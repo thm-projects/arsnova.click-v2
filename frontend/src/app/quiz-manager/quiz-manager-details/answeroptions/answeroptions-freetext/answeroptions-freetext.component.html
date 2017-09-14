@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="col-12">
+    <div class="row">
+      <h2 class="col-12 text-light text-center"
+          [innerHTML]="'component.answeroptions.free_text_question.title' | translate"></h2>
+      <div class="col-12">
+          <textarea id=""
+                    class=""
+                    rows="1"
+                    [value]="matchText"
+                    [attr.aria-label]="'component.answeroptions.description.free_text_question_text' | translate"
+                    [attr.data-intro]="'component.answeroptions.description.free_text_question_text' | translate"
+                    (input)="setMatchText($event)"
+                    (propertychange)="setMatchText($event)"
+                    [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate">
+            {{answerText}}
+          </textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div *ngFor="let elem of question.answerOptionList[0].getConfig()"
+               class="col-12 col-sm-6 configOptionContainer"
+               [attr.data-intro]="elem.configTitle | translate">
+            <p class="text-light checkboxLabel">
+              <span [innerHTML]="elem.configTitle | translate"></span>&#58;&nbsp;
+            </p>
+            <input type="checkbox"
+                   [id]="elem.id"
+                   [attr.aria-label]="elem.configTitle | translate"
+                   role="switch"
+                   name="switch"
+                   data-size="small"
+                   data-width="100"
+                   data-style="pull-right introCheckbox"
+                   data-onstyle="success"
+                   data-offstyle="danger"
+                   [checked]="elem.enabled"
+                   (change)="setConfig(elem.id, !elem.enabled)"
+                   [attr.data-on]="'component.answeroptions.free_text_question.onText' | translate"
+                   [attr.data-off]="'component.answeroptions.free_text_question.offText' | translate"
+                   [title]="elem.configTitle | translate"
+                   class="" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row"
+         [attr.data-intro]="'component.answeroptions.description.check_answer' | translate">
+      <h2 class="col-12 text-light text-center"
+          [innerHTML]="'component.answeroptions.free_text_question.check_answer_title' | translate"></h2>
+      <div class="col-12">
+          <textarea id="answerCheckArea"
+                    [attr.aria-label]="'component.answeroptions.description.check_answer' | translate"
+                    class="placeholder-align-center"
+                    (input)="setTestInput($event)"
+                    (propertychange)="setTestInput($event)"
+                    rows="1"
+                    [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate"></textarea>
+        <div *ngIf="hasTestInput()"
+             class="center-block">
+          <h4 *ngIf="testInputCorrect()"
+              class="text-center success"
+              [innerHTML]="'component.answeroptions.free_text_question.check_correct' | translate"></h4>
+          <h4 *ngIf="!testInputCorrect()"
+              class="text-center failed"
+              [innerHTML]="'component.answeroptions.free_text_question.check_incorrect' | translate"></h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

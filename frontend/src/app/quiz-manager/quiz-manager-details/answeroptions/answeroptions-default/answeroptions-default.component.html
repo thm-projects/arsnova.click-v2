@@ -1,0 +1,124 @@
+<div class="row">
+  <div class="col-12 col-md-6">
+    <div class="row">
+      <div class="col-12">
+        <div *ngIf="question.canAddAnsweroptions" class="row">
+          <div class="col-12">
+            <div id=""
+                 class=""
+                 data-step="2"
+                 (click)="addAnswer()"
+                 [attr.data-intro]="'component.answeroptions.description.default_answer_row' | translate"
+                 [attr.aria-label]="'component.answeroptions.description.default_answer_row' | translate">
+              <p class=""
+                 [innerHTML]="'component.answeroptions.new_answer' | translate"></p>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12"
+               [attr.data-intro]="'component.answeroptions.description.added_answers' | translate"
+               [attr.aria-label]="'component.answeroptions.description.added_answers' | translate"
+               data-step="1"
+               role="list">
+            <div *ngFor="let elem of question.answerOptionList; let i = index">
+              <input type="text"
+                     [value]="elem.answerText"
+                     (input)="updateAnswerValue($event, i)"
+                     (propertychange)="updateAnswerValue($event, i)">
+              <div *ngIf="question.TYPE !== 'SurveyQuestion'"
+                   class=""
+                   [attr.data-intro]="'component.answeroptions.description.is_correct' | translate">
+                <span class="text-light"
+                   [innerHTML]="'component.answeroptions.is_correct' | translate"></span>
+                <input type="checkbox"
+                       [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
+                       role="switch"
+                       name="switch"
+                       data-width="100"
+                       data-height="35"
+                       data-style="pull-right"
+                       data-onstyle="success"
+                       data-offstyle="danger"
+                       [checked]="elem.isCorrect"
+                       (change)="elem.isCorrect = !elem.isCorrect"
+                       [attr.data-on]="'component.answeroptions.free_text_question.onText' | translate"
+                       [attr.data-off]="'component.answeroptions.free_text_question.offText' | translate"
+                       [title]="'component.answeroptions.is_correct' | translate"
+                       class="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12"
+           [attr.data-intro]="'component.answeroptions.description.show_answer_content_on_buttons' | translate">
+        <span class="text-light"
+           [innerHTML]="'component.answeroptions.show_answer_content_on_buttons' | translate"></span>
+        <input type="checkbox"
+               id="config_showAnswerContentOnButtons_switch"
+               [attr.aria-label]="'component.answeroptions.description.show_answer_content_on_buttons' | translate"
+               role="switch"
+               name="switch"
+               data-width="100"
+               data-height="35"
+               data-style="pull-right"
+               data-onstyle="success"
+               data-offstyle="danger"
+               [checked]="question.displayAnswerText"
+               (change)="toggleShowAnswerContentOnButtons()"
+               [attr.data-on]="'component.answeroptions.free_text_question.onText' | translate"
+               [attr.data-off]="'component.answeroptions.free_text_question.offText' | translate"
+               [title]="'component.answeroptions.show_answer_content_on_buttons' | translate"
+               class="">
+      </div>
+      <div class="col-12 answerOptionConfig"
+           [attr.data-intro]="'component.answeroptions.description.show_one_answer_per_row' | translate">
+        <span class="text-light checkboxLabel"
+           id="showOneAnswerPerRow"
+           [innerHTML]="'component.answeroptions.show_one_answer_per_row' | translate"></span>
+        <input type="checkbox"
+               id="config_showOneAnswerPerRow_switch"
+               [attr.aria-label]="'component.answeroptions.description.show_one_answer_per_row' | translate"
+               role="switch"
+               name="switch"
+               data-width="100"
+               data-height="35"
+               data-style="pull-right"
+               data-onstyle="success"
+               data-offstyle="danger"
+               [checked]="question.showOneAnswerPerRow"
+               (change)="toggleShowOneAnswerPerRow()"
+               [attr.data-on]="'component.answeroptions.free_text_question.onText' | translate"
+               [attr.data-off]="'component.answeroptions.free_text_question.offText' | translate"
+               [title]="'component.answeroptions.show_one_answer_per_row' | translate"
+               class="">
+      </div>
+      <div *ngIf="question.TYPE === 'SurveyQuestion'"
+           class="col-xs-12 answerOptionConfig"
+           [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
+        <span class="text-light checkboxLabel"
+           id="multipleSelectionSurvey"
+           [innerHTML]="'component.answeroptions.multiple_selection_survey' | translate"></span>
+        <input type="checkbox"
+               id="config_multipleSelectionSurvey_switch"
+               [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
+               role="switch"
+               name="switch"
+               data-width="100"
+               data-height="35"
+               data-style="pull-right"
+               data-onstyle="success"
+               data-offstyle="danger"
+               (change)="toggleMultipleSelectionSurvey()"
+               [attr.data-on]="'component.answeroptions.free_text_question.onText' | translate"
+               [attr.data-off]="'component.answeroptions.free_text_question.offText' | translate"
+               [title]="'component.answeroptions.multiple_selection_survey' | translate"
+               class="">
+      </div>
+      <div class="col-12">
+        <p class="text-light text-center" id="emojiInfo" [innerHTML]="'component.answeroptions.emoji_info' | translate"></p>
+      </div>
+    </div>
+  </div>
+</div>

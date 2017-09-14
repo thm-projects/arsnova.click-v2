@@ -1,0 +1,16 @@
+<div class="row">
+  <div class="col-12 col-sm-4 nickCategoryWrapper">
+    <div *ngFor="let cat of availableNickCategories()"
+         [class]="'nickCategory ' + (hasSelectedCategory(cat) ? 'selectedCategory' : '')"
+         (click)="selectCategory(cat)">
+      <span [innerHTML]="cat"></span>
+    </div>
+  </div>
+  <div class="col-12 col-sm-8 nickNameWrapper">
+    <div *ngFor="let nick of availableNicks[selectedCategory]"
+         (click)="selectNick(nick)"
+         [class]="'nickStyle nickName ' + (hasSelectedNick(nick) ? 'selectedNickName' : '')">
+      <span [innerHTML]="nick" class="nickName"></span>
+    </div>
+  </div>
+</div>

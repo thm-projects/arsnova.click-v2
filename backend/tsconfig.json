@@ -1,0 +1,17 @@
+{
+   "compileOnSave": true,
+   "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "outDir": "dist",
+      "lib": [
+         "es2016"
+      ]
+   },
+   "include": [
+      "src/**/*.ts"
+   ],
+   "exclude": [
+      "node_modules"
+   ]
+}

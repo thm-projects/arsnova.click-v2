@@ -1,0 +1,18 @@
+<div class="row full-screen-content">
+  <div id="editQuestionText"
+       class="col-12 col-sm-6"
+       [attr.data-intro]="'plugins.markdown_bar.info_content' | translate"
+       [attr.aria-label]="'plugins.markdown_bar.info_content' | translate">
+    <app-markdown-bar (connectorEmitter)="connector($event)"></app-markdown-bar>
+    <textarea class="question-text-box textarea center-vertical"
+              [attr.aria-label]="'component.questions.enter_question_here' | translate"
+              id="questionText"
+              [placeholder]="'component.questions.enter_question_here' | translate"
+              (keyup)="fireEvent($event)"
+              [innerHTML]="questionText">
+    </textarea>
+  </div>
+  <app-live-preview
+    [targetDevice]="DeviceTypes.XS"
+    [targetEnvironment]="EnvironmentTypes.QUESTION"></app-live-preview>
+</div>

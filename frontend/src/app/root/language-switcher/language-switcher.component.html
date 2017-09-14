@@ -1,0 +1,13 @@
+<div class="row center-vertical">
+  <div class="col-12">
+    <div class="row" role="list">
+      <div class="col-xs-12 col-md-6 col-sm-6 col-lg-6 margin-bottom available_translations" role="listitem" *ngFor="let elem of languages">
+        <button type="button"
+                [id]="'translation_' + elem.tag"
+                [class]="'btn btn-block ' + (elem.selected ? 'selectedLanguageButton btn-success' : 'btn-grey')"
+                (click)="changeLanguage(elem.tag)"
+        >{{elem.name}}</button>
+      </div>
+    </div>
+  </div>
+</div>

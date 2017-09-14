@@ -1,0 +1,11 @@
+<nav class="nav navbar-footer flex-sm-column" role="navigation">
+  <input class="hidden" id="upload-session" type="file" (change)="fileChange($event)" accept="application/json" multiple="multiple" />
+  <div *ngFor="let elem of footerElements"
+       [class]="'footerElement py-sm-2 pl-sm-1 justify-content-center justify-content-sm-start ' + (elem.selectable ? elem.isActive ? 'success' : 'error' : '')"
+       [id]="elem.id"
+       [routerLink]="elem.linkTarget"
+       (click)="elem.onClickCallback($event)" >
+    <p class="footerElemIcon"><i [class]="elem.iconClass" aria-hidden="true"></i></p>
+    <p class="footerElemText text-left"><span [class]="elem.textClass" [innerHTML]="elem.textName | translate"></span></p>
+  </div>
+</nav>

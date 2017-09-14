@@ -1,0 +1,14 @@
+<div id="markdownBarDiv" class="markdown-box">
+  <ul>
+    <li *ngFor="let elem of allDisplayedMarkdownBarElements"
+        [id]="elem.id"
+        class="button-markdown button-purple"
+        data-toggle="tooltip"
+        data-placement="bottom"
+        [title]="elem.titleRef | translate"
+        data-animation="false"
+        (click)="connector(elem.id)">
+      <i [class]="elem.iconClass + ' fa fa-markdown'" aria-hidden="true"></i>
+    </li>
+  </ul>
+</div>

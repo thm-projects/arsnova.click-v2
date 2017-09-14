@@ -1,0 +1,23 @@
+.navbar-footer {
+  text-align: center;
+  padding: 5px;
+  justify-content: center;
+
+  .footerElement {
+    cursor: pointer;
+    padding: 0;
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+
+    p {
+      margin: 0;
+      line-height: 25px;
+
+      &.footerElemIcon {
+        margin-right: 10px;
+      }
+    }
+  }
+}
