@@ -18,8 +18,9 @@
 import {questionReflection} from "./question_reflection";
 import {SessionConfiguration} from '../session_configuration/session_config';
 import {QuestionI} from "./QuestionI";
+import {QuestionGroupI} from "./QuestionGroupI";
 
-export abstract class AbstractQuestionGroup {
+export abstract class AbstractQuestionGroup implements QuestionGroupI{
   get hashtag(): string {
     return this._hashtag;
   }
@@ -127,7 +128,7 @@ export abstract class AbstractQuestionGroup {
 	 * @param {AbstractQuestionGroup} questionGroup The questionGroup instance which should be checked
 	 * @returns {boolean} True if both instances are completely equal, False otherwise
 	 */
-	equals (questionGroup): boolean {
+	equals (questionGroup: QuestionGroupI): boolean {
 		if (questionGroup instanceof AbstractQuestionGroup) {
 			if (questionGroup.hashtag !== this.hashtag ||
 				questionGroup.isFirstStart !== this.isFirstStart ||
@@ -152,7 +153,7 @@ export abstract class AbstractQuestionGroup {
 	 * @param {Number} [index] The index where the question should be inserted. If not passed, it will be added to the end of the questionList
 	 * @param type
 	 */
-	addDefaultQuestion (index = -1, type = "SingleChoiceQuestion"): void {
+	addDefaultQuestion (index: number = -1, type: string = "SingleChoiceQuestion"): void {
 		if (typeof index === "undefined" || index === -1 || index >= this.questionList.length) {
 			index = this.questionList.length;
 		}

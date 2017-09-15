@@ -2,8 +2,9 @@ import {AbstractQuestionGroup} from './questiongroup_abstract';
 import {SessionConfiguration} from "../session_configuration/session_config";
 import {questionReflection} from "./question_reflection";
 import {AbstractQuestion} from "./question_abstract";
+import {QuestionGroupI} from "./QuestionGroupI";
 
-export class DefaultQuestionGroup extends AbstractQuestionGroup{
+export class DefaultQuestionGroup extends AbstractQuestionGroup implements QuestionGroupI {
 
   public TYPE: string = 'DefaultQuestionGroup';
 

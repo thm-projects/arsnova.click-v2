@@ -3,10 +3,9 @@ import {DOCUMENT} from '@angular/common';
 import {FooterBarService} from "../../service/footer-bar.service";
 import {HeaderLabelService} from "../../service/header-label.service";
 import {FooterBarComponent} from "../../footer/footer-bar/footer-bar.component";
-import {AbstractQuestionGroup} from "../../../lib/questions/questiongroup_abstract";
 import {ActiveQuestionGroupService} from "../../service/active-question-group.service";
 import {questionReflection} from "../../../lib/questions/question_reflection";
-import {DefaultSettings} from "../../service/settings.service";
+import {QuestionGroupI} from "../../../lib/questions/QuestionGroupI";
 
 @Component({
   selector: 'app-quiz-manager',
@@ -59,7 +58,7 @@ export class QuizManagerComponent implements OnInit {
     }
   ];
 
-  readonly questionGroupItem: AbstractQuestionGroup;
+  readonly questionGroupItem: QuestionGroupI;
 
   private _showMoreOrLess: string = 'component.quiz_manager.show_more';
 

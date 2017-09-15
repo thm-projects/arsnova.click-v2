@@ -53,11 +53,11 @@
   </div>
   <div class="modal-body">
     <ul>
-      <li>Server: <span [innerHTML]="'region.header.connection_status.server_status.' + serverAvailable ? 'available' : 'not_available' | translate"></span></li>
-      <li>Websocket: <span [innerHTML]="'region.header.connection_status.websocket_status.' + websocketAvailable ? 'connected' : 'not_connected' | translate"></span></li>
-      <li>LocalStorage: <span [innerHTML]="'region.header.connection_status.localStorage_status.' + localStorageAvailable ? 'writable' : 'non_writable' | translate"></span></li>
-      <li>SessionStorage: <span [innerHTML]="'region.header.connection_status.sessionStorage_status.' + sessionStorageAvailable ? 'writable' : 'non_writable' | translate"></span></li>
-      <li>Round-Trip-Time: <span [innerHTML]="rtt + 'ms'"></span></li>
+      <li>Server: <span [innerHTML]="'region.header.connection_status.server_status.' + (connectionService.serverAvailable ? 'available' : 'not_available') | translate"></span></li>
+      <li>Websocket: <span [innerHTML]="'region.header.connection_status.websocket_status.' + (connectionService.websocketAvailable ? 'connected' : 'not_connected') | translate"></span></li>
+      <li>LocalStorage: <span [innerHTML]="'region.header.connection_status.localStorage_status.' + (localStorageAvailable ? 'writable' : 'non_writable') | translate"></span></li>
+      <li>SessionStorage: <span [innerHTML]="'region.header.connection_status.sessionStorage_status.' + (sessionStorageAvailable ? 'writable' : 'non_writable') | translate"></span></li>
+      <li>Round-Trip-Time: <span [innerHTML]="connectionService.serverAvailable ? (connectionService.rtt + 'ms') : ('region.header.connection_status.server_status.not_available' | translate)"></span></li>
     </ul>
   </div>
   <div class="modal-footer">

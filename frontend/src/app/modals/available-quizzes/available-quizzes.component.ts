@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {NgbActiveModal, NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 import {ModalI} from "../modals.module";
 import {TranslateService} from "@ngx-translate/core";
 import {ActiveQuestionGroupService} from "../../service/active-question-group.service";
-import {DefaultQuestionGroup} from "../../../lib/questions/questiongroup_default";
-import {AbstractQuestion} from "../../../lib/questions/question_abstract";
-import {AbstractQuestionGroup} from "../../../lib/questions/questiongroup_abstract";
+import {questionGroupReflection} from "../../../lib/questions/questionGroup_reflection";
+import {QuestionGroupI} from "../../../lib/questions/QuestionGroupI";
 
 @Component({
   selector: 'app-available-quizzes',
@@ -13,7 +12,7 @@ import {AbstractQuestionGroup} from "../../../lib/questions/questiongroup_abstra
   styleUrls: ['./available-quizzes.component.scss']
 })
 export class AvailableQuizzesComponent implements OnInit, ModalI {
-  private _sessions: Array<AbstractQuestionGroup> = [];
+  private _sessions: Array<QuestionGroupI> = [];
 
   dismiss(result?: any): void {
     this.activeModal.dismiss(result);
@@ -27,7 +26,7 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
     this.activeModal.close(result);
   }
 
-  get sessions(): Array<AbstractQuestionGroup> {
+  get sessions(): Array<QuestionGroupI> {
     return this._sessions;
   }
 
@@ -40,16 +39,17 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
     });
     const self = this;
     sessions.forEach(function (elem) {
-      self._sessions.push(new DefaultQuestionGroup(JSON.parse(window.localStorage.getItem(elem))));
+      elem = JSON.parse(window.localStorage.getItem(elem));
+      self._sessions.push(questionGroupReflection[elem.type](elem));
     });
   }
 
-  startQuiz(session: AbstractQuestionGroup): void {
+  startQuiz(session: QuestionGroupI): void {
     this.activeQuestionGroupService.activeQuestionGroup = session;
     this.next();
   }
 
-  editQuiz(session: AbstractQuestionGroup): void {
+  editQuiz(session: QuestionGroupI): void {
     this.activeQuestionGroupService.activeQuestionGroup = session;
     this.next();
   }

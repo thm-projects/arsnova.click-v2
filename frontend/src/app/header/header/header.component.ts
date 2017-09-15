@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {HttpClient} from "@angular/common/http";
 import {DefaultSettings} from "../../service/settings.service";
+import {ConnectionService} from "../../service/connection.service";
 
 function isLocalStorageSupported():boolean {
   try {
@@ -44,23 +45,11 @@ function isSessionStorageSupported():boolean {
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  set serverAvailable(value: Boolean) {
-    this._serverAvailable = value;
-  }
-  get serverAvailable(): Boolean {
-    return this._serverAvailable;
-  }
-  get websocketAvailable(): Boolean {
-    return this._websocketAvailable;
-  }
   get localStorageAvailable(): Boolean {
     return this._localStorageAvailable;
   }
   get sessionStorageAvailable(): Boolean {
     return this._sessionStorageAvailable;
-  }
-  get rtt(): number {
-    return this._rtt;
   }
   set inHomeRoute(value: Boolean) {
     this._inHomeRoute = value;
@@ -70,14 +59,10 @@ export class HeaderComponent implements OnInit {
   }
   private _finishedWithErrors : Boolean = false;
   private _finishedWithWarnings : Boolean = false;
-  private _offline : Boolean = false;
   private _origin : string = location.hostname;
   private _inHomeRoute : Boolean = location.pathname === "/";
-  private _serverAvailable: Boolean = false;
-  private _websocketAvailable: Boolean = false;
   private _localStorageAvailable: boolean = isLocalStorageSupported();
   private _sessionStorageAvailable: boolean = isSessionStorageSupported();
-  private _rtt: number = 0;
 
   @Input() headerLabel: string;
 
@@ -96,16 +81,11 @@ export class HeaderComponent implements OnInit {
   get origin(): string {
     return this._origin;
   }
-  get offline(): Boolean {
-    return this._offline;
-  }
-
-  private _apiEndpoint = `${DefaultSettings.httpApiEndpoint}/`;
 
   constructor(private headerLabelService: HeaderLabelService,
               private router: Router,
               private modalService: NgbModal,
-              private http:HttpClient) {
+              private connectionService: ConnectionService) {
     const self = this;
     router.events.subscribe((url:any) => {
       self.inHomeRoute = (url.url === "/home" || url.url === "/");
@@ -116,15 +96,7 @@ export class HeaderComponent implements OnInit {
   }
 
   openConnectionQualityModal(content: string): void {
-    const self = this;
     this.modalService.open(content);
-    const start_time = new Date().getTime();
-    self.http.get(`${self._apiEndpoint}`).subscribe(
-      () => {
-        self.serverAvailable = true;
-        self._rtt = new Date().getTime() - start_time;
-      },
-      () => {self.serverAvailable = false}
-    );
+    this.connectionService.calculateRTT();
   }
 }

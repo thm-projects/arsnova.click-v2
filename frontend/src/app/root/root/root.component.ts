@@ -1,7 +1,7 @@
 import {Component, OnInit, Renderer2} from '@angular/core';
 import {FooterBarService} from "../../service/footer-bar.service";
 import {HeaderLabelService} from "../../service/header-label.service";
-import {DefaultSettings} from "../../service/settings.service";
+import {ThemesService} from "../../service/themes.service";
 
 @Component({
   selector: 'app-root',
@@ -10,15 +10,10 @@ import {DefaultSettings} from "../../service/settings.service";
 })
 export class RootComponent implements OnInit {
 
-  constructor(private footerBarService:FooterBarService, private renderer: Renderer2, private headerLabelService: HeaderLabelService) {
-    if (window.sessionStorage.getItem('quizTheme')) {
-      this.renderer.addClass(document.body, window.sessionStorage.getItem('quizTheme'));
-    } else {
-      if (!window.localStorage.getItem('defaultTheme')) {
-        window.localStorage.setItem('defaultTheme', DefaultSettings.defaultSettings.theme);
-      }
-      this.renderer.addClass(document.body, window.localStorage.getItem('defaultTheme'));
-    }
+  constructor(private footerBarService:FooterBarService,
+              private headerLabelService: HeaderLabelService,
+              private themesService: ThemesService) {
+    themesService.updateCurrentlyUsedTheme();
   }
 
   getFooterBarElements() {

@@ -21,6 +21,7 @@ import {WebsocketService} from "../service/websocket.service";
 import {QuizFlowModule} from "../quiz-flow/quiz-flow.module";
 import {ThemeSwitcherComponent} from "./theme-switcher/theme-switcher.component";
 import {ThemesModule} from "../themes/themes.module";
+import {ConnectionService} from "../service/connection.service";
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -102,7 +103,7 @@ const appRoutes: Routes = [
     NgbModule.forRoot()
   ],
   exports: [],
-  providers: [FooterBarService, ActiveQuestionGroupService, WebsocketService],
+  providers: [FooterBarService, ActiveQuestionGroupService, ConnectionService, WebsocketService],
   entryComponents: [],
   bootstrap: [RootComponent]
 })

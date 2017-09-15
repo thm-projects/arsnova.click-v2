@@ -189,7 +189,7 @@
         },
         "websocket_status": {
           "connected": "connected",
-          "disconnected": "disconnected"
+          "not_connected": "disconnected"
         },
         "localStorage_status": {
           "writable": "writable",

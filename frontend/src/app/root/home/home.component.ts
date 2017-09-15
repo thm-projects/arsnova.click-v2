@@ -3,11 +3,9 @@ import {FooterBarComponent} from "../../footer/footer-bar/footer-bar.component";
 import {FooterBarService} from "../../service/footer-bar.service";
 import {HeaderLabelService} from "../../service/header-label.service";
 import {ActiveQuestionGroupService} from "../../service/active-question-group.service";
-import {DefaultQuestionGroup} from "../../../lib/questions/questiongroup_default";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {AvailableQuizzesComponent} from "../../modals/available-quizzes/available-quizzes.component";
-import {WebsocketService} from "../../service/websocket.service";
-import {Subject} from "rxjs/Subject";
+import {ThemesService} from "../../service/themes.service";
 
 @Component({
   selector: 'app-home',
@@ -21,14 +19,12 @@ export class HomeComponent implements OnInit{
   public isAddingDemoQuiz = false;
   public isAddingABCDQuiz = false;
   public enteredSessionName: string = '';
-  private socket: Subject<any>;
-  private message: string = 'testmessage';
 
   constructor(private footerBarService: FooterBarService,
               private headerLabelService: HeaderLabelService,
               private modalService: NgbModal,
               private activeQuestionGroupService: ActiveQuestionGroupService,
-              private websocketService: WebsocketService) {
+              private themesService: ThemesService) {
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemAbout,
       FooterBarComponent.footerElemTranslation,
@@ -37,7 +33,6 @@ export class HomeComponent implements OnInit{
       FooterBarComponent.footerElemHashtagManagement,
       FooterBarComponent.footerElemImport,
     ]);
-    this.socket = websocketService.createWebsocket();
     headerLabelService.setHeaderLabel("default");
     const ownedQuizzes = window.localStorage.getItem('owned_quizzes');
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
@@ -47,23 +42,7 @@ export class HomeComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    let done = false;
-    this.socket.subscribe(
-      message => {
-        if (!done) {
-          this.socket.next({initData: 'local'});
-          done = !done;
-        }
-        this.message = message;
-      },
-      message => {
-        console.log('error', message);
-        this.message = message;
-      },
-      () => {
-        console.log('completed');
-      }
-    );
+    this.themesService.updateCurrentlyUsedTheme();
   }
 
   parseQuiznameInput(event: any) {

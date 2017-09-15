@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from "../../service/footer-bar.service";
 import {ActiveQuestionGroupService} from "../../service/active-question-group.service";
 import {FooterBarComponent} from "../../footer/footer-bar/footer-bar.component";
+import {ThemesService} from "../../service/themes.service";
 
 @Component({
   selector: 'app-quiz-theme',
@@ -13,11 +14,12 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
   private previewThemeBackup: string;
 
   constructor(private footerBarService: FooterBarService,
-              private activeQuestionGroupService: ActiveQuestionGroupService) {
+              private activeQuestionGroupService: ActiveQuestionGroupService,
+              private themesService: ThemesService) {
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemBack
     ]);
-    this.previewThemeBackup = document.getElementsByTagName('body')[0].className;
+    this.previewThemeBackup = document.body.className;
   }
 
   ngOnInit() {
@@ -25,21 +27,21 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
+    this.themesService.updateCurrentlyUsedTheme();
   }
 
   updateTheme(id: string) {
-    document.getElementsByTagName('body')[0].className = id;
-    this.previewThemeBackup = document.getElementsByTagName('body')[0].className;
-    window.sessionStorage.setItem('quizTheme', this.previewThemeBackup);
+    document.body.className = id;
+    this.previewThemeBackup = document.body.className;
     this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.theme = id;
   }
 
   previewTheme(id) {
-    document.getElementsByTagName('body')[0].className = id;
+    document.body.className = id;
   }
 
   restoreTheme() {
-    document.getElementsByTagName('body')[0].className = this.previewThemeBackup;
+    document.body.className = this.previewThemeBackup;
   }
 
 }

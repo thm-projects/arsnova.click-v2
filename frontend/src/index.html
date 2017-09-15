@@ -74,7 +74,9 @@
 
   <script type="text/javascript">
     window.onload = function () {
-      document.body.classList.add(window.sessionStorage.getItem('quizTheme') || window.localStorage.getItem('defaultTheme') || '');
+      if (!document.body.className) {
+        document.body.className = (window.localStorage.getItem('defaultTheme') || '');
+      }
     };
   </script>
 
