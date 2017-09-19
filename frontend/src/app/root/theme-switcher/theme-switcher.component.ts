@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import {FooterBarComponent} from "../../footer/footer-bar/footer-bar.component";
-import {FooterBarService} from "../../service/footer-bar.service";
-import {TranslateService} from "@ngx-translate/core";
-import {HeaderLabelService} from "../../service/header-label.service";
+import {Component, OnInit} from '@angular/core';
+import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
+import {FooterBarService} from '../../service/footer-bar.service';
+import {TranslateService} from '@ngx-translate/core';
+import {HeaderLabelService} from '../../service/header-label.service';
 
 @Component({
   selector: 'app-theme-switcher',
@@ -24,7 +24,7 @@ export class ThemeSwitcherComponent implements OnInit {
       FooterBarComponent.footerElemHashtagManagement,
       FooterBarComponent.footerElemImport,
     ]);
-    headerLabelService.setHeaderLabel("component.theme_switcher.set_theme");
+    headerLabelService.setHeaderLabel('component.theme_switcher.set_theme');
     this.previewThemeBackup = document.getElementsByTagName('body')[0].className;
   }
 

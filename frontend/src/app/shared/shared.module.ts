@@ -1,11 +1,11 @@
 import {ModuleWithProviders, NgModule, Pipe} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {TranslateModule, TranslatePipe, TranslateService} from "@ngx-translate/core";
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
-import {BrowserModule} from "@angular/platform-browser";
-import {HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
-import { RouterModule } from '@angular/router';
+import {CommonModule} from '@angular/common';
+import {TranslateModule, TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {BrowserModule} from '@angular/platform-browser';
+import {HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
 
 export const providers = [
   BrowserModule,
@@ -52,7 +52,7 @@ export class SharedModule {
     return this.translate.currentLang;
   }
 
-  static forRoot() : ModuleWithProviders {
+  static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
       providers: [...providers]

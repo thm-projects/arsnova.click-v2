@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NicknameManagerComponent } from './nickname-manager.component';
+import {NicknameManagerComponent} from './nickname-manager.component';
 
 describe('NicknameManagerComponent', () => {
   let component: NicknameManagerComponent;
@@ -8,9 +8,9 @@ describe('NicknameManagerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NicknameManagerComponent ]
+      declarations: [NicknameManagerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

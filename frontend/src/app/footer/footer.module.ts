@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {FooterBarComponent} from './footer-bar/footer-bar.component';
-import {SharedModule} from "../shared/shared.module";
-import {HttpModule} from "@angular/http";
+import {SharedModule} from '../shared/shared.module';
+import {HttpModule} from '@angular/http';
 
 @NgModule({
   imports: [
@@ -15,4 +15,5 @@ import {HttpModule} from "@angular/http";
     FooterBarComponent
   ]
 })
-export class FooterModule { }
+export class FooterModule {
+}

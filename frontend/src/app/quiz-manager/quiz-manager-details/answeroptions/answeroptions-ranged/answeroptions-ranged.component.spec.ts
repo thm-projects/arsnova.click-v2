@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AnsweroptionsRangedComponent } from './answeroptions-ranged.component';
+import {AnsweroptionsRangedComponent} from './answeroptions-ranged.component';
 
 describe('AnsweroptionsRangedComponent', () => {
   let component: AnsweroptionsRangedComponent;
@@ -8,9 +8,9 @@ describe('AnsweroptionsRangedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnsweroptionsRangedComponent ]
+      declarations: [AnsweroptionsRangedComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

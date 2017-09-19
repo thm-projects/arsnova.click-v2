@@ -1,9 +1,8 @@
-
 export function parseCodeBlock(result, i) {
-  let tmpNewItem = result[i].replace(/\s/g, "") + "\n";
+  let tmpNewItem = result[i].replace(/\s/g, '') + '\n';
   let mergeEndIndex = result.length;
   for (let j = i + 1; j < result.length; j++) {
-    tmpNewItem += result[j] + "\n";
+    tmpNewItem += result[j] + '\n';
     if (/^```/.test(result[j])) {
       mergeEndIndex = j;
       break;
@@ -14,42 +13,42 @@ export function parseCodeBlock(result, i) {
 }
 
 export function parseOrderedList(result, i) {
-  let tmpNewItem = result[i] + "\n";
+  let tmpNewItem = result[i] + '\n';
   let mergeEndIndex = result.length;
   for (let j = i + 1; j < result.length; j++) {
     if (!/^[0-9]*./.test(result[j])) {
       mergeEndIndex = j - 1;
       break;
     }
-    tmpNewItem += result[j] + "\n";
+    tmpNewItem += result[j] + '\n';
   }
   result.splice(i, mergeEndIndex - i + 1);
   result.splice(i, 0, tmpNewItem);
 }
 
 export function parseUnorderedList(result, i) {
-  let tmpNewItem = result[i] + "\n";
+  let tmpNewItem = result[i] + '\n';
   let mergeEndIndex = result.length;
   for (let j = i + 1; j < result.length; j++) {
     if (!/^(  )[*-+] /.test(result[j]) && !/^[0-9]*./.test(result[j])) {
       mergeEndIndex = j - 1;
       break;
     }
-    tmpNewItem += result[j] + "\n";
+    tmpNewItem += result[j] + '\n';
   }
   result.splice(i, mergeEndIndex - i + 1);
   result.splice(i, 0, tmpNewItem);
 }
 
 export function parseCommentBlock(result, i) {
-  let tmpNewItem = result[i] + "\n";
+  let tmpNewItem = result[i] + '\n';
   let mergeEndIndex = result.length;
   for (let j = i + 1; j < result.length; j++) {
     if (!/^> /.test(result[j])) {
       mergeEndIndex = j - 1;
       break;
     }
-    tmpNewItem += result[j] + "\n";
+    tmpNewItem += result[j] + '\n';
   }
   result.splice(i, mergeEndIndex - i + 1);
   result.splice(i, 0, tmpNewItem);
@@ -58,10 +57,10 @@ export function parseCommentBlock(result, i) {
 export function parseLinkBlock(result, i) {
   const startIndex = /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/.exec(result[i]);
   const linkStr = startIndex[0] || result[i];
-  const link = !/^https?:\/\//.test(linkStr) ? "http://" + linkStr : linkStr;
+  const link = !/^https?:\/\//.test(linkStr) ? 'http://' + linkStr : linkStr;
   const prevLinkContent = result[i].substring(0, startIndex.index);
-  const postLinkContent = result[i].indexOf(" ", startIndex.index) > -1 ? result[i].substring(result[i].indexOf(" ", startIndex.index)) : "";
-  result[i] = prevLinkContent + "<a href='" + link + "' target='_blank'>" + linkStr + "</a>" + postLinkContent;
+  const postLinkContent = result[i].indexOf(' ', startIndex.index) > -1 ? result[i].substring(result[i].indexOf(' ', startIndex.index)) : '';
+  result[i] = prevLinkContent + '<a href=\'' + link + '\' target=\'_blank\'>' + linkStr + '</a>' + postLinkContent;
 }
 
 export function parseHeaderBlock(result, i) {
@@ -71,25 +70,25 @@ export function parseHeaderBlock(result, i) {
 
 export function parseStrikeThroughBlock(result, i) {
   result[i].match(/~~[^~{2}]*~~/gi).forEach(function (element) {
-    result[i] = result[i].replace(element, "<del>" + element.replace(/~~/g, "") + "</del>");
+    result[i] = result[i].replace(element, '<del>' + element.replace(/~~/g, '') + '</del>');
   });
 }
 
 export function parseBoldBlock(result, i) {
   result[i].match(/\*\*[^*{2}]*\*\*/gi).forEach(function (element) {
-    result[i] = result[i].replace(element, "<b>" + element.replace(/\*\*/g, "") + "</b>");
+    result[i] = result[i].replace(element, '<b>' + element.replace(/\*\*/g, '') + '</b>');
   });
 }
 
 export function parseItalicBlock(result, i) {
   result[i].match(/\*.*\*/gi).forEach(function (element) {
-    result[i] = result[i].replace(element, "<em>" + element.replace(/\*/g, "") + "</em>");
+    result[i] = result[i].replace(element, '<em>' + element.replace(/\*/g, '') + '</em>');
   });
 }
 
 export function parseUnderlineBlock(result, i) {
   result[i].match(/__[^_{2}]*__/gi).forEach(function (element) {
-    result[i] = result[i].replace(element, "<u>" + element.replace(/__/g, "") + "</u>");
+    result[i] = result[i].replace(element, '<u>' + element.replace(/__/g, '') + '</u>');
   });
 }
 
@@ -98,7 +97,7 @@ export function parseEmojiBlock(result, i) {
   wrapper.className = 'emojiWrapper';
   let lastIndex = 0;
   result[i].match(/:([a-z0-9_\+\-]+):/g).forEach(function (emoji) {
-    const emojiPlain = emoji.replace(/:/g, "");
+    const emojiPlain = emoji.replace(/:/g, '');
     const textChild = document.createElement('span');
     textChild.innerText = result[i].substring(lastIndex, result[i].indexOf(emoji));
     wrapper.appendChild(textChild);
@@ -115,10 +114,10 @@ export function parseEmojiBlock(result, i) {
 }
 
 export function parseMathjaxBlock(result, i, endDelimiter) {
-  let tmpNewItem = result[i] + "\n";
+  let tmpNewItem = result[i] + '\n';
   let mergeEndIndex = result.length;
   for (let j = i + 1; j < result.length; j++) {
-    tmpNewItem += (result[j] + "\n");
+    tmpNewItem += (result[j] + '\n');
     if (result[j].endsWith(endDelimiter)) {
       mergeEndIndex = j;
       break;
@@ -134,13 +133,13 @@ export function parseGithubFlavoredMarkdown(result: Array<string>, overrideLineB
   for (let i = 0; i < result.length; i++) {
     switch (true) {
       case /^\$\$/.test(result[i]) && overrideLineBreaks:
-        parseMathjaxBlock(result, i, "$$");
+        parseMathjaxBlock(result, i, '$$');
         break;
       case /^\[/.test(result[i]) && overrideLineBreaks:
-        parseMathjaxBlock(result, i, "\]");
+        parseMathjaxBlock(result, i, '\]');
         break;
       case /^<math/.test(result[i]) && overrideLineBreaks:
-        parseMathjaxBlock(result, i, "</math>");
+        parseMathjaxBlock(result, i, '</math>');
         break;
       case /\$/.test(result[i]) || /\(/.test(result[i]):
         break;
@@ -148,10 +147,10 @@ export function parseGithubFlavoredMarkdown(result: Array<string>, overrideLineB
         parseCodeBlock(result, i);
         break;
       case /^([0-9]*\.)?(-)?(\*)? \[x\] /.test(result[i]):
-        result[i] = ("<input class='markdownCheckbox' type='checkbox' checked='checked' disabled='disabled' aria-label='ToDo (checked)' />" + result[i].replace(/([0-9]*\.)?(-)?(\*)? \[x\] /, ""));
+        result[i] = ('<input class=\'markdownCheckbox\' type=\'checkbox\' checked=\'checked\' disabled=\'disabled\' aria-label=\'ToDo (checked)\' />' + result[i].replace(/([0-9]*\.)?(-)?(\*)? \[x\] /, ''));
         break;
       case /^([0-9]*\.)?(-)?(\*)? \[ \] /.test(result[i]):
-        result[i] = ("<input class='markdownCheckbox' type='checkbox' disabled='disabled' aria-label='ToDo (unchecked)' />" + result[i].replace(/^([0-9]*\.)?(-)?(\*)? \[ \] /, ""));
+        result[i] = ('<input class=\'markdownCheckbox\' type=\'checkbox\' disabled=\'disabled\' aria-label=\'ToDo (unchecked)\' />' + result[i].replace(/^([0-9]*\.)?(-)?(\*)? \[ \] /, ''));
         break;
       case /^[\s]*1\./.test(result[i]) && overrideLineBreaks:
         parseOrderedList(result, i);

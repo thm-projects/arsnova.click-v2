@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FooterBarService} from "../../service/footer-bar.service";
-import {TranslateService} from "@ngx-translate/core";
-import {HeaderLabelService} from "../../service/header-label.service";
-import {FooterBarComponent} from "../../footer/footer-bar/footer-bar.component";
-import {ActivatedRoute} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
+import {FooterBarService} from '../../service/footer-bar.service';
+import {TranslateService} from '@ngx-translate/core';
+import {HeaderLabelService} from '../../service/header-label.service';
+import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-info',
@@ -28,7 +28,7 @@ export class InfoComponent implements OnInit, OnDestroy {
       FooterBarComponent.footerElemHashtagManagement,
       FooterBarComponent.footerElemImport,
     ]);
-    headerLabelService.setHeaderLabel("region.footer.about.title");
+    headerLabelService.setHeaderLabel('region.footer.about.title');
   }
 
   ngOnInit() {

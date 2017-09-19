@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {parseGithubFlavoredMarkdown} from "../../lib/markdown/markdown";
+import {parseGithubFlavoredMarkdown} from '../../lib/markdown/markdown';
 
 @Injectable()
 export class QuestionTextService {

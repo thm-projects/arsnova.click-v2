@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {TestBed, inject} from '@angular/core/testing';
 
-import { HeaderLabelService } from './header-label.service';
+import {HeaderLabelService} from './header-label.service';
 
 describe('HeaderLabelService', () => {
   beforeEach(() => {

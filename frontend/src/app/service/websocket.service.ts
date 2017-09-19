@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Subject, Observer, Observable } from 'rxjs/Rx';
-import {DefaultSettings} from "./settings.service";
+import {Injectable} from '@angular/core';
+import {Subject, Observer, Observable} from 'rxjs/Rx';
+import {DefaultSettings} from './settings.service';
 
 @Injectable()
 export class WebsocketService {

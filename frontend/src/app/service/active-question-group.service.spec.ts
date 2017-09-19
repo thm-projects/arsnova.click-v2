@@ -1,6 +1,6 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {TestBed, inject} from '@angular/core/testing';
 
-import { ActiveQuestionGroupService } from './active-question-group.service';
+import {ActiveQuestionGroupService} from './active-question-group.service';
 
 describe('ActiveQuestionGroupService', () => {
   beforeEach(() => {

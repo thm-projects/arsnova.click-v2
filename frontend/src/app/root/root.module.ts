@@ -4,24 +4,25 @@ import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
-import { HomeComponent } from './home/home.component';
-import {FooterModule} from "../footer/footer.module";
-import {SharedModule} from "../shared/shared.module";
-import {RouterModule, Routes} from "@angular/router";
-import { RootComponent } from './root/root.component';
-import {HeaderModule} from "../header/header.module";
-import {FooterBarService} from "../service/footer-bar.service";
-import { LanguageSwitcherComponent } from './language-switcher/language-switcher.component';
-import { InfoComponent } from './info/info.component';
-import { SessionManagementComponent } from './session-management/session-management.component';
-import {QuizManagerModule} from "../quiz-manager/quiz-manager.module";
-import {ActiveQuestionGroupService} from "../service/active-question-group.service";
-import {ModalsModule} from "../modals/modals.module";
-import {WebsocketService} from "../service/websocket.service";
-import {QuizFlowModule} from "../quiz-flow/quiz-flow.module";
-import {ThemeSwitcherComponent} from "./theme-switcher/theme-switcher.component";
-import {ThemesModule} from "../themes/themes.module";
-import {ConnectionService} from "../service/connection.service";
+import {HomeComponent} from './home/home.component';
+import {FooterModule} from '../footer/footer.module';
+import {SharedModule} from '../shared/shared.module';
+import {RouterModule, Routes} from '@angular/router';
+import {RootComponent} from './root/root.component';
+import {HeaderModule} from '../header/header.module';
+import {FooterBarService} from '../service/footer-bar.service';
+import {LanguageSwitcherComponent} from './language-switcher/language-switcher.component';
+import {InfoComponent} from './info/info.component';
+import {SessionManagementComponent} from './session-management/session-management.component';
+import {QuizManagerModule} from '../quiz-manager/quiz-manager.module';
+import {ActiveQuestionGroupService} from '../service/active-question-group.service';
+import {ModalsModule} from '../modals/modals.module';
+import {WebsocketService} from '../service/websocket.service';
+import {QuizFlowModule} from '../quiz-flow/quiz-flow.module';
+import {ThemeSwitcherComponent} from './theme-switcher/theme-switcher.component';
+import {ThemesModule} from '../themes/themes.module';
+import {ConnectionService} from '../service/connection.service';
+import {NicknameChooserComponent} from './nickname-chooser/nickname-chooser.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -31,37 +32,45 @@ export function HttpLoaderFactory(http: HttpClient) {
 const appRoutes: Routes = [
   //{ path: 'crisis-center', component: CrisisListComponent },
   //{ path: 'hero/:id',      component: HeroDetailComponent },
-  { path: 'themes',
+  {
+    path: 'themes',
     component: ThemeSwitcherComponent,
-    data: { }
+    data: {}
   },
-  { path: 'languages',
+  {
+    path: 'languages',
     component: LanguageSwitcherComponent,
-    data: { }
+    data: {}
   },
-  { path: 'session-management',
+  {
+    path: 'session-management',
     component: SessionManagementComponent,
-    data: { }
+    data: {}
   },
-  { path: 'about',
+  {
+    path: 'about',
     component: InfoComponent,
     data: {content: 'about'}
   },
-  { path: 'tos',
+  {
+    path: 'tos',
     component: InfoComponent,
     data: {content: 'tos'}
   },
-  { path: 'imprint',
+  {
+    path: 'imprint',
     component: InfoComponent,
     data: {content: 'imprint'}
   },
-  { path: 'dataprivacy',
+  {
+    path: 'dataprivacy',
     component: InfoComponent,
     data: {content: 'dataprivacy'}
   },
-  { path: '',
+  {
+    path: '',
     component: HomeComponent,
-    data: { }
+    data: {}
   },
   /*
   { path: '',
@@ -79,7 +88,8 @@ const appRoutes: Routes = [
     LanguageSwitcherComponent,
     InfoComponent,
     SessionManagementComponent,
-    ThemeSwitcherComponent
+    ThemeSwitcherComponent,
+    NicknameChooserComponent
   ],
   imports: [
     SharedModule,
@@ -93,7 +103,7 @@ const appRoutes: Routes = [
     }),
     RouterModule.forRoot(
       appRoutes,
-      { enableTracing: false } // <-- debugging purposes only
+      {enableTracing: false} // <-- debugging purposes only
     ),
     HeaderModule,
     FooterModule,

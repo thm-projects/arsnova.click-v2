@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AnsweroptionsDefaultComponent } from './answeroptions-default.component';
+import {AnsweroptionsDefaultComponent} from './answeroptions-default.component';
 
 describe('AnsweroptionsDefaultComponent', () => {
   let component: AnsweroptionsDefaultComponent;
@@ -8,9 +8,9 @@ describe('AnsweroptionsDefaultComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnsweroptionsDefaultComponent ]
+      declarations: [AnsweroptionsDefaultComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AnsweroptionsFreetextComponent } from './answeroptions-freetext.component';
+import {AnsweroptionsFreetextComponent} from './answeroptions-freetext.component';
 
 describe('AnsweroptionsFreetextComponent', () => {
   let component: AnsweroptionsFreetextComponent;
@@ -8,9 +8,9 @@ describe('AnsweroptionsFreetextComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnsweroptionsFreetextComponent ]
+      declarations: [AnsweroptionsFreetextComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,3 +1,6 @@
 <p>
   quiz-lobby works!
 </p>
+<div *ngFor="let elem of players" id="elem.id" [style.background-color]="sanitizeHTML(elem.colorCode)">
+  <p [innerText]="elem.name"></p>
+</div>

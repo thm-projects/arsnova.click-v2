@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {ModalI} from "../modals.module";
-import {TranslateService} from "@ngx-translate/core";
-import {ActiveQuestionGroupService} from "../../service/active-question-group.service";
-import {questionGroupReflection} from "../../../lib/questions/questionGroup_reflection";
-import {QuestionGroupI} from "../../../lib/questions/QuestionGroupI";
+import {Component, OnInit} from '@angular/core';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {ModalI} from '../modals.module';
+import {TranslateService} from '@ngx-translate/core';
+import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
+import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
+import {IQuestionGroup} from '../../../lib/questions/interfaces';
 
 @Component({
   selector: 'app-available-quizzes',
@@ -12,7 +12,7 @@ import {QuestionGroupI} from "../../../lib/questions/QuestionGroupI";
   styleUrls: ['./available-quizzes.component.scss']
 })
 export class AvailableQuizzesComponent implements OnInit, ModalI {
-  private _sessions: Array<QuestionGroupI> = [];
+  private _sessions: Array<IQuestionGroup> = [];
 
   dismiss(result?: any): void {
     this.activeModal.dismiss(result);
@@ -26,7 +26,7 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
     this.activeModal.close(result);
   }
 
-  get sessions(): Array<QuestionGroupI> {
+  get sessions(): Array<IQuestionGroup> {
     return this._sessions;
   }
 
@@ -44,12 +44,12 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
     });
   }
 
-  startQuiz(session: QuestionGroupI): void {
+  startQuiz(session: IQuestionGroup): void {
     this.activeQuestionGroupService.activeQuestionGroup = session;
     this.next();
   }
 
-  editQuiz(session: QuestionGroupI): void {
+  editQuiz(session: IQuestionGroup): void {
     this.activeQuestionGroupService.activeQuestionGroup = session;
     this.next();
   }

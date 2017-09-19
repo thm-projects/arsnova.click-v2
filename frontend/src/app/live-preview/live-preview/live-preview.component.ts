@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {DeviceTypes, EnvironmentTypes} from "../live-preview.module";
-import {QuestionTextService} from "../../service/question-text.service";
-import {Subscription} from "rxjs/Subscription";
+import {DeviceTypes, EnvironmentTypes} from '../live-preview.module';
+import {QuestionTextService} from '../../service/question-text.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-live-preview',
@@ -19,13 +19,18 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   constructor(private questionTextService: QuestionTextService) {
   }
 
-  public deviceClass () {
+  public deviceClass() {
     switch (this.targetDevice) {
-      case 0: return 'device_xs';
-      case 1: return 'device_sm';
-      case 2: return 'device_md';
-      case 3: return 'device_lg';
-      case 4: return 'device_xlg';
+      case 0:
+        return 'device_xs';
+      case 1:
+        return 'device_sm';
+      case 2:
+        return 'device_md';
+      case 3:
+        return 'device_lg';
+      case 4:
+        return 'device_xlg';
     }
   }
 

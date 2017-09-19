@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {QuestionI} from "../../../../lib/questions/QuestionI";
-import {Subscription} from "rxjs/Subscription";
-import {ActiveQuestionGroupService} from "../../../service/active-question-group.service";
-import {ActivatedRoute} from "@angular/router";
-import {FooterBarService} from "../../../service/footer-bar.service";
-import {FooterBarComponent} from "app/footer/footer-bar/footer-bar.component";
+import {Subscription} from 'rxjs/Subscription';
+import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
+import {ActivatedRoute} from '@angular/router';
+import {FooterBarService} from '../../../service/footer-bar.service';
+import {FooterBarComponent} from 'app/footer/footer-bar/footer-bar.component';
+import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
   selector: 'app-answeroptions',
@@ -17,7 +17,7 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
   }
 
   private _questionIndex: number;
-  private _question: QuestionI;
+  private _question: IQuestion;
   private _routerSubscription: Subscription;
   private _renderedComponent: string;
 

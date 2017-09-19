@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActiveQuestionGroupService} from "../../../service/active-question-group.service";
-import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute} from "@angular/router";
-import {FooterBarService} from "../../../service/footer-bar.service";
-import {FooterBarComponent} from "../../../footer/footer-bar/footer-bar.component";
-import {QuestionI} from "../../../../lib/questions/QuestionI";
-import {Subscription} from "rxjs/Subscription";
-import {questionReflection} from "../../../../lib/questions/question_reflection";
+import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
+import {TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute} from '@angular/router';
+import {FooterBarService} from '../../../service/footer-bar.service';
+import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
+import {Subscription} from 'rxjs/Subscription';
+import {questionReflection} from '../../../../lib/questions/question_reflection';
+import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
   selector: 'app-questiontype',
@@ -14,14 +14,14 @@ import {questionReflection} from "../../../../lib/questions/question_reflection"
   styleUrls: ['./questiontype.component.scss']
 })
 export class QuestiontypeComponent implements OnInit, OnDestroy {
-  get questionTypes(): Array<QuestionI> {
+  get questionTypes(): Array<IQuestion> {
     return this._questionTypes;
   }
 
   private _routerSubscription: Subscription;
-  private _question: QuestionI;
+  private _question: IQuestion;
   private _questionIndex: number;
-  private _questionTypes: Array<QuestionI> = [];
+  private _questionTypes: Array<IQuestion> = [];
   private _questionType: string;
 
   constructor(private activeQuestionGroupService: ActiveQuestionGroupService,

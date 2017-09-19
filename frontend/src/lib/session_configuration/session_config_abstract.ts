@@ -17,22 +17,23 @@
 
 import {MusicSessionConfiguration} from './session_config_music';
 import {NickSessionConfiguration} from './session_config_nicks';
-import {DefaultSettings} from "../../app/service/settings.service";
+import {DefaultSettings} from '../../app/service/settings.service';
+import {ISessionConfiguration, IMusicSessionConfiguration, INickSessionConfiguration} from './interfaces';
 
-export abstract class AbstractSessionConfiguration {
-  get music(): MusicSessionConfiguration {
+export abstract class AbstractSessionConfiguration implements ISessionConfiguration {
+  get music(): IMusicSessionConfiguration {
     return this._music;
   }
 
-  set music(value: MusicSessionConfiguration) {
+  set music(value: IMusicSessionConfiguration) {
     this._music = value;
   }
 
-  get nicks(): NickSessionConfiguration {
+  get nicks(): INickSessionConfiguration {
     return this._nicks;
   }
 
-  set nicks(value: NickSessionConfiguration) {
+  set nicks(value: INickSessionConfiguration) {
     this._nicks = value;
   }
 
@@ -68,44 +69,46 @@ export abstract class AbstractSessionConfiguration {
     this._confidenceSliderEnabled = value;
   }
 
-  private _music: MusicSessionConfiguration;
-  private _nicks: NickSessionConfiguration;
+  private _music: IMusicSessionConfiguration;
+  private _nicks: INickSessionConfiguration;
   private _theme: string;
   private _readingConfirmationEnabled: boolean;
   private _showResponseProgress: boolean;
   private _confidenceSliderEnabled: boolean;
 
-	constructor ({ music = new MusicSessionConfiguration({}),
-                 nicks = new NickSessionConfiguration({}),
-                 theme = DefaultSettings.defaultSettings.theme,
-                 readingConfirmationEnabled = DefaultSettings.defaultSettings.readingConfirmationEnabled,
-                 showResponseProgress = DefaultSettings.defaultSettings.showResponseProgress,
-                 confidenceSliderEnabled = DefaultSettings.defaultSettings.confidenceSliderEnabled}) {
-		this.music = new MusicSessionConfiguration(music);
-		this.nicks = new NickSessionConfiguration(nicks);
-		this.theme = theme;
-		this.readingConfirmationEnabled = readingConfirmationEnabled;
-		this.showResponseProgress = showResponseProgress;
-		this.confidenceSliderEnabled = confidenceSliderEnabled;
-	}
+  constructor({
+                music = {},
+                nicks = {},
+                theme = DefaultSettings.defaultSettings.theme,
+                readingConfirmationEnabled = DefaultSettings.defaultSettings.readingConfirmationEnabled,
+                showResponseProgress = DefaultSettings.defaultSettings.showResponseProgress,
+                confidenceSliderEnabled = DefaultSettings.defaultSettings.confidenceSliderEnabled
+              }) {
+    this.music = new MusicSessionConfiguration(music || {});
+    this.nicks = new NickSessionConfiguration(nicks || {});
+    this.theme = theme;
+    this.readingConfirmationEnabled = readingConfirmationEnabled;
+    this.showResponseProgress = showResponseProgress;
+    this.confidenceSliderEnabled = confidenceSliderEnabled;
+  }
 
-	serialize (): Object {
-		return {
-			music: this.music.serialize(),
-			nicks: this.nicks.serialize(),
-			theme: this.theme,
-			readingConfirmationEnabled: this.readingConfirmationEnabled,
-			showResponseProgress: this.showResponseProgress,
-			confidenceSliderEnabled: this.confidenceSliderEnabled
-		};
-	}
+  serialize(): any {
+    return {
+      music: this.music.serialize(),
+      nicks: this.nicks.serialize(),
+      theme: this.theme,
+      readingConfirmationEnabled: this.readingConfirmationEnabled,
+      showResponseProgress: this.showResponseProgress,
+      confidenceSliderEnabled: this.confidenceSliderEnabled
+    };
+  }
 
-	equals (value: AbstractSessionConfiguration): boolean {
-		return this.music.equals(value.music) &&
-				this.nicks.equals(value.nicks) &&
-				this.theme === value.theme &&
-				this.readingConfirmationEnabled === value.readingConfirmationEnabled &&
-				this.showResponseProgress === value.showResponseProgress &&
-				this.confidenceSliderEnabled === value.confidenceSliderEnabled;
-	}
+  equals(value: ISessionConfiguration): boolean {
+    return this.music.equals(value.music) &&
+      this.nicks.equals(value.nicks) &&
+      this.theme === value.theme &&
+      this.readingConfirmationEnabled === value.readingConfirmationEnabled &&
+      this.showResponseProgress === value.showResponseProgress &&
+      this.confidenceSliderEnabled === value.confidenceSliderEnabled;
+  }
 }

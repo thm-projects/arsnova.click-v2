@@ -1,4 +1,3 @@
-
 <div>
   <!--global.gamificationAnimation-->
   <!--header-->
@@ -7,19 +6,19 @@
     <app-header [headerLabel]="getHeaderLabel()"></app-header>
   </div>
 
- <div class="container-fluid">
-   <div class="row">
-     <!--footer.navigation-->
-     <!--footer-->
-     <div class="col-12 col-sm-2 p-0">
-       <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
-     </div>
+  <div class="container-fluid">
+    <div class="row">
+      <!--footer.navigation-->
+      <!--footer-->
+      <div class="col-12 col-sm-2 p-0">
+        <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
+      </div>
 
-     <div class="col-12 col-sm-10">
-       <div class="container-fluid" id="contentContainer">
-         <router-outlet></router-outlet>
-       </div>
-     </div>
-   </div>
- </div>
+      <div class="col-12 col-sm-10">
+        <div class="container-fluid" id="contentContainer">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

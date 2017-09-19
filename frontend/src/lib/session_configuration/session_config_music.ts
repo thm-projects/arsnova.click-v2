@@ -1,6 +1,7 @@
-import {DefaultSettings} from "../../app/service/settings.service";
+import {DefaultSettings} from '../../app/service/settings.service';
+import {IMusicSessionConfiguration, ITitleMusicSessionConfiguration, IVolumeMusicSessionConfiguration} from './interfaces';
 
-class VolumeConfiguration {
+class VolumeConfiguration implements IVolumeMusicSessionConfiguration {
   get useGlobalVolume(): boolean {
     return this._useGlobalVolume;
   }
@@ -8,6 +9,7 @@ class VolumeConfiguration {
   set useGlobalVolume(value: boolean) {
     this._useGlobalVolume = value;
   }
+
   get global(): number {
     return this._global;
   }
@@ -39,22 +41,27 @@ class VolumeConfiguration {
   set countdownEnd(value: number) {
     this._countdownEnd = value;
   }
+
   private _global: number;
   private _lobby: number;
   private _countdownRunning: number;
   private _countdownEnd: number;
   private _useGlobalVolume: boolean;
-  constructor ({ global = DefaultSettings.defaultSettings.music.volume.global,
-                 lobby = DefaultSettings.defaultSettings.music.volume.lobby,
-                 countdownRunning = DefaultSettings.defaultSettings.music.volume.countdownRunning,
-                 countdownEnd = DefaultSettings.defaultSettings.music.volume.countdownEnd,
-                 useGlobalVolume = DefaultSettings.defaultSettings.music.volume.useGlobal}) {
+
+  constructor({
+                global = DefaultSettings.defaultSettings.music.volume.global,
+                lobby = DefaultSettings.defaultSettings.music.volume.lobby,
+                countdownRunning = DefaultSettings.defaultSettings.music.volume.countdownRunning,
+                countdownEnd = DefaultSettings.defaultSettings.music.volume.countdownEnd,
+                useGlobalVolume = DefaultSettings.defaultSettings.music.volume.useGlobal
+              }) {
     this._global = global;
     this._lobby = lobby;
     this._countdownRunning = countdownRunning;
     this._countdownEnd = countdownEnd;
     this._useGlobalVolume = useGlobalVolume;
   }
+
   serialize(): Object {
     return {
       global: this.global,
@@ -66,7 +73,7 @@ class VolumeConfiguration {
   }
 }
 
-class TitleConfiguration {
+class TitleConfiguration implements ITitleMusicSessionConfiguration {
   get lobby(): string {
     return this._lobby;
   }
@@ -90,16 +97,21 @@ class TitleConfiguration {
   set countdownEnd(value: string) {
     this._countdownEnd = value;
   }
+
   private _lobby: string;
   private _countdownRunning: string;
   private _countdownEnd: string;
-  constructor ({ lobby = DefaultSettings.defaultSettings.music.title.lobby,
-                 countdownRunning = DefaultSettings.defaultSettings.music.title.countdownRunning,
-                 countdownEnd = DefaultSettings.defaultSettings.music.title.countdownEnd}) {
+
+  constructor({
+                lobby = DefaultSettings.defaultSettings.music.title.lobby,
+                countdownRunning = DefaultSettings.defaultSettings.music.title.countdownRunning,
+                countdownEnd = DefaultSettings.defaultSettings.music.title.countdownEnd
+              }) {
     this._lobby = lobby;
     this._countdownRunning = countdownRunning;
     this._countdownEnd = countdownEnd;
   }
+
   serialize(): Object {
     return {
       lobby: this.lobby,
@@ -109,20 +121,20 @@ class TitleConfiguration {
   }
 }
 
-export class MusicSessionConfiguration {
-  get volumeConfig(): VolumeConfiguration {
+export class MusicSessionConfiguration implements IMusicSessionConfiguration {
+  get volumeConfig(): IVolumeMusicSessionConfiguration {
     return this._volumeConfig;
   }
 
-  set volumeConfig(value: VolumeConfiguration) {
+  set volumeConfig(value: IVolumeMusicSessionConfiguration) {
     this._volumeConfig = value;
   }
 
-  get titleConfig(): TitleConfiguration {
+  get titleConfig(): ITitleMusicSessionConfiguration {
     return this._titleConfig;
   }
 
-  set titleConfig(value: TitleConfiguration) {
+  set titleConfig(value: ITitleMusicSessionConfiguration) {
     this._titleConfig = value;
   }
 
@@ -150,39 +162,40 @@ export class MusicSessionConfiguration {
     this._countdownEndEnabled = value;
   }
 
-  private _volumeConfig: VolumeConfiguration;
-  private _titleConfig: TitleConfiguration;
+  private _volumeConfig: IVolumeMusicSessionConfiguration;
+  private _titleConfig: ITitleMusicSessionConfiguration;
   private _lobbyEnabled: boolean;
   private _countdownRunningEnabled: boolean;
   private _countdownEndEnabled: boolean;
 
-	constructor ({ volumeConfig = new VolumeConfiguration({}),
-                 titleConfig = new TitleConfiguration({}),
-                 lobbyEnabled = DefaultSettings.defaultSettings.music.enabled.lobby,
-                 countdownRunningEnabled = DefaultSettings.defaultSettings.music.enabled.countdownRunning,
-                 countdownEndEnabled = DefaultSettings.defaultSettings.music.enabled.countdownEnd
-               }) {
+  constructor({
+                volumeConfig = {},
+                titleConfig = {},
+                lobbyEnabled = DefaultSettings.defaultSettings.music.enabled.lobby,
+                countdownRunningEnabled = DefaultSettings.defaultSettings.music.enabled.countdownRunning,
+                countdownEndEnabled = DefaultSettings.defaultSettings.music.enabled.countdownEnd
+              }) {
     this.volumeConfig = new VolumeConfiguration(volumeConfig);
     this.titleConfig = new TitleConfiguration(titleConfig);
-		this.lobbyEnabled = lobbyEnabled;
-		this.countdownRunningEnabled = countdownRunningEnabled;
-		this.countdownEndEnabled = countdownEndEnabled;
-	}
+    this.lobbyEnabled = lobbyEnabled;
+    this.countdownRunningEnabled = countdownRunningEnabled;
+    this.countdownEndEnabled = countdownEndEnabled;
+  }
 
-	serialize (): Object {
-		return {
-		  enabled: {
-		    lobby: this.lobbyEnabled,
+  serialize(): Object {
+    return {
+      enabled: {
+        lobby: this.lobbyEnabled,
         countdownRunning: this.countdownRunningEnabled,
         countdownEnd: this.countdownEndEnabled
       },
       volumeConfig: this.volumeConfig.serialize(),
       titleConfig: this.titleConfig.serialize()
-		};
-	}
+    };
+  }
 
-	equals (value: MusicSessionConfiguration): boolean {
-		return (
+  equals(value: IMusicSessionConfiguration): boolean {
+    return (
       this.volumeConfig.global === value.volumeConfig.global &&
       this.volumeConfig.lobby === value.volumeConfig.lobby &&
       this.volumeConfig.countdownRunning === value.volumeConfig.countdownRunning &&
@@ -192,9 +205,9 @@ export class MusicSessionConfiguration {
       this.titleConfig.countdownRunning === value.titleConfig.countdownRunning &&
       this.titleConfig.countdownEnd === value.titleConfig.countdownEnd &&
 
-			this.lobbyEnabled === value.lobbyEnabled &&
-			this.countdownRunningEnabled === value.countdownRunningEnabled &&
-			this.countdownEndEnabled === value.countdownEndEnabled
-		);
-	}
+      this.lobbyEnabled === value.lobbyEnabled &&
+      this.countdownRunningEnabled === value.countdownRunningEnabled &&
+      this.countdownEndEnabled === value.countdownEndEnabled
+    );
+  }
 }

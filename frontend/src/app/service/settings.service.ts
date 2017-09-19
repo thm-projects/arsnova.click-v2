@@ -13,7 +13,7 @@ export const DefaultSettings = {
     },
     question: {
       showOneAnswerPerRow: true,
-      text: "",
+      text: '',
       timer: 0,
       multipleSurveySelectionEnabled: true,
       rangeMin: 0,
@@ -40,16 +40,16 @@ export const DefaultSettings = {
       },
       availableTitles: {
         basePath: 'public/songs',
-        lobby: ["Song0", "Song1", "Song2", "Song3"],
-        countdownRunning: ["Song0", "Song1", "Song2"],
-        countdownEnd: ["Song0", "Song1"]
+        lobby: ['Song0', 'Song1', 'Song2', 'Song3'],
+        countdownRunning: ['Song0', 'Song1', 'Song2'],
+        countdownEnd: ['Song0', 'Song1']
       }
     },
     nicks: {
       blockIllegalNicks: true,
       restrictToCasLogin: false
     },
-    theme: "theme-Material",
+    theme: 'theme-Material',
     readingConfirmationEnabled: true,
     showResponseProgress: true,
     confidenceSliderEnabled: true

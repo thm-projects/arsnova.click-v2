@@ -1,11 +1,11 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {DeviceTypes, EnvironmentTypes} from "../../../live-preview/live-preview.module";
-import {FooterBarService} from "../../../service/footer-bar.service";
-import {FooterBarComponent} from "../../../footer/footer-bar/footer-bar.component";
-import {QuestionTextService} from "../../../service/question-text.service";
-import {Subscription} from "rxjs/Subscription";
-import {ActivatedRoute} from "@angular/router";
-import {ActiveQuestionGroupService} from "../../../service/active-question-group.service";
+import {DeviceTypes, EnvironmentTypes} from '../../../live-preview/live-preview.module';
+import {FooterBarService} from '../../../service/footer-bar.service';
+import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
+import {QuestionTextService} from '../../../service/question-text.service';
+import {Subscription} from 'rxjs/Subscription';
+import {ActivatedRoute} from '@angular/router';
+import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 
 @Component({
   selector: 'app-questiontext',
@@ -78,20 +78,20 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   }
 
   connector(event) {
-    switch(event) {
-      case "boldMarkdownButton":
+    switch (event) {
+      case 'boldMarkdownButton':
         this.wrapMarkdownSymbol('**');
         break;
-      case "underlineMarkdownButton":
+      case 'underlineMarkdownButton':
         this.wrapMarkdownSymbol('__');
         break;
-      case "strikeThroughMarkdownButton":
+      case 'strikeThroughMarkdownButton':
         this.wrapMarkdownSymbol('~~');
         break;
-      case "italicMarkdownButton":
+      case 'italicMarkdownButton':
         this.wrapMarkdownSymbol('*');
         break;
-      case "headerMarkdownButton":
+      case 'headerMarkdownButton':
         this.prependMarkdownSymbol('#', 6);
         break;
     }

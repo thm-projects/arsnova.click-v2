@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { QuizManagerComponent } from './quiz-manager.component';
+import {QuizManagerComponent} from './quiz-manager.component';
 
 describe('QuizManagerComponent', () => {
   let component: QuizManagerComponent;
@@ -8,9 +8,9 @@ describe('QuizManagerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ QuizManagerComponent ]
+      declarations: [QuizManagerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

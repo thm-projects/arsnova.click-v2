@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {FooterBarComponent} from "../footer/footer-bar/footer-bar.component";
-import {FooterBarService} from "../service/footer-bar.service";
-import {TranslateService} from "@ngx-translate/core";
-import {HeaderLabelService} from "../service/header-label.service";
-import {ThemesService} from "../service/themes.service";
+import {FooterBarComponent} from '../footer/footer-bar/footer-bar.component';
+import {FooterBarService} from '../service/footer-bar.service';
+import {TranslateService} from '@ngx-translate/core';
+import {HeaderLabelService} from '../service/header-label.service';
+import {ThemesService} from '../service/themes.service';
 
 @Component({
   selector: 'app-themes',
@@ -12,9 +12,9 @@ import {ThemesService} from "../service/themes.service";
 })
 export class ThemesComponent implements OnInit, OnDestroy {
 
-  @Output()updateTheme = new EventEmitter<string>();
-  @Output()previewTheme = new EventEmitter<string>();
-  @Output()restoreTheme = new EventEmitter<string>();
+  @Output() updateTheme = new EventEmitter<string>();
+  @Output() previewTheme = new EventEmitter<string>();
+  @Output() restoreTheme = new EventEmitter<string>();
 
   constructor(private translateService: TranslateService,
               public themesService: ThemesService) {

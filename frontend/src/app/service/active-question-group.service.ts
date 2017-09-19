@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import {questionGroupReflection} from "../../lib/questions/questionGroup_reflection";
-import {QuestionGroupI} from "../../lib/questions/QuestionGroupI";
+import {Injectable} from '@angular/core';
+import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
+import {IQuestionGroup} from '../../lib/questions/interfaces';
 
 @Injectable()
 export class ActiveQuestionGroupService {
-  get activeQuestionGroup(): QuestionGroupI {
+  get activeQuestionGroup(): IQuestionGroup {
     return this._activeQuestionGroup;
   }
 
-  set activeQuestionGroup(value: QuestionGroupI) {
+  set activeQuestionGroup(value: IQuestionGroup) {
     if (!value) {
       window.sessionStorage.removeItem('questionGroup');
     } else {
@@ -17,7 +17,7 @@ export class ActiveQuestionGroupService {
     this._activeQuestionGroup = value;
   }
 
-  private _activeQuestionGroup: QuestionGroupI;
+  private _activeQuestionGroup: IQuestionGroup;
 
   constructor() {
     if (window.sessionStorage.getItem('questionGroup')) {

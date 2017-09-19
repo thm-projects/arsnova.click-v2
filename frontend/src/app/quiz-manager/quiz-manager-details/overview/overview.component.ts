@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActiveQuestionGroupService} from "../../../service/active-question-group.service";
-import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute} from "@angular/router";
-import {Subscription} from "rxjs/Subscription";
-import {QuestionI} from "../../../../lib/questions/QuestionI";
-import {FooterBarService} from "../../../service/footer-bar.service";
-import {FooterBarComponent} from "../../../footer/footer-bar/footer-bar.component";
+import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
+import {TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs/Subscription';
+import {FooterBarService} from '../../../service/footer-bar.service';
+import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
+import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
   selector: 'app-overview',
@@ -16,11 +16,12 @@ export class OverviewComponent implements OnInit, OnDestroy {
   get questionIndex(): number {
     return this._questionIndex;
   }
-  get question(): QuestionI {
+
+  get question(): IQuestion {
     return this._question;
   }
 
-  private _question: QuestionI;
+  private _question: IQuestion;
   private _questionIndex: number;
   private _routerSubscription: Subscription;
 

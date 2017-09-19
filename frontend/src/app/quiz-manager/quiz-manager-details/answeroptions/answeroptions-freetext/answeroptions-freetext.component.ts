@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {QuestionI} from "../../../../../lib/questions/QuestionI";
-import {Subscription} from "rxjs/Subscription";
-import {ActiveQuestionGroupService} from "../../../../service/active-question-group.service";
-import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute} from "@angular/router";
-import {FreeTextAnswerOption} from "../../../../../lib/answeroptions/answeroption_freetext";
+import {Subscription} from 'rxjs/Subscription';
+import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
+import {TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute} from '@angular/router';
+import {FreeTextAnswerOption} from '../../../../../lib/answeroptions/answeroption_freetext';
+import {IQuestion} from '../../../../../lib/questions/interfaces';
 
 @Component({
   selector: 'app-answeroptions-freetext',
@@ -16,12 +16,12 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
     return this._matchText;
   }
 
-  get question(): QuestionI {
+  get question(): IQuestion {
     return this._question;
   }
 
   private _questionIndex: number;
-  private _question: QuestionI;
+  private _question: IQuestion;
   private _routerSubscription: Subscription;
   private _testInput: string = '';
   private _matchText: string = '';

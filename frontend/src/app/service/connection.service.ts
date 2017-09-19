@@ -1,35 +1,40 @@
-import { Injectable } from '@angular/core';
-import {DefaultSettings} from "./settings.service";
-import {HttpClient} from "@angular/common/http";
-import {WebsocketService} from "./websocket.service";
-import {Subject} from "rxjs/Subject";
+import {Injectable} from '@angular/core';
+import {DefaultSettings} from './settings.service';
+import {HttpClient} from '@angular/common/http';
+import {WebsocketService} from './websocket.service';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class ConnectionService {
   get socket(): Subject<any> {
     return this._socket;
   }
+
   set serverAvailable(value: Boolean) {
     this._serverAvailable = value;
   }
+
   get serverAvailable(): Boolean {
     return this._serverAvailable;
   }
+
   get websocketAvailable(): Boolean {
     return this._websocketAvailable;
   }
+
   get rtt(): number {
     return this._rtt;
   }
 
   private _socket: Subject<any>;
-  private _serverAvailable: Boolean = false;
+  private _serverAvailable: Boolean;
   private _websocketAvailable: Boolean = false;
   private _rtt: number = 0;
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}/`;
 
   constructor(private websocketService: WebsocketService,
-              private http:HttpClient) {
+              private http: HttpClient) {
+    this.initConnection();
     this.initWebsocket();
   }
 
@@ -37,6 +42,7 @@ export class ConnectionService {
     this._socket = this.websocketService.createWebsocket();
     this._socket.subscribe(
       message => {
+        window.sessionStorage.setItem('webSocket', JSON.parse(message.data).id);
         this._websocketAvailable = true;
       },
       message => {
@@ -46,6 +52,26 @@ export class ConnectionService {
         this._websocketAvailable = false;
       }
     );
+  }
+
+  initConnection(): Promise<boolean> {
+    const self = this;
+    return new Promise<boolean>((resolve, reject) => {
+      if (self.serverAvailable) {
+        resolve();
+      }
+      self.http.get(`${self._httpApiEndpoint}`).subscribe(
+        () => {
+          self.serverAvailable = true;
+          resolve();
+        },
+        () => {
+          self.serverAvailable = false;
+          self._websocketAvailable = false;
+          reject();
+        }
+      );
+    });
   }
 
   calculateRTT() {

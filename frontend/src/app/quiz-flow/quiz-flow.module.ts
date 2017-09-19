@@ -1,33 +1,38 @@
-import { NgModule } from '@angular/core';
-import { QuizLobbyComponent } from './quiz-lobby/quiz-lobby.component';
-import { VotingComponent } from './voting/voting.component';
-import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { QuizResultsComponent } from './quiz-results/quiz-results.component';
-import {RouterModule, Routes} from "@angular/router";
-import {SharedModule} from "../shared/shared.module";
-import { QuizThemeComponent } from './quiz-theme/quiz-theme.component';
-import {ThemesModule} from "../themes/themes.module";
+import {NgModule} from '@angular/core';
+import {QuizLobbyComponent} from './quiz-lobby/quiz-lobby.component';
+import {VotingComponent} from './voting/voting.component';
+import {LeaderboardComponent} from './leaderboard/leaderboard.component';
+import {QuizResultsComponent} from './quiz-results/quiz-results.component';
+import {RouterModule, Routes} from '@angular/router';
+import {SharedModule} from '../shared/shared.module';
+import {QuizThemeComponent} from './quiz-theme/quiz-theme.component';
+import {ThemesModule} from '../themes/themes.module';
 
 const quizFlowRoutes: Routes = [
-  { path: 'quiz-lobby',
+  {
+    path: 'quiz-lobby',
     component: QuizLobbyComponent,
-    data: { }
+    data: {}
   },
-  { path: 'quiz-results',
+  {
+    path: 'quiz-results',
     component: QuizResultsComponent,
-    data: { }
+    data: {}
   },
-  { path: 'quiz-theme',
+  {
+    path: 'quiz-theme',
     component: QuizThemeComponent,
     data: {}
   },
-  { path: 'leaderboard/:questionIndex',
+  {
+    path: 'leaderboard/:questionIndex',
     component: LeaderboardComponent,
-    data: { }
+    data: {}
   },
-  { path: 'voting/:questionIndex',
+  {
+    path: 'voting/:questionIndex',
     component: VotingComponent,
-    data: { }
+    data: {}
   },
   /*
   { path: '',
@@ -46,4 +51,5 @@ const quizFlowRoutes: Routes = [
   ],
   declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizResultsComponent, QuizThemeComponent]
 })
-export class QuizFlowModule { }
+export class QuizFlowModule {
+}

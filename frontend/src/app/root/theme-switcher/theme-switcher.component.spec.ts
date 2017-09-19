@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ThemeSwitcherComponent } from './theme-switcher.component';
+import {ThemeSwitcherComponent} from './theme-switcher.component';
 
 describe('ThemeSwitcherComponent', () => {
   let component: ThemeSwitcherComponent;
@@ -8,9 +8,9 @@ describe('ThemeSwitcherComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ThemeSwitcherComponent ]
+      declarations: [ThemeSwitcherComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

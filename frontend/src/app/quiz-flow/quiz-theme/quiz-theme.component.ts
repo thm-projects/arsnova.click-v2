@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FooterBarService} from "../../service/footer-bar.service";
-import {ActiveQuestionGroupService} from "../../service/active-question-group.service";
-import {FooterBarComponent} from "../../footer/footer-bar/footer-bar.component";
-import {ThemesService} from "../../service/themes.service";
+import {FooterBarService} from '../../service/footer-bar.service';
+import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
+import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
+import {ThemesService} from '../../service/themes.service';
 
 @Component({
   selector: 'app-quiz-theme',

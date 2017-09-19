@@ -1,12 +1,9 @@
-import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {QuestionI} from "../../../../../lib/questions/QuestionI";
-import {Subscription} from "rxjs/Subscription";
-import {ActiveQuestionGroupService} from "../../../../service/active-question-group.service";
-import {TranslateService} from "@ngx-translate/core";
-import {ActivatedRoute} from "@angular/router";
-import {DefaultAnswerOption} from "../../../../../lib/answeroptions/answeroption_default";
-import {QuestionSurveyI} from "../../../../../lib/questions/QuestionSurveyI";
-import {QuestionChoiceI} from "../../../../../lib/questions/QuestionChoiceI";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subscription} from 'rxjs/Subscription';
+import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
+import {TranslateService} from '@ngx-translate/core';
+import {ActivatedRoute} from '@angular/router';
+import {IQuestionChoice, IQuestionSurvey} from '../../../../../lib/questions/interfaces';
 
 @Component({
   selector: 'app-answeroptions-default',
@@ -14,12 +11,12 @@ import {QuestionChoiceI} from "../../../../../lib/questions/QuestionChoiceI";
   styleUrls: ['./answeroptions-default.component.scss']
 })
 export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
-  get question(): QuestionChoiceI {
+  get question(): IQuestionChoice {
     return this._question;
   }
 
   private _questionIndex: number;
-  private _question: QuestionChoiceI;
+  private _question: IQuestionChoice;
   private _routerSubscription: Subscription;
 
   constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
@@ -36,7 +33,7 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   }
 
   toggleMultipleSelectionSurvey(): void {
-    (<QuestionSurveyI>this._question).multipleSelectionEnabled = !(<QuestionSurveyI>this._question).multipleSelectionEnabled;
+    (<IQuestionSurvey>this._question).multipleSelectionEnabled = !(<IQuestionSurvey>this._question).multipleSelectionEnabled;
   }
 
   toggleShowOneAnswerPerRow(): void {
@@ -50,7 +47,7 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
-      this._question = <QuestionChoiceI>this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
+      this._question = <IQuestionChoice>this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
     });
   }
 

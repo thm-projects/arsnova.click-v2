@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { MarkdownBarComponent } from './markdown-bar.component';
+import {MarkdownBarComponent} from './markdown-bar.component';
 
 describe('MarkdownBarComponent', () => {
   let component: MarkdownBarComponent;
@@ -8,9 +8,9 @@ describe('MarkdownBarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MarkdownBarComponent ]
+      declarations: [MarkdownBarComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

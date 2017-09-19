@@ -71,7 +71,8 @@
               </p>
             </div>
             <div *ngIf="question.TYPE === 'FreeTextQuestion'">
-              <p role="listitem" [innerHTML]="question.answerOptionList[0].answerText || ('component.quiz_summary.validation_errors.reasons.empty_question_text' | translate)"></p>
+              <p role="listitem"
+                 [innerHTML]="question.answerOptionList[0].answerText || ('component.quiz_summary.validation_errors.reasons.empty_question_text' | translate)"></p>
             </div>
             <div *ngIf="!['RangedQuestion', 'FreeTextQuestion'].includes(question.TYPE)">
               <p role="listitem" *ngFor="let answer of question.answerOptionList; let i = index;">

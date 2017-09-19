@@ -1,6 +1,7 @@
 import {AbstractAnswerOption} from './answeroption_abstract';
+import {IFreetextAnswerOption} from './interfaces';
 
-export class FreeTextAnswerOption extends AbstractAnswerOption {
+export class FreeTextAnswerOption extends AbstractAnswerOption implements IFreetextAnswerOption {
   get configCaseSensitive(): boolean {
     return this._configCaseSensitive;
   }
@@ -33,21 +34,21 @@ export class FreeTextAnswerOption extends AbstractAnswerOption {
     this._configUsePunctuation = value;
   }
 
-  readonly TYPE: string = "FreeTextAnswerOption";
+  readonly TYPE: string = 'FreeTextAnswerOption';
   private _configCaseSensitive: boolean;
   private _configTrimWhitespaces: boolean;
   private _configUseKeywords: boolean;
   private _configUsePunctuation: boolean;
 
-	constructor ({answerText, configCaseSensitive, configTrimWhitespaces, configUseKeywords, configUsePunctuation}) {
-		super({answerText});
-		this._configCaseSensitive = configCaseSensitive;
-		this._configTrimWhitespaces = configTrimWhitespaces;
-		this._configUseKeywords = configUseKeywords;
-		this._configUsePunctuation = configUsePunctuation;
-	}
+  constructor({answerText, configCaseSensitive, configTrimWhitespaces, configUseKeywords, configUsePunctuation}) {
+    super({answerText});
+    this._configCaseSensitive = configCaseSensitive;
+    this._configTrimWhitespaces = configTrimWhitespaces;
+    this._configUseKeywords = configUseKeywords;
+    this._configUsePunctuation = configUsePunctuation;
+  }
 
-	isCorrectInput(ref: string): boolean {
+  isCorrectInput(ref: string): boolean {
     let refValue = this.answerText;
     let result = false;
     if (!this.configCaseSensitive) {
@@ -75,79 +76,79 @@ export class FreeTextAnswerOption extends AbstractAnswerOption {
     return result;
   }
 
-	setConfig (configIdentifier: string, configValue: boolean) {
-		switch (configIdentifier) {
-			case "config_case_sensitive_switch":
-				this.configCaseSensitive = configValue;
-				break;
-			case "config_trim_whitespaces_switch":
-				this.configTrimWhitespaces = configValue;
-				break;
-			case "config_use_keywords_switch":
-				this.configUseKeywords = configValue;
-				break;
-			case "config_use_punctuation_switch":
-				this.configUsePunctuation = configValue;
-				break;
-			default:
-				throw Error("Config not found");
-		}
-	}
+  setConfig(configIdentifier: string, configValue: boolean): void {
+    switch (configIdentifier) {
+      case 'config_case_sensitive_switch':
+        this.configCaseSensitive = configValue;
+        break;
+      case 'config_trim_whitespaces_switch':
+        this.configTrimWhitespaces = configValue;
+        break;
+      case 'config_use_keywords_switch':
+        this.configUseKeywords = configValue;
+        break;
+      case 'config_use_punctuation_switch':
+        this.configUsePunctuation = configValue;
+        break;
+      default:
+        throw Error('Config not found');
+    }
+  }
 
-	getConfig () {
-		return [
-			{
-				configTitle: "component.answeroptions.free_text_question.config_case_sensitive",
-				configEnabledString: "component.answeroptions.free_text_question." + (this.configCaseSensitive ? "onText" : "offText"),
+  getConfig(): Array<Object> {
+    return [
+      {
+        configTitle: 'component.answeroptions.free_text_question.config_case_sensitive',
+        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configCaseSensitive ? 'onText' : 'offText'),
         enabled: this.configCaseSensitive,
         id: 'config_case_sensitive_switch'
-			},
-			{
-				configTitle: "component.answeroptions.free_text_question.config_trim_whitespaces",
-        configEnabledString: "component.answeroptions.free_text_question." + (this.configTrimWhitespaces ? "onText" : "offText"),
+      },
+      {
+        configTitle: 'component.answeroptions.free_text_question.config_trim_whitespaces',
+        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configTrimWhitespaces ? 'onText' : 'offText'),
         enabled: this.configTrimWhitespaces,
         id: 'config_trim_whitespaces_switch'
-			},
-			{
-				configTitle: "component.answeroptions.free_text_question.config_use_keywords",
-        configEnabledString: "component.answeroptions.free_text_question." + (this.configUseKeywords ? "onText" : "offText"),
+      },
+      {
+        configTitle: 'component.answeroptions.free_text_question.config_use_keywords',
+        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configUseKeywords ? 'onText' : 'offText'),
         enabled: this.configUseKeywords,
         id: 'config_use_keywords_switch'
-			},
-			{
-				configTitle: "component.answeroptions.free_text_question.config_use_punctuation",
-        configEnabledString: "component.answeroptions.free_text_question." + (this.configUsePunctuation ? "onText" : "offText"),
+      },
+      {
+        configTitle: 'component.answeroptions.free_text_question.config_use_punctuation',
+        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configUsePunctuation ? 'onText' : 'offText'),
         enabled: this.configUsePunctuation,
         id: 'config_use_punctuation_switch'
-			}
-		];
-	}
+      }
+    ];
+  }
 
-	/**
-	 * Serialize the instance object to a JSON compatible object
-	 * @returns {{hashtag:String,questionIndex:Number,answerText:String,answerOptionNumber:Number,configCaseSensitive:Boolean,configTrimWhitespaces:Boolean,configUseKeywords:Boolean,configUseKeywords:Boolean,configUsePunctuation:Boolean,type:String}}
-	 */
-	serialize () {
-		return Object.assign(super.serialize(), {
-			configCaseSensitive: this.configCaseSensitive,
-			configTrimWhitespaces: this.configTrimWhitespaces,
-			configUseKeywords: this.configUseKeywords,
-			configUsePunctuation: this.configUsePunctuation,
-			type: this.TYPE
-		});
-	}
+  /**
+   * Serialize the instance object to a JSON compatible object
+   * @returns {{hashtag:String,questionIndex:Number,answerText:String,answerOptionNumber:Number,configCaseSensitive:Boolean,configTrimWhitespaces:Boolean,configUseKeywords:Boolean,configUseKeywords:Boolean,configUsePunctuation:Boolean,type:String}}
+   */
+  serialize(): Object {
+    return Object.assign(super.serialize(), {
+      configCaseSensitive: this.configCaseSensitive,
+      configTrimWhitespaces: this.configTrimWhitespaces,
+      configUseKeywords: this.configUseKeywords,
+      configUsePunctuation: this.configUsePunctuation,
+      type: this.TYPE
+    });
+  }
 
-	/**
-	 * Checks for equivalence relations to another AnswerOption instance. Also part of the EJSON interface
-	 * @see http://docs.meteor.com/api/ejson.html#EJSON-CustomType-equals
-	 * @param {AbstractAnswerOption} answerOption The AnswerOption instance which should be checked
-	 * @returns {boolean} True if both instances are completely equal, False otherwise
-	 */
-	equals (answerOption: FreeTextAnswerOption) {
-		return super.equals(answerOption) &&
-			answerOption.configCaseSensitive === this.configCaseSensitive &&
-			answerOption.configTrimWhitespaces === this.configTrimWhitespaces &&
-			answerOption.configUseKeywords === this.configUseKeywords &&
-			answerOption.configUsePunctuation === this.configUsePunctuation;
-	}
+  /**
+   * Checks for equivalence relations to another AnswerOption instance. Also part of the EJSON interface
+   * @see http://docs.meteor.com/api/ejson.html#EJSON-CustomType-equals
+   * @param {AbstractAnswerOption} answerOption The AnswerOption instance which should be checked
+   * @returns {boolean} True if both instances are completely equal, False otherwise
+   */
+  equals(answerOption: IFreetextAnswerOption): boolean {
+    return super.equals(answerOption) &&
+      answerOption.configCaseSensitive === this.configCaseSensitive &&
+      answerOption.configTrimWhitespaces === this.configTrimWhitespaces &&
+      answerOption.configUseKeywords === this.configUseKeywords &&
+      answerOption.configUsePunctuation === this.configUsePunctuation;
+  }
 }

@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FooterBarService} from "../../service/footer-bar.service";
-import {ActiveQuestionGroupService} from "app/service/active-question-group.service";
-import {TranslateService} from "@ngx-translate/core";
-import {FooterBarComponent} from "../../footer/footer-bar/footer-bar.component";
-import {Http, RequestOptions, Headers} from "@angular/http";
-import {DefaultSettings} from "../../service/settings.service";
+import {FooterBarService} from '../../service/footer-bar.service';
+import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
+import {TranslateService} from '@ngx-translate/core';
+import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
+import {Http, RequestOptions, Headers, RequestOptionsArgs} from '@angular/http';
+import {DefaultSettings} from '../../service/settings.service';
 
 @Component({
   selector: 'app-nickname-manager',
@@ -15,6 +15,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   get selectedCategory(): string {
     return this._selectedCategory;
   }
+
   get availableNicks() {
     return this._availableNicks;
   }
@@ -56,7 +57,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     const headers = new Headers();
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
-    const options = new RequestOptions(headers);
+    const options = new RequestOptions(<RequestOptionsArgs>headers);
     this.http.get(`${this._apiEndPoint}`, options)
       .map(res => res.json())
       .subscribe(
