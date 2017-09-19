@@ -40,7 +40,7 @@ class App {
         loadavg: loadavg(),
         freemem: freemem(),
         totalmem: totalmem(),
-        cpus: cpus(),
+        cpuCores: cpus().length,
         connectedUsers: QuizManager.getAllActiveMembers(),
         activeQuizzes: Object.keys(QuizManager.getAllActiveQuizzes()),
         persistedQuizzes: Object.keys(QuizManager.getAllActiveQuizzes()).length
