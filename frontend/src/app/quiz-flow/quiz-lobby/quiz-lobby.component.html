@@ -1,6 +1,12 @@
 <p>
   quiz-lobby works!
 </p>
-<div *ngFor="let elem of players" id="elem.id" [style.background-color]="sanitizeHTML(elem.colorCode)">
-  <p [innerText]="elem.name"></p>
+<div *ngFor="let elem of players"
+     id="elem.id"
+     (click)="isOwner ? kickMember(elem.name) : return"
+     [class]="'member-wrapper mb-1 ' + (isOwner ? 'is-owner' : '')"
+     [style.color]="'#' + sanitizeHTML(getComplementaryColor(elem.colorCode))"
+     [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
+  <p class="mb-0"
+     [innerText]="elem.name"></p>
 </div>

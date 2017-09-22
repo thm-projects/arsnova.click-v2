@@ -1,3 +1,4 @@
-<p>
-  nickname-chooser works!
-</p>
+<div *ngFor="let elem of nicks"
+     (click)="joinQuiz(elem)">
+  <p [innerHTML]="elem"></p>
+</div>

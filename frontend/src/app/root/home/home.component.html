@@ -16,6 +16,7 @@
     <div class="row">
       <div class="col-6 col-join-session">
         <button id="joinSession"
+                (click)="joinQuiz()"
                 [class]="'btn btn-success btn-block ' + (!canJoinQuiz ? 'disabled' : '')"
                 [routerLink]="['/nicks']"
                 [disabled]="!canJoinQuiz">

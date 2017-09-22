@@ -39,10 +39,30 @@ class Member implements INickname {
   private _colorCode: string;
   private _webSocket: number;
 
-  constructor({id, name, colorCode}: { id: number, name: string, colorCode: string }) {
+  constructor({id, name, colorCode}: { id: number, name: string, colorCode?: string }) {
     this._id = id;
     this._name = name;
-    this._colorCode = colorCode;
+    this._colorCode = colorCode || this.generateRandomColorCode();
+  }
+
+  private hashCode(str: string): number { // java String#hashCode
+    let hash: number = 0;
+    for (let i: number = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return hash;
+  }
+
+  private intToRGB(i: number): string {
+    const c: string = (i & 0x00FFFFFF)
+      .toString(16)
+      .toUpperCase();
+
+    return '00000'.substring(0, 6 - c.length) + c;
+  }
+
+  private generateRandomColorCode(): string {
+    return this.intToRGB(this.hashCode(this.name));
   }
 
   public serialize(): Object {
@@ -135,14 +155,10 @@ class ActiveQuizItem implements IActiveQuiz {
     });
   }
 
-  private generateRandomColorCode(): string {
-    return 'blue';
-  }
-
   public addMember(name: string, webSocketId: number): boolean {
     const foundMembers: number = this.findMemberByName(name).length;
     if (foundMembers === 0) {
-      const member: INickname = new Member({id: this.nicknames.length, name, colorCode: this.generateRandomColorCode()});
+      const member: INickname = new Member({id: this.nicknames.length, name});
       member.webSocket = webSocketId;
       this.nicknames.push(member);
       this.webSocketRouter.pushMessageToClients({
@@ -173,42 +189,56 @@ class ActiveQuizItem implements IActiveQuiz {
 }
 
 export default class QuizManagerDAO {
-  get instance(): QuizManagerDAO {
-    return this._instance;
+  private static normalizeQuizName(quizName: string): string {
+    return quizName.toLowerCase();
   }
 
-  private _instance: QuizManagerDAO = this;
-
   public static initActiveQuiz(quiz: IQuestionGroup): void {
-    if (activeQuizzes[quiz.hashtag]) {
+    const name: string = QuizManagerDAO.normalizeQuizName(quiz.hashtag);
+    if (activeQuizzes[name]) {
       return;
     }
     QuizManagerDAO.convertLegacyQuiz(quiz);
-    activeQuizzes[quiz.hashtag] = new ActiveQuizItem({nicknames: [], originalObject: quiz});
+    activeQuizzes[name] = new ActiveQuizItem({nicknames: [], originalObject: quiz});
   }
-  public static removeActiveQuiz(name: string): boolean {
+
+  public static removeActiveQuiz(originalName: string): boolean {
+    const name: string = QuizManagerDAO.normalizeQuizName(originalName);
     delete activeQuizzes[name];
     return typeof activeQuizzes[name] === 'undefined';
   }
-  public static getActiveQuizByName(name: string): IActiveQuiz {
+
+  public static getActiveQuizByName(originalName: string): IActiveQuiz {
+    const name: string = QuizManagerDAO.normalizeQuizName(originalName);
     return activeQuizzes[name];
   }
+
   public static updateActiveQuiz(data: IActiveQuiz): void {
-    activeQuizzes[data.originalObject.hashtag] = data;
+    const name: string = QuizManagerDAO.normalizeQuizName(data.originalObject.hashtag);
+    activeQuizzes[name] = data;
   }
+
   public static getAllActiveQuizzes(): Object {
     return activeQuizzes;
   }
+
   public static getAllActiveMembers(): number {
     return Object.keys(activeQuizzes).filter((value: string) => {
-      return activeQuizzes[value].nicknames.length;
-    }).reduce((a: number, b: string) => parseInt(a + activeQuizzes[b].nicknames.length, 10), 0);
+      const name: string = QuizManagerDAO.normalizeQuizName(value);
+      return activeQuizzes[name].nicknames.length;
+    }).reduce((a: number, b: string) => {
+      const name: string = QuizManagerDAO.normalizeQuizName(b);
+      return parseInt(a + activeQuizzes[name].nicknames.length, 10);
+    }, 0);
   }
+
   public static getAllActiveDemoQuizzes(): String[] {
     return Object.keys(activeQuizzes).filter((value: string) => {
-      return activeQuizzes[value].name.toLowerCase().startsWith('demo quiz');
+      const name: string = QuizManagerDAO.normalizeQuizName(value);
+      return activeQuizzes[name].name.toLowerCase().startsWith('demo quiz');
     });
   }
+
   public static convertLegacyQuiz(legacyQuiz: any): void {
     if (legacyQuiz.hasOwnProperty('configuration')) {
       // Detected old v1 arsnova.click quiz

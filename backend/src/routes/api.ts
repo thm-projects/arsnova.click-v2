@@ -1,5 +1,5 @@
 import {Router, Request, Response, NextFunction} from 'express';
-import QuizManager, {IActiveQuiz} from '../db/quiz-manager';
+import QuizManager, {IActiveQuiz, INickname} from '../db/quiz-manager';
 import * as fs from 'fs';
 import * as path from 'path';
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
@@ -300,8 +300,10 @@ export class ApiRouter {
       Object.assign(response, {
         payload: {
           currentQuestion: activeQuiz.originalObject.questionList[activeQuiz.currentQuestionIndex],
-          member: activeQuiz.nicknames[activeQuiz.nicknames.length - 1],
-          nicknames: activeQuiz.nicknames
+          member: activeQuiz.nicknames[activeQuiz.nicknames.length - 1].serialize(),
+          nicknames: activeQuiz.nicknames.map((value: INickname) => {
+            return value.serialize();
+          })
         },
         step: 'LOBBY:MEMBER_ADDED',
       });
@@ -310,8 +312,8 @@ export class ApiRouter {
   }
 
   public deleteMember(req: Request, res: Response, next: NextFunction): void {
-    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
-    const result: boolean = activeQuiz.removeMember(req.body.nickname);
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
+    const result: boolean = activeQuiz.removeMember(req.params.nickname);
     const response: Object = {status: `STATUS:${result ? 'SUCCESSFUL' : 'FAILED'}`};
     if (result) {
       Object.assign(response, {
@@ -324,16 +326,26 @@ export class ApiRouter {
 
   public getAllMembers(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
-    const names: Array<String> = activeQuiz.originalObject.sessionConfig.nicks.selectedNicks.filter((nick) => {
-      return activeQuiz.nicknames.filter((value) => {
-        return value.name === nick;
-      });
-    });
-    console.log(names);
     res.send({
       status: 'STATUS:SUCCESSFUL',
-      step: 'QUIZ:GET_AVAILABLE_NICKS',
-      payload: {nicknames: activeQuiz.nicknames}
+      step: 'QUIZ:GET_MEMBERS',
+      payload: {
+        nicknames: activeQuiz.nicknames.map((value: INickname) => {
+          return value.serialize();
+        })
+      }
+    });
+  }
+
+  public getRemainingNicks(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
+    const names: Array<String> = activeQuiz.originalObject.sessionConfig.nicks.selectedNicks.filter((nick) => {
+      return activeQuiz.nicknames.filter(value => value.name === nick).length === 0;
+    });
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:GET_REMAINING_NICKS',
+      payload: {nicknames: names}
     });
   }
 
@@ -354,9 +366,10 @@ export class ApiRouter {
     this._router.delete('/lobby', this.putCloseLobby);
 
     this._router.put('/lobby/member', this.putAddMember);
-    this._router.delete('/lobby/member', this.deleteMember);
+    this._router.delete('/lobby/:quizName/member/:nickname', this.deleteMember);
 
     this._router.get('/quiz/member/:quizName', this.getAllMembers);
+    this._router.get('/quiz/member/:quizName/available', this.getRemainingNicks);
   }
 
 }

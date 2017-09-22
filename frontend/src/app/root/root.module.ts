@@ -23,6 +23,7 @@ import {ThemeSwitcherComponent} from './theme-switcher/theme-switcher.component'
 import {ThemesModule} from '../themes/themes.module';
 import {ConnectionService} from '../service/connection.service';
 import {NicknameChooserComponent} from './nickname-chooser/nickname-chooser.component';
+import {CurrentQuizService} from '../service/current-quiz.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -66,6 +67,11 @@ const appRoutes: Routes = [
     path: 'dataprivacy',
     component: InfoComponent,
     data: {content: 'dataprivacy'}
+  },
+  {
+    path: 'nicks',
+    component: NicknameChooserComponent,
+    data: {}
   },
   {
     path: '',
@@ -113,7 +119,7 @@ const appRoutes: Routes = [
     NgbModule.forRoot()
   ],
   exports: [],
-  providers: [FooterBarService, ActiveQuestionGroupService, ConnectionService, WebsocketService],
+  providers: [FooterBarService, ActiveQuestionGroupService, ConnectionService, WebsocketService, CurrentQuizService],
   entryComponents: [],
   bootstrap: [RootComponent]
 })

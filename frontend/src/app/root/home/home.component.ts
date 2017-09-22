@@ -12,6 +12,7 @@ import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
 import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
 import {Router} from '@angular/router';
+import {CurrentQuizService} from '../../service/current-quiz.service';
 
 @Component({
   selector: 'app-home',
@@ -34,7 +35,8 @@ export class HomeComponent implements OnInit {
               private activeQuestionGroupService: ActiveQuestionGroupService,
               private themesService: ThemesService,
               private http: HttpClient,
-              private router: Router) {
+              private router: Router,
+              private currentQuiz: CurrentQuizService) {
     this.activeQuestionGroupService.activeQuestionGroup = null;
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemAbout,
@@ -82,6 +84,10 @@ export class HomeComponent implements OnInit {
         }
       }
     }
+  }
+
+  joinQuiz(): void {
+    this.currentQuiz.hashtag = this.enteredSessionName;
   }
 
   setActiveQuestionGroup(routingTarget: Array<string>): void {

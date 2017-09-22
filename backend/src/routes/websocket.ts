@@ -1,5 +1,5 @@
 import * as WebSocket from 'ws';
-import {IActiveQuiz} from '../db/quiz-manager';
+import {IActiveQuiz, default as QuizManagerDAO, INickname} from '../db/quiz-manager';
 
 export declare interface IMessage {
   status: string;
@@ -20,7 +20,7 @@ export class WebSocketRouter {
   public pushMessageToClients(message: IMessage): void {
     this.clientList.forEach((client: WebSocket) => {
       if (client.readyState === client.OPEN) {
-        client.send(message);
+        client.send(JSON.stringify(message));
       }
     });
   }
@@ -31,13 +31,26 @@ export class WebSocketRouter {
         console.log('received: %s', message);
         try {
           message = JSON.parse(message);
-          console.log(message.step);
+          console.log(this.activeQuizReference);
           if (message.step === 'LOBBY:GET_PLAYERS') {
+            const res: any = {status: 'STATUS:SUCCESSFUL'};
+            if (!this.activeQuizReference) {
+              res.step = 'LOBBY:INACTIVE';
+            } else {
+              res.step = 'LOBBY:ALL_PLAYERS';
+              res.payload = {
+                members: this.activeQuizReference.nicknames.map((value: INickname) => {
+                  return value.serialize();
+                })
+              };
+            }
+            ws.send(JSON.stringify(res));
+          } else if (message.step === 'QUIZ:ACTIVE_QUIZZES') {
             ws.send(JSON.stringify({
               status: 'STATUS:SUCCESSFUL',
-              step: 'LOBBY:ALL_PLAYERS',
+              step: 'QUIZ:ACTIVE_QUIZZES',
               payload: {
-                members: this.activeQuizReference.nicknames
+                activeQuizzes: QuizManagerDAO.getAllActiveDemoQuizzes()
               }
             }));
           }
