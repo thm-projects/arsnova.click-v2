@@ -13,6 +13,7 @@ import {DefaultSettings} from '../../service/settings.service';
 import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
+import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,9 @@ import {CurrentQuizService} from '../../service/current-quiz.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  get provideNickSelection(): boolean {
+    return this._provideNickSelection;
+  }
   public canJoinQuiz = false;
   public canAddQuiz = false;
   public canEditQuiz = false;
@@ -28,6 +32,7 @@ export class HomeComponent implements OnInit {
   public enteredSessionName = '';
 
   private _httpApiEndpoint = DefaultSettings.httpApiEndpoint;
+  private _provideNickSelection = false;
 
   constructor(private footerBarService: FooterBarService,
               private headerLabelService: HeaderLabelService,
@@ -77,9 +82,13 @@ export class HomeComponent implements OnInit {
         if ((JSON.parse(window.localStorage.getItem('owned_quizzes')) || []).indexOf(quizname) > -1) {
           this.canEditQuiz = true;
         } else {
-          this.http.get(`${this._httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe(value => {
-            this.canAddQuiz = !value;
-            this.canJoinQuiz = !!value;
+          this.http.get(`${this._httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe((value: IMessage) => {
+            const quizExists: boolean = value.status === 'STATUS:SUCCESS' && value.step === 'QUIZ:AVAILABLE';
+            this.canAddQuiz = !quizExists;
+            this.canJoinQuiz = quizExists;
+            if (quizExists) {
+              this._provideNickSelection = value.payload.provideNickSelection;
+            }
           });
         }
       }

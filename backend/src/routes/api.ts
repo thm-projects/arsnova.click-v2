@@ -3,6 +3,7 @@ import QuizManager, {IActiveQuiz, INickname} from '../db/quiz-manager';
 import * as fs from 'fs';
 import * as path from 'path';
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
+import {ISessionConfiguration} from '../interfaces/session_configuration/interfaces';
 
 export class ApiRouter {
   get router(): Router {
@@ -252,7 +253,23 @@ export class ApiRouter {
     const quizzes: Array<string> = Object.keys(QuizManager.getAllActiveQuizzes()).map((value: string) => {
       return QuizManager.getAllActiveQuizzes()[value].name.toLowerCase();
     });
-    res.send(quizzes.indexOf(req.params.quizName) > -1);
+    const quizExists: boolean = quizzes.indexOf(req.params.quizName) > -1;
+    const payload: {available?: boolean, provideNickSelection?: boolean} = {};
+
+    if (quizExists) {
+      const sessionConfig: ISessionConfiguration = QuizManager.getActiveQuizByName(req.params.quizName).originalObject.sessionConfig;
+      const provideNickSelection: boolean = sessionConfig.nicks.selectedNicks.length > 0;
+
+      payload.available = true;
+      payload.provideNickSelection = provideNickSelection;
+    }
+
+    const result: Object = {
+      status: `STATUS:${quizExists ? 'SUCCESS' : 'FAILED'}`,
+      step: `QUIZ:${!quizExists ? 'UN' : ''}AVAILABLE`,
+      payload
+    };
+    res.send(result);
   }
 
   public generateDemoQuiz(req: Request, res: Response, next: NextFunction): void {

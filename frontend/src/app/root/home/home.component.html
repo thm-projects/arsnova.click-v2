@@ -18,7 +18,7 @@
         <button id="joinSession"
                 (click)="joinQuiz()"
                 [class]="'btn btn-success btn-block ' + (!canJoinQuiz ? 'disabled' : '')"
-                [routerLink]="['/nicks']"
+                [routerLink]="['/nicks/' + (provideNickSelection ? 'select' : 'input')]"
                 [disabled]="!canJoinQuiz">
           <i class="fa fa-thumbs-up"></i>
           <span [innerHTML]="'component.hashtag_management.join_session' | translate"></span>

@@ -22,8 +22,8 @@ import {QuizFlowModule} from '../quiz-flow/quiz-flow.module';
 import {ThemeSwitcherComponent} from './theme-switcher/theme-switcher.component';
 import {ThemesModule} from '../themes/themes.module';
 import {ConnectionService} from '../service/connection.service';
-import {NicknameChooserComponent} from './nickname-chooser/nickname-chooser.component';
 import {CurrentQuizService} from '../service/current-quiz.service';
+import {NicknameChooserModule} from './nickname-chooser/nickname-chooser.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -31,8 +31,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 const appRoutes: Routes = [
-  //{ path: 'crisis-center', component: CrisisListComponent },
-  //{ path: 'hero/:id',      component: HeroDetailComponent },
+  // { path: 'crisis-center', component: CrisisListComponent },
+  // { path: 'hero/:id',      component: HeroDetailComponent },
   {
     path: 'themes',
     component: ThemeSwitcherComponent,
@@ -69,11 +69,6 @@ const appRoutes: Routes = [
     data: {content: 'dataprivacy'}
   },
   {
-    path: 'nicks',
-    component: NicknameChooserComponent,
-    data: {}
-  },
-  {
     path: '',
     component: HomeComponent,
     data: {}
@@ -84,7 +79,7 @@ const appRoutes: Routes = [
     pathMatch: 'full'
   },
   */
-  //{ path: '**', component: PageNotFoundComponent }
+  // { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -95,7 +90,6 @@ const appRoutes: Routes = [
     InfoComponent,
     SessionManagementComponent,
     ThemeSwitcherComponent,
-    NicknameChooserComponent
   ],
   imports: [
     SharedModule,
@@ -115,6 +109,7 @@ const appRoutes: Routes = [
     FooterModule,
     QuizManagerModule,
     QuizFlowModule,
+    NicknameChooserModule,
     ModalsModule,
     NgbModule.forRoot()
   ],
