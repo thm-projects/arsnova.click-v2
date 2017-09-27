@@ -3,6 +3,7 @@ import {WebSocketRouter} from '../routes/websocket';
 import * as WebSocket from 'ws';
 
 const activeQuizzes: Object = {};
+const illegalNicks: Array<string> = ['miep'];
 
 export declare interface INickname {
   id: number;
@@ -157,6 +158,11 @@ class ActiveQuizItem implements IActiveQuiz {
 
   public addMember(name: string, webSocketId: number): boolean {
     const foundMembers: number = this.findMemberByName(name).length;
+
+    if (illegalNicks.indexOf(name) > -1) {
+      throw new Error('LOBBY:ILLEGAL_NAME');
+    }
+
     if (foundMembers === 0) {
       const member: INickname = new Member({id: this.nicknames.length, name});
       member.webSocket = webSocketId;
@@ -167,8 +173,9 @@ class ActiveQuizItem implements IActiveQuiz {
         payload: {member: member.serialize()}
       });
       return true;
+    } else {
+      throw new Error('LOBBY:DUPLICATE_LOGIN');
     }
-    return false;
   }
 
   public removeMember(name: string): boolean {

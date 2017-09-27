@@ -40,7 +40,7 @@ const quizFlowRoutes: Routes = [
     pathMatch: 'full'
   },
   */
-  //{ path: '**', component: PageNotFoundComponent }
+  // { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

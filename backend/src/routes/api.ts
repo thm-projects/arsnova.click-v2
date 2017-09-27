@@ -311,21 +311,26 @@ export class ApiRouter {
 
   public putAddMember(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
-    const result: boolean = activeQuiz.addMember(req.body.nickname, parseInt(req.body.webSocketId, 10));
-    const response: Object = {status: `STATUS:${result ? 'SUCCESSFUL' : 'FAILED'}`};
-    if (result) {
-      Object.assign(response, {
+    try {
+      const result: boolean = activeQuiz.addMember(req.body.nickname, parseInt(req.body.webSocketId, 10));
+      res.send({
+        status: 'STATUS:SUCCESSFUL',
+        step: 'LOBBY:MEMBER_ADDED',
         payload: {
           currentQuestion: activeQuiz.originalObject.questionList[activeQuiz.currentQuestionIndex],
           member: activeQuiz.nicknames[activeQuiz.nicknames.length - 1].serialize(),
           nicknames: activeQuiz.nicknames.map((value: INickname) => {
             return value.serialize();
           })
-        },
-        step: 'LOBBY:MEMBER_ADDED',
+        }
+      });
+    } catch (ex) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: ex.message,
+        payload: {}
       });
     }
-    res.send(response);
   }
 
   public deleteMember(req: Request, res: Response, next: NextFunction): void {
