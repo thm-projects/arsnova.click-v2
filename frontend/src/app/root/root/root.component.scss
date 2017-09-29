@@ -1,5 +1,16 @@
 
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
 #contentContainer {
-  overflow: scroll;
   height: 90vh;
+}
+
+.footer-bar-wrapper {
+  flex-shrink: 0;
+  flex-grow: 1;
+
+  @include media-breakpoint-only(xs) {
+    width: 100%;
+  }
 }

@@ -61,7 +61,7 @@ export class QuizManagerComponent implements OnInit {
 
   readonly questionGroupItem: IQuestionGroup;
 
-  private _showMoreOrLess: string = 'component.quiz_manager.show_more';
+  private _showMoreOrLess = 'component.quiz_manager.show_more';
 
   constructor(@Inject(DOCUMENT) readonly document,
               private footerBarService: FooterBarService,

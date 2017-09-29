@@ -1,23 +1,54 @@
+
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins/breakpoints";
+
 .navbar-footer {
-  text-align: center;
   padding: 5px;
-  justify-content: center;
+  height: 100%;
+
+  @include media-breakpoint-up(sm) {
+    &:hover {
+      .footerElement {
+        .footerElemText {
+          display: block !important;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-only(xs) {
+    overflow: scroll;
+    justify-content: left;
+  }
+  @include media-breakpoint-up(sm) {
+    justify-content: center;
+  }
 
   .footerElement {
     cursor: pointer;
-    padding: 0;
-    width: 100%;
-    flex-grow: 1;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+
+    @include media-breakpoint-only(xs) {
+      padding: 10px;
+      flex-grow: 1;
+    }
+    @include media-breakpoint-up(sm) {
+      padding: 0;
+      flex-grow: 0;
+    }
+
+    .footerElemText {
+      flex-shrink: 0;
+      @include media-breakpoint-up(sm) {
+        display: none;
+      }
+    }
 
     p {
       margin: 0;
       line-height: 25px;
-
-      &.footerElemIcon {
-        margin-right: 10px;
-      }
     }
   }
 }

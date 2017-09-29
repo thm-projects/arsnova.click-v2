@@ -37,4 +37,8 @@
   flex-direction: row;
   align-items: center;
   padding: 0;
+
+  .header-title {
+    flex-basis: 100%;
+  }
 }

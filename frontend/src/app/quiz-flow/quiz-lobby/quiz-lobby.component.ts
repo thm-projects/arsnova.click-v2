@@ -4,7 +4,7 @@ import {HeaderLabelService} from '../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {ThemesService} from '../../service/themes.service';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
 import {ConnectionService} from '../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
@@ -16,9 +16,9 @@ export declare interface IPlayer {
 }
 
 export declare interface IMessage extends Object {
-  status: string;
+  status?: string;
+  payload?: any;
   step: string;
-  payload: any;
 }
 
 class Player implements IPlayer {
@@ -106,7 +106,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       step: 'LOBBY:GET_PLAYERS'
     });
     this.connectionService.socket.subscribe((message) => {
-      const data = JSON.parse(message.data);
+      const data = message;
       if (data.step === 'LOBBY:INACTIVE') {
         setTimeout(this.handleIncomingPlayers, 500);
       } else if (data.step === 'LOBBY:ALL_PLAYERS') {
@@ -178,7 +178,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         );
       } else {
         this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
-        this.handleIncomingPlayers();
+        setTimeout(() => this.handleIncomingPlayers(), 1000);
       }
     });
   }

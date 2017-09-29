@@ -1,6 +1,3 @@
-<p>
-  quiz-lobby works!
-</p>
 <div *ngFor="let elem of players"
      id="elem.id"
      (click)="isOwner ? kickMember(elem.name) : return"

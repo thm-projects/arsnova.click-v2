@@ -60,7 +60,9 @@ export class WebSocketRouter {
       });
       const id: number = this.clientList.push(ws);
       ws.send(JSON.stringify({
-        id: id - 1
+        payload: {
+          id: id - 1
+        }
       }));
     });
   }

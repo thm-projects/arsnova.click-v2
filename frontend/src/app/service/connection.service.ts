@@ -3,10 +3,11 @@ import {DefaultSettings} from './settings.service';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
 import {Subject} from 'rxjs/Subject';
+import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 
 @Injectable()
 export class ConnectionService {
-  get socket(): Subject<any> {
+  get socket(): Subject<IMessage> {
     return this._socket;
   }
 
@@ -26,10 +27,10 @@ export class ConnectionService {
     return this._rtt;
   }
 
-  private _socket: Subject<any>;
+  private _socket: Subject<IMessage>;
   private _serverAvailable: Boolean;
   private _websocketAvailable: Boolean = false;
-  private _rtt: number = 0;
+  private _rtt = 0;
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}/`;
 
   constructor(private websocketService: WebsocketService,
@@ -39,18 +40,22 @@ export class ConnectionService {
   }
 
   private initWebsocket() {
-    this._socket = this.websocketService.createWebsocket();
-    this._socket.subscribe(
+    this._socket = <Subject<IMessage>>this.websocketService
+      .connect()
+      .map((response: MessageEvent): IMessage => {
+        return JSON.parse(response.data);
+      });
+    this.socket.subscribe(
       message => {
-        window.sessionStorage.setItem('webSocket', JSON.parse(message.data).id);
+        window.sessionStorage.setItem('webSocket', message.payload.id);
         this._websocketAvailable = true;
       },
-      message => {
-        this._websocketAvailable = false;
-      },
-      () => {
-        this._websocketAvailable = false;
-      }
+        message => {
+          this._websocketAvailable = false;
+        },
+        () => {
+          this._websocketAvailable = false;
+        }
     );
   }
 
@@ -89,27 +94,6 @@ export class ConnectionService {
         self.serverAvailable = false;
         self._websocketAvailable = false;
         this._socket = null;
-      }
-    );
-  }
-
-  sendWebsocketMessage() {
-    let done = false;
-    let result;
-    this._socket.subscribe(
-      message => {
-        if (!done) {
-          this._socket.next({initData: 'local'});
-          done = !done;
-        }
-        result = message;
-      },
-      message => {
-        console.log('error', message);
-        result = message;
-      },
-      () => {
-        console.log('completed');
       }
     );
   }

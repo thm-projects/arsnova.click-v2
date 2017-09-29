@@ -5,9 +5,20 @@ import {DefaultSettings} from './settings.service';
 @Injectable()
 export class WebsocketService {
 
-  public createWebsocket(): Subject<MessageEvent> {
-    let socket = new WebSocket(`${DefaultSettings.wsApiEndpoint}`);
-    let observable = Observable.create(
+  private subject: Subject<MessageEvent>;
+  private url = DefaultSettings.wsApiEndpoint;
+
+  public connect(): Subject<MessageEvent> {
+    if (!this.subject) {
+      this.subject = this.create();
+      console.log(`Successfully connected: ${this.url}`);
+    }
+    return this.subject;
+  }
+
+  private create(): Subject<MessageEvent> {
+    const socket = new WebSocket(this.url);
+    const observable = Observable.create(
       (observer: Observer<MessageEvent>) => {
         socket.onmessage = observer.next.bind(observer);
         socket.onerror = observer.error.bind(observer);
@@ -15,7 +26,7 @@ export class WebsocketService {
         return socket.close.bind(socket);
       }
     );
-    let observer = {
+    const observer = {
       next: (data: Object) => {
         if (socket.readyState === WebSocket.OPEN) {
           socket.send(JSON.stringify(data));

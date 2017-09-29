@@ -58,7 +58,8 @@
     margin: 10px 0;
 
     .questionButtonOptions {
-      float: right;
+      flex-shrink: 0;
+      flex-grow: 1;
 
       i {
         margin: 0 5px;

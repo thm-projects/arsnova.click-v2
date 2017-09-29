@@ -41,6 +41,10 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this._selectedCategory = name;
   }
 
+  normalizeCategoryName(name: string): string {
+    return (name[0].toUpperCase() + name.substr(1)).replace('_', ' ');
+  }
+
   selectNick(name: string): void {
     this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick(name);
   }
@@ -50,7 +54,38 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   hasSelectedCategory(category: string): boolean {
-    return category === this._selectedCategory;
+    return category ? category === this._selectedCategory : !!this._selectedCategory;
+  }
+
+  hasSelectedAllNicks(): boolean {
+    const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
+    const filteredNicksLength = this._availableNicks[this._selectedCategory].filter(elem => {
+      return selectedNicks.indexOf(elem) > -1;
+    }).length;
+    return filteredNicksLength === this._availableNicks[this._selectedCategory].length;
+  }
+
+  getNumberOfSelectedNicksOfCategory(category: string): number {
+    const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
+    return this._availableNicks[category].filter(elem => {
+      return selectedNicks.indexOf(elem) > -1;
+    }).length;
+  }
+
+  getNumberOfAvailableNicksForCategory(category: string): number {
+    return this._availableNicks[category].length;
+  }
+
+  toggleAllNicks(): void {
+    if (this.hasSelectedAllNicks()) {
+      this._availableNicks[this._selectedCategory].forEach(elem => {
+        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.removeSelectedNickByName(elem);
+      });
+    } else {
+      this._availableNicks[this._selectedCategory].forEach(elem => {
+        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.addSelectedNick(elem);
+      });
+    }
   }
 
   ngOnInit() {
@@ -67,7 +102,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
         error => {
           console.log(error);
         }
-      )
+      );
   }
 
   ngOnDestroy() {

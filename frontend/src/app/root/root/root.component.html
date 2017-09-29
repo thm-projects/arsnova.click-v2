@@ -7,15 +7,15 @@
   </div>
 
   <div class="container-fluid">
-    <div class="row">
+    <div class="row flex-sm-nowrap overflow-hidden">
       <!--footer.navigation-->
       <!--footer-->
-      <div class="col-12 col-sm-2 p-0">
+      <div class="footer-bar-wrapper p-0">
         <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
       </div>
 
-      <div class="col-12 col-sm-10">
-        <div class="container-fluid" id="contentContainer">
+      <div class="mx-2 mt-2 mt-sm-0" style="flex-basis: 100%">
+        <div id="contentContainer">
           <router-outlet></router-outlet>
         </div>
       </div>

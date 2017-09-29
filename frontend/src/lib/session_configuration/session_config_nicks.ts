@@ -74,11 +74,10 @@ export class NickSessionConfiguration implements INickSessionConfiguration {
   }
 
   removeSelectedNickByName(selectedNick: string): void {
-    for (let i = 0; i < this.selectedNicks.length; i++) {
-      if (this.selectedNicks[i] === selectedNick) {
-        this.selectedNicks.splice(i, 1);
-        return;
-      }
+    const index = this.selectedNicks.indexOf(selectedNick);
+    if (index === -1) {
+      return;
     }
+    this.selectedNicks.splice(index, 1);
   }
 }

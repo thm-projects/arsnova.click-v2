@@ -4,10 +4,20 @@ h3 {
 
 .nickNameWrapper {
   background: white;
+  border-radius: 10px;
 }
 
 .selectedNickName {
   text-decoration: underline;
+}
+
+.nickCategory {
+  .nickCategoryText {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 1px;
+  }
 }
 
 .selectedCategory {
@@ -17,9 +27,10 @@ h3 {
     width: 0;
     height: 0;
     border-top: 10px solid transparent;
+    border-right: 10px solid white;
     border-bottom: 10px solid transparent;
-    border-right: 10px solid;
     right: 0;
+    top: 35%;
     position: absolute;
   }
 }

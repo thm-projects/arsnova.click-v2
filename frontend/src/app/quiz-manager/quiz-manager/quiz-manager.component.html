@@ -43,10 +43,8 @@
           <span *ngIf="!questionGroupItem.sessionConfig.nicks.selectedNicks.length" [innerHTML]="'component.quiz_summary.no_selected_nicks' | translate"></span>
           <span *ngIf="questionGroupItem.sessionConfig.nicks.selectedNicks.length"
                 [innerHTML]="questionGroupItem.sessionConfig.nicks.selectedNicks.length"></span>
-          <span *ngIf="questionGroupItem.sessionConfig.nicks.selectedNicks.length"
-                [innerHTML]="'component.quiz_summary.showSelectedNicksText' | translate"></span>
         </p>
-        <p role="listitem" [innerHTML]="questionGroupItem.sessionConfig.nicks.selectedNicks"></p>
+        <p role="listitem" [innerHTML]="questionGroupItem.sessionConfig.nicks.selectedNicks.join(', ')"></p>
       </div>
       <p class="overflow-wrapper-label" [innerHTML]="showMoreOrLess | translate"></p>
     </div>
@@ -58,7 +56,7 @@
       <li *ngFor="let elem of selectableQuestionTypes"
           (click)="addQuestion(elem.id)"
           [id]="elem.id + '_draggable'"
-          [class]="'questionElementWrapper draggable questionType_' + elem.id"
+          [class]="'questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + elem.id"
           [attr.data-intro]="elem.descriptionType | translate"
           [innerHTML]="elem.translationName | translate">
       </li>
@@ -77,9 +75,9 @@
         [attr.data-intro]="'component.quiz_manager.description.added_questions' | translate">
       <li *ngFor="let elem of questionGroupItem.questionList; let i = index;"
           [id]="i + '_draggable'"
-          [class]="'questionElementWrapper draggable questionType_' + i">
+          [class]="'questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + i">
         <span [innerHTML]="elem.translationReferrer() | translate"></span>
-        <span class="questionButtonOptions">
+        <span class="questionButtonOptions text-right">
           <i *ngIf="i" (click)="moveQuestionUp(i)" class="fa fa-arrow-up"></i>
           <i *ngIf="i !== questionGroupItem.questionList.length - 1" (click)="moveQuestionDown(i)" class="fa fa-arrow-down"></i>
           <i [routerLink]="['/quiz-manager', i,  'overview']" class="fa fa-pencil"></i>
