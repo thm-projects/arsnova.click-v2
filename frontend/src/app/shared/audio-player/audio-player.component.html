@@ -1,0 +1,24 @@
+<div class="btn-toolbar">
+  <audio [id]="_randomUUID"
+         [src]="apiUrl + target + '/' + src + '.mp3'"></audio>
+  <div class="btn-group">
+    <button *ngIf="!_isPlaying"
+            class="btn btn-secondary"
+            (click)="playMusic()">
+      <i class="fa fa-play"></i>
+    </button>
+    <button *ngIf="_isPlaying"
+            class="btn btn-secondary"
+            (click)="pauseMusic()">
+      <i class="fa fa-pause"></i>
+    </button>
+    <button class="btn btn-secondary"
+            (click)="stopMusic()"
+            [disabled]="isStopped()">
+      <i class="fa fa-stop"></i>
+    </button>
+  </div>
+  <div class="input-group">
+    <input type="range" [value]="volume" (input)="emitVolumeChange($event)">
+  </div>
+</div>
