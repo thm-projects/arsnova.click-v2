@@ -371,6 +371,25 @@ export class ApiRouter {
     });
   }
 
+  public randomFile(dir: string): Promise<string> {
+    return new Promise((resolve) => {
+      fs.readdir(dir, (err, items) => {
+        resolve(items[Math.floor(Math.random() * items.length)]);
+      });
+    });
+  }
+
+  public getFileByName(req: Request, res: Response, next: NextFunction): void {
+    const pathToFiles: string = path.join(__dirname, `../../${req.params.directory}/${req.params.subdirectory}`);
+    if (req.params.fileName.indexOf('Random') > -1) {
+      this.randomFile(pathToFiles).then((file: string) => {
+        res.send(fs.readFileSync(file));
+      });
+    } else {
+      res.send(fs.readFileSync(`${pathToFiles}/${req.params.fileName}`));
+    }
+  }
+
   /**
    * Take each handler, and attach to one of the Express.Router's
    * endpoints.
@@ -392,6 +411,8 @@ export class ApiRouter {
 
     this._router.get('/quiz/member/:quizName', this.getAllMembers);
     this._router.get('/quiz/member/:quizName/available', this.getRemainingNicks);
+
+    this._router.get('/files/:directory/:subdirectory/:fileName', this.getFileByName);
   }
 
 }

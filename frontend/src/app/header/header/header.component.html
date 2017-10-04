@@ -1,5 +1,5 @@
 <nav class="navbar navbar-header" id="header">
-  <div class="arsnova-logo d-flex align-items-center">
+  <div class="arsnova-logo d-flex align-items-center pointer">
     <svg [routerLink]="['/']" *ngIf="!inHomeRoute" version="1.1" id="arsnova-logo-image" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1024 1024" xml:space="preserve">
           <g id="text">
               <text transform="translate(512 200)" class="arsnova-logo-origin" [innerHTML]="origin"></text>
@@ -20,7 +20,7 @@
       <div class="text-center header-label" *ngIf="headerLabel !== 'default'" [innerHTML]="headerLabel | translate"></div>
     </div>
   </div>
-  <div class="text-right d-flex align-items-center" id="connectionQualityHeader" role="dialog">
+  <div class="text-right d-flex align-items-center pointer" id="connectionQualityHeader" role="dialog">
     <svg id="connectionQualityImage"
            height="50px"
            width="50px"

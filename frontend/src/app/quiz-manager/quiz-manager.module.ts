@@ -11,6 +11,7 @@ import {MarkdownModule} from '../markdown/markdown.module';
 import {LivePreviewModule} from '../live-preview/live-preview.module';
 import {AnsweroptionsComponent} from 'app/quiz-manager/quiz-manager-details/answeroptions/answeroptions.component';
 import {NicknameManagerComponent} from './nickname-manager/nickname-manager.component';
+import { SoundManagerComponent } from './sound-manager/sound-manager.component';
 
 const quizManagerRoutes: Routes = [
   {
@@ -21,6 +22,11 @@ const quizManagerRoutes: Routes = [
   {
     path: 'quiz-manager/nicknames',
     component: NicknameManagerComponent,
+    data: {}
+  },
+  {
+    path: 'quiz-manager/sound',
+    component: SoundManagerComponent,
     data: {}
   },
   {
@@ -54,7 +60,7 @@ const quizManagerRoutes: Routes = [
     pathMatch: 'full'
   },
   */
-  //{ path: '**', component: PageNotFoundComponent }
+  // { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
@@ -65,7 +71,7 @@ const quizManagerRoutes: Routes = [
     LivePreviewModule,
     RouterModule.forChild(quizManagerRoutes),
   ],
-  declarations: [QuizManagerComponent, NicknameManagerComponent]
+  declarations: [QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent]
 })
 export class QuizManagerModule {
 }

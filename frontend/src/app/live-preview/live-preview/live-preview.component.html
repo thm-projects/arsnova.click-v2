@@ -1,9 +1,25 @@
-<div *ngIf="targetEnvironment === 0">
+<div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.ANSWEROPTIONS"
+     id="answer-option-preview"
+     [class]="'preview-frame ' + deviceClass()">
   <app-header [headerLabel]="'region.header.answers'"></app-header>
-
+  <div id="answer-option-element-wrapper"
+       class="d-flex justify-content-around align-items-center flex-wrap">
+    <div *ngFor="let elem of answers; let i = index"
+         class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
+         [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
+      <p *ngIf="question.displayAnswerText"
+         class="mb-0"
+         [innerHTML]="elem.answerText"></p>
+      <p *ngIf="!question.displayAnswerText"
+         class="mb-0"
+         [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
+    </div>
+  </div>
 </div>
-<div *ngIf="targetEnvironment === 1" [class]="'questionPreview ' + deviceClass()">
+<div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.QUESTION"
+     id="question-preview"
+     [class]="'preview-frame ' + deviceClass()">
   <app-header [headerLabel]="'region.header.question'"></app-header>
-  <p class="p-0" [innerHTML]="dataSource"></p>
-  <div *ngIf="targetDevice === 0" class="homeButton"></div>
+  <p class="p-0" [innerHTML]="questionTextDataSource"></p>
 </div>
+<div *ngIf="targetDevice === DEVICE_TYPE.XS" class="homeButton hidden"></div>

@@ -76,6 +76,9 @@ export class QuizManagerComponent implements OnInit {
     headerLabelService.setHeaderLabel('component.quiz_manager.title');
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
     FooterBarComponent.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
+    FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
+      return self.isActive ? '/quiz-lobby' : null;
+    };
   }
 
   ngOnInit() {

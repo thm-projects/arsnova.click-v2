@@ -40,15 +40,15 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   }
 
   updateMinRange(event: Event): void {
-    this._minRange = parseInt((<HTMLInputElement>event.target).value);
+    this._minRange = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   updateMaxRange(event: Event): void {
-    this._maxRange = parseInt((<HTMLInputElement>event.target).value);
+    this._maxRange = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   updateCorrectValue(event: Event): void {
-    this._correctValue = parseInt((<HTMLInputElement>event.target).value);
+    this._correctValue = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   ngOnInit() {

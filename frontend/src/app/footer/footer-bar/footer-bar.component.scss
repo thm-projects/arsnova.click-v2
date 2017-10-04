@@ -1,10 +1,9 @@
-
-@import "~bootstrap/scss/variables";
-@import "~bootstrap/scss/mixins/breakpoints";
+@import "../../../styles_vendor";
 
 .navbar-footer {
-  padding: 5px;
-  height: 100%;
+  position: absolute;
+  left: 0;
+  z-index: 1040;
 
   @include media-breakpoint-up(sm) {
     &:hover {
@@ -16,9 +15,10 @@
     }
   }
 
-  @include media-breakpoint-only(xs) {
+  @include media-breakpoint-down(xs) {
     overflow: scroll;
     justify-content: left;
+    width: 100%;
   }
   @include media-breakpoint-up(sm) {
     justify-content: center;
@@ -30,7 +30,7 @@
     align-items: center;
     flex-shrink: 0;
 
-    @include media-breakpoint-only(xs) {
+    @include media-breakpoint-down(xs) {
       padding: 10px;
       flex-grow: 1;
     }

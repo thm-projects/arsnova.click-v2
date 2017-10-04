@@ -553,6 +553,9 @@ $themes: (
       #waiting_for_players_notifier {
         color: map-get($map, "fg-lobby-waiting-for-players-notifier");
       }
+      .own-nick {
+        animation: colorChangingOwnNick 5s infinite;
+      }
       @keyframes colorChangingOwnNick {
         0% {
           background-color: map-get($map, "bg-colorChangingOwnNick0");

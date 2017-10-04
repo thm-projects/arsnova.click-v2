@@ -30,10 +30,11 @@ export class NicknameInputComponent implements OnInit {
   }
 
   joinQuiz(): void {
+    const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
     const promise = new Promise((resolve, reject) => {
       this.http.put(`${this._httpApiEndpoint}/lobby/member/`, {
         quizName: this.currentQuiz.hashtag,
-        nickname: (<HTMLInputElement>document.getElementById('input-nickname')).value,
+        nickname: nickname,
         webSocketId: window.sessionStorage.getItem('webSocket')
       }).subscribe((data: IMessage) => {
           if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
@@ -45,6 +46,7 @@ export class NicknameInputComponent implements OnInit {
         });
     });
     promise.then(() => {
+      window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, nickname);
       this.router.navigate(['/quiz-lobby']);
     });
     promise.catch((data: IMessage) => {

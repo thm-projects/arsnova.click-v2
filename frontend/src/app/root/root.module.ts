@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateModule, TranslateLoader, TranslateCompiler, TranslateService} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -24,10 +24,21 @@ import {ThemesModule} from '../themes/themes.module';
 import {ConnectionService} from '../service/connection.service';
 import {CurrentQuizService} from '../service/current-quiz.service';
 import {NicknameChooserModule} from './nickname-chooser/nickname-chooser.module';
+import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
+
+import * as MessageFormat from 'messageformat';
+import {I18nService} from '../service/i18n.service';
+import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
+import {QrCodeService} from '../service/qr-code.service';
+import {SoundService} from '../service/sound.service';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
+}
+
+export function CustomCompilerFactory() {
+  return new TranslateMessageFormatCompiler(new MessageFormat('en'));
 }
 
 const appRoutes: Routes = [
@@ -89,7 +100,7 @@ const appRoutes: Routes = [
     LanguageSwitcherComponent,
     InfoComponent,
     SessionManagementComponent,
-    ThemeSwitcherComponent,
+    ThemeSwitcherComponent
   ],
   imports: [
     SharedModule,
@@ -98,7 +109,11 @@ const appRoutes: Routes = [
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
+        deps: [HttpClient],
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useFactory: CustomCompilerFactory
       }
     }),
     RouterModule.forRoot(
@@ -111,10 +126,20 @@ const appRoutes: Routes = [
     QuizFlowModule,
     NicknameChooserModule,
     ModalsModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    NgxQRCodeModule
   ],
   exports: [],
-  providers: [FooterBarService, ActiveQuestionGroupService, ConnectionService, WebsocketService, CurrentQuizService],
+  providers: [
+    FooterBarService,
+    ActiveQuestionGroupService,
+    ConnectionService,
+    WebsocketService,
+    CurrentQuizService,
+    I18nService,
+    QrCodeService,
+    SoundService
+  ],
   entryComponents: [],
   bootstrap: [RootComponent]
 })

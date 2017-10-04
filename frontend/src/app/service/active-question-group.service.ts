@@ -27,8 +27,14 @@ export class ActiveQuestionGroupService {
     }
   }
 
+  persistForSession() {
+    window.sessionStorage.setItem('questionGroup', JSON.stringify(this.activeQuestionGroup.serialize()));
+
+    // TODO: Update server setting
+  }
+
   persist() {
-    window.localStorage.setItem(this.activeQuestionGroup.hashtag, JSON.stringify(this.activeQuestionGroup.serialize()));
+    this.persistForSession();
     window.sessionStorage.setItem('questionGroup', JSON.stringify(this.activeQuestionGroup.serialize()));
     const questionList = JSON.parse(window.localStorage.getItem('owned_quizzes')) || [];
     if (questionList.indexOf(this.activeQuestionGroup.hashtag) === -1) {

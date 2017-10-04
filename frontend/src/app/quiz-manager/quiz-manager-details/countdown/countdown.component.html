@@ -11,29 +11,33 @@
           <span class="fa fa-hourglass text-light mr-3"
                 aria-hidden="true"></span>
           <input type="number"
+                 class="border-0 rounded"
                  [min]="minCountdownValue"
-                 [title]="countdown + ('component.timer.second' | translate)"
+                 [title]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
                  id="slider-timer-input-field"
                  [value]="countdown"
                  (input)="updateCountdown($event.target.value)"
                  (propertyChange)="updateCountdown($event.target.value)"
-                 [attr.aria-valuetext]="countdown + ('component.timer.second' | translate)"/>
-          <span class="text-center text-light ml-3" [innerHTML]="'component.timer.second' | translate"></span>
+                 [attr.aria-valuetext]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"/>
+          <span class="text-center text-light ml-3">
+            {{ 'component.timer.second' | translate:{COUNT: countdown} }}
+          </span>
         </div>
       </div>
-      <div class="col-12">
+      <div *ngIf="countdown"
+           class="col-12">
         <p class="text-center text-light mt-4" id="parsedTime">
           <span id="hours">
             <span [innerHTML]="parsedHours"></span>
-            <span [innerHTML]="'component.timer.hour' | translate"></span>
+            <span [innerHTML]="'component.timer.hour' | translate:{COUNT: plainHours}"></span>
           </span>
           <span id="minutes">
             <span [innerHTML]="parsedMinutes"></span>
-            <span [innerHTML]="'component.timer.minute' | translate"></span>
+            <span [innerHTML]="'component.timer.minute' | translate:{COUNT: plainMinutes}"></span>
           </span>
           <span id="seconds">
             <span [innerHTML]="parsedSeconds"></span>
-            <span [innerHTML]="'component.timer.second' | translate"></span>
+            <span [innerHTML]="'component.timer.second' | translate:{COUNT: plainSeconds}"></span>
           </span>
         </p>
       </div>

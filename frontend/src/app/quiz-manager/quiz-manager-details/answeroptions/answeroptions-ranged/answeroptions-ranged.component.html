@@ -1,15 +1,16 @@
-<div class="row">
+<div class="row center-vertical">
   <div class="col-12"
        [attr.data-intro]="'component.answeroptions.description.range_area' | translate"
        [attr.aria-label]="'component.answeroptions.description.range_area' | translate">
     <div class="row">
       <div class="col-12 col-md-4"
            [attr.data-intro]="'component.answeroptions.description.min_range' | translate">
-        <h3 [innerHTML]="'component.answeroptions.ranged_question.min_range' | translate"></h3>
+        <h3 class="text-light"
+            [innerHTML]="'component.answeroptions.ranged_question.min_range' | translate"></h3>
         <input type="number"
                [attr.aria-label]="'component.answeroptions.description.min_range' | translate"
                id="minRangeInput"
-               class=""
+               class="border-0 rounded p-2"
                step="any"
                min="0"
                [value]="minRange"
@@ -19,11 +20,12 @@
       </div>
       <div class="col-12 col-md-4"
            [attr.data-intro]="'component.answeroptions.description.correct_value' | translate">
-        <h3 [innerHTML]="'component.answeroptions.ranged_question.correct_value' | translate"></h3>
+        <h3 class="text-light"
+            [innerHTML]="'component.answeroptions.ranged_question.correct_value' | translate"></h3>
         <input type="number"
                [attr.aria-label]="'component.answeroptions.description.correct_value' | translate"
                id="correctValueInput"
-               class=""
+               class="border-0 rounded p-2"
                step="any"
                min="0"
                [value]="correctValue"
@@ -33,11 +35,12 @@
       </div>
       <div class="col-12 col-md-4"
            [attr.data-intro]="'component.answeroptions.description.max_range' | translate">
-        <h3 [innerHTML]="'component.answeroptions.ranged_question.max_range' | translate"></h3>
+        <h3 class="text-light"
+            [innerHTML]="'component.answeroptions.ranged_question.max_range' | translate"></h3>
         <input type="number"
                [attr.aria-label]="'component.answeroptions.description.max_range' | translate"
                id="maxRangeInput"
-               class="input-field"
+               class="border-0 rounded p-2"
                step="any"
                min="0"
                [value]="maxRange"
@@ -46,12 +49,5 @@
                placeholder="'component.answeroptions.ranged_question.max_range' | translate"/>
       </div>
     </div>
-  </div>
-  <div class="col-12"
-       [attr.data-intro]="'component.answeroptions.description.range_slider' | translate"
-       [attr.aria-label]="'component.answeroptions.description.range_slider' | translate">
-    <div id="rangedSlider"
-         role="slider"
-         class=""></div>
   </div>
 </div>

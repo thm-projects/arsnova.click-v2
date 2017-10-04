@@ -1,5 +1,4 @@
 #header {
-  cursor: pointer;
   height: 10vh;
   .arsnova-logo {
     padding: 0;
@@ -40,5 +39,6 @@
 
   .header-title {
     flex-basis: 100%;
+    cursor: default;
   }
 }

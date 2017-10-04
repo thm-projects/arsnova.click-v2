@@ -13,6 +13,17 @@ import {IQuestion} from '../../../../lib/questions/interfaces';
   styleUrls: ['./countdown.component.scss']
 })
 export class CountdownComponent implements OnInit, OnDestroy {
+  get plainHours(): number {
+    return this._plainHours;
+  }
+
+  get plainMinutes(): number {
+    return this._plainMinutes;
+  }
+
+  get plainSeconds(): number {
+    return this._plainSeconds;
+  }
   get parsedSeconds(): string {
     return this._parsedSeconds;
   }
@@ -32,11 +43,14 @@ export class CountdownComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _question: IQuestion;
   private _routerSubscription: Subscription;
-  private _parsedHours: string = '0';
-  private _parsedMinutes: string = '0';
-  private _parsedSeconds: string = '0';
+  private _parsedHours = '0';
+  private _parsedMinutes = '0';
+  private _parsedSeconds = '0';
+  private _plainHours = 0;
+  private _plainMinutes = 0;
+  private _plainSeconds = 0;
 
-  public minCountdownValue: number = 10;
+  public minCountdownValue = 10;
   private _countdown: number = this.minCountdownValue;
 
   constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
@@ -50,7 +64,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
   updateCountdown(value: string): void {
-    this._countdown = parseInt(value);
+    this._countdown = parseInt(value, 10);
     const hours = Math.floor(this._countdown / 3600);
     const minutes = Math.floor((this._countdown - hours * 3600) / 60);
     const seconds = Math.floor((this._countdown - hours * 3600) - (minutes * 60));
@@ -58,6 +72,10 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this._parsedHours = hours > 0 && hours < 10 ? '0' + hours : String(hours);
     this._parsedMinutes = minutes > 0 && minutes < 10 ? '0' + minutes : String(minutes);
     this._parsedSeconds = seconds > 0 && seconds < 10 ? '0' + seconds : String(seconds);
+
+    this._plainHours = parseInt(this._parsedHours, 10);
+    this._plainMinutes = parseInt(this._parsedMinutes, 10);
+    this._plainSeconds = parseInt(this._parsedSeconds, 10);
 
     this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].timer = this.countdown;
   }
@@ -76,3 +94,4 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
 }
+

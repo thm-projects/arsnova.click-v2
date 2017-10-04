@@ -1,11 +1,16 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
-import {Http, RequestOptions} from '@angular/http';
+import {Http, RequestOptions, RequestOptionsArgs} from '@angular/http';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
+import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
+import {QrCodeService} from '../../service/qr-code.service';
 
 export class FooterbarElement {
-  set linkTarget(value: string) {
+  set onClickCallback(value: Function) {
+    this._onClickCallback = value;
+  }
+  set linkTarget(value: Function | string) {
     this._linkTarget = value;
   }
 
@@ -41,7 +46,7 @@ export class FooterbarElement {
     return this._textName;
   }
 
-  get linkTarget(): string {
+  get linkTarget(): Function | string {
     return this._linkTarget;
   }
 
@@ -55,9 +60,9 @@ export class FooterbarElement {
   readonly _textName: string;
   readonly _selectable: boolean;
   readonly _showIntro: boolean;
-  readonly _onClickCallback: Function;
 
-  private _linkTarget: string;
+  private _onClickCallback: Function;
+  private _linkTarget: Function | string;
   private _isActive: boolean;
 
   constructor({id, iconClass, textClass, textName, selectable, showIntro, linkTarget}: any, onClickCallback?: Function) {
@@ -79,11 +84,6 @@ export class FooterbarElement {
   styleUrls: ['./footer-bar.component.scss']
 })
 export class FooterBarComponent implements OnInit, OnDestroy {
-  get _footerElements(): Array<FooterbarElement> {
-    return this.footerElements;
-  }
-
-  @Input() footerElements: Array<FooterbarElement> = [];
 
   static footerElemTranslation: FooterbarElement = new FooterbarElement({
     id: 'translation',
@@ -100,9 +100,9 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     iconClass: 'fa fa-music',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.sound',
-    selectable: true,
+    selectable: false,
     showIntro: true,
-    linkTarget: '/sound',
+    linkTarget: '/quiz-manager/sound',
   }, function () {
 
   });
@@ -207,7 +207,6 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     showIntro: true,
     linkTarget: null,
   }, function () {
-
   });
   static footerElemNicknames: FooterbarElement = new FooterbarElement({
     id: 'nicknames',
@@ -282,17 +281,37 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     textName: 'component.lobby.start_quiz',
     selectable: true,
     showIntro: false,
-    linkTarget: '/quiz-lobby',
   }, function () {
-
   });
+
+  get _footerElements(): Array<FooterbarElement> {
+    return this.footerElements;
+  }
+
+  @Input() footerElements: Array<FooterbarElement> = [];
 
   private _apiEndPoint = '/api/upload';
   private _routerSubscription: Subscription;
 
   constructor(private footerBarService: FooterBarService,
+              private activeQuestionGroupService: ActiveQuestionGroupService,
               private router: Router,
-              private http: Http) {
+              private http: Http,
+              private qrCodeService: QrCodeService) {
+    if (this.activeQuestionGroupService.activeQuestionGroup) {
+      if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.readingConfirmationEnabled) {
+        FooterBarComponent.footerElemReadingConfirmation.isActive = true;
+      }
+      if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.showResponseProgress) {
+        FooterBarComponent.footerElemResponseProgress.isActive = true;
+      }
+      if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.confidenceSliderEnabled) {
+        FooterBarComponent.footerElemConfidenceSlider.isActive = true;
+      }
+    }
+    FooterBarComponent.footerElemQRCode.onClickCallback = () => {
+      qrCodeService.toggleQrCode();
+    };
   }
 
   ngOnInit() {
@@ -305,6 +324,33 @@ export class FooterBarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._routerSubscription.unsubscribe();
+  }
+
+  getLinkTarget(elem: FooterbarElement): void {
+    return typeof elem.linkTarget === 'function' ? elem.linkTarget(elem) : elem.linkTarget;
+  }
+
+  toggleSetting(elem: FooterbarElement) {
+    let target: string = null;
+    switch (elem) {
+      case FooterBarComponent.footerElemResponseProgress:
+        target = 'showResponseProgress';
+        break;
+      case FooterBarComponent.footerElemConfidenceSlider:
+        target = 'confidenceSliderEnabled';
+        break;
+      case FooterBarComponent.footerElemProductTour:
+        target = null;
+        break;
+      case FooterBarComponent.footerElemReadingConfirmation:
+        target = 'readingConfirmationEnabled';
+        break;
+    }
+    if (target) {
+      this.activeQuestionGroupService.activeQuestionGroup.sessionConfig[target] = !elem.isActive;
+      elem.isActive = !elem.isActive;
+      this.activeQuestionGroupService.persistForSession();
+    }
   }
 
   public fileChange(event: any) {
@@ -320,16 +366,16 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     const headers = new Headers();
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
-    const options = new RequestOptions(headers);
+    const options = new RequestOptions(<RequestOptionsArgs>headers);
     this.http.post(`${this._apiEndPoint}`, formData, options)
       .map(res => res.json())
       .subscribe(
         data => {
-          console.log('success')
+          console.log('success');
         },
         error => {
-          console.log(error)
+          console.log(error);
         }
-      )
+      );
   }
 }

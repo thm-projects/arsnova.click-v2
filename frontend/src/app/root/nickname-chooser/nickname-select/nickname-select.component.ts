@@ -46,6 +46,7 @@ export class NicknameSelectComponent implements OnInit {
       });
     });
     promise.then(() => {
+      window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, name);
       this.router.navigate(['/quiz-lobby']);
     });
     promise.catch((err) => {

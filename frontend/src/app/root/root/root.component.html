@@ -6,7 +6,7 @@
     <app-header [headerLabel]="getHeaderLabel()"></app-header>
   </div>
 
-  <div class="container-fluid">
+  <div class="container-fluid" style="height: 90vh;">
     <div class="row flex-sm-nowrap overflow-hidden">
       <!--footer.navigation-->
       <!--footer-->
@@ -14,11 +14,18 @@
         <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
       </div>
 
-      <div class="mx-2 mt-2 mt-sm-0" style="flex-basis: 100%">
-        <div id="contentContainer">
+      <div class="col-12">
+        <div id="content-container" class="container mr-sm-2">
           <router-outlet></router-outlet>
         </div>
       </div>
     </div>
   </div>
+
+  <ngx-qrcode [qrc-value] = "qrCodeContent"
+              qrc-class = "content"
+              qrc-errorCorrectionLevel = "L"
+              qrc-element-type="img"
+              [class] = "'qr-code-element ' + (!showQrCode ? 'hidden' : '')">
+  </ngx-qrcode>
 </div>

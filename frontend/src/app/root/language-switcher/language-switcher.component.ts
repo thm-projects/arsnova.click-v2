@@ -24,7 +24,9 @@ export class LanguageSwitcherComponent implements OnInit {
     name: 'Deutsch'
   }];
 
-  constructor(private translateService: TranslateService, private footerBarService: FooterBarService, private headerLabelService: HeaderLabelService) {
+  constructor(private translateService: TranslateService,
+              private footerBarService: FooterBarService,
+              private headerLabelService: HeaderLabelService) {
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemHome,
       FooterBarComponent.footerElemAbout,

@@ -37,8 +37,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     return Object.keys(this._availableNicks);
   }
 
-  selectCategory(name: string): void {
-    this._selectedCategory = name;
+  toggleSelectedCategory(name: string): void {
+    this._selectedCategory = this._selectedCategory === name ? '' : name;
   }
 
   normalizeCategoryName(name: string): string {

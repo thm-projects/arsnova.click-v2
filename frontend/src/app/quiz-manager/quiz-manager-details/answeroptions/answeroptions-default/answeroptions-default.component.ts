@@ -4,6 +4,7 @@ import {ActiveQuestionGroupService} from '../../../../service/active-question-gr
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice, IQuestionSurvey} from '../../../../../lib/questions/interfaces';
+import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-answeroptions-default',
@@ -11,6 +12,10 @@ import {IQuestionChoice, IQuestionSurvey} from '../../../../../lib/questions/int
   styleUrls: ['./answeroptions-default.component.scss']
 })
 export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
+
+  public readonly DEVICE_TYPE = DEVICE_TYPES;
+  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+
   get question(): IQuestionChoice {
     return this._question;
   }
@@ -26,6 +31,10 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
 
   addAnswer(): void {
     this._question.addDefaultAnswerOption();
+  }
+
+  deleteAnswer(index: number): void {
+    this._question.answerOptionList.splice(index, 1);
   }
 
   updateAnswerValue(event: Event, index: number): void {

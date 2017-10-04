@@ -3,7 +3,7 @@
     <div class="row">
       <div *ngFor="let cat of availableNickCategories()"
            [class]="'nickCategory pointer col-6 ' + (hasSelectedCategory(cat) ? 'selectedCategory' : '') + ' ' + (hasSelectedCategory() ? 'col-sm-12' : 'col-sm-6')"
-           (click)="selectCategory(cat)">
+           (click)="toggleSelectedCategory(cat)">
         <div class="nickCategoryText">
           <p class="mb-0" [innerHTML]="('component.nickname_categories.category.' + cat) | translate"></p>
           <p class="mb-0">({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>

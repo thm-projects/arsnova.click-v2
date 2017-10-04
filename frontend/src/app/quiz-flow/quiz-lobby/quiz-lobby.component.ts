@@ -92,6 +92,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         FooterBarComponent.footerElemConfidenceSlider,
       ]);
       this._isOwner = true;
+      FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
+        return self.isActive ? '/quiz-results' : null;
+      };
     } else {
       footerBarService.replaceFooterElments([
         FooterBarComponent.footerElemBack
@@ -107,20 +110,32 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     });
     this.connectionService.socket.subscribe((message) => {
       const data = message;
-      if (data.step === 'LOBBY:INACTIVE') {
-        setTimeout(this.handleIncomingPlayers, 500);
-      } else if (data.step === 'LOBBY:ALL_PLAYERS') {
-        data.payload.members.forEach((elem: IPlayer) => {
-          this._players.push(new Player(elem));
-        });
-      } else if (data.step === 'MEMBER:ADDED') {
-        this._players.push(new Player(data.payload.member));
-        console.log('Member added', data.payload);
-      } else if (data.step === 'MEMBER:REMOVED') {
-        this._players = this._players.filter(player => player.name !== data.payload.name);
+      switch (data.step) {
+        case 'LOBBY:INACTIVE':
+          setTimeout(this.handleIncomingPlayers, 500);
+          break;
+        case 'LOBBY:ALL_PLAYERS':
+          data.payload.members.forEach((elem: IPlayer) => {
+            this._players.push(new Player(elem));
+          });
+          FooterBarComponent.footerElemStartQuiz.isActive = true;
+          break;
+        case 'MEMBER:ADDED':
+          this._players.push(new Player(data.payload.member));
+          FooterBarComponent.footerElemStartQuiz.isActive = true;
+          break;
+        case 'MEMBER:REMOVED':
+          this._players = this._players.filter(player => player.name !== data.payload.name);
+          if (!this._players.length) {
+            FooterBarComponent.footerElemStartQuiz.isActive = false;
+          }
+          break;
       }
-      console.log(data.payload);
     });
+  }
+
+  isOwnNick(name: string): boolean {
+    return name === window.sessionStorage.getItem(`${this.activeQuestionGroupService.activeQuestionGroup.hashtag}_nick`);
   }
 
   kickMember(name: string): void {
@@ -153,8 +168,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       webSocketId: window.sessionStorage.getItem('webSocket')
     }).subscribe(
       (data: IMessage) => {
-        console.log(data);
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
+          window.sessionStorage.setItem(`${this.activeQuestionGroupService.activeQuestionGroup.hashtag}_nick`, 'testnick');
         }
       }
     );

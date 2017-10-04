@@ -1,11 +1,12 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {DeviceTypes, EnvironmentTypes} from '../../../live-preview/live-preview.module';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {QuestionTextService} from '../../../service/question-text.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute} from '@angular/router';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
+import {LIVE_PREVIEW_ENVIRONMENT} from 'environments/environment';
+import {DEVICE_TYPES} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-questiontext',
@@ -14,8 +15,9 @@ import {ActiveQuestionGroupService} from '../../../service/active-question-group
 })
 export class QuestiontextComponent implements OnInit, OnDestroy {
 
-  public DeviceTypes = DeviceTypes;
-  public EnvironmentTypes = EnvironmentTypes;
+  public readonly DEVICE_TYPE = DEVICE_TYPES;
+  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+
   private questionTextElement: HTMLTextAreaElement;
   private _questionIndex: number;
   private _routerSubscription: Subscription;
@@ -31,17 +33,21 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   }
 
   private insertMarkupSymbol(symbol: string) {
-    const pre = this.questionTextElement.value.substr(0, this.questionTextElement.selectionStart);
-    const selected = this.questionTextElement.value.substring(this.questionTextElement.selectionStart, this.questionTextElement.selectionEnd);
-    const post = this.questionTextElement.value.substr(this.questionTextElement.selectionEnd, this.questionTextElement.value.length);
+    const selectionStart = this.questionTextElement.selectionStart;
+    const selectionEnd = this.questionTextElement.selectionEnd;
+    const pre = this.questionTextElement.value.substr(0, selectionStart);
+    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
+    const post = this.questionTextElement.value.substr(selectionEnd, this.questionTextElement.value.length);
 
     this.questionTextElement.value = `${pre}${symbol}${selected}${symbol}${post}`;
   }
 
   private removeMarkupSymbol(length: number) {
-    const pre = this.questionTextElement.value.substr(0, this.questionTextElement.selectionStart - length);
-    const selected = this.questionTextElement.value.substring(this.questionTextElement.selectionStart, this.questionTextElement.selectionEnd);
-    const post = this.questionTextElement.value.substr(this.questionTextElement.selectionEnd + length, this.questionTextElement.value.length);
+    const selectionStart = this.questionTextElement.selectionStart;
+    const selectionEnd = this.questionTextElement.selectionEnd;
+    const pre = this.questionTextElement.value.substr(0, selectionStart - length);
+    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
+    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
 
     this.questionTextElement.value = `${pre}${selected}${post}`;
   }
@@ -59,9 +65,11 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     const fullPre = this.questionTextElement.value.substring(0, this.questionTextElement.selectionStart);
     const lineStart = fullPre.lastIndexOf('\n') + 1;
     const pre = fullPre.substring(0, lineStart);
-    const currentSymbolCount = this.questionTextElement.value.substring(lineStart, this.questionTextElement.selectionEnd).lastIndexOf(symbol) + 1;
-    const selected = this.questionTextElement.value.substring(this.questionTextElement.selectionStart, this.questionTextElement.selectionEnd);
-    const post = this.questionTextElement.value.substr(this.questionTextElement.selectionEnd + length, this.questionTextElement.value.length);
+    const selectionStart = this.questionTextElement.selectionStart;
+    const selectionEnd = this.questionTextElement.selectionEnd;
+    const currentSymbolCount = this.questionTextElement.value.substring(lineStart, selectionEnd).lastIndexOf(symbol) + 1;
+    const selected = this.questionTextElement.value.substring(selectionStart, this.questionTextElement.selectionEnd);
+    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
     let symbolFinal = '';
 
     for (let i = 0; i < currentSymbolCount; i++) {
@@ -103,7 +111,8 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
 
   computeQuestionTextInputHeight() {
     const questionTextElem = <HTMLInputElement>document.getElementById('questionText');
-    questionTextElem.style.height = (parseInt(window.getComputedStyle(questionTextElem).getPropertyValue('line-height').replace('px', ''))) * (questionTextElem.value.split('\n').length + 2) + 'px';
+    const lineHeight = window.getComputedStyle(questionTextElem).getPropertyValue('line-height').replace('px', '');
+    questionTextElem.style.height = (parseInt(lineHeight, 10)) * (questionTextElem.value.split('\n').length + 2) + 'px';
   }
 
   fireEvent(event) {

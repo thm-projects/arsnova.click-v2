@@ -1,11 +1,25 @@
 import {ModuleWithProviders, NgModule, Pipe} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {TranslateModule, TranslatePipe, TranslateService} from '@ngx-translate/core';
+import {TranslateLoader, TranslateModule, TranslatePipe, TranslateService, TranslateCompiler} from '@ngx-translate/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {BrowserModule} from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
+import * as MessageFormat from 'messageformat';
+import {I18nService} from '../service/i18n.service';
+import { AudioPlayerComponent } from './audio-player/audio-player.component';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
+export function CustomCompilerFactory() {
+  return new TranslateMessageFormatCompiler(new MessageFormat());
+}
 
 export const providers = [
   BrowserModule,
@@ -22,9 +36,19 @@ export const providers = [
     FormsModule,
     CommonModule,
     HttpClientModule,
-    TranslateModule,
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useFactory: CustomCompilerFactory
+      }
+    }),
     NgbModule,
-    RouterModule,
+    RouterModule
   ],
   exports: [
     CommonModule,
@@ -32,30 +56,13 @@ export const providers = [
     TranslatePipe,
     TranslateModule,
     NgbModule,
-    RouterModule
+    RouterModule,
+    AudioPlayerComponent
   ],
   providers: [],
-  declarations: [],
+  declarations: [AudioPlayerComponent],
   bootstrap: []
 })
 export class SharedModule {
-
-  constructor(private translate: TranslateService) {
-    // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang('en');
-
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use('en');
-  }
-
-  getCurrentLanguage() {
-    return this.translate.currentLang;
-  }
-
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: SharedModule,
-      providers: [...providers]
-    };
-  }
+  constructor(private I18nService: I18nService) {}
 }

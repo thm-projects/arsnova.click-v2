@@ -4,10 +4,12 @@ import {AnsweroptionsComponent} from './answeroptions.component';
 import {AnsweroptionsDefaultComponent} from './answeroptions-default/answeroptions-default.component';
 import {AnsweroptionsFreetextComponent} from './answeroptions-freetext/answeroptions-freetext.component';
 import {AnsweroptionsRangedComponent} from './answeroptions-ranged/answeroptions-ranged.component';
+import {LivePreviewModule} from '../../../live-preview/live-preview.module';
 
 @NgModule({
   imports: [
-    SharedModule
+    SharedModule,
+    LivePreviewModule
   ],
   declarations: [AnsweroptionsComponent, AnsweroptionsDefaultComponent, AnsweroptionsFreetextComponent, AnsweroptionsRangedComponent]
 })
