@@ -13,11 +13,13 @@ export class DefaultQuestionGroup extends AbstractQuestionGroup implements IQues
                 hashtag,
                 questionList = [],
                 isFirstStart = true,
-                sessionConfig = new SessionConfiguration(null)}:
-                { hashtag: string,
-                  questionList?: Array<string>,
-                  isFirstStart?: boolean,
-                  sessionConfig?: ISessionConfiguration }) {
+                sessionConfig = new SessionConfiguration(null)
+              }: {
+    hashtag: string,
+    questionList?: Array<string>,
+    isFirstStart?: boolean,
+    sessionConfig?: ISessionConfiguration
+  }) {
     super({hashtag, questionList, isFirstStart, sessionConfig});
     if (this.questionList.length > 0) {
       this.questionList.forEach(function (question: any, index: number) {

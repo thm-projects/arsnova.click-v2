@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
@@ -8,10 +8,10 @@ import {IMessage} from '../../../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {DefaultSettings} from '../../../service/settings.service';
 
 @Component({
-  selector: 'app-nickname-input',
-  templateUrl: './nickname-input.component.html',
-  styleUrls: ['./nickname-input.component.scss']
-})
+             selector: 'app-nickname-input',
+             templateUrl: './nickname-input.component.html',
+             styleUrls: ['./nickname-input.component.scss']
+           })
 export class NicknameInputComponent implements OnInit {
   get failedLoginReason(): string {
     return this._failedLoginReason;
@@ -20,13 +20,14 @@ export class NicknameInputComponent implements OnInit {
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
   private _failedLoginReason = '';
 
-  constructor(private http: HttpClient,
-               private footerBarService: FooterBarService,
-               private router: Router,
-               private currentQuiz: CurrentQuizService) {
+  constructor(
+    private http: HttpClient,
+    private footerBarService: FooterBarService,
+    private router: Router,
+    private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
-    ]);
+                                            FooterBarComponent.footerElemBack
+                                          ]);
   }
 
   joinQuiz(): void {
@@ -37,13 +38,13 @@ export class NicknameInputComponent implements OnInit {
         nickname: nickname,
         webSocketId: window.sessionStorage.getItem('webSocket')
       }).subscribe((data: IMessage) => {
-          if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-            this.currentQuiz.currentQuestion = data.payload.currentQuestion;
-            resolve();
-          } else {
-            reject(data);
-          }
-        });
+        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
+          this.currentQuiz.currentQuestion = data.payload.currentQuestion;
+          resolve();
+        } else {
+          reject(data);
+        }
+      });
     });
     promise.then(() => {
       window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, nickname);

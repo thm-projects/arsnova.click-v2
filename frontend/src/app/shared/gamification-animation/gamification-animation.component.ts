@@ -1,15 +1,16 @@
-import {Component, Input, OnInit, Sanitizer, SecurityContext} from '@angular/core';
-import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
+import {Component, Input, OnInit} from '@angular/core';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-gamification-animation',
-  templateUrl: './gamification-animation.component.html',
-  styleUrls: ['./gamification-animation.component.scss']
-})
+             selector: 'app-gamification-animation',
+             templateUrl: './gamification-animation.component.html',
+             styleUrls: ['./gamification-animation.component.scss']
+           })
 export class GamificationAnimationComponent implements OnInit {
   get image(): string {
     return this._image;
   }
+
   get background(): string {
     return this._background;
   }
@@ -62,7 +63,8 @@ export class GamificationAnimationComponent implements OnInit {
   private _background: string;
   private _image = null;
 
-  constructor(private sanitizer: DomSanitizer) { }
+  constructor(private sanitizer: DomSanitizer) {
+  }
 
   sanitizeStyle(value: string): SafeStyle {
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);

@@ -3,14 +3,14 @@ import {FooterBarService} from '../../service/footer-bar.service';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {TranslateService} from '@ngx-translate/core';
 import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
-import {Http, RequestOptions, Headers, RequestOptionsArgs} from '@angular/http';
+import {Headers, Http, RequestOptions, RequestOptionsArgs} from '@angular/http';
 import {DefaultSettings} from '../../service/settings.service';
 
 @Component({
-  selector: 'app-nickname-manager',
-  templateUrl: './nickname-manager.component.html',
-  styleUrls: ['./nickname-manager.component.scss']
-})
+             selector: 'app-nickname-manager',
+             templateUrl: './nickname-manager.component.html',
+             styleUrls: ['./nickname-manager.component.scss']
+           })
 export class NicknameManagerComponent implements OnInit, OnDestroy {
   get selectedCategory(): string {
     return this._selectedCategory;
@@ -24,13 +24,14 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   private _availableNicks = {};
   private _selectedCategory = '';
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private translateService: TranslateService,
-              private footerBarService: FooterBarService,
-              private http: Http) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private translateService: TranslateService,
+    private footerBarService: FooterBarService,
+    private http: Http) {
     this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
-    ]);
+                                                 FooterBarComponent.footerElemBack
+                                               ]);
   }
 
   availableNickCategories(): Array<string> {
@@ -39,10 +40,6 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
 
   toggleSelectedCategory(name: string): void {
     this._selectedCategory = this._selectedCategory === name ? '' : name;
-  }
-
-  normalizeCategoryName(name: string): string {
-    return (name[0].toUpperCase() + name.substr(1)).replace('_', ' ');
   }
 
   selectNick(name: string): void {
@@ -94,15 +91,15 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     headers.append('Accept', 'application/json');
     const options = new RequestOptions(<RequestOptionsArgs>headers);
     this.http.get(`${this._apiEndPoint}`, options)
-      .map(res => res.json())
-      .subscribe(
-        data => {
-          this._availableNicks = data;
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        .map(res => res.json())
+        .subscribe(
+          data => {
+            this._availableNicks = data;
+          },
+          error => {
+            console.log(error);
+          }
+        );
   }
 
   ngOnDestroy() {

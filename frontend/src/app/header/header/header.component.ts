@@ -2,8 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {HeaderLabelService} from 'app/service/header-label.service';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../service/settings.service';
 import {ConnectionService} from '../../service/connection.service';
 
 function isLocalStorageSupported(): boolean {
@@ -39,10 +37,10 @@ function isSessionStorageSupported(): boolean {
 }
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
-})
+             selector: 'app-header',
+             templateUrl: './header.component.html',
+             styleUrls: ['./header.component.scss']
+           })
 export class HeaderComponent implements OnInit {
   get localStorageAvailable(): Boolean {
     return this._localStorageAvailable;
@@ -89,10 +87,11 @@ export class HeaderComponent implements OnInit {
     return this._origin;
   }
 
-  constructor(private headerLabelService: HeaderLabelService,
-              private router: Router,
-              private modalService: NgbModal,
-              private connectionService: ConnectionService) {
+  constructor(
+    private headerLabelService: HeaderLabelService,
+    private router: Router,
+    private modalService: NgbModal,
+    private connectionService: ConnectionService) {
     const self = this;
     router.events.subscribe((url: any) => {
       self.inHomeRoute = (url.url === '/home' || url.url === '/');

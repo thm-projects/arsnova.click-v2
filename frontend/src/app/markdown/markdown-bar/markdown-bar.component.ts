@@ -47,74 +47,74 @@ class MarkdownBarElement {
 
 /* Visible Markdown buttons by default */
 const BoldMarkdownButton = new MarkdownBarElement({
-  id: 'boldMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.bold',
-  iconClass: 'fa-bold'
-});
+                                                    id: 'boldMarkdownButton',
+                                                    titleRef: 'plugins.markdown_bar.tooltip.bold',
+                                                    iconClass: 'fa-bold'
+                                                  });
 const HeaderMarkdownButton = new MarkdownBarElement({
-  id: 'headerMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.heading',
-  iconClass: 'fa-header'
-});
+                                                      id: 'headerMarkdownButton',
+                                                      titleRef: 'plugins.markdown_bar.tooltip.heading',
+                                                      iconClass: 'fa-header'
+                                                    });
 const HyperlinkMarkdownButton = new MarkdownBarElement({
-  id: 'hyperlinkMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.hyperlink',
-  iconClass: 'fa-globe'
-});
+                                                         id: 'hyperlinkMarkdownButton',
+                                                         titleRef: 'plugins.markdown_bar.tooltip.hyperlink',
+                                                         iconClass: 'fa-globe'
+                                                       });
 const UlMarkdownButton = new MarkdownBarElement({
-  id: 'unsortedListMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.unordered_list',
-  iconClass: 'fa-list-ul'
-});
+                                                  id: 'unsortedListMarkdownButton',
+                                                  titleRef: 'plugins.markdown_bar.tooltip.unordered_list',
+                                                  iconClass: 'fa-list-ul'
+                                                });
 const CodeMarkdownButton = new MarkdownBarElement({
-  id: 'codeMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.code',
-  iconClass: 'fa-code'
-});
+                                                    id: 'codeMarkdownButton',
+                                                    titleRef: 'plugins.markdown_bar.tooltip.code',
+                                                    iconClass: 'fa-code'
+                                                  });
 const ImageMarkdownButton = new MarkdownBarElement({
-  id: 'imageMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.image',
-  iconClass: 'fa-image'
-});
+                                                     id: 'imageMarkdownButton',
+                                                     titleRef: 'plugins.markdown_bar.tooltip.image',
+                                                     iconClass: 'fa-image'
+                                                   });
 const ShowMoreMarkdownButton = new MarkdownBarElement({
-  id: 'showMoreMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.show_more',
-  iconClass: 'fa-caret-square-o-down',
-  iconClassToggled: 'fa-caret-square-o-up'
-});
+                                                        id: 'showMoreMarkdownButton',
+                                                        titleRef: 'plugins.markdown_bar.tooltip.show_more',
+                                                        iconClass: 'fa-caret-square-o-down',
+                                                        iconClassToggled: 'fa-caret-square-o-up'
+                                                      });
 
 /* Hidden Markdown buttons - visible only by clicking on ShowMoreMarkdownButton */
 const LatexMarkdownButton = new MarkdownBarElement({
-  id: 'latexMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.latex',
-  iconClass: 'latexIcon',
-  hiddenByDefault: true
-});
+                                                     id: 'latexMarkdownButton',
+                                                     titleRef: 'plugins.markdown_bar.tooltip.latex',
+                                                     iconClass: 'latexIcon',
+                                                     hiddenByDefault: true
+                                                   });
 const UnderlineMarkdownButton = new MarkdownBarElement({
-  id: 'underlineMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.underline',
-  iconClass: 'fa-underline',
-  hiddenByDefault: true
-});
+                                                         id: 'underlineMarkdownButton',
+                                                         titleRef: 'plugins.markdown_bar.tooltip.underline',
+                                                         iconClass: 'fa-underline',
+                                                         hiddenByDefault: true
+                                                       });
 const StrikeThroughMarkdownButton = new MarkdownBarElement({
-  id: 'strikeThroughMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.strike_through',
-  iconClass: 'fa-strikethrough',
-  hiddenByDefault: true
-});
+                                                             id: 'strikeThroughMarkdownButton',
+                                                             titleRef: 'plugins.markdown_bar.tooltip.strike_through',
+                                                             iconClass: 'fa-strikethrough',
+                                                             hiddenByDefault: true
+                                                           });
 const ItalicMarkdownButton = new MarkdownBarElement({
-  id: 'italicMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.italic',
-  iconClass: 'fa-italic',
-  hiddenByDefault: true
-});
+                                                      id: 'italicMarkdownButton',
+                                                      titleRef: 'plugins.markdown_bar.tooltip.italic',
+                                                      iconClass: 'fa-italic',
+                                                      hiddenByDefault: true
+                                                    });
 
 
 @Component({
-  selector: 'app-markdown-bar',
-  templateUrl: './markdown-bar.component.html',
-  styleUrls: ['./markdown-bar.component.scss']
-})
+             selector: 'app-markdown-bar',
+             templateUrl: './markdown-bar.component.html',
+             styleUrls: ['./markdown-bar.component.scss']
+           })
 export class MarkdownBarComponent implements OnInit, OnDestroy {
   get showHiddenMarkdownButtons(): boolean {
     return this._showHiddenMarkdownButtons;
@@ -127,7 +127,7 @@ export class MarkdownBarComponent implements OnInit, OnDestroy {
   public markdownBarElements = Array<MarkdownBarElement>();
   public hiddenMarkdownBarElements = Array<MarkdownBarElement>();
   public allDisplayedMarkdownBarElements = Array<MarkdownBarElement>();
-  private _showHiddenMarkdownButtons: boolean = false;
+  private _showHiddenMarkdownButtons = false;
 
   @Output() connectorEmitter: EventEmitter<string> = new EventEmitter<string>();
 

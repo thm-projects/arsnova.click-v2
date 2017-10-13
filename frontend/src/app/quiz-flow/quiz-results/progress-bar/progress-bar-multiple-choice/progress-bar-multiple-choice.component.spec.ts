@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ProgressBarMultipleChoiceComponent } from './progress-bar-multiple-choice.component';
+import {ProgressBarMultipleChoiceComponent} from './progress-bar-multiple-choice.component';
 
 describe('ProgressBarMultipleChoiceComponent', () => {
   let component: ProgressBarMultipleChoiceComponent;
@@ -8,9 +8,9 @@ describe('ProgressBarMultipleChoiceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgressBarMultipleChoiceComponent ]
-    })
-    .compileComponents();
+                                     declarations: [ProgressBarMultipleChoiceComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

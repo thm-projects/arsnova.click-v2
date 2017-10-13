@@ -18,14 +18,15 @@ import {I18nService} from '../../service/i18n.service';
 import {Subscription} from 'rxjs/Subscription';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
-})
+             selector: 'app-home',
+             templateUrl: './home.component.html',
+             styleUrls: ['./home.component.scss']
+           })
 export class HomeComponent implements OnInit, OnDestroy {
   get provideNickSelection(): boolean {
     return this._provideNickSelection;
   }
+
   public canJoinQuiz = false;
   public canAddQuiz = false;
   public canEditQuiz = false;
@@ -37,25 +38,26 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _provideNickSelection = false;
   private _routerSubscription: Subscription;
 
-  constructor(private footerBarService: FooterBarService,
-              private headerLabelService: HeaderLabelService,
-              private modalService: NgbModal,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private http: HttpClient,
-              private router: Router,
-              private themesService: ThemesService,
-              private route: ActivatedRoute,
-              private i18nService: I18nService,
-              private currentQuiz: CurrentQuizService) {
+  constructor(
+    private footerBarService: FooterBarService,
+    private headerLabelService: HeaderLabelService,
+    private modalService: NgbModal,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private http: HttpClient,
+    private router: Router,
+    private themesService: ThemesService,
+    private route: ActivatedRoute,
+    private i18nService: I18nService,
+    private currentQuiz: CurrentQuizService) {
     this.activeQuestionGroupService.activeQuestionGroup = null;
     footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemAbout,
-      FooterBarComponent.footerElemTranslation,
-      FooterBarComponent.footerElemTheme,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemHashtagManagement,
-      FooterBarComponent.footerElemImport,
-    ]);
+                                            FooterBarComponent.footerElemAbout,
+                                            FooterBarComponent.footerElemTranslation,
+                                            FooterBarComponent.footerElemTheme,
+                                            FooterBarComponent.footerElemFullscreen,
+                                            FooterBarComponent.footerElemHashtagManagement,
+                                            FooterBarComponent.footerElemImport,
+                                          ]);
     headerLabelService.setHeaderLabel('default');
     const ownedQuizzes = window.localStorage.getItem('owned_quizzes');
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
@@ -81,6 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   parseQuiznameInput(event: any) {
     const quizname = event.target.value.trim();
+    this.enteredSessionName = quizname;
     this.canJoinQuiz = false;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
@@ -126,8 +129,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       } else {
         questionGroup = questionGroupReflection.DefaultQuestionGroup({
-          hashtag: this.enteredSessionName
-        });
+                                                                       hashtag: this.enteredSessionName
+                                                                     });
         if (this.isAddingABCDQuiz) {
           throw new NotYetImplementedException();
           // questionGroup.addQuestion(ABCDSingleChoiceQuestion);

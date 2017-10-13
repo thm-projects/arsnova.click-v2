@@ -3,12 +3,12 @@ import {IQuestionChoice, IValidationStackTrace} from './interfaces';
 
 export class MultipleChoiceQuestion extends AbstractChoiceQuestion implements IQuestionChoice {
 
-  canEditQuestionText: boolean = true;
-  canEditAnsweroptions: boolean = true;
-  canEditQuestionTimer: boolean = true;
-  canEditQuestionType: boolean = true;
+  canEditQuestionText = true;
+  canEditAnsweroptions = true;
+  canEditQuestionTimer = true;
+  canEditQuestionType = true;
 
-  canAddAnsweroptions: boolean = true;
+  canAddAnsweroptions = true;
 
   readonly preferredAnsweroptionComponent: string = 'AnsweroptionsDefaultComponent';
 

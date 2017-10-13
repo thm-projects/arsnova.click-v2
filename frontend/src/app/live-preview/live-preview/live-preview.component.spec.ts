@@ -8,9 +8,9 @@ describe('LivePreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LivePreviewComponent]
-    })
-      .compileComponents();
+                                     declarations: [LivePreviewComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

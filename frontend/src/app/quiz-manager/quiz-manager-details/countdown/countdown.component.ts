@@ -8,10 +8,10 @@ import {ActivatedRoute} from '@angular/router';
 import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-countdown',
-  templateUrl: './countdown.component.html',
-  styleUrls: ['./countdown.component.scss']
-})
+             selector: 'app-countdown',
+             templateUrl: './countdown.component.html',
+             styleUrls: ['./countdown.component.scss']
+           })
 export class CountdownComponent implements OnInit, OnDestroy {
   get plainHours(): number {
     return this._plainHours;
@@ -24,6 +24,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
   get plainSeconds(): number {
     return this._plainSeconds;
   }
+
   get parsedSeconds(): string {
     return this._parsedSeconds;
   }
@@ -53,18 +54,23 @@ export class CountdownComponent implements OnInit, OnDestroy {
   public minCountdownValue = 10;
   private _countdown: number = this.minCountdownValue;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private translateService: TranslateService,
-              private route: ActivatedRoute,
-              private footerBarService: FooterBarService) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private translateService: TranslateService,
+    private route: ActivatedRoute,
+    private footerBarService: FooterBarService) {
     this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemNicknames
-    ]);
+                                                 FooterBarComponent.footerElemBack,
+                                                 FooterBarComponent.footerElemNicknames
+                                               ]);
   }
 
-  updateCountdown(value: string): void {
-    this._countdown = parseInt(value, 10);
+  updateCountdown(event: Event | number): void {
+    if (typeof event === 'string') {
+      this._countdown = event;
+    } else {
+      this._countdown = parseInt((<HTMLInputElement>(<Event>event).target).value, 10);
+    }
     const hours = Math.floor(this._countdown / 3600);
     const minutes = Math.floor((this._countdown - hours * 3600) / 60);
     const seconds = Math.floor((this._countdown - hours * 3600) - (minutes * 60));
@@ -84,7 +90,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
-      this.updateCountdown(String(this._question.timer));
+      this.updateCountdown(this._question.timer);
     });
   }
 

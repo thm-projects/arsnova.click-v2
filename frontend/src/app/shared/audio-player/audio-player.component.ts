@@ -1,19 +1,21 @@
-import {Component, Input, OnInit, Output, EventEmitter, Inject, AfterViewInit} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {DefaultSettings} from '../../service/settings.service';
 
 @Component({
-  selector: 'app-audio-player',
-  templateUrl: './audio-player.component.html',
-  styleUrls: ['./audio-player.component.scss']
-})
+             selector: 'app-audio-player',
+             templateUrl: './audio-player.component.html',
+             styleUrls: ['./audio-player.component.scss']
+           })
 export class AudioPlayerComponent implements OnInit, AfterViewInit {
 
   get volume(): number {
     return this._volume;
   }
+
   get apiUrl(): string {
     return this._apiUrl;
   }
+
   get src(): string {
     return this._src;
   }
@@ -22,6 +24,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   set src(value: string) {
     this._src = value;
   }
+
   @Input()
   set original_volume(value: number) {
     this._original_volume = value;
@@ -42,7 +45,8 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   private _audioElement: HTMLAudioElement;
   private _isPlaying = false;
 
-  constructor() {}
+  constructor() {
+  }
 
   private getAudioElement() {
     if (!this._audioElement) {

@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GamificationAnimationComponent } from './gamification-animation.component';
+import {GamificationAnimationComponent} from './gamification-animation.component';
 
 describe('GamificationAnimationComponent', () => {
   let component: GamificationAnimationComponent;
@@ -8,9 +8,9 @@ describe('GamificationAnimationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GamificationAnimationComponent ]
-    })
-    .compileComponents();
+                                     declarations: [GamificationAnimationComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

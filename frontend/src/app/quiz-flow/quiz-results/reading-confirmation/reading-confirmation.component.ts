@@ -2,14 +2,11 @@ import {Component, Input, OnInit} from '@angular/core';
 import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
 
 @Component({
-  selector: 'app-reading-confirmation',
-  templateUrl: './reading-confirmation.component.html',
-  styleUrls: ['./reading-confirmation.component.scss']
-})
+             selector: 'app-reading-confirmation',
+             templateUrl: './reading-confirmation.component.html',
+             styleUrls: ['./reading-confirmation.component.scss']
+           })
 export class ReadingConfirmationComponent implements OnInit {
-  get hasData(): boolean {
-    return this._hasData;
-  }
   @Input()
   set data(value: any) {
     this._data = value;
@@ -35,7 +32,8 @@ export class ReadingConfirmationComponent implements OnInit {
 
   private _name: string;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

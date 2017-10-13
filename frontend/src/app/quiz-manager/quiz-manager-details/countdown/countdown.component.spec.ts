@@ -8,9 +8,9 @@ describe('CountdownComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [CountdownComponent]
-    })
-      .compileComponents();
+                                     declarations: [CountdownComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

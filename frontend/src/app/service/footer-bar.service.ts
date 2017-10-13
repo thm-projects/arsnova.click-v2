@@ -12,16 +12,8 @@ export class FooterBarService {
   constructor() {
   }
 
-  public addFooterElement(element: FooterbarElement) {
-    this._footerElements.push(element);
-  }
-
   public replaceFooterElments(elements: Array<FooterbarElement>) {
     this._footerElements = elements;
-  }
-
-  public removeFooterElement(element: FooterbarElement) {
-    this._footerElements.splice(this._footerElements.indexOf(element), 1);
   }
 
 }

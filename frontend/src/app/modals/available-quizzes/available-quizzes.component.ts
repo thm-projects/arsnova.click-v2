@@ -7,10 +7,10 @@ import {questionGroupReflection} from '../../../lib/questions/questionGroup_refl
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-available-quizzes',
-  templateUrl: './available-quizzes.component.html',
-  styleUrls: ['./available-quizzes.component.scss']
-})
+             selector: 'app-available-quizzes',
+             templateUrl: './available-quizzes.component.html',
+             styleUrls: ['./available-quizzes.component.scss']
+           })
 export class AvailableQuizzesComponent implements OnInit, ModalI {
   private _sessions: Array<IQuestionGroup> = [];
 
@@ -30,9 +30,10 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
     return this._sessions;
   }
 
-  constructor(private translateService: TranslateService,
-              private activeModal: NgbActiveModal,
-              private activeQuestionGroupService: ActiveQuestionGroupService) {
+  constructor(
+    private translateService: TranslateService,
+    private activeModal: NgbActiveModal,
+    private activeQuestionGroupService: ActiveQuestionGroupService) {
     const sessions = JSON.parse(window.localStorage.getItem('owned_quizzes')) || [];
     sessions.sort(function (a, b) {
       return a > b;

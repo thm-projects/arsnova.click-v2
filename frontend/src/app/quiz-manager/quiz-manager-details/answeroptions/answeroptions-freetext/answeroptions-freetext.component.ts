@@ -7,10 +7,10 @@ import {FreeTextAnswerOption} from '../../../../../lib/answeroptions/answeroptio
 import {IQuestion} from '../../../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-answeroptions-freetext',
-  templateUrl: './answeroptions-freetext.component.html',
-  styleUrls: ['./answeroptions-freetext.component.scss']
-})
+             selector: 'app-answeroptions-freetext',
+             templateUrl: './answeroptions-freetext.component.html',
+             styleUrls: ['./answeroptions-freetext.component.scss']
+           })
 export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   get matchText(): string {
     return this._matchText;
@@ -23,12 +23,13 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _question: IQuestion;
   private _routerSubscription: Subscription;
-  private _testInput: string = '';
-  private _matchText: string = '';
+  private _testInput = '';
+  private _matchText = '';
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private translateService: TranslateService,
-              private route: ActivatedRoute) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private translateService: TranslateService,
+    private route: ActivatedRoute) {
   }
 
   setTestInput(event: Event): void {

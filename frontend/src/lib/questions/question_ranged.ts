@@ -57,7 +57,8 @@ export class RangedQuestion extends AbstractQuestion implements IQuestionRanged 
   /**
    * Serialized the instance object to a JSON compatible object
    * @see AbstractQuestion.serialize()
-   * @returns {{hashtag, questionText, type, timer, startTime, questionIndex, answerOptionList}|{hashtag: String, questionText: String, type: AbstractQuestion, timer: Number, startTime: Number, questionIndex: Number, answerOptionList: Array}}
+   * @returns {{hashtag, questionText, type, timer, startTime, questionIndex, answerOptionList}|{hashtag: String, questionText: String,
+   *     type: AbstractQuestion, timer: Number, startTime: Number, questionIndex: Number, answerOptionList: Array}}
    */
   serialize(): Object {
     return Object.assign(super.serialize(), {
@@ -76,10 +77,10 @@ export class RangedQuestion extends AbstractQuestion implements IQuestionRanged 
    */
   isValid(): boolean {
     return super.isValid() &&
-      this.answerOptionList.length === 0 &&
-      this.rangeMin < this.rangeMax &&
-      this.correctValue >= this.rangeMin &&
-      this.correctValue <= this.rangeMax;
+           this.answerOptionList.length === 0 &&
+           this.rangeMin < this.rangeMax &&
+           this.correctValue >= this.rangeMin &&
+           this.correctValue <= this.rangeMax;
   }
 
   /**
@@ -103,11 +104,12 @@ export class RangedQuestion extends AbstractQuestion implements IQuestionRanged 
    * Checks for equivalence relations to another Question instance. Also part of the EJSON interface
    * @see AbstractQuestion.equals()
    * @see http://docs.meteor.com/api/ejson.html#EJSON-CustomType-equals
-   * @param {QuestionI} question The Question instance which should be checked
+   * @param {IQuestionRanged} question The Question instance which should be checked
    * @returns {boolean} True if both instances are completely equal, False otherwise
    */
   equals(question: IQuestionRanged): boolean {
-    return super.equals(question) && question.rangeMax === this.rangeMax && question.rangeMin === this.rangeMin && question.correctValue === this.correctValue;
+    return super.equals(question) && question.rangeMax === this.rangeMax && question.rangeMin === this.rangeMin && question.correctValue ===
+           this.correctValue;
   }
 
   translationReferrer(): string {

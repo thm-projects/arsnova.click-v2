@@ -1,12 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { CurrentQuizService } from './current-quiz.service';
+import {CurrentQuizService} from './current-quiz.service';
 
 describe('CurrentQuizService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [CurrentQuizService]
-    });
+                                     providers: [CurrentQuizService]
+                                   });
   });
 
   it('should be created', inject([CurrentQuizService], (service: CurrentQuizService) => {

@@ -2,10 +2,10 @@ import {Component, Input, OnInit} from '@angular/core';
 import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
 
 @Component({
-  selector: 'app-confidence-rate',
-  templateUrl: './confidence-rate.component.html',
-  styleUrls: ['./confidence-rate.component.scss']
-})
+             selector: 'app-confidence-rate',
+             templateUrl: './confidence-rate.component.html',
+             styleUrls: ['./confidence-rate.component.scss']
+           })
 export class ConfidenceRateComponent implements OnInit {
   @Input()
   set data(value: any) {

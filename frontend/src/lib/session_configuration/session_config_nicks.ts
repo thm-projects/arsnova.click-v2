@@ -50,8 +50,8 @@ export class NickSessionConfiguration implements INickSessionConfiguration {
 
   equals(value: INickSessionConfiguration): boolean {
     return this.selectedNicks === value.selectedNicks &&
-      this.blockIllegalNicks === value.blockIllegalNicks &&
-      this.restrictToCasLogin === value.restrictToCasLogin;
+           this.blockIllegalNicks === value.blockIllegalNicks &&
+           this.restrictToCasLogin === value.restrictToCasLogin;
   }
 
   hasSelectedNick(nickname: string): boolean {

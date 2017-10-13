@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ProgressBarFreetextComponent } from './progress-bar-freetext.component';
+import {ProgressBarFreetextComponent} from './progress-bar-freetext.component';
 
 describe('ProgressBarFreetextComponent', () => {
   let component: ProgressBarFreetextComponent;
@@ -8,9 +8,9 @@ describe('ProgressBarFreetextComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgressBarFreetextComponent ]
-    })
-    .compileComponents();
+                                     declarations: [ProgressBarFreetextComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,31 +8,30 @@ import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.componen
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../environments/environment';
 
 @Component({
-  selector: 'app-question-details',
-  templateUrl: './question-details.component.html',
-  styleUrls: ['./question-details.component.scss']
-})
+             selector: 'app-question-details',
+             templateUrl: './question-details.component.html',
+             styleUrls: ['./question-details.component.scss']
+           })
 export class QuestionDetailsComponent implements OnInit, OnDestroy {
   get question(): IQuestion {
     return this._question;
   }
+
   get questionIndex(): number {
     return this._questionIndex;
   }
-
-  public readonly DEVICE_TYPE = DEVICE_TYPES;
-  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
 
   private _routerSubscription: Subscription;
   private _question: IQuestion;
   private _questionIndex: number;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private route: ActivatedRoute,
-              private footerBarService: FooterBarService) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private route: ActivatedRoute,
+    private footerBarService: FooterBarService) {
     footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
-    ]);
+                                            FooterBarComponent.footerElemBack
+                                          ]);
   }
 
   ngOnInit() {

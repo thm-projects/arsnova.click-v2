@@ -43,23 +43,23 @@ const quizFlowRoutes: Routes = [
     data: {}
   },
   /*
-  { path: '',
-    redirectTo: '/home',
-    pathMatch: 'full'
-  },
-  */
+   { path: '',
+   redirectTo: '/home',
+   pathMatch: 'full'
+   },
+   */
   // { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    ThemesModule,
-    RouterModule.forChild(quizFlowRoutes),
-    QuizResultsModule
-  ],
-  declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent],
-  providers: [AttendeeService]
-})
+            imports: [
+              SharedModule,
+              ThemesModule,
+              RouterModule.forChild(quizFlowRoutes),
+              QuizResultsModule
+            ],
+            declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent],
+            providers: [AttendeeService]
+          })
 export class QuizFlowModule {
 }

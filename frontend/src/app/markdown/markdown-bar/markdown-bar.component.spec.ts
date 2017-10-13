@@ -8,9 +8,9 @@ describe('MarkdownBarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MarkdownBarComponent]
-    })
-      .compileComponents();
+                                     declarations: [MarkdownBarComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

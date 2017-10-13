@@ -8,10 +8,10 @@ import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 
 @Component({
-  selector: 'app-nickname-select',
-  templateUrl: './nickname-select.component.html',
-  styleUrls: ['./nickname-select.component.scss']
-})
+             selector: 'app-nickname-select',
+             templateUrl: './nickname-select.component.html',
+             styleUrls: ['./nickname-select.component.scss']
+           })
 export class NicknameSelectComponent implements OnInit {
   get nicks(): Array<string> {
     return this._nicks;
@@ -20,13 +20,14 @@ export class NicknameSelectComponent implements OnInit {
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
   private _nicks: Array<string> = [];
 
-  constructor(private http: HttpClient,
-              private footerBarService: FooterBarService,
-              private router: Router,
-              private currentQuiz: CurrentQuizService) {
+  constructor(
+    private http: HttpClient,
+    private footerBarService: FooterBarService,
+    private router: Router,
+    private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
-    ]);
+                                            FooterBarComponent.footerElemBack
+                                          ]);
   }
 
   joinQuiz(name: string): void {
@@ -36,14 +37,14 @@ export class NicknameSelectComponent implements OnInit {
         nickname: name,
         webSocketId: window.sessionStorage.getItem('webSocket')
       })
-      .subscribe((data: IMessage) => {
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-          this.currentQuiz.currentQuestion = data.payload.currentQuestion;
-          resolve();
-        } else {
-          reject();
-        }
-      });
+          .subscribe((data: IMessage) => {
+            if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
+              this.currentQuiz.currentQuestion = data.payload.currentQuestion;
+              resolve();
+            } else {
+              reject();
+            }
+          });
     });
     promise.then(() => {
       window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, name);

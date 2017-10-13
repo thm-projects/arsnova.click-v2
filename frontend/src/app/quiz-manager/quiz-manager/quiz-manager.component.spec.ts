@@ -8,9 +8,9 @@ describe('QuizManagerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [QuizManagerComponent]
-    })
-      .compileComponents();
+                                     declarations: [QuizManagerComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

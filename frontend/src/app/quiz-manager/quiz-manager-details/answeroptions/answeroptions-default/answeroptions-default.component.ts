@@ -7,10 +7,10 @@ import {IQuestionChoice, IQuestionSurvey} from '../../../../../lib/questions/int
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../environments/environment';
 
 @Component({
-  selector: 'app-answeroptions-default',
-  templateUrl: './answeroptions-default.component.html',
-  styleUrls: ['./answeroptions-default.component.scss']
-})
+             selector: 'app-answeroptions-default',
+             templateUrl: './answeroptions-default.component.html',
+             styleUrls: ['./answeroptions-default.component.scss']
+           })
 export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
 
   public readonly DEVICE_TYPE = DEVICE_TYPES;
@@ -24,9 +24,10 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   private _question: IQuestionChoice;
   private _routerSubscription: Subscription;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private translateService: TranslateService,
-              private route: ActivatedRoute) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private translateService: TranslateService,
+    private route: ActivatedRoute) {
   }
 
   addAnswer(): void {

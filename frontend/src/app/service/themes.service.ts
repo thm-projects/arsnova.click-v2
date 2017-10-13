@@ -1,4 +1,4 @@
-import {Injectable, Renderer2} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {DefaultSettings} from './settings.service';
 import {ITheme} from '../../lib/common.interfaces';
@@ -15,21 +15,22 @@ export class ThemesService {
 
   private _themes: Array<ITheme> = [];
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private http: HttpClient) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private http: HttpClient) {
     if (!window.localStorage.getItem('defaultTheme')) {
       window.localStorage.setItem('defaultTheme', DefaultSettings.defaultSettings.theme);
     }
     this.updateCurrentlyUsedTheme();
     http.get(`${DefaultSettings.httpApiEndpoint}/themes`)
-      .subscribe(
-        (data: IMessage) => {
-          this._themes = data.payload;
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        .subscribe(
+          (data: IMessage) => {
+            this._themes = data.payload;
+          },
+          error => {
+            console.log(error);
+          }
+        );
   }
 
   updateCurrentlyUsedTheme() {

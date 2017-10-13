@@ -5,19 +5,20 @@ import {ThemesService} from '../../service/themes.service';
 import {QrCodeService} from '../../service/qr-code.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './root.component.html',
-  styleUrls: ['./root.component.scss']
-})
+             selector: 'app-root',
+             templateUrl: './root.component.html',
+             styleUrls: ['./root.component.scss']
+           })
 export class RootComponent implements OnInit {
 
   private showQrCode = false;
   private qrCodeContent = '';
 
-  constructor(private footerBarService: FooterBarService,
-              private headerLabelService: HeaderLabelService,
-              private themesService: ThemesService,
-              private qrCodeService: QrCodeService) {
+  constructor(
+    private footerBarService: FooterBarService,
+    private headerLabelService: HeaderLabelService,
+    private themesService: ThemesService,
+    private qrCodeService: QrCodeService) {
     themesService.updateCurrentlyUsedTheme();
     this.qrCodeContent = qrCodeService.qrCodeContent;
     qrCodeService.getSubscription().subscribe(value => {

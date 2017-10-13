@@ -8,9 +8,11 @@
        aria-valuemax="100"></div>
   <div *ngIf="base"
        class="align-self-center"
-       style="position: absolute; left: 10px;">{{'component.liveResults.confidence_grade' | translate}}</div>
+       style="position: absolute; left: 10px;">{{'component.liveResults.confidence_grade' | translate}}
+  </div>
   <div *ngIf="base"
        class="align-self-center"
-       style="position: absolute; right: 10px;">{{percent}}&nbsp;&#37;&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}</div>
+       style="position: absolute; right: 10px;">{{percent}}&nbsp;&#37;&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}
+  </div>
   <div *ngIf="!base" class="w-100 d-flex align-items-center justify-content-center"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i></div>
 </div>

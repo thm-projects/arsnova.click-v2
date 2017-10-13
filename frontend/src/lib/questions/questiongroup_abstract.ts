@@ -16,9 +16,8 @@
  * along with ARSnova Click.  If not, see <http://www.gnu.org/licenses/>.*/
 
 import {questionReflection} from './question_reflection';
-import {IQuestionGroup} from './interfaces';
+import {IQuestion, IQuestionGroup} from './interfaces';
 import {ISessionConfiguration} from '../session_configuration/interfaces';
-import {IQuestion} from './interfaces';
 
 export abstract class AbstractQuestionGroup implements IQuestionGroup {
   get hashtag(): string {
@@ -67,7 +66,8 @@ export abstract class AbstractQuestionGroup implements IQuestionGroup {
 
   /**
    * Adds a question to the questionGroup instance
-   * @param {SingleChoiceQuestion|MultipleChoiceQuestion|RangedQuestion|SurveyQuestion} question The question which extends {QuestionI} to be added
+   * @param {SingleChoiceQuestion|MultipleChoiceQuestion|RangedQuestion|SurveyQuestion} question The question which extends {QuestionI} to
+   *     be added
    * @param {Number} [index] An optional index position where the item should be added
    * @returns {IQuestion|Null} if successful returns the inserted Question otherwise Null
    */
@@ -133,8 +133,8 @@ export abstract class AbstractQuestionGroup implements IQuestionGroup {
   equals(questionGroup: IQuestionGroup): boolean {
     if (questionGroup instanceof AbstractQuestionGroup) {
       if (questionGroup.hashtag !== this.hashtag ||
-        questionGroup.isFirstStart !== this.isFirstStart ||
-        !questionGroup.sessionConfig.equals(this.sessionConfig)) {
+          questionGroup.isFirstStart !== this.isFirstStart ||
+          !questionGroup.sessionConfig.equals(this.sessionConfig)) {
         return false;
       }
       if (questionGroup.questionList.length === this.questionList.length) {
@@ -160,13 +160,13 @@ export abstract class AbstractQuestionGroup implements IQuestionGroup {
       index = this.questionList.length;
     }
     const questionItem = questionReflection[type]({
-      hashtag: this.hashtag,
-      questionText: '',
-      questionIndex: index,
-      timer: 40,
-      startTime: 0,
-      answerOptionList: []
-    });
+                                                    hashtag: this.hashtag,
+                                                    questionText: '',
+                                                    questionIndex: index,
+                                                    timer: 40,
+                                                    startTime: 0,
+                                                    answerOptionList: []
+                                                  });
     this.addQuestion(questionItem, index);
   }
 }

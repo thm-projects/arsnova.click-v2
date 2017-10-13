@@ -1,12 +1,12 @@
-import {TestBed, inject} from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
 import {QuestionTextService} from './question-text.service';
 
 describe('QuestionTextService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [QuestionTextService]
-    });
+                                     providers: [QuestionTextService]
+                                   });
   });
 
   it('should be created', inject([QuestionTextService], (service: QuestionTextService) => {

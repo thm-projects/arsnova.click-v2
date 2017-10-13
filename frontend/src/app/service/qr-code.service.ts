@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {ActiveQuestionGroupService} from './active-question-group.service';
@@ -7,9 +7,6 @@ import {ActiveQuestionGroupService} from './active-question-group.service';
 export class QrCodeService {
   get qrCodeContent(): string {
     return this._qrCodeContent;
-  }
-  get showQrCode(): boolean {
-    return this._showQrCode;
   }
 
   private _showQrCode: boolean;

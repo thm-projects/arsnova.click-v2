@@ -6,10 +6,10 @@ import {ActivatedRoute} from '@angular/router';
 import {IQuestionRanged} from '../../../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-answeroptions-ranged',
-  templateUrl: './answeroptions-ranged.component.html',
-  styleUrls: ['./answeroptions-ranged.component.scss']
-})
+             selector: 'app-answeroptions-ranged',
+             templateUrl: './answeroptions-ranged.component.html',
+             styleUrls: ['./answeroptions-ranged.component.scss']
+           })
 export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   get minRange(): number {
     return this._minRange;
@@ -34,9 +34,10 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   private _maxRange: number;
   private _correctValue: number;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private translateService: TranslateService,
-              private route: ActivatedRoute) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private translateService: TranslateService,
+    private route: ActivatedRoute) {
   }
 
   updateMinRange(event: Event): void {

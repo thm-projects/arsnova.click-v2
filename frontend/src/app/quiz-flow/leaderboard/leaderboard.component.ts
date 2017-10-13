@@ -20,14 +20,15 @@ export interface ILeaderBoard {
 }
 
 @Component({
-  selector: 'app-leaderboard',
-  templateUrl: './leaderboard.component.html',
-  styleUrls: ['./leaderboard.component.scss']
-})
+             selector: 'app-leaderboard',
+             templateUrl: './leaderboard.component.html',
+             styleUrls: ['./leaderboard.component.scss']
+           })
 export class LeaderboardComponent implements OnInit, OnDestroy {
   get isGlobalRanking(): boolean {
     return this._isGlobalRanking;
   }
+
   get leaderBoard(): Array<ILeaderBoard> {
     return this._leaderBoard;
   }
@@ -37,17 +38,18 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   private _leaderBoard: Array<ILeaderBoard>;
   private _isGlobalRanking: boolean;
 
-  constructor(private footerBarService: FooterBarService,
-              private route: ActivatedRoute,
-              private headerLabelService: HeaderLabelService,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private http: Http,
-              private attendeeService: AttendeeService) {
+  constructor(
+    private footerBarService: FooterBarService,
+    private route: ActivatedRoute,
+    private headerLabelService: HeaderLabelService,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private http: Http,
+    private attendeeService: AttendeeService) {
     this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemExport
-    ]);
+                                                 FooterBarComponent.footerElemBack,
+                                                 FooterBarComponent.footerElemFullscreen,
+                                                 FooterBarComponent.footerElemExport
+                                               ]);
     this._leaderBoard = [];
   }
 
@@ -57,15 +59,15 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       this._isGlobalRanking = isNaN(this._questionIndex);
       const hashtag = this.activeQuestionGroupService.activeQuestionGroup.hashtag;
       this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${hashtag}/${this._questionIndex}`)
-        .map(res => res.json())
-        .subscribe(
-          (data: IMessage) => {
-            this._leaderBoard = data.payload;
-          },
-          error => {
-            console.log(error);
-          }
-        );
+          .map(res => res.json())
+          .subscribe(
+            (data: IMessage) => {
+              this._leaderBoard = data.payload;
+            },
+            error => {
+              console.log(error);
+            }
+          );
     });
   }
 

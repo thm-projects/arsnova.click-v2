@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject, Observer, Observable} from 'rxjs/Rx';
+import {Observable, Observer, Subject} from 'rxjs/Rx';
 import {DefaultSettings} from './settings.service';
 
 @Injectable()

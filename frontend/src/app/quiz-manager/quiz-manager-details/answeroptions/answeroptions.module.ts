@@ -7,11 +7,13 @@ import {AnsweroptionsRangedComponent} from './answeroptions-ranged/answeroptions
 import {LivePreviewModule} from '../../../live-preview/live-preview.module';
 
 @NgModule({
-  imports: [
-    SharedModule,
-    LivePreviewModule
-  ],
-  declarations: [AnsweroptionsComponent, AnsweroptionsDefaultComponent, AnsweroptionsFreetextComponent, AnsweroptionsRangedComponent]
-})
+            imports: [
+              SharedModule,
+              LivePreviewModule
+            ],
+            declarations: [
+              AnsweroptionsComponent, AnsweroptionsDefaultComponent, AnsweroptionsFreetextComponent, AnsweroptionsRangedComponent
+            ]
+          })
 export class AnsweroptionsModule {
 }

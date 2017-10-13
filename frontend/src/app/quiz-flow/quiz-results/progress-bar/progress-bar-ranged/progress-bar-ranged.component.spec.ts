@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ProgressBarRangedComponent } from './progress-bar-ranged.component';
+import {ProgressBarRangedComponent} from './progress-bar-ranged.component';
 
 describe('ProgressBarRangedComponent', () => {
   let component: ProgressBarRangedComponent;
@@ -8,9 +8,9 @@ describe('ProgressBarRangedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgressBarRangedComponent ]
-    })
-    .compileComponents();
+                                     declarations: [ProgressBarRangedComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

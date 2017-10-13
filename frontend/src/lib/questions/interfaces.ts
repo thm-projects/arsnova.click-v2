@@ -56,6 +56,7 @@ export interface IQuestionChoice extends IQuestion {
   addDefaultAnswerOption(index?: number): void;
 }
 
+// noinspection TsLint
 export interface IQuestionFreetext extends IQuestion {
 
 }

@@ -1,12 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { AttendeeService } from './attendee.service';
+import {AttendeeService} from './attendee.service';
 
 describe('AttendeeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AttendeeService]
-    });
+                                     providers: [AttendeeService]
+                                   });
   });
 
   it('should be created', inject([AttendeeService], (service: AttendeeService) => {

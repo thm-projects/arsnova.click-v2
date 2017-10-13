@@ -6,7 +6,7 @@ export class HeaderLabelService {
     return this._headerLabel;
   }
 
-  private _headerLabel: string = 'default';
+  private _headerLabel = 'default';
 
   constructor() {
   }

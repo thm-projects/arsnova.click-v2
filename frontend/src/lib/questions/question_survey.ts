@@ -65,7 +65,7 @@ export class SurveyQuestion extends AbstractChoiceQuestion implements IQuestionS
 
   equals(question: IQuestionSurvey): boolean {
     return super.equals(question) &&
-      question.multipleSelectionEnabled === this.multipleSelectionEnabled;
+           question.multipleSelectionEnabled === this.multipleSelectionEnabled;
   }
 
   translationReferrer(): string {
@@ -82,8 +82,8 @@ export class SurveyQuestion extends AbstractChoiceQuestion implements IQuestionS
     }
     this.addAnswerOption(
       new DefaultAnswerOption({
-        answerText: ''
-      }),
+                                answerText: ''
+                              }),
       index
     );
   }

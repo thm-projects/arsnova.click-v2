@@ -1,18 +1,15 @@
-import {Component, EventEmitter, OnDestroy, OnInit, SecurityContext} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {ActivatedRoute} from '@angular/router';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {IQuestion} from '../../../lib/questions/interfaces';
-import {AttendeeService, INickname} from '../../service/attendee.service';
+import {AttendeeService} from '../../service/attendee.service';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {ISessionConfiguration} from '../../../lib/session_configuration/interfaces';
 import {DefaultSettings} from '../../service/settings.service';
 import {HttpClient} from '@angular/common/http';
 import {ConnectionService} from '../../service/connection.service';
 import {HeaderLabelService} from '../../service/header-label.service';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 export class Countdown {
 
@@ -41,20 +38,23 @@ export class Countdown {
 }
 
 @Component({
-  selector: 'app-quiz-results',
-  templateUrl: './quiz-results.component.html',
-  styleUrls: ['./quiz-results.component.scss']
-})
+             selector: 'app-quiz-results',
+             templateUrl: './quiz-results.component.html',
+             styleUrls: ['./quiz-results.component.scss']
+           })
 export class QuizResultsComponent implements OnInit, OnDestroy {
   get countdownValue(): number {
     return this._countdownValue;
   }
+
   get isActiveQuiz(): boolean {
     return this._isActiveQuiz;
   }
+
   get sessionConfig(): ISessionConfiguration {
     return this._sessionConfig;
   }
+
   get questions(): Array<IQuestion> {
     return this._questions;
   }
@@ -66,20 +66,21 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private _countdownValue: number;
   private _isActiveQuiz = true;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private http: HttpClient,
-              private headerLabelService: HeaderLabelService,
-              private connectionService: ConnectionService,
-              private footerBarService: FooterBarService,
-              private attendeeService: AttendeeService) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private http: HttpClient,
+    private headerLabelService: HeaderLabelService,
+    private connectionService: ConnectionService,
+    private footerBarService: FooterBarService,
+    private attendeeService: AttendeeService) {
     this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemReadingConfirmation,
-      FooterBarComponent.footerElemConfidenceSlider,
-      FooterBarComponent.footerElemResponseProgress,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemSound,
-    ]);
+                                                 FooterBarComponent.footerElemBack,
+                                                 FooterBarComponent.footerElemReadingConfirmation,
+                                                 FooterBarComponent.footerElemConfidenceSlider,
+                                                 FooterBarComponent.footerElemResponseProgress,
+                                                 FooterBarComponent.footerElemFullscreen,
+                                                 FooterBarComponent.footerElemSound,
+                                               ]);
     this._questions = [];
     headerLabelService.setHeaderLabel('component.liveResults.title');
   }
@@ -133,8 +134,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private handleResponseUpdates() {
     this.connectionService.socket.next({
-      step: 'LOBBY:GET_PLAYERS'
-    });
+                                         step: 'LOBBY:GET_PLAYERS'
+                                       });
     this.connectionService.socket.subscribe((message) => {
       const data = message;
       switch (data.step) {

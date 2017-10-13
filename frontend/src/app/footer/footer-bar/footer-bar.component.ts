@@ -12,16 +12,13 @@ export class FooterbarElement {
   set onClickCallback(value: Function) {
     this._onClickCallback = value;
   }
+
   set linkTarget(value: Function | string) {
     this._linkTarget = value;
   }
 
   get selectable(): boolean {
     return this._selectable;
-  }
-
-  get showIntro(): boolean {
-    return this._showIntro;
   }
 
   get isActive(): boolean {
@@ -34,10 +31,6 @@ export class FooterbarElement {
 
   get id(): string {
     return this._id;
-  }
-
-  get iconClass(): string {
-    return this._iconClass;
   }
 
   get textClass(): string {
@@ -81,90 +74,90 @@ export class FooterbarElement {
 }
 
 @Component({
-  selector: 'app-footer-bar',
-  templateUrl: './footer-bar.component.html',
-  styleUrls: ['./footer-bar.component.scss']
-})
+             selector: 'app-footer-bar',
+             templateUrl: './footer-bar.component.html',
+             styleUrls: ['./footer-bar.component.scss']
+           })
 export class FooterBarComponent implements OnInit, OnDestroy {
 
   static footerElemTranslation: FooterbarElement = new FooterbarElement({
-    id: 'translation',
-    iconClass: 'fa fa-globe',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.languages',
-    selectable: false,
-    showIntro: false,
-    linkTarget: '/languages'
-  }, function () {
+                                                                          id: 'translation',
+                                                                          iconClass: 'fa fa-globe',
+                                                                          textClass: 'footerElementText',
+                                                                          textName: 'region.footer.footer_bar.languages',
+                                                                          selectable: false,
+                                                                          showIntro: false,
+                                                                          linkTarget: '/languages'
+                                                                        }, function () {
   });
   static footerElemSound: FooterbarElement = new FooterbarElement({
-    id: 'sound',
-    iconClass: 'fa fa-music',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.sound',
-    selectable: false,
-    showIntro: true,
-    linkTarget: '/quiz-manager/sound',
-  }, function () {
+                                                                    id: 'sound',
+                                                                    iconClass: 'fa fa-music',
+                                                                    textClass: 'footerElementText',
+                                                                    textName: 'region.footer.footer_bar.sound',
+                                                                    selectable: false,
+                                                                    showIntro: true,
+                                                                    linkTarget: '/quiz-manager/sound',
+                                                                  }, function () {
 
   });
   static footerElemReadingConfirmation: FooterbarElement = new FooterbarElement({
-    id: 'reading-confirmation',
-    iconClass: 'fa fa-eye',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.reading-confirmation',
-    selectable: true,
-    showIntro: true,
-    linkTarget: null,
-  }, function () {
+                                                                                  id: 'reading-confirmation',
+                                                                                  iconClass: 'fa fa-eye',
+                                                                                  textClass: 'footerElementText',
+                                                                                  textName: 'region.footer.footer_bar.reading-confirmation',
+                                                                                  selectable: true,
+                                                                                  showIntro: true,
+                                                                                  linkTarget: null,
+                                                                                }, function () {
 
   });
   static footerElemTheme: FooterbarElement = new FooterbarElement({
-    id: 'theme',
-    iconClass: 'fa fa-apple',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.style',
-    selectable: false,
-    showIntro: false,
-    linkTarget: '/themes',
-  }, function () {
+                                                                    id: 'theme',
+                                                                    iconClass: 'fa fa-apple',
+                                                                    textClass: 'footerElementText',
+                                                                    textName: 'region.footer.footer_bar.style',
+                                                                    selectable: false,
+                                                                    showIntro: false,
+                                                                    linkTarget: '/themes',
+                                                                  }, function () {
 
   });
   static footerElemImport: FooterbarElement = new FooterbarElement({
-    id: 'import',
-    iconClass: 'fa fa-upload',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.import',
-    selectable: false,
-    showIntro: false,
-    linkTarget: null,
-  }, function () {
+                                                                     id: 'import',
+                                                                     iconClass: 'fa fa-upload',
+                                                                     textClass: 'footerElementText',
+                                                                     textName: 'region.footer.footer_bar.import',
+                                                                     selectable: false,
+                                                                     showIntro: false,
+                                                                     linkTarget: null,
+                                                                   }, function () {
     document.getElementById('upload-session').click();
   });
   static footerElemHashtagManagement: FooterbarElement = new FooterbarElement({
-    id: 'sessionManagement',
-    iconClass: 'fa fa-wrench',
-    textClass: 'footerElementText',
-    textName: 'component.hashtag_management.session_management',
-    selectable: false,
-    showIntro: false,
-    linkTarget: '/session-management',
-  }, function () {
+                                                                                id: 'sessionManagement',
+                                                                                iconClass: 'fa fa-wrench',
+                                                                                textClass: 'footerElementText',
+                                                                                textName: 'component.hashtag_management.session_management',
+                                                                                selectable: false,
+                                                                                showIntro: false,
+                                                                                linkTarget: '/session-management',
+                                                                              }, function () {
 
   });
   static footerElemFullscreen: FooterbarElement = new FooterbarElement({
-    id: 'fullscreen',
-    iconClass: 'fa fa-arrows-alt',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.fullscreen',
-    selectable: true,
-    showIntro: false,
-    linkTarget: null,
-  }, function () {
+                                                                         id: 'fullscreen',
+                                                                         iconClass: 'fa fa-arrows-alt',
+                                                                         textClass: 'footerElementText',
+                                                                         textName: 'region.footer.footer_bar.fullscreen',
+                                                                         selectable: true,
+                                                                         showIntro: false,
+                                                                         linkTarget: null,
+                                                                       }, function () {
     this.isActive = !this.isActive;
     const elem = document.documentElement;
     if (!document.fullscreenElement &&
-      !document.webkitFullscreenElement) {
+        !document.webkitFullscreenElement) {
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
       } else if (elem.webkitRequestFullscreen) {
@@ -179,138 +172,135 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     }
   });
   static footerElemHome: FooterbarElement = new FooterbarElement({
-    id: 'home',
-    iconClass: 'fa fa-home',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.home',
-    selectable: false,
-    showIntro: false,
-    linkTarget: '/',
-  }, function () {
+                                                                   id: 'home',
+                                                                   iconClass: 'fa fa-home',
+                                                                   textClass: 'footerElementText',
+                                                                   textName: 'region.footer.footer_bar.home',
+                                                                   selectable: false,
+                                                                   showIntro: false,
+                                                                   linkTarget: '/',
+                                                                 }, function () {
 
   });
   static footerElemAbout: FooterbarElement = new FooterbarElement({
-    id: 'about',
-    iconClass: 'fa fa-info-circle',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.info',
-    selectable: false,
-    showIntro: false,
-    linkTarget: '/about',
-  }, function () {
+                                                                    id: 'about',
+                                                                    iconClass: 'fa fa-info-circle',
+                                                                    textClass: 'footerElementText',
+                                                                    textName: 'region.footer.footer_bar.info',
+                                                                    selectable: false,
+                                                                    showIntro: false,
+                                                                    linkTarget: '/about',
+                                                                  }, function () {
 
   });
   static footerElemQRCode: FooterbarElement = new FooterbarElement({
-    id: 'qr-code',
-    iconClass: 'fa fa-qrcode',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.qr_code',
-    selectable: false,
-    showIntro: true,
-    linkTarget: null,
-  }, function () {
+                                                                     id: 'qr-code',
+                                                                     iconClass: 'fa fa-qrcode',
+                                                                     textClass: 'footerElementText',
+                                                                     textName: 'region.footer.footer_bar.qr_code',
+                                                                     selectable: false,
+                                                                     showIntro: true,
+                                                                     linkTarget: null,
+                                                                   }, function () {
   });
   static footerElemNicknames: FooterbarElement = new FooterbarElement({
-    id: 'nicknames',
-    iconClass: 'fa fa-users',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.nicknames',
-    selectable: true,
-    showIntro: true,
-    linkTarget: '/quiz-manager/nicknames',
-  }, function () {
+                                                                        id: 'nicknames',
+                                                                        iconClass: 'fa fa-users',
+                                                                        textClass: 'footerElementText',
+                                                                        textName: 'region.footer.footer_bar.nicknames',
+                                                                        selectable: true,
+                                                                        showIntro: true,
+                                                                        linkTarget: '/quiz-manager/nicknames',
+                                                                      }, function () {
 
   });
   static footerElemEditQuiz: FooterbarElement = new FooterbarElement({
-    id: 'edit-quiz',
-    iconClass: 'fa fa-pencil-square-o',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.edit_quiz',
-    selectable: false,
-    showIntro: false,
-    linkTarget: '/quiz-manager',
-  }, function () {
+                                                                       id: 'edit-quiz',
+                                                                       iconClass: 'fa fa-pencil-square-o',
+                                                                       textClass: 'footerElementText',
+                                                                       textName: 'region.footer.footer_bar.edit_quiz',
+                                                                       selectable: false,
+                                                                       showIntro: false,
+                                                                       linkTarget: '/quiz-manager',
+                                                                     }, function () {
 
   });
   static footerElemProductTour: FooterbarElement = new FooterbarElement({
-    id: 'product-tour',
-    iconClass: 'fa fa-flag',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.show_product_tour',
-    selectable: true,
-    showIntro: false,
-    linkTarget: null,
-  }, function () {
+                                                                          id: 'product-tour',
+                                                                          iconClass: 'fa fa-flag',
+                                                                          textClass: 'footerElementText',
+                                                                          textName: 'region.footer.footer_bar.show_product_tour',
+                                                                          selectable: true,
+                                                                          showIntro: false,
+                                                                          linkTarget: null,
+                                                                        }, function () {
 
   });
   static footerElemResponseProgress: FooterbarElement = new FooterbarElement({
-    id: 'response-progress',
-    iconClass: 'fa fa-align-left',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.show_response_progress',
-    selectable: true,
-    showIntro: true,
-    linkTarget: null,
-  }, function () {
+                                                                               id: 'response-progress',
+                                                                               iconClass: 'fa fa-align-left',
+                                                                               textClass: 'footerElementText',
+                                                                               textName: 'region.footer.footer_bar.show_response_progress',
+                                                                               selectable: true,
+                                                                               showIntro: true,
+                                                                               linkTarget: null,
+                                                                             }, function () {
 
   });
   static footerElemConfidenceSlider: FooterbarElement = new FooterbarElement({
-    id: 'confidence-slider',
-    iconClass: 'fa fa-sliders',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.show_confidence_slider',
-    selectable: true,
-    showIntro: true,
-    linkTarget: null,
-  }, function () {
+                                                                               id: 'confidence-slider',
+                                                                               iconClass: 'fa fa-sliders',
+                                                                               textClass: 'footerElementText',
+                                                                               textName: 'region.footer.footer_bar.show_confidence_slider',
+                                                                               selectable: true,
+                                                                               showIntro: true,
+                                                                               linkTarget: null,
+                                                                             }, function () {
 
   });
   static footerElemBack: FooterbarElement = new FooterbarElement({
-    id: 'back',
-    iconClass: 'fa fa-undo',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.back',
-    selectable: false,
-    showIntro: false,
-    linkTarget: null,
-  }, function () {
+                                                                   id: 'back',
+                                                                   iconClass: 'fa fa-undo',
+                                                                   textClass: 'footerElementText',
+                                                                   textName: 'region.footer.footer_bar.back',
+                                                                   selectable: false,
+                                                                   showIntro: false,
+                                                                   linkTarget: null,
+                                                                 }, function () {
     history.back();
   });
   static footerElemStartQuiz: FooterbarElement = new FooterbarElement({
-    id: 'startQuiz',
-    iconClass: 'fa fa-paper-plane',
-    textClass: 'footerElementText',
-    textName: 'component.lobby.start_quiz',
-    selectable: true,
-    showIntro: false,
-  }, function () {
+                                                                        id: 'startQuiz',
+                                                                        iconClass: 'fa fa-paper-plane',
+                                                                        textClass: 'footerElementText',
+                                                                        textName: 'component.lobby.start_quiz',
+                                                                        selectable: true,
+                                                                        showIntro: false,
+                                                                      }, function () {
   });
   static footerElemExport: FooterbarElement = new FooterbarElement({
-    id: 'startQuiz',
-    iconClass: 'fa fa-download',
-    textClass: 'footerElementText',
-    textName: 'component.leaderboard.export',
-    selectable: false,
-    showIntro: false,
-    linkTarget: null
-  }, function () {
+                                                                     id: 'startQuiz',
+                                                                     iconClass: 'fa fa-download',
+                                                                     textClass: 'footerElementText',
+                                                                     textName: 'component.leaderboard.export',
+                                                                     selectable: false,
+                                                                     showIntro: false,
+                                                                     linkTarget: null
+                                                                   }, function () {
   });
-
-  get _footerElements(): Array<FooterbarElement> {
-    return this.footerElements;
-  }
 
   @Input() footerElements: Array<FooterbarElement> = [];
 
   private _apiEndPoint = `${DefaultSettings.httpApiEndpoint}/upload`;
   private _routerSubscription: Subscription;
 
-  constructor(private footerBarService: FooterBarService,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private router: Router,
-              private http: Http,
-              private translateService: TranslateService,
-              private qrCodeService: QrCodeService) {
+  constructor(
+    private footerBarService: FooterBarService,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private router: Router,
+    private http: Http,
+    private translateService: TranslateService,
+    private qrCodeService: QrCodeService) {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.readingConfirmationEnabled) {
         FooterBarComponent.footerElemReadingConfirmation.isActive = true;
@@ -386,14 +376,14 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     headers.append('Accept', 'application/json');
     const options = new RequestOptions(<RequestOptionsArgs>headers);
     this.http.post(`${this._apiEndPoint}`, formData, options)
-      .map(res => res.json())
-      .subscribe(
-        data => {
-          console.log('success');
-        },
-        error => {
-          console.log(error);
-        }
-      );
+        .map(res => res.json())
+        .subscribe(
+          data => {
+            console.log('success');
+          },
+          error => {
+            console.log(error);
+          }
+        );
   }
 }

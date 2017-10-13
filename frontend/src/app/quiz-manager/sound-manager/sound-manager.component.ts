@@ -13,32 +13,23 @@ export declare interface ISong {
 }
 
 @Component({
-  selector: 'app-sound-manager',
-  templateUrl: './sound-manager.component.html',
-  styleUrls: ['./sound-manager.component.scss']
-})
+             selector: 'app-sound-manager',
+             templateUrl: './sound-manager.component.html',
+             styleUrls: ['./sound-manager.component.scss']
+           })
 export class SoundManagerComponent implements OnInit, OnDestroy {
-  get currentlyPlayedMusic(): string {
-    return this._currentlyPlayedMusic;
-  }
-  get isPlayingCountdownEndMusic(): boolean {
-    return this._isPlayingCountdownEndMusic;
-  }
-  get isPlayingCountdownRunningMusic(): boolean {
-    return this._isPlayingCountdownRunningMusic;
-  }
   get countdownEndSounds(): Array<ISong> {
     return this._countdownEndSounds;
   }
+
   get countdownRunningSounds(): Array<ISong> {
     return this._countdownRunningSounds;
   }
-  get isPlayingLobbyMusic(): boolean {
-    return this._isPlayingLobbyMusic;
-  }
+
   get lobbySongs(): Array<ISong> {
     return this._lobbySongs;
   }
+
   get config(): IMusicSessionConfiguration {
     return this._config;
   }
@@ -47,19 +38,16 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   private _lobbySongs: Array<ISong> = [];
   private _countdownRunningSounds: Array<ISong> = [];
   private _countdownEndSounds: Array<ISong> = [];
-  private _isPlayingLobbyMusic = false;
-  private _isPlayingCountdownRunningMusic = false;
-  private _isPlayingCountdownEndMusic = false;
 
   private _currentlyPlayedMusic = null;
 
-  constructor(private soundService: SoundService,
-              private translateService: TranslateService,
-              private footerBarService: FooterBarService,
-              private activeQuestionGroupService: ActiveQuestionGroupService) {
+  constructor(
+    private translateService: TranslateService,
+    private footerBarService: FooterBarService,
+    private activeQuestionGroupService: ActiveQuestionGroupService) {
     footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
-    ]);
+                                            FooterBarComponent.footerElemBack
+                                          ]);
     this.translateService.get('plugins.sound.random').subscribe(value => {
       this._lobbySongs.push({id: 'Random', text: value});
       this._countdownRunningSounds.push({id: 'Random', text: value});
@@ -94,8 +82,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   toggleMusicPreview(target: 'lobby' | 'countdownRunning' | 'countdownEnd') {
     this._currentlyPlayedMusic = `${DefaultSettings.httpApiEndpoint}/files/sound/${target}/${this.config.titleConfig[target]}.mp3`;
     const audioElements = document.getElementsByTagName('audio');
-    const targets = ['lobby', 'countdownRunning', 'countdownEnd'];
-    for (let i = 0; i < audioElements.length; i++ ) {
+    for (let i = 0; i < audioElements.length; i++) {
       (<HTMLAudioElement>audioElements.item(i)).volume = (this.config.volumeConfig[target] || 60) / 100;
     }
   }

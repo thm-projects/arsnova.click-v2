@@ -18,10 +18,10 @@ export declare interface IMessage extends Object {
 }
 
 @Component({
-  selector: 'app-quiz-lobby',
-  templateUrl: './quiz-lobby.component.html',
-  styleUrls: ['./quiz-lobby.component.scss']
-})
+             selector: 'app-quiz-lobby',
+             templateUrl: './quiz-lobby.component.html',
+             styleUrls: ['./quiz-lobby.component.scss']
+           })
 export class QuizLobbyComponent implements OnInit, OnDestroy {
   get isOwner(): boolean {
     return this._isOwner;
@@ -30,36 +30,37 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
   private _isOwner: boolean;
 
-  constructor(private footerBarService: FooterBarService,
-              private headerLabelService: HeaderLabelService,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private themesService: ThemesService,
-              private http: HttpClient,
-              private connectionService: ConnectionService,
-              private sanitizer: DomSanitizer,
-              private attendeeService: AttendeeService) {
+  constructor(
+    private footerBarService: FooterBarService,
+    private headerLabelService: HeaderLabelService,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private themesService: ThemesService,
+    private http: HttpClient,
+    private connectionService: ConnectionService,
+    private sanitizer: DomSanitizer,
+    private attendeeService: AttendeeService) {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       footerBarService.replaceFooterElments([
-        FooterBarComponent.footerElemEditQuiz,
-        FooterBarComponent.footerElemStartQuiz,
-        FooterBarComponent.footerElemProductTour,
-        FooterBarComponent.footerElemNicknames,
-        FooterBarComponent.footerElemSound,
-        FooterBarComponent.footerElemReadingConfirmation,
-        FooterBarComponent.footerElemTheme,
-        FooterBarComponent.footerElemFullscreen,
-        FooterBarComponent.footerElemQRCode,
-        FooterBarComponent.footerElemResponseProgress,
-        FooterBarComponent.footerElemConfidenceSlider,
-      ]);
+                                              FooterBarComponent.footerElemEditQuiz,
+                                              FooterBarComponent.footerElemStartQuiz,
+                                              FooterBarComponent.footerElemProductTour,
+                                              FooterBarComponent.footerElemNicknames,
+                                              FooterBarComponent.footerElemSound,
+                                              FooterBarComponent.footerElemReadingConfirmation,
+                                              FooterBarComponent.footerElemTheme,
+                                              FooterBarComponent.footerElemFullscreen,
+                                              FooterBarComponent.footerElemQRCode,
+                                              FooterBarComponent.footerElemResponseProgress,
+                                              FooterBarComponent.footerElemConfidenceSlider,
+                                            ]);
       this._isOwner = true;
       FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
         return self.isActive ? '/quiz-results' : null;
       };
     } else {
       footerBarService.replaceFooterElments([
-        FooterBarComponent.footerElemBack
-      ]);
+                                              FooterBarComponent.footerElemBack
+                                            ]);
       this._isOwner = false;
     }
     headerLabelService.setHeaderLabel('component.lobby.title');
@@ -67,8 +68,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   private handleIncomingPlayers() {
     this.connectionService.socket.next({
-      step: 'LOBBY:GET_PLAYERS'
-    });
+                                         step: 'LOBBY:GET_PLAYERS'
+                                       });
     this.connectionService.socket.subscribe((message) => {
       const data = message;
       switch (data.step) {
@@ -102,14 +103,14 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   kickMember(name: string): void {
     const quizName = this.activeQuestionGroupService.activeQuestionGroup.hashtag;
     this.http.delete(`${this._httpApiEndpoint}/lobby/${quizName}/member/${name}`)
-      .subscribe(
-      (data: IMessage) => {
-        console.log(data);
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_REMOVED') {
-          this.attendeeService.attendees = this.attendeeService.attendees.filter(player => player.name !== name);
-        }
-      }
-    );
+        .subscribe(
+          (data: IMessage) => {
+            console.log(data);
+            if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_REMOVED') {
+              this.attendeeService.attendees = this.attendeeService.attendees.filter(player => player.name !== name);
+            }
+          }
+        );
   }
 
   getComplementaryColor(value: string): string {
@@ -159,6 +160,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+  }
 
 }

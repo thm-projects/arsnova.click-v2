@@ -117,7 +117,7 @@ class TitleConfiguration implements ITitleMusicSessionConfiguration {
       lobby: this.lobby,
       countdownRunning: this.countdownRunning,
       countdownEnd: this.countdownEnd
-    }
+    };
   }
 }
 

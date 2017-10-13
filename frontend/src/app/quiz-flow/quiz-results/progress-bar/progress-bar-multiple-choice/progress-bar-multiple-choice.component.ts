@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-progress-bar-multiple-choice',
-  templateUrl: './progress-bar-multiple-choice.component.html',
-  styleUrls: ['./progress-bar-multiple-choice.component.scss']
-})
+             selector: 'app-progress-bar-multiple-choice',
+             templateUrl: './progress-bar-multiple-choice.component.html',
+             styleUrls: ['./progress-bar-multiple-choice.component.scss']
+           })
 export class ProgressBarMultipleChoiceComponent implements OnInit {
   @Input()
   set attendeeData(value: any) {
@@ -17,7 +17,8 @@ export class ProgressBarMultipleChoiceComponent implements OnInit {
   private base: number;
   private absolute: number;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

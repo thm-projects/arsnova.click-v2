@@ -16,8 +16,8 @@
                  [title]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
                  id="slider-timer-input-field"
                  [value]="countdown"
-                 (input)="updateCountdown($event.target.value)"
-                 (propertyChange)="updateCountdown($event.target.value)"
+                 (input)="updateCountdown($event)"
+                 (propertyChange)="updateCountdown($event)"
                  [attr.aria-valuetext]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"/>
           <span class="text-center text-light ml-3">
             {{ 'component.timer.second' | translate:{COUNT: countdown} }}

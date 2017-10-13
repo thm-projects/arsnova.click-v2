@@ -22,7 +22,7 @@
                data-step="1"
                role="list">
             <div *ngFor="let elem of question.answerOptionList; let i = index"
-                 class="btn-group mb-2 d-flex" >
+                 class="btn-group mb-2 d-flex">
               <input type="text"
                      class="btn-block text-left rounded-left px-2 border-0"
                      [value]="elem.answerText"
@@ -39,7 +39,7 @@
                        role="switch"
                        [checked]="elem.isCorrect"
                        (change)="elem.isCorrect = !elem.isCorrect"
-                       [title]="'component.answeroptions.is_correct' | translate" >
+                       [title]="'component.answeroptions.is_correct' | translate">
                 {{('component.answeroptions.' + (elem.isCorrect ? 'correct' : 'wrong')) | translate}}
               </label>
             </div>
@@ -62,7 +62,7 @@
                      role="switch"
                      [checked]="question.displayAnswerText"
                      (change)="toggleShowAnswerContentOnButtons()"
-                     [title]="'component.answeroptions.show_answer_content_on_buttons' | translate" >
+                     [title]="'component.answeroptions.show_answer_content_on_buttons' | translate">
               {{('component.answeroptions.free_text_question.' + (question.displayAnswerText ? 'onText' : 'offText')) | translate}}
             </label>
           </div>
@@ -80,7 +80,7 @@
                      role="switch"
                      [checked]="question.showOneAnswerPerRow"
                      (change)="toggleShowOneAnswerPerRow()"
-                     [title]="'component.answeroptions.show_one_answer_per_row' | translate" >
+                     [title]="'component.answeroptions.show_one_answer_per_row' | translate">
               {{('component.answeroptions.free_text_question.' + (question.showOneAnswerPerRow ? 'onText' : 'offText')) | translate}}
             </label>
           </div>
@@ -99,7 +99,7 @@
                      role="switch"
                      [checked]="question.multipleSelectionEnabled"
                      (change)="toggleMultipleSelectionSurvey()"
-                     [title]="'component.answeroptions.multiple_selection_survey' | translate" >
+                     [title]="'component.answeroptions.multiple_selection_survey' | translate">
               {{('component.answeroptions.free_text_question.' + (question.multipleSelectionEnabled ? 'onText' : 'offText')) | translate}}
             </label>
           </div>

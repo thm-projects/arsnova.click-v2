@@ -8,9 +8,9 @@ describe('AnsweroptionsRangedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AnsweroptionsRangedComponent]
-    })
-      .compileComponents();
+                                     declarations: [AnsweroptionsRangedComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

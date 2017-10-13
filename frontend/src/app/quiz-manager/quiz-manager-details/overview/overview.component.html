@@ -42,7 +42,8 @@
           </h4>
           <p>
             <span [innerHTML]="'component.quiz_summary.text' | translate"></span>:&nbsp;
-            <span [innerHTML]="question.questionText || ('component.quiz_summary.validation_errors.reasons.empty_question_text' | translate)"></span>
+            <span *ngIf="question.questionText" [innerHTML]="question.questionText"></span>
+            <span *ngIf="!question.questionText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
           </p>
           <p>
             <span [innerHTML]="'component.quiz_summary.type' | translate"></span>:&nbsp;
@@ -71,8 +72,13 @@
               </p>
             </div>
             <div *ngIf="question.TYPE === 'FreeTextQuestion'">
-              <p role="listitem"
-                 [innerHTML]="question.answerOptionList[0].answerText || ('component.quiz_summary.validation_errors.reasons.empty_question_text' | translate)"></p>
+              <p *ngIf="question.answerOptionList[0].answerText"
+                 role="listitem"
+                 [innerHTML]="question.answerOptionList[0].answerText"></p>
+              <p *ngIf="!question.answerOptionList[0].answerText"
+                 role="listitem">
+                {{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}
+              </p>
             </div>
             <div *ngIf="!['RangedQuestion', 'FreeTextQuestion'].includes(question.TYPE)">
               <p role="listitem" *ngFor="let answer of question.answerOptionList; let i = index;">
@@ -81,7 +87,9 @@
                 <span *ngIf="question.TYPE !== 'SurveyQuestion'"
                       [innerHTML]="'(' + (('component.quiz_summary.' + (answer.isCorrect ? 'correct' : 'wrong')) | translate) + ')'"></span>
                 <span>:&nbsp;</span>
-                <span [innerHTML]="answer.answerText || ('component.quiz_summary.validation_errors.reasons.empty_question_text' | translate)"></span>
+                <span *ngIf="answer.answerText"
+                      [innerHTML]="answer.answerText"></span>
+                <span *ngIf="!answer.answerText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
               </p>
               <p *ngIf="!question.answerOptionList.length" [innerHTML]="'component.quiz_summary.validation_errors.reasons.no_answers_defined' | translate"></p>
             </div>

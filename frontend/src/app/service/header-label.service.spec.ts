@@ -1,12 +1,12 @@
-import {TestBed, inject} from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
 import {HeaderLabelService} from './header-label.service';
 
 describe('HeaderLabelService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [HeaderLabelService]
-    });
+                                     providers: [HeaderLabelService]
+                                   });
   });
 
   it('should be created', inject([HeaderLabelService], (service: HeaderLabelService) => {

@@ -6,7 +6,7 @@ export interface ILanguage {
 }
 
 export class LANGUAGES {
-  public readonly AVAILABLE: {DE: ILanguage, EN: ILanguage, FR: ILanguage, IT: ILanguage, ES: ILanguage};
+  public readonly AVAILABLE: { DE: ILanguage, EN: ILanguage, FR: ILanguage, IT: ILanguage, ES: ILanguage };
 
   constructor() {
     this.AVAILABLE = {DE: null, EN: null, FR: null, IT: null, ES: null};
@@ -33,10 +33,6 @@ export class I18nService {
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use(this._lang.AVAILABLE.EN.TRANSLATE_REF);
-  }
-
-  getCurrentLanguage(): Object {
-    return this._lang.AVAILABLE[this.translate.currentLang];
   }
 
   setLanguage(language: string) {

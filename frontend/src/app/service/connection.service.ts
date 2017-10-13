@@ -33,29 +33,30 @@ export class ConnectionService {
   private _rtt = 0;
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}/`;
 
-  constructor(private websocketService: WebsocketService,
-              private http: HttpClient) {
+  constructor(
+    private websocketService: WebsocketService,
+    private http: HttpClient) {
     this.initConnection();
     this.initWebsocket();
   }
 
   private initWebsocket() {
     this._socket = <Subject<IMessage>>this.websocketService
-      .connect()
-      .map((response: MessageEvent): IMessage => {
-        return JSON.parse(response.data);
-      });
+                                          .connect()
+                                          .map((response: MessageEvent): IMessage => {
+                                            return JSON.parse(response.data);
+                                          });
     this.socket.subscribe(
       message => {
         window.sessionStorage.setItem('webSocket', message.payload.id);
         this._websocketAvailable = true;
       },
-        message => {
-          this._websocketAvailable = false;
-        },
-        () => {
-          this._websocketAvailable = false;
-        }
+      message => {
+        this._websocketAvailable = false;
+      },
+      () => {
+        this._websocketAvailable = false;
+      }
     );
   }
 

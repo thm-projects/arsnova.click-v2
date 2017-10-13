@@ -30,7 +30,7 @@ export function parseUnorderedList(result, i) {
   let tmpNewItem = result[i] + '\n';
   let mergeEndIndex = result.length;
   for (let j = i + 1; j < result.length; j++) {
-    if (!/^(  )[*-+] /.test(result[j]) && !/^[0-9]*./.test(result[j])) {
+    if (!/^( {2})[*-+] /.test(result[j]) && !/^[0-9]*./.test(result[j])) {
       mergeEndIndex = j - 1;
       break;
     }
@@ -59,12 +59,13 @@ export function parseLinkBlock(result, i) {
   const linkStr = startIndex[0] || result[i];
   const link = !/^https?:\/\//.test(linkStr) ? 'http://' + linkStr : linkStr;
   const prevLinkContent = result[i].substring(0, startIndex.index);
-  const postLinkContent = result[i].indexOf(' ', startIndex.index) > -1 ? result[i].substring(result[i].indexOf(' ', startIndex.index)) : '';
+  const postLinkContent = result[i].indexOf(' ', startIndex.index) > -1 ? result[i].substring(result[i].indexOf(' ', startIndex.index))
+    : '';
   result[i] = prevLinkContent + '<a href=\'' + link + '\' target=\'_blank\'>' + linkStr + '</a>' + postLinkContent;
 }
 
 export function parseHeaderBlock(result, i) {
-  const length = result[i].lastIndexOf('#') + 1;
+  const length: { 1, 2, 3, 4, 5, 6 } = result[i].lastIndexOf('#') + 1;
   result[i] = `<h${length}>${result[i].replace(/#/g, '')}</h${length}>`;
 }
 
@@ -147,10 +148,13 @@ export function parseGithubFlavoredMarkdown(result: Array<string>, overrideLineB
         parseCodeBlock(result, i);
         break;
       case /^([0-9]*\.)?(-)?(\*)? \[x\] /.test(result[i]):
-        result[i] = ('<input class=\'markdownCheckbox\' type=\'checkbox\' checked=\'checked\' disabled=\'disabled\' aria-label=\'ToDo (checked)\' />' + result[i].replace(/([0-9]*\.)?(-)?(\*)? \[x\] /, ''));
+        result[i]
+          = ('<input class=\'markdownCheckbox\' type=\'checkbox\' checked=\'checked\' disabled=\'disabled\' aria-label=\'ToDo (checked)\' />' +
+             result[i].replace(/([0-9]*\.)?(-)?(\*)? \[x\] /, ''));
         break;
       case /^([0-9]*\.)?(-)?(\*)? \[ \] /.test(result[i]):
-        result[i] = ('<input class=\'markdownCheckbox\' type=\'checkbox\' disabled=\'disabled\' aria-label=\'ToDo (unchecked)\' />' + result[i].replace(/^([0-9]*\.)?(-)?(\*)? \[ \] /, ''));
+        result[i] = ('<input class=\'markdownCheckbox\' type=\'checkbox\' disabled=\'disabled\' aria-label=\'ToDo (unchecked)\' />' +
+                     result[i].replace(/^([0-9]*\.)?(-)?(\*)? \[ \] /, ''));
         break;
       case /^[\s]*1\./.test(result[i]) && overrideLineBreaks:
         parseOrderedList(result, i);
@@ -176,7 +180,8 @@ export function parseGithubFlavoredMarkdown(result: Array<string>, overrideLineB
       case /^[#{0-6}].*/.test(result[i]):
         parseHeaderBlock(result, i);
         break;
-      case !/(^!)?\[.*\]\(.*\)/.test(result[i]) && /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/.test(result[i]) && !(/youtube/.test(result[i]) || /youtu.be/.test(result[i]) || /vimeo/.test(result[i])):
+      case !/(^!)?\[.*\]\(.*\)/.test(result[i]) && /((https?:\/\/)?[\w-]+(\.[\w-]+)+\.?(:\d+)?(\/\S*)?)/.test(result[i]) &&
+           !(/youtube/.test(result[i]) || /youtu.be/.test(result[i]) || /vimeo/.test(result[i])):
         parseLinkBlock(result, i);
         break;
       case overrideLineBreaks && result[i].length === 0:

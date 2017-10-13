@@ -8,9 +8,9 @@ describe('NicknameSelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [NicknameSelectComponent]
-    })
-      .compileComponents();
+                                     declarations: [NicknameSelectComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

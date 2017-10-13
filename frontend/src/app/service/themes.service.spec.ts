@@ -1,12 +1,12 @@
-import {TestBed, inject} from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
 import {ThemesService} from './themes.service';
 
 describe('ThemesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ThemesService]
-    });
+                                     providers: [ThemesService]
+                                   });
   });
 
   it('should be created', inject([ThemesService], (service: ThemesService) => {

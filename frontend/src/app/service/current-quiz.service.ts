@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {IQuestion} from '../../lib/questions/interfaces';
 import {questionReflection} from '../../lib/questions/question_reflection';
 
@@ -16,19 +16,24 @@ export class CurrentQuizService implements ICurrentQuiz {
   get currentQuestion(): any {
     return this._currentQuestion;
   }
+
   set currentQuestion(value: any) {
     this._currentQuestion = questionReflection[value.TYPE](value);
   }
+
   set hashtag(value: string) {
     this._hashtag = value;
   }
+
   get hashtag(): string {
     return this._hashtag;
   }
+
   private _hashtag: string;
   private _currentQuestion: IQuestion;
 
-  constructor() {}
+  constructor() {
+  }
 
   public serialize(): ICurrentQuizData {
     return {

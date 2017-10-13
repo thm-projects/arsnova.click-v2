@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-  selector: 'app-progress-bar-survey',
-  templateUrl: './progress-bar-survey.component.html',
-  styleUrls: ['./progress-bar-survey.component.scss']
-})
+             selector: 'app-progress-bar-survey',
+             templateUrl: './progress-bar-survey.component.html',
+             styleUrls: ['./progress-bar-survey.component.scss']
+           })
 export class ProgressBarSurveyComponent implements OnInit {
   @Input()
   set attendeeData(value: any) {
@@ -17,7 +17,8 @@ export class ProgressBarSurveyComponent implements OnInit {
   private base: number;
   private absolute: number;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

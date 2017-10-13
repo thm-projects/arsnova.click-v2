@@ -4,8 +4,8 @@
   <div *ngFor="let attendee of leaderBoard; let i = index">
     <h4 *ngIf="leaderBoard.length">{{'component.leaderboard.question' | translate}}&nbsp;{{i + 1}}</h4>
     <h4 *ngIf="!leaderBoard.length">{{'component.leaderboard.no_attendee_correct' | translate}}</h4>
-    <div [class]="'leader-board-item rounded p-2 ' + (!j || isOwnNick(attendee.name) ? 'own-nick' : '')">
-      <span *ngIf="!j || isOwnNick(attendee.name)"
+    <div [class]="'leader-board-item rounded p-2 ' + (!i || isOwnNick(attendee.name) ? 'own-nick' : '')">
+      <span *ngIf="!i || isOwnNick(attendee.name)"
             class="fa fa-education"
             aria-hidden="true"></span>
       <span>{{i + 1}}.&nbsp;</span>

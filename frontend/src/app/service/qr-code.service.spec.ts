@@ -1,12 +1,12 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { QrCodeService } from './qr-code.service';
+import {QrCodeService} from './qr-code.service';
 
 describe('QrCodeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [QrCodeService]
-    });
+                                     providers: [QrCodeService]
+                                   });
   });
 
   it('should be created', inject([QrCodeService], (service: QrCodeService) => {

@@ -8,10 +8,10 @@ import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.componen
 import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
-})
+             selector: 'app-overview',
+             templateUrl: './overview.component.html',
+             styleUrls: ['./overview.component.scss']
+           })
 export class OverviewComponent implements OnInit, OnDestroy {
   get questionIndex(): number {
     return this._questionIndex;
@@ -25,14 +25,15 @@ export class OverviewComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _routerSubscription: Subscription;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private translateService: TranslateService,
-              private route: ActivatedRoute,
-              private footerBarService: FooterBarService) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private translateService: TranslateService,
+    private route: ActivatedRoute,
+    private footerBarService: FooterBarService) {
     this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemNicknames
-    ]);
+                                                 FooterBarComponent.footerElemBack,
+                                                 FooterBarComponent.footerElemNicknames
+                                               ]);
   }
 
   ngOnInit() {

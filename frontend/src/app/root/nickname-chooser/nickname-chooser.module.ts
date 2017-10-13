@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { NicknameInputComponent } from './nickname-input/nickname-input.component';
+import {NgModule} from '@angular/core';
+import {NicknameInputComponent} from './nickname-input/nickname-input.component';
 import {NicknameSelectComponent} from './nickname-select/nickname-select.component';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule, Routes} from '@angular/router';
@@ -18,10 +18,11 @@ const nicknameChooserRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [
-    SharedModule,
-    RouterModule.forChild(nicknameChooserRoutes),
-  ],
-  declarations: [NicknameInputComponent, NicknameSelectComponent]
-})
-export class NicknameChooserModule { }
+            imports: [
+              SharedModule,
+              RouterModule.forChild(nicknameChooserRoutes),
+            ],
+            declarations: [NicknameInputComponent, NicknameSelectComponent]
+          })
+export class NicknameChooserModule {
+}

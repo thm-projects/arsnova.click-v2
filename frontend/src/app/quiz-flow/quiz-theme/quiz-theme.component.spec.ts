@@ -8,9 +8,9 @@ describe('QuizThemeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [QuizThemeComponent]
-    })
-      .compileComponents();
+                                     declarations: [QuizThemeComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

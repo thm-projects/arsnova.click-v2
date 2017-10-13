@@ -28,7 +28,8 @@ export class FreeTextQuestion extends AbstractQuestion implements IQuestionFreet
   /**
    * Serialized the instance object to a JSON compatible object
    * @see AbstractQuestion.serialize()
-   * @returns {{hashtag, questionText, type, timer, startTime, questionIndex, answerOptionList}|{hashtag: String, questionText: String, type: AbstractQuestion, timer: Number, startTime: Number, questionIndex: Number, answerOptionList: Array}}
+   * @returns {{hashtag, questionText, type, timer, startTime, questionIndex, answerOptionList}|{hashtag: String, questionText: String,
+   *     type: AbstractQuestion, timer: Number, startTime: Number, questionIndex: Number, answerOptionList: Array}}
    */
   serialize(): Object {
     return Object.assign(super.serialize(), {
@@ -44,8 +45,8 @@ export class FreeTextQuestion extends AbstractQuestion implements IQuestionFreet
    */
   isValid(): boolean {
     return super.isValid() &&
-      this.answerOptionList.length === 1 &&
-      this.answerOptionList[0].isValid();
+           this.answerOptionList.length === 1 &&
+           this.answerOptionList[0].isValid();
   }
 
   addAnswerOption(answerOption: IFreetextAnswerOption): void {
@@ -80,12 +81,12 @@ export class FreeTextQuestion extends AbstractQuestion implements IQuestionFreet
     }
     this.addAnswerOption(
       new FreeTextAnswerOption({
-        answerText: '',
-        configCaseSensitive: false,
-        configTrimWhitespaces: false,
-        configUseKeywords: true,
-        configUsePunctuation: false
-      })
+                                 answerText: '',
+                                 configCaseSensitive: false,
+                                 configTrimWhitespaces: false,
+                                 configUseKeywords: true,
+                                 configUsePunctuation: false
+                               })
     );
   }
 }

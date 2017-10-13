@@ -4,15 +4,15 @@ import {SharedModule} from '../shared/shared.module';
 import {HeaderLabelService} from '../service/header-label.service';
 
 @NgModule({
-  imports: [
-    SharedModule
-  ],
-  exports: [
-    HeaderComponent
-  ],
-  declarations: [HeaderComponent],
-  providers: [HeaderLabelService],
-  bootstrap: [HeaderComponent]
-})
+            imports: [
+              SharedModule
+            ],
+            exports: [
+              HeaderComponent
+            ],
+            declarations: [HeaderComponent],
+            providers: [HeaderLabelService],
+            bootstrap: [HeaderComponent]
+          })
 export class HeaderModule {
 }

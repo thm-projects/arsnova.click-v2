@@ -58,7 +58,7 @@ export abstract class AbstractQuestion {
         if (!(answerOption instanceof AbstractAnswerOption)) {
           answerOptionList[index] = answerOptionReflection[answerOption.TYPE](answerOption);
         }
-      })
+      });
     }
     this.answerOptionList = answerOptionList;
   }
@@ -66,7 +66,8 @@ export abstract class AbstractQuestion {
   /**
    * Adds a new AnswerOption to the Question instance
    * @param {IAnswerOption} answerOption The AnswerOption instance to be added
-   * @param {Number} [index] An optional index where the AnswerOption instance should be added. If not set or set to an invalid value the instance is added to the end of the answerOptionList
+   * @param {Number} [index] An optional index where the AnswerOption instance should be added. If not set or set to an invalid value the
+   *     instance is added to the end of the answerOptionList
    * @throws {Error} If the answerOption is not of type IAnswerOption
    */
   addAnswerOption(answerOption: IAnswerOption, index: number = -1): void {
@@ -102,7 +103,7 @@ export abstract class AbstractQuestion {
    * @returns {{hashtag:String,questionText:String,type:AbstractQuestion,timer:Number,startTime:Number,questionIndex:Number,answerOptionList:Array}}
    */
   serialize(): Object {
-    let answerOptionListSerialized = Array<IAnswerOption>();
+    const answerOptionListSerialized = Array<IAnswerOption>();
     this.answerOptionList.forEach(function (answeroption) {
       answerOptionListSerialized.push(answeroption.serialize());
     });
@@ -136,7 +137,9 @@ export abstract class AbstractQuestion {
    * @returns {String} The question text without the markdown characters
    */
   getQuestionTextWithoutMarkdownChars(): string {
-    return this.questionText.replace(/#/g, '').replace(/\*/g, '').replace(/1./g, '').replace(/\[/g, '').replace(/\]\(/g, '').replace(/\)/g, '').replace(/- /g, '').replace(/ /g, '').replace(/\\\(/g, '').replace(/\\\)/g, '').replace(/$/g, '').replace(/<hlcode>/g, '').replace(/<\/hlcode>/g, '').replace(/>/g, '');
+    return this.questionText.replace(/#/g, '').replace(/\*/g, '').replace(/1./g, '').replace(/\[/g, '').replace(/\]\(/g, '')
+               .replace(/\)/g, '').replace(/- /g, '').replace(/ /g, '').replace(/\\\(/g, '').replace(/\\\)/g, '').replace(/$/g, '')
+               .replace(/<hlcode>/g, '').replace(/<\/hlcode>/g, '').replace(/>/g, '');
   }
 
   /**
@@ -169,7 +172,7 @@ export abstract class AbstractQuestion {
    * @returns {boolean} True if both instances are completely equal, False otherwise
    */
   equals(question: IQuestion): boolean {
-    let questionAnswerOptionList = question.answerOptionList;
+    const questionAnswerOptionList = question.answerOptionList;
     if (questionAnswerOptionList.length === this.answerOptionList.length) {
       let isEqual = true;
       for (let i = 0; i < this.answerOptionList.length; i++) {
@@ -178,7 +181,7 @@ export abstract class AbstractQuestion {
         }
       }
       if (question.timer !== this.timer ||
-        question.questionText !== this.questionText) {
+          question.questionText !== this.questionText) {
         isEqual = false;
       }
       return isEqual;
@@ -187,7 +190,8 @@ export abstract class AbstractQuestion {
 
   /**
    * Quick way to insert a default AnswerOption to the Question instance.
-   * @param {Number} [index] The index where the AnswerOption should be inserted. If not passed, it will be added to the end of the answerOptionList
+   * @param {Number} [index] The index where the AnswerOption should be inserted. If not passed, it will be added to the end of the
+   *     answerOptionList
    */
   addDefaultAnswerOption(index = -1): void {
     if (index === -1 || index >= this.answerOptionList.length) {
@@ -195,9 +199,9 @@ export abstract class AbstractQuestion {
     }
     this.addAnswerOption(
       new DefaultAnswerOption({
-        answerText: '',
-        isCorrect: false
-      }),
+                                answerText: '',
+                                isCorrect: false
+                              }),
       index
     );
   }

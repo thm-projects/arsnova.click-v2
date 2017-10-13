@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ConfidenceRateComponent } from './confidence-rate.component';
+import {ConfidenceRateComponent} from './confidence-rate.component';
 
 describe('ConfidenceRateComponent', () => {
   let component: ConfidenceRateComponent;
@@ -8,9 +8,9 @@ describe('ConfidenceRateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfidenceRateComponent ]
-    })
-    .compileComponents();
+                                     declarations: [ConfidenceRateComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

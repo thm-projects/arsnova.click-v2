@@ -8,10 +8,10 @@ import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice} from '../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-live-preview',
-  templateUrl: './live-preview.component.html',
-  styleUrls: ['./live-preview.component.scss']
-})
+             selector: 'app-live-preview',
+             templateUrl: './live-preview.component.html',
+             styleUrls: ['./live-preview.component.scss']
+           })
 export class LivePreviewComponent implements OnInit, OnDestroy {
   get question(): IQuestionChoice {
     return this._question;
@@ -29,9 +29,10 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _subscription: Subscription;
 
-  constructor(private questionTextService: QuestionTextService,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private route: ActivatedRoute) {
+  constructor(
+    private questionTextService: QuestionTextService,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private route: ActivatedRoute) {
   }
 
   public deviceClass() {

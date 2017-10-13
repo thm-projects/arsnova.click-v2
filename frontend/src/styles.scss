@@ -6,7 +6,6 @@ $splash-screen-corner-radius: 10px;
 
 @import "assets/themes/themeSwitcher";
 
-
 body {
   font-family: $font;
   height: 100%;
@@ -33,12 +32,15 @@ input, .footerElement {
 .pointer {
   cursor: pointer;
 }
+
 .overflow-hidden {
   overflow: hidden;
 }
+
 .relative {
   position: relative;
 }
+
 button:disabled {
   cursor: not-allowed !important;
 }
@@ -162,13 +164,13 @@ Credits: https://ihatetomatoes.net/create-custom-preloading-screen/
 
 .placeholder-align-center {
 
-  &::-webkit-input-placeholder{
+  &::-webkit-input-placeholder {
     @include placeholder-align-center;
   }
-  &:-moz-placeholder{
+  &:-moz-placeholder {
     @include placeholder-align-center;
   }
-  &::-moz-placeholder{
+  &::-moz-placeholder {
     @include placeholder-align-center;
   }
   &:-ms-input-placeholder {

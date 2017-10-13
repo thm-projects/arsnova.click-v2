@@ -8,9 +8,9 @@ describe('LeaderboardComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [LeaderboardComponent]
-    })
-      .compileComponents();
+                                     declarations: [LeaderboardComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

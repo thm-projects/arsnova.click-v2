@@ -9,7 +9,7 @@
                autocomplete="off"
                spellcheck="false"
                [value]="enteredSessionName"
-               (input)="enteredSessionName = $event.target.value; parseQuiznameInput($event)"
+               (input)="parseQuiznameInput($event)"
                [placeholder]="'component.hashtag_management.enter_quiz_name' | translate"/>
       </div>
     </div>

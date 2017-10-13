@@ -9,10 +9,10 @@ import {questionReflection} from '../../../../lib/questions/question_reflection'
 import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-questiontype',
-  templateUrl: './questiontype.component.html',
-  styleUrls: ['./questiontype.component.scss']
-})
+             selector: 'app-questiontype',
+             templateUrl: './questiontype.component.html',
+             styleUrls: ['./questiontype.component.scss']
+           })
 export class QuestiontypeComponent implements OnInit, OnDestroy {
   get questionTypes(): Array<IQuestion> {
     return this._questionTypes;
@@ -24,15 +24,16 @@ export class QuestiontypeComponent implements OnInit, OnDestroy {
   private _questionTypes: Array<IQuestion> = [];
   private _questionType: string;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService,
-              private translateService: TranslateService,
-              private route: ActivatedRoute,
-              private footerBarService: FooterBarService) {
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private translateService: TranslateService,
+    private route: ActivatedRoute,
+    private footerBarService: FooterBarService) {
     this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemNicknames
-    ]);
-    for (let type in questionReflection) {
+                                                 FooterBarComponent.footerElemBack,
+                                                 FooterBarComponent.footerElemNicknames
+                                               ]);
+    for (const type in questionReflection) {
       if (questionReflection.hasOwnProperty(type)) {
         this._questionTypes.push(questionReflection[type]({}));
       }

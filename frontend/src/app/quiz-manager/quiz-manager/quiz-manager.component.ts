@@ -8,10 +8,10 @@ import {questionReflection} from '../../../lib/questions/question_reflection';
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
 
 @Component({
-  selector: 'app-quiz-manager',
-  templateUrl: './quiz-manager.component.html',
-  styleUrls: ['./quiz-manager.component.scss']
-})
+             selector: 'app-quiz-manager',
+             templateUrl: './quiz-manager.component.html',
+             styleUrls: ['./quiz-manager.component.scss']
+           })
 export class QuizManagerComponent implements OnInit {
   get showMoreOrLess(): string {
     return this._showMoreOrLess;
@@ -63,16 +63,17 @@ export class QuizManagerComponent implements OnInit {
 
   private _showMoreOrLess = 'component.quiz_manager.show_more';
 
-  constructor(@Inject(DOCUMENT) readonly document,
-              private footerBarService: FooterBarService,
-              private headerLabelService: HeaderLabelService,
-              private activeQuestionGroupService: ActiveQuestionGroupService) {
+  constructor(
+    @Inject(DOCUMENT) readonly document,
+    private footerBarService: FooterBarService,
+    private headerLabelService: HeaderLabelService,
+    private activeQuestionGroupService: ActiveQuestionGroupService) {
     footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemHome,
-      FooterBarComponent.footerElemStartQuiz,
-      FooterBarComponent.footerElemProductTour,
-      FooterBarComponent.footerElemNicknames,
-    ]);
+                                            FooterBarComponent.footerElemHome,
+                                            FooterBarComponent.footerElemStartQuiz,
+                                            FooterBarComponent.footerElemProductTour,
+                                            FooterBarComponent.footerElemNicknames,
+                                          ]);
     headerLabelService.setHeaderLabel('component.quiz_manager.title');
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
     FooterBarComponent.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();

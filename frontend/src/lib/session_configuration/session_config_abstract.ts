@@ -18,7 +18,7 @@
 import {MusicSessionConfiguration} from './session_config_music';
 import {NickSessionConfiguration} from './session_config_nicks';
 import {DefaultSettings} from '../../app/service/settings.service';
-import {ISessionConfiguration, IMusicSessionConfiguration, INickSessionConfiguration} from './interfaces';
+import {IMusicSessionConfiguration, INickSessionConfiguration, ISessionConfiguration} from './interfaces';
 
 export abstract class AbstractSessionConfiguration implements ISessionConfiguration {
   get music(): IMusicSessionConfiguration {
@@ -105,10 +105,10 @@ export abstract class AbstractSessionConfiguration implements ISessionConfigurat
 
   equals(value: ISessionConfiguration): boolean {
     return this.music.equals(value.music) &&
-      this.nicks.equals(value.nicks) &&
-      this.theme === value.theme &&
-      this.readingConfirmationEnabled === value.readingConfirmationEnabled &&
-      this.showResponseProgress === value.showResponseProgress &&
-      this.confidenceSliderEnabled === value.confidenceSliderEnabled;
+           this.nicks.equals(value.nicks) &&
+           this.theme === value.theme &&
+           this.readingConfirmationEnabled === value.readingConfirmationEnabled &&
+           this.showResponseProgress === value.showResponseProgress &&
+           this.confidenceSliderEnabled === value.confidenceSliderEnabled;
   }
 }

@@ -146,9 +146,9 @@ export class FreeTextAnswerOption extends AbstractAnswerOption implements IFreet
    */
   equals(answerOption: IFreetextAnswerOption): boolean {
     return super.equals(answerOption) &&
-      answerOption.configCaseSensitive === this.configCaseSensitive &&
-      answerOption.configTrimWhitespaces === this.configTrimWhitespaces &&
-      answerOption.configUseKeywords === this.configUseKeywords &&
-      answerOption.configUsePunctuation === this.configUsePunctuation;
+           answerOption.configCaseSensitive === this.configCaseSensitive &&
+           answerOption.configTrimWhitespaces === this.configTrimWhitespaces &&
+           answerOption.configUseKeywords === this.configUseKeywords &&
+           answerOption.configUsePunctuation === this.configUsePunctuation;
   }
 }

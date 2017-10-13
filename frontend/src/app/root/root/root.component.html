@@ -23,10 +23,10 @@
     </div>
   </div>
 
-  <ngx-qrcode [qrc-value] = "qrCodeContent"
-              qrc-class = "content"
-              qrc-errorCorrectionLevel = "L"
+  <ngx-qrcode [qrc-value]="qrCodeContent"
+              qrc-class="content"
+              qrc-errorCorrectionLevel="L"
               qrc-element-type="canvas"
-              [class] = "'d-flex justify-content-center align-items-center qr-code-element ' + (!showQrCode ? 'hidden' : '')">
+              [class]="'d-flex justify-content-center align-items-center qr-code-element ' + (!showQrCode ? 'hidden' : '')">
   </ngx-qrcode>
 </div>

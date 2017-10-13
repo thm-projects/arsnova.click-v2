@@ -40,8 +40,8 @@ export abstract class AbstractChoiceQuestion extends AbstractQuestion {
    */
   equals(question: IQuestionChoice): boolean {
     return super.equals(question) &&
-      question.displayAnswerText !== this.displayAnswerText ||
-      question.showOneAnswerPerRow === this.showOneAnswerPerRow;
+           question.displayAnswerText !== this.displayAnswerText ||
+           question.showOneAnswerPerRow === this.showOneAnswerPerRow;
   }
 
   /**

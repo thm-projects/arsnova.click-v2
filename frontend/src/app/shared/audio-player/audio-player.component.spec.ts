@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { AudioPlayerComponent } from './audio-player.component';
+import {AudioPlayerComponent} from './audio-player.component';
 
 describe('AudioPlayerComponent', () => {
   let component: AudioPlayerComponent;
@@ -8,9 +8,9 @@ describe('AudioPlayerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AudioPlayerComponent ]
-    })
-    .compileComponents();
+                                     declarations: [AudioPlayerComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {

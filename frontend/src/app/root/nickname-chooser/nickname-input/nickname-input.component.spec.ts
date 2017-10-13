@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NicknameInputComponent } from './nickname-input.component';
+import {NicknameInputComponent} from './nickname-input.component';
 
 describe('NicknameInputComponent', () => {
   let component: NicknameInputComponent;
@@ -8,9 +8,9 @@ describe('NicknameInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NicknameInputComponent ]
-    })
-    .compileComponents();
+                                     declarations: [NicknameInputComponent]
+                                   })
+           .compileComponents();
   }));
 
   beforeEach(() => {
