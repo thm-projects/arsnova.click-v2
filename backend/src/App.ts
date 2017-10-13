@@ -5,6 +5,7 @@ import {cpus, freemem, loadavg, totalmem, uptime} from 'os';
 import * as cors from 'cors';
 
 import ApiRouter from './routes/api';
+import LeaderboardRouter from './routes/leaderboard';
 import options from './cors.config';
 import {Router} from 'express';
 import QuizManager from './db/quiz-manager';
@@ -48,6 +49,7 @@ class App {
     });
     this.express.use('/', router);
     this.express.use('/api/v1', ApiRouter);
+    this.express.use('/api/v1/quiz/leaderboard', LeaderboardRouter);
     // this.express.use('/websocket', WebSocketRouter);
   }
 

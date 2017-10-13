@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {WebSocketRouter} from './routes/websocket';
 import {Server} from 'https';
+import * as process from 'process';
 
 debug('ts-express:server');
 const cert: any = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
@@ -21,6 +22,32 @@ server.on('error', onError);
 server.on('listening', onListening);
 
 WebSocketRouter.wss = new WebSocket.Server({server});
+
+import * as phantomjs from 'phantomjs-prebuilt';
+import {ChildProcess, spawn} from 'child_process';
+import {themes} from './themes/availableThemes';
+import {ITheme} from './interfaces/common.interfaces';
+
+const languages: any = {'en': 'en'};
+const params: any = [path.join(__dirname, '../theme_preview/phantomDriver.js')];
+themes.forEach((theme: ITheme) => {
+  for (const languageKey in languages) {
+    if (languages.hasOwnProperty(languageKey)) {
+      params.push(`http://localhost:4200/preview/${theme.id}/${languageKey}`);
+    }
+  }
+});
+const command: ChildProcess = spawn(phantomjs.path, params);
+command.stdout.on('data', (data) => {
+  debug(`phantomjs (stdout): ${data.toString()}`);
+});
+command.stderr.on('data', (data) => {
+  debug(`phantomjs (stderr): ${data.toString()}`);
+});
+command.on('exit', () => {
+  debug(`phantomjs (exit): All preview images have been generated`);
+});
+
 
 function normalizePort(val: number | string): number | string | boolean {
   const portCheck: number = (typeof val === 'string') ? parseInt(val, 10) : val;

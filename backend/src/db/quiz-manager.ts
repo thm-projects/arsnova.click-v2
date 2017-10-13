@@ -1,20 +1,14 @@
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
 import {WebSocketRouter} from '../routes/websocket';
-import * as WebSocket from 'ws';
+import illegalNicks from '../nicknames/illegalNicks';
+import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
 
 const activeQuizzes: Object = {};
-const illegalNicks: Array<string> = ['miep'];
-
-export declare interface INickname {
-  id: number;
-  name: string;
-  colorCode: string;
-  webSocket: number;
-
-  serialize(): Object;
-}
 
 class Member implements INickname {
+  get responses(): Array<IQuizResponse> {
+    return this._responses;
+  }
   set webSocket(value: number) {
     this._webSocket = value;
   }
@@ -39,11 +33,15 @@ class Member implements INickname {
   private _name: string;
   private _colorCode: string;
   private _webSocket: number;
+  private _responses: Array<IQuizResponse>;
 
-  constructor({id, name, colorCode}: { id: number, name: string, colorCode?: string }) {
+  constructor(
+    {id, name, colorCode, responses}: { id: number, name: string, colorCode?: string, responses?: Array<IQuizResponse> }
+    ) {
     this._id = id;
     this._name = name;
     this._colorCode = colorCode || this.generateRandomColorCode();
+    this._responses = responses || [];
   }
 
   private hashCode(str: string): number { // java String#hashCode
@@ -70,22 +68,10 @@ class Member implements INickname {
     return {
       id: this.id,
       name: this.name,
-      colorCode: this.colorCode
+      colorCode: this.colorCode,
+      responses: this.responses
     };
   }
-}
-
-export declare interface IActiveQuiz {
-  name: string;
-  nicknames: Array<INickname>;
-  currentQuestionIndex: number;
-  originalObject: IQuestionGroup;
-
-  addMember(name: string, webSocketId: number): boolean;
-
-  removeMember(name: string): boolean;
-
-  onDestroy(): void;
 }
 
 class ActiveQuizItem implements IActiveQuiz {
@@ -193,6 +179,18 @@ class ActiveQuizItem implements IActiveQuiz {
     }
     return false;
   }
+
+  public addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void {
+    this.nicknames.filter(value => {return value.name === nickname; })[0].responses[questionIndex] = data;
+
+    this.webSocketRouter.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'MEMBER:UPDATED_RESPONSE',
+      payload: {
+        nickname: this.nicknames.filter(value => {return value.name === nickname; })[0]
+      }
+    });
+  }
 }
 
 export default class QuizManagerDAO {
@@ -236,7 +234,7 @@ export default class QuizManagerDAO {
     }).reduce((a: number, b: string) => {
       const name: string = QuizManagerDAO.normalizeQuizName(b);
       return parseInt(a + activeQuizzes[name].nicknames.length, 10);
-    }, 0);
+    },        0);
   }
 
   public static getAllActiveDemoQuizzes(): String[] {
