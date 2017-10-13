@@ -1,0 +1,7 @@
+<div *ngFor="let answer of data.answerOptionList; let i = index">
+  <app-progress-bar-single-choice *ngIf="data.TYPE === 'SingleChoiceQuestion'" [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
+  <app-progress-bar-multiple-choice *ngIf="data.TYPE === 'MultipleChoiceQuestion'" [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-multiple-choice>
+  <app-progress-bar-survey *ngIf="data.TYPE === 'SurveyQuestion'" [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-survey>
+  <app-progress-bar-ranged *ngIf="data.TYPE === 'RangedQuestion'" [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-ranged>
+  <app-progress-bar-freetext *ngIf="data.TYPE === 'FreeTextQuestion'" [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-freetext>
+</div>

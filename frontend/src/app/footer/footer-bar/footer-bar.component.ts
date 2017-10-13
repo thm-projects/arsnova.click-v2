@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {QrCodeService} from '../../service/qr-code.service';
+import {DefaultSettings} from '../../service/settings.service';
+import {TranslateService} from '@ngx-translate/core';
 
 export class FooterbarElement {
   set onClickCallback(value: Function) {
@@ -283,6 +285,16 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     showIntro: false,
   }, function () {
   });
+  static footerElemExport: FooterbarElement = new FooterbarElement({
+    id: 'startQuiz',
+    iconClass: 'fa fa-download',
+    textClass: 'footerElementText',
+    textName: 'component.leaderboard.export',
+    selectable: false,
+    showIntro: false,
+    linkTarget: null
+  }, function () {
+  });
 
   get _footerElements(): Array<FooterbarElement> {
     return this.footerElements;
@@ -290,13 +302,14 @@ export class FooterBarComponent implements OnInit, OnDestroy {
 
   @Input() footerElements: Array<FooterbarElement> = [];
 
-  private _apiEndPoint = '/api/upload';
+  private _apiEndPoint = `${DefaultSettings.httpApiEndpoint}/upload`;
   private _routerSubscription: Subscription;
 
   constructor(private footerBarService: FooterBarService,
               private activeQuestionGroupService: ActiveQuestionGroupService,
               private router: Router,
               private http: Http,
+              private translateService: TranslateService,
               private qrCodeService: QrCodeService) {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.readingConfirmationEnabled) {
@@ -311,6 +324,11 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     }
     FooterBarComponent.footerElemQRCode.onClickCallback = () => {
       qrCodeService.toggleQrCode();
+    };
+    FooterBarComponent.footerElemExport.onClickCallback = () => {
+      window.open(`${DefaultSettings.httpApiEndpoint}/export/
+        ${this.activeQuestionGroupService.activeQuestionGroup.hashtag}/
+        ${translateService.currentLang}`);
     };
   }
 

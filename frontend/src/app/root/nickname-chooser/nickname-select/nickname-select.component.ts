@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../service/settings.service';
-import {IMessage, IPlayer} from '../../../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../../../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {Router} from '@angular/router';

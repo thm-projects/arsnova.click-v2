@@ -34,6 +34,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   private _src: string;
   @Input() private _original_volume: number;
   @Input() target: string;
+  @Input() autostart: boolean;
   @Output() volumeChange = new EventEmitter();
   private _apiUrl = `${DefaultSettings.httpApiEndpoint}/files/sound/`;
   private _volume = 1;
@@ -74,7 +75,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
 
   isStopped(): boolean {
     if (!this.getAudioElement()) {
-      return false;
+      return true;
     }
     return (!this._audioElement.currentTime && this._audioElement.paused) || this._audioElement.ended;
   }

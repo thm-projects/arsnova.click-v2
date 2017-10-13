@@ -3,12 +3,12 @@ import {IQuestionRanged, IValidationStackTrace} from './interfaces';
 
 export class RangedQuestion extends AbstractQuestion implements IQuestionRanged {
 
-  canEditQuestionText: boolean = true;
-  canEditAnsweroptions: boolean = true;
-  canEditQuestionTimer: boolean = true;
-  canEditQuestionType: boolean = true;
+  canEditQuestionText = true;
+  canEditAnsweroptions = true;
+  canEditQuestionTimer = true;
+  canEditQuestionType = true;
 
-  canAddAnsweroptions: boolean = false;
+  canAddAnsweroptions = false;
 
   readonly preferredAnsweroptionComponent: string = 'AnsweroptionsRangedComponent';
 
@@ -36,11 +36,11 @@ export class RangedQuestion extends AbstractQuestion implements IQuestionRanged 
     this._correctValue = value;
   }
 
-  public TYPE: string = 'RangedQuestion';
+  public TYPE = 'RangedQuestion';
 
-  private _rangeMin: number = 0;
-  private _rangeMax: number = 0;
-  private _correctValue: number = 0;
+  private _rangeMin = 0;
+  private _rangeMax = 0;
+  private _correctValue = 0;
 
   /**
    * Constructs a RangedQuestion instance
@@ -61,7 +61,7 @@ export class RangedQuestion extends AbstractQuestion implements IQuestionRanged 
    */
   serialize(): Object {
     return Object.assign(super.serialize(), {
-      type: this.TYPE,
+      TYPE: this.TYPE,
       rangeMin: this.rangeMin,
       rangeMax: this.rangeMax,
       correctValue: this.correctValue

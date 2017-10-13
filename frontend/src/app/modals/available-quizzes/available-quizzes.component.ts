@@ -40,7 +40,7 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
     const self = this;
     sessions.forEach(function (elem) {
       elem = JSON.parse(window.localStorage.getItem(elem));
-      self._sessions.push(questionGroupReflection[elem.type](elem));
+      self._sessions.push(questionGroupReflection[elem.TYPE](elem));
     });
   }
 

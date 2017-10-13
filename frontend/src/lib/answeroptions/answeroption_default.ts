@@ -14,7 +14,7 @@ export class DefaultAnswerOption extends AbstractAnswerOption implements IAnswer
    */
   serialize(): any {
     return Object.assign(super.serialize(), {
-      type: this.TYPE
+      TYPE: this.TYPE
     });
   }
 }

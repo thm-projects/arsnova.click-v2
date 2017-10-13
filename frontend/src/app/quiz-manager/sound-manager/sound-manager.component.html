@@ -47,14 +47,22 @@
   <option value="100" label="100%">
 </datalist>
 
-<div class="col-12">
+<div class="col-12 mt-5">
   <div class="row">
+    <div class="col-12 col-sm-6">
+      <label class="mb-0 mr-2 text-light align-self-center"
+         style="width: 100%;line-height: 1.2;">
+        <span>{{'plugins.sound.global_volume' | translate}}&nbsp;</span>
+        <span>{{config.volumeConfig.global}}&nbsp;&#37;</span>
+        <input type="range"
+               list="tickmarks"
+               (input)="setGlobalVolume($event)"
+               [value]="config.volumeConfig.global">
+      </label>
+    </div>
     <div class="col-12 col-sm-6">
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <p class="mb-0 mr-2 text-light align-self-center"
-           style="width: 100%;line-height: 1.2;"
-           [innerHTML]="'plugins.sound.global_volume' | translate"></p>
         <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.volumeConfig.useGlobalVolume ? 'success' : 'danger')">
           <input type="checkbox"
                  class="hidden"
@@ -69,13 +77,6 @@
         </label>
       </div>
     </div>
-    <div class="col-12 col-sm-6">
-      <input type="range"
-             list="tickmarks"
-             (input)="setGlobalVolume($event)"
-             [value]="config.volumeConfig.global">
-      <span>{{config.volumeConfig.global}}&nbsp;&#37;</span>
-    </div>
   </div>
 </div>
 <div class="collapse show" id="panel-lobby">
@@ -84,18 +85,21 @@
       <div class="col-12">
         <h3>{{'plugins.sound.lobby_music_detailed' | translate }}</h3>
       </div>
-      <div class="col-12">
-        <div id="slider-lobby-music" class="margin-bottom"></div>
+      <div class="col-12 mb-2 d-flex"
+           [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
+        <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.lobbyEnabled ? 'success' : 'danger')">
+          <input type="checkbox"
+                 class="hidden"
+                 id="toggle-lobby-music"
+                 [attr.aria-label]="'Activate/Deactivate Lobby Music Button'"
+                 autocomplete="off"
+                 role="switch"
+                 [checked]="config.lobbyEnabled"
+                 (change)="config.lobbyEnabled = !config.lobbyEnabled"
+                 [title]="'Activate/Deactivate Lobby Music Button'" >
+          {{('plugins.sound.' + (config.lobbyEnabled ? 'active' : 'inactive')) | translate}}
+        </label>
         <p>{{'plugins.sound.volume' | translate}}: {{config.volumeConfig.lobby}} %</p>
-      </div>
-      <div class="col-12">
-        <select id="lobbySoundSelect"
-                class="rounded"
-                (change)="selectSound('lobby', $event)"
-                title="soundSelect">
-          <option *ngFor="let elem of lobbySongs"
-                  [value]="elem.id">{{elem.text}}</option>
-        </select>
       </div>
       <div class="col-12">
         <div class="row">
@@ -107,28 +111,19 @@
                               (volumeChange)="config.volumeConfig.lobby = $event" ></app-audio-player>
           </div>
           <div class="col-12 col-sm-6">
-            <div class="col-12 col-sm-6">
-              <div class="col-12 mb-2 d-flex"
-                   [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-                <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.lobbyEnabled ? 'success' : 'danger')">
-                  <input type="checkbox"
-                         class="hidden"
-                         id="toggle-lobby-music"
-                         [attr.aria-label]="'Activate/Deactivate Lobby Music Button'"
-                         autocomplete="off"
-                         role="switch"
-                         [checked]="config.lobbyEnabled"
-                         (change)="config.lobbyEnabled = !config.lobbyEnabled"
-                         [title]="'Activate/Deactivate Lobby Music Button'" >
-                  {{('plugins.sound.' + (config.lobbyEnabled ? 'active' : 'inactive')) | translate}}
-                </label>
-              </div>
+            <select id="lobbySoundSelect"
+                    class="rounded"
+                    (change)="selectSound('lobby', $event)"
+                    title="soundSelect">
+              <option *ngFor="let elem of lobbySongs"
+                      [selected]="config.titleConfig.lobby === elem.id"
+                      [value]="elem.id">{{elem.text}}</option>
+            </select>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>
 <div class="collapse" id="panel-countdownRunning" role="tabpanel">
   <div class="card card-body border-0 mt-5">
@@ -146,6 +141,7 @@
               (change)="selectSound('countdownRunning', $event)"
               title="soundSelect">
         <option *ngFor="let elem of countdownRunningSounds"
+                [selected]="config.titleConfig.countdownRunning === elem.id"
                 [value]="elem.id">{{elem.text}}</option>
       </select>
     </div>
@@ -196,6 +192,7 @@
               (change)="selectSound('countdownEnd', $event)"
               title="soundSelect">
         <option *ngFor="let elem of countdownEndSounds"
+                [selected]="config.titleConfig.countdownEnd === elem.id"
                 [value]="elem.id">{{elem.text}}</option>
       </select>
     </div>

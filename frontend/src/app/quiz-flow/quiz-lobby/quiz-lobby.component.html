@@ -1,4 +1,4 @@
-<div *ngFor="let elem of players"
+<div *ngFor="let elem of attendeeService.attendees"
      [id]="elem.id"
      (click)="isOwner ? kickMember(elem.name) : return"
      [class]="'member-wrapper mb-1 col-sm-4 col-md-3 ' + (isOwner ? 'pointer ' : '') + (isOwnNick(elem.name) ? 'own-nick' : '')"

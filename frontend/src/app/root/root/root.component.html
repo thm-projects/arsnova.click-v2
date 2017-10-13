@@ -1,5 +1,4 @@
 <div>
-  <!--global.gamificationAnimation-->
   <!--header-->
   <!--header.title-->
   <div class="px-1 px-sm-4">
@@ -7,7 +6,7 @@
   </div>
 
   <div class="container-fluid" style="height: 90vh;">
-    <div class="row flex-sm-nowrap overflow-hidden">
+    <div class="row flex-sm-nowrap">
       <!--footer.navigation-->
       <!--footer-->
       <div class="footer-bar-wrapper p-0">
@@ -15,8 +14,10 @@
       </div>
 
       <div class="col-12">
-        <div id="content-container" class="container mr-sm-2">
-          <router-outlet></router-outlet>
+        <div class="row">
+          <div id="content-container" class="container mr-sm-2">
+            <router-outlet></router-outlet>
+          </div>
         </div>
       </div>
     </div>
@@ -25,7 +26,7 @@
   <ngx-qrcode [qrc-value] = "qrCodeContent"
               qrc-class = "content"
               qrc-errorCorrectionLevel = "L"
-              qrc-element-type="img"
-              [class] = "'qr-code-element ' + (!showQrCode ? 'hidden' : '')">
+              qrc-element-type="canvas"
+              [class] = "'d-flex justify-content-center align-items-center qr-code-element ' + (!showQrCode ? 'hidden' : '')">
   </ngx-qrcode>
 </div>

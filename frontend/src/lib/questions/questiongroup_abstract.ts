@@ -159,7 +159,7 @@ export abstract class AbstractQuestionGroup implements IQuestionGroup {
     if (typeof index === 'undefined' || index === -1 || index >= this.questionList.length) {
       index = this.questionList.length;
     }
-    let questionItem = questionReflection[type]({
+    const questionItem = questionReflection[type]({
       hashtag: this.hashtag,
       questionText: '',
       questionIndex: index,

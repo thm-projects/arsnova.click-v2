@@ -1,3 +1,16 @@
-<p>
-  leaderboard works!
-</p>
+<div class="">
+  <h2 *ngIf="!leaderBoard.length"
+      [innerHTML]="'component.leaderboard.no_attendee_correct' + (isGlobalRanking ? '_global' : '') | translate"></h2>
+  <div *ngFor="let attendee of leaderBoard; let i = index">
+    <h4 *ngIf="leaderBoard.length">{{'component.leaderboard.question' | translate}}&nbsp;{{i + 1}}</h4>
+    <h4 *ngIf="!leaderBoard.length">{{'component.leaderboard.no_attendee_correct' | translate}}</h4>
+    <div [class]="'leader-board-item rounded p-2 ' + (!j || isOwnNick(attendee.name) ? 'own-nick' : '')">
+      <span *ngIf="!j || isOwnNick(attendee.name)"
+            class="fa fa-education"
+            aria-hidden="true"></span>
+      <span>{{i + 1}}.&nbsp;</span>
+      <span>{{attendee.name}}&nbsp;-&nbsp;</span>
+      <span>{{attendee.responseTime}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
+    </div>
+  </div>
+</div>

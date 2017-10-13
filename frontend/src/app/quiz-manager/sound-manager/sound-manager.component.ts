@@ -81,9 +81,9 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
 
     this._countdownEndSounds.push({id: 'Song1', text: 'Chinese Gong'});
 
-    this.config.titleConfig.lobby = 'Song0';
-    this.config.titleConfig.countdownRunning = 'Song0';
-    this.config.titleConfig.countdownEnd = 'Song0';
+    this.config.titleConfig.lobby = this.config.titleConfig.lobby || 'Song0';
+    this.config.titleConfig.countdownRunning = this.config.titleConfig.countdownRunning || 'Song0';
+    this.config.titleConfig.countdownEnd = this.config.titleConfig.countdownEnd || 'Song0';
   }
 
   selectSound(target: 'lobby' | 'countdownRunning' | 'countdownEnd', event: Event): void {

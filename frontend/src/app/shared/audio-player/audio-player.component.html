@@ -1,7 +1,10 @@
 <div class="btn-toolbar">
   <audio [id]="_randomUUID"
+         loop="loop"
+         [autoplay]="autostart ? 'autoplay' : null"
          [src]="apiUrl + target + '/' + src + '.mp3'"></audio>
-  <div class="btn-group">
+  <div *ngIf="!autostart"
+       class="btn-group">
     <button *ngIf="!_isPlaying"
             class="btn btn-secondary"
             (click)="playMusic()">
@@ -18,7 +21,8 @@
       <i class="fa fa-stop"></i>
     </button>
   </div>
-  <div class="input-group">
+  <div *ngIf="!autostart"
+       class="input-group">
     <input type="range" [value]="volume" (input)="emitVolumeChange($event)">
   </div>
 </div>

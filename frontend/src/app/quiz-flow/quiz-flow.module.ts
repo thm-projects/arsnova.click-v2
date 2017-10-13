@@ -7,6 +7,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
 import {QuizThemeComponent} from './quiz-theme/quiz-theme.component';
 import {ThemesModule} from '../themes/themes.module';
+import {QuizResultsModule} from './quiz-results/quiz-results.module';
+import {AttendeeService} from '../service/attendee.service';
+import {QuestionDetailsComponent} from './quiz-results/question-details/question-details.component';
 
 const quizFlowRoutes: Routes = [
   {
@@ -17,6 +20,11 @@ const quizFlowRoutes: Routes = [
   {
     path: 'quiz-results',
     component: QuizResultsComponent,
+    data: {}
+  },
+  {
+    path: 'quiz-results/:questionIndex',
+    component: QuestionDetailsComponent,
     data: {}
   },
   {
@@ -48,8 +56,10 @@ const quizFlowRoutes: Routes = [
     SharedModule,
     ThemesModule,
     RouterModule.forChild(quizFlowRoutes),
+    QuizResultsModule
   ],
-  declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizResultsComponent, QuizThemeComponent]
+  declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent],
+  providers: [AttendeeService]
 })
 export class QuizFlowModule {
 }

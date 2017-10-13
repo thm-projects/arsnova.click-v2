@@ -1,32 +1,30 @@
 <div class="text-light">
-  <div class="col-12">
-    <div class="btn-group btn-header mb-4" data-toggle="buttons"
-         role="group" [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
-      <button type="button"
-              [class]="'btn btn-' + (currentData === 'about' ? 'secondary' : 'default')"
-              [routerLink]="['/about']">
-        <span [innerHTML]="'region.footer.footer_bar.info' | translate"></span>
-      </button>
-      <button type="button"
-              [class]="'btn btn-' + (currentData === 'tos' ? 'secondary' : 'default')"
-              [routerLink]="['/tos']">
-        <span [innerHTML]="'region.footer.footer_bar.tos' | translate"></span>
-      </button>
-      <button type="button"
-              [class]="'btn btn-' + (currentData === 'imprint' ? 'secondary' : 'default')"
-              [routerLink]="['/imprint']">
-        <span [innerHTML]="'region.footer.footer_bar.imprint' | translate"></span>
-      </button>
-      <button type="button"
-              [class]="'btn btn-' + (currentData === 'dataprivacy' ? 'secondary' : 'default')"
-              data-toggle="collapse"
-              [routerLink]="['/dataprivacy']">
-        <span [innerHTML]="'region.footer.footer_bar.data_privacy' | translate"></span>
-      </button>
-      <button type="button" class="btn btn-default" onclick="window.open('https://arsnova.eu/blog');">
-        <span [innerHTML]="'region.footer.footer_bar.blog' | translate"></span>
-      </button>
-    </div>
+  <div class="btn-group btn-header mb-4" data-toggle="buttons"
+       role="group" [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
+    <button type="button"
+            [class]="'btn btn-' + (currentData === 'about' ? 'secondary' : 'default')"
+            [routerLink]="['/about']">
+      <span [innerHTML]="'region.footer.footer_bar.info' | translate"></span>
+    </button>
+    <button type="button"
+            [class]="'btn btn-' + (currentData === 'tos' ? 'secondary' : 'default')"
+            [routerLink]="['/tos']">
+      <span [innerHTML]="'region.footer.footer_bar.tos' | translate"></span>
+    </button>
+    <button type="button"
+            [class]="'btn btn-' + (currentData === 'imprint' ? 'secondary' : 'default')"
+            [routerLink]="['/imprint']">
+      <span [innerHTML]="'region.footer.footer_bar.imprint' | translate"></span>
+    </button>
+    <button type="button"
+            [class]="'btn btn-' + (currentData === 'dataprivacy' ? 'secondary' : 'default')"
+            data-toggle="collapse"
+            [routerLink]="['/dataprivacy']">
+      <span [innerHTML]="'region.footer.footer_bar.data_privacy' | translate"></span>
+    </button>
+    <button type="button" class="btn btn-default" onclick="window.open('https://arsnova.eu/blog');">
+      <span [innerHTML]="'region.footer.footer_bar.blog' | translate"></span>
+    </button>
   </div>
   <div *ngIf="currentData === 'about'" id="infoElement">
     <h3 [innerHTML]="'region.footer.about.declaration' | translate"></h3>

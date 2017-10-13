@@ -34,9 +34,9 @@ export const DefaultSettings = {
         useGlobal: true
       },
       title: {
-        lobby: '',
-        countdownRunning: '',
-        countdownEnd: ''
+        lobby: 'Song0',
+        countdownRunning: 'Song0',
+        countdownEnd: 'Song0'
       },
       availableTitles: {
         basePath: 'public/songs',

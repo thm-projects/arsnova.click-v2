@@ -36,6 +36,12 @@ input, .footerElement {
 .overflow-hidden {
   overflow: hidden;
 }
+.relative {
+  position: relative;
+}
+button:disabled {
+  cursor: not-allowed !important;
+}
 
 #header {
 }

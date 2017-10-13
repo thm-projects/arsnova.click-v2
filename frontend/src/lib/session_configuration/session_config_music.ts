@@ -69,7 +69,7 @@ class VolumeConfiguration implements IVolumeMusicSessionConfiguration {
       lobby: this.lobby,
       countdownRunning: this.countdownRunning,
       countdownEnd: this.countdownEnd
-    }
+    };
   }
 }
 

@@ -8,13 +8,12 @@ import {ConnectionService} from '../../service/connection.service';
 
 function isLocalStorageSupported(): boolean {
   try {
-    let itemBackup = localStorage.getItem('');
+    const itemBackup = localStorage.getItem('');
     localStorage.removeItem('');
     localStorage.setItem('', itemBackup);
     if (itemBackup === null) {
       localStorage.removeItem('');
-    }
-    else {
+    } else {
       localStorage.setItem('', itemBackup);
     }
     return true;
@@ -25,13 +24,12 @@ function isLocalStorageSupported(): boolean {
 
 function isSessionStorageSupported(): boolean {
   try {
-    let itemBackup = sessionStorage.getItem('');
+    const itemBackup = sessionStorage.getItem('');
     sessionStorage.removeItem('');
     sessionStorage.setItem('', itemBackup);
     if (itemBackup === null) {
       sessionStorage.removeItem('');
-    }
-    else {
+    } else {
       sessionStorage.setItem('', itemBackup);
     }
     return true;

@@ -4,6 +4,7 @@ import {FooterBarService} from '../service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HeaderLabelService} from '../service/header-label.service';
 import {ThemesService} from '../service/themes.service';
+import {DefaultSettings} from '../service/settings.service';
 
 @Component({
   selector: 'app-themes',
@@ -25,6 +26,10 @@ export class ThemesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.themesService.updateCurrentlyUsedTheme();
+  }
+
+  getThemePreviewUrl(id: string): string {
+    return `${DefaultSettings.httpApiEndpoint}/theme/${id}/${this.translateService.currentLang}`;
   }
 
   change(id: string): void {

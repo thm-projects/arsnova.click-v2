@@ -1,0 +1,7 @@
+<h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h2>
+
+<h4>{{question.questionText}}</h4>
+
+<div *ngFor="let elem of question.answerOptionList; let i = index">
+  <p>{{i + 1}}&nbsp;{{elem.answerText}}</p>
+</div>

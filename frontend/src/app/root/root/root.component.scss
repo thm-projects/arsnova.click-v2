@@ -6,6 +6,7 @@
   @include media-breakpoint-down(xs) {
     height: 80vh;
     top: 10vh;
+    position: absolute;
   }
 }
 
@@ -25,21 +26,7 @@
 
 .qr-code-element {
   position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100vh;
   top: 0;
-
-  .content {
-    width: 50vmin;
-    height: 50vmin;
-
-    img,
-    canvas {
-      width: 50vmin;
-      height: 50vmin;
-    }
-  }
 }

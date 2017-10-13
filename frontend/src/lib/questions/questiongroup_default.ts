@@ -7,15 +7,22 @@ import {ISessionConfiguration} from '../session_configuration/interfaces';
 
 export class DefaultQuestionGroup extends AbstractQuestionGroup implements IQuestionGroup {
 
-  public TYPE: string = 'DefaultQuestionGroup';
+  public TYPE = 'DefaultQuestionGroup';
 
-  constructor({hashtag, questionList = [], isFirstStart = true, sessionConfig = new SessionConfiguration(null)}: { hashtag: string, questionList?: Array<string>, isFirstStart?: boolean, sessionConfig?: ISessionConfiguration }) {
+  constructor({
+                hashtag,
+                questionList = [],
+                isFirstStart = true,
+                sessionConfig = new SessionConfiguration(null)}:
+                { hashtag: string,
+                  questionList?: Array<string>,
+                  isFirstStart?: boolean,
+                  sessionConfig?: ISessionConfiguration }) {
     super({hashtag, questionList, isFirstStart, sessionConfig});
-    const self = this;
     if (this.questionList.length > 0) {
       this.questionList.forEach(function (question: any, index: number) {
         if (!(question instanceof AbstractQuestion)) {
-          this.questionList[index] = questionReflection[question.type](question);
+          this.questionList[index] = questionReflection[question.TYPE](question);
         }
       }, this);
     }
@@ -26,6 +33,6 @@ export class DefaultQuestionGroup extends AbstractQuestionGroup implements IQues
    * @returns {{hashtag: String, type: String, questionList: Array}}
    */
   serialize(): any {
-    return Object.assign(super.serialize(), {type: this.TYPE});
+    return Object.assign(super.serialize(), {TYPE: this.TYPE});
   }
 }

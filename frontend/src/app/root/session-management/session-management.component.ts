@@ -41,13 +41,13 @@ export class SessionManagementComponent implements OnInit {
 
   startQuiz(session: string): void {
     const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
-    this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.type](questionGroupSerialized);
+    this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
     this.router.navigate(['/quiz-lobby']);
   }
 
   editQuiz(session: string): void {
     const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
-    this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.type](questionGroupSerialized);
+    this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
     this.router.navigate(['/quiz-manager']);
   }
 

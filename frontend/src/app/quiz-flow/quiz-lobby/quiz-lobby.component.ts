@@ -8,49 +8,13 @@ import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
 import {ConnectionService} from '../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {AttendeeService, INickname} from '../../service/attendee.service';
 
-export declare interface IPlayer {
-  id: string;
-  name: string;
-  colorCode: string;
-}
 
 export declare interface IMessage extends Object {
   status?: string;
   payload?: any;
   step: string;
-}
-
-class Player implements IPlayer {
-  get colorCode(): string {
-    return this._colorCode;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get id(): string {
-    return this._id;
-  }
-
-  private _id: string;
-  private _name: string;
-  private _colorCode: string;
-
-  constructor({id, name, colorCode}) {
-    this._id = id;
-    this._name = name;
-    this._colorCode = colorCode;
-  }
-
-  serialize(): IPlayer {
-    return {
-      id: this.id,
-      name: this.name,
-      colorCode: this.colorCode
-    };
-  }
 }
 
 @Component({
@@ -62,12 +26,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   get isOwner(): boolean {
     return this._isOwner;
   }
-  get players(): Array<IPlayer> {
-    return this._players;
-  }
 
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
-  private _players: Array<IPlayer> = [];
   private _isOwner: boolean;
 
   constructor(private footerBarService: FooterBarService,
@@ -76,7 +36,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
               private themesService: ThemesService,
               private http: HttpClient,
               private connectionService: ConnectionService,
-              private sanitizer: DomSanitizer) {
+              private sanitizer: DomSanitizer,
+              private attendeeService: AttendeeService) {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       footerBarService.replaceFooterElments([
         FooterBarComponent.footerElemEditQuiz,
@@ -115,18 +76,18 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           setTimeout(this.handleIncomingPlayers, 500);
           break;
         case 'LOBBY:ALL_PLAYERS':
-          data.payload.members.forEach((elem: IPlayer) => {
-            this._players.push(new Player(elem));
+          data.payload.members.forEach((elem: INickname) => {
+            this.attendeeService.addMember(elem);
           });
           FooterBarComponent.footerElemStartQuiz.isActive = true;
           break;
         case 'MEMBER:ADDED':
-          this._players.push(new Player(data.payload.member));
+          this.attendeeService.addMember(data.payload.member);
           FooterBarComponent.footerElemStartQuiz.isActive = true;
           break;
         case 'MEMBER:REMOVED':
-          this._players = this._players.filter(player => player.name !== data.payload.name);
-          if (!this._players.length) {
+          this.attendeeService.attendees = this.attendeeService.attendees.filter(player => player.name !== data.payload.name);
+          if (!this.attendeeService.attendees.length) {
             FooterBarComponent.footerElemStartQuiz.isActive = false;
           }
           break;
@@ -145,7 +106,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       (data: IMessage) => {
         console.log(data);
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_REMOVED') {
-          this._players = this._players.filter(player => player.name !== name);
+          this.attendeeService.attendees = this.attendeeService.attendees.filter(player => player.name !== name);
         }
       }
     );
@@ -184,7 +145,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         }).subscribe(
           () => {
             this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
-            this.handleIncomingPlayers();
+            setTimeout(() => this.handleIncomingPlayers(), 1000);
             this.addTestPlayer();
           },
           (error) => {
@@ -198,7 +159,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() { }
 
 }

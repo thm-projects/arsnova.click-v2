@@ -80,6 +80,11 @@ const appRoutes: Routes = [
     data: {content: 'dataprivacy'}
   },
   {
+    path: 'preview/:themeId/:languageId',
+    component: HomeComponent,
+    data: {}
+  },
+  {
     path: '',
     component: HomeComponent,
     data: {}

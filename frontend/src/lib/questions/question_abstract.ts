@@ -56,7 +56,7 @@ export abstract class AbstractQuestion {
     if (answerOptionList.length > 0) {
       answerOptionList.forEach(function (answerOption: any, index: number) {
         if (!(answerOption instanceof AbstractAnswerOption)) {
-          answerOptionList[index] = answerOptionReflection[answerOption.type](answerOption);
+          answerOptionList[index] = answerOptionReflection[answerOption.TYPE](answerOption);
         }
       })
     }

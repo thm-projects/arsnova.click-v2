@@ -1,0 +1,7 @@
+<div id="countdownAnimationWrapper"
+     [style.background-color]="background"
+     aria-hidden="true">
+  <div *ngIf="image"
+       id="countdownAnimation"
+       [style.background-image]="sanitizeStyle('url(' + image + ')')"></div>
+</div>

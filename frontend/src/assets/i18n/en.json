@@ -46,7 +46,7 @@
         "nicknames": "Nicknames",
         "show_product_tour": "Product tour",
         "show_response_progress": "Progress",
-        "show_confidence_slider": "Degree of Certainty",
+        "show_confidence_slider": "Confidence Grade",
         "edit_quiz": "Edit",
         "remove": "Remove",
         "description": {
@@ -332,8 +332,7 @@
       "no_attendee_correct": "No one has answered this question correctly",
       "no_attendee_correct_global": "Nobody has answered all the questions correctly",
       "question": "Question",
-      "second": "second",
-      "second_plural": "seconds",
+      "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
       "show_more": "Show 1 more",
       "show_more_plural": "Show %s more",
       "show_less": "Show less",
@@ -347,6 +346,7 @@
       "question_number": "Question",
       "ranking": "Ranking",
       "reading_confirmation": "Reading confirmation",
+      "confidence_grade": "Confidence Grade",
       "show_more": "Show 1 more",
       "show_more_plural": "Show %s more",
       "correct": "Correct",
@@ -367,7 +367,8 @@
       "guessed_correct": "Correctly estimated",
       "guessed_wrong": "Wrong estimated",
       "correct_answer": "Correct answer",
-      "abort_countdown": "Abort Countdown"
+      "abort_countdown": "Abort Countdown",
+      "no_data": "No data available"
     },
     "lobby": {
       "title": "Quiz Lobby",
@@ -503,8 +504,7 @@
       "answer_configuration": "Configuration of the answer",
       "answer_configuration_plural": "Configuration of the answers",
       "timer": "Countdown",
-      "second": "second",
-      "second_plural": "seconds",
+      "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
       "minute": "minute",
       "minute_plural": "minutes",
       "hour": "hour",
@@ -610,8 +610,7 @@
       "question": "Show question",
       "send": "Send",
       "abstention": "Abstention",
-      "seconds_left": "1 Second left!",
-      "seconds_left_plural": "__value__ Seconds left",
+      "seconds_left": "# {COUNT, plural, =0{Seconds} one{Second} other{Seconds}} left!",
       "ranged_question": {
         "title": "Please enter your answer!",
         "input_placeholder": "Answer"

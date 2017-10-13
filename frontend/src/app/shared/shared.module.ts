@@ -11,6 +11,7 @@ import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compil
 import * as MessageFormat from 'messageformat';
 import {I18nService} from '../service/i18n.service';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
+import {GamificationAnimationComponent} from './gamification-animation/gamification-animation.component';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -57,10 +58,11 @@ export const providers = [
     TranslateModule,
     NgbModule,
     RouterModule,
-    AudioPlayerComponent
+    AudioPlayerComponent,
+    GamificationAnimationComponent
   ],
   providers: [],
-  declarations: [AudioPlayerComponent],
+  declarations: [AudioPlayerComponent, GamificationAnimationComponent],
   bootstrap: []
 })
 export class SharedModule {

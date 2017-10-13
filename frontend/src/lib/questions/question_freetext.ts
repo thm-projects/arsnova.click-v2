@@ -5,12 +5,12 @@ import {IFreetextAnswerOption} from '../answeroptions/interfaces';
 
 export class FreeTextQuestion extends AbstractQuestion implements IQuestionFreetext {
 
-  canEditQuestionText: boolean = true;
-  canEditAnsweroptions: boolean = true;
-  canEditQuestionTimer: boolean = true;
-  canEditQuestionType: boolean = true;
+  canEditQuestionText = true;
+  canEditAnsweroptions = true;
+  canEditQuestionTimer = true;
+  canEditQuestionType = true;
 
-  canAddAnsweroptions: boolean = false;
+  canAddAnsweroptions = false;
 
   readonly preferredAnsweroptionComponent: string = 'AnsweroptionsFreetextComponent';
 
@@ -32,7 +32,7 @@ export class FreeTextQuestion extends AbstractQuestion implements IQuestionFreet
    */
   serialize(): Object {
     return Object.assign(super.serialize(), {
-      type: this.TYPE
+      TYPE: this.TYPE
     });
   }
 

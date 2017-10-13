@@ -134,7 +134,7 @@ export class FreeTextAnswerOption extends AbstractAnswerOption implements IFreet
       configTrimWhitespaces: this.configTrimWhitespaces,
       configUseKeywords: this.configUseKeywords,
       configUsePunctuation: this.configUsePunctuation,
-      type: this.TYPE
+      TYPE: this.TYPE
     });
   }
 

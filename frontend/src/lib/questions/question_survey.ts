@@ -4,12 +4,12 @@ import {DefaultAnswerOption} from '../answeroptions/answeroption_default';
 
 export class SurveyQuestion extends AbstractChoiceQuestion implements IQuestionSurvey {
 
-  canEditQuestionText: boolean = true;
-  canEditAnsweroptions: boolean = true;
-  canEditQuestionTimer: boolean = true;
-  canEditQuestionType: boolean = true;
+  canEditQuestionText = true;
+  canEditAnsweroptions = true;
+  canEditQuestionTimer = true;
+  canEditQuestionType = true;
 
-  canAddAnsweroptions: boolean = true;
+  canAddAnsweroptions = true;
 
   readonly preferredAnsweroptionComponent: string = 'AnsweroptionsDefaultComponent';
 
@@ -21,7 +21,7 @@ export class SurveyQuestion extends AbstractChoiceQuestion implements IQuestionS
     this._multipleSelectionEnabled = value;
   }
 
-  public TYPE: string = 'SurveyQuestion';
+  public TYPE = 'SurveyQuestion';
   private _multipleSelectionEnabled: boolean;
 
   /**
@@ -58,7 +58,7 @@ export class SurveyQuestion extends AbstractChoiceQuestion implements IQuestionS
    */
   serialize(): Object {
     return Object.assign(super.serialize(), {
-      type: this.TYPE,
+      TYPE: this.TYPE,
       multipleSelectionEnabled: this.multipleSelectionEnabled
     });
   }

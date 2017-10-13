@@ -17,7 +17,7 @@ export class CurrentQuizService implements ICurrentQuiz {
     return this._currentQuestion;
   }
   set currentQuestion(value: any) {
-    this._currentQuestion = questionReflection[value.type](value);
+    this._currentQuestion = questionReflection[value.TYPE](value);
   }
   set hashtag(value: string) {
     this._hashtag = value;

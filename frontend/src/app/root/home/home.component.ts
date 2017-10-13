@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
@@ -11,16 +11,18 @@ import {IQuestionGroup} from '../../../lib/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
 import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {I18nService} from '../../service/i18n.service';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   get provideNickSelection(): boolean {
     return this._provideNickSelection;
   }
@@ -33,14 +35,17 @@ export class HomeComponent implements OnInit {
 
   private _httpApiEndpoint = DefaultSettings.httpApiEndpoint;
   private _provideNickSelection = false;
+  private _routerSubscription: Subscription;
 
   constructor(private footerBarService: FooterBarService,
               private headerLabelService: HeaderLabelService,
               private modalService: NgbModal,
               private activeQuestionGroupService: ActiveQuestionGroupService,
-              private themesService: ThemesService,
               private http: HttpClient,
               private router: Router,
+              private themesService: ThemesService,
+              private route: ActivatedRoute,
+              private i18nService: I18nService,
               private currentQuiz: CurrentQuizService) {
     this.activeQuestionGroupService.activeQuestionGroup = null;
     footerBarService.replaceFooterElments([
@@ -60,6 +65,18 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.themesService.updateCurrentlyUsedTheme();
+    this._routerSubscription = this.route.params.subscribe(params => {
+      if (!Object.keys(params).length) {
+        return;
+      }
+      window.localStorage.setItem('defaultTheme', params.themeId);
+      this.themesService.updateCurrentlyUsedTheme();
+      this.i18nService.setLanguage(params.languageId.toUpperCase());
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._routerSubscription.unsubscribe();
   }
 
   parseQuiznameInput(event: any) {

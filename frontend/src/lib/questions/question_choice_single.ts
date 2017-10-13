@@ -3,12 +3,12 @@ import {IQuestionChoice, IValidationStackTrace} from './interfaces';
 
 export class SingleChoiceQuestion extends AbstractChoiceQuestion implements IQuestionChoice {
 
-  canEditQuestionText: boolean = true;
-  canEditAnsweroptions: boolean = true;
-  canEditQuestionTimer: boolean = true;
-  canEditQuestionType: boolean = true;
+  canEditQuestionText = true;
+  canEditAnsweroptions = true;
+  canEditQuestionTimer = true;
+  canEditQuestionType = true;
 
-  canAddAnsweroptions: boolean = true;
+  canAddAnsweroptions = true;
 
   readonly preferredAnsweroptionComponent: string = 'AnsweroptionsDefaultComponent';
 
@@ -28,7 +28,7 @@ export class SingleChoiceQuestion extends AbstractChoiceQuestion implements IQue
    * @returns {{hashtag:String,questionText:String,type:AbstractQuestion,timer:Number,startTime:Number,questionIndex:Number,answerOptionList:Array}}
    */
   serialize(): Object {
-    return Object.assign(super.serialize(), {type: this.TYPE});
+    return Object.assign(super.serialize(), {TYPE: this.TYPE});
   }
 
   /**
