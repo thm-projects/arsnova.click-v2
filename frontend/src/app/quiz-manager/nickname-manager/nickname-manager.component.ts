@@ -7,10 +7,10 @@ import {Headers, Http, RequestOptions, RequestOptionsArgs} from '@angular/http';
 import {DefaultSettings} from '../../service/settings.service';
 
 @Component({
-             selector: 'app-nickname-manager',
-             templateUrl: './nickname-manager.component.html',
-             styleUrls: ['./nickname-manager.component.scss']
-           })
+  selector: 'app-nickname-manager',
+  templateUrl: './nickname-manager.component.html',
+  styleUrls: ['./nickname-manager.component.scss']
+})
 export class NicknameManagerComponent implements OnInit, OnDestroy {
   get selectedCategory(): string {
     return this._selectedCategory;
@@ -30,8 +30,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private http: Http) {
     this.footerBarService.replaceFooterElments([
-                                                 FooterBarComponent.footerElemBack
-                                               ]);
+      FooterBarComponent.footerElemBack
+    ]);
   }
 
   availableNickCategories(): Array<string> {

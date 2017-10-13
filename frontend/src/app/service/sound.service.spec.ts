@@ -5,8 +5,8 @@ import {SoundService} from './sound.service';
 describe('SoundService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [SoundService]
-                                   });
+      providers: [SoundService]
+    });
   });
 
   it('should be created', inject([SoundService], (service: SoundService) => {

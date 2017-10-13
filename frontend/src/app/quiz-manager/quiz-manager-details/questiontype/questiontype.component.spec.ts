@@ -8,8 +8,8 @@ describe('QuestiontypeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [QuestiontypeComponent]
-                                   })
+      declarations: [QuestiontypeComponent]
+    })
            .compileComponents();
   }));
 

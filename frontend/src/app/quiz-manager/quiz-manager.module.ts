@@ -64,14 +64,14 @@ const quizManagerRoutes: Routes = [
 ];
 
 @NgModule({
-            imports: [
-              SharedModule,
-              QuizManagerDetailsModule,
-              MarkdownModule,
-              LivePreviewModule,
-              RouterModule.forChild(quizManagerRoutes),
-            ],
-            declarations: [QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent]
-          })
+  imports: [
+    SharedModule,
+    QuizManagerDetailsModule,
+    MarkdownModule,
+    LivePreviewModule,
+    RouterModule.forChild(quizManagerRoutes),
+  ],
+  declarations: [QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent]
+})
 export class QuizManagerModule {
 }

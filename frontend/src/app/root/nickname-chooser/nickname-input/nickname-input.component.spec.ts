@@ -8,8 +8,8 @@ describe('NicknameInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [NicknameInputComponent]
-                                   })
+      declarations: [NicknameInputComponent]
+    })
            .compileComponents();
   }));
 

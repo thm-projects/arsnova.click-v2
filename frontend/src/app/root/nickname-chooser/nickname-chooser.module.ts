@@ -18,11 +18,11 @@ const nicknameChooserRoutes: Routes = [
 ];
 
 @NgModule({
-            imports: [
-              SharedModule,
-              RouterModule.forChild(nicknameChooserRoutes),
-            ],
-            declarations: [NicknameInputComponent, NicknameSelectComponent]
-          })
+  imports: [
+    SharedModule,
+    RouterModule.forChild(nicknameChooserRoutes),
+  ],
+  declarations: [NicknameInputComponent, NicknameSelectComponent]
+})
 export class NicknameChooserModule {
 }

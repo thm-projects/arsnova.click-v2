@@ -8,13 +8,13 @@ import {QuestionDetailsComponent} from './question-details/question-details.comp
 import {LivePreviewModule} from '../../live-preview/live-preview.module';
 
 @NgModule({
-            imports: [
-              SharedModule,
-              ProgressBarModule,
-              LivePreviewModule
-            ],
-            declarations: [QuizResultsComponent, ConfidenceRateComponent, ReadingConfirmationComponent, QuestionDetailsComponent],
-            exports: [QuizResultsComponent],
-          })
+  imports: [
+    SharedModule,
+    ProgressBarModule,
+    LivePreviewModule
+  ],
+  declarations: [QuizResultsComponent, ConfidenceRateComponent, ReadingConfirmationComponent, QuestionDetailsComponent],
+  exports: [QuizResultsComponent],
+})
 export class QuizResultsModule {
 }

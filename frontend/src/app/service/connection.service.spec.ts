@@ -5,8 +5,8 @@ import {ConnectionService} from './connection.service';
 describe('ConnectionService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [ConnectionService]
-                                   });
+      providers: [ConnectionService]
+    });
   });
 
   it('should be created', inject([ConnectionService], (service: ConnectionService) => {

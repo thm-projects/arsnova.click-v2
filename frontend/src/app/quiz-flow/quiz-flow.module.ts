@@ -52,14 +52,14 @@ const quizFlowRoutes: Routes = [
 ];
 
 @NgModule({
-            imports: [
-              SharedModule,
-              ThemesModule,
-              RouterModule.forChild(quizFlowRoutes),
-              QuizResultsModule
-            ],
-            declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent],
-            providers: [AttendeeService]
-          })
+  imports: [
+    SharedModule,
+    ThemesModule,
+    RouterModule.forChild(quizFlowRoutes),
+    QuizResultsModule
+  ],
+  declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent],
+  providers: [AttendeeService]
+})
 export class QuizFlowModule {
 }

@@ -5,8 +5,8 @@ import {QuestionTextService} from './question-text.service';
 describe('QuestionTextService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [QuestionTextService]
-                                   });
+      providers: [QuestionTextService]
+    });
   });
 
   it('should be created', inject([QuestionTextService], (service: QuestionTextService) => {

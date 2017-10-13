@@ -8,8 +8,8 @@ describe('SoundManagerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [SoundManagerComponent]
-                                   })
+      declarations: [SoundManagerComponent]
+    })
            .compileComponents();
   }));
 

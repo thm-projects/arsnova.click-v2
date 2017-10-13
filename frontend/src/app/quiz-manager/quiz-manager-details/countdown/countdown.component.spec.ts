@@ -8,8 +8,8 @@ describe('CountdownComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [CountdownComponent]
-                                   })
+      declarations: [CountdownComponent]
+    })
            .compileComponents();
   }));
 

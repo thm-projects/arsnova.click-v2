@@ -4,12 +4,12 @@ import {ThemesComponent} from './themes.component';
 import {ThemesService} from '../service/themes.service';
 
 @NgModule({
-            imports: [
-              SharedModule
-            ],
-            exports: [ThemesComponent],
-            declarations: [ThemesComponent],
-            providers: [ThemesService]
-          })
+  imports: [
+    SharedModule
+  ],
+  exports: [ThemesComponent],
+  declarations: [ThemesComponent],
+  providers: [ThemesService]
+})
 export class ThemesModule {
 }

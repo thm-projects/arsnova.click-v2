@@ -8,10 +8,10 @@ import {IMessage} from '../../../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {DefaultSettings} from '../../../service/settings.service';
 
 @Component({
-             selector: 'app-nickname-input',
-             templateUrl: './nickname-input.component.html',
-             styleUrls: ['./nickname-input.component.scss']
-           })
+  selector: 'app-nickname-input',
+  templateUrl: './nickname-input.component.html',
+  styleUrls: ['./nickname-input.component.scss']
+})
 export class NicknameInputComponent implements OnInit {
   get failedLoginReason(): string {
     return this._failedLoginReason;
@@ -26,8 +26,8 @@ export class NicknameInputComponent implements OnInit {
     private router: Router,
     private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemBack
-                                          ]);
+      FooterBarComponent.footerElemBack
+    ]);
   }
 
   joinQuiz(): void {

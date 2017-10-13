@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-             selector: 'app-progress-bar-freetext',
-             templateUrl: './progress-bar-freetext.component.html',
-             styleUrls: ['./progress-bar-freetext.component.scss']
-           })
+  selector: 'app-progress-bar-freetext',
+  templateUrl: './progress-bar-freetext.component.html',
+  styleUrls: ['./progress-bar-freetext.component.scss']
+})
 export class ProgressBarFreetextComponent implements OnInit {
   @Input()
   set attendeeData(value: any) {

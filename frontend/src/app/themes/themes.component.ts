@@ -4,10 +4,10 @@ import {ThemesService} from '../service/themes.service';
 import {DefaultSettings} from '../service/settings.service';
 
 @Component({
-             selector: 'app-themes',
-             templateUrl: './themes.component.html',
-             styleUrls: ['./themes.component.scss']
-           })
+  selector: 'app-themes',
+  templateUrl: './themes.component.html',
+  styleUrls: ['./themes.component.scss']
+})
 export class ThemesComponent implements OnInit, OnDestroy {
 
   @Output() updateTheme = new EventEmitter<string>();

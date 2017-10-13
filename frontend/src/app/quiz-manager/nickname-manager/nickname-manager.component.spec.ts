@@ -8,8 +8,8 @@ describe('NicknameManagerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [NicknameManagerComponent]
-                                   })
+      declarations: [NicknameManagerComponent]
+    })
            .compileComponents();
   }));
 

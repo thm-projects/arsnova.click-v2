@@ -5,8 +5,8 @@ import {CurrentQuizService} from './current-quiz.service';
 describe('CurrentQuizService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [CurrentQuizService]
-                                   });
+      providers: [CurrentQuizService]
+    });
   });
 
   it('should be created', inject([CurrentQuizService], (service: CurrentQuizService) => {

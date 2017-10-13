@@ -18,10 +18,10 @@ import {I18nService} from '../../service/i18n.service';
 import {Subscription} from 'rxjs/Subscription';
 
 @Component({
-             selector: 'app-home',
-             templateUrl: './home.component.html',
-             styleUrls: ['./home.component.scss']
-           })
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
+})
 export class HomeComponent implements OnInit, OnDestroy {
   get provideNickSelection(): boolean {
     return this._provideNickSelection;
@@ -51,13 +51,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     private currentQuiz: CurrentQuizService) {
     this.activeQuestionGroupService.activeQuestionGroup = null;
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemAbout,
-                                            FooterBarComponent.footerElemTranslation,
-                                            FooterBarComponent.footerElemTheme,
-                                            FooterBarComponent.footerElemFullscreen,
-                                            FooterBarComponent.footerElemHashtagManagement,
-                                            FooterBarComponent.footerElemImport,
-                                          ]);
+      FooterBarComponent.footerElemAbout,
+      FooterBarComponent.footerElemTranslation,
+      FooterBarComponent.footerElemTheme,
+      FooterBarComponent.footerElemFullscreen,
+      FooterBarComponent.footerElemHashtagManagement,
+      FooterBarComponent.footerElemImport,
+    ]);
     headerLabelService.setHeaderLabel('default');
     const ownedQuizzes = window.localStorage.getItem('owned_quizzes');
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
@@ -129,8 +129,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       } else {
         questionGroup = questionGroupReflection.DefaultQuestionGroup({
-                                                                       hashtag: this.enteredSessionName
-                                                                     });
+          hashtag: this.enteredSessionName
+        });
         if (this.isAddingABCDQuiz) {
           throw new NotYetImplementedException();
           // questionGroup.addQuestion(ABCDSingleChoiceQuestion);

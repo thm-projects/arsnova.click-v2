@@ -5,8 +5,8 @@ import {QrCodeService} from './qr-code.service';
 describe('QrCodeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [QrCodeService]
-                                   });
+      providers: [QrCodeService]
+    });
   });
 
   it('should be created', inject([QrCodeService], (service: QrCodeService) => {

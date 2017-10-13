@@ -5,8 +5,8 @@ import {HeaderLabelService} from './header-label.service';
 describe('HeaderLabelService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [HeaderLabelService]
-                                   });
+      providers: [HeaderLabelService]
+    });
   });
 
   it('should be created', inject([HeaderLabelService], (service: HeaderLabelService) => {

@@ -2,10 +2,10 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
-             selector: 'app-gamification-animation',
-             templateUrl: './gamification-animation.component.html',
-             styleUrls: ['./gamification-animation.component.scss']
-           })
+  selector: 'app-gamification-animation',
+  templateUrl: './gamification-animation.component.html',
+  styleUrls: ['./gamification-animation.component.scss']
+})
 export class GamificationAnimationComponent implements OnInit {
   get image(): string {
     return this._image;
@@ -16,10 +16,6 @@ export class GamificationAnimationComponent implements OnInit {
   }
 
   private _gamification = [
-    {
-      background: 'transparent',
-      image: null
-    },
     {
       background: '#f4d717',
       image: 'finger_0.gif'
@@ -53,8 +49,9 @@ export class GamificationAnimationComponent implements OnInit {
       this._background = this._gamification[value].background;
       if (this._gamification[value].image) {
         this._image = '/assets/gamification/' + this._gamification[value].image;
-      } else {
-        this._image = null;
+      }
+      if (!value) {
+        setTimeout(() => { this._image = null; }, 1000);
       }
     }
   }

@@ -2,10 +2,10 @@ import {Component, Input, OnInit} from '@angular/core';
 import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
 
 @Component({
-             selector: 'app-reading-confirmation',
-             templateUrl: './reading-confirmation.component.html',
-             styleUrls: ['./reading-confirmation.component.scss']
-           })
+  selector: 'app-reading-confirmation',
+  templateUrl: './reading-confirmation.component.html',
+  styleUrls: ['./reading-confirmation.component.scss']
+})
 export class ReadingConfirmationComponent implements OnInit {
   @Input()
   set data(value: any) {

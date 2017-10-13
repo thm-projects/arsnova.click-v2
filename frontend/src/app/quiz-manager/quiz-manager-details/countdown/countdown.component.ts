@@ -8,10 +8,10 @@ import {ActivatedRoute} from '@angular/router';
 import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
-             selector: 'app-countdown',
-             templateUrl: './countdown.component.html',
-             styleUrls: ['./countdown.component.scss']
-           })
+  selector: 'app-countdown',
+  templateUrl: './countdown.component.html',
+  styleUrls: ['./countdown.component.scss']
+})
 export class CountdownComponent implements OnInit, OnDestroy {
   get plainHours(): number {
     return this._plainHours;
@@ -60,9 +60,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
     this.footerBarService.replaceFooterElments([
-                                                 FooterBarComponent.footerElemBack,
-                                                 FooterBarComponent.footerElemNicknames
-                                               ]);
+      FooterBarComponent.footerElemBack,
+      FooterBarComponent.footerElemNicknames
+    ]);
   }
 
   updateCountdown(event: Event | number): void {

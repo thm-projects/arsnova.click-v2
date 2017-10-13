@@ -31,10 +31,10 @@ export class NickSessionConfiguration implements INickSessionConfiguration {
   private _restrictToCasLogin: boolean;
 
   constructor({
-                selectedNicks = Array<string>(),
-                blockIllegalNicks = DefaultSettings.defaultSettings.nicks.blockIllegalNicks,
-                restrictToCasLogin = DefaultSettings.defaultSettings.nicks.restrictToCasLogin
-              }) {
+    selectedNicks = Array<string>(),
+    blockIllegalNicks = DefaultSettings.defaultSettings.nicks.blockIllegalNicks,
+    restrictToCasLogin = DefaultSettings.defaultSettings.nicks.restrictToCasLogin
+  }) {
     this.selectedNicks = selectedNicks;
     this.blockIllegalNicks = blockIllegalNicks;
     this.restrictToCasLogin = restrictToCasLogin;

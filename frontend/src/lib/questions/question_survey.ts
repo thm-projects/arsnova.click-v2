@@ -82,8 +82,8 @@ export class SurveyQuestion extends AbstractChoiceQuestion implements IQuestionS
     }
     this.addAnswerOption(
       new DefaultAnswerOption({
-                                answerText: ''
-                              }),
+        answerText: ''
+      }),
       index
     );
   }

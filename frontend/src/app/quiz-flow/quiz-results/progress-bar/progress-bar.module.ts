@@ -8,20 +8,20 @@ import {ProgressBarFreetextComponent} from './progress-bar-freetext/progress-bar
 import {ProgressBarComponent} from './progress-bar.component';
 
 @NgModule({
-            imports: [
-              SharedModule
-            ],
-            declarations: [
-              ProgressBarSingleChoiceComponent,
-              ProgressBarMultipleChoiceComponent,
-              ProgressBarSurveyComponent,
-              ProgressBarRangedComponent,
-              ProgressBarFreetextComponent,
-              ProgressBarComponent
-            ],
-            exports: [
-              ProgressBarComponent
-            ]
-          })
+  imports: [
+    SharedModule
+  ],
+  declarations: [
+    ProgressBarSingleChoiceComponent,
+    ProgressBarMultipleChoiceComponent,
+    ProgressBarSurveyComponent,
+    ProgressBarRangedComponent,
+    ProgressBarFreetextComponent,
+    ProgressBarComponent
+  ],
+  exports: [
+    ProgressBarComponent
+  ]
+})
 export class ProgressBarModule {
 }

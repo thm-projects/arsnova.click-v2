@@ -1,10 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
-             selector: 'app-progress-bar-single-choice',
-             templateUrl: './progress-bar-single-choice.component.html',
-             styleUrls: ['./progress-bar-single-choice.component.scss']
-           })
+  selector: 'app-progress-bar-single-choice',
+  templateUrl: './progress-bar-single-choice.component.html',
+  styleUrls: ['./progress-bar-single-choice.component.scss']
+})
 export class ProgressBarSingleChoiceComponent implements OnInit {
   @Input()
   set attendeeData(value: any) {

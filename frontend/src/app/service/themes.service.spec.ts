@@ -5,8 +5,8 @@ import {ThemesService} from './themes.service';
 describe('ThemesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [ThemesService]
-                                   });
+      providers: [ThemesService]
+    });
   });
 
   it('should be created', inject([ThemesService], (service: ThemesService) => {

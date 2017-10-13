@@ -32,39 +32,39 @@ export const providers = [
 ];
 
 @NgModule({
-            imports: [
-              BrowserModule,
-              FormsModule,
-              CommonModule,
-              HttpClientModule,
-              TranslateModule.forChild({
-                                         loader: {
-                                           provide: TranslateLoader,
-                                           useFactory: HttpLoaderFactory,
-                                           deps: [HttpClient],
-                                         },
-                                         compiler: {
-                                           provide: TranslateCompiler,
-                                           useFactory: CustomCompilerFactory
-                                         }
-                                       }),
-              NgbModule,
-              RouterModule
-            ],
-            exports: [
-              CommonModule,
-              HttpClientModule,
-              TranslatePipe,
-              TranslateModule,
-              NgbModule,
-              RouterModule,
-              AudioPlayerComponent,
-              GamificationAnimationComponent
-            ],
-            providers: [],
-            declarations: [AudioPlayerComponent, GamificationAnimationComponent],
-            bootstrap: []
-          })
+  imports: [
+    BrowserModule,
+    FormsModule,
+    CommonModule,
+    HttpClientModule,
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useFactory: CustomCompilerFactory
+      }
+    }),
+    NgbModule,
+    RouterModule
+  ],
+  exports: [
+    CommonModule,
+    HttpClientModule,
+    TranslatePipe,
+    TranslateModule,
+    NgbModule,
+    RouterModule,
+    AudioPlayerComponent,
+    GamificationAnimationComponent
+  ],
+  providers: [],
+  declarations: [AudioPlayerComponent, GamificationAnimationComponent],
+  bootstrap: []
+})
 export class SharedModule {
   constructor(private I18nService: I18nService) {
   }

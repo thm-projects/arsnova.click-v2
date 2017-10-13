@@ -5,8 +5,8 @@ import {DefaultSettings} from './settings.service';
 describe('DefaultSettings', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [DefaultSettings]
-                                   });
+      providers: [DefaultSettings]
+    });
   });
 
   it('should be created', inject([DefaultSettings], (service: SettingsService) => {

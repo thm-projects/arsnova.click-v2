@@ -8,10 +8,10 @@ import {questionGroupReflection} from '../../../lib/questions/questionGroup_refl
 import {Router} from '@angular/router';
 
 @Component({
-             selector: 'app-session-management',
-             templateUrl: './session-management.component.html',
-             styleUrls: ['./session-management.component.scss']
-           })
+  selector: 'app-session-management',
+  templateUrl: './session-management.component.html',
+  styleUrls: ['./session-management.component.scss']
+})
 export class SessionManagementComponent implements OnInit {
   get sessions(): Array<string> {
     return this._sessions;
@@ -26,13 +26,13 @@ export class SessionManagementComponent implements OnInit {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private router: Router) {
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemHome,
-                                            FooterBarComponent.footerElemAbout,
-                                            FooterBarComponent.footerElemTranslation,
-                                            FooterBarComponent.footerElemTheme,
-                                            FooterBarComponent.footerElemFullscreen,
-                                            FooterBarComponent.footerElemImport,
-                                          ]);
+      FooterBarComponent.footerElemHome,
+      FooterBarComponent.footerElemAbout,
+      FooterBarComponent.footerElemTranslation,
+      FooterBarComponent.footerElemTheme,
+      FooterBarComponent.footerElemFullscreen,
+      FooterBarComponent.footerElemImport,
+    ]);
     headerLabelService.setHeaderLabel('component.hashtag_management.session_management');
     this._sessions = JSON.parse(window.localStorage.getItem('owned_quizzes')) || [];
   }

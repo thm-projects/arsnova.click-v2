@@ -7,10 +7,10 @@ import {questionGroupReflection} from '../../../lib/questions/questionGroup_refl
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
 
 @Component({
-             selector: 'app-available-quizzes',
-             templateUrl: './available-quizzes.component.html',
-             styleUrls: ['./available-quizzes.component.scss']
-           })
+  selector: 'app-available-quizzes',
+  templateUrl: './available-quizzes.component.html',
+  styleUrls: ['./available-quizzes.component.scss']
+})
 export class AvailableQuizzesComponent implements OnInit, ModalI {
   private _sessions: Array<IQuestionGroup> = [];
 

@@ -5,8 +5,8 @@ import {ActiveQuestionGroupService} from './active-question-group.service';
 describe('ActiveQuestionGroupService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [ActiveQuestionGroupService]
-                                   });
+      providers: [ActiveQuestionGroupService]
+    });
   });
 
   it('should be created', inject([ActiveQuestionGroupService], (service: ActiveQuestionGroupService) => {

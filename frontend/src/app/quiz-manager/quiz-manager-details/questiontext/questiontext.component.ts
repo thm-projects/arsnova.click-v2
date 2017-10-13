@@ -9,10 +9,10 @@ import {LIVE_PREVIEW_ENVIRONMENT} from 'environments/environment';
 import {DEVICE_TYPES} from '../../../../environments/environment';
 
 @Component({
-             selector: 'app-questiontext',
-             templateUrl: './questiontext.component.html',
-             styleUrls: ['./questiontext.component.scss']
-           })
+  selector: 'app-questiontext',
+  templateUrl: './questiontext.component.html',
+  styleUrls: ['./questiontext.component.scss']
+})
 export class QuestiontextComponent implements OnInit, OnDestroy {
 
   public readonly DEVICE_TYPE = DEVICE_TYPES;
@@ -28,9 +28,9 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private route: ActivatedRoute) {
     this.footerBarService.replaceFooterElments([
-                                                 FooterBarComponent.footerElemBack,
-                                                 FooterBarComponent.footerElemNicknames
-                                               ]);
+      FooterBarComponent.footerElemBack,
+      FooterBarComponent.footerElemNicknames
+    ]);
   }
 
   private insertMarkupSymbol(symbol: string) {

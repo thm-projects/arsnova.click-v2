@@ -5,10 +5,10 @@ import {HeaderLabelService} from '../../service/header-label.service';
 import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 
 @Component({
-             selector: 'app-language-switcher',
-             templateUrl: './language-switcher.component.html',
-             styleUrls: ['./language-switcher.component.scss']
-           })
+  selector: 'app-language-switcher',
+  templateUrl: './language-switcher.component.html',
+  styleUrls: ['./language-switcher.component.scss']
+})
 export class LanguageSwitcherComponent implements OnInit {
   get languages(): Object[] {
     return this._languages;
@@ -31,13 +31,13 @@ export class LanguageSwitcherComponent implements OnInit {
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService) {
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemHome,
-                                            FooterBarComponent.footerElemAbout,
-                                            FooterBarComponent.footerElemTheme,
-                                            FooterBarComponent.footerElemFullscreen,
-                                            FooterBarComponent.footerElemHashtagManagement,
-                                            FooterBarComponent.footerElemImport,
-                                          ]);
+      FooterBarComponent.footerElemHome,
+      FooterBarComponent.footerElemAbout,
+      FooterBarComponent.footerElemTheme,
+      FooterBarComponent.footerElemFullscreen,
+      FooterBarComponent.footerElemHashtagManagement,
+      FooterBarComponent.footerElemImport,
+    ]);
     headerLabelService.setHeaderLabel('component.translation.translations');
   }
 

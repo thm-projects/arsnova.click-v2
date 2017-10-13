@@ -8,8 +8,8 @@ describe('LivePreviewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [LivePreviewComponent]
-                                   })
+      declarations: [LivePreviewComponent]
+    })
            .compileComponents();
   }));
 

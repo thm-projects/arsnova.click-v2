@@ -81,12 +81,12 @@ export class FreeTextQuestion extends AbstractQuestion implements IQuestionFreet
     }
     this.addAnswerOption(
       new FreeTextAnswerOption({
-                                 answerText: '',
-                                 configCaseSensitive: false,
-                                 configTrimWhitespaces: false,
-                                 configUseKeywords: true,
-                                 configUsePunctuation: false
-                               })
+        answerText: '',
+        configCaseSensitive: false,
+        configTrimWhitespaces: false,
+        configUseKeywords: true,
+        configUsePunctuation: false
+      })
     );
   }
 }

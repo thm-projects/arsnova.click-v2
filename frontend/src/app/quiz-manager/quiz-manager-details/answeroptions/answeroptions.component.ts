@@ -7,10 +7,10 @@ import {FooterBarComponent} from 'app/footer/footer-bar/footer-bar.component';
 import {IQuestion} from '../../../../lib/questions/interfaces';
 
 @Component({
-             selector: 'app-answeroptions',
-             templateUrl: './answeroptions.component.html',
-             styleUrls: ['./answeroptions.component.scss']
-           })
+  selector: 'app-answeroptions',
+  templateUrl: './answeroptions.component.html',
+  styleUrls: ['./answeroptions.component.scss']
+})
 export class AnsweroptionsComponent implements OnInit, OnDestroy {
   get renderedComponent(): string {
     return this._renderedComponent;
@@ -26,9 +26,9 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
     this.footerBarService.replaceFooterElments([
-                                                 FooterBarComponent.footerElemBack,
-                                                 FooterBarComponent.footerElemNicknames
-                                               ]);
+      FooterBarComponent.footerElemBack,
+      FooterBarComponent.footerElemNicknames
+    ]);
   }
 
   ngOnInit() {

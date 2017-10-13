@@ -13,12 +13,12 @@ export abstract class AbstractChoiceQuestion extends AbstractQuestion {
   private _showOneAnswerPerRow: boolean;
 
   constructor({
-                questionText,
-                timer,
-                displayAnswerText,
-                answerOptionList,
-                showOneAnswerPerRow
-              }) {
+    questionText,
+    timer,
+    displayAnswerText,
+    answerOptionList,
+    showOneAnswerPerRow
+  }) {
     super({questionText, timer, displayAnswerText, answerOptionList});
     this.showOneAnswerPerRow = showOneAnswerPerRow;
   }

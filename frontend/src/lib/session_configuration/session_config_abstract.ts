@@ -77,13 +77,13 @@ export abstract class AbstractSessionConfiguration implements ISessionConfigurat
   private _confidenceSliderEnabled: boolean;
 
   constructor({
-                music = {},
-                nicks = {},
-                theme = DefaultSettings.defaultSettings.theme,
-                readingConfirmationEnabled = DefaultSettings.defaultSettings.readingConfirmationEnabled,
-                showResponseProgress = DefaultSettings.defaultSettings.showResponseProgress,
-                confidenceSliderEnabled = DefaultSettings.defaultSettings.confidenceSliderEnabled
-              }) {
+    music = {},
+    nicks = {},
+    theme = DefaultSettings.defaultSettings.theme,
+    readingConfirmationEnabled = DefaultSettings.defaultSettings.readingConfirmationEnabled,
+    showResponseProgress = DefaultSettings.defaultSettings.showResponseProgress,
+    confidenceSliderEnabled = DefaultSettings.defaultSettings.confidenceSliderEnabled
+  }) {
     this.music = new MusicSessionConfiguration(music || {});
     this.nicks = new NickSessionConfiguration(nicks || {});
     this.theme = theme;

@@ -5,8 +5,8 @@ import {AttendeeService} from './attendee.service';
 describe('AttendeeService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [AttendeeService]
-                                   });
+      providers: [AttendeeService]
+    });
   });
 
   it('should be created', inject([AttendeeService], (service: AttendeeService) => {

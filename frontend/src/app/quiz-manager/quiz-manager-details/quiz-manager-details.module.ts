@@ -10,14 +10,14 @@ import {QuestionTextService} from '../../service/question-text.service';
 import {AnsweroptionsModule} from './answeroptions/answeroptions.module';
 
 @NgModule({
-            imports: [
-              SharedModule,
-              MarkdownModule,
-              LivePreviewModule,
-              AnsweroptionsModule
-            ],
-            providers: [QuestionTextService],
-            declarations: [OverviewComponent, CountdownComponent, QuestiontextComponent, QuestiontypeComponent]
-          })
+  imports: [
+    SharedModule,
+    MarkdownModule,
+    LivePreviewModule,
+    AnsweroptionsModule
+  ],
+  providers: [QuestionTextService],
+  declarations: [OverviewComponent, CountdownComponent, QuestiontextComponent, QuestiontypeComponent]
+})
 export class QuizManagerDetailsModule {
 }

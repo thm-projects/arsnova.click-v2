@@ -13,10 +13,10 @@ export declare interface ISong {
 }
 
 @Component({
-             selector: 'app-sound-manager',
-             templateUrl: './sound-manager.component.html',
-             styleUrls: ['./sound-manager.component.scss']
-           })
+  selector: 'app-sound-manager',
+  templateUrl: './sound-manager.component.html',
+  styleUrls: ['./sound-manager.component.scss']
+})
 export class SoundManagerComponent implements OnInit, OnDestroy {
   get countdownEndSounds(): Array<ISong> {
     return this._countdownEndSounds;
@@ -46,8 +46,8 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private activeQuestionGroupService: ActiveQuestionGroupService) {
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemBack
-                                          ]);
+      FooterBarComponent.footerElemBack
+    ]);
     this.translateService.get('plugins.sound.random').subscribe(value => {
       this._lobbySongs.push({id: 'Random', text: value});
       this._countdownRunningSounds.push({id: 'Random', text: value});

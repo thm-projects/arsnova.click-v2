@@ -38,10 +38,10 @@ export class Countdown {
 }
 
 @Component({
-             selector: 'app-quiz-results',
-             templateUrl: './quiz-results.component.html',
-             styleUrls: ['./quiz-results.component.scss']
-           })
+  selector: 'app-quiz-results',
+  templateUrl: './quiz-results.component.html',
+  styleUrls: ['./quiz-results.component.scss']
+})
 export class QuizResultsComponent implements OnInit, OnDestroy {
   get countdownValue(): number {
     return this._countdownValue;
@@ -64,7 +64,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private _currentQuestionIndex = 0;
   private _countdown: Countdown;
   private _countdownValue: number;
-  private _isActiveQuiz = true;
+  private _isActiveQuiz = false;
 
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
@@ -74,13 +74,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private attendeeService: AttendeeService) {
     this.footerBarService.replaceFooterElments([
-                                                 FooterBarComponent.footerElemBack,
-                                                 FooterBarComponent.footerElemReadingConfirmation,
-                                                 FooterBarComponent.footerElemConfidenceSlider,
-                                                 FooterBarComponent.footerElemResponseProgress,
-                                                 FooterBarComponent.footerElemFullscreen,
-                                                 FooterBarComponent.footerElemSound,
-                                               ]);
+      FooterBarComponent.footerElemBack,
+      FooterBarComponent.footerElemReadingConfirmation,
+      FooterBarComponent.footerElemConfidenceSlider,
+      FooterBarComponent.footerElemResponseProgress,
+      FooterBarComponent.footerElemFullscreen,
+      FooterBarComponent.footerElemSound,
+    ]);
     this._questions = [];
     headerLabelService.setHeaderLabel('component.liveResults.title');
   }
@@ -134,8 +134,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private handleResponseUpdates() {
     this.connectionService.socket.next({
-                                         step: 'LOBBY:GET_PLAYERS'
-                                       });
+      step: 'LOBBY:GET_PLAYERS'
+    });
     this.connectionService.socket.subscribe((message) => {
       const data = message;
       switch (data.step) {
@@ -176,6 +176,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this._countdown = new Countdown(this.questions[this._currentQuestionIndex], this._currentQuestionIndex);
         this._countdown.onChange.subscribe((value) => {
           this._countdownValue = value;
+          if (value) {
+            this._isActiveQuiz = !!value;
+          }
         });
         setTimeout(() => {
           this.sendDummyTestData();

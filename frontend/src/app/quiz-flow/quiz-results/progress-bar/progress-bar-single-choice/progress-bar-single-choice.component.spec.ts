@@ -8,8 +8,8 @@ describe('ProgressBarSingleChoiceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [ProgressBarSingleChoiceComponent]
-                                   })
+      declarations: [ProgressBarSingleChoiceComponent]
+    })
            .compileComponents();
   }));
 

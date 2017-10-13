@@ -8,10 +8,10 @@ import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.componen
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../environments/environment';
 
 @Component({
-             selector: 'app-question-details',
-             templateUrl: './question-details.component.html',
-             styleUrls: ['./question-details.component.scss']
-           })
+  selector: 'app-question-details',
+  templateUrl: './question-details.component.html',
+  styleUrls: ['./question-details.component.scss']
+})
 export class QuestionDetailsComponent implements OnInit, OnDestroy {
   get question(): IQuestion {
     return this._question;
@@ -30,8 +30,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemBack
-                                          ]);
+      FooterBarComponent.footerElemBack
+    ]);
   }
 
   ngOnInit() {

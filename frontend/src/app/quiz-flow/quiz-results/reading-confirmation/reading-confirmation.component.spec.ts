@@ -8,8 +8,8 @@ describe('ReadingConfirmationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [ReadingConfirmationComponent]
-                                   })
+      declarations: [ReadingConfirmationComponent]
+    })
            .compileComponents();
   }));
 

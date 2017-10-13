@@ -49,12 +49,12 @@ class VolumeConfiguration implements IVolumeMusicSessionConfiguration {
   private _useGlobalVolume: boolean;
 
   constructor({
-                global = DefaultSettings.defaultSettings.music.volume.global,
-                lobby = DefaultSettings.defaultSettings.music.volume.lobby,
-                countdownRunning = DefaultSettings.defaultSettings.music.volume.countdownRunning,
-                countdownEnd = DefaultSettings.defaultSettings.music.volume.countdownEnd,
-                useGlobalVolume = DefaultSettings.defaultSettings.music.volume.useGlobal
-              }) {
+    global = DefaultSettings.defaultSettings.music.volume.global,
+    lobby = DefaultSettings.defaultSettings.music.volume.lobby,
+    countdownRunning = DefaultSettings.defaultSettings.music.volume.countdownRunning,
+    countdownEnd = DefaultSettings.defaultSettings.music.volume.countdownEnd,
+    useGlobalVolume = DefaultSettings.defaultSettings.music.volume.useGlobal
+  }) {
     this._global = global;
     this._lobby = lobby;
     this._countdownRunning = countdownRunning;
@@ -103,10 +103,10 @@ class TitleConfiguration implements ITitleMusicSessionConfiguration {
   private _countdownEnd: string;
 
   constructor({
-                lobby = DefaultSettings.defaultSettings.music.title.lobby,
-                countdownRunning = DefaultSettings.defaultSettings.music.title.countdownRunning,
-                countdownEnd = DefaultSettings.defaultSettings.music.title.countdownEnd
-              }) {
+    lobby = DefaultSettings.defaultSettings.music.title.lobby,
+    countdownRunning = DefaultSettings.defaultSettings.music.title.countdownRunning,
+    countdownEnd = DefaultSettings.defaultSettings.music.title.countdownEnd
+  }) {
     this._lobby = lobby;
     this._countdownRunning = countdownRunning;
     this._countdownEnd = countdownEnd;
@@ -169,12 +169,12 @@ export class MusicSessionConfiguration implements IMusicSessionConfiguration {
   private _countdownEndEnabled: boolean;
 
   constructor({
-                volumeConfig = {},
-                titleConfig = {},
-                lobbyEnabled = DefaultSettings.defaultSettings.music.enabled.lobby,
-                countdownRunningEnabled = DefaultSettings.defaultSettings.music.enabled.countdownRunning,
-                countdownEndEnabled = DefaultSettings.defaultSettings.music.enabled.countdownEnd
-              }) {
+    volumeConfig = {},
+    titleConfig = {},
+    lobbyEnabled = DefaultSettings.defaultSettings.music.enabled.lobby,
+    countdownRunningEnabled = DefaultSettings.defaultSettings.music.enabled.countdownRunning,
+    countdownEndEnabled = DefaultSettings.defaultSettings.music.enabled.countdownEnd
+  }) {
     this.volumeConfig = new VolumeConfiguration(volumeConfig);
     this.titleConfig = new TitleConfiguration(titleConfig);
     this.lobbyEnabled = lobbyEnabled;

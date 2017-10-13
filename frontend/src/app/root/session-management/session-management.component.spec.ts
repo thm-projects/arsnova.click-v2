@@ -8,8 +8,8 @@ describe('SessionManagementComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [SessionManagementComponent]
-                                   })
+      declarations: [SessionManagementComponent]
+    })
            .compileComponents();
   }));
 

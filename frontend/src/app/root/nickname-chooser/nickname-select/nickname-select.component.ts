@@ -8,10 +8,10 @@ import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 
 @Component({
-             selector: 'app-nickname-select',
-             templateUrl: './nickname-select.component.html',
-             styleUrls: ['./nickname-select.component.scss']
-           })
+  selector: 'app-nickname-select',
+  templateUrl: './nickname-select.component.html',
+  styleUrls: ['./nickname-select.component.scss']
+})
 export class NicknameSelectComponent implements OnInit {
   get nicks(): Array<string> {
     return this._nicks;
@@ -26,8 +26,8 @@ export class NicknameSelectComponent implements OnInit {
     private router: Router,
     private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemBack
-                                          ]);
+      FooterBarComponent.footerElemBack
+    ]);
   }
 
   joinQuiz(name: string): void {

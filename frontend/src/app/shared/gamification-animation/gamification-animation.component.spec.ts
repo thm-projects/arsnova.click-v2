@@ -8,8 +8,8 @@ describe('GamificationAnimationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [GamificationAnimationComponent]
-                                   })
+      declarations: [GamificationAnimationComponent]
+    })
            .compileComponents();
   }));
 

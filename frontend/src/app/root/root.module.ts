@@ -99,54 +99,54 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-            declarations: [
-              HomeComponent,
-              RootComponent,
-              LanguageSwitcherComponent,
-              InfoComponent,
-              SessionManagementComponent,
-              ThemeSwitcherComponent
-            ],
-            imports: [
-              SharedModule,
-              ThemesModule,
-              TranslateModule.forRoot({
-                                        loader: {
-                                          provide: TranslateLoader,
-                                          useFactory: HttpLoaderFactory,
-                                          deps: [HttpClient],
-                                        },
-                                        compiler: {
-                                          provide: TranslateCompiler,
-                                          useFactory: CustomCompilerFactory
-                                        }
-                                      }),
-              RouterModule.forRoot(
-                appRoutes,
-                {enableTracing: false} // <-- debugging purposes only
-              ),
-              HeaderModule,
-              FooterModule,
-              QuizManagerModule,
-              QuizFlowModule,
-              NicknameChooserModule,
-              ModalsModule,
-              NgbModule.forRoot(),
-              NgxQRCodeModule
-            ],
-            exports: [],
-            providers: [
-              FooterBarService,
-              ActiveQuestionGroupService,
-              ConnectionService,
-              WebsocketService,
-              CurrentQuizService,
-              I18nService,
-              QrCodeService,
-              SoundService
-            ],
-            entryComponents: [],
-            bootstrap: [RootComponent]
-          })
+  declarations: [
+    HomeComponent,
+    RootComponent,
+    LanguageSwitcherComponent,
+    InfoComponent,
+    SessionManagementComponent,
+    ThemeSwitcherComponent
+  ],
+  imports: [
+    SharedModule,
+    ThemesModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      },
+      compiler: {
+        provide: TranslateCompiler,
+        useFactory: CustomCompilerFactory
+      }
+    }),
+    RouterModule.forRoot(
+      appRoutes,
+      {enableTracing: false} // <-- debugging purposes only
+    ),
+    HeaderModule,
+    FooterModule,
+    QuizManagerModule,
+    QuizFlowModule,
+    NicknameChooserModule,
+    ModalsModule,
+    NgbModule.forRoot(),
+    NgxQRCodeModule
+  ],
+  exports: [],
+  providers: [
+    FooterBarService,
+    ActiveQuestionGroupService,
+    ConnectionService,
+    WebsocketService,
+    CurrentQuizService,
+    I18nService,
+    QrCodeService,
+    SoundService
+  ],
+  entryComponents: [],
+  bootstrap: [RootComponent]
+})
 export class RootModule {
 }

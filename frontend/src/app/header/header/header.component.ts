@@ -37,10 +37,10 @@ function isSessionStorageSupported(): boolean {
 }
 
 @Component({
-             selector: 'app-header',
-             templateUrl: './header.component.html',
-             styleUrls: ['./header.component.scss']
-           })
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
+})
 export class HeaderComponent implements OnInit {
   get localStorageAvailable(): Boolean {
     return this._localStorageAvailable;

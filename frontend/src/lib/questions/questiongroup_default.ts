@@ -10,11 +10,11 @@ export class DefaultQuestionGroup extends AbstractQuestionGroup implements IQues
   public TYPE = 'DefaultQuestionGroup';
 
   constructor({
-                hashtag,
-                questionList = [],
-                isFirstStart = true,
-                sessionConfig = new SessionConfiguration(null)
-              }: {
+    hashtag,
+    questionList = [],
+    isFirstStart = true,
+    sessionConfig = new SessionConfiguration(null)
+  }: {
     hashtag: string,
     questionList?: Array<string>,
     isFirstStart?: boolean,

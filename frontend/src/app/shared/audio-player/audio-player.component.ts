@@ -2,11 +2,14 @@ import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@an
 import {DefaultSettings} from '../../service/settings.service';
 
 @Component({
-             selector: 'app-audio-player',
-             templateUrl: './audio-player.component.html',
-             styleUrls: ['./audio-player.component.scss']
-           })
+  selector: 'app-audio-player',
+  templateUrl: './audio-player.component.html',
+  styleUrls: ['./audio-player.component.scss']
+})
 export class AudioPlayerComponent implements OnInit, AfterViewInit {
+  get loop(): boolean {
+    return this._loop;
+  }
 
   get volume(): number {
     return this._volume;
@@ -18,6 +21,14 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
 
   get src(): string {
     return this._src;
+  }
+
+  @Input()
+  set loop(value: boolean) {
+    if (typeof value === 'undefined') {
+      value = true;
+    }
+    this._loop = value ? true : null;
   }
 
   @Input()
@@ -34,11 +45,14 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private _src: string;
   @Input() private _original_volume: number;
   @Input() target: string;
   @Input() autostart: boolean;
+
   @Output() volumeChange = new EventEmitter();
+
+  private _src: string;
+  private _loop = true;
   private _apiUrl = `${DefaultSettings.httpApiEndpoint}/files/sound/`;
   private _volume = 1;
   private _randomUUID = `audio-player-${Math.random()}`;

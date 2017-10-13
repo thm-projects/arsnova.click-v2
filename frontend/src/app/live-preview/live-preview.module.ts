@@ -4,12 +4,12 @@ import {SharedModule} from '../shared/shared.module';
 import {HeaderModule} from '../header/header.module';
 
 @NgModule({
-            imports: [
-              SharedModule,
-              HeaderModule
-            ],
-            declarations: [LivePreviewComponent],
-            exports: [LivePreviewComponent]
-          })
+  imports: [
+    SharedModule,
+    HeaderModule
+  ],
+  declarations: [LivePreviewComponent],
+  exports: [LivePreviewComponent]
+})
 export class LivePreviewModule {
 }

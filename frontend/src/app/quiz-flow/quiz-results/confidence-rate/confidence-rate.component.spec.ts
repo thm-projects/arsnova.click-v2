@@ -8,8 +8,8 @@ describe('ConfidenceRateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [ConfidenceRateComponent]
-                                   })
+      declarations: [ConfidenceRateComponent]
+    })
            .compileComponents();
   }));
 

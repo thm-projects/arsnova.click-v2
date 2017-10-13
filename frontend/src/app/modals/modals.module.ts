@@ -11,12 +11,12 @@ export declare interface ModalI {
 }
 
 @NgModule({
-            imports: [
-              SharedModule
-            ],
-            declarations: [AvailableQuizzesComponent],
-            entryComponents: [AvailableQuizzesComponent],
-            exports: [AvailableQuizzesComponent]
-          })
+  imports: [
+    SharedModule
+  ],
+  declarations: [AvailableQuizzesComponent],
+  entryComponents: [AvailableQuizzesComponent],
+  exports: [AvailableQuizzesComponent]
+})
 export class ModalsModule {
 }

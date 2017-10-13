@@ -160,13 +160,13 @@ export abstract class AbstractQuestionGroup implements IQuestionGroup {
       index = this.questionList.length;
     }
     const questionItem = questionReflection[type]({
-                                                    hashtag: this.hashtag,
-                                                    questionText: '',
-                                                    questionIndex: index,
-                                                    timer: 40,
-                                                    startTime: 0,
-                                                    answerOptionList: []
-                                                  });
+      hashtag: this.hashtag,
+      questionText: '',
+      questionIndex: index,
+      timer: 40,
+      startTime: 0,
+      answerOptionList: []
+    });
     this.addQuestion(questionItem, index);
   }
 }

@@ -45,11 +45,11 @@ export abstract class AbstractQuestion {
   private _answerOptionList: Array<IAnswerOption>;
 
   constructor({
-                questionText = DefaultSettings.defaultSettings.question.text,
-                timer = DefaultSettings.defaultSettings.question.timer,
-                displayAnswerText = DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
-                answerOptionList = Array<IAnswerOption>()
-              }) {
+    questionText = DefaultSettings.defaultSettings.question.text,
+    timer = DefaultSettings.defaultSettings.question.timer,
+    displayAnswerText = DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
+    answerOptionList = Array<IAnswerOption>()
+  }) {
     this.questionText = questionText;
     this.timer = timer;
     this.displayAnswerText = displayAnswerText;
@@ -199,9 +199,9 @@ export abstract class AbstractQuestion {
     }
     this.addAnswerOption(
       new DefaultAnswerOption({
-                                answerText: '',
-                                isCorrect: false
-                              }),
+        answerText: '',
+        isCorrect: false
+      }),
       index
     );
   }

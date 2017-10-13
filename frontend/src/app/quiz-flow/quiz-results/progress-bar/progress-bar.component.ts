@@ -3,10 +3,10 @@ import {IQuestion} from '../../../../lib/questions/interfaces';
 import {AttendeeService} from '../../../service/attendee.service';
 
 @Component({
-             selector: 'app-progress-bar',
-             templateUrl: './progress-bar.component.html',
-             styleUrls: ['./progress-bar.component.scss']
-           })
+  selector: 'app-progress-bar',
+  templateUrl: './progress-bar.component.html',
+  styleUrls: ['./progress-bar.component.scss']
+})
 export class ProgressBarComponent implements OnInit, OnDestroy {
 
   @Input() data: IQuestion;

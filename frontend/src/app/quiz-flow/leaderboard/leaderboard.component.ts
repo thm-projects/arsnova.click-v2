@@ -20,10 +20,10 @@ export interface ILeaderBoard {
 }
 
 @Component({
-             selector: 'app-leaderboard',
-             templateUrl: './leaderboard.component.html',
-             styleUrls: ['./leaderboard.component.scss']
-           })
+  selector: 'app-leaderboard',
+  templateUrl: './leaderboard.component.html',
+  styleUrls: ['./leaderboard.component.scss']
+})
 export class LeaderboardComponent implements OnInit, OnDestroy {
   get isGlobalRanking(): boolean {
     return this._isGlobalRanking;
@@ -46,10 +46,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     private http: Http,
     private attendeeService: AttendeeService) {
     this.footerBarService.replaceFooterElments([
-                                                 FooterBarComponent.footerElemBack,
-                                                 FooterBarComponent.footerElemFullscreen,
-                                                 FooterBarComponent.footerElemExport
-                                               ]);
+      FooterBarComponent.footerElemBack,
+      FooterBarComponent.footerElemFullscreen,
+      FooterBarComponent.footerElemExport
+    ]);
     this._leaderBoard = [];
   }
 

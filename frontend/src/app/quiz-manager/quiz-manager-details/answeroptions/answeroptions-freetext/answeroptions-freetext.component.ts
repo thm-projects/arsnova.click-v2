@@ -7,10 +7,10 @@ import {FreeTextAnswerOption} from '../../../../../lib/answeroptions/answeroptio
 import {IQuestion} from '../../../../../lib/questions/interfaces';
 
 @Component({
-             selector: 'app-answeroptions-freetext',
-             templateUrl: './answeroptions-freetext.component.html',
-             styleUrls: ['./answeroptions-freetext.component.scss']
-           })
+  selector: 'app-answeroptions-freetext',
+  templateUrl: './answeroptions-freetext.component.html',
+  styleUrls: ['./answeroptions-freetext.component.scss']
+})
 export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   get matchText(): string {
     return this._matchText;

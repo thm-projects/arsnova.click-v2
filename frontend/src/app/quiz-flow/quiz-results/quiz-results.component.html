@@ -38,10 +38,17 @@
                        [data]="getConfidenceData(i)"></app-confidence-rate>
   <app-progress-bar *ngIf="showResponseProgress()" [data]="elem" [questionIndex]="i"></app-progress-bar>
 </div>
-<app-audio-player *ngIf="isActiveQuiz && sessionConfig && sessionConfig.music.countdownRunningEnabled"
+<app-audio-player *ngIf="isActiveQuiz && countdownValue && sessionConfig && sessionConfig.music.countdownRunningEnabled"
                   [original_volume]="sessionConfig.music.volumeConfig.useGlobalVolume ? sessionConfig.music.volumeConfig.global : sessionConfig.music.volumeConfig.countdownRunning"
                   [autostart]="true"
                   [target]="'countdownRunning'"
                   [src]="sessionConfig.music.titleConfig.countdownRunning"></app-audio-player>
 
-<app-gamification-animation *ngIf="countdownValue" [countdownValue]="countdownValue"></app-gamification-animation>
+<app-audio-player *ngIf="isActiveQuiz && !countdownValue && sessionConfig && sessionConfig.music.countdownEndEnabled"
+                  [original_volume]="sessionConfig.music.volumeConfig.useGlobalVolume ? sessionConfig.music.volumeConfig.global : sessionConfig.music.volumeConfig.countdownEnd"
+                  [autostart]="true"
+                  [loop]="false"
+                  [target]="'countdownEnd'"
+                  [src]="sessionConfig.music.titleConfig.countdownEnd"></app-audio-player>
+
+<app-gamification-animation *ngIf="isActiveQuiz && countdownValue >= 0" [countdownValue]="countdownValue"></app-gamification-animation>

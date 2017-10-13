@@ -5,8 +5,8 @@ import {FooterBarService} from './footer-bar.service';
 describe('FooterBarService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-                                     providers: [FooterBarService]
-                                   });
+      providers: [FooterBarService]
+    });
   });
 
   it('should be created', inject([FooterBarService], (service: FooterBarService) => {

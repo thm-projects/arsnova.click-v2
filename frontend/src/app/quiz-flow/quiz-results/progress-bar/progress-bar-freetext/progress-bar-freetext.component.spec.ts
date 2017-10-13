@@ -8,8 +8,8 @@ describe('ProgressBarFreetextComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-                                     declarations: [ProgressBarFreetextComponent]
-                                   })
+      declarations: [ProgressBarFreetextComponent]
+    })
            .compileComponents();
   }));
 

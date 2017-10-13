@@ -5,10 +5,10 @@ import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {ThemesService} from '../../service/themes.service';
 
 @Component({
-             selector: 'app-quiz-theme',
-             templateUrl: './quiz-theme.component.html',
-             styleUrls: ['./quiz-theme.component.scss']
-           })
+  selector: 'app-quiz-theme',
+  templateUrl: './quiz-theme.component.html',
+  styleUrls: ['./quiz-theme.component.scss']
+})
 export class QuizThemeComponent implements OnInit, OnDestroy {
 
   private previewThemeBackup: string;
@@ -18,8 +18,8 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private themesService: ThemesService) {
     footerBarService.replaceFooterElments([
-                                            FooterBarComponent.footerElemBack
-                                          ]);
+      FooterBarComponent.footerElemBack
+    ]);
     this.previewThemeBackup = document.body.className;
   }
 
