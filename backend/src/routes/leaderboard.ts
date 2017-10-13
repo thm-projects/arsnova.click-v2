@@ -26,7 +26,7 @@ export class LeaderboardRouter {
   private isCorrectMultipleChoiceQuestion(response: Array<number>, question: IQuestionChoice): number {
     let hasCorrectAnswer: number = 0;
     let hasWrongAnswer: number = 0;
-    const correctAnswers: Array<IAnswerOption> = question.answerOptionList.filter((answeroption) =>  {
+    const correctAnswers: Array<IAnswerOption> = question.answerOptionList.filter((answeroption) => {
       return answeroption.isCorrect;
     });
     response.every((element) => {

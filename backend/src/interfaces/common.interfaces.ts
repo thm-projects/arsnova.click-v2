@@ -30,6 +30,7 @@ export declare interface IActiveQuiz {
   originalObject: IQuestionGroup;
 
   addMember(name: string, webSocketId: number): boolean;
+
   removeMember(name: string): boolean;
 
   addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void;

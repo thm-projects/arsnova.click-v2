@@ -9,6 +9,7 @@ class Member implements INickname {
   get responses(): Array<IQuizResponse> {
     return this._responses;
   }
+
   set webSocket(value: number) {
     this._webSocket = value;
   }
@@ -36,8 +37,7 @@ class Member implements INickname {
   private _responses: Array<IQuizResponse>;
 
   constructor(
-    {id, name, colorCode, responses}: { id: number, name: string, colorCode?: string, responses?: Array<IQuizResponse> }
-    ) {
+    {id, name, colorCode, responses}: { id: number, name: string, colorCode?: string, responses?: Array<IQuizResponse> }) {
     this._id = id;
     this._name = name;
     this._colorCode = colorCode || this.generateRandomColorCode();
@@ -181,13 +181,17 @@ class ActiveQuizItem implements IActiveQuiz {
   }
 
   public addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void {
-    this.nicknames.filter(value => {return value.name === nickname; })[0].responses[questionIndex] = data;
+    this.nicknames.filter(value => {
+      return value.name === nickname;
+    })[0].responses[questionIndex] = data;
 
     this.webSocketRouter.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
       step: 'MEMBER:UPDATED_RESPONSE',
       payload: {
-        nickname: this.nicknames.filter(value => {return value.name === nickname; })[0]
+        nickname: this.nicknames.filter(value => {
+          return value.name === nickname;
+        })[0]
       }
     });
   }
@@ -234,7 +238,7 @@ export default class QuizManagerDAO {
     }).reduce((a: number, b: string) => {
       const name: string = QuizManagerDAO.normalizeQuizName(b);
       return parseInt(a + activeQuizzes[name].nicknames.length, 10);
-    },        0);
+    }, 0);
   }
 
   public static getAllActiveDemoQuizzes(): String[] {

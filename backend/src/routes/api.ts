@@ -48,7 +48,7 @@ export class ApiRouter {
       return QuizManager.getAllActiveQuizzes()[value].name.toLowerCase();
     });
     const quizExists: boolean = quizzes.indexOf(req.params.quizName) > -1;
-    const payload: {available?: boolean, provideNickSelection?: boolean} = {};
+    const payload: { available?: boolean, provideNickSelection?: boolean } = {};
 
     if (quizExists) {
       const sessionConfig: ISessionConfiguration = QuizManager.getActiveQuizByName(req.params.quizName).originalObject.sessionConfig;
@@ -167,7 +167,9 @@ export class ApiRouter {
 
   public addMemberResponse(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
-    if (activeQuiz.nicknames.filter(value => {return value.name === req.body.nickname; })[0].responses[+req.body.questionIndex]) {
+    if (activeQuiz.nicknames.filter(value => {
+        return value.name === req.body.nickname;
+      })[0].responses[+req.body.questionIndex]) {
       res.send({
         status: 'STATUS:FAILED',
         step: 'QUIZ:DUPLICATE_MEMBER_RESPONSE',
