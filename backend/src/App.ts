@@ -43,8 +43,8 @@ class App {
         totalmem: totalmem(),
         cpuCores: cpus().length,
         connectedUsers: QuizManager.getAllActiveMembers(),
-        activeQuizzes: Object.keys(QuizManager.getAllActiveQuizzes()),
-        persistedQuizzes: Object.keys(QuizManager.getAllActiveQuizzes()).length
+        activeQuizzes: QuizManager.getAllActiveQuizzes(),
+        persistedQuizzes: Object.keys(QuizManager.getAllPersistedQuizzes()).length
       });
     });
     this.express.use('/', router);

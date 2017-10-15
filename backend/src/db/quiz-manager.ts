@@ -318,6 +318,12 @@ export default class QuizManagerDAO {
   }
 
   public static getAllActiveQuizzes(): Object {
+    return Object.keys(activeQuizzes).filter(name => {
+      return !this.isInactiveQuiz(name) ? activeQuizzes[name] : false;
+    });
+  }
+
+  public static getAllPersistedQuizzes(): Object {
     return activeQuizzes;
   }
 
