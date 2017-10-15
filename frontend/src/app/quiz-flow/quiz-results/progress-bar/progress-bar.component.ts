@@ -16,20 +16,26 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
   }
 
   attendeeDataForAnswer(answerIndex: number): Object {
-    const matches = this.attendeeService.attendees.filter(value => {
-      const responseValue = value.responses[this.questionIndex].value;
-      return typeof value.responses[this.questionIndex] !== 'undefined' && (
-        responseValue === answerIndex ||
-        (responseValue instanceof Array && (<Array<number>>responseValue).indexOf(answerIndex) > -1)
-      );
-    });
-    return {
+    const result = {
       answerIndex: answerIndex,
       label: this.data.answerOptionList[answerIndex].answerText,
-      absolute: matches.length,
+      absolute: 0,
       base: this.attendeeService.attendees.length,
-      percent: matches.length / this.attendeeService.attendees.length * 100
+      percent: 0
     };
+    if (this.questionIndex >= 0) {
+      const matches = this.attendeeService.attendees.filter(value => {
+        if (typeof value.responses[this.questionIndex] === 'undefined') {
+          return false;
+        }
+        const responseValue = value.responses[this.questionIndex].value;
+        return responseValue === answerIndex ||
+               (responseValue instanceof Array && (<Array<number>>responseValue).indexOf(answerIndex) > -1);
+      });
+      result.absolute = matches.length;
+      result.percent = matches.length / this.attendeeService.attendees.length * 100;
+    }
+    return result;
   }
 
   ngOnInit() {

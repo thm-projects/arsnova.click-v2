@@ -123,10 +123,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
-  addTestPlayer() {
+  addTestPlayer(name: string) {
     this.http.put(`${this._httpApiEndpoint}/lobby/member`, {
       quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
-      nickname: 'testnick',
+      nickname: name,
       webSocketId: window.sessionStorage.getItem('webSocket')
     }).subscribe(
       (data: IMessage) => {
@@ -147,7 +147,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           () => {
             this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
             setTimeout(() => this.handleIncomingPlayers(), 1000);
-            this.addTestPlayer();
+            this.addTestPlayer('testnick');
+            this.addTestPlayer('testnickerina');
           },
           (error) => {
             console.log('error', error);

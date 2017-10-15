@@ -1,4 +1,5 @@
 import {IQuestionGroup} from './questions/interfaces';
+import {WebSocketRouter} from '../routes/websocket';
 
 export declare interface ITheme {
   name: string;
@@ -28,12 +29,20 @@ export declare interface IActiveQuiz {
   nicknames: Array<INickname>;
   currentQuestionIndex: number;
   originalObject: IQuestionGroup;
+  webSocketRouter: WebSocketRouter;
+  currentStartTimestamp: number;
 
   addMember(name: string, webSocketId: number): boolean;
 
   removeMember(name: string): boolean;
 
   addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void;
+
+  nextQuestion(): number;
+
+  setTimestamp(startTimestamp: number): void;
+
+  reset(): void;
 
   onDestroy(): void;
 }

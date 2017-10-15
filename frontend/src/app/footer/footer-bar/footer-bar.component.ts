@@ -10,6 +10,7 @@ import {TranslateService} from '@ngx-translate/core';
 
 export class FooterbarElement {
   set onClickCallback(value: Function) {
+    this._restoreOnClickCallback = this._onClickCallback;
     this._onClickCallback = value;
   }
 
@@ -65,6 +66,7 @@ export class FooterbarElement {
   readonly _showIntro: boolean;
 
   private _onClickCallback: Function;
+  private _restoreOnClickCallback: Function;
   private _linkTarget: Function | string;
   private _isActive: boolean;
 
@@ -78,6 +80,10 @@ export class FooterbarElement {
     this._isActive = false;
     this._linkTarget = linkTarget;
     this._onClickCallback = onClickCallback;
+  }
+
+  public restoreClickCallback() {
+    this._onClickCallback = this._restoreOnClickCallback;
   }
 }
 
@@ -275,6 +281,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     showIntro: false,
     linkTarget: null,
   }, function () {
+    console.log('routing back');
     history.back();
   });
   static footerElemStartQuiz: FooterbarElement = new FooterbarElement({

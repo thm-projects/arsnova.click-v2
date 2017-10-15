@@ -7,6 +7,7 @@ import {ISessionConfiguration} from '../interfaces/session_configuration/interfa
 import availableNicks from '../nicknames/availableNicks';
 import {themes} from '../themes/availableThemes';
 import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
+import {DatabaseTypes, DbDao} from '../db/DbDao';
 
 export class ApiRouter {
   get router(): Router {
@@ -50,6 +51,8 @@ export class ApiRouter {
     const quizExists: boolean = quizzes.indexOf(req.params.quizName) > -1;
     const payload: { available?: boolean, provideNickSelection?: boolean } = {};
 
+    const isInactive: boolean = QuizManager.isInactiveQuiz(req.params.quizName);
+
     if (quizExists) {
       const sessionConfig: ISessionConfiguration = QuizManager.getActiveQuizByName(req.params.quizName).originalObject.sessionConfig;
       const provideNickSelection: boolean = sessionConfig.nicks.selectedNicks.length > 0;
@@ -59,8 +62,8 @@ export class ApiRouter {
     }
 
     const result: Object = {
-      status: `STATUS:${quizExists ? 'SUCCESS' : 'FAILED'}`,
-      step: `QUIZ:${!quizExists ? 'UN' : ''}AVAILABLE`,
+      status: `STATUS:SUCCESS`,
+      step: `QUIZ:${quizExists ? 'AVAILABLE' : isInactive ? 'EXISTS' : 'UNDEFINED'}`,
       payload
     };
     res.send(result);
@@ -153,6 +156,88 @@ export class ApiRouter {
     });
   }
 
+  public startQuiz(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    if (activeQuiz.currentStartTimestamp) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:ALREADY_STARTED',
+        payload: {startTimestamp: activeQuiz.currentStartTimestamp, nextQuestionIndex: activeQuiz.currentQuestionIndex}
+      });
+    } else {
+      const nextQuestionIndex: number = activeQuiz.nextQuestion();
+      if (nextQuestionIndex === -1) {
+        res.send({
+          status: 'STATUS:FAILED',
+          step: 'QUIZ:END_OF_QUESTIONS',
+          payload: {}
+        });
+      } else {
+        const startTimestamp: number = new Date().getTime();
+        activeQuiz.setTimestamp(startTimestamp);
+        res.send({
+          status: 'STATUS:SUCCESSFUL',
+          step: 'QUIZ:START',
+          payload: {startTimestamp, nextQuestionIndex}
+        });
+      }
+    }
+  }
+
+  public reserveQuiz(req: Request, res: Response, next: NextFunction): void {
+    if (!req.body.quizName || !req.body.privateKey) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'INVALID_DATA',
+        payload: {}
+      });
+      return;
+    }
+    QuizManager.initInactiveQuiz(req.body.quizName, req.body.privateKey);
+    DbDao.create(DatabaseTypes.quiz, {quizName: req.body.quizName, privateKey: req.body.privateKey});
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:RESERVED',
+      payload: {}
+    });
+  }
+
+  public deleteQuiz(req: Request, res: Response, next: NextFunction): void {
+    if (!req.body.quizName || !req.body.privateKey) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'INVALID_DATA',
+        payload: {}
+      });
+      return;
+    }
+    const dbResult: boolean = DbDao.delete(DatabaseTypes.quiz, {quizName: req.body.quizName, privateKey: req.body.privateKey});
+    if (dbResult) {
+      QuizManager.removeQuiz(req.body.quizName);
+      res.send({
+        status: 'STATUS:SUCCESS',
+        step: 'QUIZ_REMOVED',
+        payload: {}
+      });
+    } else {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'INSUFFICIENT_PERMISSIONS',
+        payload: {}
+      });
+    }
+  }
+
+  public resetQuiz(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
+    activeQuiz.reset();
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:RESET',
+      payload: {}
+    });
+  }
+
   public getRemainingNicks(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const names: Array<String> = activeQuiz.originalObject.sessionConfig.nicks.selectedNicks.filter((nick) => {
@@ -242,9 +327,13 @@ export class ApiRouter {
     this._router.put('/lobby/member', this.addMember);
     this._router.delete('/lobby/:quizName/member/:nickname', this.deleteMember);
 
+    this._router.post('/quiz/start', this.startQuiz);
+    this._router.patch('/quiz/reset/:quizName', this.resetQuiz);
+    this._router.post('/quiz/reserve', this.reserveQuiz);
+    this._router.delete('/quiz', this.deleteQuiz);
+
     this._router.get('/quiz/member/:quizName', this.getAllMembers);
     this._router.get('/quiz/member/:quizName/available', this.getRemainingNicks);
-
     this._router.put('/quiz/member/response', this.addMemberResponse);
 
     this._router.get('/files/:directory/:subdirectory/:fileName', this.getFileByName);

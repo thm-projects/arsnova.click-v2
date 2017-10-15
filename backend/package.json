@@ -15,6 +15,7 @@
     "express": "^4.14.0",
     "express-ws": "^3.0.0",
     "hbs": "~4.0.1",
+    "lowdb": "^1.0.0",
     "morgan": "^1.7.0",
     "node-sass-middleware": "0.9.8",
     "phantomjs25-beta": "^1.0.14",

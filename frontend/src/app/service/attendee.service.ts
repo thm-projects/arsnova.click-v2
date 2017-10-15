@@ -13,9 +13,14 @@ export declare interface INickname {
   colorCode: string;
   webSocket?: number;
   responses?: Array<IQuizResponse>;
+
+  serialize(): Object;
 }
 
 class Player implements INickname {
+  set responses(value: Array<IQuizResponse>) {
+    this._responses = value;
+  }
   get responses(): Array<IQuizResponse> {
     return this._responses;
   }
@@ -44,7 +49,7 @@ class Player implements INickname {
     this._responses = responses || [];
   }
 
-  serialize(): INickname {
+  serialize(): Object {
     return {
       id: this.id,
       name: this.name,
@@ -69,7 +74,11 @@ export class AttendeeService implements OnDestroy {
   constructor() {
     const restoreAttendees = window.sessionStorage.getItem('_attendees');
     if (restoreAttendees) {
-      this._attendees = JSON.parse(restoreAttendees);
+      this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
+        console.log(attendee);
+        return new Player(attendee);
+      });
+      console.log(this._attendees);
     }
   }
 
@@ -79,17 +88,23 @@ export class AttendeeService implements OnDestroy {
     }
   }
 
+  clearResponses(): void {
+    this._attendees.forEach((attendee) => {
+      attendee.responses.splice(0, attendee.responses.length);
+    });
+  }
+
   getMember(nickname: string): INickname {
     return this._attendees.filter(value => value.name === nickname)[0];
   }
 
   modifyResponse(attendee: INickname): void {
     this.getMember(attendee.name).responses = attendee.responses;
-    window.sessionStorage.setItem('_attendees', JSON.stringify(this._attendees));
+    window.sessionStorage.setItem('_attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
   }
 
   ngOnDestroy() {
-    window.sessionStorage.setItem('_attendees', JSON.stringify(this._attendees));
+    window.sessionStorage.setItem('_attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
   }
 
 }

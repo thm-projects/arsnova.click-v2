@@ -89,6 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.canEditQuiz = false;
     this.isAddingDemoQuiz = false;
     this.isAddingABCDQuiz = false;
+
     if (quizname.toLowerCase() === 'demo quiz') {
       this.isAddingDemoQuiz = true;
       this.canAddQuiz = false;
@@ -103,11 +104,26 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canEditQuiz = true;
         } else {
           this.http.get(`${this._httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe((value: IMessage) => {
-            const quizExists: boolean = value.status === 'STATUS:SUCCESS' && value.step === 'QUIZ:AVAILABLE';
-            this.canAddQuiz = !quizExists;
-            this.canJoinQuiz = quizExists;
-            if (quizExists) {
-              this._provideNickSelection = value.payload.provideNickSelection;
+            if (value.status === 'STATUS:SUCCESS') {
+              switch (value.step) {
+                case 'QUIZ:EXISTS':
+                  this.canAddQuiz = false;
+                  this.canJoinQuiz = false;
+                  break;
+                case 'QUIZ:AVAILABLE':
+                  this.canAddQuiz = false;
+                  this.canJoinQuiz = true;
+                  this._provideNickSelection = value.payload.provideNickSelection;
+                  break;
+                case 'QUIZ:UNDEFINED':
+                  this.canAddQuiz = true;
+                  this.canJoinQuiz = false;
+                  break;
+                default:
+                  console.log(value);
+              }
+            } else {
+              console.log(value);
             }
           });
         }
@@ -139,6 +155,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
     createQuizPromise.then(() => {
+      if (!window.localStorage.getItem('privateKey')) {
+        window.localStorage.setItem('privateKey', this.activeQuestionGroupService.generatePrivateKey());
+      }
+      this.http.post(`${this._httpApiEndpoint}/quiz/reserve`, {
+        quizName: this.enteredSessionName,
+        privateKey: window.localStorage.getItem('privateKey')
+      }).subscribe((value: any) => {
+      });
       this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
       this.activeQuestionGroupService.persist();
       this.router.navigate(routingTarget);

@@ -6,6 +6,10 @@ import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {Router} from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {DefaultSettings} from '../../service/settings.service';
+import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {RequestMethod, RequestOptions, RequestOptionsArgs} from '@angular/http';
 
 @Component({
   selector: 'app-session-management',
@@ -21,7 +25,7 @@ export class SessionManagementComponent implements OnInit {
 
   constructor(
     private footerBarService: FooterBarService,
-    private translateService: TranslateService,
+    private http: HttpClient,
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private router: Router) {
@@ -38,6 +42,11 @@ export class SessionManagementComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  isValid(session: string): boolean {
+    const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
+    return questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized).isValid();
   }
 
   startQuiz(session: string): void {
@@ -72,5 +81,15 @@ export class SessionManagementComponent implements OnInit {
     this.sessions.splice(this.sessions.indexOf(session), 1);
     window.localStorage.removeItem(session);
     window.localStorage.setItem('owned_quizzes', JSON.stringify(this.sessions));
+    this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/`, {
+      body: {
+        quizName: session,
+        privateKey: localStorage.getItem('privateKey')
+      }
+    }).subscribe((response: IMessage) => {
+      if (response.status !== 'STATUS:SUCCESS') {
+        console.log(response);
+      }
+    });
   }
 }

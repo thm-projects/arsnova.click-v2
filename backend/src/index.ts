@@ -8,6 +8,11 @@ import * as path from 'path';
 import {WebSocketRouter} from './routes/websocket';
 import {Server} from 'https';
 import * as process from 'process';
+import * as phantomjs from 'phantomjs-prebuilt';
+import {ChildProcess, spawn} from 'child_process';
+import {themes} from './themes/availableThemes';
+import {ITheme} from './interfaces/common.interfaces';
+import {DatabaseTypes, DbDao} from './db/DbDao';
 
 debug('ts-express:server');
 const cert: any = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
@@ -20,13 +25,9 @@ const server: Server = https.createServer({key: key, cert: cert}, App);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+server.on('close', onClose);
 
 WebSocketRouter.wss = new WebSocket.Server({server});
-
-import * as phantomjs from 'phantomjs-prebuilt';
-import {ChildProcess, spawn} from 'child_process';
-import {themes} from './themes/availableThemes';
-import {ITheme} from './interfaces/common.interfaces';
 
 const languages: any = {'en': 'en'};
 const params: any = [path.join(__dirname, '../theme_preview/phantomDriver.js')];
@@ -83,4 +84,8 @@ function onListening(): void {
   const addr: { port: number; family: string; address: string; } = server.address();
   const bind: string = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
   debug(`Listening on ${bind}`);
+}
+
+function onClose(): void {
+  DbDao.closeConnection(DatabaseTypes.quiz);
 }

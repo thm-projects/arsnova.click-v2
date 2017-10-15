@@ -10,6 +10,7 @@ import {DefaultSettings} from '../../service/settings.service';
 import {HttpClient} from '@angular/common/http';
 import {ConnectionService} from '../../service/connection.service';
 import {HeaderLabelService} from '../../service/header-label.service';
+import {Router} from '@angular/router';
 
 export class Countdown {
 
@@ -19,10 +20,8 @@ export class Countdown {
 
   public onChange = new EventEmitter<number>();
 
-  constructor(question: IQuestion, questionIndex: number) {
+  constructor(question: IQuestion, startTimestamp: number) {
     this._time = question.timer;
-    // Get starting timestamp and current timestamp from server
-    const startTimestamp = new Date().getTime();
     const endTimestamp = startTimestamp + this._time * 1000;
     this._remainingTime = (endTimestamp - startTimestamp) / 1000;
     this._isRunning = true;
@@ -69,6 +68,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private http: HttpClient,
+    private router: Router,
     private headerLabelService: HeaderLabelService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
@@ -81,6 +81,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       FooterBarComponent.footerElemFullscreen,
       FooterBarComponent.footerElemSound,
     ]);
+    FooterBarComponent.footerElemBack.onClickCallback = () => {
+      this.attendeeService.clearResponses();
+      this.http.patch(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${activeQuestionGroupService.activeQuestionGroup.hashtag}`, {
+      }).subscribe(
+        (data: IMessage) => {
+          this.router.navigate(['/quiz-lobby']);
+        }
+      );
+    };
     this._questions = [];
     headerLabelService.setHeaderLabel('component.liveResults.title');
   }
@@ -98,19 +107,24 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   getConfidenceData(questionIndex: number): Object {
-    const matches = this.attendeeService.attendees.filter(value => {
-      return value.responses[questionIndex] ? value.responses[questionIndex].confidence : false;
-    });
-    const absoluteValues = matches.length ? this.attendeeService.attendees.map(value => {
-      return value.responses[questionIndex] ? value.responses[questionIndex].confidence : 0;
-    }).reduce((currentValue, nextValue) => {
-      return currentValue + nextValue;
-    }) : 0;
-    return {
-      absolute: matches.length,
+    const result = {
       base: this.attendeeService.attendees.length,
-      percent: absoluteValues / matches.length
+      absolute: 0,
+      percent: 0
     };
+    if (questionIndex >= 0) {
+      const matches = this.attendeeService.attendees.filter(value => {
+        return value.responses[questionIndex] ? value.responses[questionIndex].confidence : false;
+      });
+      const absoluteValues = matches.length ? this.attendeeService.attendees.map(value => {
+        return value.responses[questionIndex] ? value.responses[questionIndex].confidence : 0;
+      }).reduce((currentValue, nextValue) => {
+        return currentValue + nextValue;
+      }) : 0;
+      result.absolute = matches.length;
+      result.percent = absoluteValues / (matches.length || 1);
+    }
+    return result;
   }
 
   showReadingConfirmation(): boolean {
@@ -122,14 +136,19 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   getReadingConfirmationData(questionIndex: number): Object {
-    const matchCount = this.attendeeService.attendees.filter(value => {
-      return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
-    }).length;
-    return {
-      absolute: matchCount,
+    const result = {
       base: this.attendeeService.attendees.length,
-      percent: matchCount / this.attendeeService.attendees.length
+      absolute: 0,
+      percent: 0
     };
+    if (questionIndex >= 0) {
+      const matchCount = this.attendeeService.attendees.filter(value => {
+        return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
+      }).length;
+      result.absolute = matchCount;
+      result.percent = matchCount / (this.attendeeService.attendees.length || 1) * 100;
+    }
+    return result;
   }
 
   private handleResponseUpdates() {
@@ -143,7 +162,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           data.payload.members.forEach(nickname => {
             this.attendeeService.addMember(nickname);
           });
-          console.log(this.attendeeService);
           break;
         case 'MEMBER:UPDATED_RESPONSE':
           this.attendeeService.modifyResponse(data.payload.nickname);
@@ -168,27 +186,60 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit() {
-    this.connectionService.initConnection().then(() => {
-      if (this.activeQuestionGroupService.activeQuestionGroup) {
-        this._sessionConfig = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig;
-        this._questions = this.activeQuestionGroupService.activeQuestionGroup.questionList;
-        this._countdown = new Countdown(this.questions[this._currentQuestionIndex], this._currentQuestionIndex);
-        this._countdown.onChange.subscribe((value) => {
-          this._countdownValue = value;
-          if (value) {
-            this._isActiveQuiz = !!value;
-          }
-        });
-        setTimeout(() => {
-          this.sendDummyTestData();
-        }, 1500);
+  private sendDummyTestData2(): void {
+    this.http.put(`${DefaultSettings.httpApiEndpoint}/quiz/member/response`, {
+      quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
+      nickname: 'testnickerina',
+      questionIndex: this._currentQuestionIndex,
+      value: 1,
+      responseTime: 200,
+      confidence: 40,
+      readingConfirmation: true
+    }).subscribe(
+      (data: IMessage) => {
+        console.log(data);
       }
+    );
+  }
+
+  ngOnInit() {
+    if (this.activeQuestionGroupService.activeQuestionGroup) {
+      this._sessionConfig = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig;
+      this._questions = this.activeQuestionGroupService.activeQuestionGroup.questionList;
+      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/start`, {
+        quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag
+      }).subscribe(
+        (data: IMessage) => {
+          console.log(data);
+          if (data.status !== 'STATUS:SUCCESSFUL' && data.step !== 'QUIZ:ALREADY_STARTED') {
+            return;
+          }
+          this._currentQuestionIndex = data.payload.nextQuestionIndex;
+          this._countdown = new Countdown(this.questions[this._currentQuestionIndex], data.payload.startTimestamp);
+          this._countdown.onChange.subscribe((value) => {
+            this._countdownValue = value;
+            if (value) {
+              this._isActiveQuiz = !!value;
+            }
+          });
+          if (data.status === 'STATUS:SUCCESSFUL') {
+            setTimeout(() => {
+              this.sendDummyTestData();
+            }, 1500);
+            setTimeout(() => {
+              this.sendDummyTestData2();
+            }, 2500);
+          }
+        }
+      );
+    }
+    this.connectionService.initConnection().then(() => {
       setTimeout(() => this.handleResponseUpdates(), 1000);
     });
   }
 
   ngOnDestroy() {
+    FooterBarComponent.footerElemBack.restoreClickCallback();
   }
 
 }

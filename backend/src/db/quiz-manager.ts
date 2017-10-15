@@ -2,8 +2,7 @@ import {IQuestionGroup} from '../interfaces/questions/interfaces';
 import {WebSocketRouter} from '../routes/websocket';
 import illegalNicks from '../nicknames/illegalNicks';
 import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
-
-const activeQuizzes: Object = {};
+import {DatabaseTypes, DbDao} from './DbDao';
 
 class Member implements INickname {
   get responses(): Array<IQuizResponse> {
@@ -75,6 +74,9 @@ class Member implements INickname {
 }
 
 class ActiveQuizItem implements IActiveQuiz {
+  get currentStartTimestamp(): number {
+    return this._currentStartTimestamp;
+  }
   set currentQuestionIndex(value: number) {
     this._currentQuestionIndex = value;
   }
@@ -101,9 +103,10 @@ class ActiveQuizItem implements IActiveQuiz {
 
   private _name: string;
   private _nicknames: Array<INickname>;
-  private _currentQuestionIndex: number = 0;
+  private _currentQuestionIndex: number = -1;
   private _originalObject: IQuestionGroup;
   private _webSocketRouter: WebSocketRouter;
+  private _currentStartTimestamp: number;
 
   constructor({nicknames, originalObject}: { nicknames: Array<INickname>, originalObject: IQuestionGroup }) {
     this._name = originalObject.hashtag;
@@ -117,6 +120,27 @@ class ActiveQuizItem implements IActiveQuiz {
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:DELETED',
       payload: {}
+    });
+  }
+
+  public reset(): void {
+    this._currentQuestionIndex = -1;
+    this._currentStartTimestamp = 0;
+    this._nicknames.forEach((member) => {
+      member.responses.splice(0, member.responses.length);
+    });
+  }
+
+  public setTimestamp(startTimestamp: number): void {
+    this._currentStartTimestamp = startTimestamp;
+
+    setTimeout(() => this._currentStartTimestamp = 0,
+               this.originalObject.questionList[this.currentQuestionIndex].timer * 1000);
+
+    this.webSocketRouter.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:START',
+      payload: { startTimestamp }
     });
   }
 
@@ -191,20 +215,74 @@ class ActiveQuizItem implements IActiveQuiz {
       payload: {
         nickname: this.nicknames.filter(value => {
           return value.name === nickname;
-        })[0]
+        })[0].serialize()
       }
     });
   }
 }
+
+class ActiveQuizItemPlaceholder implements IActiveQuiz {
+  public name: string;
+  public nicknames: INickname[];
+  public currentQuestionIndex: number;
+  public originalObject: IQuestionGroup;
+  public webSocketRouter: WebSocketRouter;
+  public currentStartTimestamp: number;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  public addMember(name: string, webSocketId: number): boolean {
+    throw new Error('Method not implemented.');
+  }
+
+  public removeMember(name: string): boolean {
+    throw new Error('Method not implemented.');
+  }
+
+  public addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public nextQuestion(): number {
+    throw new Error('Method not implemented.');
+  }
+
+  public setTimestamp(startTimestamp: number): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public reset(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public onDestroy(): void {
+    throw new Error('Method not implemented.');
+  }
+}
+
+const activeQuizzes: Object = {};
+DbDao.getState()[DatabaseTypes.quiz].forEach(value => {
+  return activeQuizzes[value.quizName] = new ActiveQuizItemPlaceholder(value.quizName);
+});
 
 export default class QuizManagerDAO {
   private static normalizeQuizName(quizName: string): string {
     return quizName.toLowerCase();
   }
 
+  public static initInactiveQuiz(quizName: string, privateKey: string): void {
+    const name: string = QuizManagerDAO.normalizeQuizName(quizName);
+    if (activeQuizzes[name]) {
+      return;
+    }
+    activeQuizzes[name] = new ActiveQuizItemPlaceholder(name);
+  }
+
   public static initActiveQuiz(quiz: IQuestionGroup): void {
     const name: string = QuizManagerDAO.normalizeQuizName(quiz.hashtag);
-    if (activeQuizzes[name]) {
+    if (activeQuizzes[name] && !(activeQuizzes[name] instanceof ActiveQuizItemPlaceholder)) {
       return;
     }
     QuizManagerDAO.convertLegacyQuiz(quiz);
@@ -213,17 +291,29 @@ export default class QuizManagerDAO {
 
   public static removeActiveQuiz(originalName: string): boolean {
     const name: string = QuizManagerDAO.normalizeQuizName(originalName);
+    activeQuizzes[name] = new ActiveQuizItemPlaceholder(name);
+    return true;
+  }
+
+  public static removeQuiz(originalName: string): boolean {
+    const name: string = QuizManagerDAO.normalizeQuizName(originalName);
     delete activeQuizzes[name];
-    return typeof activeQuizzes[name] === 'undefined';
+    return true;
   }
 
   public static getActiveQuizByName(originalName: string): IActiveQuiz {
     const name: string = QuizManagerDAO.normalizeQuizName(originalName);
+    if (activeQuizzes[name] instanceof ActiveQuizItemPlaceholder) {
+      return;
+    }
     return activeQuizzes[name];
   }
 
   public static updateActiveQuiz(data: IActiveQuiz): void {
     const name: string = QuizManagerDAO.normalizeQuizName(data.originalObject.hashtag);
+    if (activeQuizzes[name] instanceof ActiveQuizItemPlaceholder) {
+      return;
+    }
     activeQuizzes[name] = data;
   }
 
@@ -231,14 +321,21 @@ export default class QuizManagerDAO {
     return activeQuizzes;
   }
 
+  public static isInactiveQuiz(name: string): boolean {
+    return activeQuizzes[name] && activeQuizzes[name] instanceof ActiveQuizItemPlaceholder;
+  }
+
   public static getAllActiveMembers(): number {
     return Object.keys(activeQuizzes).filter((value: string) => {
       const name: string = QuizManagerDAO.normalizeQuizName(value);
+      if (activeQuizzes[name] instanceof ActiveQuizItemPlaceholder) {
+        return;
+      }
       return activeQuizzes[name].nicknames.length;
     }).reduce((a: number, b: string) => {
       const name: string = QuizManagerDAO.normalizeQuizName(b);
       return parseInt(a + activeQuizzes[name].nicknames.length, 10);
-    }, 0);
+    },        0);
   }
 
   public static getAllActiveDemoQuizzes(): String[] {

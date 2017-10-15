@@ -12,6 +12,7 @@
                 class="btn btn-default btn-block"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.start_session' | translate"
+                [disabled]="!isValid(elem)"
                 (click)="startQuiz(elem)"
                 data-animation="false">
           <span class="fa fa-send" aria-hidden="true"></span>

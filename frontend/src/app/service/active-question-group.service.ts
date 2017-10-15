@@ -27,10 +27,18 @@ export class ActiveQuestionGroupService {
     }
   }
 
+  private dec2hex(dec) {
+    return ('0' + dec.toString(16)).substr(-2);
+  }
+
+  public generatePrivateKey(length?: number) {
+    const arr = new Uint8Array((length || 40) / 2);
+    window.crypto.getRandomValues(arr);
+    return Array.from(arr, this.dec2hex).join('');
+  }
+
   persistForSession() {
     window.sessionStorage.setItem('questionGroup', JSON.stringify(this.activeQuestionGroup.serialize()));
-
-    // TODO: Update server setting
   }
 
   persist() {
