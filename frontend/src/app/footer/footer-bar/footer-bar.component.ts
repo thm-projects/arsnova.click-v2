@@ -281,7 +281,6 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     showIntro: false,
     linkTarget: null,
   }, function () {
-    console.log('routing back');
     history.back();
   });
   static footerElemStartQuiz: FooterbarElement = new FooterbarElement({

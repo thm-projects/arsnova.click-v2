@@ -66,7 +66,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
   updateCountdown(event: Event | number): void {
-    if (typeof event === 'string') {
+    if (typeof event === 'number') {
       this._countdown = event;
     } else {
       this._countdown = parseInt((<HTMLInputElement>(<Event>event).target).value, 10);

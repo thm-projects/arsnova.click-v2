@@ -39,18 +39,18 @@ export class NicknameInputComponent implements OnInit {
         webSocketId: window.sessionStorage.getItem('webSocket')
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-          this.currentQuiz.currentQuestion = data.payload.currentQuestion;
           resolve();
         } else {
           reject(data);
         }
+      }, () => {
+        reject();
       });
     });
     promise.then(() => {
       window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, nickname);
       this.router.navigate(['/quiz-lobby']);
-    });
-    promise.catch((data: IMessage) => {
+    }, (data: IMessage) => {
       switch (data.step) {
         case 'LOBBY:DUPLICATE_LOGIN':
           this._failedLoginReason = 'plugins.splashscreen.error.error_messages.duplicate_user';

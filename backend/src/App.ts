@@ -37,13 +37,13 @@ class App {
     const router: Router = express.Router();
     router.get('/', (req, res, next) => {
       res.json({
-        uptime: `${uptime()} seconds`,
+        uptime: uptime(),
         loadavg: loadavg(),
         freemem: freemem(),
         totalmem: totalmem(),
         cpuCores: cpus().length,
         connectedUsers: QuizManager.getAllActiveMembers(),
-        activeQuizzes: QuizManager.getAllActiveQuizzes(),
+        activeQuizzes: QuizManager.getAllActiveQuizNames(),
         persistedQuizzes: Object.keys(QuizManager.getAllPersistedQuizzes()).length
       });
     });

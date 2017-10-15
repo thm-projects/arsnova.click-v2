@@ -1,12 +1,17 @@
-<input type="text"
-       id="input-nickname"
-       [placeholder]="'component.choose_nickname.enter_nickname_here' | translate"
-       [attr.data-intro]="'component.choose_nickname.description.nickname_input' | translate"
-       [attr.aria-label]="'component.choose_nickname.description.nickname_input' | translate"
-       maxlength="20"/>
-<button class="btn btn-success"
-        (click)="joinQuiz()"
-        [innerHTML]="'component.hashtag_management.join_session' | translate"></button>
-<div *ngIf="failedLoginReason"
-     class="failedLogin p-5 m-5 text-center text-uppercase"
-     [innerHTML]="failedLoginReason | translate"></div>
+<div class="center-vertical d-flex justify-content-center flex-column">
+  <div class="btn-group">
+    <input type="text"
+           class="btn"
+           id="input-nickname"
+           [placeholder]="'component.choose_nickname.enter_nickname_here' | translate"
+           [attr.data-intro]="'component.choose_nickname.description.nickname_input' | translate"
+           [attr.aria-label]="'component.choose_nickname.description.nickname_input' | translate"
+           maxlength="20"/>
+    <button class="btn btn-success"
+            (click)="joinQuiz()"
+            [innerHTML]="'component.hashtag_management.join_session' | translate"></button>
+  </div>
+  <div *ngIf="failedLoginReason"
+       class="failedLogin p-5 m-5 text-center text-uppercase"
+       [innerHTML]="failedLoginReason | translate"></div>
+</div>

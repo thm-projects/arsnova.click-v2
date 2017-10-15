@@ -9,6 +9,8 @@ import {DefaultSettings} from '../../service/settings.service';
 import {ConnectionService} from '../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {AttendeeService, INickname} from '../../service/attendee.service';
+import {CurrentQuizService} from '../../service/current-quiz.service';
+import {Router} from '@angular/router';
 
 
 export declare interface IMessage extends Object {
@@ -29,17 +31,20 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
   private _isOwner: boolean;
+  private _hashtag: string;
 
   constructor(
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
+    private currentQuizService: CurrentQuizService,
     private themesService: ThemesService,
+    private router: Router,
     private http: HttpClient,
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
     private attendeeService: AttendeeService) {
-    if (this.activeQuestionGroupService.activeQuestionGroup) {
+    if (activeQuestionGroupService.activeQuestionGroup) {
       footerBarService.replaceFooterElments([
         FooterBarComponent.footerElemEditQuiz,
         FooterBarComponent.footerElemStartQuiz,
@@ -54,6 +59,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         FooterBarComponent.footerElemConfidenceSlider,
       ]);
       this._isOwner = true;
+      this._hashtag = activeQuestionGroupService.activeQuestionGroup.hashtag;
       FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
         return self.isActive ? '/quiz-results' : null;
       };
@@ -62,6 +68,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         FooterBarComponent.footerElemBack
       ]);
       this._isOwner = false;
+      this._hashtag = currentQuizService.hashtag;
     }
     headerLabelService.setHeaderLabel('component.lobby.title');
   }
@@ -91,23 +98,27 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           if (!this.attendeeService.attendees.length) {
             FooterBarComponent.footerElemStartQuiz.isActive = false;
           }
+          const existingNickname = window.sessionStorage.getItem(`${this._hashtag}_nick`);
+          if (existingNickname === data.payload.name) {
+            window.sessionStorage.removeItem(`${this._hashtag}_nick`);
+            this.router.navigate(['/']);
+          }
           break;
       }
     });
   }
 
   isOwnNick(name: string): boolean {
-    return name === window.sessionStorage.getItem(`${this.activeQuestionGroupService.activeQuestionGroup.hashtag}_nick`);
+    return name === window.sessionStorage.getItem(`${this._hashtag}_nick`);
   }
 
   kickMember(name: string): void {
-    const quizName = this.activeQuestionGroupService.activeQuestionGroup.hashtag;
+    const quizName = this._hashtag;
     this.http.delete(`${this._httpApiEndpoint}/lobby/${quizName}/member/${name}`)
         .subscribe(
           (data: IMessage) => {
-            console.log(data);
-            if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_REMOVED') {
-              this.attendeeService.attendees = this.attendeeService.attendees.filter(player => player.name !== name);
+            if (data.status !== 'STATUS:SUCCESSFUL') {
+              console.log(data);
             }
           }
         );
@@ -125,13 +136,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   addTestPlayer(name: string) {
     this.http.put(`${this._httpApiEndpoint}/lobby/member`, {
-      quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
+      quizName: this._hashtag,
       nickname: name,
       webSocketId: window.sessionStorage.getItem('webSocket')
     }).subscribe(
       (data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-          window.sessionStorage.setItem(`${this.activeQuestionGroupService.activeQuestionGroup.hashtag}_nick`, 'testnick');
+          window.sessionStorage.setItem(`${this._hashtag}_nick`, 'testnick');
         }
       }
     );
@@ -140,7 +151,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.themesService.updateCurrentlyUsedTheme();
     this.connectionService.initConnection().then(() => {
-      if (this.activeQuestionGroupService.activeQuestionGroup) {
+      if (this._isOwner) {
         this.http.put(`${this._httpApiEndpoint}/lobby`, {
           quiz: this.activeQuestionGroupService.activeQuestionGroup.serialize()
         }).subscribe(

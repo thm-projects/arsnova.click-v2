@@ -36,21 +36,21 @@ export class NicknameSelectComponent implements OnInit {
         quizName: this.currentQuiz.hashtag,
         nickname: name,
         webSocketId: window.sessionStorage.getItem('webSocket')
-      })
-          .subscribe((data: IMessage) => {
-            if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-              this.currentQuiz.currentQuestion = data.payload.currentQuestion;
-              resolve();
-            } else {
-              reject();
-            }
-          });
-    });
+      }).subscribe((data: IMessage) => {
+        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
+          this.currentQuiz.currentQuestion = data.payload.currentQuestion;
+          resolve();
+        } else {
+          reject();
+        }
+      }, () => {
+        reject();
+      });
+  });
     promise.then(() => {
       window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, name);
       this.router.navigate(['/quiz-lobby']);
-    });
-    promise.catch((err) => {
+    }, (err) => {
       console.log(err);
     });
   }

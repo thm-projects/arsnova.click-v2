@@ -45,9 +45,7 @@ export class ApiRouter {
   }
 
   public getIsAvailableQuiz(req: Request, res: Response, next: NextFunction): void {
-    const quizzes: Array<string> = Object.keys(QuizManager.getAllActiveQuizzes()).map((value: string) => {
-      return QuizManager.getAllActiveQuizzes()[value].name.toLowerCase();
-    });
+    const quizzes: Array<string> = QuizManager.getAllActiveQuizNames();
     const quizExists: boolean = quizzes.indexOf(req.params.quizName) > -1;
     const payload: { available?: boolean, provideNickSelection?: boolean } = {};
 
@@ -114,7 +112,6 @@ export class ApiRouter {
         status: 'STATUS:SUCCESSFUL',
         step: 'LOBBY:MEMBER_ADDED',
         payload: {
-          currentQuestion: activeQuiz.originalObject.questionList[activeQuiz.currentQuestionIndex],
           member: activeQuiz.nicknames[activeQuiz.nicknames.length - 1].serialize(),
           nicknames: activeQuiz.nicknames.map((value: INickname) => {
             return value.serialize();

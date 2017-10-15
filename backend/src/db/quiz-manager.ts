@@ -169,7 +169,7 @@ class ActiveQuizItem implements IActiveQuiz {
   public addMember(name: string, webSocketId: number): boolean {
     const foundMembers: number = this.findMemberByName(name).length;
 
-    if (illegalNicks.indexOf(name) > -1) {
+    if (illegalNicks.indexOf(name.toUpperCase()) > -1) {
       throw new Error('LOBBY:ILLEGAL_NAME');
     }
 
@@ -306,6 +306,7 @@ export default class QuizManagerDAO {
     if (activeQuizzes[name] instanceof ActiveQuizItemPlaceholder) {
       return;
     }
+    console.log(activeQuizzes, name, activeQuizzes[name]);
     return activeQuizzes[name];
   }
 
@@ -317,10 +318,9 @@ export default class QuizManagerDAO {
     activeQuizzes[name] = data;
   }
 
-  public static getAllActiveQuizzes(): Object {
-    return Object.keys(activeQuizzes).filter(name => {
-      return !this.isInactiveQuiz(name) ? activeQuizzes[name] : false;
-    });
+  public static getAllActiveQuizNames(): Array<string> {
+    return Object.keys(activeQuizzes)
+                 .filter(name => !this.isInactiveQuiz(name));
   }
 
   public static getAllPersistedQuizzes(): Object {

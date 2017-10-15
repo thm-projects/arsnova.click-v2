@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {IQuestion} from '../../lib/questions/interfaces';
 import {questionReflection} from '../../lib/questions/question_reflection';
 
@@ -12,7 +12,7 @@ export declare interface ICurrentQuiz extends ICurrentQuizData {
 }
 
 @Injectable()
-export class CurrentQuizService implements ICurrentQuiz {
+export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
   get currentQuestion(): any {
     return this._currentQuestion;
   }
@@ -33,6 +33,12 @@ export class CurrentQuizService implements ICurrentQuiz {
   private _currentQuestion: IQuestion;
 
   constructor() {
+    const instance = window.sessionStorage.getItem('current_quiz');
+    if (instance) {
+      const parsedInstance = JSON.parse(instance);
+      this._hashtag = parsedInstance.hashtag;
+      this._currentQuestion = parsedInstance.currentQuestion;
+    }
   }
 
   public serialize(): ICurrentQuizData {
@@ -40,6 +46,10 @@ export class CurrentQuizService implements ICurrentQuiz {
       hashtag: this.hashtag,
       currentQuestion: this.currentQuestion
     };
+  }
+
+  ngOnDestroy(): void {
+    window.sessionStorage.setItem('current_quiz', JSON.stringify(this.serialize()));
   }
 
 }
