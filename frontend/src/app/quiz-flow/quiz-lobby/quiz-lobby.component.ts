@@ -74,9 +74,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   private handleIncomingPlayers() {
-    this.connectionService.socket.next({
-      step: 'LOBBY:GET_PLAYERS'
-    });
     this.connectionService.socket.subscribe((message) => {
       const data = message;
       switch (data.step) {
@@ -85,6 +82,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           break;
         case 'LOBBY:ALL_PLAYERS':
           data.payload.members.forEach((elem: INickname) => {
+            console.log(elem);
             this.attendeeService.addMember(elem);
           });
           FooterBarComponent.footerElemStartQuiz.isActive = true;
@@ -105,6 +103,29 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           }
           break;
       }
+    });
+
+    if (!this._isOwner) {
+      this.connectionService.socket.subscribe((message) => {
+        const data = message;
+        switch (data.step) {
+          case 'LOBBY:ALL_PLAYERS':
+            data.payload.members.forEach((elem: INickname) => {
+              this.attendeeService.addMember(elem);
+            });
+            FooterBarComponent.footerElemStartQuiz.isActive = true;
+            break;
+          case 'QUIZ:NEXT_QUESTION':
+            this.currentQuizService.currentQuestion = data.payload.question;
+            break;
+          case 'QUIZ:START':
+            this.router.navigate(['/voting']);
+            break;
+        }
+      });
+    }
+    this.connectionService.socket.next({
+      step: 'LOBBY:GET_PLAYERS'
     });
   }
 

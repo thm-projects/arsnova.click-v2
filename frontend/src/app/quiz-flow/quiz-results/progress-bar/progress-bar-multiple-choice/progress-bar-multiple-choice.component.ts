@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {SafeStyle, DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress-bar-multiple-choice',
@@ -17,7 +18,12 @@ export class ProgressBarMultipleChoiceComponent implements OnInit {
   private base: number;
   private absolute: number;
 
-  constructor() {
+  sanitizeStyle(value: string): SafeStyle {
+    value = value.replace(/\s/g, '');
+    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+  }
+
+  constructor(private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {

@@ -129,6 +129,11 @@ class ActiveQuizItem implements IActiveQuiz {
     this._nicknames.forEach((member) => {
       member.responses.splice(0, member.responses.length);
     });
+    this.webSocketRouter.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:RESET',
+      payload: {}
+    });
   }
 
   public setTimestamp(startTimestamp: number): void {

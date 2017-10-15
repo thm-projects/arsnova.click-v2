@@ -11,6 +11,8 @@ import {HttpClient} from '@angular/common/http';
 import {ConnectionService} from '../../service/connection.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {Router} from '@angular/router';
+import {CurrentQuizService} from '../../service/current-quiz.service';
+import {I18nService, NumberTypes} from '../../service/i18n.service';
 
 export class Countdown {
 
@@ -64,32 +66,42 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private _countdown: Countdown;
   private _countdownValue: number;
   private _isActiveQuiz = false;
+  private _isOwner: boolean;
+  private _hashtag: string;
 
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
+    private currentQuizService: CurrentQuizService,
     private http: HttpClient,
     private router: Router,
     private headerLabelService: HeaderLabelService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
+    private i18nService: I18nService,
     private attendeeService: AttendeeService) {
-    this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemReadingConfirmation,
-      FooterBarComponent.footerElemConfidenceSlider,
-      FooterBarComponent.footerElemResponseProgress,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemSound,
-    ]);
-    FooterBarComponent.footerElemBack.onClickCallback = () => {
-      this.attendeeService.clearResponses();
-      this.http.patch(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${activeQuestionGroupService.activeQuestionGroup.hashtag}`, {
-      }).subscribe(
-        (data: IMessage) => {
-          this.router.navigate(['/quiz-lobby']);
-        }
-      );
-    };
+    if (activeQuestionGroupService.activeQuestionGroup) {
+      this._isOwner = true;
+      this._hashtag = activeQuestionGroupService.activeQuestionGroup.hashtag;
+      this.footerBarService.replaceFooterElments([
+        FooterBarComponent.footerElemBack,
+        FooterBarComponent.footerElemReadingConfirmation,
+        FooterBarComponent.footerElemConfidenceSlider,
+        FooterBarComponent.footerElemResponseProgress,
+        FooterBarComponent.footerElemFullscreen,
+        FooterBarComponent.footerElemSound,
+      ]);
+      FooterBarComponent.footerElemBack.onClickCallback = () => {
+        this.http.patch(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${this._hashtag}`, {
+        }).subscribe(
+          (data: IMessage) => {
+            this.router.navigate(['/quiz-lobby']);
+          }
+        );
+      };
+    } else {
+      this._isOwner = false;
+      this._hashtag = currentQuizService.hashtag;
+    }
     this._questions = [];
     headerLabelService.setHeaderLabel('component.liveResults.title');
   }
@@ -110,7 +122,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     const result = {
       base: this.attendeeService.attendees.length,
       absolute: 0,
-      percent: 0
+      percent: '0'
     };
     if (questionIndex >= 0) {
       const matches = this.attendeeService.attendees.filter(value => {
@@ -122,7 +134,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return currentValue + nextValue;
       }) : 0;
       result.absolute = matches.length;
-      result.percent = absoluteValues / (matches.length || 1);
+      result.percent = this.i18nService.formatNumber(absoluteValues / (matches.length || 1) / 100, NumberTypes.percent);
     }
     return result;
   }
@@ -139,14 +151,14 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     const result = {
       base: this.attendeeService.attendees.length,
       absolute: 0,
-      percent: 0
+      percent: '0'
     };
     if (questionIndex >= 0) {
       const matchCount = this.attendeeService.attendees.filter(value => {
         return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
       }).length;
       result.absolute = matchCount;
-      result.percent = matchCount / (this.attendeeService.attendees.length || 1) * 100;
+      result.percent = this.i18nService.formatNumber(matchCount / (this.attendeeService.attendees.length || 1), NumberTypes.percent);
     }
     return result;
   }
@@ -166,13 +178,16 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         case 'MEMBER:UPDATED_RESPONSE':
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
+        case 'QUIZ:RESET':
+          this.attendeeService.clearResponses();
+          break;
       }
     });
   }
 
   private sendDummyTestData(): void {
     this.http.put(`${DefaultSettings.httpApiEndpoint}/quiz/member/response`, {
-      quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
+      quizName: this._hashtag,
       nickname: 'testnick',
       questionIndex: this._currentQuestionIndex,
       value: 0,
@@ -188,7 +203,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private sendDummyTestData2(): void {
     this.http.put(`${DefaultSettings.httpApiEndpoint}/quiz/member/response`, {
-      quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
+      quizName: this._hashtag,
       nickname: 'testnickerina',
       questionIndex: this._currentQuestionIndex,
       value: 1,
@@ -203,11 +218,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.activeQuestionGroupService.activeQuestionGroup) {
+    if (this._isOwner) {
       this._sessionConfig = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig;
       this._questions = this.activeQuestionGroupService.activeQuestionGroup.questionList;
       this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/start`, {
-        quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag
+        quizName: this._hashtag
       }).subscribe(
         (data: IMessage) => {
           console.log(data);

@@ -14,7 +14,7 @@ import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implem
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
-import {I18nService} from '../../service/i18n.service';
+import {I18nService, Languages} from '../../service/i18n.service';
 import {Subscription} from 'rxjs/Subscription';
 
 @Component({
@@ -73,7 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       window.localStorage.setItem('defaultTheme', params.themeId);
       this.themesService.updateCurrentlyUsedTheme();
-      this.i18nService.setLanguage(params.languageId.toUpperCase());
+      this.i18nService.setLanguage(<Languages>params.languageId.toUpperCase());
     });
   }
 

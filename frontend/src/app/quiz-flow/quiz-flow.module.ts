@@ -38,7 +38,7 @@ const quizFlowRoutes: Routes = [
     data: {}
   },
   {
-    path: 'voting/:questionIndex',
+    path: 'voting',
     component: VotingComponent,
     data: {}
   },

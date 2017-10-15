@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress-bar-single-choice',
@@ -21,7 +22,12 @@ export class ProgressBarSingleChoiceComponent implements OnInit {
   private label: string;
   private normalizedAnswerIndex: string;
 
-  constructor() {
+  sanitizeStyle(value: string): SafeStyle {
+    value = value.replace(/\s/g, '');
+    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+  }
+
+  constructor(private sanitizer: DomSanitizer) {
   }
 
   ngOnInit() {

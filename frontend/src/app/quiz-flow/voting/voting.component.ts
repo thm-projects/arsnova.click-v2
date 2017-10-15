@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {CurrentQuizService} from '../../service/current-quiz.service';
 
 @Component({
   selector: 'app-voting',
@@ -7,7 +8,8 @@ import {Component, OnInit} from '@angular/core';
 })
 export class VotingComponent implements OnInit {
 
-  constructor() {
+  constructor(private currentQuizService: CurrentQuizService) {
+    console.log(this.currentQuizService.currentQuestion, currentQuizService.hashtag);
   }
 
   ngOnInit() {
