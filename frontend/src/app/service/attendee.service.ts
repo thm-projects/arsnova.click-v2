@@ -76,11 +76,14 @@ export class AttendeeService implements OnDestroy {
     const restoreAttendees = window.sessionStorage.getItem('_attendees');
     if (restoreAttendees) {
       this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
-        console.log(attendee);
         return new Player(attendee);
       });
-      console.log(this._attendees);
     }
+  }
+
+  cleanUp(): void {
+    this.attendees = [];
+    window.sessionStorage.removeItem('_attendees');
   }
 
   addMember(attendee: INickname): void {

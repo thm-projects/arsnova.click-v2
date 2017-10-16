@@ -16,6 +16,7 @@ import {CurrentQuizService} from '../../service/current-quiz.service';
 import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {I18nService, Languages} from '../../service/i18n.service';
 import {Subscription} from 'rxjs/Subscription';
+import {AttendeeService} from '../../service/attendee.service';
 
 @Component({
   selector: 'app-home',
@@ -48,6 +49,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private themesService: ThemesService,
     private route: ActivatedRoute,
     private i18nService: I18nService,
+    private attendeeService: AttendeeService,
     private currentQuiz: CurrentQuizService) {
     this.activeQuestionGroupService.activeQuestionGroup = null;
     footerBarService.replaceFooterElments([
@@ -71,6 +73,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     window.sessionStorage.removeItem('quiz_theme');
     window.sessionStorage.removeItem('webSocket');
     this.currentQuiz.cleanUp();
+    this.attendeeService.cleanUp();
   }
 
   ngOnInit(): void {
