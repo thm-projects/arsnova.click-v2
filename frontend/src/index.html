@@ -76,7 +76,8 @@
   <script type="text/javascript">
     window.onload = function () {
       if (!document.body.className) {
-        document.body.className = (window.localStorage.getItem('defaultTheme') || '');
+        console.log(window.sessionStorage.getItem('quiz_theme'));
+        document.body.className = (window.sessionStorage.getItem('quiz_theme') || window.localStorage.getItem('defaultTheme') || '');
       }
     };
   </script>

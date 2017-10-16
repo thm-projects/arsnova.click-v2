@@ -34,7 +34,7 @@ export class ThemesService {
   }
 
   updateCurrentlyUsedTheme() {
-    let usedTheme = window.localStorage.getItem('defaultTheme');
+    let usedTheme = (window.sessionStorage.getItem('quiz_theme') || window.localStorage.getItem('defaultTheme'));
     if (this.activeQuestionGroupService.activeQuestionGroup && this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.theme) {
       usedTheme = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.theme;
     }

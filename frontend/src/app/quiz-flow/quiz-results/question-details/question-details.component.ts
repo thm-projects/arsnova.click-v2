@@ -6,6 +6,7 @@ import {ActiveQuestionGroupService} from '../../../service/active-question-group
 import {IQuestion} from '../../../../lib/questions/interfaces';
 import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../environments/environment';
+import {CurrentQuizService} from '../../../service/current-quiz.service';
 
 @Component({
   selector: 'app-question-details',
@@ -28,6 +29,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
+    private currentQuizService: CurrentQuizService,
     private footerBarService: FooterBarService) {
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemBack
@@ -37,7 +39,11 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
-      this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
+      if (this.activeQuestionGroupService.activeQuestionGroup) {
+        this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex] || null;
+      } else {
+        this._question = this.currentQuizService.previousQuestions[this._questionIndex] || null;
+      }
     });
   }
 

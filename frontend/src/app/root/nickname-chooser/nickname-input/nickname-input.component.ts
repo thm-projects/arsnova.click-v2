@@ -6,6 +6,7 @@ import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {IMessage} from '../../../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {DefaultSettings} from '../../../service/settings.service';
+import {SessionConfiguration} from '../../../../lib/session_configuration/session_config';
 
 @Component({
   selector: 'app-nickname-input',
@@ -39,6 +40,7 @@ export class NicknameInputComponent implements OnInit {
         webSocketId: window.sessionStorage.getItem('webSocket')
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
+          this.currentQuiz.sessionConfiguration = data.payload.sessionConfiguration;
           resolve();
         } else {
           reject(data);

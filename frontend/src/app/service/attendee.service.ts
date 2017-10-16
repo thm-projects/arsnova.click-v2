@@ -1,4 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
+import {CurrentQuizService} from './current-quiz.service';
 
 export declare interface IQuizResponse {
   value: Array<number> | number | string;
@@ -71,7 +72,7 @@ export class AttendeeService implements OnDestroy {
 
   private _attendees: Array<INickname> = [];
 
-  constructor() {
+  constructor(private currentQuizService: CurrentQuizService) {
     const restoreAttendees = window.sessionStorage.getItem('_attendees');
     if (restoreAttendees) {
       this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
@@ -92,6 +93,14 @@ export class AttendeeService implements OnDestroy {
     this._attendees.forEach((attendee) => {
       attendee.responses.splice(0, attendee.responses.length);
     });
+  }
+
+  isOwnNick(name: string): boolean {
+    return name === window.sessionStorage.getItem(`${this.currentQuizService.hashtag}_nick`);
+  }
+
+  getOwnNick(): string {
+    return window.sessionStorage.getItem(`${this.currentQuizService.hashtag}_nick`);
   }
 
   getMember(nickname: string): INickname {

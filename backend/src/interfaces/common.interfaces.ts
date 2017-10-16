@@ -44,5 +44,7 @@ export declare interface IActiveQuiz {
 
   reset(): void;
 
+  updateQuizSettings(target: string, state: boolean): void;
+
   onDestroy(): void;
 }

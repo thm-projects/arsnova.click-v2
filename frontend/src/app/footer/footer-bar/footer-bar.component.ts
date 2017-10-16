@@ -7,6 +7,7 @@ import {ActiveQuestionGroupService} from 'app/service/active-question-group.serv
 import {QrCodeService} from '../../service/qr-code.service';
 import {DefaultSettings} from '../../service/settings.service';
 import {TranslateService} from '@ngx-translate/core';
+import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
 
 export class FooterbarElement {
   set onClickCallback(value: Function) {
@@ -319,6 +320,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     private http: Http,
     private translateService: TranslateService,
     private qrCodeService: QrCodeService) {
+
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.readingConfirmationEnabled) {
         FooterBarComponent.footerElemReadingConfirmation.isActive = true;
@@ -329,15 +331,15 @@ export class FooterBarComponent implements OnInit, OnDestroy {
       if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.confidenceSliderEnabled) {
         FooterBarComponent.footerElemConfidenceSlider.isActive = true;
       }
-    }
-    FooterBarComponent.footerElemQRCode.onClickCallback = () => {
-      qrCodeService.toggleQrCode();
-    };
-    FooterBarComponent.footerElemExport.onClickCallback = () => {
-      window.open(`${DefaultSettings.httpApiEndpoint}/export/
+      FooterBarComponent.footerElemQRCode.onClickCallback = () => {
+        qrCodeService.toggleQrCode();
+      };
+      FooterBarComponent.footerElemExport.onClickCallback = () => {
+        window.open(`${DefaultSettings.httpApiEndpoint}/export/
         ${this.activeQuestionGroupService.activeQuestionGroup.hashtag}/
         ${translateService.currentLang}`);
-    };
+      };
+    }
   }
 
   ngOnInit() {
@@ -376,6 +378,21 @@ export class FooterBarComponent implements OnInit, OnDestroy {
       this.activeQuestionGroupService.activeQuestionGroup.sessionConfig[target] = !elem.isActive;
       elem.isActive = !elem.isActive;
       this.activeQuestionGroupService.persistForSession();
+
+      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/settings/update`, {
+        quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
+        target: target,
+        state: elem.isActive
+      }).map(res => res.json()).subscribe(
+        (data: IMessage) => {
+          if (data.status !== 'STATUS:SUCCESS') {
+            console.log(data);
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   }
 

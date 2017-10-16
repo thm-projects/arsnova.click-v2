@@ -63,6 +63,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
       this.modalService.open(AvailableQuizzesComponent);
     }
+    this.cleanUpSessionStorage();
+  }
+
+  private cleanUpSessionStorage(): void {
+    window.sessionStorage.removeItem('questionGroup');
+    window.sessionStorage.removeItem('quiz_theme');
+    window.sessionStorage.removeItem('webSocket');
+    this.currentQuiz.cleanUp();
   }
 
   ngOnInit(): void {

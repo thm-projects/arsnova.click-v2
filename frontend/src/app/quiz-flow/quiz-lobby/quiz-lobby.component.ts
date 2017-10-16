@@ -129,10 +129,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     });
   }
 
-  isOwnNick(name: string): boolean {
-    return name === window.sessionStorage.getItem(`${this._hashtag}_nick`);
-  }
-
   kickMember(name: string): void {
     const quizName = this._hashtag;
     this.http.delete(`${this._httpApiEndpoint}/lobby/${quizName}/member/${name}`)

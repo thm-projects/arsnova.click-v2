@@ -13,6 +13,8 @@ import {HeaderLabelService} from '../../service/header-label.service';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {I18nService, NumberTypes} from '../../service/i18n.service';
+import {SessionConfiguration} from '../../../lib/session_configuration/session_config';
+import {MusicSessionConfiguration} from '../../../lib/session_configuration/session_config_music';
 
 export class Countdown {
 
@@ -144,6 +146,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   showResponseProgress(): boolean {
+    console.log(this._sessionConfig.showResponseProgress);
     return this._sessionConfig.showResponseProgress;
   }
 
@@ -247,6 +250,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           }
         }
       );
+    } else {
+      this._questions = [this.currentQuizService.currentQuestion];
+      console.log(this._questions);
+      this._sessionConfig = new SessionConfiguration();
     }
     this.connectionService.initConnection().then(() => {
       setTimeout(() => this.handleResponseUpdates(), 1000);

@@ -115,7 +115,8 @@ export class ApiRouter {
           member: activeQuiz.nicknames[activeQuiz.nicknames.length - 1].serialize(),
           nicknames: activeQuiz.nicknames.map((value: INickname) => {
             return value.serialize();
-          })
+          }),
+          sessionConfiguration: activeQuiz.originalObject.sessionConfig
         }
       });
     } catch (ex) {
@@ -181,11 +182,30 @@ export class ApiRouter {
     }
   }
 
+  public getQuizStartTime(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:GET_STARTTIME',
+      payload: {startTimestamp: activeQuiz.currentStartTimestamp}
+    });
+  }
+
+  public updateQuizSettings(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    activeQuiz.updateQuizSettings(req.body.target, req.body.state);
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:UPDATED_SETTINGS',
+      payload: {}
+    });
+  }
+
   public reserveQuiz(req: Request, res: Response, next: NextFunction): void {
     if (!req.body.quizName || !req.body.privateKey) {
       res.send({
         status: 'STATUS:FAILED',
-        step: 'INVALID_DATA',
+        step: 'QUIZ:INVALID_DATA',
         payload: {}
       });
       return;
@@ -203,7 +223,7 @@ export class ApiRouter {
     if (!req.body.quizName || !req.body.privateKey) {
       res.send({
         status: 'STATUS:FAILED',
-        step: 'INVALID_DATA',
+        step: 'QUIZ:INVALID_DATA',
         payload: {}
       });
       return;
@@ -213,13 +233,13 @@ export class ApiRouter {
       QuizManager.removeQuiz(req.body.quizName);
       res.send({
         status: 'STATUS:SUCCESS',
-        step: 'QUIZ_REMOVED',
+        step: 'QUIZ:REMOVED',
         payload: {}
       });
     } else {
       res.send({
         status: 'STATUS:FAILED',
-        step: 'INSUFFICIENT_PERMISSIONS',
+        step: 'QUIZ:INSUFFICIENT_PERMISSIONS',
         payload: {}
       });
     }
@@ -251,7 +271,7 @@ export class ApiRouter {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     if (activeQuiz.nicknames.filter(value => {
         return value.name === req.body.nickname;
-      })[0].responses[+req.body.questionIndex]) {
+      })[0].responses[activeQuiz.currentQuestionIndex]) {
       res.send({
         status: 'STATUS:FAILED',
         step: 'QUIZ:DUPLICATE_MEMBER_RESPONSE',
@@ -269,11 +289,11 @@ export class ApiRouter {
       return;
     }
 
-    activeQuiz.addResponse(req.body.nickname, +req.body.questionIndex, <IQuizResponse>{
+    activeQuiz.addResponse(req.body.nickname, activeQuiz.currentQuestionIndex, <IQuizResponse>{
       value: req.body.value,
       responseTime: parseInt(req.body.responseTime, 10),
-      confidence: parseInt(req.body.confidence, 10) || 0,
-      readingConfirmation: req.body.readingConfirmation || false
+      confidence: parseInt(req.body.confidence, 10) || 0, // TODO: Separate to extra update method
+      readingConfirmation: req.body.readingConfirmation || false // TODO: Separate to extra update method
     });
 
     res.send({
@@ -325,6 +345,8 @@ export class ApiRouter {
     this._router.delete('/lobby/:quizName/member/:nickname', this.deleteMember);
 
     this._router.post('/quiz/start', this.startQuiz);
+    this._router.get('/quiz/startTime/:quizName', this.getQuizStartTime);
+    this._router.post('/quiz/settings/update', this.updateQuizSettings);
     this._router.patch('/quiz/reset/:quizName', this.resetQuiz);
     this._router.post('/quiz/reserve', this.reserveQuiz);
     this._router.delete('/quiz', this.deleteQuiz);

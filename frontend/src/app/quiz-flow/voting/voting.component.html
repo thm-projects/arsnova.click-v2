@@ -1,3 +1,17 @@
-<p>
-  voting works!
-</p>
+<div id="countdown-header"
+     class="overflow-hidden mb-3">
+  <div class="pull-left">
+    <i class="fa fa-users"></i>
+    <span>{{'component.voting.title' | translate}}</span>
+  </div>
+  <div class="pull-right">
+    <span>{{countdownValue}}</span>
+    <i class="fa fa-hourglass"></i>
+  </div>
+</div>
+
+<div *ngFor="let answer of currentQuizService.currentQuestion.answerOptionList; let i = index"
+     class="answer-element"
+     [id]="i">
+  {{answer.answerText}}
+</div>

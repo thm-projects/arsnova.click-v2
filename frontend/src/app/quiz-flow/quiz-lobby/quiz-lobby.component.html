@@ -1,7 +1,7 @@
 <div *ngFor="let elem of attendeeService.attendees"
      [id]="elem.id"
      (click)="isOwner ? kickMember(elem.name) : return"
-     [class]="'member-wrapper mb-1 col-sm-4 col-md-3 ' + (isOwner ? 'pointer ' : '') + (isOwnNick(elem.name) ? 'own-nick' : '')"
+     [class]="'member-wrapper mb-1 col-sm-4 col-md-3 ' + (isOwner ? 'pointer ' : '') + (attendeeService.isOwnNick(elem.name) ? 'own-nick' : '')"
      [style.color]="'#' + sanitizeHTML(getComplementaryColor(elem.colorCode))"
      [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
   <p class="mb-0"

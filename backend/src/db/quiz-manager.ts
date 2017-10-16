@@ -224,6 +224,18 @@ class ActiveQuizItem implements IActiveQuiz {
       }
     });
   }
+
+  public updateQuizSettings(target: string, state: boolean): void {
+    this.originalObject.sessionConfig[target] = state;
+
+    this.webSocketRouter.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:UPDATED_SETTINGS',
+      payload: {
+        target, state
+      }
+    });
+  }
 }
 
 class ActiveQuizItemPlaceholder implements IActiveQuiz {
@@ -263,6 +275,10 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
   }
 
   public onDestroy(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public updateQuizSettings(target: string, state: boolean): void {
     throw new Error('Method not implemented.');
   }
 }
