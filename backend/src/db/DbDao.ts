@@ -31,8 +31,10 @@ export class DbDao {
          .write();
   }
 
-  public static delete(database: DatabaseTypes, query: Object): boolean {
-    if (!Object.keys(DbDao.read(database, query)).length) {
+  public static delete(database: DatabaseTypes, query: {quizName: string, privateKey: string}): boolean {
+    const dbContent: any = DbDao.read(database, query);
+    console.log('deleting quiz', query, dbContent);
+    if (!Object.keys(dbContent).length || dbContent.privateKey !== query.privateKey) {
       return false;
     }
     DbDao.db.get(database)

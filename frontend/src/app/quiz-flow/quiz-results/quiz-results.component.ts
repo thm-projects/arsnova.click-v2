@@ -168,7 +168,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private handleResponseUpdates() {
     this.connectionService.socket.next({
-      step: 'LOBBY:GET_PLAYERS'
+      step: 'LOBBY:GET_PLAYERS',
+      payload: {
+        quizName: this._hashtag
+      }
     });
     this.connectionService.socket.subscribe((message) => {
       const data = message;

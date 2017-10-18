@@ -4,6 +4,8 @@ import {questionReflection} from '../../lib/questions/question_reflection';
 import {ISessionConfiguration} from '../../lib/session_configuration/interfaces';
 import {SessionConfiguration} from '../../lib/session_configuration/session_config';
 import {ThemesService} from './themes.service';
+import {ConnectionService} from './connection.service';
+import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 
 export declare interface ICurrentQuizData {
   hashtag: string;
@@ -62,15 +64,27 @@ export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
   private _previousQuestions: Array<IQuestion> = [];
   private _sessionConfiguration: ISessionConfiguration;
 
-  constructor(private themesService: ThemesService) {
+  constructor(private themesService: ThemesService,
+    private connectionService: ConnectionService) {
     const instance = window.sessionStorage.getItem('current_quiz');
     if (instance) {
       const parsedInstance = JSON.parse(instance);
       this.hashtag = parsedInstance.hashtag;
-      this.currentQuestion = parsedInstance.currentQuestion;
-      this.previousQuestions = parsedInstance.previousQuestions;
-      this.sessionConfiguration = parsedInstance.sessionConfiguration;
+      if (parsedInstance.currentQuestion) {
+        this.currentQuestion = parsedInstance.currentQuestion;
+      }
+      if (parsedInstance.previousQuestions.length > 0) {
+        this.previousQuestions = parsedInstance.previousQuestions;
+      }
+      if (parsedInstance.sessionConfiguration) {
+        this.sessionConfiguration = parsedInstance.sessionConfiguration;
+      }
     }
+    connectionService.socket.subscribe((data: IMessage) => {
+      if (data.status === 'STATUS:SUCCESSFULL' && data.step === 'QUIZ:UPDATE_SETTINGS') {
+        this.sessionConfiguration = data.payload.sessionConfiguration;
+      }
+    });
   }
 
   public cleanUp(): void {

@@ -1,3 +1,4 @@
+import * as WebSocket from 'ws';
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
 import {WebSocketRouter} from '../routes/websocket';
 import illegalNicks from '../nicknames/illegalNicks';
@@ -5,11 +6,17 @@ import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interf
 import {DatabaseTypes, DbDao} from './DbDao';
 
 class Member implements INickname {
+  set webSocketAuthorization(value: number) {
+    this._webSocketAuthorization = value;
+  }
+  get webSocketAuthorization(): number {
+    return this._webSocketAuthorization;
+  }
   get responses(): Array<IQuizResponse> {
     return this._responses;
   }
 
-  set webSocket(value: number) {
+  set webSocket(value: WebSocket) {
     this._webSocket = value;
   }
 
@@ -25,22 +32,25 @@ class Member implements INickname {
     return this._colorCode;
   }
 
-  get webSocket(): number {
+  get webSocket(): WebSocket {
     return this._webSocket;
   }
 
   private _id: number;
   private _name: string;
   private _colorCode: string;
-  private _webSocket: number;
+  private _webSocket: WebSocket;
+  private _webSocketAuthorization: number;
   private _responses: Array<IQuizResponse>;
 
   constructor(
-    {id, name, colorCode, responses}: { id: number, name: string, colorCode?: string, responses?: Array<IQuizResponse> }) {
+    {id, name, colorCode, responses, webSocketAuthorization}:
+      { id: number, name: string, colorCode?: string, responses?: Array<IQuizResponse>, webSocketAuthorization: number}) {
     this._id = id;
     this._name = name;
     this._colorCode = colorCode || this.generateRandomColorCode();
     this._responses = responses || [];
+    this._webSocketAuthorization = webSocketAuthorization;
   }
 
   private hashCode(str: string): number { // java String#hashCode
@@ -112,14 +122,22 @@ class ActiveQuizItem implements IActiveQuiz {
     this._name = originalObject.hashtag;
     this._nicknames = nicknames;
     this._originalObject = originalObject;
-    this._webSocketRouter = new WebSocketRouter(this);
+    this._webSocketRouter = new WebSocketRouter();
   }
 
   public onDestroy(): void {
-    this.webSocketRouter.pushMessageToClients({
+    this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:DELETED',
       payload: {}
+    });
+  }
+
+  private pushMessageToClients(message: any): void {
+    this._nicknames.forEach(value => {
+      if (value.webSocket && value.webSocket.readyState === WebSocket.OPEN) {
+        value.webSocket.send(JSON.stringify(message));
+      }
     });
   }
 
@@ -129,7 +147,7 @@ class ActiveQuizItem implements IActiveQuiz {
     this._nicknames.forEach((member) => {
       member.responses.splice(0, member.responses.length);
     });
-    this.webSocketRouter.pushMessageToClients({
+    this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:RESET',
       payload: {}
@@ -142,7 +160,7 @@ class ActiveQuizItem implements IActiveQuiz {
     setTimeout(() => this._currentStartTimestamp = 0,
                this.originalObject.questionList[this.currentQuestionIndex].timer * 1000);
 
-    this.webSocketRouter.pushMessageToClients({
+    this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:START',
       payload: { startTimestamp }
@@ -152,7 +170,7 @@ class ActiveQuizItem implements IActiveQuiz {
   public nextQuestion(): number {
     if (this.currentQuestionIndex < this.originalObject.questionList.length - 1) {
       this.currentQuestionIndex++;
-      this.webSocketRouter.pushMessageToClients({
+      this.pushMessageToClients({
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:NEXT_QUESTION',
         payload: {
@@ -171,7 +189,7 @@ class ActiveQuizItem implements IActiveQuiz {
     });
   }
 
-  public addMember(name: string, webSocketId: number): boolean {
+  public addMember(name: string, webSocketAuthorization: number): boolean {
     const foundMembers: number = this.findMemberByName(name).length;
 
     if (illegalNicks.indexOf(name.toUpperCase()) > -1) {
@@ -179,10 +197,9 @@ class ActiveQuizItem implements IActiveQuiz {
     }
 
     if (foundMembers === 0) {
-      const member: INickname = new Member({id: this.nicknames.length, name});
-      member.webSocket = webSocketId;
+      const member: INickname = new Member({id: this.nicknames.length, name, webSocketAuthorization});
       this.nicknames.push(member);
-      this.webSocketRouter.pushMessageToClients({
+      this.pushMessageToClients({
         status: 'STATUS:SUCCESSFUL',
         step: 'MEMBER:ADDED',
         payload: {member: member.serialize()}
@@ -197,7 +214,7 @@ class ActiveQuizItem implements IActiveQuiz {
     const foundMembers: Array<INickname> = this.findMemberByName(name);
     if (foundMembers.length === 1) {
       this.nicknames.splice(this.nicknames.indexOf(foundMembers[0]), 1);
-      this.webSocketRouter.pushMessageToClients({
+      this.pushMessageToClients({
         status: 'STATUS:SUCCESSFUL',
         step: 'MEMBER:REMOVED',
         payload: {
@@ -214,7 +231,7 @@ class ActiveQuizItem implements IActiveQuiz {
       return value.name === nickname;
     })[0].responses[questionIndex] = data;
 
-    this.webSocketRouter.pushMessageToClients({
+    this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
       step: 'MEMBER:UPDATED_RESPONSE',
       payload: {
@@ -228,7 +245,7 @@ class ActiveQuizItem implements IActiveQuiz {
   public updateQuizSettings(target: string, state: boolean): void {
     this.originalObject.sessionConfig[target] = state;
 
-    this.webSocketRouter.pushMessageToClients({
+    this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:UPDATED_SETTINGS',
       payload: {
@@ -245,12 +262,13 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
   public originalObject: IQuestionGroup;
   public webSocketRouter: WebSocketRouter;
   public currentStartTimestamp: number;
+  public webSocketAuthorization: number;
 
   constructor(name: string) {
     this.name = name;
   }
 
-  public addMember(name: string, webSocketId: number): boolean {
+  public addMember(name: string, webSocketAuthorization: number): boolean {
     throw new Error('Method not implemented.');
   }
 
@@ -327,7 +345,6 @@ export default class QuizManagerDAO {
     if (activeQuizzes[name] instanceof ActiveQuizItemPlaceholder) {
       return;
     }
-    console.log(activeQuizzes, name, activeQuizzes[name]);
     return activeQuizzes[name];
   }
 

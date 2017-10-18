@@ -7,6 +7,8 @@ import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.componen
 import {IMessage} from '../../../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {DefaultSettings} from '../../../service/settings.service';
 import {SessionConfiguration} from '../../../../lib/session_configuration/session_config';
+import {AttendeeService} from '../../../service/attendee.service';
+import {ConnectionService} from '../../../service/connection.service';
 
 @Component({
   selector: 'app-nickname-input',
@@ -25,6 +27,8 @@ export class NicknameInputComponent implements OnInit {
     private http: HttpClient,
     private footerBarService: FooterBarService,
     private router: Router,
+    private attendeeService: AttendeeService,
+    private connectionService: ConnectionService,
     private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemBack
@@ -41,6 +45,9 @@ export class NicknameInputComponent implements OnInit {
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           this.currentQuiz.sessionConfiguration = data.payload.sessionConfiguration;
+          this.attendeeService.attendees = data.payload.nicknames;
+          window.sessionStorage.setItem('webSocketAuthorization', data.payload.webSocketAuthorization);
+          this.connectionService.authorizeWebSocket(this.currentQuiz.hashtag);
           resolve();
         } else {
           reject(data);

@@ -11,7 +11,6 @@ export class WebsocketService {
   public connect(): Subject<MessageEvent> {
     if (!this.subject) {
       this.subject = this.create();
-      console.log(`Successfully connected: ${this.url}`);
     }
     return this.subject;
   }

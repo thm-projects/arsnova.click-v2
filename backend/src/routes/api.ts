@@ -107,7 +107,8 @@ export class ApiRouter {
   public addMember(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     try {
-      const result: boolean = activeQuiz.addMember(req.body.nickname, parseInt(req.body.webSocketId, 10));
+      const webSocketAuthorization: number = Math.random();
+      activeQuiz.addMember(req.body.nickname, webSocketAuthorization);
       res.send({
         status: 'STATUS:SUCCESSFUL',
         step: 'LOBBY:MEMBER_ADDED',
@@ -116,14 +117,15 @@ export class ApiRouter {
           nicknames: activeQuiz.nicknames.map((value: INickname) => {
             return value.serialize();
           }),
-          sessionConfiguration: activeQuiz.originalObject.sessionConfig
+          sessionConfiguration: activeQuiz.originalObject.sessionConfig,
+          webSocketAuthorization: webSocketAuthorization
         }
       });
     } catch (ex) {
       res.send({
         status: 'STATUS:FAILED',
-        step: ex.message,
-        payload: {}
+        step: 'LOBBY:MEMBER_ADDED',
+        payload: {message: ex.message}
       });
     }
   }
@@ -245,6 +247,33 @@ export class ApiRouter {
     }
   }
 
+  public deleteActiveQuiz(req: Request, res: Response, next: NextFunction): void {
+    if (!req.body.quizName || !req.body.privateKey) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:INVALID_DATA',
+        payload: {}
+      });
+      return;
+    }
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    const dbResult: Object = DbDao.read(DatabaseTypes.quiz, {quizName: req.body.quizName, privateKey: req.body.privateKey});
+    if (activeQuiz && dbResult) {
+      QuizManager.removeActiveQuiz(req.body.quizName);
+      res.send({
+        status: 'STATUS:SUCCESS',
+        step: 'QUIZ:CLOSED',
+        payload: {}
+      });
+    } else {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:INSUFFICIENT_PERMISSIONS',
+        payload: {}
+      });
+    }
+  }
+
   public resetQuiz(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     activeQuiz.reset();
@@ -350,6 +379,7 @@ export class ApiRouter {
     this._router.patch('/quiz/reset/:quizName', this.resetQuiz);
     this._router.post('/quiz/reserve', this.reserveQuiz);
     this._router.delete('/quiz', this.deleteQuiz);
+    this._router.delete('/quiz/active', this.deleteActiveQuiz);
 
     this._router.get('/quiz/member/:quizName', this.getAllMembers);
     this._router.get('/quiz/member/:quizName/available', this.getRemainingNicks);

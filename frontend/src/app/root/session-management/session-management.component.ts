@@ -81,7 +81,7 @@ export class SessionManagementComponent implements OnInit {
     this.sessions.splice(this.sessions.indexOf(session), 1);
     window.localStorage.removeItem(session);
     window.localStorage.setItem('owned_quizzes', JSON.stringify(this.sessions));
-    this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/`, {
+    this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz`, {
       body: {
         quizName: session,
         privateKey: localStorage.getItem('privateKey')

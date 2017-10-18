@@ -37,6 +37,10 @@ export class ActiveQuestionGroupService {
     return Array.from(arr, this.dec2hex).join('');
   }
 
+  public cleanUp(): void {
+    this.activeQuestionGroup = null;
+}
+
   persistForSession() {
     window.sessionStorage.setItem('questionGroup', JSON.stringify(this.activeQuestionGroup.serialize()));
   }

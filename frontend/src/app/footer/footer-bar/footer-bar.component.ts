@@ -310,7 +310,6 @@ export class FooterBarComponent implements OnInit, OnDestroy {
 
   @Input() footerElements: Array<FooterbarElement> = [];
 
-  private _apiEndPoint = `${DefaultSettings.httpApiEndpoint}/upload`;
   private _routerSubscription: Subscription;
 
   constructor(
@@ -406,11 +405,11 @@ export class FooterBarComponent implements OnInit, OnDestroy {
       const file: File = fileList[i];
       formData.append('uploadFile', file, file.name);
     }
-    const headers = new Headers();
-    headers.append('Content-Type', 'multipart/form-data');
-    headers.append('Accept', 'application/json');
-    const options = new RequestOptions(<RequestOptionsArgs>headers);
-    this.http.post(`${this._apiEndPoint}`, formData, options)
+    formData.append('privateKey', window.localStorage.getItem('privateKey'));
+    const options = new RequestOptions();
+    options.headers.append('Content-Type', 'multipart/form-data');
+    options.headers.append('Accept', 'application/json');
+    this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/upload`, formData, options)
         .map(res => res.json())
         .subscribe(
           data => {

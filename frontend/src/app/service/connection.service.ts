@@ -7,6 +7,9 @@ import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 
 @Injectable()
 export class ConnectionService {
+  set websocketAvailable(value: Boolean) {
+    this._websocketAvailable = value;
+  }
   get socket(): Subject<IMessage> {
     return this._socket;
   }
@@ -32,6 +35,7 @@ export class ConnectionService {
   private _websocketAvailable: Boolean = false;
   private _rtt = 0;
   private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}/`;
+  private _isWebSocketAuthorized = false;
 
   constructor(
     private websocketService: WebsocketService,
@@ -41,23 +45,21 @@ export class ConnectionService {
   }
 
   private initWebsocket() {
-    this._socket = <Subject<IMessage>>this.websocketService
-                                          .connect()
-                                          .map((response: MessageEvent): IMessage => {
-                                            return JSON.parse(response.data);
-                                          });
-    this.socket.subscribe(
-      message => {
-        window.sessionStorage.setItem('webSocket', message.payload.id);
-        this._websocketAvailable = true;
-      },
-      message => {
-        this._websocketAvailable = false;
-      },
-      () => {
-        this._websocketAvailable = false;
-      }
-    );
+    this._socket = <Subject<IMessage>>this.websocketService.connect()
+                                         .map((response: MessageEvent): IMessage => {
+                                           return JSON.parse(response.data);
+                                         });
+  }
+
+  authorizeWebSocket(hashtag: string): void {
+    if (this._isWebSocketAuthorized) {
+      return;
+    }
+    this._isWebSocketAuthorized = true;
+    this._socket.next({step: 'WEBSOCKET:AUTHORIZE', payload: {
+      quizName: hashtag,
+      webSocketAuthorization: window.sessionStorage.getItem('webSocketAuthorization')
+    }});
   }
 
   initConnection(): Promise<boolean> {

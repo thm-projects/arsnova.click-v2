@@ -10,43 +10,43 @@ export declare interface IMessage {
 
 export class WebSocketRouter {
   public static wss: WebSocket.Server;
-  private clientList: Array<WebSocket> = [];
-  private activeQuizReference: IActiveQuiz;
 
-  constructor(activeQuizReference: IActiveQuiz) {
+  constructor() {
     this.init();
-    this.activeQuizReference = activeQuizReference;
-  }
-
-  public pushMessageToClients(message: IMessage): void {
-    this.clientList.forEach((client: WebSocket) => {
-      if (client.readyState === client.OPEN) {
-        client.send(JSON.stringify(message));
-      }
-    });
   }
 
   private init(): void {
     WebSocketRouter.wss.on('connection', (ws: WebSocket) => {
       ws.on('message', (message: string | any) => {
-        console.log('received: %s', message);
         try {
           message = JSON.parse(message);
-          console.log(this.activeQuizReference);
+
+          if (message.step === 'WEBSOCKET:AUTHORIZE') {
+            const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(message.payload.quizName);
+            activeQuiz.nicknames.forEach(nickname => {
+              if (nickname.webSocketAuthorization === parseFloat(message.payload.webSocketAuthorization)) {
+                nickname.webSocket = ws;
+              }
+            });
+          }
+
           if (message.step === 'LOBBY:GET_PLAYERS') {
+            const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(message.payload.quizName);
             const res: any = {status: 'STATUS:SUCCESSFUL'};
-            if (!this.activeQuizReference) {
+            if (!activeQuiz) {
               res.step = 'LOBBY:INACTIVE';
             } else {
               res.step = 'LOBBY:ALL_PLAYERS';
               res.payload = {
-                members: this.activeQuizReference.nicknames.map((value: INickname) => {
+                members: activeQuiz.nicknames.map((value: INickname) => {
                   return value.serialize();
                 })
               };
             }
             ws.send(JSON.stringify(res));
-          } else if (message.step === 'QUIZ:ACTIVE_QUIZZES') {
+          }
+
+          if (message.step === 'QUIZ:ACTIVE_QUIZZES') {
             ws.send(JSON.stringify({
               status: 'STATUS:SUCCESSFUL',
               step: 'QUIZ:ACTIVE_QUIZZES',
@@ -59,12 +59,6 @@ export class WebSocketRouter {
           ws.send(`Hello, you sent -> ${message}`);
         }
       });
-      const id: number = this.clientList.push(ws);
-      ws.send(JSON.stringify({
-        payload: {
-          id: id - 1
-        }
-      }));
     });
   }
 }

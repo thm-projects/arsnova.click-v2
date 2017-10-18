@@ -8,7 +8,7 @@ import {AvailableQuizzesComponent} from '../../modals/available-quizzes/availabl
 import {ThemesService} from '../../service/themes.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
 import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -17,6 +17,7 @@ import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {I18nService, Languages} from '../../service/i18n.service';
 import {Subscription} from 'rxjs/Subscription';
 import {AttendeeService} from '../../service/attendee.service';
+import {ConnectionService} from '../../service/connection.service';
 
 @Component({
   selector: 'app-home',
@@ -50,8 +51,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private i18nService: I18nService,
     private attendeeService: AttendeeService,
+    private connectionService: ConnectionService,
     private currentQuiz: CurrentQuizService) {
-    this.activeQuestionGroupService.activeQuestionGroup = null;
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemAbout,
       FooterBarComponent.footerElemTranslation,
@@ -65,15 +66,45 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
       this.modalService.open(AvailableQuizzesComponent);
     }
+    this.connectionService.socket.subscribe(
+      (data: IMessage) => {
+        if (data.payload.id) {
+          window.sessionStorage.setItem('webSocket', data.payload.id);
+          this.connectionService.websocketAvailable = true;
+        }
+      },
+      () => {
+        this.connectionService.websocketAvailable = false;
+      },
+      () => {
+        this.connectionService.websocketAvailable = false;
+      }
+    );
     this.cleanUpSessionStorage();
   }
 
   private cleanUpSessionStorage(): void {
-    window.sessionStorage.removeItem('questionGroup');
+    if (this.activeQuestionGroupService.activeQuestionGroup) {
+
+      this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
+        body: {
+          quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
+          privateKey: window.localStorage.getItem('privateKey')
+        }
+      }).subscribe((response: IMessage) => {
+        if (response.status !== 'STATUS:SUCCESS') {
+          console.log(response);
+        }
+      });
+
+      window.sessionStorage.removeItem('questionGroup');
+      window.sessionStorage.removeItem(`${this.activeQuestionGroupService.activeQuestionGroup.hashtag}_nick`);
+    }
     window.sessionStorage.removeItem('quiz_theme');
     window.sessionStorage.removeItem('webSocket');
-    this.currentQuiz.cleanUp();
+    this.activeQuestionGroupService.cleanUp();
     this.attendeeService.cleanUp();
+    this.currentQuiz.cleanUp();
   }
 
   ngOnInit(): void {

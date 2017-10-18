@@ -103,17 +103,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           }
           break;
       }
-    });
 
-    if (!this._isOwner) {
-      this.connectionService.socket.subscribe((message) => {
-        const data = message;
+      if (!this._isOwner) {
         switch (data.step) {
           case 'LOBBY:ALL_PLAYERS':
             data.payload.members.forEach((elem: INickname) => {
               this.attendeeService.addMember(elem);
             });
-            FooterBarComponent.footerElemStartQuiz.isActive = true;
             break;
           case 'QUIZ:NEXT_QUESTION':
             this.currentQuizService.currentQuestion = data.payload.question;
@@ -122,10 +118,14 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
             this.router.navigate(['/voting']);
             break;
         }
-      });
-    }
+      }
+    });
+
     this.connectionService.socket.next({
-      step: 'LOBBY:GET_PLAYERS'
+      step: 'LOBBY:GET_PLAYERS',
+      payload: {
+        quizName: this._hashtag
+      }
     });
   }
 
@@ -159,7 +159,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     }).subscribe(
       (data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-          window.sessionStorage.setItem(`${this._hashtag}_nick`, 'testnick');
+          window.sessionStorage.setItem(`${this._hashtag}_nick`, name);
+          window.sessionStorage.setItem('webSocketAuthorization', data.payload.webSocketAuthorization);
+          this.connectionService.authorizeWebSocket(this._hashtag);
         }
       }
     );
@@ -176,7 +178,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
             this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
             setTimeout(() => this.handleIncomingPlayers(), 1000);
             this.addTestPlayer('testnick');
-            this.addTestPlayer('testnickerina');
           },
           (error) => {
             console.log('error', error);
@@ -184,6 +185,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         );
       } else {
         this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
+        this.connectionService.authorizeWebSocket(this._hashtag);
         setTimeout(() => this.handleIncomingPlayers(), 1000);
       }
     });

@@ -1,3 +1,4 @@
+import * as WebSocket from 'ws';
 import {IQuestionGroup} from './questions/interfaces';
 import {WebSocketRouter} from '../routes/websocket';
 
@@ -18,7 +19,8 @@ export declare interface INickname {
   id: number;
   name: string;
   colorCode: string;
-  webSocket: number;
+  webSocket: WebSocket;
+  webSocketAuthorization: number;
   responses: Array<IQuizResponse>;
 
   serialize(): Object;
@@ -32,7 +34,7 @@ export declare interface IActiveQuiz {
   webSocketRouter: WebSocketRouter;
   currentStartTimestamp: number;
 
-  addMember(name: string, webSocketId: number): boolean;
+  addMember(name: string, webSocketAuthorization: number): boolean;
 
   removeMember(name: string): boolean;
 
