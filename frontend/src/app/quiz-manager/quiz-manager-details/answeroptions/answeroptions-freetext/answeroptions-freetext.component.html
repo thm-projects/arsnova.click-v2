@@ -13,14 +13,14 @@
                     (input)="setMatchText($event)"
                     (propertychange)="setMatchText($event)"
                     [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate">
-            {{answerText}}
+            {{question.answerOptionList[0].answerText}}
           </textarea>
       </div>
     </div>
     <div class="row mb-3">
       <div class="col-12">
         <div class="row">
-          <div *ngFor="let elem of question.answerOptionList[0].getConfig()"
+          <div *ngFor="let elem of answer"
                class="col-12 col-sm-6 mb-2 d-flex answerOptionConfig"
                [attr.data-intro]="elem.configTitle | translate">
             <p class="mb-0 mr-2 text-light align-self-center"

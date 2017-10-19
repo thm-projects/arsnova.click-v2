@@ -84,6 +84,13 @@ class Member implements INickname {
 }
 
 class ActiveQuizItem implements IActiveQuiz {
+  get ownerSocket(): WebSocket {
+    return this._ownerSocket;
+  }
+
+  set ownerSocket(value: WebSocket) {
+    this._ownerSocket = value;
+  }
   get currentStartTimestamp(): number {
     return this._currentStartTimestamp;
   }
@@ -117,6 +124,7 @@ class ActiveQuizItem implements IActiveQuiz {
   private _originalObject: IQuestionGroup;
   private _webSocketRouter: WebSocketRouter;
   private _currentStartTimestamp: number;
+  private _ownerSocket: WebSocket;
 
   constructor({nicknames, originalObject}: { nicknames: Array<INickname>, originalObject: IQuestionGroup }) {
     this._name = originalObject.hashtag;
@@ -139,6 +147,7 @@ class ActiveQuizItem implements IActiveQuiz {
         value.webSocket.send(JSON.stringify(message));
       }
     });
+    this._ownerSocket.send(JSON.stringify(message));
   }
 
   public reset(): void {
@@ -263,6 +272,7 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
   public webSocketRouter: WebSocketRouter;
   public currentStartTimestamp: number;
   public webSocketAuthorization: number;
+  public ownerSocket: WebSocket;
 
   constructor(name: string) {
     this.name = name;

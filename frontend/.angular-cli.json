@@ -5,13 +5,12 @@
   },
   "apps": [
     {
-      "serviceWorker": true,
+      "serviceWorker": false,
       "root": "src",
       "outDir": "dist",
       "assets": [
         "assets",
         "manifest.json",
-        "service-worker.js",
         "favicon.svg"
       ],
       "index": "index.html",

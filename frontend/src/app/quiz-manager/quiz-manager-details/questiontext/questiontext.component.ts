@@ -5,8 +5,7 @@ import {QuestionTextService} from '../../../service/question-text.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute} from '@angular/router';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
-import {LIVE_PREVIEW_ENVIRONMENT} from 'environments/environment';
-import {DEVICE_TYPES} from '../../../../environments/environment';
+import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from 'environments/environment';
 
 @Component({
   selector: 'app-questiontext',

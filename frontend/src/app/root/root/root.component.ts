@@ -10,9 +10,23 @@ import {QrCodeService} from '../../service/qr-code.service';
   styleUrls: ['./root.component.scss']
 })
 export class RootComponent implements OnInit {
+  get showQrCode(): boolean {
+    return this._showQrCode;
+  }
 
-  private showQrCode = false;
-  private qrCodeContent = '';
+  set showQrCode(value: boolean) {
+    this._showQrCode = value;
+  }
+  get qrCodeContent(): string {
+    return this._qrCodeContent;
+  }
+
+  set qrCodeContent(value: string) {
+    this._qrCodeContent = value;
+  }
+
+  private _showQrCode = false;
+  private _qrCodeContent = '';
 
   constructor(
     private footerBarService: FooterBarService,

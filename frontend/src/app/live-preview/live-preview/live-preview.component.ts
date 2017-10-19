@@ -13,15 +13,30 @@ import {IQuestionChoice} from '../../../lib/questions/interfaces';
   styleUrls: ['./live-preview.component.scss']
 })
 export class LivePreviewComponent implements OnInit, OnDestroy {
+  get targetDevice(): DEVICE_TYPES {
+    return this._targetDevice;
+  }
+  get targetEnvironment(): LIVE_PREVIEW_ENVIRONMENT {
+    return this._targetEnvironment;
+  }
   get question(): IQuestionChoice {
     return this._question;
+  }
+
+  @Input()
+  set targetDevice(value: DEVICE_TYPES) {
+    this._targetDevice = value;
+  }
+  @Input()
+  set targetEnvironment(value: LIVE_PREVIEW_ENVIRONMENT) {
+    this._targetEnvironment = value;
   }
 
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
 
-  @Input() private targetDevice: DEVICE_TYPES;
-  @Input() private targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
+  private _targetDevice: DEVICE_TYPES;
+  private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
   private questionTextDataSource: string;
   private answers: Array<IAnswerOption>;
 

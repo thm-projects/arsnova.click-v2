@@ -9,6 +9,20 @@ import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./reading-confirmation.component.scss']
 })
 export class ReadingConfirmationComponent implements OnInit {
+  get percent(): string {
+    return this._percent;
+  }
+
+  set percent(value: string) {
+    this._percent = value;
+  }
+  get base(): number {
+    return this._base;
+  }
+
+  set base(value: number) {
+    this._base = value;
+  }
   @Input()
   set data(value: any) {
     this._data = value;
@@ -25,8 +39,8 @@ export class ReadingConfirmationComponent implements OnInit {
     this._name = result[0];
   }
 
-  private percent: string;
-  private base: number;
+  private _percent: string;
+  private _base: number;
   private absolute: number;
 
   private _data: Object;

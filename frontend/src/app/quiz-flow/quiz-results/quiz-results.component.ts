@@ -166,29 +166,35 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  private handleResponseUpdates() {
-    this.connectionService.socket.next({
-      step: 'LOBBY:GET_PLAYERS',
-      payload: {
-        quizName: this._hashtag
-      }
-    });
-    this.connectionService.socket.subscribe((message) => {
-      const data = message;
+  handleMessages() {
+    this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
-        case 'LOBBY:ALL_PLAYERS':
-          data.payload.members.forEach(nickname => {
-            this.attendeeService.addMember(nickname);
-          });
-          break;
         case 'MEMBER:UPDATED_RESPONSE':
+          console.log('modify response data for nickname', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
+          this.router.navigate(['/quiz-lobby']);
           break;
       }
+      this._isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
+  }
+
+  private handleMessagesForOwner(data: IMessage) {
+    switch (data.step) {
+      default:
+        return;
+    }
+  }
+
+  private handleMessagesForAttendee(data: IMessage) {
+    switch (data.step) {
+      case 'QUIZ:UPDATED_SETTINGS':
+        this.currentQuizService.sessionConfiguration[data.payload.target] = data.payload.state;
+        break;
+    }
   }
 
   private sendDummyTestData(): void {
@@ -243,23 +249,22 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
               this._isActiveQuiz = !!value;
             }
           });
+          this.connectionService.authorizeWebSocketAsOwner(this._hashtag);
           if (data.status === 'STATUS:SUCCESSFUL') {
             setTimeout(() => {
               this.sendDummyTestData();
             }, 1500);
-            setTimeout(() => {
-              this.sendDummyTestData2();
-            }, 2500);
           }
         }
       );
     } else {
+      this.connectionService.authorizeWebSocket(this._hashtag);
       this._questions = [this.currentQuizService.currentQuestion];
       console.log(this._questions);
-      this._sessionConfig = new SessionConfiguration();
+      this._sessionConfig = new SessionConfiguration(this.currentQuizService.sessionConfiguration);
     }
     this.connectionService.initConnection().then(() => {
-      setTimeout(() => this.handleResponseUpdates(), 1000);
+      this.handleMessages();
     });
   }
 

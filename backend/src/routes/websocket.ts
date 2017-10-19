@@ -1,6 +1,7 @@
 import * as WebSocket from 'ws';
 import QuizManagerDAO from '../db/quiz-manager';
 import {IActiveQuiz, INickname} from '../interfaces/common.interfaces';
+import {DatabaseTypes, DbDao} from '../db/DbDao';
 
 export declare interface IMessage {
   status: string;
@@ -21,13 +22,30 @@ export class WebSocketRouter {
         try {
           message = JSON.parse(message);
 
+          console.log(`received message step ${message.step} with content ${message.payload}`);
+
           if (message.step === 'WEBSOCKET:AUTHORIZE') {
             const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(message.payload.quizName);
             activeQuiz.nicknames.forEach(nickname => {
               if (nickname.webSocketAuthorization === parseFloat(message.payload.webSocketAuthorization)) {
                 nickname.webSocket = ws;
+                ws.send(JSON.stringify({status: 'STATUS:SUCCESSFULL', step: 'WEBSOCKET:AUTHORIZED'}));
               }
             });
+          }
+
+          if (message.step === 'WEBSOCKET:AUTHORIZE_AS_OWNER') {
+            const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(message.payload.quizName);
+            const isOwner: Object = DbDao.read(DatabaseTypes.quiz, {
+              quizName: message.payload.quizName,
+              privateKey: message.payload.webSocketAuthorization
+            });
+            if (Object.keys(isOwner).length > 0) {
+              activeQuiz.ownerSocket = ws;
+              ws.send(JSON.stringify({status: 'STATUS:SUCCESSFULL', step: 'WEBSOCKET:AUTHORIZED'}));
+            } else {
+              ws.send(JSON.stringify({status: 'STATUS:FAILED', step: 'INSUFFICIENT_PERMISSIONS'}));
+            }
           }
 
           if (message.step === 'LOBBY:GET_PLAYERS') {

@@ -43,7 +43,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
-    private attendeeService: AttendeeService) {
+    public attendeeService: AttendeeService) {
     if (activeQuestionGroupService.activeQuestionGroup) {
       footerBarService.replaceFooterElments([
         FooterBarComponent.footerElemEditQuiz,
@@ -73,60 +73,58 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     headerLabelService.setHeaderLabel('component.lobby.title');
   }
 
-  private handleIncomingPlayers() {
-    this.connectionService.socket.subscribe((message) => {
-      const data = message;
+  private handleMessages() {
+    this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'LOBBY:INACTIVE':
-          setTimeout(this.handleIncomingPlayers, 500);
+          setTimeout(this.handleMessages, 500);
           break;
         case 'LOBBY:ALL_PLAYERS':
           data.payload.members.forEach((elem: INickname) => {
-            console.log(elem);
             this.attendeeService.addMember(elem);
           });
-          FooterBarComponent.footerElemStartQuiz.isActive = true;
           break;
         case 'MEMBER:ADDED':
           this.attendeeService.addMember(data.payload.member);
-          FooterBarComponent.footerElemStartQuiz.isActive = true;
           break;
         case 'MEMBER:REMOVED':
           this.attendeeService.attendees = this.attendeeService.attendees.filter(player => player.name !== data.payload.name);
-          if (!this.attendeeService.attendees.length) {
-            FooterBarComponent.footerElemStartQuiz.isActive = false;
-          }
-          const existingNickname = window.sessionStorage.getItem(`${this._hashtag}_nick`);
-          if (existingNickname === data.payload.name) {
-            window.sessionStorage.removeItem(`${this._hashtag}_nick`);
-            this.router.navigate(['/']);
-          }
           break;
       }
+      this._isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
+    });
+  }
 
-      if (!this._isOwner) {
-        switch (data.step) {
-          case 'LOBBY:ALL_PLAYERS':
-            data.payload.members.forEach((elem: INickname) => {
-              this.attendeeService.addMember(elem);
-            });
-            break;
-          case 'QUIZ:NEXT_QUESTION':
-            this.currentQuizService.currentQuestion = data.payload.question;
-            break;
-          case 'QUIZ:START':
-            this.router.navigate(['/voting']);
-            break;
+  private handleMessagesForOwner(data: IMessage) {
+    switch (data.step) {
+      case 'LOBBY:ALL_PLAYERS':
+      case 'MEMBER:ADDED':
+        FooterBarComponent.footerElemStartQuiz.isActive = true;
+        break;
+      case 'MEMBER:REMOVED':
+        if (!this.attendeeService.attendees.length) {
+          FooterBarComponent.footerElemStartQuiz.isActive = false;
         }
-      }
-    });
+        break;
+    }
+  }
 
-    this.connectionService.socket.next({
-      step: 'LOBBY:GET_PLAYERS',
-      payload: {
-        quizName: this._hashtag
-      }
-    });
+  private handleMessagesForAttendee(data: IMessage) {
+    switch (data.step) {
+      case 'QUIZ:NEXT_QUESTION':
+        this.currentQuizService.currentQuestion = data.payload.question;
+        break;
+      case 'QUIZ:START':
+        this.router.navigate(['/voting']);
+        break;
+      case 'MEMBER:REMOVED':
+        const existingNickname = window.sessionStorage.getItem(`${this._hashtag}_nick`);
+        if (existingNickname === data.payload.name) {
+          window.sessionStorage.removeItem(`${this._hashtag}_nick`);
+          this.router.navigate(['/']);
+        }
+        break;
+    }
   }
 
   kickMember(name: string): void {
@@ -176,7 +174,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         }).subscribe(
           () => {
             this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
-            setTimeout(() => this.handleIncomingPlayers(), 1000);
+            this.connectionService.authorizeWebSocketAsOwner(this._hashtag);
+            this.handleMessages();
             this.addTestPlayer('testnick');
           },
           (error) => {
@@ -186,7 +185,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       } else {
         this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
         this.connectionService.authorizeWebSocket(this._hashtag);
-        setTimeout(() => this.handleIncomingPlayers(), 1000);
+        this.handleMessages();
       }
     });
   }

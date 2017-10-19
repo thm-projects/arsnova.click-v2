@@ -7,6 +7,9 @@ import {DefaultSettings} from '../../service/settings.service';
   styleUrls: ['./audio-player.component.scss']
 })
 export class AudioPlayerComponent implements OnInit, AfterViewInit {
+  get randomUUID(): string {
+    return this._randomUUID;
+  }
   get loop(): boolean {
     return this._loop;
   }

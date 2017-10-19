@@ -42,6 +42,13 @@ function isSessionStorageSupported(): boolean {
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  get offline(): boolean {
+    return this._offline;
+  }
+
+  set offline(value: boolean) {
+    this._offline = value;
+  }
   get localStorageAvailable(): Boolean {
     return this._localStorageAvailable;
   }
@@ -64,6 +71,7 @@ export class HeaderComponent implements OnInit {
   private _inHomeRoute: Boolean = location.pathname === '/';
   private _localStorageAvailable: boolean = isLocalStorageSupported();
   private _sessionStorageAvailable: boolean = isSessionStorageSupported();
+  private _offline = false;
 
   @Input() headerLabel: string;
 

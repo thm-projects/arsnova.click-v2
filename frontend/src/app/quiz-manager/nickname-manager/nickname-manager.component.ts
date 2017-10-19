@@ -50,7 +50,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     return this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.hasSelectedNick(name);
   }
 
-  hasSelectedCategory(category: string): boolean {
+  hasSelectedCategory(category?: string): boolean {
     return category ? category === this._selectedCategory : !!this._selectedCategory;
   }
 

@@ -33,6 +33,7 @@ export declare interface IActiveQuiz {
   originalObject: IQuestionGroup;
   webSocketRouter: WebSocketRouter;
   currentStartTimestamp: number;
+  ownerSocket: WebSocket;
 
   addMember(name: string, webSocketAuthorization: number): boolean;
 

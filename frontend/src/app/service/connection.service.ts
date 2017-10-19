@@ -52,6 +52,7 @@ export class ConnectionService {
   }
 
   authorizeWebSocket(hashtag: string): void {
+    console.log(this._isWebSocketAuthorized);
     if (this._isWebSocketAuthorized) {
       return;
     }
@@ -59,6 +60,17 @@ export class ConnectionService {
     this._socket.next({step: 'WEBSOCKET:AUTHORIZE', payload: {
       quizName: hashtag,
       webSocketAuthorization: window.sessionStorage.getItem('webSocketAuthorization')
+    }});
+  }
+
+  authorizeWebSocketAsOwner(hashtag: string): void {
+    if (this._isWebSocketAuthorized) {
+      return;
+    }
+    this._isWebSocketAuthorized = true;
+    this._socket.next({step: 'WEBSOCKET:AUTHORIZE_AS_OWNER', payload: {
+      quizName: hashtag,
+      webSocketAuthorization: window.localStorage.getItem('privateKey')
     }});
   }
 

@@ -5,6 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {FreeTextAnswerOption} from '../../../../../lib/answeroptions/answeroption_freetext';
 import {IQuestion} from '../../../../../lib/questions/interfaces';
+import {IAnswerOption, IFreetextAnswerOption} from '../../../../../lib/answeroptions/interfaces';
 
 @Component({
   selector: 'app-answeroptions-freetext',
@@ -12,6 +13,9 @@ import {IQuestion} from '../../../../../lib/questions/interfaces';
   styleUrls: ['./answeroptions-freetext.component.scss']
 })
 export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
+  get answer(): IFreetextAnswerOption {
+    return this._answer;
+  }
   get matchText(): string {
     return this._matchText;
   }
@@ -25,6 +29,7 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   private _routerSubscription: Subscription;
   private _testInput = '';
   private _matchText = '';
+  private _answer: IFreetextAnswerOption;
 
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
@@ -57,6 +62,7 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
       this._questionIndex = +params['questionIndex'];
       this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
       this._matchText = this._question.answerOptionList[0].answerText;
+      this._answer = <IFreetextAnswerOption>this._question.answerOptionList[0];
     });
   }
 

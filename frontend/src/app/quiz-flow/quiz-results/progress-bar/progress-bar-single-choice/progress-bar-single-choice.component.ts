@@ -7,6 +7,20 @@ import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./progress-bar-single-choice.component.scss']
 })
 export class ProgressBarSingleChoiceComponent implements OnInit {
+  get percent(): number {
+    return this._percent;
+  }
+
+  set percent(value: number) {
+    this._percent = value;
+  }
+  get base(): number {
+    return this._base;
+  }
+
+  set base(value: number) {
+    this._base = value;
+  }
   @Input()
   set attendeeData(value: any) {
     this.percent = value.percent;
@@ -16,8 +30,8 @@ export class ProgressBarSingleChoiceComponent implements OnInit {
     this.normalizedAnswerIndex = String.fromCharCode(65 + value.answerIndex);
   }
 
-  private percent: number;
-  private base: number;
+  private _percent: number;
+  private _base: number;
   private absolute: number;
   private label: string;
   private normalizedAnswerIndex: string;
