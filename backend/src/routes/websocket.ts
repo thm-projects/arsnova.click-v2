@@ -10,14 +10,18 @@ export declare interface IMessage {
 }
 
 export class WebSocketRouter {
-  public static wss: WebSocket.Server;
-
-  constructor() {
-    this.init();
+  static get wss(): WebSocket.Server {
+    return this._wss;
   }
 
-  private init(): void {
-    WebSocketRouter.wss.on('connection', (ws: WebSocket) => {
+  static set wss(value: WebSocket.Server) {
+    this._wss = value;
+    WebSocketRouter.init();
+  }
+  private static _wss: WebSocket.Server;
+
+  private static init(): void {
+    WebSocketRouter._wss.on('connection', (ws: WebSocket) => {
       ws.on('message', (message: string | any) => {
         try {
           message = JSON.parse(message);
@@ -76,6 +80,10 @@ export class WebSocketRouter {
         } catch (ex) {
           ws.send(`Hello, you sent -> ${message}`);
         }
+      });
+
+      ws.send(JSON.stringify({status: 'STATUS:SUCCESSFULL', step: 'CONNECTED', payload: {}}), (err) => {
+        console.log('error while sending ws message', err);
       });
     });
   }

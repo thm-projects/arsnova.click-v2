@@ -70,22 +70,4 @@
 }
 
 #available_questions_wrapper {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex: 1 1 100%;
-  flex-wrap: wrap;
-
-  li {
-    border-radius: 10px;
-    padding: 5px;
-    margin: 5px;
-    border: 1px solid white;
-    flex-grow: 0;
-    text-align: center;
-    flex-shrink: 0;
-    flex-basis: calc(50% - 10px);
-    cursor: pointer;
-  }
 }

@@ -1,34 +1,34 @@
 <div class="row" id="quizManagerDetails">
   <div class="col-12">
-    <div class="btn-group btn-header mb-2 mb-sm-4" data-toggle="buttons"
+    <div class="btn-group btn-header mb-2 mb-sm-4 overflow-scroll" data-toggle="buttons"
          role="navigation" [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
       <button type="button"
               *ngIf="question.canEditQuestionText"
               class="btn btn-default"
               [routerLink]="['/quiz-manager', questionIndex, 'questionText']">
-        <span class="hidden-xs-down" [innerHTML]="'component.quiz_manager.details.question_text.long' | translate"></span>
-        <span class="hidden-sm-up" [innerHTML]="'component.quiz_manager.details.question_text.short' | translate"></span>
+        <span class="d-none d-sm-block" [innerHTML]="'component.quiz_manager.details.question_text.long' | translate"></span>
+        <span class="d-block d-sm-none" [innerHTML]="'component.quiz_manager.details.question_text.short' | translate"></span>
       </button>
       <button type="button"
               *ngIf="question.canEditAnsweroptions"
               class="btn btn-default"
               [routerLink]="['/quiz-manager', questionIndex, 'answeroptions']">
-        <span class="hidden-xs-down" [innerHTML]="'component.quiz_manager.details.answeroptions.long' | translate"></span>
-        <span class="hidden-sm-up" [innerHTML]="'component.quiz_manager.details.answeroptions.short' | translate"></span>
+        <span class="d-none d-sm-block" [innerHTML]="'component.quiz_manager.details.answeroptions.long' | translate"></span>
+        <span class="d-block d-sm-none" [innerHTML]="'component.quiz_manager.details.answeroptions.short' | translate"></span>
       </button>
       <button type="button"
               *ngIf="question.canEditQuestionTimer"
               class="btn btn-default"
               [routerLink]="['/quiz-manager', questionIndex, 'countdown']">
-        <span class="hidden-xs-down" [innerHTML]="'component.quiz_manager.details.timer.long' | translate"></span>
-        <span class="hidden-sm-up" [innerHTML]="'component.quiz_manager.details.timer.short' | translate"></span>
+        <span class="d-none d-sm-block" [innerHTML]="'component.quiz_manager.details.timer.long' | translate"></span>
+        <span class="d-block d-sm-none" [innerHTML]="'component.quiz_manager.details.timer.short' | translate"></span>
       </button>
       <button type="button"
               *ngIf="question.canEditQuestionType"
               class="btn btn-default"
               [routerLink]="['/quiz-manager', questionIndex, 'questionType']">
-        <span class="hidden-xs-down" [innerHTML]="'component.quiz_manager.details.question_type.long' | translate"></span>
-        <span class="hidden-sm-up" [innerHTML]="'component.quiz_manager.details.question_type.short' | translate"></span>
+        <span class="d-none d-sm-block" [innerHTML]="'component.quiz_manager.details.question_type.long' | translate"></span>
+        <span class="d-block d-sm-none" [innerHTML]="'component.quiz_manager.details.question_type.short' | translate"></span>
       </button>
     </div>
   </div>

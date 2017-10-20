@@ -1,5 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {CurrentQuizService} from './current-quiz.service';
+import {FooterBarComponent} from '../footer/footer-bar/footer-bar.component';
 
 export declare interface IQuizResponse {
   value: Array<number> | number | string;
@@ -78,6 +79,9 @@ export class AttendeeService implements OnDestroy {
       this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
         return new Player(attendee);
       });
+      if (this._attendees.length) {
+        FooterBarComponent.footerElemStartQuiz.isActive = true;
+      }
     }
   }
 
@@ -89,6 +93,7 @@ export class AttendeeService implements OnDestroy {
   addMember(attendee: INickname): void {
     if (!this.getMember(attendee.name)) {
       this._attendees.push(new Player(attendee));
+      this.persistToSessionStorage();
     }
   }
 
@@ -96,6 +101,7 @@ export class AttendeeService implements OnDestroy {
     this._attendees.forEach((attendee) => {
       attendee.responses.splice(0, attendee.responses.length);
     });
+    this.persistToSessionStorage();
   }
 
   isOwnNick(name: string): boolean {
@@ -112,11 +118,15 @@ export class AttendeeService implements OnDestroy {
 
   modifyResponse(attendee: INickname): void {
     this.getMember(attendee.name).responses = attendee.responses;
+    this.persistToSessionStorage();
+  }
+
+  persistToSessionStorage(): void {
     window.sessionStorage.setItem('_attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
   }
 
   ngOnDestroy() {
-    window.sessionStorage.setItem('_attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
+    this.persistToSessionStorage();
   }
 
 }

@@ -34,9 +34,7 @@ export class ReadingConfirmationComponent implements OnInit {
 
   @Input()
   set name(value: string) {
-    const result = [value];
-    parseGithubFlavoredMarkdown(result);
-    this._name = result[0];
+    this._name = parseGithubFlavoredMarkdown(value);
   }
 
   private _percent: string;

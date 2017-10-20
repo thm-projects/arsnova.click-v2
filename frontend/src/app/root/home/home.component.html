@@ -2,7 +2,7 @@
 <div class="row center-vertical" id="landingPageContent">
   <div class="col-md-10 col-lg-8 m-auto">
     <div class="row">
-      <div class="col-12">
+      <div class="col-12 px-1">
         <input type="text"
                class="text-center rounded w-100 mb-2 border-0 input-field"
                id="hashtag-input-field"
@@ -13,8 +13,8 @@
                [placeholder]="'component.hashtag_management.enter_quiz_name' | translate"/>
       </div>
     </div>
-    <div class="row no-gutters">
-      <div class="col-6 col-join-session pr-1">
+    <div class="row">
+      <div class="col-6 col-join-session px-1">
         <button id="joinSession"
                 (click)="joinQuiz()"
                 [class]="'btn btn-success btn-block ' + (!canJoinQuiz ? 'disabled' : '')"
@@ -24,7 +24,7 @@
           <span [innerHTML]="'component.hashtag_management.join_session' | translate"></span>
         </button>
       </div>
-      <div class="col-6 col-create-session pl-1">
+      <div class="col-6 col-create-session px-1">
         <button id="addSession"
                 [class]="'btn btn-success btn-block ' + (!canAddQuiz ? 'disabled' : '')"
                 *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"

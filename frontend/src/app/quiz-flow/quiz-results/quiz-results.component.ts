@@ -84,6 +84,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     if (activeQuestionGroupService.activeQuestionGroup) {
       this._isOwner = true;
       this._hashtag = activeQuestionGroupService.activeQuestionGroup.hashtag;
+      this.connectionService.authorizeWebSocketAsOwner(this._hashtag);
       this.footerBarService.replaceFooterElments([
         FooterBarComponent.footerElemBack,
         FooterBarComponent.footerElemReadingConfirmation,
@@ -146,7 +147,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   showResponseProgress(): boolean {
-    console.log(this._sessionConfig.showResponseProgress);
     return this._sessionConfig.showResponseProgress;
   }
 
@@ -249,7 +249,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
               this._isActiveQuiz = !!value;
             }
           });
-          this.connectionService.authorizeWebSocketAsOwner(this._hashtag);
           if (data.status === 'STATUS:SUCCESSFUL') {
             setTimeout(() => {
               this.sendDummyTestData();

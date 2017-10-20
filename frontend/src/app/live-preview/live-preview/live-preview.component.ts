@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, SecurityContext} from '@angular/core';
 import {QuestionTextService} from '../../service/question-text.service';
 import {Subscription} from 'rxjs/Subscription';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../environments/environment';
@@ -6,6 +6,7 @@ import {IAnswerOption} from '../../../lib/answeroptions/interfaces';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice} from '../../../lib/questions/interfaces';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-live-preview',
@@ -37,7 +38,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
   private _targetDevice: DEVICE_TYPES;
   private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
-  private questionTextDataSource: string;
+  private questionTextDataSource: SafeHtml;
   private answers: Array<IAnswerOption>;
 
   private _question: IQuestionChoice;
@@ -47,7 +48,8 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   constructor(
     private questionTextService: QuestionTextService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer) {
   }
 
   public deviceClass() {
@@ -84,12 +86,16 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return String.fromCharCode(65 + index);
   }
 
+  sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  }
+
   ngOnInit() {
     switch (this.targetEnvironment) {
       case this.ENVIRONMENT_TYPE.QUESTION:
-        this.questionTextDataSource = this.questionTextService.currentValue.join('<br/>');
+        this.questionTextDataSource = this.sanitizeHTML(this.questionTextService.currentValue);
         this._subscription = this.questionTextService.getEmitter().subscribe(
-          value => this.questionTextDataSource = value.join('<br/>')
+          value => this.questionTextDataSource = this.sanitizeHTML(value)
         );
         break;
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:

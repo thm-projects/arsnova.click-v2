@@ -4,21 +4,18 @@ import {parseGithubFlavoredMarkdown} from '../../lib/markdown/markdown';
 @Injectable()
 export class QuestionTextService {
 
-  @Output() fire: EventEmitter<string[]> = new EventEmitter();
-  public currentValue: string[] = [''];
+  @Output() fire: EventEmitter<string> = new EventEmitter();
+  public currentValue = '';
 
   constructor() {
   }
 
   change(value: string): void {
-    const result = value.split('\n');
-    parseGithubFlavoredMarkdown(result);
-    console.log(result);
-    this.currentValue = result;
-    this.fire.emit(result);
+    this.currentValue = parseGithubFlavoredMarkdown(value);
+    this.fire.emit(this.currentValue);
   }
 
-  getEmitter(): EventEmitter<string[]> {
+  getEmitter(): EventEmitter<string> {
     return this.fire;
   }
 

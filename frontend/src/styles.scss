@@ -24,7 +24,7 @@ input, .footerElement {
 }
 
 .center-vertical {
-  height: 90vh;
+  height: 100%;
   align-content: center;
   align-items: center;
 }
@@ -37,12 +37,21 @@ input, .footerElement {
   overflow: hidden;
 }
 
+.overflow-scroll {
+  overflow: scroll;
+}
+
 .relative {
   position: relative;
 }
 
 button:disabled {
   cursor: not-allowed !important;
+}
+
+img[alt="emoji"] {
+  height: 24px;
+  width: 24px;
 }
 
 #header {

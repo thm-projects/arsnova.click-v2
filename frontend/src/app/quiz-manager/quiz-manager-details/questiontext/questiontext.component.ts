@@ -85,6 +85,26 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this.questionTextElement.value = `${pre}${symbolFinal} ${selected}${post}`;
   }
 
+  private wrapWithLinkSymbol() {
+    const selectionStart = this.questionTextElement.selectionStart;
+    const selectionEnd = this.questionTextElement.selectionEnd;
+    const pre = this.questionTextElement.value.substr(0, selectionStart - length);
+    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
+    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
+
+    this.questionTextElement.value = `${pre}[${selected}](${selected})${post}`;
+  }
+
+  private wrapWithImageSymbol() {
+    const selectionStart = this.questionTextElement.selectionStart;
+    const selectionEnd = this.questionTextElement.selectionEnd;
+    const pre = this.questionTextElement.value.substr(0, selectionStart - length);
+    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
+    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
+
+    this.questionTextElement.value = `${pre}![${selected}](${selected})${post}`;
+  }
+
   connector(event) {
     switch (event) {
       case 'boldMarkdownButton':
@@ -101,6 +121,18 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
         break;
       case 'headerMarkdownButton':
         this.prependMarkdownSymbol('#', 6);
+        break;
+      case 'hyperlinkMarkdownButton':
+        this.wrapWithLinkSymbol();
+        break;
+      case 'imageMarkdownButton':
+        this.wrapWithImageSymbol();
+        break;
+      case 'codeMarkdownButton':
+        break;
+      case 'ulMarkdownButton':
+        break;
+      case 'latexMarkdownButton':
         break;
     }
     this.questionTextService.change(this.questionTextElement.value);

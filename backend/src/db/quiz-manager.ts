@@ -147,7 +147,11 @@ class ActiveQuizItem implements IActiveQuiz {
         value.webSocket.send(JSON.stringify(message));
       }
     });
-    this._ownerSocket.send(JSON.stringify(message));
+    if (this._ownerSocket) {
+      this._ownerSocket.send(JSON.stringify(message));
+    } else {
+      console.log('no owner socket defined');
+    }
   }
 
   public reset(): void {

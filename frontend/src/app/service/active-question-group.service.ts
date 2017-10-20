@@ -1,6 +1,10 @@
 import {Injectable} from '@angular/core';
 import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../lib/questions/interfaces';
+import {HttpClient} from '@angular/common/http';
+import {DefaultSettings} from './settings.service';
+import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {ConnectionService} from 'app/service/connection.service';
 
 @Injectable()
 export class ActiveQuestionGroupService {
@@ -9,17 +13,17 @@ export class ActiveQuestionGroupService {
   }
 
   set activeQuestionGroup(value: IQuestionGroup) {
-    if (!value) {
-      window.sessionStorage.removeItem('questionGroup');
-    } else {
-      window.sessionStorage.setItem('questionGroup', JSON.stringify(value.serialize()));
-    }
     this._activeQuestionGroup = value;
+    if (value) {
+      this.persistForSession();
+    }
   }
 
   private _activeQuestionGroup: IQuestionGroup;
 
-  constructor() {
+  constructor(
+    private http: HttpClient,
+    private connectionService: ConnectionService) {
     if (window.sessionStorage.getItem('questionGroup')) {
       const serializedObject = window.sessionStorage.getItem('questionGroup');
       const parsedObject = JSON.parse(serializedObject);
@@ -38,8 +42,23 @@ export class ActiveQuestionGroupService {
   }
 
   public cleanUp(): void {
+    this.close();
     this.activeQuestionGroup = null;
-}
+  }
+
+  public close(): void {
+    window.sessionStorage.removeItem(`${this.activeQuestionGroup.hashtag}_nick`);
+    this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
+      body: {
+        quizName: this.activeQuestionGroup.hashtag,
+        privateKey: window.localStorage.getItem('privateKey')
+      }
+    }).subscribe((response: IMessage) => {
+      if (response.status !== 'STATUS:SUCCESS') {
+        console.log(response);
+      }
+    });
+  }
 
   persistForSession() {
     window.sessionStorage.setItem('questionGroup', JSON.stringify(this.activeQuestionGroup.serialize()));

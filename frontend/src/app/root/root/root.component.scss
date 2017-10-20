@@ -1,12 +1,13 @@
 @import "../../../styles_vendor";
 
 #content-container {
-  height: 100%;
-
   @include media-breakpoint-down(xs) {
     height: 80vh;
     top: 10vh;
     position: absolute;
+  }
+  @include media-breakpoint-up(sm) {
+    height: 90vh;
   }
 }
 

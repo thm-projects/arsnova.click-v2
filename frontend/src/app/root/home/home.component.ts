@@ -85,26 +85,14 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private cleanUpSessionStorage(): void {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
-
-      this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
-        body: {
-          quizName: this.activeQuestionGroupService.activeQuestionGroup.hashtag,
-          privateKey: window.localStorage.getItem('privateKey')
-        }
-      }).subscribe((response: IMessage) => {
-        if (response.status !== 'STATUS:SUCCESS') {
-          console.log(response);
-        }
-      });
-
+      this.activeQuestionGroupService.cleanUp();
       window.sessionStorage.removeItem('questionGroup');
-      window.sessionStorage.removeItem(`${this.activeQuestionGroupService.activeQuestionGroup.hashtag}_nick`);
     }
     window.sessionStorage.removeItem('quiz_theme');
     window.sessionStorage.removeItem('webSocket');
-    this.activeQuestionGroupService.cleanUp();
     this.attendeeService.cleanUp();
     this.currentQuiz.cleanUp();
+    this.connectionService.cleanUp();
   }
 
   ngOnInit(): void {

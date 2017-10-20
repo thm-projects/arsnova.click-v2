@@ -27,8 +27,6 @@ server.on('error', onError);
 server.on('listening', onListening);
 server.on('close', onClose);
 
-WebSocketRouter.wss = new WebSocket.Server({server});
-
 const languages: any = {'en': 'en'};
 const params: any = [path.join(__dirname, '../theme_preview/phantomDriver.js')];
 const themePreviewEndpoint: string = 'http://localhost:4200/preview';
@@ -85,8 +83,12 @@ function onListening(): void {
   const addr: { port: number; family: string; address: string; } = server.address();
   const bind: string = (typeof addr === 'string') ? `pipe ${addr}` : `port ${addr.port}`;
   debug(`Listening on ${bind}`);
+
+  WebSocketRouter.wss = new WebSocket.Server({server});
 }
 
 function onClose(): void {
   DbDao.closeConnection(DatabaseTypes.quiz);
+
+  WebSocketRouter.wss.close();
 }

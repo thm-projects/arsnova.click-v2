@@ -47,31 +47,41 @@ export class ConnectionService {
   private initWebsocket() {
     this._socket = <Subject<IMessage>>this.websocketService.connect()
                                          .map((response: MessageEvent): IMessage => {
+      this._websocketAvailable = true;
                                            return JSON.parse(response.data);
                                          });
   }
 
-  authorizeWebSocket(hashtag: string): void {
-    console.log(this._isWebSocketAuthorized);
-    if (this._isWebSocketAuthorized) {
+  cleanUp(): void {
+    this._isWebSocketAuthorized = false;
+  }
+
+  private sendAuthorizationMessage(hashtag: string, step: string, auth: string): void {
+    if (!this._websocketAvailable) {
+      setTimeout(() => {this.sendAuthorizationMessage(hashtag, step, auth); }, 500);
       return;
     }
-    this._isWebSocketAuthorized = true;
-    this._socket.next({step: 'WEBSOCKET:AUTHORIZE', payload: {
+    this._socket.next({step: step, payload: {
       quizName: hashtag,
-      webSocketAuthorization: window.sessionStorage.getItem('webSocketAuthorization')
+      webSocketAuthorization: auth
     }});
   }
 
-  authorizeWebSocketAsOwner(hashtag: string): void {
+  authorizeWebSocket(hashtag: string): void {
     if (this._isWebSocketAuthorized) {
       return;
     }
     this._isWebSocketAuthorized = true;
-    this._socket.next({step: 'WEBSOCKET:AUTHORIZE_AS_OWNER', payload: {
-      quizName: hashtag,
-      webSocketAuthorization: window.localStorage.getItem('privateKey')
-    }});
+    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE', window.sessionStorage.getItem('webSocketAuthorization'));
+  }
+
+  authorizeWebSocketAsOwner(hashtag: string): void {
+    console.log('websocketauth', this._isWebSocketAuthorized);
+    if (this._isWebSocketAuthorized) {
+      return;
+    }
+    this._isWebSocketAuthorized = true;
+    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER', window.localStorage.getItem('privateKey'));
   }
 
   initConnection(): Promise<boolean> {

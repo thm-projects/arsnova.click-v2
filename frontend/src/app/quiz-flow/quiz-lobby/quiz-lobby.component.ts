@@ -63,6 +63,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
         return self.isActive ? '/quiz-results' : null;
       };
+      FooterBarComponent.footerElemEditQuiz.onClickCallback = function () {
+        if (activeQuestionGroupService.activeQuestionGroup) {
+          activeQuestionGroupService.close();
+          attendeeService.cleanUp();
+          connectionService.cleanUp();
+        }
+      };
     } else {
       footerBarService.replaceFooterElments([
         FooterBarComponent.footerElemBack

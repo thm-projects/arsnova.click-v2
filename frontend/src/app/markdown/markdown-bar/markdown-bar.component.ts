@@ -178,7 +178,9 @@ export class MarkdownBarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.flipIconClasses(ShowMoreMarkdownButton);
+    if (this.showHiddenMarkdownButtons) {
+      this.flipIconClasses(ShowMoreMarkdownButton);
+    }
   }
 
 }
