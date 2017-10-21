@@ -3,10 +3,13 @@ import {ActiveQuestionGroupService} from 'app/service/active-question-group.serv
 import {DefaultSettings} from './settings.service';
 import {ITheme} from '../../lib/common.interfaces';
 import {HttpClient} from '@angular/common/http';
-import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 
 @Injectable()
 export class ThemesService {
+  get currentTheme(): string {
+    return this._currentTheme;
+  }
   private previewThemeBackup = '';
 
   get themes(): Array<Object> {
@@ -14,6 +17,7 @@ export class ThemesService {
   }
 
   private _themes: Array<ITheme> = [];
+  private _currentTheme: string;
 
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
@@ -41,6 +45,7 @@ export class ThemesService {
     if (document.body.className) {
       document.body.classList.remove(document.body.className);
     }
+    this._currentTheme = usedTheme;
     document.body.className = usedTheme;
   }
 

@@ -3,7 +3,7 @@ import {DefaultSettings} from './settings.service';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
 import {Subject} from 'rxjs/Subject';
-import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 
 @Injectable()
 export class ConnectionService {
@@ -98,7 +98,7 @@ export class ConnectionService {
         () => {
           self.serverAvailable = false;
           self._websocketAvailable = false;
-          reject();
+          //reject();
         }
       );
     });

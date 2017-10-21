@@ -8,7 +8,7 @@ import {questionGroupReflection} from '../../../lib/questions/questionGroup_refl
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
-import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {RequestMethod, RequestOptions, RequestOptionsArgs} from '@angular/http';
 
 @Component({
@@ -52,13 +52,13 @@ export class SessionManagementComponent implements OnInit {
   startQuiz(session: string): void {
     const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
     this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
-    this.router.navigate(['/quiz-lobby']);
+    this.router.navigate(['/quiz/flow']);
   }
 
   editQuiz(session: string): void {
     const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
     this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
-    this.router.navigate(['/quiz-manager']);
+    this.router.navigate(['/quiz/manager']);
   }
 
   exportQuiz(session: string): void {

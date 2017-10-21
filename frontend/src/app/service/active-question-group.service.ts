@@ -3,7 +3,7 @@ import {questionGroupReflection} from '../../lib/questions/questionGroup_reflect
 import {IQuestionGroup} from '../../lib/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from './settings.service';
-import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {ConnectionService} from 'app/service/connection.service';
 
 @Injectable()

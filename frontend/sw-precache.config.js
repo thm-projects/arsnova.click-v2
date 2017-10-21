@@ -3,7 +3,7 @@ module.exports = {
   stripPrefix: 'dist',
   root: 'dist/',
   staticFileGlobs: [
-    'dist/**/*.{html,css,js,jpg,png,woff?,ttf,svg,eot,otf,json}'
+    'dist/**/*.{html,css,js,jpg,png,woff?,ttf,svg,eot,otf,json,gz}'
   ],
   maximumFileSizeToCacheInBytes: 3000000,
   verbose: true

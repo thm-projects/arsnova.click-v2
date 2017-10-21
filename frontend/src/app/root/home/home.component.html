@@ -28,28 +28,28 @@
         <button id="addSession"
                 [class]="'btn btn-success btn-block ' + (!canAddQuiz ? 'disabled' : '')"
                 *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
-                (click)="setActiveQuestionGroup(['/quiz-manager'])"
+                (click)="setActiveQuestionGroup(['/quiz', 'manager', 'overview'])"
                 [disabled]="!canAddQuiz">
           <span [innerHTML]="'component.hashtag_management.create_session' | translate"></span>
           <i class="fa fa-edit"></i>
         </button>
         <button id="editSession"
                 class="btn btn-success btn-block"
-                (click)="setActiveQuestionGroup(['/quiz-manager'])"
+                (click)="setActiveQuestionGroup(['/quiz', 'manager', 'overview'])"
                 *ngIf="canEditQuiz">
           <span [innerHTML]="'component.hashtag_management.edit_session' | translate"></span>
           <i class="fa fa-edit"></i>
         </button>
         <button id="runDemoQuizSession"
                 class="btn btn-success btn-block"
-                (click)="setActiveQuestionGroup(['/quiz-lobby'])"
+                (click)="setActiveQuestionGroup(['/quiz', 'flow', 'lobby'])"
                 *ngIf="isAddingDemoQuiz">
           <span [innerHTML]="'component.hashtag_management.create_demo_session' | translate"></span>
           <i class="fa fa-send"></i>
         </button>
         <button id="runABCDQuizSession"
                 class="btn btn-success btn-block"
-                (click)="setActiveQuestionGroup(['/quiz-lobby'])"
+                (click)="setActiveQuestionGroup(['/quiz', 'flow', 'lobby'])"
                 *ngIf="isAddingABCDQuiz">
           <span [innerHTML]="'component.hashtag_management.create_abcd_session' | translate"></span>
           <i class="fa fa-send"></i>

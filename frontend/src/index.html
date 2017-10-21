@@ -31,25 +31,12 @@
   <meta name="msapplication-square150x150logo" content="/images/icons/arsNovaClick-152.png">
   <meta name="theme-color" content="#23425b">
 
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator['serviceWorker'].register('service-worker.js').then(function (registration) {
-        // Registration was successful
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }).catch(function (err) {
-        // registration failed :(
-        console.log('ServiceWorker registration failed: ', err);
-      });
-    }
-  </script>
-
   <base href="/">
 
   <link rel="manifest" href="/manifest.json">
 
   <!-- Fallback for everything else -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg" sizes="any">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900" rel="stylesheet" type='text/css'>
   <!-- special tag for apple "set to homescreen" favicon  -->
   <link rel="apple-touch-icon" href="/favicon.svg">
   <link rel="apple-touch-icon-precomposed" href="/favicon.svg">
@@ -70,17 +57,6 @@
   <!-- Android Stock Browser and non-Retina iPhone and iPod Touch -->
   <link rel="apple-touch-icon-precomposed" href="/assets/icons/arsnova_click-72.png">
 
-  <!-- piwik -->
-  <script async="async" defer="defer" type="text/javascript" src="//arsnova.thm.de/stats/piwik.js"></script>
-
-  <script type="text/javascript">
-    window.onload = function () {
-      if (!document.body.className) {
-        console.log(window.sessionStorage.getItem('quiz_theme'));
-        document.body.className = (window.sessionStorage.getItem('quiz_theme') || window.localStorage.getItem('defaultTheme') || '');
-      }
-    };
-  </script>
 
   <noscript>
     <div role="main">
@@ -109,6 +85,40 @@
 
 </head>
 <body class="theme-Material">
+
+<script>
+  var giftofspeed = document.createElement('link');
+  giftofspeed.rel = 'stylesheet';
+  giftofspeed.href = 'https://fonts.googleapis.com/css?family=Roboto:400,500,700,900';
+  giftofspeed.type = 'text/css';
+  var godefer = document.getElementsByTagName('link')[0];
+  godefer.parentNode.insertBefore(giftofspeed, godefer);
+</script>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator['serviceWorker'].register('service-worker.js').then(function (registration) {
+      // Registration was successful
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }).catch(function (err) {
+      // registration failed :(
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  }
+</script>
+
+<!-- piwik -->
+<script async="async" defer="defer" type="text/javascript" src="https://arsnova.thm.de/stats/piwik.js"></script>
+
+<script type="text/javascript">
+  window.onload = function () {
+    if (!document.body.className) {
+      console.log(window.sessionStorage.getItem('quiz_theme'));
+      document.body.className = (window.sessionStorage.getItem('quiz_theme') || window.localStorage.getItem('defaultTheme') || '');
+    }
+  };
+</script>
+
 <div id="theme-wrapper">
   <div id="content">
     <app-root>

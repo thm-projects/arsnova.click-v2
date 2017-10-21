@@ -3,23 +3,23 @@
        role="group" [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
     <button type="button"
             [class]="'btn btn-' + (currentData === 'about' ? 'secondary' : 'default')"
-            [routerLink]="['/about']">
+            [routerLink]="['/info', 'about']">
       <span [innerHTML]="'region.footer.footer_bar.info' | translate"></span>
     </button>
     <button type="button"
             [class]="'btn btn-' + (currentData === 'tos' ? 'secondary' : 'default')"
-            [routerLink]="['/tos']">
+            [routerLink]="['/info', 'tos']">
       <span [innerHTML]="'region.footer.footer_bar.tos' | translate"></span>
     </button>
     <button type="button"
             [class]="'btn btn-' + (currentData === 'imprint' ? 'secondary' : 'default')"
-            [routerLink]="['/imprint']">
+            [routerLink]="['/info', 'imprint']">
       <span [innerHTML]="'region.footer.footer_bar.imprint' | translate"></span>
     </button>
     <button type="button"
             [class]="'btn btn-' + (currentData === 'dataprivacy' ? 'secondary' : 'default')"
             data-toggle="collapse"
-            [routerLink]="['/dataprivacy']">
+            [routerLink]="['/info', 'dataprivacy']">
       <span [innerHTML]="'region.footer.footer_bar.data_privacy' | translate"></span>
     </button>
     <button type="button" class="btn btn-default" onclick="window.open('https://arsnova.eu/blog');">

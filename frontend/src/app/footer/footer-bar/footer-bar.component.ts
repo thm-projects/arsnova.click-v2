@@ -7,7 +7,8 @@ import {ActiveQuestionGroupService} from 'app/service/active-question-group.serv
 import {QrCodeService} from '../../service/qr-code.service';
 import {DefaultSettings} from '../../service/settings.service';
 import {TranslateService} from '@ngx-translate/core';
-import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {ThemesService} from '../../service/themes.service';
 
 export class FooterbarElement {
   set onClickCallback(value: Function) {
@@ -112,7 +113,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     textName: 'region.footer.footer_bar.sound',
     selectable: false,
     showIntro: true,
-    linkTarget: '/quiz-manager/sound',
+    linkTarget: '/quiz/manager/sound',
   }, function () {
 
   });
@@ -156,7 +157,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     textName: 'component.hashtag_management.session_management',
     selectable: false,
     showIntro: false,
-    linkTarget: '/session-management',
+    linkTarget: '/quiz/overview',
   }, function () {
 
   });
@@ -204,7 +205,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     textName: 'region.footer.footer_bar.info',
     selectable: false,
     showIntro: false,
-    linkTarget: '/about',
+    linkTarget: ['info', 'about'],
   }, function () {
 
   });
@@ -225,7 +226,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     textName: 'region.footer.footer_bar.nicknames',
     selectable: true,
     showIntro: true,
-    linkTarget: '/quiz-manager/nicknames',
+    linkTarget: '/quiz/manager/nicknames',
   }, function () {
 
   });
@@ -236,7 +237,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     textName: 'region.footer.footer_bar.edit_quiz',
     selectable: false,
     showIntro: false,
-    linkTarget: '/quiz-manager',
+    linkTarget: '/quiz/manager',
   }, function () {
 
   });
@@ -318,6 +319,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     private router: Router,
     private http: Http,
     private translateService: TranslateService,
+    private themesService: ThemesService,
     private qrCodeService: QrCodeService) {
 
     if (this.activeQuestionGroupService.activeQuestionGroup) {
@@ -334,9 +336,8 @@ export class FooterBarComponent implements OnInit, OnDestroy {
         qrCodeService.toggleQrCode();
       };
       FooterBarComponent.footerElemExport.onClickCallback = () => {
-        window.open(`${DefaultSettings.httpApiEndpoint}/export/
-        ${this.activeQuestionGroupService.activeQuestionGroup.hashtag}/
-        ${translateService.currentLang}`);
+        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.activeQuestionGroupService.activeQuestionGroup.hashtag}/${window.localStorage.getItem('privateKey')}/${themesService.currentTheme}/${translateService.currentLang}`;
+        window.open(link);
       };
     }
   }
@@ -344,7 +345,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._routerSubscription = this.router.events.subscribe((val) => {
       if (val.hasOwnProperty('url')) {
-        FooterBarComponent.footerElemTheme.linkTarget = val['url'].indexOf('lobby') > -1 ? '/quiz-theme' : '/themes';
+        FooterBarComponent.footerElemTheme.linkTarget = val['url'].indexOf('lobby') > -1 ? '/quiz/flow/theme' : '/themes';
       }
     });
   }

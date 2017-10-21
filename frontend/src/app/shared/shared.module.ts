@@ -33,7 +33,6 @@ export const providers = [
 
 @NgModule({
   imports: [
-    BrowserModule,
     FormsModule,
     CommonModule,
     HttpClientModule,

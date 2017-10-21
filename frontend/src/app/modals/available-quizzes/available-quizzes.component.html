@@ -10,7 +10,7 @@
       <li *ngFor="let elem of sessions"
           (click)="elem.isValid() ? startQuiz(elem) : editQuiz(elem)"
           [class]="elem.isValid() ? 'success' : 'failed'"
-          [routerLink]="[elem.isValid() ? '/quiz-lobby' : '/quiz-manager']"
+          [routerLink]="[elem.isValid() ? '/quiz/flow' : '/quiz/manager']"
           [innerHTML]="elem.hashtag"></li>
     </ul>
   </div>

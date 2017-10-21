@@ -13,7 +13,7 @@ import {DefaultSettings} from '../../service/settings.service';
 import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
-import {IMessage} from '../../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {I18nService, Languages} from '../../service/i18n.service';
 import {Subscription} from 'rxjs/Subscription';
 import {AttendeeService} from '../../service/attendee.service';

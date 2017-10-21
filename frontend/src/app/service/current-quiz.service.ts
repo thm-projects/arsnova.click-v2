@@ -5,7 +5,7 @@ import {ISessionConfiguration} from '../../lib/session_configuration/interfaces'
 import {SessionConfiguration} from '../../lib/session_configuration/session_config';
 import {ThemesService} from './themes.service';
 import {ConnectionService} from './connection.service';
-import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 
 export declare interface ICurrentQuizData {
   hashtag: string;
