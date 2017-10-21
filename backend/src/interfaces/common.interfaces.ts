@@ -22,6 +22,7 @@ export declare interface INickname {
   webSocket: WebSocket;
   webSocketAuthorization: number;
   responses: Array<IQuizResponse>;
+  casProfile: {id: string, mail: Array<string> | string};
 
   serialize(): Object;
 }

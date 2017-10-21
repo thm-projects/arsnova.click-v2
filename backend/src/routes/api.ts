@@ -1,4 +1,4 @@
-import {Router, Request, Response, NextFunction} from 'express';
+import {NextFunction, Request, Response, Router} from 'express';
 import QuizManager from '../db/quiz-manager';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -8,6 +8,7 @@ import availableNicks from '../nicknames/availableNicks';
 import {themes} from '../themes/availableThemes';
 import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from '../db/DbDao';
+import {ExcelWorkbook} from '../export/excel-workbook';
 
 export class ApiRouter {
   get router(): Router {
@@ -332,6 +333,38 @@ export class ApiRouter {
     });
   }
 
+  public getExportFile(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
+    const dbResult: Object = DbDao.read(DatabaseTypes.quiz, {quizName: req.params.quizName, privateKey: req.params.privateKey});
+
+    if (!dbResult) {
+      res.writeHead(500);
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'EXPORT:QUIZ_NOT_FOUND',
+        payload: {}
+      });
+      return;
+    }
+    if (!activeQuiz) {
+      res.writeHead(500);
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'EXPORT:QUIZ_INACTIVE',
+        payload: {}
+      });
+      return;
+    }
+    const wb = new ExcelWorkbook({
+      themeName: req.params.theme,
+      translation: req.params.language,
+      quiz: activeQuiz,
+    });
+    const date: Date = new Date();
+    const dateFormatted = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}-${date.getHours()}_${date.getMinutes()}`;
+    wb.write(`Export-${req.params.quizName}-${dateFormatted}.xlsx`, res);
+  }
+
   public randomFile(dir: string): Promise<string> {
     return new Promise((resolve) => {
       fs.readdir(dir, (err, items) => {
@@ -384,6 +417,8 @@ export class ApiRouter {
     this._router.get('/quiz/member/:quizName', this.getAllMembers);
     this._router.get('/quiz/member/:quizName/available', this.getRemainingNicks);
     this._router.put('/quiz/member/response', this.addMemberResponse);
+
+    this._router.get('/quiz/export/:quizName/:privateKey/:theme/:language', this.getExportFile);
 
     this._router.get('/files/:directory/:subdirectory/:fileName', this.getFileByName);
   }
