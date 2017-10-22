@@ -27,7 +27,7 @@ export class QuestionTextService {
   }
 
   change(value: string): void {
-    let mathjaxValues = value.match(/( ?\${1,2}\s.*)/g);
+    let mathjaxValues = value.match(/( ?\${1,2}\s.*)/g) || [];
     mathjaxValues = mathjaxValues.concat(value.match(/(\\(.)*\\.*)/g));
     this.currentValue = parseGithubFlavoredMarkdown(value);
     this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {

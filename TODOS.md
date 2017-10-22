@@ -20,6 +20,7 @@
 ###### Low Priority Features:
 - [ ] Product Tour
 - [ ] gzip language files
+- [ ] Styling of the online indicator image
 
 #### Known issues
 - [ ] Size of QR Code in the Quiz Lobby too small

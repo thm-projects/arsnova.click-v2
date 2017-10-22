@@ -9,8 +9,8 @@
          class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
          [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
       <p *ngIf="question.displayAnswerText"
-         class="mb-0"
-         [innerHTML]="elem.answerText"></p>
+         class="markdown-answer"
+         [innerHTML]="mathjaxAnswers[i]"></p>
       <p *ngIf="!question.displayAnswerText"
          class="mb-0"
          [innerHTML]="normalizeAnswerOptionIndex(i)"></p>

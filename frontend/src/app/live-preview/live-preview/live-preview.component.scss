@@ -39,6 +39,13 @@
       padding: 1rem;
       flex-grow: 1;
       flex-shrink: 1;
+
+      .markdown-answer {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        margin-bottom: 0 !important; // Remove bottom margin of marked generated paragraph element
+      }
     }
   }
 }

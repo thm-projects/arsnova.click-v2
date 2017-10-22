@@ -15,9 +15,12 @@ export function parseGithubFlavoredMarkdown(value: string): string {
       return highlight.highlightAuto(code).value;
     }
   });
-  value.match(/:([a-z0-9_\+\-]+):/g).forEach(token => {
-    const emoji = token.replace(/:/g, '');
-    value = value.replace(token, `![emoji](/assets/emojis/${emoji}.png)`);
-  });
+  const emojiMatch = value.match(/:([a-z0-9_\+\-]+):/g);
+  if (emojiMatch) {
+    emojiMatch.forEach(token => {
+      const emoji = token.replace(/:/g, '');
+      value = value.replace(token, `![emoji](/assets/emojis/${emoji}.png)`);
+    });
+  }
   return marked(value);
 }
