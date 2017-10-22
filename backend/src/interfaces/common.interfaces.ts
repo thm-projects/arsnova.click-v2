@@ -2,6 +2,16 @@ import * as WebSocket from 'ws';
 import {IQuestionGroup} from './questions/interfaces';
 import {WebSocketRouter} from '../routes/websocket';
 
+export declare interface IMathjaxFormat {
+  format: 'TeX' | 'inline-TeX' | 'MathML';
+  output: 'svg' | 'html' | 'mml';
+}
+
+export declare interface ICas {
+  id: string;
+  mail: string | Array<string>;
+}
+
 export declare interface ITheme {
   name: string;
   description: string;

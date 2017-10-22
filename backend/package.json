@@ -17,6 +17,7 @@
     "express-ws": "^3.0.0",
     "hbs": "~4.0.1",
     "lowdb": "^1.0.0",
+    "mathjax": "^2.7.2",
     "messageformat": "^1.0.2",
     "morgan": "^1.7.0",
     "node-sass-middleware": "0.9.8",

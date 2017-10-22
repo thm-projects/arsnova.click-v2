@@ -78,7 +78,7 @@ export class QuizManagerComponent implements OnInit {
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
     FooterBarComponent.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
     FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
-      return self.isActive ? '/quiz-lobby' : null;
+      return self.isActive ? '/quiz/flow/lobby' : null;
     };
   }
 

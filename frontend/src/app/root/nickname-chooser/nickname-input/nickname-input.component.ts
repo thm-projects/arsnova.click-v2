@@ -58,7 +58,7 @@ export class NicknameInputComponent implements OnInit {
     });
     promise.then(() => {
       window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, nickname);
-      this.router.navigate(['/quiz-lobby']);
+      this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (data: IMessage) => {
       switch (data.step) {
         case 'LOBBY:DUPLICATE_LOGIN':

@@ -56,6 +56,14 @@ export class ConnectionService {
     this._isWebSocketAuthorized = false;
   }
 
+  public sendMessage(message: IMessage): void {
+    if (!this._websocketAvailable) {
+      setTimeout(() => {this.sendMessage(message); }, 500);
+      return;
+    }
+    this._socket.next(message);
+  }
+
   private sendAuthorizationMessage(hashtag: string, step: string, auth: string): void {
     if (!this._websocketAvailable) {
       setTimeout(() => {this.sendAuthorizationMessage(hashtag, step, auth); }, 500);
@@ -76,7 +84,6 @@ export class ConnectionService {
   }
 
   authorizeWebSocketAsOwner(hashtag: string): void {
-    console.log('websocketauth', this._isWebSocketAuthorized);
     if (this._isWebSocketAuthorized) {
       return;
     }

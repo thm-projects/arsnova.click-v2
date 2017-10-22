@@ -1,5 +1,6 @@
 export const DefaultSettings = {
   httpApiEndpoint: 'https://localhost:3000/api/v1',
+  httpLibEndpoint: 'https://localhost:3000/lib',
   wsApiEndpoint: 'wss://localhost:3000',
   defaultSettings: {
     answers: {

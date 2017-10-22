@@ -26,13 +26,11 @@ const quizFlowRoutes: Routes = [
     path: 'quiz/flow/results',
     component: QuizResultsComponent,
     data: {},
-    children: [
-      {
-        path: ':questionIndex',
-        component: QuestionDetailsComponent,
-        data: {}
-      },
-    ]
+  },
+  {
+    path: 'quiz/flow/results/:questionIndex',
+    component: QuestionDetailsComponent,
+    data: {}
   },
   {
     path: 'quiz/flow/theme',

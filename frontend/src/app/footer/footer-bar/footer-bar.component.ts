@@ -85,6 +85,9 @@ export class FooterbarElement {
   }
 
   public restoreClickCallback() {
+    if (!this._restoreOnClickCallback) {
+      return;
+    }
     this._onClickCallback = this._restoreOnClickCallback;
   }
 }

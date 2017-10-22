@@ -195,6 +195,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.handleMessages();
       }
     });
+    if (!this.attendeeService.attendees.length) {
+      this.connectionService.sendMessage({status: 'STATUS:SUCCESSFULL', step: 'LOBBY:GET_PLAYERS', payload: {quizName: this._hashtag}});
+    }
   }
 
   ngOnDestroy() {

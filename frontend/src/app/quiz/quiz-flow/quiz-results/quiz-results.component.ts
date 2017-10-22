@@ -170,7 +170,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'MEMBER:UPDATED_RESPONSE':
-          console.log('modify response data for nickname', data.payload.nickname);
+          console.log('modify response data for nickname in live results view', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
         case 'QUIZ:RESET':
@@ -192,7 +192,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private handleMessagesForAttendee(data: IMessage) {
     switch (data.step) {
       case 'QUIZ:UPDATED_SETTINGS':
-        this.currentQuizService.sessionConfiguration[data.payload.target] = data.payload.state;
+        this._sessionConfig[data.payload.target] = data.payload.state;
         break;
     }
   }

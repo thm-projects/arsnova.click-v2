@@ -1,5 +1,8 @@
 <!--The content below is only a placeholder and can be replaced.-->
 <div class="row center-vertical" id="landingPageContent">
+  <div class="col-12 text-center mb-5" id="arsnova-click-description">
+    <h4 class="mb-0">{{'component.hashtag_home.demo_quiz.title.1' | translate}}</h4>
+  </div>
   <div class="col-md-10 col-lg-8 m-auto">
     <div class="row">
       <div class="col-12 px-1">
@@ -57,9 +60,12 @@
       </div>
     </div>
   </div>
-  <div class="col-12 text-center" id="demo-quiz-description">
-    <p [innerHTML]="'component.hashtag_home.demo_quiz.title.1' | translate"></p>
-    <p [innerHTML]="'component.hashtag_home.demo_quiz.title.2' | translate"></p>
-    <p [innerHTML]="'component.hashtag_home.demo_quiz.title.3' | translate"></p>
+  <div class="col-12 text-center mt-5" id="demo-quiz-description">
+    <p>{{'component.hashtag_home.demo_quiz.title.2' | translate}}</p>
+    <p>{{'component.hashtag_home.demo_quiz.title.3' | translate}}</p>
+  </div>
+  <div class="col-12 px-1 mb-5 mathjax-container">
+    <div class="mathjax-css-container"></div>
+    <div class="mathjax-content-container" [innerHTML]="sanitizeHTML(mathjax)"></div>
   </div>
 </div>

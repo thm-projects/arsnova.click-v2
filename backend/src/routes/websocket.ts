@@ -78,6 +78,7 @@ export class WebSocketRouter {
             }));
           }
         } catch (ex) {
+          console.log('error while receiving ws message', ex);
           ws.send(`Hello, you sent -> ${message}`);
         }
       });

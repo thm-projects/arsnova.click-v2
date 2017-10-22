@@ -9,6 +9,7 @@ import {ActivatedRoute} from '@angular/router';
 import {DefaultSettings} from '../../../service/settings.service';
 import {Http} from '@angular/http';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
+import {CurrentQuizService} from '../../../service/current-quiz.service';
 
 export interface ILeaderBoardItem {
   name: string;
@@ -25,6 +26,9 @@ export interface ILeaderBoard {
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit, OnDestroy {
+  get questionIndex(): number {
+    return this._questionIndex;
+  }
   get isGlobalRanking(): boolean {
     return this._isGlobalRanking;
   }
@@ -37,19 +41,31 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _leaderBoard: Array<ILeaderBoard>;
   private _isGlobalRanking: boolean;
+  private _hashtag: string;
 
   constructor(
     private footerBarService: FooterBarService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
+    private currentQuizService: CurrentQuizService,
     private http: Http,
-    private attendeeService: AttendeeService) {
-    this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemExport
-    ]);
+    public attendeeService: AttendeeService) {
+
+    if (this.activeQuestionGroupService.activeQuestionGroup) {
+      this._hashtag = this.activeQuestionGroupService.activeQuestionGroup.hashtag;
+      this.footerBarService.replaceFooterElments([
+        FooterBarComponent.footerElemBack,
+        FooterBarComponent.footerElemFullscreen,
+        FooterBarComponent.footerElemExport
+      ]);
+    } else {
+      this._hashtag = this.currentQuizService.hashtag;
+      this.footerBarService.replaceFooterElments([
+        FooterBarComponent.footerElemBack,
+        FooterBarComponent.footerElemFullscreen
+      ]);
+    }
     this._leaderBoard = [];
   }
 
@@ -57,8 +73,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._isGlobalRanking = isNaN(this._questionIndex);
-      const hashtag = this.activeQuestionGroupService.activeQuestionGroup.hashtag;
-      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${hashtag}/${this._questionIndex}`)
+      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex}`)
           .map(res => res.json())
           .subscribe(
             (data: IMessage) => {

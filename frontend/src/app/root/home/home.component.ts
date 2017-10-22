@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
 import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
@@ -18,6 +18,7 @@ import {I18nService, Languages} from '../../service/i18n.service';
 import {Subscription} from 'rxjs/Subscription';
 import {AttendeeService} from '../../service/attendee.service';
 import {ConnectionService} from '../../service/connection.service';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public isAddingDemoQuiz = false;
   public isAddingABCDQuiz = false;
   public enteredSessionName = '';
+  public mathjax = '';
 
   private _httpApiEndpoint = DefaultSettings.httpApiEndpoint;
   private _provideNickSelection = false;
@@ -52,6 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private i18nService: I18nService,
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
+    private sanitizer: DomSanitizer,
     private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemAbout,
@@ -66,21 +69,34 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
       this.modalService.open(AvailableQuizzesComponent);
     }
-    this.connectionService.socket.subscribe(
-      (data: IMessage) => {
-        if (data.payload.id) {
-          window.sessionStorage.setItem('webSocket', data.payload.id);
-          this.connectionService.websocketAvailable = true;
+    this.connectionService.initConnection().then(() => {
+      this.http.get(`${DefaultSettings.httpLibEndpoint}/mathjax/example/third`).subscribe(
+        (result: {css: string, html: string, speakText: string}) => {
+        const style = document.createElement('style');
+        style.innerHTML = result.css;
+        document.getElementsByClassName('mathjax-css-container').item(0).appendChild(style);
+        this.mathjax = result.html;
+      });
+      this.connectionService.socket.subscribe(
+        (data: IMessage) => {
+          if (data.payload.id) {
+            window.sessionStorage.setItem('webSocket', data.payload.id);
+            this.connectionService.websocketAvailable = true;
+          }
+        },
+        () => {
+          this.connectionService.websocketAvailable = false;
+        },
+        () => {
+          this.connectionService.websocketAvailable = false;
         }
-      },
-      () => {
-        this.connectionService.websocketAvailable = false;
-      },
-      () => {
-        this.connectionService.websocketAvailable = false;
-      }
-    );
+      );
+    });
     this.cleanUpSessionStorage();
+  }
+
+  sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
   private cleanUpSessionStorage(): void {

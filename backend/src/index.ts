@@ -29,7 +29,7 @@ server.on('close', onClose);
 
 const languages: any = {'en': 'en'};
 const params: any = [path.join(__dirname, '../theme_preview/phantomDriver.js')];
-const themePreviewEndpoint: string = 'http://localhost:4200/preview';
+const themePreviewEndpoint = 'http://localhost:4200/preview';
 themes.forEach((theme: ITheme) => {
   for (const languageKey in languages) {
     if (languages.hasOwnProperty(languageKey)) {

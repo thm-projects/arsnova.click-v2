@@ -10,8 +10,18 @@
   </div>
 </div>
 
-<div *ngFor="let answer of currentQuizService.currentQuestion.answerOptionList; let i = index"
-     class="answer-element"
-     [id]="i">
-  {{answer.answerText}}
+<div id="answer-option-element-wrapper"
+     class="d-flex justify-content-around align-items-center flex-wrap">
+  <div *ngFor="let elem of currentQuizService.currentQuestion.answerOptionList; let i = index"
+       [id]="i"
+       [class]="'answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer ' + (isSelected(i) ? 'selected' : '')"
+       (click)="toggleSelectAnswer(i)"
+       [style.flex-basis]="currentQuizService.currentQuestion.showOneAnswerPerRow ? '100%' : getComputedWidth()">
+    <p *ngIf="currentQuizService.currentQuestion.displayAnswerText"
+       class="mb-0"
+       [innerHTML]="elem.answerText"></p>
+    <p *ngIf="!currentQuizService.currentQuestion.displayAnswerText"
+       class="mb-0"
+       [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
+  </div>
 </div>

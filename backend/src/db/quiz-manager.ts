@@ -2,10 +2,13 @@ import * as WebSocket from 'ws';
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
 import {WebSocketRouter} from '../routes/websocket';
 import illegalNicks from '../nicknames/illegalNicks';
-import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
+import {IActiveQuiz, ICas, INickname, IQuizResponse} from '../interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from './DbDao';
 
 class Member implements INickname {
+  get casProfile(): ICas {
+    return this._casProfile;
+  }
   set webSocketAuthorization(value: number) {
     this._webSocketAuthorization = value;
   }
@@ -42,6 +45,7 @@ class Member implements INickname {
   private _webSocket: WebSocket;
   private _webSocketAuthorization: number;
   private _responses: Array<IQuizResponse>;
+  private _casProfile: ICas;
 
   constructor(
     {id, name, colorCode, responses, webSocketAuthorization}:

@@ -1,9 +1,9 @@
 #### Todos
 ###### High Priority Features:
-- [ ] Voting View
+- [x] Voting View
 - [x] Export of Results
 - [ ] Import of Quizzes
-- [ ] Share the session configuration update to the clients in the Live Results
+- [x] Share the session configuration update to the clients in the Live Results
 - [ ] CAS Login Support
 - [ ] ABCD Question
 - [ ] Client: Translation (DE)
@@ -13,6 +13,7 @@
 - [ ] Full Markdown Support for Answeroptions
 - [ ] Display of Question content in the Live Results
 - [ ] Toggle for blocking rude nicknames in the Nickname Manager
+- [ ] Reading Confirmation
 - [ ] Client: Translation (FR, ES, IT)
 - [ ] Server: Translation for Excel export files (EN, DE, FR, ES, IT)
 
