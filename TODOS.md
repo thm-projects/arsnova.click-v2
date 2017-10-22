@@ -9,8 +9,9 @@
 - [ ] Client: Translation (DE)
 
 ###### Medium Priority Features:
-- [ ] Full Markdown Support for Questions
-- [ ] Full Markdown Support for Answeroptions
+- [x] Full Markdown Support for Questions
+- [x] Full Markdown Support for Answeroptions
+- [ ] Mathjax & Markdown in Voting View
 - [ ] Display of Question content in the Live Results
 - [ ] Toggle for blocking rude nicknames in the Nickname Manager
 - [ ] Reading Confirmation
@@ -24,6 +25,10 @@
 
 #### Known issues
 - [ ] Size of QR Code in the Quiz Lobby too small
+- [ ] Order of mathjax output in answeroption live preview
+
+#### Refactoring required
+- [ ] MathJax / Markdown parsing in the client
 
 #### Testing required
 - [ ] Export of Results
