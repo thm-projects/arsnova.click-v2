@@ -3,3 +3,9 @@ export declare interface ITheme {
   description: string;
   id: string;
 }
+
+export declare interface IMathjaxResponse {
+  css: string;
+  html: string;
+  speakText: string;
+}

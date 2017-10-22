@@ -15,23 +15,35 @@ export class LibRouter {
     this._router = Router();
     this.init();
 
+    mjAPI.start();
     mjAPI.config({
       // determines whether Message.Set() calls are logged
       displayMessages: false,
       // determines whether error messages are shown on the console
       displayErrors:   true,
       // determines whether "unknown characters" (i.e., no glyph in the configured fonts) are saved in the error array
-      undefinedCharError: false,
+      undefinedCharError: true,
       // a convenience option to add MathJax extensions
-      extensions: 'mml2jax',
+      extensions: '',
       // for webfont urls in the CSS for HTML output
       fontURL: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/fonts/HTML-CSS',
       // default MathJax config
       MathJax: {
-        jax: ['input/mml', 'output/HTML-CSS']
+        jax: ['input/TeX', 'input/MathML', 'input/AsciiMath', 'output/CommonHTML'],
+        extensions: [
+          'tex2jax.js', 'mml2jax.js', 'asciimath2jax.js', 'AssistiveMML.js'
+        ],
+        TeX: {
+          extensions: ['AMSmath.js', 'AMSsymbols.js', 'noErrors.js', 'noUndefined.js']
+        },
+        tex2jax: {
+          processEscapes: true,
+          processEnvironments: true,
+          inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+          displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
+        }
       }
     });
-    mjAPI.start();
   }
 
   /**
@@ -133,18 +145,25 @@ export class LibRouter {
       res.writeHead(500);
       res.send(`Malformed request received -> ${req.body}`);
     }
-    mjAPI.typeset({
-      math: req.body.mathjax,
-      format: req.body.format,
-      html: req.body.output === 'html',
-      css: req.body.output === 'html',
-      svg: req.body.output === 'svg',
-      mml: req.body.output === 'mml'
-    }, function (data) {
-      if (!data.errors) {
-        res.send(data);
-      }
-    });
+    const mathjaxArray = JSON.parse(req.body.mathjax);
+    const result = [];
+    if (mathjaxArray) {
+      mathjaxArray.forEach((mathjaxPlain, index) => {
+        mjAPI.typeset({
+          math: mathjaxPlain.replace(/ ?\${1,2} ?/g, ''),
+          format: req.body.format,
+          html: req.body.output === 'html',
+          css: req.body.output === 'html',
+          svg: req.body.output === 'svg',
+          mml: req.body.output === 'mml'
+        }).then(data => {
+          result.push(data);
+          if (index === mathjaxArray.length - 1) {
+            res.send(JSON.stringify(result));
+          }
+        });
+      });
+    }
   }
 
   /**

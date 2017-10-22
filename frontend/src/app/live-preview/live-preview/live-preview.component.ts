@@ -6,7 +6,10 @@ import {IAnswerOption} from '../../../lib/answeroptions/interfaces';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice} from '../../../lib/questions/interfaces';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
+import {DefaultSettings} from '../../service/settings.service';
+import {HttpClient} from '@angular/common/http';
+import {IMathjaxResponse} from '../../../lib/common.interfaces';
 
 @Component({
   selector: 'app-live-preview',
@@ -46,7 +49,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   private _subscription: Subscription;
 
   constructor(
-    private questionTextService: QuestionTextService,
+    public questionTextService: QuestionTextService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
     private sanitizer: DomSanitizer) {
@@ -87,7 +90,11 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   }
 
   sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+  }
+
+  sanitizeStyle(value: string): SafeStyle {
+    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
   }
 
   ngOnInit() {
@@ -95,7 +102,16 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
       case this.ENVIRONMENT_TYPE.QUESTION:
         this.questionTextDataSource = this.sanitizeHTML(this.questionTextService.currentValue);
         this._subscription = this.questionTextService.getEmitter().subscribe(
-          value => this.questionTextDataSource = this.sanitizeHTML(value)
+          value => {
+            this.questionTextDataSource = this.sanitizeHTML(value);
+            const styleElem = document.getElementById('mathjaxStyle');
+            const style = document.createElement('style');
+            style.innerHTML = this.questionTextService.mathjaxStyles;
+            if (styleElem.hasChildNodes()) {
+              styleElem.removeChild(styleElem.children.item(0));
+            }
+            styleElem.appendChild(style);
+          }
         );
         break;
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:

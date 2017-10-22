@@ -19,6 +19,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {AttendeeService} from '../../service/attendee.service';
 import {ConnectionService} from '../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {IMathjaxResponse} from 'lib/common.interfaces';
 
 @Component({
   selector: 'app-home',
@@ -71,7 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.connectionService.initConnection().then(() => {
       this.http.get(`${DefaultSettings.httpLibEndpoint}/mathjax/example/third`).subscribe(
-        (result: {css: string, html: string, speakText: string}) => {
+        (result: IMathjaxResponse) => {
         const style = document.createElement('style');
         style.innerHTML = result.css;
         document.getElementsByClassName('mathjax-css-container').item(0).appendChild(style);
