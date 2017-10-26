@@ -6,8 +6,19 @@ import {DefaultSettings} from './settings.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {ConnectionService} from 'app/service/connection.service';
 
+export declare interface IServerConfig {
+  cacheQuizAssets: boolean;
+}
+
 @Injectable()
 export class ActiveQuestionGroupService {
+  get cacheAssets(): boolean {
+    return this._cacheAssets;
+  }
+
+  set cacheAssets(value: boolean) {
+    this._cacheAssets = value;
+  }
   get activeQuestionGroup(): IQuestionGroup {
     return this._activeQuestionGroup;
   }
@@ -20,6 +31,8 @@ export class ActiveQuestionGroupService {
   }
 
   private _activeQuestionGroup: IQuestionGroup;
+  private _serverConfig: IServerConfig = {cacheQuizAssets: false};
+  private _cacheAssets = false;
 
   constructor(
     private http: HttpClient,
@@ -29,6 +42,16 @@ export class ActiveQuestionGroupService {
       const parsedObject = JSON.parse(serializedObject);
       this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
     }
+    this.connectionService.initConnection().then(() => {
+      this.initCacheAssetsState();
+    });
+  }
+
+  private initCacheAssetsState() {
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/`).subscribe((value: {serverConfig: IServerConfig}) => {
+      this._serverConfig = value.serverConfig;
+      this._cacheAssets = value.serverConfig.cacheQuizAssets;
+    });
   }
 
   private dec2hex(dec) {
@@ -51,7 +74,7 @@ export class ActiveQuestionGroupService {
     this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
       body: {
         quizName: this.activeQuestionGroup.hashtag,
-        privateKey: window.localStorage.getItem('privateKey')
+        privateKey: window.localStorage.getItem('config.private_key')
       }
     }).subscribe((response: IMessage) => {
       if (response.status !== 'STATUS:SUCCESS') {
@@ -67,10 +90,19 @@ export class ActiveQuestionGroupService {
   persist() {
     this.persistForSession();
     window.localStorage.setItem(this.activeQuestionGroup.hashtag, JSON.stringify(this.activeQuestionGroup.serialize()));
-    const questionList = JSON.parse(window.localStorage.getItem('owned_quizzes')) || [];
+    const questionList = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
     if (questionList.indexOf(this.activeQuestionGroup.hashtag) === -1) {
       questionList.push(this.activeQuestionGroup.hashtag);
-      window.localStorage.setItem('owned_quizzes', JSON.stringify(questionList));
+      window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
+    }
+    if (this._cacheAssets || this._serverConfig.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
+      this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
+        quiz: this.activeQuestionGroup.serialize()
+      }).subscribe((response: IMessage) => {
+        if (response.status !== 'STATUS:SUCCESSFULL') {
+          console.log(response);
+        }
+      });
     }
   }
 }

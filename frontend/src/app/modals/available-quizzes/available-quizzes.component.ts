@@ -34,7 +34,7 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
     private translateService: TranslateService,
     private activeModal: NgbActiveModal,
     private activeQuestionGroupService: ActiveQuestionGroupService) {
-    const sessions = JSON.parse(window.localStorage.getItem('owned_quizzes')) || [];
+    const sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
     sessions.sort(function (a, b) {
       return a > b;
     });

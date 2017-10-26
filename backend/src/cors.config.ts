@@ -1,6 +1,6 @@
 import * as cors from 'cors';
 
-const whitelist: Array<string> = ['http://localhost:4200', 'https://localhost:3000', 'http://localhost:4711'];
+const whitelist: Array<string> = ['http://localhost:4200', 'https://localhost:3000', 'http://localhost:4711', 'http://192.168.2.124:4200'];
 
 const options: cors.CorsOptions = {
   allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'X-Access-Token'],

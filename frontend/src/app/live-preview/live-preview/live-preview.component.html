@@ -19,7 +19,7 @@
 </div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.QUESTION"
      id="question-preview"
-     [class]="'preview-frame overflow-scroll ' + deviceClass()">
+     [class]="'preview-frame overflow-auto ' + deviceClass()">
   <app-header [headerLabel]="'region.header.question'"></app-header>
   <p class="p-0" [innerHTML]="questionTextDataSource"></p>
 </div>

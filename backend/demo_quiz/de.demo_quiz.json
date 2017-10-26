@@ -17,7 +17,7 @@
           "answerText": ":smile:",
           "answerOptionNumber": 0,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -25,7 +25,7 @@
           "answerText": ":cry:",
           "answerOptionNumber": 1,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -33,7 +33,7 @@
           "answerText": ":rage:",
           "answerOptionNumber": 2,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -41,10 +41,10 @@
           "answerText": ":neutral_face:",
           "answerOptionNumber": 3,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         }
       ],
-      "type": "SurveyQuestion",
+      "TYPE": "SurveyQuestion",
       "multipleSelectionEnabled": false
     },
     {
@@ -62,7 +62,7 @@
           "answerText": "Fake",
           "answerOptionNumber": 0,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -70,10 +70,10 @@
           "answerText": "Photo",
           "answerOptionNumber": 1,
           "isCorrect": true,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         }
       ],
-      "type": "TrueFalseSingleChoiceQuestion"
+      "TYPE": "TrueFalseSingleChoiceQuestion"
     },
     {
       "hashtag": "Demo Quiz 265",
@@ -90,7 +90,7 @@
           "answerText": "28",
           "answerOptionNumber": 0,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -98,7 +98,7 @@
           "answerText": "26",
           "answerOptionNumber": 1,
           "isCorrect": true,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -106,7 +106,7 @@
           "answerText": "24",
           "answerOptionNumber": 2,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -114,10 +114,10 @@
           "answerText": "22",
           "answerOptionNumber": 3,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         }
       ],
-      "type": "SingleChoiceQuestion"
+      "TYPE": "SingleChoiceQuestion"
     },
     {
       "hashtag": "Demo Quiz 265",
@@ -128,7 +128,7 @@
       "questionIndex": 3,
       "displayAnswerText": false,
       "answerOptionList": [],
-      "type": "RangedQuestion",
+      "TYPE": "RangedQuestion",
       "rangeMin": 10,
       "rangeMax": 50,
       "correctValue": 30
@@ -151,10 +151,10 @@
           "configTrimWhitespaces": false,
           "configUseKeywords": true,
           "configUsePunctuation": true,
-          "type": "FreeTextAnswerOption"
+          "TYPE": "FreeTextAnswerOption"
         }
       ],
-      "type": "FreeTextQuestion"
+      "TYPE": "FreeTextQuestion"
     },
     {
       "hashtag": "Demo Quiz 265",
@@ -171,7 +171,7 @@
           "answerText": "Groovy",
           "answerOptionNumber": 0,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -179,7 +179,7 @@
           "answerText": "Python",
           "answerOptionNumber": 1,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -187,7 +187,7 @@
           "answerText": "Java",
           "answerOptionNumber": 2,
           "isCorrect": true,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -195,7 +195,7 @@
           "answerText": "Processing",
           "answerOptionNumber": 3,
           "isCorrect": true,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -203,7 +203,7 @@
           "answerText": "Scala",
           "answerOptionNumber": 4,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         },
         {
           "hashtag": "Demo Quiz 265",
@@ -211,10 +211,10 @@
           "answerText": ":black_joker:",
           "answerOptionNumber": 5,
           "isCorrect": false,
-          "type": "DefaultAnswerOption"
+          "TYPE": "DefaultAnswerOption"
         }
       ],
-      "type": "MultipleChoiceQuestion"
+      "TYPE": "MultipleChoiceQuestion"
     }
   ],
   "configuration": {
@@ -264,5 +264,5 @@
     "showResponseProgress": true,
     "confidenceSliderEnabled": true
   },
-  "type": "DefaultQuestionGroup"
+  "TYPE": "DefaultQuestionGroup"
 }

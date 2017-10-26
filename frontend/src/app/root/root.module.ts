@@ -1,9 +1,6 @@
 import {NgModule} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe} from '@ngx-translate/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
 import {HomeComponent} from './home/home.component';
 import {FooterModule} from '../footer/footer.module';
 import {SharedModule} from '../shared/shared.module';
@@ -24,23 +21,16 @@ import {ConnectionService} from '../service/connection.service';
 import {CurrentQuizService} from '../service/current-quiz.service';
 import {NicknameChooserModule} from './nickname-chooser/nickname-chooser.module';
 import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-
-import * as MessageFormat from 'messageformat';
 import {I18nService} from '../service/i18n.service';
 import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
 import {QrCodeService} from '../service/qr-code.service';
 import {SoundService} from '../service/sound.service';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
-
-// AoT requires an exported function for factories
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
-}
-
-export function CustomCompilerFactory() {
-  return new TranslateMessageFormatCompiler(new MessageFormat('en'));
-}
+import {HttpClient} from '@angular/common/http';
+import {createTranslateLoader} from '../../lib/translation.factory';
+import {CasService} from '../service/cas.service';
+import {UserService} from '../service/user.service';
 
 const appRoutes: Routes = [
   {
@@ -56,31 +46,26 @@ const appRoutes: Routes = [
     loadChildren: 'app/root/info/info.module#InfoModule'
   },
   {
+    path: 'quiz/manager',
+    loadChildren: 'app/quiz/quiz-manager/quiz-manager.module#QuizManagerModule'
+  },
+  {
+    path: 'quiz/flow',
+    canLoad: [CasService],
+    loadChildren: 'app/quiz/quiz-flow/quiz-flow.module#QuizFlowModule'
+  },
+  {
+    path: 'quiz/overview',
+    component: SessionManagementComponent,
+  },
+  {
     path: 'languages',
     component: LanguageSwitcherComponent,
-    pathMatch: 'full',
   },
   {
     path: '',
     component: HomeComponent,
     pathMatch: 'full',
-  },
-  {
-    path: 'quiz',
-    children: [
-      {
-        path: 'overview',
-        component: SessionManagementComponent
-      },
-      {
-        path: 'manager',
-        loadChildren: 'app/quiz/quiz-manager/quiz-manager.module#QuizManagerModule'
-      },
-      {
-        path: 'flow',
-        loadChildren: 'app/quiz/quiz-flow/quiz-flow.module#QuizFlowModule'
-      },
-    ]
   },
   /*
    { path: '',
@@ -111,12 +96,12 @@ const appRoutes: Routes = [
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient],
+        useFactory: (createTranslateLoader),
+        deps: [HttpClient]
       },
       compiler: {
         provide: TranslateCompiler,
-        useFactory: CustomCompilerFactory
+        useClass: TranslateMessageFormatCompiler
       }
     }),
     HeaderModule,
@@ -136,8 +121,12 @@ const appRoutes: Routes = [
     CurrentQuizService,
     I18nService,
     QrCodeService,
-    SoundService
+    SoundService,
+    TranslateModule,
+    UserService,
+    CasService
   ],
+  exports: [TranslatePipe, TranslateModule],
   entryComponents: [],
   bootstrap: [RootComponent]
 })

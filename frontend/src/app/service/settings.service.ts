@@ -1,7 +1,7 @@
 export const DefaultSettings = {
-  httpApiEndpoint: 'https://localhost:3000/api/v1',
-  httpLibEndpoint: 'https://localhost:3000/lib',
-  wsApiEndpoint: 'wss://localhost:3000',
+  httpApiEndpoint: `https://${location.hostname}:3000/api/v1`,
+  httpLibEndpoint: `https://${location.hostname}:3000/lib`,
+  wsApiEndpoint: `wss://${location.hostname}:3000`,
   defaultSettings: {
     answers: {
       displayAnswerTextOnButtons: true,
@@ -53,6 +53,7 @@ export const DefaultSettings = {
     theme: 'theme-Material',
     readingConfirmationEnabled: true,
     showResponseProgress: true,
-    confidenceSliderEnabled: true
+    confidenceSliderEnabled: true,
+    cacheQuizAssets: false
   }
 };

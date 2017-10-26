@@ -8,6 +8,8 @@
     "abort": "Abort",
     "yes": "Yes",
     "no": "No",
+    "true": "Yes",
+    "false": "No",
     "close_window": "Close window",
     "aria_description": {
       "arsnova_slogan": "Quizzes for everyone & anything"
@@ -49,6 +51,9 @@
         "show_confidence_slider": "Confidence Grade",
         "edit_quiz": "Edit",
         "remove": "Remove",
+        "cache_assets": "Cache Assets",
+        "block_rude_nicknames": "Block rude nicknames",
+        "enable_cas_login": "Enable CAS Login",
         "description": {
           "qr-code": "Attendees can scan the QR code via their mobile devices to join the quiz.",
           "sound": "Set the sound for the background music or the countdown here.",
@@ -538,8 +543,6 @@
       "show_selected_nicks": "Show nicknames",
       "isRestrictingRudeNicks": "Block inappropriate nicknames",
       "isRestrictingToCAS": "Attendees must authenticate via CAS",
-      "true": "Yes",
-      "false": "No",
       "description": {
         "header": "Here is the summary of the entire quiz round",
         "session_url": "Under this URL, participants can enter the quiz as soon as you release it",

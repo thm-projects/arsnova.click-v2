@@ -29,14 +29,14 @@
         </p>
         <p role="listitem" *ngIf="questionGroupItem.sessionConfig.nicks.selectedNicks.length === 0">
           <span [innerHTML]="'component.quiz_summary.isRestrictingRudeNicks' | translate"></span>&#58;&nbsp;
-          <span [innerHTML]="questionGroupItem.sessionConfig.nicks.restrictToCasLogin | translate"></span>
+          <span [innerHTML]="('global.' + questionGroupItem.sessionConfig.nicks.blockIllegalNicks) | translate"></span>
         </p>
         <p role="listitem"
            id="quizSummaryRestrictToCas"
            [attr.data-intro]="'component.quiz_summary.description.restrict_to_cas' | translate"
            [attr.aria-label]="'component.quiz_summary.description.restrict_to_cas' | translate">
           <span [innerHTML]="'component.quiz_summary.isRestrictingToCAS' | translate"></span>&#58;&nbsp;
-          <span [innerHTML]="questionGroupItem.sessionConfig.nicks.restrictToCasLogin | translate"></span>
+          <span [innerHTML]="('global.' + questionGroupItem.sessionConfig.nicks.restrictToCasLogin) | translate"></span>
         </p>
         <p role="listitem">
           <span [innerHTML]="'component.quiz_summary.selected_nicks' | translate"></span>&#58;&nbsp;
@@ -51,7 +51,7 @@
   </div>
   <div class="col-12">
     <h2 class="text-light mt-4" [innerHTML]="'component.quiz_manager.available_questions_title' | translate"></h2>
-    <div class="overflow-scroll">
+    <div class="overflow-auto available-questions-view-frame">
       <div class="btn-group" id="available_questions_wrapper"
            [attr.data-intro]="'component.quiz_manager.description.available_questions' | translate">
         <button *ngFor="let elem of selectableQuestionTypes"

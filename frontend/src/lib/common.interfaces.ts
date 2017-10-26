@@ -5,7 +5,8 @@ export declare interface ITheme {
 }
 
 export declare interface IMathjaxResponse {
-  css: string;
-  html: string;
+  css?: string;
+  html?: string;
+  svg?: string;
   speakText: string;
 }

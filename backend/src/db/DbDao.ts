@@ -5,6 +5,7 @@ import * as FileSync from 'lowdb/adapters/FileSync';
 
 export enum DatabaseTypes {
   quiz = 'quiz',
+  assets = 'assets'
 }
 
 const adapter: FileSync = new FileSync('arsnova-click-v2-db-v1.json');
@@ -14,8 +15,12 @@ export class DbDao {
   private static db: lowdb;
   private static instance: DbDao;
 
-  public static create(database: DatabaseTypes, data: Object): void {
-    DbDao.db.get(database).push(data).write();
+  public static create(database: DatabaseTypes, data: Object, ref?: string): void {
+    if (ref) {
+      DbDao.db.set(`${database}.${ref}`, data).write();
+    } else {
+      DbDao.db.get(database).push(data).write();
+    }
   }
 
   public static read(database: DatabaseTypes, query: Object): Object {
@@ -55,12 +60,19 @@ export class DbDao {
     if (!DbDao.instance) {
       DbDao.instance = new DbDao();
       DbDao.db = lowdb(adapter);
-      if (!Object.keys(DbDao.db.getState()).length) {
-        DbDao.db.set(DatabaseTypes.quiz, [])
-             .write();
+      const state = DbDao.getState();
+      if (!state[DatabaseTypes.quiz]) {
+        DbDao.initDb(DatabaseTypes.quiz, []);
+      }
+      if (!state[DatabaseTypes.assets]) {
+        DbDao.initDb(DatabaseTypes.assets, {});
       }
     }
     return DbDao.instance;
+  }
+
+  private static initDb(type: DatabaseTypes, initialValue: any) {
+    DbDao.db.set(type, initialValue).write();
   }
 }
 

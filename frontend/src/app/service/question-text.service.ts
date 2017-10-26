@@ -27,19 +27,31 @@ export class QuestionTextService {
   }
 
   change(value: string): void {
-    let mathjaxValues = value.match(/( ?\${1,2}\s.*)/g) || [];
-    mathjaxValues = mathjaxValues.concat(value.match(/(\\(.)*\\.*)/g));
+    const matchForDollar = value.match(/( ?\${1,2}\s.*)/g);
+    const matchForBlock = value.match(/(\\(.)*\\.*)/g);
+    let mathjaxValues = [];
+    if (matchForDollar) {
+      mathjaxValues = mathjaxValues.concat(matchForDollar);
+    }
+    if (matchForBlock) {
+      mathjaxValues = mathjaxValues.concat(matchForBlock);
+    }
+
     this.currentValue = parseGithubFlavoredMarkdown(value);
-    this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
-      mathjaxValues.forEach((mathjaxValue: string, index: number) => {
-        // Escape the mathjax html characters so that we can find it in the parsed output of marked
-        const escapedMathjaxValue = mathjaxValue.replace(/&/g, '&amp;')
-                                                .replace(/\\\\/g, '\\');
-        this.mathjaxStyles = mathjaxRendered[index].css;
-        this.currentValue = this.currentValue.replace(escapedMathjaxValue, mathjaxRendered[index].html);
+    if (mathjaxValues.length) {
+      this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
+        mathjaxValues.forEach((mathjaxValue: string, index: number) => {
+          // Escape the mathjax html characters so that we can find it in the parsed output of marked
+          const escapedMathjaxValue = mathjaxValue.replace(/&/g, '&amp;')
+                                                  .replace(/\\\\/g, '\\');
+          this.mathjaxStyles = mathjaxRendered[index].css;
+          this.currentValue = this.currentValue.replace(escapedMathjaxValue, mathjaxRendered[index].html);
+        });
+        this.fire.emit(this.currentValue);
       });
+    } else {
       this.fire.emit(this.currentValue);
-    });
+    }
   }
 
   getEmitter(): EventEmitter<string> {

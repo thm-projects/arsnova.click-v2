@@ -35,7 +35,7 @@ export class ThemeSwitcherComponent implements OnInit {
   updateTheme(id: string) {
     document.getElementsByTagName('body')[0].className = id;
     this.previewThemeBackup = document.getElementsByTagName('body')[0].className;
-    window.localStorage.setItem('defaultTheme', this.previewThemeBackup);
+    window.localStorage.setItem('config.default_theme', this.previewThemeBackup);
   }
 
   previewTheme(id) {

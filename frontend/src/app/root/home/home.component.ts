@@ -66,32 +66,31 @@ export class HomeComponent implements OnInit, OnDestroy {
       FooterBarComponent.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('default');
-    const ownedQuizzes = window.localStorage.getItem('owned_quizzes');
+    const ownedQuizzes = window.localStorage.getItem('config.owned_quizzes');
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
       this.modalService.open(AvailableQuizzesComponent);
     }
     this.connectionService.initConnection().then(() => {
       this.http.get(`${DefaultSettings.httpLibEndpoint}/mathjax/example/third`).subscribe(
         (result: IMathjaxResponse) => {
-        const style = document.createElement('style');
-        style.innerHTML = result.css;
-        document.getElementsByClassName('mathjax-css-container').item(0).appendChild(style);
-        this.mathjax = result.html;
+        this.mathjax = result.svg;
       });
-      this.connectionService.socket.subscribe(
-        (data: IMessage) => {
-          if (data.payload.id) {
-            window.sessionStorage.setItem('webSocket', data.payload.id);
-            this.connectionService.websocketAvailable = true;
+      this.connectionService.initConnection().then(() => {
+        this.connectionService.socket.subscribe(
+          (data: IMessage) => {
+            if (data.payload.id) {
+              window.sessionStorage.setItem('webSocket', data.payload.id);
+              this.connectionService.websocketAvailable = true;
+            }
+          },
+          () => {
+            this.connectionService.websocketAvailable = false;
+          },
+          () => {
+            this.connectionService.websocketAvailable = false;
           }
-        },
-        () => {
-          this.connectionService.websocketAvailable = false;
-        },
-        () => {
-          this.connectionService.websocketAvailable = false;
-        }
-      );
+        );
+      })
     });
     this.cleanUpSessionStorage();
   }
@@ -105,8 +104,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.activeQuestionGroupService.cleanUp();
       window.sessionStorage.removeItem('questionGroup');
     }
-    window.sessionStorage.removeItem('quiz_theme');
-    window.sessionStorage.removeItem('webSocket');
+    window.sessionStorage.removeItem('config.quiz_theme');
     this.attendeeService.cleanUp();
     this.currentQuiz.cleanUp();
     this.connectionService.cleanUp();
@@ -118,7 +116,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!Object.keys(params).length) {
         return;
       }
-      window.localStorage.setItem('defaultTheme', params.themeId);
+      window.localStorage.setItem('config.default_theme', params.themeId);
       this.themesService.updateCurrentlyUsedTheme();
       this.i18nService.setLanguage(<Languages>params.languageId.toUpperCase());
     });
@@ -147,7 +145,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.canEditQuiz = false;
     } else {
       if (quizname.length > 3) {
-        if ((JSON.parse(window.localStorage.getItem('owned_quizzes')) || []).indexOf(quizname) > -1) {
+        if ((JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(quizname) > -1) {
           this.canEditQuiz = true;
         } else {
           this.http.get(`${this._httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe((value: IMessage) => {
@@ -202,12 +200,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
     createQuizPromise.then(() => {
-      if (!window.localStorage.getItem('privateKey')) {
-        window.localStorage.setItem('privateKey', this.activeQuestionGroupService.generatePrivateKey());
+      if (!window.localStorage.getItem('config.private_key')) {
+        window.localStorage.setItem('config.private_key', this.activeQuestionGroupService.generatePrivateKey());
       }
       this.http.post(`${this._httpApiEndpoint}/quiz/reserve`, {
         quizName: this.enteredSessionName,
-        privateKey: window.localStorage.getItem('privateKey')
+        privateKey: window.localStorage.getItem('config.private_key')
       }).subscribe((value: any) => {
       });
       this.activeQuestionGroupService.activeQuestionGroup = questionGroup;

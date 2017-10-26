@@ -69,5 +69,11 @@
   }
 }
 
-#available_questions_wrapper {
+.available-questions-view-frame {
+  &:before {
+    content: ' ';
+  }
+  &:after {
+    content: ' ';
+  }
 }

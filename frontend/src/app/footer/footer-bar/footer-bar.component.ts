@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
-import {Http, RequestOptions, RequestOptionsArgs} from '@angular/http';
+import {Http, RequestOptions} from '@angular/http';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
@@ -307,6 +307,36 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     linkTarget: null
   }, function () {
   });
+  static footerElemSaveAssets: FooterbarElement = new FooterbarElement({
+    id: 'saveAssets',
+    iconClass: 'fa fa-cloud',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.cache_assets',
+    selectable: true,
+    showIntro: false,
+    linkTarget: null
+  }, function () {
+  });
+  static footerElemBlockRudeNicknames: FooterbarElement = new FooterbarElement({
+    id: 'blockRudeNicknames',
+    iconClass: 'fa fa-lock',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.block_rude_nicknames',
+    selectable: true,
+    showIntro: false,
+    linkTarget: null
+  }, function () {
+  });
+  static footerElemEnableCasLogin: FooterbarElement = new FooterbarElement({
+    id: 'enableCasLogin',
+    iconClass: 'fa fa-sign-in',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.enable_cas_login',
+    selectable: true,
+    showIntro: false,
+    linkTarget: null
+  }, function () {
+  });
 
   get _footerElements(): Array<FooterbarElement> {
     return this.footerElements;
@@ -335,11 +365,38 @@ export class FooterBarComponent implements OnInit, OnDestroy {
       if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.confidenceSliderEnabled) {
         FooterBarComponent.footerElemConfidenceSlider.isActive = true;
       }
+      if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.restrictToCasLogin) {
+        FooterBarComponent.footerElemEnableCasLogin.isActive = true;
+      }
+      if (this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.blockIllegalNicks) {
+        FooterBarComponent.footerElemBlockRudeNicknames.isActive = true;
+      }
+      if (window.localStorage.getItem('config.cache_assets') === 'true') {
+        FooterBarComponent.footerElemSaveAssets.isActive = true;
+      }
       FooterBarComponent.footerElemQRCode.onClickCallback = () => {
         qrCodeService.toggleQrCode();
       };
+      FooterBarComponent.footerElemEnableCasLogin.onClickCallback = () => {
+        const newState = !FooterBarComponent.footerElemEnableCasLogin.isActive;
+        FooterBarComponent.footerElemEnableCasLogin.isActive = newState;
+        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.restrictToCasLogin = newState;
+        this.activeQuestionGroupService.persist();
+      };
+      FooterBarComponent.footerElemBlockRudeNicknames.onClickCallback = () => {
+        const newState = !FooterBarComponent.footerElemBlockRudeNicknames.isActive;
+        FooterBarComponent.footerElemBlockRudeNicknames.isActive = newState;
+        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.blockIllegalNicks = newState;
+        this.activeQuestionGroupService.persist();
+      };
+      FooterBarComponent.footerElemSaveAssets.onClickCallback = () => {
+        const newState = !FooterBarComponent.footerElemSaveAssets.isActive;
+        FooterBarComponent.footerElemSaveAssets.isActive = newState;
+        this.activeQuestionGroupService.cacheAssets = newState;
+        window.localStorage.setItem('config.cache_assets', `${newState}`);
+      };
       FooterBarComponent.footerElemExport.onClickCallback = () => {
-        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.activeQuestionGroupService.activeQuestionGroup.hashtag}/${window.localStorage.getItem('privateKey')}/${themesService.currentTheme}/${translateService.currentLang}`;
+        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.activeQuestionGroupService.activeQuestionGroup.hashtag}/${window.localStorage.getItem('config.private_key')}/${themesService.currentTheme}/${translateService.currentLang}`;
         window.open(link);
       };
     }
@@ -409,7 +466,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
       const file: File = fileList[i];
       formData.append('uploadFile', file, file.name);
     }
-    formData.append('privateKey', window.localStorage.getItem('privateKey'));
+    formData.append('privateKey', window.localStorage.getItem('config.private_key'));
     const options = new RequestOptions();
     options.headers.append('Content-Type', 'multipart/form-data');
     options.headers.append('Accept', 'application/json');

@@ -3,14 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "prestart": "gulp scripts",
+    "bootstrap": "gulp scripts",
+    "prestart": "npm run bootstrap",
     "start": "node dist/index.js",
+    "predebug": "npm run bootstrap",
+    "debug": "node-debug dist/index.js",
     "test": "mocha --reporter spec --compilers ts:ts-node/register 'test/**/*.test.ts'"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
+    "cas": "0.0.3",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
+    "crypto-js": "^3.1.9-1",
     "debug": "^2.2.0",
     "excel4node": "^1.2.1",
     "express": "^4.14.0",
@@ -19,10 +24,15 @@
     "lowdb": "^1.0.0",
     "mathjax": "^2.7.2",
     "messageformat": "^1.0.2",
+    "mime": "^2.0.3",
+    "mime-types": "^2.1.17",
     "morgan": "^1.7.0",
     "node-sass-middleware": "0.9.8",
     "phantomjs25-beta": "^1.0.14",
-    "serve-favicon": "~2.4.2"
+    "request": "^2.83.0",
+    "serve-favicon": "~2.4.2",
+    "system": "^2.0.1",
+    "webpage": "^0.3.0"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",
@@ -42,6 +52,7 @@
     "gulp-typescript": "^3.1.1",
     "livereload": "^0.6.2",
     "mocha": "^3.1.2",
+    "node-inspector": "^1.1.1",
     "ts-node": "^1.6.1",
     "tslint": "^5.7.0",
     "typescript": "^2.5.2"

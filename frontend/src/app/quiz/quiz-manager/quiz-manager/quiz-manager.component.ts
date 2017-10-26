@@ -73,6 +73,7 @@ export class QuizManagerComponent implements OnInit {
       FooterBarComponent.footerElemStartQuiz,
       FooterBarComponent.footerElemProductTour,
       FooterBarComponent.footerElemNicknames,
+      FooterBarComponent.footerElemSaveAssets
     ]);
     headerLabelService.setHeaderLabel('component.quiz_manager.title');
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;

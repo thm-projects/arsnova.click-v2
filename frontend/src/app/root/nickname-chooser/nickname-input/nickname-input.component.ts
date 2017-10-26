@@ -40,8 +40,7 @@ export class NicknameInputComponent implements OnInit {
     const promise = new Promise((resolve, reject) => {
       this.http.put(`${this._httpApiEndpoint}/lobby/member/`, {
         quizName: this.currentQuiz.hashtag,
-        nickname: nickname,
-        webSocketId: window.sessionStorage.getItem('webSocket')
+        nickname: nickname
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           this.currentQuiz.sessionConfiguration = data.payload.sessionConfiguration;

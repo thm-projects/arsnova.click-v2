@@ -1,5 +1,17 @@
 import {NextFunction, Request, Response, Router} from 'express';
 import * as mjAPI from 'mathjax-node';
+import * as request from 'request';
+import {IQuestion, IQuestionGroup} from '../interfaces/questions/interfaces';
+import * as fs from 'fs';
+import {DatabaseTypes, DbDao} from '../db/DbDao';
+import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
+import * as sha256 from 'crypto-js/sha256';
+import * as Hex from 'crypto-js/enc-hex';
+import * as CAS from 'cas';
+import * as crypto from 'crypto';
+
+const casSettings = {base_url: 'https://cas.thm.de/cas', service: 'arsnova_click_v2'};
+const cas = new CAS(casSettings);
 
 export class LibRouter {
   get router(): Router {
@@ -20,7 +32,7 @@ export class LibRouter {
       // determines whether Message.Set() calls are logged
       displayMessages: false,
       // determines whether error messages are shown on the console
-      displayErrors:   true,
+      displayErrors: true,
       // determines whether "unknown characters" (i.e., no glyph in the configured fonts) are saved in the error array
       undefinedCharError: true,
       // a convenience option to add MathJax extensions
@@ -39,8 +51,8 @@ export class LibRouter {
         tex2jax: {
           processEscapes: true,
           processEnvironments: true,
-          inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
-          displayMath: [ ['$$', '$$'], ['\\[', '\\]'] ],
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
         }
       }
     });
@@ -133,6 +145,7 @@ export class LibRouter {
       format: 'TeX', // 'inline-TeX', 'MathML'
       html: true, //  svg:true, mml: true
       css: true, //  svg:true, mml: true
+      svg: true
     }, function (data) {
       if (!data.errors) {
         res.send(data);
@@ -166,6 +179,80 @@ export class LibRouter {
     }
   }
 
+  public cacheQuizAssets(req: Request, res: Response, next: NextFunction): void {
+    if (!req.body.quiz) {
+      res.writeHead(500);
+      res.end(`Malformed request received -> ${req.body}`);
+    }
+    const quiz: IQuestionGroup = req.body.quiz;
+    quiz.questionList.forEach((question: IQuestion) => {
+      this.matchTextToAssetsDb(question.questionText);
+      question.answerOptionList.forEach((answerOption: IAnswerOption) => {
+        this.matchTextToAssetsDb(answerOption.answerText);
+      });
+    });
+    res.send({
+      status: 'STATUS:SUCCESSFULL',
+      step: 'CACHE:QUIZ_ASSETS',
+      payload: {}
+    });
+  }
+
+  private matchTextToAssetsDb(value: string) {
+    const acceptedFileTypes = [/image\/*/];
+    const matchedValue = value.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+    if (matchedValue) {
+      matchedValue.forEach((matchedValueElement: string) => {
+        const digest = Hex.stringify(sha256(matchedValueElement));
+        const path = `${__dirname}/../../cache/${digest}`;
+        if (fs.existsSync(path)) {
+          return;
+        }
+        if (!matchedValueElement.startsWith('http')) {
+          matchedValueElement = `http://${matchedValueElement}`;
+        }
+        const req = request(matchedValueElement);
+        req.on('response', (response) => {
+          const contentType = response.headers['content-type'];
+          const hasContentTypeMatched = acceptedFileTypes.some((contentTypeRegex) => contentType.match(contentTypeRegex));
+          if (!hasContentTypeMatched) {
+            req.abort();
+            fs.unlink(path);
+          } else {
+            DbDao.create(DatabaseTypes.assets, {url: matchedValueElement, digest, path}, digest);
+          }
+        }).on('error', (err) => {
+          console.log(err);
+          req.abort();
+        }).pipe(fs.createWriteStream(path));
+      });
+    }
+  }
+
+  private randomValueHex (len: number = 40) {
+    return crypto.randomBytes(Math.ceil((len) / 2))
+                 .toString('hex') // convert to hexadecimal format
+                 .slice(0, len);   // return required number of characters
+  }
+
+  public authorize(req: Request, res: Response, next: NextFunction): void {
+    const ticket = req.params.ticket;
+    if (ticket) {
+      cas.validate(ticket, function(err, status, username) {
+        if (err) {
+          // Handle the error
+          res.send({error: err});
+        } else {
+          // Log the user in
+          res.send({status: status, username: username});
+        }
+      });
+    } else {
+      const loginUrl = `${casSettings.base_url}?service=${req.headers.referer}/${this.randomValueHex(12)}`;
+      res.redirect(loginUrl);
+    }
+  }
+
   /**
    * Take each handler, and attach to one of the Express.Router's
    * endpoints.
@@ -177,6 +264,10 @@ export class LibRouter {
     this._router.get('/mathjax/example/first', this.getFirstMathjaxExample);
     this._router.get('/mathjax/example/second', this.getSecondMathjaxExample);
     this._router.get('/mathjax/example/third', this.getThirdMathjaxExample);
+
+    this._router.post('/cache/quiz/assets', this.cacheQuizAssets.bind(this));
+
+    this._router.get('/authorize', this.authorize.bind(this));
   }
 
 }

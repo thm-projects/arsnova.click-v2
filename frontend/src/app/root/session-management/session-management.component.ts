@@ -38,7 +38,7 @@ export class SessionManagementComponent implements OnInit {
       FooterBarComponent.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('component.hashtag_management.session_management');
-    this._sessions = JSON.parse(window.localStorage.getItem('owned_quizzes')) || [];
+    this._sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
   }
 
   ngOnInit() {
@@ -80,11 +80,11 @@ export class SessionManagementComponent implements OnInit {
   deleteQuiz(session: string): void {
     this.sessions.splice(this.sessions.indexOf(session), 1);
     window.localStorage.removeItem(session);
-    window.localStorage.setItem('owned_quizzes', JSON.stringify(this.sessions));
+    window.localStorage.setItem('config.owned_quizzes', JSON.stringify(this.sessions));
     this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz`, {
       body: {
         quizName: session,
-        privateKey: localStorage.getItem('privateKey')
+        privateKey: localStorage.getItem('config.private_key')
       }
     }).subscribe((response: IMessage) => {
       if (response.status !== 'STATUS:SUCCESS') {

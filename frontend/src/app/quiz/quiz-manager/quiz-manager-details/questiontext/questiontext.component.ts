@@ -28,7 +28,8 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute) {
     this.footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemNicknames
+      FooterBarComponent.footerElemNicknames,
+      FooterBarComponent.footerElemSaveAssets
     ]);
   }
 
@@ -135,9 +136,6 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
       case 'latexMarkdownButton':
         break;
     }
-    this.questionTextService.change(this.questionTextElement.value);
-    this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText = this.questionTextElement.value;
-    this.activeQuestionGroupService.persist();
 
   }
 
@@ -166,5 +164,8 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._routerSubscription.unsubscribe();
+    this.questionTextService.change(this.questionTextElement.value);
+    this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText = this.questionTextElement.value;
+    this.activeQuestionGroupService.persist();
   }
 }

@@ -22,8 +22,8 @@ export class ThemesService {
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private http: HttpClient) {
-    if (!window.localStorage.getItem('defaultTheme')) {
-      window.localStorage.setItem('defaultTheme', DefaultSettings.defaultSettings.theme);
+    if (!window.localStorage.getItem('config.default_theme')) {
+      window.localStorage.setItem('config.default_theme', DefaultSettings.defaultSettings.theme);
     }
     this.updateCurrentlyUsedTheme();
     http.get(`${DefaultSettings.httpApiEndpoint}/themes`)
@@ -38,7 +38,7 @@ export class ThemesService {
   }
 
   updateCurrentlyUsedTheme() {
-    let usedTheme = (window.sessionStorage.getItem('quiz_theme') || window.localStorage.getItem('defaultTheme'));
+    let usedTheme = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme'));
     if (this.activeQuestionGroupService.activeQuestionGroup && this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.theme) {
       usedTheme = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.theme;
     }

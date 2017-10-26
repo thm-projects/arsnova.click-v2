@@ -25,28 +25,41 @@ export enum CurrencyTypes {
 
 @Injectable()
 export class I18nService {
+  set currentLanguage(value: Languages) {
+    window.localStorage.setItem('config.language', value.toString());
+    this._currentLanguage = value;
+  }
 
   private _currentLanguage: Languages;
 
   constructor(private translate: TranslateService) {
+    let selectedLanguage: Languages;
+    if (Languages[window.localStorage.getItem('config.language')]) {
+      selectedLanguage = Languages[window.localStorage.getItem('config.language')];
+    } else if (Languages[navigator.language]) {
+      selectedLanguage = Languages[navigator.language];
+    } else {
+      selectedLanguage = Languages.EN;
+    }
+
     // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang(Languages.EN.toString().toLowerCase());
+    translate.setDefaultLang(selectedLanguage.toString().toLowerCase());
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use(Languages.EN.toString().toLowerCase());
+    translate.use(selectedLanguage.toString().toLowerCase());
 
-    this._currentLanguage = Languages.EN;
+    this.currentLanguage = selectedLanguage;
   }
 
   public formatNumber(number: number, type: NumberTypes = NumberTypes.decimal): string {
     return number.toLocaleString(undefined, {
       style: type.toString(),
-      currency: CurrencyTypes[this._currentLanguage.toString()]
+      currency: CurrencyTypes[this.currentLanguage.toString()]
     });
   }
 
   setLanguage(language: Languages) {
-    this._currentLanguage = Languages.EN;
+    this.currentLanguage = language;
     this.translate.use(language.toString().toLowerCase());
   }
 

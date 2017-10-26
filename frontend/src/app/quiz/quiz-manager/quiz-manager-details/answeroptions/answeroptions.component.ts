@@ -27,7 +27,8 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService) {
     this.footerBarService.replaceFooterElments([
       FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemNicknames
+      FooterBarComponent.footerElemNicknames,
+      FooterBarComponent.footerElemSaveAssets
     ]);
   }
 

@@ -14,7 +14,7 @@ import {themes} from './themes/availableThemes';
 import {ITheme} from './interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from './db/DbDao';
 
-debug('ts-express:server');
+debug('arsnova.click: ts-express:server');
 const cert: any = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
 const key: any = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
 
@@ -89,6 +89,7 @@ function onListening(): void {
 
 function onClose(): void {
   DbDao.closeConnection(DatabaseTypes.quiz);
+  DbDao.closeConnection(DatabaseTypes.assets);
 
   WebSocketRouter.wss.close();
 }

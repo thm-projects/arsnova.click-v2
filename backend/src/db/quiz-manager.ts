@@ -206,11 +206,14 @@ class ActiveQuizItem implements IActiveQuiz {
     });
   }
 
-  public addMember(name: string, webSocketAuthorization: number): boolean {
+  public addMember(name: string, webSocketAuthorization: number, profile?: ICas): boolean {
     const foundMembers: number = this.findMemberByName(name).length;
 
-    if (illegalNicks.indexOf(name.toUpperCase()) > -1) {
+    if (this.originalObject.sessionConfig.nicks.blockIllegalNicks && illegalNicks.indexOf(name.toUpperCase()) > -1) {
       throw new Error('LOBBY:ILLEGAL_NAME');
+    }
+    if (this.originalObject.sessionConfig.nicks.restrictToCasLogin && !profile) {
+      throw new Error('LOBBY:CAS_LOGIN_REQUIRED');
     }
 
     if (foundMembers === 0) {

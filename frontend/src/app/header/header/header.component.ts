@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {HeaderLabelService} from 'app/service/header-label.service';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConnectionService} from '../../service/connection.service';
@@ -68,7 +67,7 @@ export class HeaderComponent implements OnInit {
   private _finishedWithErrors: Boolean = false;
   private _finishedWithWarnings: Boolean = false;
   private _origin: string = location.hostname;
-  private _inHomeRoute: Boolean = location.pathname === '/';
+  private _inHomeRoute: Boolean;
   private _localStorageAvailable: boolean = isLocalStorageSupported();
   private _sessionStorageAvailable: boolean = isSessionStorageSupported();
   private _offline = false;
@@ -96,17 +95,15 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(
-    private headerLabelService: HeaderLabelService,
     private router: Router,
     private modalService: NgbModal,
     private connectionService: ConnectionService) {
-    const self = this;
-    router.events.subscribe((url: any) => {
-      self.inHomeRoute = (url.url === '/home' || url.url === '/');
-    });
   }
 
   ngOnInit() {
+    this.router.events.subscribe((url: any) => {
+      this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
+    });
   }
 
   openConnectionQualityModal(content: string): void {

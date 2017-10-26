@@ -8,7 +8,9 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-        "assets",
+        "assets/fonts",
+        "assets/i18n",
+        "assets/icons",
         "manifest.json",
         "favicon.svg"
       ],

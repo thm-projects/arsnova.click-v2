@@ -159,8 +159,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   addTestPlayer(name: string) {
     this.http.put(`${this._httpApiEndpoint}/lobby/member`, {
       quizName: this._hashtag,
-      nickname: name,
-      webSocketId: window.sessionStorage.getItem('webSocket')
+      nickname: name
     }).subscribe(
       (data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {

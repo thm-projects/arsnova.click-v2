@@ -88,7 +88,7 @@ export class ConnectionService {
       return;
     }
     this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER', window.localStorage.getItem('privateKey'));
+    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER', window.localStorage.getItem('config.private_key'));
   }
 
   initConnection(): Promise<boolean> {

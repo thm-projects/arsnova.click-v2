@@ -10,6 +10,10 @@ import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interf
 import {DatabaseTypes, DbDao} from '../db/DbDao';
 import {ExcelWorkbook} from '../export/excel-workbook';
 
+const serverConfig = {
+  cacheQuizAssets: true
+};
+
 export class ApiRouter {
   get router(): Router {
     return this._router;
@@ -30,7 +34,9 @@ export class ApiRouter {
    * TODO: Return REST Spec here
    */
   public getAll(req: Request, res: Response, next: NextFunction): void {
-    res.send({ab: 'cd'});
+    res.send({
+      serverConfig
+    });
   }
 
   public getThemes(req: Request, res: Response, next: NextFunction): void {
@@ -48,7 +54,7 @@ export class ApiRouter {
   public getIsAvailableQuiz(req: Request, res: Response, next: NextFunction): void {
     const quizzes: Array<string> = QuizManager.getAllActiveQuizNames();
     const quizExists: boolean = quizzes.indexOf(req.params.quizName) > -1;
-    const payload: { available?: boolean, provideNickSelection?: boolean } = {};
+    const payload: { available?: boolean, provideNickSelection?: boolean, authorizeViaCas?: boolean } = {};
 
     const isInactive: boolean = QuizManager.isInactiveQuiz(req.params.quizName);
 
@@ -58,6 +64,7 @@ export class ApiRouter {
 
       payload.available = true;
       payload.provideNickSelection = provideNickSelection;
+      payload.authorizeViaCas = sessionConfig.nicks.restrictToCasLogin;
     }
 
     const result: Object = {

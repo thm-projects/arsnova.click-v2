@@ -30,7 +30,7 @@ export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
       return;
     }
     this._sessionConfiguration = new SessionConfiguration(value);
-    window.sessionStorage.setItem(`quiz_theme`, value.theme);
+    window.sessionStorage.setItem(`config.quiz_theme`, value.theme);
     this.themesService.updateCurrentlyUsedTheme();
     this.persistToSessionStorage();
   }

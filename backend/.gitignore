@@ -41,6 +41,7 @@ testem.log
 .DS_Store
 Thumbs.db
 
+cache/
 arsnova-click-v2-db-v*.json
 theme_preview/*.png
 !theme_preview/phantomDriver.js
