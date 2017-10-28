@@ -2,7 +2,7 @@
 ###### High Priority Features:
 - [x] Voting View
 - [x] Export of Results
-- [ ] Import of Quizzes
+- [x] Import of Quizzes
 - [x] Share the session configuration update to the clients in the Live Results
 - [ ] CAS Login Support
 - [ ] ABCD Question
@@ -18,6 +18,7 @@
 - [x] Cache external Resources from Quizzes with activated "Cache Assets" configuration switch
 - [ ] Client: Translation (FR, ES, IT)
 - [ ] Server: Translation for Excel export files (EN, DE, FR, ES, IT)
+- [ ] Support renaming of duplicate quizzes on upload
 
 ###### Low Priority Features:
 - [ ] Product Tour
@@ -27,6 +28,7 @@
 - [ ] Cookie Consent
 - [ ] Theming of Dialog Modals
 - [ ] Support Api calls of PowerPoint Plugin
+- [ ] Support Assets Caching when importing quizzes
 
 #### Known issues
 - [ ] Size of QR Code in the Quiz Lobby too small
