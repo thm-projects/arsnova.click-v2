@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
-import {TranslateService} from '@ngx-translate/core';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
@@ -8,15 +7,14 @@ import {questionGroupReflection} from '../../../lib/questions/questionGroup_refl
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
-import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
-import {RequestMethod, RequestOptions, RequestOptionsArgs} from '@angular/http';
+import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 
 @Component({
-  selector: 'app-session-management',
-  templateUrl: './session-management.component.html',
-  styleUrls: ['./session-management.component.scss']
+  selector: 'app-quiz-overview',
+  templateUrl: './quiz-overview.component.html',
+  styleUrls: ['./quiz-overview.component.scss']
 })
-export class SessionManagementComponent implements OnInit {
+export class QuizOverviewComponent implements OnInit {
   get sessions(): Array<string> {
     return this._sessions;
   }

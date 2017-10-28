@@ -9,12 +9,9 @@ import {RootComponent} from './root/root.component';
 import {HeaderModule} from '../header/header.module';
 import {FooterBarService} from '../service/footer-bar.service';
 import {LanguageSwitcherComponent} from './language-switcher/language-switcher.component';
-import {SessionManagementComponent} from './session-management/session-management.component';
-import {QuizManagerModule} from '../quiz/quiz-manager/quiz-manager.module';
 import {ActiveQuestionGroupService} from '../service/active-question-group.service';
 import {ModalsModule} from '../modals/modals.module';
 import {WebsocketService} from '../service/websocket.service';
-import {QuizFlowModule} from '../quiz/quiz-flow/quiz-flow.module';
 import {ThemeSwitcherComponent} from './theme-switcher/theme-switcher.component';
 import {ThemesModule} from '../themes/themes.module';
 import {ConnectionService} from '../service/connection.service';
@@ -31,6 +28,8 @@ import {HttpClient} from '@angular/common/http';
 import {createTranslateLoader} from '../../lib/translation.factory';
 import {CasService} from '../service/cas.service';
 import {UserService} from '../service/user.service';
+import {QuizModule} from '../quiz/quiz.module';
+import {FileUploadService} from '../service/file-upload.service';
 
 const appRoutes: Routes = [
   {
@@ -46,17 +45,8 @@ const appRoutes: Routes = [
     loadChildren: 'app/root/info/info.module#InfoModule'
   },
   {
-    path: 'quiz/manager',
-    loadChildren: 'app/quiz/quiz-manager/quiz-manager.module#QuizManagerModule'
-  },
-  {
-    path: 'quiz/flow',
-    canLoad: [CasService],
-    loadChildren: 'app/quiz/quiz-flow/quiz-flow.module#QuizFlowModule'
-  },
-  {
-    path: 'quiz/overview',
-    component: SessionManagementComponent,
+    path: 'quiz',
+    loadChildren: 'app/quiz/quiz.module#QuizModule'
   },
   {
     path: 'languages',
@@ -81,7 +71,6 @@ const appRoutes: Routes = [
     HomeComponent,
     RootComponent,
     LanguageSwitcherComponent,
-    SessionManagementComponent,
     ThemeSwitcherComponent
   ],
   imports: [
@@ -106,8 +95,7 @@ const appRoutes: Routes = [
     }),
     HeaderModule,
     FooterModule,
-    QuizManagerModule,
-    QuizFlowModule,
+    QuizModule,
     NicknameChooserModule,
     ModalsModule,
     NgbModule.forRoot(),
@@ -124,7 +112,8 @@ const appRoutes: Routes = [
     SoundService,
     TranslateModule,
     UserService,
-    CasService
+    CasService,
+    FileUploadService
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

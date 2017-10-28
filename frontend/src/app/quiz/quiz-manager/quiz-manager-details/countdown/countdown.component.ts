@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -94,6 +94,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     });
   }
 
+  @HostListener('window:beforeunload', [ '$event' ])
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
     this._routerSubscription.unsubscribe();

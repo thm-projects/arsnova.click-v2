@@ -19,7 +19,7 @@ export function parseGithubFlavoredMarkdown(value: string): string {
   if (emojiMatch) {
     emojiMatch.forEach(token => {
       const emoji = token.replace(/:/g, '');
-      value = value.replace(token, `![emoji](/assets/emojis/${emoji}.png)`);
+      value = value.replace(token, `![emoji](/assets/icons/emojis/${emoji}.png)`);
     });
   }
   return marked(value);

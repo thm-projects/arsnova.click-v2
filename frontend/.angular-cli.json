@@ -11,8 +11,7 @@
         "assets/fonts",
         "assets/i18n",
         "assets/icons",
-        "manifest.json",
-        "favicon.svg"
+        "manifest.json"
       ],
       "index": "index.html",
       "main": "main.ts",

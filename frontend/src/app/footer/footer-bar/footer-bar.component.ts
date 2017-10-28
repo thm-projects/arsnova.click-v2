@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
-import {Http, RequestOptions} from '@angular/http';
+import {Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
@@ -9,6 +9,7 @@ import {DefaultSettings} from '../../service/settings.service';
 import {TranslateService} from '@ngx-translate/core';
 import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {ThemesService} from '../../service/themes.service';
+import {FileUploadService} from '../../service/file-upload.service';
 
 export class FooterbarElement {
   set onClickCallback(value: Function) {
@@ -352,6 +353,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     private router: Router,
     private http: Http,
     private translateService: TranslateService,
+    private fileUploadService: FileUploadService,
     private themesService: ThemesService,
     private qrCodeService: QrCodeService) {
 
@@ -464,21 +466,8 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     const formData: FormData = new FormData();
     for (let i = 0; i < fileList.length; i++) {
       const file: File = fileList[i];
-      formData.append('uploadFile', file, file.name);
+      formData.append('uploadFiles[]', file, file.name);
     }
-    formData.append('privateKey', window.localStorage.getItem('config.private_key'));
-    const options = new RequestOptions();
-    options.headers.append('Content-Type', 'multipart/form-data');
-    options.headers.append('Accept', 'application/json');
-    this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/upload`, formData, options)
-        .map(res => res.json())
-        .subscribe(
-          data => {
-            console.log('success');
-          },
-          error => {
-            console.log(error);
-          }
-        );
+    this.fileUploadService.uploadFile(formData);
   }
 }

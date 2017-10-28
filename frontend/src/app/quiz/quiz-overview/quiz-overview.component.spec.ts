@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {SessionManagementComponent} from './session-management.component';
+import {QuizOverviewComponent} from './quiz-overview.component';
 
-describe('SessionManagementComponent', () => {
-  let component: SessionManagementComponent;
-  let fixture: ComponentFixture<SessionManagementComponent>;
+describe('QuizOverviewComponent', () => {
+  let component: QuizOverviewComponent;
+  let fixture: ComponentFixture<QuizOverviewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SessionManagementComponent]
+      declarations: [QuizOverviewComponent]
     })
            .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SessionManagementComponent);
+    fixture = TestBed.createComponent(QuizOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,6 @@
+<div *ngFor="let duplicateQuiz of fileUploadService.duplicateQuizzes; let i = index">
+  <p>{{duplicateQuiz.quizName}}</p>
+  <div *ngFor="let renameRecommendation of duplicateQuiz.renameRecommendation"
+       (click)="sendRecommendation(duplicateQuiz, renameRecommendation, i)"
+       class='pull-left rounded pointer p-2 m-2'>{{renameRecommendation}}</div>
+</div>

@@ -48,7 +48,7 @@ export class GamificationAnimationComponent implements OnInit {
     if (value < this._gamification.length) {
       this._background = this._gamification[value].background;
       if (this._gamification[value].image) {
-        this._image = '/assets/gamification/' + this._gamification[value].image;
+        this._image = '/assets/icons/gamification/' + this._gamification[value].image;
       }
       if (!value) {
         setTimeout(() => { this._image = null; }, 1000);
