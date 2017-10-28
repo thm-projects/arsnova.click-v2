@@ -2,7 +2,6 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {IQuestion} from '../../../../../lib/questions/interfaces';
 import {AttendeeService} from '../../../../service/attendee.service';
 import {I18nService, NumberTypes} from '../../../../service/i18n.service';
-import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress-bar',
@@ -14,7 +13,8 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
   @Input() data: IQuestion;
   @Input() questionIndex: number;
 
-  constructor(private attendeeService: AttendeeService,
+  constructor(
+    private attendeeService: AttendeeService,
     private i18nService: I18nService) {
   }
 

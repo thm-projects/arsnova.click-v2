@@ -1,14 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FooterbarElement, FooterBarService} from '../../service/footer-bar.service';
-import {Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
-import {QrCodeService} from '../../service/qr-code.service';
-import {DefaultSettings} from '../../service/settings.service';
-import {TranslateService} from '@ngx-translate/core';
-import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
-import {ThemesService} from '../../service/themes.service';
 import {FileUploadService} from '../../service/file-upload.service';
 
 @Component({
@@ -30,8 +24,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     private router: Router,
     private footerBarService: FooterBarService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private fileUploadService: FileUploadService
-  ) {
+    private fileUploadService: FileUploadService) {
   }
 
   ngOnInit() {

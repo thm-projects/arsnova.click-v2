@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, SecurityContext} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {QuestionTextService} from '../../service/question-text.service';
 import {Subscription} from 'rxjs/Subscription';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../environments/environment';
@@ -21,9 +21,11 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   get targetDevice(): DEVICE_TYPES {
     return this._targetDevice;
   }
+
   get targetEnvironment(): LIVE_PREVIEW_ENVIRONMENT {
     return this._targetEnvironment;
   }
+
   get question(): IQuestionChoice {
     return this._question;
   }
@@ -32,6 +34,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   set targetDevice(value: DEVICE_TYPES) {
     this._targetDevice = value;
   }
+
   @Input()
   set targetEnvironment(value: LIVE_PREVIEW_ENVIRONMENT) {
     this._targetEnvironment = value;

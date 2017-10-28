@@ -17,6 +17,7 @@ export class RootComponent implements OnInit {
   set showQrCode(value: boolean) {
     this._showQrCode = value;
   }
+
   get qrCodeContent(): string {
     return this._qrCodeContent;
   }

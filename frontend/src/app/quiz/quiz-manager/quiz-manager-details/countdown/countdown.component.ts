@@ -3,7 +3,6 @@ import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {TranslateService} from '@ngx-translate/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {FooterBarComponent} from '../../../../footer/footer-bar/footer-bar.component';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestion} from '../../../../../lib/questions/interfaces';
 
@@ -94,7 +93,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:beforeunload', [ '$event' ])
+  @HostListener('window:beforeunload', ['$event'])
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
     this._routerSubscription.unsubscribe();

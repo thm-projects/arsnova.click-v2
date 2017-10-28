@@ -55,11 +55,11 @@
       <div class="btn-group" id="available_questions_wrapper"
            [attr.data-intro]="'component.quiz_manager.description.available_questions' | translate">
         <button *ngFor="let elem of selectableQuestionTypes"
-             (click)="addQuestion(elem.id)"
-             [id]="elem.id + '_draggable'"
-             [class]="'btn btn-info mr-2 pointer questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + elem.id"
-             [attr.data-intro]="elem.descriptionType | translate"
-             [innerHTML]="elem.translationName | translate">
+                (click)="addQuestion(elem.id)"
+                [id]="elem.id + '_draggable'"
+                [class]="'btn btn-info mr-2 pointer questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + elem.id"
+                [attr.data-intro]="elem.descriptionType | translate"
+                [innerHTML]="elem.translationName | translate">
         </button>
       </div>
     </div>

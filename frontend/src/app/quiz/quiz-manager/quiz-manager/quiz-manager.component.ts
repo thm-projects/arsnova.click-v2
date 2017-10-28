@@ -2,7 +2,6 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {questionReflection} from '../../../../lib/questions/question_reflection';
 import {IQuestionGroup} from '../../../../lib/questions/interfaces';

@@ -22,6 +22,7 @@ export class ActiveQuestionGroupService {
   set cacheAssets(value: boolean) {
     this._cacheAssets = value;
   }
+
   get activeQuestionGroup(): IQuestionGroup {
     return this._activeQuestionGroup;
   }
@@ -55,7 +56,7 @@ export class ActiveQuestionGroupService {
   }
 
   private initCacheAssetsState() {
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/`).subscribe((value: {serverConfig: IServerConfig}) => {
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/`).subscribe((value: { serverConfig: IServerConfig }) => {
       this._serverConfig = value.serverConfig;
       this._cacheAssets = value.serverConfig.cacheQuizAssets;
     });
@@ -156,7 +157,8 @@ export class ActiveQuestionGroupService {
         window.localStorage.setItem('config.cache_assets', `${newState}`);
       };
       this.footerBarService.footerElemExport.onClickCallback = () => {
-        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.activeQuestionGroup.hashtag}/${window.localStorage.getItem('config.private_key')}/${this.activeQuestionGroup.sessionConfig.theme}/${this.translateService.currentLang}`;
+        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.activeQuestionGroup.hashtag}/${window.localStorage.getItem(
+          'config.private_key')}/${this.activeQuestionGroup.sessionConfig.theme}/${this.translateService.currentLang}`;
         window.open(link);
       };
     }

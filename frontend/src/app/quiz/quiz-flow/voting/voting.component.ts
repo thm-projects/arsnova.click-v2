@@ -6,7 +6,6 @@ import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {Countdown} from '../quiz-results/quiz-results.component';
 import {Router} from '@angular/router';
 import {AttendeeService} from '../../../service/attendee.service';
-import {IAnswerOption} from '../../../../lib/answeroptions/interfaces';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {ConnectionService} from '../../../service/connection.service';
 
@@ -26,7 +25,8 @@ export class VotingComponent implements OnInit, OnDestroy {
   private _selectedAnswers: Array<number> = [];
   private _toggleSelectedAnswers: boolean;
 
-  constructor(public currentQuizService: CurrentQuizService,
+  constructor(
+    public currentQuizService: CurrentQuizService,
     private http: HttpClient,
     private attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
@@ -83,9 +83,8 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public toggleSelectAnswer(index: number): void {
-    this.isSelected(index) ?
-    this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) :
-    this._toggleSelectedAnswers ? this._selectedAnswers = [index] : this._selectedAnswers.push(index);
+    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) : this._toggleSelectedAnswers
+      ? this._selectedAnswers = [index] : this._selectedAnswers.push(index);
   }
 
   ngOnInit() {

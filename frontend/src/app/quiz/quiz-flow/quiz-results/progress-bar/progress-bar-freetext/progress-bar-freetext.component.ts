@@ -14,6 +14,7 @@ export class ProgressBarFreetextComponent implements OnInit {
   set base(value: number) {
     this._base = value;
   }
+
   get percent(): number {
     return this._percent;
   }
@@ -21,6 +22,7 @@ export class ProgressBarFreetextComponent implements OnInit {
   set percent(value: number) {
     this._percent = value;
   }
+
   @Input()
   set attendeeData(value: any) {
     this.percent = value.percent;

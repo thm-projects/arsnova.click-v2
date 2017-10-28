@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HeaderLabelService} from '../../service/header-label.service';

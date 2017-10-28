@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {HeaderLabelService} from '../../service/header-label.service';
-import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 

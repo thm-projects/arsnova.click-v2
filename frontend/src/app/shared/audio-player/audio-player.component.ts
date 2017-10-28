@@ -10,6 +10,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   get randomUUID(): string {
     return this._randomUUID;
   }
+
   get loop(): boolean {
     return this._loop;
   }

@@ -28,6 +28,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   get questionIndex(): number {
     return this._questionIndex;
   }
+
   get isGlobalRanking(): boolean {
     return this._isGlobalRanking;
   }

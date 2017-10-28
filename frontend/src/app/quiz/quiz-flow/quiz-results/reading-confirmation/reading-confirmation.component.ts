@@ -16,6 +16,7 @@ export class ReadingConfirmationComponent implements OnInit {
   set percent(value: string) {
     this._percent = value;
   }
+
   get base(): number {
     return this._base;
   }
@@ -23,6 +24,7 @@ export class ReadingConfirmationComponent implements OnInit {
   set base(value: number) {
     this._base = value;
   }
+
   @Input()
   set data(value: any) {
     this._data = value;
@@ -51,7 +53,8 @@ export class ReadingConfirmationComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
   }
 
-  constructor(private i18nService: I18nService,
+  constructor(
+    private i18nService: I18nService,
     private sanitizer: DomSanitizer) {
   }
 

@@ -1,6 +1,5 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {FooterBarComponent} from '../../../../footer/footer-bar/footer-bar.component';
 import {QuestionTextService} from '../../../../service/question-text.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute} from '@angular/router';

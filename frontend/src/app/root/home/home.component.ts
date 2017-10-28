@@ -1,5 +1,4 @@
-import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
-import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
@@ -8,7 +7,7 @@ import {AvailableQuizzesComponent} from '../../modals/available-quizzes/availabl
 import {ThemesService} from '../../service/themes.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../service/settings.service';
 import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -73,8 +72,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.connectionService.initConnection().then(() => {
       this.http.get(`${DefaultSettings.httpLibEndpoint}/mathjax/example/third`).subscribe(
         (result: IMathjaxResponse) => {
-        this.mathjax = result.svg;
-      });
+          this.mathjax = result.svg;
+        });
       this.connectionService.initConnection().then(() => {
         this.connectionService.socket.subscribe(
           (data: IMessage) => {

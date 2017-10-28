@@ -10,6 +10,7 @@ export class ThemesService {
   get currentTheme(): string {
     return this._currentTheme;
   }
+
   private previewThemeBackup = '';
 
   get themes(): Array<Object> {

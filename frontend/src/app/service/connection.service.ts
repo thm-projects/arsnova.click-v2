@@ -10,6 +10,7 @@ export class ConnectionService {
   set websocketAvailable(value: Boolean) {
     this._websocketAvailable = value;
   }
+
   get socket(): Subject<IMessage> {
     return this._socket;
   }
@@ -46,10 +47,10 @@ export class ConnectionService {
 
   private initWebsocket() {
     this._socket = <Subject<IMessage>>this.websocketService.connect()
-                                         .map((response: MessageEvent): IMessage => {
-      this._websocketAvailable = true;
-                                           return JSON.parse(response.data);
-                                         });
+                                          .map((response: MessageEvent): IMessage => {
+                                            this._websocketAvailable = true;
+                                            return JSON.parse(response.data);
+                                          });
   }
 
   cleanUp(): void {
@@ -58,7 +59,9 @@ export class ConnectionService {
 
   public sendMessage(message: IMessage): void {
     if (!this._websocketAvailable) {
-      setTimeout(() => {this.sendMessage(message); }, 500);
+      setTimeout(() => {
+        this.sendMessage(message);
+      }, 500);
       return;
     }
     this._socket.next(message);
@@ -66,13 +69,17 @@ export class ConnectionService {
 
   private sendAuthorizationMessage(hashtag: string, step: string, auth: string): void {
     if (!this._websocketAvailable) {
-      setTimeout(() => {this.sendAuthorizationMessage(hashtag, step, auth); }, 500);
+      setTimeout(() => {
+        this.sendAuthorizationMessage(hashtag, step, auth);
+      }, 500);
       return;
     }
-    this._socket.next({step: step, payload: {
-      quizName: hashtag,
-      webSocketAuthorization: auth
-    }});
+    this._socket.next({
+      step: step, payload: {
+        quizName: hashtag,
+        webSocketAuthorization: auth
+      }
+    });
   }
 
   authorizeWebSocket(hashtag: string): void {

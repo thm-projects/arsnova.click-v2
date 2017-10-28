@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {TranslateService} from '@ngx-translate/core';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {Headers, Http, RequestOptions, RequestOptionsArgs} from '@angular/http';
 import {DefaultSettings} from '../../../service/settings.service';
 

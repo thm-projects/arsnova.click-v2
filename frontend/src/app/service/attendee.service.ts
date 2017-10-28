@@ -1,6 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {CurrentQuizService} from './current-quiz.service';
-import {FooterBarComponent} from '../footer/footer-bar/footer-bar.component';
 import {FooterBarService} from './footer-bar.service';
 
 export declare interface IQuizResponse {
@@ -24,6 +23,7 @@ class Player implements INickname {
   set responses(value: Array<IQuizResponse>) {
     this._responses = value;
   }
+
   get responses(): Array<IQuizResponse> {
     return this._responses;
   }
@@ -76,8 +76,7 @@ export class AttendeeService implements OnDestroy {
 
   constructor(
     private currentQuizService: CurrentQuizService,
-    private footerBarService: FooterBarService
-  ) {
+    private footerBarService: FooterBarService) {
     const restoreAttendees = window.sessionStorage.getItem('_attendees');
     if (restoreAttendees) {
       this._attendees = JSON.parse(restoreAttendees).map((attendee) => {

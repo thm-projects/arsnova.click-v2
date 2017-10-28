@@ -25,6 +25,7 @@ export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
       return questionReflection[elem.TYPE](elem);
     });
   }
+
   set sessionConfiguration(value: ISessionConfiguration) {
     if (!value) {
       return;
@@ -34,12 +35,15 @@ export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
     this.themesService.updateCurrentlyUsedTheme();
     this.persistToSessionStorage();
   }
+
   get sessionConfiguration(): ISessionConfiguration {
     return this._sessionConfiguration;
   }
+
   get previousQuestions(): Array<IQuestion> {
     return this._previousQuestions;
   }
+
   get currentQuestion(): any {
     return this._currentQuestion;
   }
@@ -64,7 +68,8 @@ export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
   private _previousQuestions: Array<IQuestion> = [];
   private _sessionConfiguration: ISessionConfiguration;
 
-  constructor(private themesService: ThemesService,
+  constructor(
+    private themesService: ThemesService,
     private connectionService: ConnectionService) {
     const instance = window.sessionStorage.getItem('current_quiz');
     if (instance) {

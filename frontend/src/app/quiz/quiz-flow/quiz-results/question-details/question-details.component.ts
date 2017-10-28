@@ -4,8 +4,6 @@ import {FooterBarService} from '../../../../service/footer-bar.service';
 import {ActivatedRoute} from '@angular/router';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {IQuestion} from '../../../../../lib/questions/interfaces';
-import {FooterBarComponent} from '../../../../footer/footer-bar/footer-bar.component';
-import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../environments/environment';
 import {CurrentQuizService} from '../../../../service/current-quiz.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {parseGithubFlavoredMarkdown} from '../../../../../lib/markdown/markdown';
@@ -19,6 +17,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   get questionText(): SafeHtml {
     return this._questionText;
   }
+
   get question(): IQuestion {
     return this._question;
   }

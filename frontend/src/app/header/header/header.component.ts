@@ -48,6 +48,7 @@ export class HeaderComponent implements OnInit {
   set offline(value: boolean) {
     this._offline = value;
   }
+
   get localStorageAvailable(): Boolean {
     return this._localStorageAvailable;
   }

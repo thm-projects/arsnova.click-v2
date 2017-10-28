@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
-import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {Router} from '@angular/router';

@@ -3,7 +3,6 @@ import {ActiveQuestionGroupService} from '../../../../service/active-question-gr
 import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {FooterBarComponent} from '../../../../footer/footer-bar/footer-bar.component';
 import {Subscription} from 'rxjs/Subscription';
 import {questionReflection} from '../../../../../lib/questions/question_reflection';
 import {IQuestion} from '../../../../../lib/questions/interfaces';

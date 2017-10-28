@@ -19,6 +19,7 @@ export class FileUploadService {
   get duplicateQuizzes(): Array<IDuplicateQuiz> {
     return this._duplicateQuizzes;
   }
+
   get renameFilesQueue(): FormData {
     return this._renameFilesQueue;
   }
@@ -30,8 +31,8 @@ export class FileUploadService {
     private http: HttpClient,
     private router: Router,
     private modalService: NgbModal,
-    private activeQuestionGroupService: ActiveQuestionGroupService
-  ) { }
+    private activeQuestionGroupService: ActiveQuestionGroupService) {
+  }
 
   uploadFile(formData: FormData) {
     this._renameFilesQueue = new FormData();

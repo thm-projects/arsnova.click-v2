@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SafeStyle, DomSanitizer} from '@angular/platform-browser';
+import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress-bar-multiple-choice',
@@ -14,6 +14,7 @@ export class ProgressBarMultipleChoiceComponent implements OnInit {
   set percent(value: number) {
     this._percent = value;
   }
+
   get base(): number {
     return this._base;
   }
@@ -21,6 +22,7 @@ export class ProgressBarMultipleChoiceComponent implements OnInit {
   set base(value: number) {
     this._base = value;
   }
+
   @Input()
   set attendeeData(value: any) {
     this.percent = value.percent;

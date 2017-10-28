@@ -1,11 +1,7 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {InfoComponent} from './info.component';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule, Routes} from '@angular/router';
-import {TranslateLoader, TranslateModule, TranslateCompiler} from '@ngx-translate/core';
-import {createTranslateLoader} from '../../../lib/translation.factory';
-import {HttpClient} from '@angular/common/http';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
 
 const infoRoutes: Routes = [
   {
@@ -42,4 +38,5 @@ const infoRoutes: Routes = [
   ],
   declarations: [InfoComponent]
 })
-export class InfoModule { }
+export class InfoModule {
+}

@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
-import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
 
 @Component({
   selector: 'app-language-switcher',

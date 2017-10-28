@@ -1,8 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {SoundService} from '../../../service/sound.service';
 import {FooterBarService} from 'app/service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {IMusicSessionConfiguration} from '../../../../lib/session_configuration/interfaces';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {DefaultSettings} from '../../../service/settings.service';

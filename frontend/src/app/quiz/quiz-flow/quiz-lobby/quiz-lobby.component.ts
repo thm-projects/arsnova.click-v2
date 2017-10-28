@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {ThemesService} from '../../../service/themes.service';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../service/settings.service';

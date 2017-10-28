@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {FooterBarService} from '../../../service/footer-bar.service';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {IQuestion} from '../../../../lib/questions/interfaces';
 import {AttendeeService} from '../../../service/attendee.service';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
@@ -14,7 +13,6 @@ import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {I18nService, NumberTypes} from '../../../service/i18n.service';
 import {SessionConfiguration} from '../../../../lib/session_configuration/session_config';
-import {MusicSessionConfiguration} from '../../../../lib/session_configuration/session_config_music';
 
 export class Countdown {
 
@@ -94,8 +92,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemSound,
       ]);
       this.footerBarService.footerElemBack.onClickCallback = () => {
-        this.http.patch(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${this._hashtag}`, {
-        }).subscribe(
+        this.http.patch(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${this._hashtag}`, {}).subscribe(
           (data: IMessage) => {
             this.router.navigate(['/quiz', 'flow', 'lobby']);
           }

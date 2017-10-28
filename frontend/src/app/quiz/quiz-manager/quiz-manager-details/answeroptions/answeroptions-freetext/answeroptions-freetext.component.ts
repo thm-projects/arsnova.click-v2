@@ -5,7 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {FreeTextAnswerOption} from '../../../../../../lib/answeroptions/answeroption_freetext';
 import {IQuestion} from '../../../../../../lib/questions/interfaces';
-import {IAnswerOption, IFreetextAnswerOption} from '../../../../../../lib/answeroptions/interfaces';
+import {IFreetextAnswerOption} from '../../../../../../lib/answeroptions/interfaces';
 
 @Component({
   selector: 'app-answeroptions-freetext',

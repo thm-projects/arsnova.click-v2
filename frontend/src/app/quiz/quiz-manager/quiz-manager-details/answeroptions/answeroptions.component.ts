@@ -3,7 +3,6 @@ import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {FooterBarComponent} from 'app/footer/footer-bar/footer-bar.component';
 import {IQuestion} from '../../../../../lib/questions/interfaces';
 
 @Component({

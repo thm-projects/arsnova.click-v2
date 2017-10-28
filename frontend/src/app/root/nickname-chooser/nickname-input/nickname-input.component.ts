@@ -3,10 +3,8 @@ import {HttpClient} from '@angular/common/http';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {IMessage} from '../../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {DefaultSettings} from '../../../service/settings.service';
-import {SessionConfiguration} from '../../../../lib/session_configuration/session_config';
 import {AttendeeService} from '../../../service/attendee.service';
 import {ConnectionService} from '../../../service/connection.service';
 

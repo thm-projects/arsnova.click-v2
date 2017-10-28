@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import { QuizRenameComponent } from './quiz-rename/quiz-rename.component';
+import {QuizRenameComponent} from './quiz-rename/quiz-rename.component';
 import {CasService} from '../service/cas.service';
 import {QuizOverviewComponent} from './quiz-overview/quiz-overview.component';
 import {QuizFlowModule} from './quiz-flow/quiz-flow.module';
@@ -36,4 +36,5 @@ const quizRoutes: Routes = [
   ],
   declarations: [QuizOverviewComponent, QuizRenameComponent]
 })
-export class QuizModule { }
+export class QuizModule {
+}

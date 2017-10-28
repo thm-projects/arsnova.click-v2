@@ -4,7 +4,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {FooterBarComponent} from '../../../../footer/footer-bar/footer-bar.component';
 import {IQuestion} from '../../../../../lib/questions/interfaces';
 
 @Component({

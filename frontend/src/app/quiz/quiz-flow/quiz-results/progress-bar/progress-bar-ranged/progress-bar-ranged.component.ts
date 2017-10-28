@@ -14,6 +14,7 @@ export class ProgressBarRangedComponent implements OnInit {
   set percent(value: number) {
     this._percent = value;
   }
+
   get base(): number {
     return this._base;
   }
@@ -21,6 +22,7 @@ export class ProgressBarRangedComponent implements OnInit {
   set base(value: number) {
     this._base = value;
   }
+
   @Input()
   set attendeeData(value: any) {
     this.percent = value.percent;

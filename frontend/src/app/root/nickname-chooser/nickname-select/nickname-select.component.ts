@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../service/settings.service';
 import {IMessage} from '../../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {FooterBarService} from '../../../service/footer-bar.service';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {AttendeeService} from '../../../service/attendee.service';
@@ -52,7 +51,7 @@ export class NicknameSelectComponent implements OnInit {
       }, () => {
         reject();
       });
-  });
+    });
     promise.then(() => {
       window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, name);
       this.router.navigate(['/quiz', 'flow', 'lobby']);

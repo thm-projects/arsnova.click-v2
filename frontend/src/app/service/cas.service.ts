@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CanActivate, CanLoad, Router} from '@angular/router';
 import {UserService} from 'app/service/user.service';
 import {DefaultSettings} from './settings.service';
@@ -8,8 +8,8 @@ export class CasService implements CanLoad, CanActivate {
 
   constructor(
     private userService: UserService,
-    private router: Router
-  ) { }
+    private router: Router) {
+  }
 
   canActivate() {
     return this.canLoad();
