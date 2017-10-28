@@ -58,8 +58,8 @@ class Member implements INickname {
   }
 
   private hashCode(str: string): number { // java String#hashCode
-    let hash: number = 0;
-    for (let i: number = 0; i < str.length; i++) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
       hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     return hash;
@@ -124,7 +124,7 @@ class ActiveQuizItem implements IActiveQuiz {
 
   private _name: string;
   private _nicknames: Array<INickname>;
-  private _currentQuestionIndex: number = -1;
+  private _currentQuestionIndex = -1;
   private _originalObject: IQuestionGroup;
   private _webSocketRouter: WebSocketRouter;
   private _currentStartTimestamp: number;

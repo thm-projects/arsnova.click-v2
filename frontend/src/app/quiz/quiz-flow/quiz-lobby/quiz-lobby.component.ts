@@ -151,6 +151,20 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       .toString(16))).slice(-6);
   }
 
+  hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
+  transformForegroundColor(rgbObj: {r: string, g: string, b: string}): string {
+    const o = Math.round(((parseInt(rgbObj.r, 10) * 299) + (parseInt(rgbObj.g, 10) * 587) + (parseInt(rgbObj.b, 10) * 114)) / 1000);
+    return o < 125 ? 'ffffff' : '000000';
+  }
+
   sanitizeHTML(value: string): SafeHtml {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }

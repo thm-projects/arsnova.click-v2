@@ -2,7 +2,7 @@
      [id]="elem.id"
      (click)="isOwner ? kickMember(elem.name) : return"
      [class]="'member-wrapper mb-1 col-sm-4 col-md-3 ' + (isOwner ? 'pointer ' : '') + (attendeeService.isOwnNick(elem.name) ? 'own-nick' : '')"
-     [style.color]="'#' + sanitizeHTML(getComplementaryColor(elem.colorCode))"
+     [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
      [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
   <p class="mb-0"
      [innerText]="elem.name"></p>
