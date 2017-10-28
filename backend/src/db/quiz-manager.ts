@@ -332,6 +332,18 @@ export default class QuizManagerDAO {
     return quizName.toLowerCase();
   }
 
+  public static getRenameRecommendations(quizName: string): Array<string> {
+    const result = [];
+    const count = Object.keys(activeQuizzes).filter(activeQuizName => activeQuizName.startsWith(quizName)).length;
+    const date = new Date();
+    const dateYearPart = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}`;
+    const dateFormatted = `${dateYearPart}-${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    result.push(`${quizName} ${count + 1}`);
+    result.push(`${quizName} ${dateFormatted}`);
+    result.push(`${quizName}_${Math.random()}`);
+    return result;
+  }
+
   public static initInactiveQuiz(quizName: string, privateKey: string): void {
     const name: string = QuizManagerDAO.normalizeQuizName(quizName);
     if (activeQuizzes[name]) {

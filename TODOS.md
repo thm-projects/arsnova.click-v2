@@ -13,7 +13,7 @@
 - [x] Full Markdown Support for Answeroptions
 - [ ] Mathjax & Markdown in Voting View
 - [ ] Display of Question content in the Live Results
-- [ ] Toggle for blocking rude nicknames in the Nickname Manager
+- [x] Toggle for blocking rude nicknames in the Nickname Manager
 - [ ] Reading Confirmation
 - [x] Cache external Resources from Quizzes with activated "Cache Assets" configuration switch
 - [ ] Client: Translation (FR, ES, IT)

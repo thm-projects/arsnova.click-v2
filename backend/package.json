@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "bootstrap": "gulp scripts",
+    "bootstrap": "gulp",
     "prestart": "npm run bootstrap",
     "start": "node dist/index.js",
     "predebug": "npm run bootstrap",
@@ -13,6 +13,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "cas": "0.0.3",
+    "connect-busboy": "0.0.2",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
     "crypto-js": "^3.1.9-1",
@@ -20,7 +21,8 @@
     "excel4node": "^1.2.1",
     "express": "^4.14.0",
     "express-ws": "^3.0.0",
-    "hbs": "~4.0.1",
+    "imagemin": "^5.3.1",
+    "imagemin-pngquant": "^5.0.1",
     "lowdb": "^1.0.0",
     "mathjax": "^2.7.2",
     "messageformat": "^1.0.2",
@@ -28,11 +30,11 @@
     "mime-types": "^2.1.17",
     "morgan": "^1.7.0",
     "node-sass-middleware": "0.9.8",
-    "phantomjs25-beta": "^1.0.14",
+    "phantomjs-prebuilt": "^2.1.15",
+    "pn": "^1.0.0",
     "request": "^2.83.0",
     "serve-favicon": "~2.4.2",
-    "system": "^2.0.1",
-    "webpage": "^0.3.0"
+    "svg2png": "^4.1.1"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",
@@ -49,6 +51,7 @@
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
     "gulp-typescript": "^3.1.1",
     "livereload": "^0.6.2",
     "mocha": "^3.1.2",

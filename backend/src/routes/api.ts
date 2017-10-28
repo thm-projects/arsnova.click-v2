@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response, Router} from 'express';
-import QuizManager from '../db/quiz-manager';
+import QuizManager, {default as QuizManagerDAO} from '../db/quiz-manager';
 import * as fs from 'fs';
 import * as path from 'path';
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
@@ -9,6 +9,7 @@ import {themes} from '../themes/availableThemes';
 import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from '../db/DbDao';
 import {ExcelWorkbook} from '../export/excel-workbook';
+import {server} from 'websocket';
 
 const serverConfig = {
   cacheQuizAssets: true
@@ -47,8 +48,13 @@ export class ApiRouter {
     });
   }
 
+  public getFavicon(req: Request, res: Response, next: NextFunction): void {
+    const imagePath = req.params.themeId ? `favicons/${req.params.themeId}` : `arsnova_click_small`;
+    res.send(fs.readFileSync(path.join(__dirname, `../../images/${imagePath}.png`)));
+  }
+
   public getTheme(req: Request, res: Response, next: NextFunction): void {
-    res.send(fs.readFileSync(path.join(__dirname, `../../theme_preview/${req.params.themeId}_${req.params.languageId}.png`)));
+    res.send(fs.readFileSync(path.join(__dirname, `../../images/themes/${req.params.themeId}_${req.params.languageId}.png`)));
   }
 
   public getIsAvailableQuiz(req: Request, res: Response, next: NextFunction): void {
@@ -162,6 +168,66 @@ export class ApiRouter {
         })
       }
     });
+  }
+
+  public uploadQuiz(req: Request, res: Response, next: NextFunction): void {
+    const duplicateQuizzes = [];
+    const quizData = [];
+    let privateKey = '';
+    if (req.busboy) {
+      const promise = new Promise((resolve) => {
+        req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+          if (fieldname === 'uploadFiles[]') {
+            let quiz = '';
+            file.on('data', (buffer) => {
+              console.log(buffer.toString('utf8'));
+              const part = buffer.toString('utf8');
+              quiz += part;
+              console.log('stream data ' + part);
+            });
+            file.on('end', () => {
+              console.log('final output ' + quiz);
+              quizData.push({
+                fileName: filename,
+                quiz: JSON.parse(quiz)
+              });
+            });
+          }
+          console.log('file', fieldname, file, filename, encoding, mimetype);
+        });
+        req.busboy.on('field', function(key, value, keyTruncated, valueTruncated) {
+          if (key === 'privateKey') {
+            privateKey = value;
+          }
+        });
+        req.busboy.on('finish', function() {
+          console.log('form parsing finished');
+          console.log('result finish', quizData, privateKey);
+          resolve();
+        });
+        req.pipe(req.busboy);
+      });
+      promise.then(() => {
+        quizData.forEach((data: {fileName: string, quiz: IQuestionGroup}) => {
+          const dbResult = DbDao.read(DatabaseTypes.quiz, {quizName: data.quiz.hashtag});
+          if (dbResult) {
+            duplicateQuizzes.push({
+              quizName: data.quiz.hashtag,
+              fileName: data.fileName,
+              renameRecommendation: QuizManagerDAO.getRenameRecommendations(data.quiz.hashtag)
+            });
+          } else {
+            DbDao.create(DatabaseTypes.quiz, {quizName: data.quiz.hashtag, privateKey});
+            if (serverConfig.cacheQuizAssets) {
+              // TODO: Cache assets if the server setting is enabled
+            }
+          }
+        });
+        res.send({status: 'STATUS:SUCCESSFUL', step: 'QUIZ:UPLOAD_FILE', payload: {duplicateQuizzes}});
+      });
+    } else {
+      res.send({status: 'STATUS:FAILED', step: 'QUIZ:UPLOAD_FILE', payload: {message: 'busboy not found'}});
+    }
   }
 
   public startQuiz(req: Request, res: Response, next: NextFunction): void {
@@ -398,6 +464,7 @@ export class ApiRouter {
   private init(): void {
     this._router.get('/', this.getAll);
 
+    this._router.get('/favicon/:themeId?', this.getFavicon);
     this._router.get('/themes', this.getThemes);
     this._router.get('/theme/:themeId/:languageId', this.getTheme);
 
@@ -413,6 +480,7 @@ export class ApiRouter {
     this._router.put('/lobby/member', this.addMember);
     this._router.delete('/lobby/:quizName/member/:nickname', this.deleteMember);
 
+    this._router.post('/quiz/upload', this.uploadQuiz);
     this._router.post('/quiz/start', this.startQuiz);
     this._router.get('/quiz/startTime/:quizName', this.getQuizStartTime);
     this._router.post('/quiz/settings/update', this.updateQuizSettings);

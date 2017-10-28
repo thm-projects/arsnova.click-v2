@@ -5,6 +5,10 @@ import * as WebSocket from 'ws';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as pnFs from 'pn/fs';
+import * as svg2png from 'svg2png';
+import * as imagemin from 'imagemin';
+import * as imageminPngquant from 'imagemin-pngquant';
 import {WebSocketRouter} from './routes/websocket';
 import {Server} from 'https';
 import * as process from 'process';
@@ -28,11 +32,15 @@ server.on('listening', onListening);
 server.on('close', onClose);
 
 const languages: any = {'en': 'en'};
-const params: any = [path.join(__dirname, '../theme_preview/phantomDriver.js')];
+const params: any = [path.join(__dirname, 'phantomDriver.js')];
 const themePreviewEndpoint = 'http://localhost:4200/preview';
 themes.forEach((theme: ITheme) => {
   for (const languageKey in languages) {
     if (languages.hasOwnProperty(languageKey)) {
+      pnFs.readFile(path.join(__dirname, `../images/favicons/favicon.svg`))
+        .then(svg2png)
+        .then(buffer => fs.writeFile(path.join(__dirname, `../images/favicons/favicon_${theme.id}.png`), buffer))
+        .catch(e => console.error(e));
       params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);
     }
   }
@@ -42,10 +50,18 @@ command.stdout.on('data', (data) => {
   debug(`phantomjs (stdout): ${data.toString()}`);
 });
 command.stderr.on('data', (data) => {
-  debug(`phantomjs (stderr): ${data.toString()}`);
+  console.log(`phantomjs (stderr): ${data.toString()}`);
 });
 command.on('exit', () => {
-  debug(`phantomjs (exit): All preview images have been generated`);
+  console.log(`phantomjs (exit): All preview images have been generated`);
+
+  imagemin([path.join(__dirname, '../images/**/*.{png}')], path.join(__dirname, '../images'), {
+    plugins: [
+      imageminPngquant({quality: '65-80'})
+    ]
+  }).then(files => {
+    files.forEach(file => fs.writeFileSync(path.join(__dirname, file.path), file.data));
+  });
 });
 
 

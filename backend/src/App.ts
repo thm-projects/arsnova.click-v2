@@ -3,6 +3,7 @@ import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import {cpus, freemem, loadavg, totalmem, uptime} from 'os';
 import * as cors from 'cors';
+import * as busboy from 'connect-busboy';
 
 import ApiRouter from './routes/api';
 import LeaderboardRouter from './routes/leaderboard';
@@ -27,6 +28,7 @@ class App {
   // Configure Express middleware.
   private middleware(): void {
     this.express.use(logger('dev'));
+    this.express.use(busboy());
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({extended: false}));
     this.express.use(cors(options));
