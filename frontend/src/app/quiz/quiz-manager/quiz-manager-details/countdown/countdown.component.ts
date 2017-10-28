@@ -59,9 +59,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
-    this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemNicknames
+    this.footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack,
+      this.footerBarService.footerElemNicknames
     ]);
   }
 

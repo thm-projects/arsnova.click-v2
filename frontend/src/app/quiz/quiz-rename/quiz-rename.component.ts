@@ -18,7 +18,7 @@ export class QuizRenameComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private router: Router
   ) {
-    this.footerBarService.replaceFooterElments([FooterBarComponent.footerElemBack]);
+    this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
   }
 
   sendRecommendation(duplicateQuiz: IDuplicateQuiz, renameRecommendation: string, index: number) {

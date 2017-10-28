@@ -45,25 +45,25 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     public attendeeService: AttendeeService) {
     if (activeQuestionGroupService.activeQuestionGroup) {
-      footerBarService.replaceFooterElments([
-        FooterBarComponent.footerElemEditQuiz,
-        FooterBarComponent.footerElemStartQuiz,
-        FooterBarComponent.footerElemProductTour,
-        FooterBarComponent.footerElemNicknames,
-        FooterBarComponent.footerElemSound,
-        FooterBarComponent.footerElemReadingConfirmation,
-        FooterBarComponent.footerElemTheme,
-        FooterBarComponent.footerElemFullscreen,
-        FooterBarComponent.footerElemQRCode,
-        FooterBarComponent.footerElemResponseProgress,
-        FooterBarComponent.footerElemConfidenceSlider,
+      footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemEditQuiz,
+        this.footerBarService.footerElemStartQuiz,
+        this.footerBarService.footerElemProductTour,
+        this.footerBarService.footerElemNicknames,
+        this.footerBarService.footerElemSound,
+        this.footerBarService.footerElemReadingConfirmation,
+        this.footerBarService.footerElemTheme,
+        this.footerBarService.footerElemFullscreen,
+        this.footerBarService.footerElemQRCode,
+        this.footerBarService.footerElemResponseProgress,
+        this.footerBarService.footerElemConfidenceSlider,
       ]);
       this._isOwner = true;
       this._hashtag = activeQuestionGroupService.activeQuestionGroup.hashtag;
-      FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
+      this.footerBarService.footerElemStartQuiz.linkTarget = (self) => {
         return self.isActive ? ['/quiz', 'flow', 'results'] : null;
       };
-      FooterBarComponent.footerElemEditQuiz.onClickCallback = function () {
+      this.footerBarService.footerElemEditQuiz.onClickCallback = function () {
         if (activeQuestionGroupService.activeQuestionGroup) {
           activeQuestionGroupService.close();
           attendeeService.cleanUp();
@@ -71,8 +71,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         }
       };
     } else {
-      footerBarService.replaceFooterElments([
-        FooterBarComponent.footerElemBack
+      footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack
       ]);
       this._isOwner = false;
       this._hashtag = currentQuizService.hashtag;
@@ -106,11 +106,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     switch (data.step) {
       case 'LOBBY:ALL_PLAYERS':
       case 'MEMBER:ADDED':
-        FooterBarComponent.footerElemStartQuiz.isActive = true;
+        this.footerBarService.footerElemStartQuiz.isActive = true;
         break;
       case 'MEMBER:REMOVED':
         if (!this.attendeeService.attendees.length) {
-          FooterBarComponent.footerElemStartQuiz.isActive = false;
+          this.footerBarService.footerElemStartQuiz.isActive = false;
         }
         break;
     }

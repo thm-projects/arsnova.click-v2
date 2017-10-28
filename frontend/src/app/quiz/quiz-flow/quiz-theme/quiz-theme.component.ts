@@ -17,8 +17,8 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private themesService: ThemesService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack
     ]);
     this.previewThemeBackup = document.body.className;
   }

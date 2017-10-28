@@ -29,10 +29,10 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private http: Http) {
-    this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemBlockRudeNicknames,
-      FooterBarComponent.footerElemEnableCasLogin
+    this.footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack,
+      this.footerBarService.footerElemBlockRudeNicknames,
+      this.footerBarService.footerElemEnableCasLogin
     ]);
   }
 

@@ -68,17 +68,17 @@ export class QuizManagerComponent implements OnInit {
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemHome,
-      FooterBarComponent.footerElemStartQuiz,
-      FooterBarComponent.footerElemProductTour,
-      FooterBarComponent.footerElemNicknames,
-      FooterBarComponent.footerElemSaveAssets
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemHome,
+      this.footerBarService.footerElemStartQuiz,
+      this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemNicknames,
+      this.footerBarService.footerElemSaveAssets
     ]);
     headerLabelService.setHeaderLabel('component.quiz_manager.title');
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
-    FooterBarComponent.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
-    FooterBarComponent.footerElemStartQuiz.linkTarget = (self) => {
+    this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
+    this.footerBarService.footerElemStartQuiz.linkTarget = (self) => {
       return self.isActive ? '/quiz/flow/lobby' : null;
     };
   }
@@ -96,7 +96,7 @@ export class QuizManagerComponent implements OnInit {
 
   addQuestion(id: string) {
     this.activeQuestionGroupService.activeQuestionGroup.addQuestion(questionReflection[id]({}));
-    FooterBarComponent.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
+    this.footerBarService.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
     this.activeQuestionGroupService.persist();
   }
 
@@ -116,7 +116,7 @@ export class QuizManagerComponent implements OnInit {
 
   deleteQuestion(id: number) {
     this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(id);
-    FooterBarComponent.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
+    this.footerBarService.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
     this.activeQuestionGroupService.persist();
   }
 }

@@ -33,7 +33,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private router: Router) {
 
-    this.footerBarService.replaceFooterElments([]);
+    this.footerBarService.replaceFooterElements([]);
 
     this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${this.currentQuizService.hashtag}`)
         .subscribe((data: IMessage) => {

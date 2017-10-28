@@ -30,13 +30,13 @@ export class LanguageSwitcherComponent implements OnInit {
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemHome,
-      FooterBarComponent.footerElemAbout,
-      FooterBarComponent.footerElemTheme,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemHashtagManagement,
-      FooterBarComponent.footerElemImport,
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemHome,
+      this.footerBarService.footerElemAbout,
+      this.footerBarService.footerElemTheme,
+      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemHashtagManagement,
+      this.footerBarService.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('component.translation.translations');
   }

@@ -26,10 +26,10 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
     private route: ActivatedRoute) {
-    this.footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack,
-      FooterBarComponent.footerElemNicknames,
-      FooterBarComponent.footerElemSaveAssets
+    this.footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack,
+      this.footerBarService.footerElemNicknames,
+      this.footerBarService.footerElemSaveAssets
     ]);
   }
 

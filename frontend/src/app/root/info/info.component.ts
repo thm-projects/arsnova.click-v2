@@ -21,13 +21,13 @@ export class InfoComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemHome,
-      FooterBarComponent.footerElemTranslation,
-      FooterBarComponent.footerElemTheme,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemHashtagManagement,
-      FooterBarComponent.footerElemImport,
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemHome,
+      this.footerBarService.footerElemTranslation,
+      this.footerBarService.footerElemTheme,
+      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemHashtagManagement,
+      this.footerBarService.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('region.footer.about.title');
   }

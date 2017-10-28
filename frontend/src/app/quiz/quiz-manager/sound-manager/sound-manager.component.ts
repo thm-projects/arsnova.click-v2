@@ -45,8 +45,8 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private activeQuestionGroupService: ActiveQuestionGroupService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack
     ]);
     this.translateService.get('plugins.sound.random').subscribe(value => {
       this._lobbySongs.push({id: 'Random', text: value});

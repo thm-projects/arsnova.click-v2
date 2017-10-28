@@ -22,7 +22,7 @@
 
 ###### Low Priority Features:
 - [ ] Product Tour
-- [ ] gzip language files
+- [x] gzip language files
 - [ ] Styling of the online indicator image
 - [ ] Single Quizmaster setting
 - [ ] Cookie Consent

@@ -27,13 +27,13 @@ export class QuizOverviewComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private router: Router) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemHome,
-      FooterBarComponent.footerElemAbout,
-      FooterBarComponent.footerElemTranslation,
-      FooterBarComponent.footerElemTheme,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemImport,
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemHome,
+      this.footerBarService.footerElemAbout,
+      this.footerBarService.footerElemTranslation,
+      this.footerBarService.footerElemTheme,
+      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('component.hashtag_management.session_management');
     this._sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];

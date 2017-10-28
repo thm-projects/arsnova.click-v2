@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {ActiveQuestionGroupService} from './active-question-group.service';
 
 @Injectable()
 export class QrCodeService {
@@ -13,15 +12,13 @@ export class QrCodeService {
   private subject: Subject<boolean>;
   private _qrCodeContent: string;
 
-  constructor(private activeQuestionGroupService: ActiveQuestionGroupService) {
+  constructor() {
     this.subject = new Subject();
-    this.toggleQrCode();
-    if (this.activeQuestionGroupService.activeQuestionGroup) {
-      this._qrCodeContent = `${document.location.origin}/${this.activeQuestionGroupService.activeQuestionGroup.hashtag}`;
-    }
+    this.toggleQrCode('');
   }
 
-  public toggleQrCode() {
+  public toggleQrCode(hashtag: string) {
+    this._qrCodeContent = `${document.location.origin}/quiz/${hashtag}`;
     this._showQrCode = !this._showQrCode;
     this.subject.next(!this._showQrCode);
   }

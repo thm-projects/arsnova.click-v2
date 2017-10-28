@@ -1,6 +1,7 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {CurrentQuizService} from './current-quiz.service';
 import {FooterBarComponent} from '../footer/footer-bar/footer-bar.component';
+import {FooterBarService} from './footer-bar.service';
 
 export declare interface IQuizResponse {
   value: Array<number> | number | string;
@@ -73,14 +74,17 @@ export class AttendeeService implements OnDestroy {
 
   private _attendees: Array<INickname> = [];
 
-  constructor(private currentQuizService: CurrentQuizService) {
+  constructor(
+    private currentQuizService: CurrentQuizService,
+    private footerBarService: FooterBarService
+  ) {
     const restoreAttendees = window.sessionStorage.getItem('_attendees');
     if (restoreAttendees) {
       this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
         return new Player(attendee);
       });
       if (this._attendees.length) {
-        FooterBarComponent.footerElemStartQuiz.isActive = true;
+        this.footerBarService.footerElemStartQuiz.isActive = true;
       }
     }
   }

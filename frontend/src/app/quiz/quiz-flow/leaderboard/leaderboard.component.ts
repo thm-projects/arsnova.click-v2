@@ -3,7 +3,6 @@ import {FooterBarService} from '../../../service/footer-bar.service';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {AttendeeService} from 'app/service/attendee.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
-import {FooterBarComponent} from '../../../footer/footer-bar/footer-bar.component';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute} from '@angular/router';
 import {DefaultSettings} from '../../../service/settings.service';
@@ -54,16 +53,16 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
 
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       this._hashtag = this.activeQuestionGroupService.activeQuestionGroup.hashtag;
-      this.footerBarService.replaceFooterElments([
-        FooterBarComponent.footerElemBack,
-        FooterBarComponent.footerElemFullscreen,
-        FooterBarComponent.footerElemExport
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack,
+        this.footerBarService.footerElemFullscreen,
+        this.footerBarService.footerElemExport
       ]);
     } else {
       this._hashtag = this.currentQuizService.hashtag;
-      this.footerBarService.replaceFooterElments([
-        FooterBarComponent.footerElemBack,
-        FooterBarComponent.footerElemFullscreen
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack,
+        this.footerBarService.footerElemFullscreen
       ]);
     }
     this._leaderBoard = [];

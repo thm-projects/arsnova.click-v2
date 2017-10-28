@@ -29,8 +29,8 @@ export class NicknameSelectComponent implements OnInit {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private currentQuiz: CurrentQuizService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack
     ]);
   }
 

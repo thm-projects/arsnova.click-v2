@@ -85,15 +85,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this._isOwner = true;
       this._hashtag = activeQuestionGroupService.activeQuestionGroup.hashtag;
       this.connectionService.authorizeWebSocketAsOwner(this._hashtag);
-      this.footerBarService.replaceFooterElments([
-        FooterBarComponent.footerElemBack,
-        FooterBarComponent.footerElemReadingConfirmation,
-        FooterBarComponent.footerElemConfidenceSlider,
-        FooterBarComponent.footerElemResponseProgress,
-        FooterBarComponent.footerElemFullscreen,
-        FooterBarComponent.footerElemSound,
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack,
+        this.footerBarService.footerElemReadingConfirmation,
+        this.footerBarService.footerElemConfidenceSlider,
+        this.footerBarService.footerElemResponseProgress,
+        this.footerBarService.footerElemFullscreen,
+        this.footerBarService.footerElemSound,
       ]);
-      FooterBarComponent.footerElemBack.onClickCallback = () => {
+      this.footerBarService.footerElemBack.onClickCallback = () => {
         this.http.patch(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${this._hashtag}`, {
         }).subscribe(
           (data: IMessage) => {
@@ -268,7 +268,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    FooterBarComponent.footerElemBack.restoreClickCallback();
+    this.footerBarService.footerElemBack.restoreClickCallback();
   }
 
 }

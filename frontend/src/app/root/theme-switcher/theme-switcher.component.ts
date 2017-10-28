@@ -17,13 +17,13 @@ export class ThemeSwitcherComponent implements OnInit {
     private footerBarService: FooterBarService,
     private translateService: TranslateService,
     private headerLabelService: HeaderLabelService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemHome,
-      FooterBarComponent.footerElemAbout,
-      FooterBarComponent.footerElemTranslation,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemHashtagManagement,
-      FooterBarComponent.footerElemImport,
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemHome,
+      this.footerBarService.footerElemAbout,
+      this.footerBarService.footerElemTranslation,
+      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemHashtagManagement,
+      this.footerBarService.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('component.theme_switcher.set_theme');
     this.previewThemeBackup = document.getElementsByTagName('body')[0].className;

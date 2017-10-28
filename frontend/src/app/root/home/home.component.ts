@@ -57,13 +57,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
     private currentQuiz: CurrentQuizService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemAbout,
-      FooterBarComponent.footerElemTranslation,
-      FooterBarComponent.footerElemTheme,
-      FooterBarComponent.footerElemFullscreen,
-      FooterBarComponent.footerElemHashtagManagement,
-      FooterBarComponent.footerElemImport,
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemAbout,
+      this.footerBarService.footerElemTranslation,
+      this.footerBarService.footerElemTheme,
+      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemHashtagManagement,
+      this.footerBarService.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('default');
     const ownedQuizzes = window.localStorage.getItem('config.owned_quizzes');

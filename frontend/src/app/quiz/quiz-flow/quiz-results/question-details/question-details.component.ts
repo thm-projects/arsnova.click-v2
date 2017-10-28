@@ -38,8 +38,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private currentQuizService: CurrentQuizService,
     private sanitizer: DomSanitizer,
     private footerBarService: FooterBarService) {
-    footerBarService.replaceFooterElments([
-      FooterBarComponent.footerElemBack
+    footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack
     ]);
   }
 
