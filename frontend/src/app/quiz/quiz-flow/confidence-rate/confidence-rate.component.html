@@ -1,0 +1,18 @@
+<h2>{{'component.voting.confidence_level.title' | translate}}</h2>
+
+<div class="row">
+  <div class="col-12">
+    <input type="range"
+           [value]="confidenceValue"
+           (input)="updateConficence($event)"
+           (propertyChange)="updateConficence($event)">
+  </div>
+  <div class="col-12">
+    <button type="button"
+            (click)="sendConfidence()"
+            class="btn btn-warning">
+      <span class="fa fa-send" aria-hidden="true"></span>
+      <span>{{("component.voting." + (confidenceValue ? 'send' : 'abstention')) | translate}}</span>
+    </button>
+  </div>
+</div>

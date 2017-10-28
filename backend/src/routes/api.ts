@@ -174,6 +174,7 @@ export class ApiRouter {
     const duplicateQuizzes = [];
     const quizData = [];
     let privateKey = '';
+    // noinspection TypeScriptUnresolvedVariable
     if (req.busboy) {
       const promise = new Promise((resolve) => {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
@@ -406,6 +407,30 @@ export class ApiRouter {
     });
   }
 
+  public setMemberConfidenceRate(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    activeQuiz.nicknames.filter((member) => {
+      return member.name === req.body.nickname;
+    })[0].responses[req.body.questionIndex].confidence = req.body.confidenceValue;
+    res.send({
+      status: 'STATUS:SUCCESSFULL',
+      step: 'QUIZ:CONFIDENCE_VALUE',
+      payload: {}
+    });
+  }
+
+  public setMemberReadingConfirmation(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    activeQuiz.nicknames.filter((member) => {
+      return member.name === req.body.nickname;
+    })[0].responses[req.body.questionIndex].readingConfirmation = true;
+    res.send({
+      status: 'STATUS:SUCCESSFULL',
+      step: 'QUIZ:READING_CONFIRMATION',
+      payload: {}
+    });
+  }
+
   public getExportFile(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const dbResult: Object = DbDao.read(DatabaseTypes.quiz, {quizName: req.params.quizName, privateKey: req.params.privateKey});
@@ -492,6 +517,8 @@ export class ApiRouter {
     this._router.get('/quiz/member/:quizName', this.getAllMembers);
     this._router.get('/quiz/member/:quizName/available', this.getRemainingNicks);
     this._router.put('/quiz/member/response', this.addMemberResponse);
+    this._router.put('/quiz/member/confidence-rate', this.setMemberConfidenceRate);
+    this._router.put('/quiz/member/reading-confirmation', this.setMemberReadingConfirmation);
 
     this._router.get('/quiz/export/:quizName/:privateKey/:theme/:language', this.getExportFile);
 

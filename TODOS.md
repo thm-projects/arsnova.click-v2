@@ -14,7 +14,8 @@
 - [ ] Mathjax & Markdown in Voting View
 - [ ] Display of Question content in the Live Results
 - [x] Toggle for blocking rude nicknames in the Nickname Manager
-- [ ] Reading Confirmation
+- [x] Reading Confirmation
+- [x] Confidence Rate
 - [x] Cache external Resources from Quizzes with activated "Cache Assets" configuration switch
 - [ ] Client: Translation (FR, ES, IT)
 - [ ] Server: Translation for Excel export files (EN, DE, FR, ES, IT)
@@ -32,7 +33,7 @@
 
 #### Known issues
 - [ ] Size of QR Code in the Quiz Lobby too small
-- [ ] Order of mathjax output in answeroption live preview
+- [ ] Order of mathjax output in answeroption live preview currently depends on async rendering race conditions
 
 #### Refactoring required
 - [ ] MathJax / Markdown parsing in the client

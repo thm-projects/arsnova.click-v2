@@ -121,7 +121,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.currentQuizService.currentQuestion = data.payload.question;
         break;
       case 'QUIZ:START':
-        this.router.navigate(['/quiz', 'flow', 'voting']);
+        let target = 'voting';
+        if (this.currentQuizService.sessionConfiguration.readingConfirmationEnabled) {
+          target = 'reading-confirmation';
+        }
+        this.router.navigate(['/quiz', 'flow', target]);
         break;
       case 'MEMBER:REMOVED':
         const existingNickname = window.sessionStorage.getItem(`${this._hashtag}_nick`);

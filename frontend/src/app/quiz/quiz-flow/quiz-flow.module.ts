@@ -10,6 +10,8 @@ import {ThemesModule} from '../../themes/themes.module';
 import {QuizResultsModule} from './quiz-results/quiz-results.module';
 import {AttendeeService} from '../../service/attendee.service';
 import {QuestionDetailsComponent} from './quiz-results/question-details/question-details.component';
+import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
+import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 
 const quizFlowRoutes: Routes = [
   {
@@ -47,6 +49,16 @@ const quizFlowRoutes: Routes = [
     component: VotingComponent,
     data: {}
   },
+  {
+    path: 'quiz/flow/reading-confirmation',
+    component: ReadingConfirmationComponent,
+    data: {}
+  },
+  {
+    path: 'quiz/flow/confidence-rate',
+    component: ConfidenceRateComponent,
+    data: {}
+  },
 ];
 
 @NgModule({
@@ -56,7 +68,14 @@ const quizFlowRoutes: Routes = [
     RouterModule.forChild(quizFlowRoutes),
     QuizResultsModule
   ],
-  declarations: [QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent],
+  declarations: [
+    QuizLobbyComponent,
+    VotingComponent,
+    LeaderboardComponent,
+    QuizThemeComponent,
+    ReadingConfirmationComponent,
+    ConfidenceRateComponent
+  ],
   providers: [AttendeeService]
 })
 export class QuizFlowModule {
