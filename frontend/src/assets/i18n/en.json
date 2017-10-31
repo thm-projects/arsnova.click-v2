@@ -290,6 +290,7 @@
     },
     "hashtag_management": {
       "enter_quiz_name": "Enter the quiz name here",
+      "enter_server_password": "Enter the server password here",
       "join_session": "Join now!",
       "start_session": "Start the quiz",
       "edit_session": "Edit the quiz",

@@ -5,7 +5,7 @@ const args = system.args;
 const page = webpage.create();
 
 page.viewportSize = {
-  width: 400,
+  width: 350,
   height: 720
 };
 page.onConsoleMessage = function (message) {

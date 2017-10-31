@@ -9,11 +9,10 @@ import {themes} from '../themes/availableThemes';
 import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from '../db/DbDao';
 import {ExcelWorkbook} from '../export/excel-workbook';
-import {server} from 'websocket';
 
-const serverConfig = {
-  cacheQuizAssets: true
-};
+const privateServerConfig = require('../../settings.json');
+privateServerConfig.public.limitActiveQuizzes = parseFloat(privateServerConfig.public.limitActiveQuizzes);
+const publicServerConfig = privateServerConfig.public;
 
 export class ApiRouter {
   get router(): Router {
@@ -36,7 +35,7 @@ export class ApiRouter {
    */
   public getAll(req: Request, res: Response, next: NextFunction): void {
     res.send({
-      serverConfig
+      serverConfig: publicServerConfig
     });
   }
 
@@ -83,10 +82,11 @@ export class ApiRouter {
 
   public generateDemoQuiz(req: Request, res: Response, next: NextFunction): void {
     try {
-      const result: IQuestionGroup = JSON.parse(fs.readFileSync(path.join(__dirname, '../../demo_quiz/de.demo_quiz.json')).toString());
+      const demoQuizPath = path.join(__dirname, `../../demo_quiz/${req.body.translation}.demo_quiz.json`);
+      const result: IQuestionGroup = JSON.parse(fs.readFileSync(demoQuizPath).toString());
       result.hashtag = 'Demo Quiz ' + (QuizManager.getAllActiveDemoQuizzes().length + 1);
       QuizManager.convertLegacyQuiz(result);
-      res.setHeader('Response-Type', 'text/plain');
+      res.setHeader('Response-Type', 'application/json');
       res.send(result);
     } catch (ex) {
       res.send(`File IO Error: ${ex}`);
@@ -219,7 +219,7 @@ export class ApiRouter {
             });
           } else {
             DbDao.create(DatabaseTypes.quiz, {quizName: data.quiz.hashtag, privateKey});
-            if (serverConfig.cacheQuizAssets) {
+            if (publicServerConfig.cacheQuizAssets) {
               // TODO: Cache assets if the server setting is enabled
             }
           }
@@ -283,6 +283,34 @@ export class ApiRouter {
       res.send({
         status: 'STATUS:FAILED',
         step: 'QUIZ:INVALID_DATA',
+        payload: {}
+      });
+      return;
+    }
+    const activeQuizzesAmount = QuizManagerDAO.getAllActiveQuizNames();
+    if (activeQuizzesAmount.length >= publicServerConfig.limitActiveQuizzes) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:TOO_MUCH_ACTIVE_QUIZZES',
+        payload: {
+          activeQuizzes: activeQuizzesAmount,
+          limitActiveQuizzes: publicServerConfig.limitActiveQuizzes
+        }
+      });
+      return;
+    }
+    if (publicServerConfig.createQuizPasswordRequired && !req.body.serverPassword) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:SERVER_PASSWORD_REQUIRED',
+        payload: {}
+      });
+      return;
+    }
+    if (req.body.serverPassword !== privateServerConfig.createQuizPassword) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:INSUFFICIENT_PERMISSIONS',
         payload: {}
       });
       return;

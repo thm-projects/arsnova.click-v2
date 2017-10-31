@@ -1,0 +1,9 @@
+{
+  "public": {
+    "cacheQuizAssets": true,
+    "createQuizPasswordRequired": true,
+    "limitActiveQuizzes": "Infinity"
+  },
+  "limitQuizCreationToCasAccounts": [],
+  "createQuizPassword": "abc"
+}

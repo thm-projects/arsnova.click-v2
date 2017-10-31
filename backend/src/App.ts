@@ -8,6 +8,7 @@ import * as busboy from 'connect-busboy';
 import ApiRouter from './routes/api';
 import LeaderboardRouter from './routes/leaderboard';
 import LibRouter from './routes/lib';
+import LegacyApiRouter from './routes/legacy-api';
 import options from './cors.config';
 import {Router} from 'express';
 import QuizManager from './db/quiz-manager';
@@ -52,6 +53,7 @@ class App {
     });
     this.express.use('/', router);
     this.express.use('/lib', LibRouter);
+    this.express.use('/api', LegacyApiRouter);
     this.express.use('/api/v1', ApiRouter);
     this.express.use('/api/v1/quiz/leaderboard', LeaderboardRouter);
   }

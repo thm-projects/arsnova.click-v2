@@ -25,10 +25,10 @@
 - [ ] Product Tour
 - [x] gzip language files
 - [ ] Styling of the online indicator image
-- [ ] Single Quizmaster setting
+- [x] Single Quizmaster setting
 - [ ] Cookie Consent
 - [ ] Theming of Dialog Modals
-- [ ] Support Api calls of PowerPoint Plugin
+- [x] Support Api calls of PowerPoint Plugin
 - [ ] Support Assets Caching when importing quizzes
 
 #### Known issues

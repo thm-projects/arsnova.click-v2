@@ -2,26 +2,14 @@ import {Injectable} from '@angular/core';
 import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../lib/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from './settings.service';
+import {DefaultSettings, SettingsService} from './settings.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
-import {ConnectionService} from 'app/service/connection.service';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {QrCodeService} from 'app/service/qr-code.service';
 
-export declare interface IServerConfig {
-  cacheQuizAssets: boolean;
-}
-
 @Injectable()
 export class ActiveQuestionGroupService {
-  get cacheAssets(): boolean {
-    return this._cacheAssets;
-  }
-
-  set cacheAssets(value: boolean) {
-    this._cacheAssets = value;
-  }
 
   get activeQuestionGroup(): IQuestionGroup {
     return this._activeQuestionGroup;
@@ -36,7 +24,6 @@ export class ActiveQuestionGroupService {
   }
 
   private _activeQuestionGroup: IQuestionGroup;
-  private _serverConfig: IServerConfig = {cacheQuizAssets: false};
   private _cacheAssets = false;
 
   constructor(
@@ -44,22 +31,12 @@ export class ActiveQuestionGroupService {
     private translateService: TranslateService,
     private http: HttpClient,
     private footerBarService: FooterBarService,
-    private connectionService: ConnectionService) {
+    private settingsService: SettingsService) {
     if (window.sessionStorage.getItem('questionGroup')) {
       const serializedObject = window.sessionStorage.getItem('questionGroup');
       const parsedObject = JSON.parse(serializedObject);
       this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
     }
-    this.connectionService.initConnection().then(() => {
-      this.initCacheAssetsState();
-    });
-  }
-
-  private initCacheAssetsState() {
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/`).subscribe((value: { serverConfig: IServerConfig }) => {
-      this._serverConfig = value.serverConfig;
-      this._cacheAssets = value.serverConfig.cacheQuizAssets;
-    });
   }
 
   private dec2hex(dec) {
@@ -79,16 +56,18 @@ export class ActiveQuestionGroupService {
 
   public close(): void {
     window.sessionStorage.removeItem(`${this.activeQuestionGroup.hashtag}_nick`);
-    this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
-      body: {
-        quizName: this.activeQuestionGroup.hashtag,
-        privateKey: window.localStorage.getItem('config.private_key')
-      }
-    }).subscribe((response: IMessage) => {
-      if (response.status !== 'STATUS:SUCCESS') {
-        console.log(response);
-      }
-    });
+    if (this.activeQuestionGroup) {
+      this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
+        body: {
+          quizName: this.activeQuestionGroup.hashtag,
+          privateKey: window.localStorage.getItem('config.private_key')
+        }
+      }).subscribe((response: IMessage) => {
+        if (response.status !== 'STATUS:SUCCESS') {
+          console.log(response);
+        }
+      });
+    }
   }
 
   persistForSession() {
@@ -103,7 +82,7 @@ export class ActiveQuestionGroupService {
       questionList.push(this.activeQuestionGroup.hashtag);
       window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
     }
-    if (this._cacheAssets || this._serverConfig.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
+    if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
       this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
         quiz: this.activeQuestionGroup.serialize()
       }).subscribe((response: IMessage) => {
@@ -153,7 +132,7 @@ export class ActiveQuestionGroupService {
       this.footerBarService.footerElemSaveAssets.onClickCallback = () => {
         const newState = !this.footerBarService.footerElemSaveAssets.isActive;
         this.footerBarService.footerElemSaveAssets.isActive = newState;
-        this.cacheAssets = newState;
+        this.settingsService.serverSettings.cacheQuizAssets = newState;
         window.localStorage.setItem('config.cache_assets', `${newState}`);
       };
       this.footerBarService.footerElemExport.onClickCallback = () => {

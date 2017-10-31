@@ -15,6 +15,15 @@
                (input)="parseQuiznameInput($event)"
                [placeholder]="'component.hashtag_management.enter_quiz_name' | translate"/>
       </div>
+      <div *ngIf="passwordRequired" class="col-12 px-1">
+        <input type="password"
+               class="text-center rounded w-100 mb-2 border-0 input-field"
+               id="server-password-input-field"
+               autocomplete="off"
+               spellcheck="false"
+               (input)="setPassword($event)"
+               [placeholder]="'component.hashtag_management.enter_server_password' | translate"/>
+      </div>
     </div>
     <div class="row">
       <div class="col-6 col-join-session px-1">

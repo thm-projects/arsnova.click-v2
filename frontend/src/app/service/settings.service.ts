@@ -1,3 +1,6 @@
+import {HostListener, Injectable, OnDestroy} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+
 export const DefaultSettings = {
   httpApiEndpoint: `https://${location.hostname}:3000/api/v1`,
   httpLibEndpoint: `https://${location.hostname}:3000/lib`,
@@ -57,3 +60,38 @@ export const DefaultSettings = {
     cacheQuizAssets: false
   }
 };
+
+export declare interface IServerSettings {
+  cacheQuizAssets: boolean;
+  createQuizPasswordRequired: boolean;
+  limitActiveQuizzes: number;
+}
+
+@Injectable()
+export class SettingsService implements OnDestroy {
+  get serverSettings(): IServerSettings {
+    return this._serverSettings;
+  }
+
+  private _serverSettings: IServerSettings;
+
+  constructor(
+    private http: HttpClient
+  ) {
+    this._serverSettings = <IServerSettings>(JSON.parse(window.sessionStorage.getItem('_serverSettings')));
+    if (!this._serverSettings) {
+      this.initServerSettings();
+    }
+  }
+
+  private initServerSettings() {
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/`).subscribe((data: any) => {
+      this._serverSettings = data.serverConfig;
+    });
+  }
+
+  @HostListener('window:beforeunload', [ '$event' ])
+  ngOnDestroy() {
+    window.sessionStorage.setItem('_serverSettings', JSON.stringify(this._serverSettings));
+  }
+}

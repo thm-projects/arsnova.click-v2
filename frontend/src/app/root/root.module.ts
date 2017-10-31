@@ -30,6 +30,7 @@ import {CasService} from '../service/cas.service';
 import {UserService} from '../service/user.service';
 import {QuizModule} from '../quiz/quiz.module';
 import {FileUploadService} from '../service/file-upload.service';
+import {SettingsService} from '../service/settings.service';
 
 const appRoutes: Routes = [
   {
@@ -113,7 +114,8 @@ const appRoutes: Routes = [
     TranslateModule,
     UserService,
     CasService,
-    FileUploadService
+    FileUploadService,
+    SettingsService
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

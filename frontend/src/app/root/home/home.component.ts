@@ -8,7 +8,7 @@ import {ThemesService} from '../../service/themes.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../service/settings.service';
+import {DefaultSettings, SettingsService} from '../../service/settings.service';
 import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
@@ -33,6 +33,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public canJoinQuiz = false;
   public canAddQuiz = false;
   public canEditQuiz = false;
+  public passwordRequired = false;
   public isAddingDemoQuiz = false;
   public isAddingABCDQuiz = false;
   public enteredSessionName = '';
@@ -41,6 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _httpApiEndpoint = DefaultSettings.httpApiEndpoint;
   private _provideNickSelection = false;
   private _routerSubscription: Subscription;
+  private _serverPassword = '';
 
   constructor(
     private footerBarService: FooterBarService,
@@ -55,6 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
+    private settingsService: SettingsService,
     private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemAbout,
@@ -77,10 +80,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.connectionService.initConnection().then(() => {
         this.connectionService.socket.subscribe(
           (data: IMessage) => {
-            if (data.payload.id) {
-              window.sessionStorage.setItem('webSocket', data.payload.id);
-              this.connectionService.websocketAvailable = true;
-            }
+            this.connectionService.websocketAvailable = true;
           },
           () => {
             this.connectionService.websocketAvailable = false;
@@ -89,7 +89,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.connectionService.websocketAvailable = false;
           }
         );
-      })
+      });
     });
     this.cleanUpSessionStorage();
   }
@@ -131,6 +131,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.canJoinQuiz = false;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
+    this.passwordRequired = false;
     this.isAddingDemoQuiz = false;
     this.isAddingABCDQuiz = false;
 
@@ -138,10 +139,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.isAddingDemoQuiz = true;
       this.canAddQuiz = false;
       this.canEditQuiz = false;
+      this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
     } else if (quizname.indexOf('abcd') > -1) {
       this.isAddingABCDQuiz = true;
       this.canAddQuiz = false;
       this.canEditQuiz = false;
+      this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
     } else {
       if (quizname.length > 3) {
         if ((JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(quizname) > -1) {
@@ -162,6 +165,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 case 'QUIZ:UNDEFINED':
                   this.canAddQuiz = true;
                   this.canJoinQuiz = false;
+                  this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
                   break;
                 default:
                   console.log(value);
@@ -179,8 +183,15 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.currentQuiz.hashtag = this.enteredSessionName;
   }
 
+  setPassword(event: Event): void {
+    this._serverPassword = (<HTMLInputElement>event.target).value;
+  }
+
   setActiveQuestionGroup(routingTarget: Array<string>): void {
     let questionGroup: IQuestionGroup;
+    if (this.passwordRequired && !(this._serverPassword && this._serverPassword.length)) {
+      return;
+    }
     const createQuizPromise = new Promise((resolve) => {
       if (this.isAddingDemoQuiz) {
         this.http.get(`${this._httpApiEndpoint}/demoquiz/generate`).subscribe((value: any) => {
@@ -204,12 +215,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
       this.http.post(`${this._httpApiEndpoint}/quiz/reserve`, {
         quizName: this.enteredSessionName,
-        privateKey: window.localStorage.getItem('config.private_key')
-      }).subscribe((value: any) => {
+        privateKey: window.localStorage.getItem('config.private_key'),
+        serverPassword: this._serverPassword
+      }).subscribe((value: IMessage) => {
+        if (value.status === 'STATUS:SUCCESSFUL') {
+          this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
+          this.activeQuestionGroupService.persist();
+          this.router.navigate(routingTarget);
+        } else {
+          console.log(value);
+        }
       });
-      this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-      this.activeQuestionGroupService.persist();
-      this.router.navigate(routingTarget);
     });
   }
 }

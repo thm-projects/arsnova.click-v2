@@ -1,8 +1,7 @@
 import {Router, Request, Response, NextFunction} from 'express';
 import QuizManagerDAO from '../db/quiz-manager';
-import {IQuestion, IQuestionChoice, IQuestionFreetext, IQuestionRanged} from '../interfaces/questions/interfaces';
-import {IAnswerOption, IFreetextAnswerOption} from '../interfaces/answeroptions/interfaces';
-import {IActiveQuiz, IQuizResponse} from '../interfaces/common.interfaces';
+import {IQuestion} from '../interfaces/questions/interfaces';
+import {IActiveQuiz} from '../interfaces/common.interfaces';
 import {Leaderboard} from '../leaderboard/leaderboard';
 
 export class LeaderboardRouter {

@@ -344,6 +344,13 @@ export default class QuizManagerDAO {
     return result;
   }
 
+  public static setQuizAsInactive(quizName: string): void {
+    const name: string = QuizManagerDAO.normalizeQuizName(quizName);
+    if (activeQuizzes[name]) {
+      activeQuizzes[name] = new ActiveQuizItemPlaceholder(name);
+    }
+  }
+
   public static initInactiveQuiz(quizName: string, privateKey: string): void {
     const name: string = QuizManagerDAO.normalizeQuizName(quizName);
     if (activeQuizzes[name]) {
