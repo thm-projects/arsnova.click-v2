@@ -22,11 +22,11 @@
 - [ ] Support renaming of duplicate quizzes on upload
 
 ###### Low Priority Features:
-- [ ] Product Tour
+- [x] Product Tour
 - [x] gzip language files
 - [ ] Styling of the online indicator image
 - [x] Single Quizmaster setting
-- [ ] Cookie Consent
+- [x] Cookie Consent
 - [ ] Theming of Dialog Modals
 - [x] Support Api calls of PowerPoint Plugin
 - [ ] Support Assets Caching when importing quizzes
@@ -34,6 +34,7 @@
 #### Known issues
 - [ ] Size of QR Code in the Quiz Lobby too small
 - [ ] Order of mathjax output in answeroption live preview currently depends on async rendering race conditions
+- [ ] Adjust some of the introjs initializations
 
 #### Refactoring required
 - [ ] MathJax / Markdown parsing in the client

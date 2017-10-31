@@ -62,14 +62,14 @@ export class FooterbarElement {
   private _linkTarget: Function | string;
   private _isActive: boolean;
 
-  constructor({id, iconClass, textClass, textName, selectable, showIntro, linkTarget}: any, onClickCallback?: Function) {
+  constructor({id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget}: any, onClickCallback?: Function) {
     this._id = id;
     this._iconClass = iconClass;
     this._textClass = textClass;
     this._textName = textName;
     this._selectable = selectable;
     this._showIntro = showIntro;
-    this._isActive = false;
+    this._isActive = isActive;
     this._linkTarget = linkTarget;
     this._onClickCallback = onClickCallback;
   }
@@ -238,8 +238,10 @@ export class FooterBarService {
     selectable: true,
     showIntro: false,
     linkTarget: null,
+    isActive: JSON.parse(localStorage.getItem('config.show-product-tour'))
   }, function () {
-
+    this.isActive = !this.isActive;
+    localStorage.setItem('config.show-product-tour', this.isActive);
   });
   public footerElemResponseProgress: FooterbarElement = new FooterbarElement({
     id: 'response-progress',

@@ -6,6 +6,7 @@
        [class]="'footerElement py-sm-2 px-sm-1 justify-content-center justify-content-sm-start ' + (elem.selectable ? elem.isActive ? 'success' : 'error' : '')"
        [id]="elem.id"
        [routerLink]="getLinkTarget(elem)"
+       [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
        (click)="toggleSetting(elem);elem.onClickCallback($event)">
     <p class="footerElemIcon"><i [class]="elem.iconClass" aria-hidden="true"></i></p>
     <p class="footerElemText text-left ml-2"><span [class]="elem.textClass" [innerHTML]="elem.textName | translate"></span></p>
