@@ -45,7 +45,5 @@ import {I18nService, Languages} from '../service/i18n.service';
   bootstrap: []
 })
 export class SharedModule {
-  constructor(i18nService: I18nService) {
-    i18nService.setLanguage(Languages.EN);
-  }
+  constructor() {}
 }

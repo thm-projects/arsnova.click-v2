@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
+import {I18nService, Languages, LanguageTranslations} from '../../service/i18n.service';
 
 @Component({
   selector: 'app-language-switcher',
@@ -9,24 +9,14 @@ import {HeaderLabelService} from '../../service/header-label.service';
   styleUrls: ['./language-switcher.component.scss']
 })
 export class LanguageSwitcherComponent implements OnInit {
-  get languages(): Object[] {
-    return this._languages;
+  get availableLanguages(): Array<Object> {
+    return this._availableLanguages;
   }
 
-  private _languages: Object[] = [
-    {
-      tag: 'en',
-      selected: this.translateService.currentLang === 'en',
-      name: 'English'
-    }, {
-      tag: 'de',
-      selected: this.translateService.currentLang === 'de',
-      name: 'Deutsch'
-    }
-  ];
+  private _availableLanguages: Array<Object> = [];
 
   constructor(
-    private translateService: TranslateService,
+    public i18nService: I18nService,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService) {
     footerBarService.replaceFooterElements([
@@ -38,13 +28,19 @@ export class LanguageSwitcherComponent implements OnInit {
       this.footerBarService.footerElemImport,
     ]);
     headerLabelService.setHeaderLabel('component.translation.translations');
+    Object.keys(Languages).forEach((lang) => {
+      this._availableLanguages.push({
+        text: LanguageTranslations[lang],
+        tag: lang
+      });
+    });
   }
 
   ngOnInit() {
   }
 
   changeLanguage(tag: string): void {
-    this.translateService.use(tag);
+    this.i18nService.setLanguage(Languages[tag]);
   }
 
 }

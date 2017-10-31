@@ -9,6 +9,14 @@ export enum Languages {
   ES = <any>'ES'
 }
 
+export enum LanguageTranslations {
+  DE = <any>'Deutsch',
+  EN = <any>'English',
+  FR = <any>'Français',
+  IT = <any>'Italiano',
+  ES = <any>'Español'
+}
+
 export enum NumberTypes {
   decimal = <any>'decimal',
   currency = <any>'currency',
