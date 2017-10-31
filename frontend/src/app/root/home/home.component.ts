@@ -9,7 +9,6 @@ import {questionGroupReflection} from '../../../lib/questions/questionGroup_refl
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings, SettingsService} from '../../service/settings.service';
-import {NotYetImplementedException} from '../../../lib/exceptions/not-yet-implemented-exception';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
@@ -19,6 +18,8 @@ import {AttendeeService} from '../../service/attendee.service';
 import {ConnectionService} from '../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {IMathjaxResponse} from 'lib/common.interfaces';
+import {ABCDSingleChoiceQuestion} from '../../../lib/questions/question_choice_single_abcd';
+import {DefaultAnswerOption} from '../../../lib/answeroptions/answeroption_default';
 
 @Component({
   selector: 'app-home',
@@ -125,6 +126,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._routerSubscription.unsubscribe();
   }
 
+  private checkABCDOrdering(hashtag: string): boolean {
+    let ordered = true;
+    if (!hashtag || hashtag.length < 2 || hashtag.charAt(0) !== 'a') {
+      return false;
+    }
+    for (let i = 1; i < hashtag.length; i++) {
+      if (hashtag.charCodeAt(i) !== hashtag.charCodeAt(i - 1) + 1) {
+        ordered = false;
+        break;
+      }
+    }
+    return ordered;
+  }
+
   parseQuiznameInput(event: any) {
     const quizname = event.target.value.trim();
     this.enteredSessionName = quizname;
@@ -140,7 +155,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.canAddQuiz = false;
       this.canEditQuiz = false;
       this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
-    } else if (quizname.indexOf('abcd') > -1) {
+    } else if (this.checkABCDOrdering(quizname.toLowerCase())) {
       this.isAddingABCDQuiz = true;
       this.canAddQuiz = false;
       this.canEditQuiz = false;
@@ -194,18 +209,31 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     const createQuizPromise = new Promise((resolve) => {
       if (this.isAddingDemoQuiz) {
-        this.http.get(`${this._httpApiEndpoint}/demoquiz/generate`).subscribe((value: any) => {
+        const url = `${this._httpApiEndpoint}/demoquiz/generate/${this.i18nService.currentLanguage.toString()}`;
+        this.http.get(url).subscribe((value: any) => {
           questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
+          this.enteredSessionName = questionGroup.hashtag;
+          resolve();
+        });
+      } else if (this.isAddingABCDQuiz) {
+        const url = `${this._httpApiEndpoint}/abcdquiz/generate/${this.i18nService.currentLanguage.toString()}`;
+        this.http.get(url).subscribe((value: any) => {
+          questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
+          const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+          this.enteredSessionName.split('').forEach((character, index) => {
+            answerOptionList.push(new DefaultAnswerOption({answerText: (String.fromCharCode(index + 65))}));
+          });
+          this.enteredSessionName = questionGroup.hashtag;
+          const abcdQuestion = new ABCDSingleChoiceQuestion({
+            questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false
+          });
+          questionGroup.questionList = [abcdQuestion];
           resolve();
         });
       } else {
         questionGroup = questionGroupReflection.DefaultQuestionGroup({
           hashtag: this.enteredSessionName
         });
-        if (this.isAddingABCDQuiz) {
-          throw new NotYetImplementedException();
-          // questionGroup.addQuestion(ABCDSingleChoiceQuestion);
-        }
         resolve();
       }
     });

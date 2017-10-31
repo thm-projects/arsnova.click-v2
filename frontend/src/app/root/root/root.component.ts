@@ -114,10 +114,8 @@ export class RootComponent implements OnInit, AfterViewInit {
         customIntroJs.start();
       }
     });
-      console.log(customIntroJs);
     hasStartedIntroJs = true;
     customIntroJs.onafterchange(function (targetElement) {
-      console.log(targetElement);
       introState[route].elements[targetElement.id] = true;
       localStorage.setItem('config.intro-state', JSON.stringify(introState));
     }).oncomplete(function () {

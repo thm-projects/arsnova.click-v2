@@ -82,9 +82,22 @@ export class ApiRouter {
 
   public generateDemoQuiz(req: Request, res: Response, next: NextFunction): void {
     try {
-      const demoQuizPath = path.join(__dirname, `../../demo_quiz/${req.body.translation}.demo_quiz.json`);
+      const demoQuizPath = path.join(__dirname, `../../predefined_quizzes/demo_quiz/${req.params.languageId}.demo_quiz.json`);
       const result: IQuestionGroup = JSON.parse(fs.readFileSync(demoQuizPath).toString());
-      result.hashtag = 'Demo Quiz ' + (QuizManager.getAllActiveDemoQuizzes().length + 1);
+      result.hashtag = 'Demo Quiz ' + (QuizManager.getAllPersistedDemoQuizzes().length + 1);
+      QuizManager.convertLegacyQuiz(result);
+      res.setHeader('Response-Type', 'application/json');
+      res.send(result);
+    } catch (ex) {
+      res.send(`File IO Error: ${ex}`);
+    }
+  }
+
+  public generateAbcdQuiz(req: Request, res: Response, next: NextFunction): void {
+    try {
+      const abcdQuizPath = path.join(__dirname, `../../predefined_quizzes/abcd_quiz/${req.params.languageId}.abcd_quiz.json`);
+      const result: IQuestionGroup = JSON.parse(fs.readFileSync(abcdQuizPath).toString());
+      result.hashtag = 'ABCD Quiz ' + (QuizManager.getAllPersistedAbcdQuizzes().length + 1);
       QuizManager.convertLegacyQuiz(result);
       res.setHeader('Response-Type', 'application/json');
       res.send(result);
@@ -523,7 +536,8 @@ export class ApiRouter {
 
     this._router.get('/getAvailableQuiz/:quizName', this.getIsAvailableQuiz);
 
-    this._router.get('/demoquiz/generate', this.generateDemoQuiz);
+    this._router.get('/demoquiz/generate/:languageId', this.generateDemoQuiz);
+    this._router.get('/abcdquiz/generate/:languageId', this.generateAbcdQuiz);
 
     this._router.get('/availableNicks/all', this.getAllAvailableNicks);
 

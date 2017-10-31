@@ -7,10 +7,22 @@ import {SurveyQuestion} from './question_survey';
 import {FreeTextQuestion} from './question_freetext';
 import {DefaultSettings} from '../../app/service/settings.service';
 import {answerOptionReflection} from '../answeroptions/answeroption_reflection';
+import {ABCDSingleChoiceQuestion} from 'lib/questions/question_choice_single_abcd';
 
 export const questionReflection = {
   SingleChoiceQuestion: function ({questionText, timer, displayAnswerText, answerOptionList, showOneAnswerPerRow}): SingleChoiceQuestion {
     return new SingleChoiceQuestion({
+      questionText: questionText || DefaultSettings.defaultSettings.question.text,
+      timer: timer || DefaultSettings.defaultSettings.question.timer,
+      displayAnswerText: displayAnswerText ||
+                         DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
+      answerOptionList: answerOptionList || [],
+      showOneAnswerPerRow: showOneAnswerPerRow ||
+                           DefaultSettings.defaultSettings.question.showOneAnswerPerRow
+    });
+  },
+  ABCDSingleChoiceQuestion: function ({questionText, timer, displayAnswerText, answerOptionList, showOneAnswerPerRow}): YesNoSingleChoiceQuestion {
+    return new ABCDSingleChoiceQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
       displayAnswerText: displayAnswerText ||

@@ -5,7 +5,7 @@
 - [x] Import of Quizzes
 - [x] Share the session configuration update to the clients in the Live Results
 - [ ] CAS Login Support
-- [ ] ABCD Question
+- [x] ABCD Question
 - [ ] Client: Translation (DE)
 
 ###### Medium Priority Features:
@@ -38,6 +38,8 @@
 
 #### Refactoring required
 - [ ] MathJax / Markdown parsing in the client
+- [ ] Format ABCD Quiz Name depending on the number of answers
+- [ ] Reuse existing ABCD Quizzes when adding a new one
 
 #### Testing required
 - [ ] Export of Results

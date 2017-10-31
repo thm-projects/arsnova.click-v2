@@ -25,6 +25,9 @@ export enum CurrencyTypes {
 
 @Injectable()
 export class I18nService {
+  get currentLanguage(): Languages {
+    return this._currentLanguage;
+  }
   set currentLanguage(value: Languages) {
     window.localStorage.setItem('config.language', value.toString());
     this._currentLanguage = value;

@@ -73,7 +73,7 @@ export class WebSocketRouter {
               status: 'STATUS:SUCCESSFUL',
               step: 'QUIZ:ACTIVE_QUIZZES',
               payload: {
-                activeQuizzes: QuizManagerDAO.getAllActiveDemoQuizzes()
+                activeQuizzes: QuizManagerDAO.getAllPersistedDemoQuizzes()
               }
             }));
           }

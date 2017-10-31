@@ -332,6 +332,20 @@ export default class QuizManagerDAO {
     return quizName.toLowerCase();
   }
 
+  private static checkABCDOrdering(hashtag: string): boolean {
+    let ordered = true;
+    if (!hashtag || hashtag.length < 2 || hashtag.charAt(0) !== 'a') {
+      return false;
+    }
+    for (let i = 1; i < hashtag.length; i++) {
+      if (hashtag.charCodeAt(i) !== hashtag.charCodeAt(i - 1) + 1) {
+        ordered = false;
+        break;
+      }
+    }
+    return ordered;
+  }
+
   public static getRenameRecommendations(quizName: string): Array<string> {
     const result = [];
     const count = Object.keys(activeQuizzes).filter(activeQuizName => activeQuizName.startsWith(quizName)).length;
@@ -422,14 +436,38 @@ export default class QuizManagerDAO {
     },        0);
   }
 
-  public static getAllActiveDemoQuizzes(): String[] {
+  public static getAllPersistedDemoQuizzes(): String[] {
     return Object.keys(activeQuizzes).filter((value: string) => {
       const name: string = QuizManagerDAO.normalizeQuizName(value);
       return activeQuizzes[name].name.toLowerCase().startsWith('demo quiz');
     });
   }
 
+  public static getAllPersistedAbcdQuizzes(): String[] {
+    return Object.keys(activeQuizzes).filter((value: string) => {
+      const name: string = QuizManagerDAO.normalizeQuizName(value);
+      return QuizManagerDAO.checkABCDOrdering(activeQuizzes[name].name);
+    });
+  }
+
+  private static replaceTypeInformationOnLegacyQuiz(obj): void {
+    if (obj.hasOwnProperty('type')) {
+      obj.TYPE = obj.type;
+      delete obj.type;
+      Object.keys(obj).forEach((key) => {
+        if (obj[key] instanceof Array) {
+          obj[key].forEach((elem, index) => {
+            this.replaceTypeInformationOnLegacyQuiz(obj[key][index]);
+          });
+        } else if (obj[key] instanceof Object) {
+          this.replaceTypeInformationOnLegacyQuiz(obj[key]);
+        }
+      });
+    }
+  }
+
   public static convertLegacyQuiz(legacyQuiz: any): void {
+    QuizManagerDAO.replaceTypeInformationOnLegacyQuiz(legacyQuiz);
     if (legacyQuiz.hasOwnProperty('configuration')) {
       // Detected old v1 arsnova.click quiz
       legacyQuiz.sessionConfig = {
