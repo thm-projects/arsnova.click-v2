@@ -6,6 +6,7 @@
 - [ ] Mathjax & Markdown in Voting View
 - [ ] Display of question content in the Live Results
 - [ ] Support renaming of duplicate quizzes on upload
+- [ ] Server: Caching of previously rendered mathjax
 
 ###### Low Priority Features:
 - [ ] Styling of the online indicator image
