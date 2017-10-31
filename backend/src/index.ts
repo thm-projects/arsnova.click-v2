@@ -31,19 +31,17 @@ server.on('error', onError);
 server.on('listening', onListening);
 server.on('close', onClose);
 
-const languages: any = {'en': 'en'};
+const languages = ['en', 'de', 'fr', 'it', 'es'];
 const params: any = [path.join(__dirname, 'phantomDriver.js')];
 const themePreviewEndpoint = 'http://localhost:4200/preview';
 themes.forEach((theme: ITheme) => {
-  for (const languageKey in languages) {
-    if (languages.hasOwnProperty(languageKey)) {
-      pnFs.readFile(path.join(__dirname, `../images/favicons/favicon.svg`))
+  languages.forEach((languageKey) => {
+    pnFs.readFile(path.join(__dirname, `../images/favicons/favicon.svg`))
         .then(svg2png)
         .then(buffer => fs.writeFile(path.join(__dirname, `../images/favicons/favicon_${theme.id}.png`), buffer))
         .catch(e => console.error(e));
-      params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);
-    }
-  }
+    params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);
+  });
 });
 const command: ChildProcess = spawn(phantomjs.path, params);
 command.stdout.on('data', (data) => {

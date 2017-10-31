@@ -77,12 +77,6 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     CommonModule,
-    RouterModule.forRoot(
-      appRoutes,
-      {enableTracing: false} // <-- debugging purposes only
-    ),
-    SharedModule,
-    ThemesModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -94,6 +88,12 @@ const appRoutes: Routes = [
         useClass: TranslateMessageFormatCompiler
       }
     }),
+    RouterModule.forRoot(
+      appRoutes,
+      {enableTracing: false} // <-- debugging purposes only
+    ),
+    SharedModule,
+    ThemesModule,
     HeaderModule,
     FooterModule,
     QuizModule,
@@ -103,12 +103,12 @@ const appRoutes: Routes = [
     NgxQRCodeModule
   ],
   providers: [
+    I18nService,
     FooterBarService,
     ActiveQuestionGroupService,
     ConnectionService,
     WebsocketService,
     CurrentQuizService,
-    I18nService,
     QrCodeService,
     SoundService,
     TranslateModule,

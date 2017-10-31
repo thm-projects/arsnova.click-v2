@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
-import {TranslateService} from '@ngx-translate/core';
 import {HeaderLabelService} from '../../service/header-label.service';
 
 @Component({
@@ -14,7 +13,6 @@ export class ThemeSwitcherComponent implements OnInit {
 
   constructor(
     private footerBarService: FooterBarService,
-    private translateService: TranslateService,
     private headerLabelService: HeaderLabelService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
