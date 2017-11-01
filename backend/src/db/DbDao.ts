@@ -5,7 +5,8 @@ import * as FileSync from 'lowdb/adapters/FileSync';
 
 export enum DatabaseTypes {
   quiz = 'quiz',
-  assets = 'assets'
+  assets = 'assets',
+  mathjax = 'mathjax'
 }
 
 const adapter: FileSync = new FileSync('arsnova-click-v2-db-v1.json');
@@ -38,7 +39,6 @@ export class DbDao {
 
   public static delete(database: DatabaseTypes, query: {quizName: string, privateKey: string}): boolean {
     const dbContent: any = DbDao.read(database, query);
-    console.log('deleting quiz', query, dbContent);
     if (!Object.keys(dbContent).length || dbContent.privateKey !== query.privateKey) {
       return false;
     }
@@ -66,6 +66,9 @@ export class DbDao {
       }
       if (!state[DatabaseTypes.assets]) {
         DbDao.initDb(DatabaseTypes.assets, {});
+      }
+      if (!state[DatabaseTypes.mathjax]) {
+        DbDao.initDb(DatabaseTypes.mathjax, {});
       }
     }
     return DbDao.instance;

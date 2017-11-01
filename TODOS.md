@@ -6,7 +6,6 @@
 - [ ] Mathjax & Markdown in Voting View
 - [ ] Display of question content in the Live Results
 - [ ] Support renaming of duplicate quizzes on upload
-- [ ] Server: Caching of previously rendered mathjax
 
 ###### Low Priority Features:
 - [ ] Styling of the online indicator image
@@ -32,12 +31,14 @@
 - [x] ABCD Question
 - [x] Client: Translation (DE, FR, ES, IT)
 - [x] Server: Translation for Excel export files (EN, DE, FR, ES, IT)
+- [x] Server: Caching of previously rendered mathjax
 
 #### Known issues
 - [x] Add translation files for the export files to the messageformat instance
-- [ ] Size of QR Code in the Quiz Lobby too small
 - [x] Order of mathjax output in answeroption live preview currently depends on async rendering race conditions
+- [ ] Size of QR Code in the Quiz Lobby too small
 - [ ] Adjust some of the introjs initializations
+- [ ] Add missing translation keys
 
 #### Refactoring required
 - [x] MathJax / Markdown parsing in the client (use svg only)

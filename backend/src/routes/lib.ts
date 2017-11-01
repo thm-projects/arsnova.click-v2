@@ -162,6 +162,11 @@ export class LibRouter {
     const result = [];
     if (mathjaxArray) {
       mathjaxArray.forEach((mathjaxPlain, index) => {
+        const dbResult = DbDao.read(DatabaseTypes.mathjax, mathjaxPlain);
+        if (dbResult) {
+          result.push(dbResult);
+          return;
+        }
         mjAPI.typeset({
           math: mathjaxPlain.replace(/ ?\${1,2} ?/g, ''),
           format: req.body.format,
@@ -171,6 +176,7 @@ export class LibRouter {
           mml: req.body.output === 'mml'
         }).then(data => {
           result.push(data);
+          DbDao.create(DatabaseTypes.mathjax, data, mathjaxPlain);
           if (index === mathjaxArray.length - 1) {
             res.send(JSON.stringify(result));
           }
