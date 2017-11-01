@@ -183,29 +183,29 @@ export class RangedExcelWorksheet extends ExcelWorksheet implements IExcelWorksh
       castedQuestion.rangeMax
     );
 
-    this.ws.cell(1, 1).string(`${this.mf.compile('export.question_type')}: ${this.mf.compile(`export.type.${this._question.TYPE}`)}`);
-    this.ws.cell(2, 1).string(this.mf.compile('export.question'));
+    this.ws.cell(1, 1).string(`${this.mf('export.question_type')}: ${this.mf(`export.type.${this._question.TYPE}`)}`);
+    this.ws.cell(2, 1).string(this.mf('export.question'));
 
-    this.ws.cell(2, 2).string(this.mf.compile('export.min_range'));
-    this.ws.cell(2, 3).string(this.mf.compile('export.correct_value'));
-    this.ws.cell(2, 4).string(this.mf.compile('export.max_range'));
+    this.ws.cell(2, 2).string(this.mf('export.min_range'));
+    this.ws.cell(2, 3).string(this.mf('export.correct_value'));
+    this.ws.cell(2, 4).string(this.mf('export.max_range'));
 
     this.ws.cell(4, 1).string(castedQuestion.questionText.replace(/[#]*[*]*/g, ''));
     this.ws.cell(4, 2).number(castedQuestion.rangeMin);
     this.ws.cell(4, 3).number(castedQuestion.correctValue);
     this.ws.cell(4, 4).number(castedQuestion.rangeMax);
 
-    this.ws.cell(6, 1).string(`${this.mf.compile('export.number_of_answers')}:`);
+    this.ws.cell(6, 1).string(`${this.mf('export.number_of_answers')}:`);
     this.ws.cell(6, 2).number(numberOfInputValuesPerGroup.minRange);
     this.ws.cell(6, 3).number(numberOfInputValuesPerGroup.correctValue);
     this.ws.cell(6, 4).number(numberOfInputValuesPerGroup.maxRange);
 
-    this.ws.cell(7, 1).string(this.mf.compile('export.percent_correct') + ':');
+    this.ws.cell(7, 1).string(this.mf('export.percent_correct') + ':');
     const correctResponsesPercentage: number = this.leaderBoardData.length / this.quiz.nicknames.length * 100;
     this.ws.cell(7, 2).number((isNaN(correctResponsesPercentage) ? 0 : Math.round(correctResponsesPercentage)));
 
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(8, 1).string(this.mf.compile('export.average_confidence') + ':');
+      this.ws.cell(8, 1).string(this.mf('export.average_confidence') + ':');
       let confidenceSummary = 0;
       this.quiz.nicknames.forEach((nickItem) => {
         confidenceSummary += nickItem.responses[this._questionIndex].confidence;
@@ -214,16 +214,16 @@ export class RangedExcelWorksheet extends ExcelWorksheet implements IExcelWorksh
     }
 
     let nextColumnIndex = 1;
-    this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.attendee'));
+    this.ws.cell(10, nextColumnIndex++).string(this.mf('export.attendee'));
     if (this._isCasRequired) {
-      this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.cas_account_id'));
-      this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.cas_account_email'));
+      this.ws.cell(10, nextColumnIndex++).string(this.mf('export.cas_account_id'));
+      this.ws.cell(10, nextColumnIndex++).string(this.mf('export.cas_account_email'));
     }
-    this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.answer'));
+    this.ws.cell(10, nextColumnIndex++).string(this.mf('export.answer'));
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.confidence_level'));
+      this.ws.cell(10, nextColumnIndex++).string(this.mf('export.confidence_level'));
     }
-    this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.time'));
+    this.ws.cell(10, nextColumnIndex++).string(this.mf('export.time'));
 
     let nextStartRow = 10;
     this.leaderBoardData.forEach((leaderboardItem) => {
@@ -246,13 +246,13 @@ export class RangedExcelWorksheet extends ExcelWorksheet implements IExcelWorksh
       this.ws.cell(nextStartRow, nextColumnIndex++).number(leaderboardItem.responseTime);
     });
     if (nextStartRow === 10) {
-      this.ws.cell(11, 1).string(this.mf.compile('export.attendee_complete_correct_none_available'));
+      this.ws.cell(11, 1).string(this.mf('export.attendee_complete_correct_none_available'));
     }
   }
 
   constructor({wb, theme, translation, quiz, mf, questionIndex}) {
     super({theme, translation, quiz, mf, questionIndex});
-    this._ws = wb.addWorksheet(`${mf.compile('export.question')} ${questionIndex + 1}`, this._options);
+    this._ws = wb.addWorksheet(`${mf('export.question')} ${questionIndex + 1}`, this._options);
     this._questionIndex = questionIndex;
     this._question = this.quiz.originalObject.questionList[questionIndex];
     this.formatSheet();

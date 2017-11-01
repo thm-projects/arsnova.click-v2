@@ -118,30 +118,30 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
   public addSheetData(): void {
     const answerOption = <IFreetextAnswerOption>this._question.answerOptionList[0];
 
-    this.ws.cell(1, 1).string(`${this.mf.compile('export.question_type')}: ${this.mf.compile(`export.type.${this._question.TYPE}`)}`);
-    this.ws.cell(2, 1).string(this.mf.compile('export.question'));
-    this.ws.cell(2, 2).string(this.mf.compile('export.correct_value'));
+    this.ws.cell(1, 1).string(`${this.mf('export.question_type')}: ${this.mf(`export.type.${this._question.TYPE}`)}`);
+    this.ws.cell(2, 1).string(this.mf('export.question'));
+    this.ws.cell(2, 2).string(this.mf('export.correct_value'));
 
     this.ws.cell(4, 1).string(this._question.questionText.replace(/[#]*[*]*/g, ''));
     this.ws.cell(4, 2).string(answerOption.answerText);
 
-    this.ws.cell(6, 1).string(this.mf.compile('export.number_of_answers') + ':');
+    this.ws.cell(6, 1).string(this.mf('export.number_of_answers') + ':');
     this.ws.cell(6, 2).number(calculateNumberOfAnswers(this.quiz, this._questionIndex, 0));
-    this.ws.cell(6, 3).string(this.mf.compile('view.answeroptions.free_text_question.config_case_sensitive') + ': ' +
-                              this.mf.compile('global.' + (answerOption.configCaseSensitive ? 'yes' : 'no')));
-    this.ws.cell(6, 4).string(this.mf.compile('view.answeroptions.free_text_question.config_trim_whitespaces') + ': ' +
-                              this.mf.compile('global.' + (answerOption.configTrimWhitespaces ? 'yes' : 'no')));
+    this.ws.cell(6, 3).string(this.mf('view.answeroptions.free_text_question.config_case_sensitive') + ': ' +
+                              this.mf('global.' + (answerOption.configCaseSensitive ? 'yes' : 'no')));
+    this.ws.cell(6, 4).string(this.mf('view.answeroptions.free_text_question.config_trim_whitespaces') + ': ' +
+                              this.mf('global.' + (answerOption.configTrimWhitespaces ? 'yes' : 'no')));
 
-    this.ws.cell(7, 1).string(this.mf.compile('export.percent_correct') + ':');
+    this.ws.cell(7, 1).string(this.mf('export.percent_correct') + ':');
     const correctResponsesPercentage: number = this.leaderBoardData.length / this.quiz.nicknames.length * 100;
     this.ws.cell(7, 2).number((isNaN(correctResponsesPercentage) ? 0 : Math.round(correctResponsesPercentage)));
-    this.ws.cell(7, 3).string(this.mf.compile('view.answeroptions.free_text_question.config_use_keywords') + ': ' +
-                              this.mf.compile('global.' + (answerOption.configUseKeywords ? 'yes' : 'no')));
-    this.ws.cell(7, 4).string(this.mf.compile('view.answeroptions.free_text_question.config_use_punctuation') + ': ' +
-                              this.mf.compile('global.' + (answerOption.configUsePunctuation ? 'yes' : 'no')));
+    this.ws.cell(7, 3).string(this.mf('view.answeroptions.free_text_question.config_use_keywords') + ': ' +
+                              this.mf('global.' + (answerOption.configUseKeywords ? 'yes' : 'no')));
+    this.ws.cell(7, 4).string(this.mf('view.answeroptions.free_text_question.config_use_punctuation') + ': ' +
+                              this.mf('global.' + (answerOption.configUsePunctuation ? 'yes' : 'no')));
 
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(8, 1).string(this.mf.compile('export.average_confidence') + ':');
+      this.ws.cell(8, 1).string(this.mf('export.average_confidence') + ':');
       let confidenceSummary = 0;
       this.quiz.nicknames.forEach((nickItem) => {
         confidenceSummary += nickItem.responses[this._questionIndex].confidence;
@@ -150,16 +150,16 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
     }
 
     let nextColumnIndex = 1;
-    this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.attendee'));
+    this.ws.cell(10, nextColumnIndex++).string(this.mf('export.attendee'));
     if (this._isCasRequired) {
-      this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.cas_account_id'));
-      this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.cas_account_email'));
+      this.ws.cell(10, nextColumnIndex++).string(this.mf('export.cas_account_id'));
+      this.ws.cell(10, nextColumnIndex++).string(this.mf('export.cas_account_email'));
     }
-    this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.answer'));
+    this.ws.cell(10, nextColumnIndex++).string(this.mf('export.answer'));
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.confidence_level'));
+      this.ws.cell(10, nextColumnIndex++).string(this.mf('export.confidence_level'));
     }
-    this.ws.cell(10, nextColumnIndex++).string(this.mf.compile('export.time'));
+    this.ws.cell(10, nextColumnIndex++).string(this.mf('export.time'));
 
     let nextStartRow = 10;
     this.quiz.nicknames.forEach((nickItem) => {
@@ -178,13 +178,13 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
       this.ws.cell(nextStartRow, nextColumnIndex++).number(nickItem.responses[this._questionIndex].responseTime);
     });
     if (nextStartRow === 10) {
-      this.ws.cell(11, 1).string(this.mf.compile('export.attendee_complete_correct_none_available'));
+      this.ws.cell(11, 1).string(this.mf('export.attendee_complete_correct_none_available'));
     }
   }
 
   constructor({wb, theme, translation, quiz, mf, questionIndex}) {
     super({theme, translation, quiz, mf, questionIndex});
-    this._ws = wb.addWorksheet(`${mf.compile('export.question')} ${questionIndex + 1}`, this._options);
+    this._ws = wb.addWorksheet(`${mf('export.question')} ${questionIndex + 1}`, this._options);
     this._questionIndex = questionIndex;
     this._question = this.quiz.originalObject.questionList[questionIndex];
     this.formatSheet();

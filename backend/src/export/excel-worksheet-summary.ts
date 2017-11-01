@@ -175,10 +175,10 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     const numberOfQuestions = this.quiz.originalObject.questionList.length;
 
     this.ws.cell(currentRowIndex, 1)
-        .string(`${this.mf.compile('export.quiz_name')}: ${this.quiz.originalObject.hashtag}`);
+        .string(`${this.mf('export.quiz_name')}: ${this.quiz.originalObject.hashtag}`);
 
     this.ws.cell(currentRowIndex, this.columnsToFormat - 1).string(
-      `${this.mf.compile('export.session_content')}`
+      `${this.mf('export.session_content')}`
     );
     currentRowIndex++;
 
@@ -189,15 +189,15 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
 
     this.addLogoImage();
 
-    this.ws.cell(currentRowIndex, 1).string(`${this.mf.compile('export.number_attendees')}:`);
+    this.ws.cell(currentRowIndex, 1).string(`${this.mf('export.number_attendees')}:`);
     this.ws.cell(currentRowIndex, 3).number(this.quiz.nicknames.length);
     currentRowIndex++;
 
-    this.ws.cell(currentRowIndex, 1).string(`${this.mf.compile('export.average_number_attendees_participated')}:`);
+    this.ws.cell(currentRowIndex, 1).string(`${this.mf('export.average_number_attendees_participated')}:`);
     this.ws.cell(currentRowIndex, 3).number(Math.round((numberOfResponses / numberOfAttendees / numberOfQuestions) * 100));
     currentRowIndex++;
 
-    this.ws.cell(currentRowIndex, 1).string(`${this.mf.compile('export.average_correct_answered_questions')}:`);
+    this.ws.cell(currentRowIndex, 1).string(`${this.mf('export.average_correct_answered_questions')}:`);
     this.ws.cell(currentRowIndex, 3).number(this.leaderBoardData.map((x) => {
       return x.correctQuestions.length;
     }).reduce((a, b) => {
@@ -205,7 +205,7 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     }, 0) / numberOfAttendees);
     currentRowIndex++;
 
-    this.ws.cell(currentRowIndex, 1).string(`${this.mf.compile('export.average_confidence')}:`);
+    this.ws.cell(currentRowIndex, 1).string(`${this.mf('export.average_confidence')}:`);
     const averageConfidencePercentage = (this.leaderBoardData.filter((x) => {
       return x.confidenceValue > -1;
     }).map((x) => {
@@ -216,7 +216,7 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     this.ws.cell(currentRowIndex, 3).number((isNaN(averageConfidencePercentage) ? 0 : Math.round(averageConfidencePercentage)));
     currentRowIndex++;
 
-    this.ws.cell(currentRowIndex, 1).string(`${this.mf.compile('export.average_response_time')}:`);
+    this.ws.cell(currentRowIndex, 1).string(`${this.mf('export.average_response_time')}:`);
     this.ws.cell(currentRowIndex, 3).number(Math.round(Number(((this.leaderBoardData.map((x) => {
       return x.responseTime;
     }).reduce((a, b) => {
@@ -225,20 +225,20 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     currentRowIndex += 2;
 
     let nextColumnIndex = 1;
-    this.ws.cell(currentRowIndex, nextColumnIndex).string(this.mf.compile('export.attendee_complete_correct'));
+    this.ws.cell(currentRowIndex, nextColumnIndex).string(this.mf('export.attendee_complete_correct'));
     currentRowIndex += 2;
 
-    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf.compile('export.attendee'));
+    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf('export.attendee'));
     if (this._isCasRequired) {
-      this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf.compile('export.cas_account_id'));
-      this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf.compile('export.cas_account_email'));
+      this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf('export.cas_account_id'));
+      this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf('export.cas_account_email'));
     }
-    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf.compile('export.correct_questions'));
+    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf('export.correct_questions'));
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf.compile('export.average_confidence'));
+      this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf('export.average_confidence'));
     }
-    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf.compile('export.overall_response_time'));
-    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf.compile('export.average_response_time'));
+    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf('export.overall_response_time'));
+    this.ws.cell(currentRowIndex, nextColumnIndex++).string(this.mf('export.average_response_time'));
     currentRowIndex++;
 
     let nextStartRow = currentRowIndex + 5;
@@ -272,25 +272,25 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     });
 
     if (nextStartRow === currentRowIndex + 5) {
-      this.ws.cell(currentRowIndex, 1).string(this.mf.compile('export.attendee_complete_correct_none_available'));
+      this.ws.cell(currentRowIndex, 1).string(this.mf('export.attendee_complete_correct_none_available'));
       nextStartRow++;
     }
 
     nextColumnIndex = 1;
-    this.ws.cell(nextStartRow, nextColumnIndex).string(this.mf.compile('export.attendee_all_entries'));
+    this.ws.cell(nextStartRow, nextColumnIndex).string(this.mf('export.attendee_all_entries'));
     nextStartRow += 2;
 
-    this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf.compile('export.attendee'));
+    this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf('export.attendee'));
     if (this._isCasRequired) {
-      this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf.compile('export.cas_account_id'));
-      this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf.compile('export.cas_account_email'));
+      this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf('export.cas_account_id'));
+      this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf('export.cas_account_email'));
     }
-    this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf.compile('export.correct_questions'));
+    this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf('export.correct_questions'));
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf.compile('export.average_confidence'));
+      this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf('export.average_confidence'));
     }
-    this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf.compile('export.overall_response_time'));
-    this.ws.cell(nextStartRow++, nextColumnIndex++).string(this.mf.compile('export.average_response_time'));
+    this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf('export.overall_response_time'));
+    this.ws.cell(nextStartRow++, nextColumnIndex++).string(this.mf('export.average_response_time'));
 
     this.leaderBoardData.forEach((leaderboardItem, indexInList) => {
       nextColumnIndex = 1;
@@ -304,7 +304,7 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
         this.ws.cell(targetRow, nextColumnIndex++).string(profile.mail instanceof Array ? profile.mail.slice(-1)[0] : profile.mail);
       }
       if (leaderboardItem.correctQuestions.length === 0) {
-        this.ws.cell(targetRow, nextColumnIndex++).string(this.mf.compile('export.correct_questions_none_available'));
+        this.ws.cell(targetRow, nextColumnIndex++).string(this.mf('export.correct_questions_none_available'));
       } else {
         this.ws.cell(targetRow, nextColumnIndex++).string(leaderboardItem.correctQuestions.join(', '));
       }
@@ -318,7 +318,7 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
 
   constructor({wb, theme, translation, quiz, mf}) {
     super({theme, translation, quiz, mf});
-    this._ws = wb.addWorksheet(mf.compile('export.summary'), this._options);
+    this._ws = wb.addWorksheet(mf('export.summary'), this._options);
     this.formatSheet();
     this.addSheetData();
   }

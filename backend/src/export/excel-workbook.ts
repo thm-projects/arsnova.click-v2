@@ -24,7 +24,7 @@ export class ExcelWorkbook implements IExcelWorkbook {
 
   protected _worksheets: Array<IExcelWorksheet> = [];
 
-  constructor({themeName, quiz, translation}: {themeName: string, quiz: IActiveQuiz, translation: string}) {
+  constructor({themeName, quiz, translation, mf}: {themeName: string, quiz: IActiveQuiz, translation: string, mf: MessageFormat}) {
     this._wb = new xlsx.Workbook({
       jszip: {
         compression: 'DEFLATE'
@@ -38,7 +38,7 @@ export class ExcelWorkbook implements IExcelWorkbook {
     });
     this._theme = new ExcelTheme(themeName);
     this._translation = translation;
-    this._mf = new MessageFormat(translation);
+    this._mf = mf;
     this._quiz = quiz;
 
     this.generateSheets();

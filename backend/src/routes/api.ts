@@ -498,6 +498,7 @@ export class ApiRouter {
       themeName: req.params.theme,
       translation: req.params.language,
       quiz: activeQuiz,
+      mf: res.__mf
     });
     const date: Date = new Date();
     const dateFormatted = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}-${date.getHours()}_${date.getMinutes()}`;

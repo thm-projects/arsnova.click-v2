@@ -47,19 +47,16 @@ export abstract class ExcelWorksheet {
     this._theme = theme;
     this._translation = translation;
     this._quiz = quiz;
-    mf.compile = (key: string, config?: Object) => {
-      return `${key}%%${config ? Object.keys(config).forEach(configKey => `${configKey}:${config[configKey]}`) : null}`;
-    };
     this._mf = mf;
     this._createdAt = this.generateCreatedAtString();
     this._options = Object.assign({}, excelDefaultWorksheetOptions, {
       headerFooter: {
-        firstHeader: mf.compile('export.page_header', {createdAt: this._createdAt}),
-        firstFooter: mf.compile('export.page_footer'),
-        evenHeader: mf.compile('export.page_header', {createdAt: this._createdAt}),
-        evenFooter: mf.compile('export.page_footer'),
-        oddHeader: mf.compile('export.page_header', {createdAt: this._createdAt}),
-        oddFooter: mf.compile('export.page_footer'),
+        firstHeader: mf('export.page_header', {createdAt: this._createdAt}),
+        firstFooter: mf('export.page_footer'),
+        evenHeader: mf('export.page_header', {createdAt: this._createdAt}),
+        evenFooter: mf('export.page_footer'),
+        oddHeader: mf('export.page_header', {createdAt: this._createdAt}),
+        oddFooter: mf('export.page_footer'),
         alignWithMargins: true,
         scaleWithDoc: false
       }
@@ -89,8 +86,8 @@ export abstract class ExcelWorksheet {
     const date = new Date();
     return `${this.prefixNumberWithZero(date.getDate())}.
             ${this.prefixNumberWithZero(date.getMonth() + 1)}.
-            ${date.getFullYear()} ${this._mf.compile('export.exported_at')} ${this.prefixNumberWithZero(date.getHours())}:
-            ${this.prefixNumberWithZero(date.getMinutes())} ${this._mf.compile('export.exported_at_time')}`;
+            ${date.getFullYear()} ${this._mf('export.exported_at')} ${this.prefixNumberWithZero(date.getHours())}:
+            ${this.prefixNumberWithZero(date.getMinutes())} ${this._mf('export.exported_at_time')}`;
   }
 
   private getLeaderboardData(questionIndex: number): Array<ILeaderBoardItem> {

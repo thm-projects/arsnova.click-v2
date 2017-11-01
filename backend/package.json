@@ -21,6 +21,7 @@
     "excel4node": "^1.2.1",
     "express": "^4.14.0",
     "express-ws": "^3.0.0",
+    "i18n": "^0.8.3",
     "imagemin": "^5.3.1",
     "imagemin-pngquant": "^5.0.1",
     "lowdb": "^1.0.0",

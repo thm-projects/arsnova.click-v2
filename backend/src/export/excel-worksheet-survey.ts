@@ -102,20 +102,20 @@ export class SurveyExcelWorksheet extends ExcelWorksheet implements IExcelWorksh
   public addSheetData(): void {
     const answerList = this._question.answerOptionList;
 
-    this.ws.cell(1, 1).string(`${this.mf.compile('export.question_type')}: ${this.mf.compile(`export.type.${this._question.TYPE}`)}`);
-    this.ws.cell(2, 1).string(this.mf.compile('export.question'));
+    this.ws.cell(1, 1).string(`${this.mf('export.question_type')}: ${this.mf(`export.type.${this._question.TYPE}`)}`);
+    this.ws.cell(2, 1).string(this.mf('export.question'));
 
     this.ws.cell(4, 1).string(this._question.questionText.replace(/[#]*[*]*/g, ''));
     for (let j = 0; j < answerList.length; j++) {
-      this.ws.cell(2, (j + 2)).string(this.mf.compile('export.answer') + ' ' + (j + 1));
+      this.ws.cell(2, (j + 2)).string(this.mf('export.answer') + ' ' + (j + 1));
       this.ws.cell(4, (j + 2)).string(answerList[j].answerText);
       this.ws.cell(6, (j + 2)).number(calculateNumberOfAnswers(this.quiz, this._questionIndex, j));
     }
 
-    this.ws.cell(6, 1).string(this.mf.compile('export.number_of_answers') + ':');
+    this.ws.cell(6, 1).string(this.mf('export.number_of_answers') + ':');
 
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(7, 1).string(this.mf.compile('export.average_confidence') + ':');
+      this.ws.cell(7, 1).string(this.mf('export.average_confidence') + ':');
       let confidenceSummary = 0;
       this.quiz.nicknames.forEach((nickItem) => {
         confidenceSummary += nickItem.responses[this._questionIndex].confidence;
@@ -124,16 +124,16 @@ export class SurveyExcelWorksheet extends ExcelWorksheet implements IExcelWorksh
     }
 
     let nextColumnIndex = 1;
-    this.ws.cell(9, nextColumnIndex++).string(this.mf.compile('export.attendee'));
+    this.ws.cell(9, nextColumnIndex++).string(this.mf('export.attendee'));
     if (this._isCasRequired) {
-      this.ws.cell(9, nextColumnIndex++).string(this.mf.compile('export.cas_account_id'));
-      this.ws.cell(9, nextColumnIndex++).string(this.mf.compile('export.cas_account_email'));
+      this.ws.cell(9, nextColumnIndex++).string(this.mf('export.cas_account_id'));
+      this.ws.cell(9, nextColumnIndex++).string(this.mf('export.cas_account_email'));
     }
-    this.ws.cell(9, nextColumnIndex++).string(this.mf.compile('export.answer'));
+    this.ws.cell(9, nextColumnIndex++).string(this.mf('export.answer'));
     if (this.responsesWithConfidenceValue.length > 0) {
-      this.ws.cell(9, nextColumnIndex++).string(this.mf.compile('export.confidence_level'));
+      this.ws.cell(9, nextColumnIndex++).string(this.mf('export.confidence_level'));
     }
-    this.ws.cell(9, nextColumnIndex++).string(this.mf.compile('export.time'));
+    this.ws.cell(9, nextColumnIndex++).string(this.mf('export.time'));
 
     let nextStartRow = 9;
     this.leaderBoardData.forEach((leaderboardItem) => {
@@ -162,13 +162,13 @@ export class SurveyExcelWorksheet extends ExcelWorksheet implements IExcelWorksh
       this.ws.cell(nextStartRow, nextColumnIndex++).number(nickItem.responses[this._questionIndex].responseTime);
     });
     if (nextStartRow === 9) {
-      this.ws.cell(10, 1).string(this.mf.compile('export.attendee_complete_correct_none_available'));
+      this.ws.cell(10, 1).string(this.mf('export.attendee_complete_correct_none_available'));
     }
   }
 
   constructor({wb, theme, translation, quiz, mf, questionIndex}) {
     super({theme, translation, quiz, mf, questionIndex});
-    this._ws = wb.addWorksheet(`${this.mf.compile('export.question')} ${questionIndex + 1}`, this._options);
+    this._ws = wb.addWorksheet(`${this.mf('export.question')} ${questionIndex + 1}`, this._options);
     this._questionIndex = questionIndex;
     this._question = this.quiz.originalObject.questionList[questionIndex];
     this.formatSheet();
