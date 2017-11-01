@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
 import {Subscription} from 'rxjs/Subscription';
 import {TranslateService} from '@ngx-translate/core';
@@ -36,8 +36,8 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
 
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private translateService: TranslateService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute
+  ) {
   }
 
   updateMinRange(event: Event): void {
@@ -62,6 +62,7 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     });
   }
 
+  @HostListener('window:beforeunload', [ '$event' ])
   ngOnDestroy() {
     this._question.rangeMin = this._minRange;
     this._question.rangeMax = this._maxRange;

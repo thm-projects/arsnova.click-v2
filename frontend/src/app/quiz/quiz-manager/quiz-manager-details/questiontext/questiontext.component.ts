@@ -28,7 +28,8 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemSaveAssets
+      this.footerBarService.footerElemSaveAssets,
+      this.footerBarService.footerElemProductTour
     ]);
   }
 

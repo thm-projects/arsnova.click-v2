@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
-import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice, IQuestionSurvey} from '../../../../../../lib/questions/interfaces';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../../environments/environment';
+import {QuestionTextService} from '../../../../../service/question-text.service';
 
 @Component({
   selector: 'app-answeroptions-default',
@@ -26,20 +26,24 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
 
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private translateService: TranslateService,
-    private route: ActivatedRoute) {
+    private questionTextService: QuestionTextService,
+    private route: ActivatedRoute
+  ) {
   }
 
   addAnswer(): void {
     this._question.addDefaultAnswerOption();
+    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
   }
 
   deleteAnswer(index: number): void {
     this._question.answerOptionList.splice(index, 1);
+    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
   }
 
   updateAnswerValue(event: Event, index: number): void {
     this._question.answerOptionList[index].answerText = (<HTMLInputElement>event.target).value;
+    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
   }
 
   toggleMultipleSelectionSurvey(): void {
@@ -58,9 +62,11 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._question = <IQuestionChoice>this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
+      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
     });
   }
 
+  @HostListener('window:beforeunload', [ '$event' ])
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
     this._routerSubscription.unsubscribe();

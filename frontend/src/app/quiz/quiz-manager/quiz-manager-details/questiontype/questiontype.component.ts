@@ -30,7 +30,9 @@ export class QuestiontypeComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService) {
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemNicknames
+      this.footerBarService.footerElemNicknames,
+      this.footerBarService.footerElemSaveAssets,
+      this.footerBarService.footerElemProductTour
     ]);
     for (const type in questionReflection) {
       if (questionReflection.hasOwnProperty(type)) {

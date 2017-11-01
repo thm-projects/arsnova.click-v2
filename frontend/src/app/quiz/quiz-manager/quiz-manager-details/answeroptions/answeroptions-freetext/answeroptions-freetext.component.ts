@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -16,30 +16,26 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _routerSubscription: Subscription;
   private _testInput = '';
-
-  constructor(
-    private activeQuestionGroupService: ActiveQuestionGroupService,
-    private translateService: TranslateService,
-    private route: ActivatedRoute) {
-  }
-
   private _question: IQuestion;
+  private _matchText = '';
+  private _answer: IFreetextAnswerOption;
 
   get question(): IQuestion {
     return this._question;
   }
-
-  private _matchText = '';
-
   get matchText(): string {
     return this._matchText;
   }
-
-  private _answer: IFreetextAnswerOption;
-
   get answer(): IFreetextAnswerOption {
     return this._answer;
   }
+
+  constructor(
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private route: ActivatedRoute
+  ) {
+  }
+
 
   setTestInput(event: Event): void {
     this._testInput = (<HTMLTextAreaElement>event.target).value;
@@ -70,6 +66,7 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
     });
   }
 
+  @HostListener('window:beforeunload', [ '$event' ])
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
     this._routerSubscription.unsubscribe();

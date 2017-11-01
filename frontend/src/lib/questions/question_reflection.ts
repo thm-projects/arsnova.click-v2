@@ -14,10 +14,10 @@ export const questionReflection = {
     return new SingleChoiceQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
-      displayAnswerText: displayAnswerText ||
+      displayAnswerText: typeof displayAnswerText !== 'undefined' ? displayAnswerText :
                          DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
       answerOptionList: answerOptionList || [],
-      showOneAnswerPerRow: showOneAnswerPerRow ||
+      showOneAnswerPerRow: typeof showOneAnswerPerRow !== 'undefined' ? showOneAnswerPerRow :
                            DefaultSettings.defaultSettings.question.showOneAnswerPerRow
     });
   },
@@ -25,10 +25,10 @@ export const questionReflection = {
     return new ABCDSingleChoiceQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
-      displayAnswerText: displayAnswerText ||
+      displayAnswerText: typeof displayAnswerText !== 'undefined' ? displayAnswerText :
                          DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
       answerOptionList: answerOptionList || [],
-      showOneAnswerPerRow: showOneAnswerPerRow ||
+      showOneAnswerPerRow: typeof showOneAnswerPerRow !== 'undefined' ? showOneAnswerPerRow :
                            DefaultSettings.defaultSettings.question.showOneAnswerPerRow
     });
   },
@@ -36,10 +36,10 @@ export const questionReflection = {
     return new YesNoSingleChoiceQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
-      displayAnswerText: displayAnswerText ||
+      displayAnswerText: typeof displayAnswerText !== 'undefined' ? displayAnswerText :
                          DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
       answerOptionList: answerOptionList || [],
-      showOneAnswerPerRow: showOneAnswerPerRow ||
+      showOneAnswerPerRow: typeof showOneAnswerPerRow !== 'undefined' ? showOneAnswerPerRow :
                            DefaultSettings.defaultSettings.question.showOneAnswerPerRow
     });
   },
@@ -47,10 +47,10 @@ export const questionReflection = {
     return new TrueFalseSingleChoiceQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
-      displayAnswerText: displayAnswerText ||
+      displayAnswerText: typeof displayAnswerText !== 'undefined' ? displayAnswerText :
                          DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
       answerOptionList: answerOptionList || [],
-      showOneAnswerPerRow: showOneAnswerPerRow ||
+      showOneAnswerPerRow: typeof showOneAnswerPerRow !== 'undefined' ? showOneAnswerPerRow :
                            DefaultSettings.defaultSettings.question.showOneAnswerPerRow
     });
   },
@@ -58,10 +58,10 @@ export const questionReflection = {
     return new MultipleChoiceQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
-      displayAnswerText: displayAnswerText ||
+      displayAnswerText: typeof displayAnswerText !== 'undefined' ? displayAnswerText :
                          DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
       answerOptionList: answerOptionList || [],
-      showOneAnswerPerRow: showOneAnswerPerRow ||
+      showOneAnswerPerRow: typeof showOneAnswerPerRow !== 'undefined' ? showOneAnswerPerRow :
                            DefaultSettings.defaultSettings.question.showOneAnswerPerRow
     });
   },
@@ -69,10 +69,12 @@ export const questionReflection = {
     return new SurveyQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
-      displayAnswerText: displayAnswerText || DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
+      displayAnswerText: typeof displayAnswerText !== 'undefined' ? displayAnswerText :
+                         DefaultSettings.defaultSettings.answers.displayAnswerTextOnButtons,
       answerOptionList: answerOptionList || [],
-      showOneAnswerPerRow: showOneAnswerPerRow || DefaultSettings.defaultSettings.question.showOneAnswerPerRow,
-      multipleSelectionEnabled: multipleSelectionEnabled ||
+      showOneAnswerPerRow: typeof showOneAnswerPerRow !== 'undefined' ? showOneAnswerPerRow :
+                           DefaultSettings.defaultSettings.question.showOneAnswerPerRow,
+      multipleSelectionEnabled: typeof multipleSelectionEnabled !== 'undefined' ? multipleSelectionEnabled :
                                 DefaultSettings.defaultSettings.question.multipleSurveySelectionEnabled
     });
   },
@@ -80,9 +82,9 @@ export const questionReflection = {
     return new RangedQuestion({
       questionText: questionText || DefaultSettings.defaultSettings.question.text,
       timer: timer || DefaultSettings.defaultSettings.question.timer,
-      rangeMin: rangeMin || DefaultSettings.defaultSettings.question.rangeMin,
-      rangeMax: rangeMax || DefaultSettings.defaultSettings.question.rangeMax,
-      correctValue: correctValue || DefaultSettings.defaultSettings.question.correctValue
+      rangeMin: typeof rangeMin !== 'undefined' ? rangeMin : DefaultSettings.defaultSettings.question.rangeMin,
+      rangeMax: typeof rangeMax !== 'undefined' ? rangeMax : DefaultSettings.defaultSettings.question.rangeMax,
+      correctValue: typeof correctValue !== 'undefined' ? correctValue : DefaultSettings.defaultSettings.question.correctValue
     });
   },
   FreeTextQuestion: function ({questionText, timer, answerOptionList}): FreeTextQuestion {

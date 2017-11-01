@@ -34,13 +34,13 @@
 - [x] Server: Translation for Excel export files (EN, DE, FR, ES, IT)
 
 #### Known issues
-- [ ] Size of QR Code in the Quiz Lobby too small
-- [ ] Order of mathjax output in answeroption live preview currently depends on async rendering race conditions
-- [ ] Adjust some of the introjs initializations
 - [x] Add translation files for the export files to the messageformat instance
+- [ ] Size of QR Code in the Quiz Lobby too small
+- [x] Order of mathjax output in answeroption live preview currently depends on async rendering race conditions
+- [ ] Adjust some of the introjs initializations
 
 #### Refactoring required
-- [ ] MathJax / Markdown parsing in the client (use svg only)
+- [x] MathJax / Markdown parsing in the client (use svg only)
 - [ ] Format ABCD Quiz Name depending on the number of answers
 - [ ] Reuse existing ABCD Quizzes when adding a new one
 - [ ] Move color styles from the components to the theme switcher

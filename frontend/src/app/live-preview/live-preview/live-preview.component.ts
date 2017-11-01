@@ -45,20 +45,19 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
   private _targetDevice: DEVICE_TYPES;
   private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
-  private questionTextDataSource: SafeHtml;
-  private answers: Array<IAnswerOption>;
-  private mathjaxAnswers = [];
+  private dataSource: string | Array<string>;
 
   private _question: IQuestionChoice;
   private _questionIndex: number;
   private _subscription: Subscription;
+  private _routerSubscription: Subscription;
 
   constructor(
     public questionTextService: QuestionTextService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private route: ActivatedRoute,
-    private http: HttpClient,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute
+  ) {
   }
 
   public deviceClass() {
@@ -99,79 +98,21 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  sanitizeStyle(value: string): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
-  }
-
-  parseMarkdown(value: string): string {
-    return parseGithubFlavoredMarkdown(value);
-  }
-
-  parseMathjax(value: Array<string>) {
-    return new Promise<Array<IMathjaxResponse>>(resolve => {
-      this.http.post(`${DefaultSettings.httpLibEndpoint}/mathjax`, {
-        mathjax: JSON.stringify(value),
-        format: 'TeX',
-        output: 'html'
-      }).subscribe((data: any) => {
-        resolve(data);
-      });
-    });
-  }
-
   ngOnInit() {
+    this._subscription = this.questionTextService.getEmitter().subscribe(
+      value => {
+        this.dataSource = value;
+      }
+    );
     switch (this.targetEnvironment) {
-      case this.ENVIRONMENT_TYPE.QUESTION:
-        this.questionTextDataSource = this.sanitizeHTML(this.questionTextService.currentValue);
-        this._subscription = this.questionTextService.getEmitter().subscribe(
-          value => {
-            this.questionTextDataSource = this.sanitizeHTML(value);
-            const styleElem = document.getElementById('mathjaxStyle');
-            const style = document.createElement('style');
-            style.innerHTML = this.questionTextService.mathjaxStyles;
-            if (styleElem.hasChildNodes()) {
-              styleElem.removeChild(styleElem.children.item(0));
-            }
-            styleElem.appendChild(style);
-          }
-        );
-        break;
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
-        this._subscription = this.route.params.subscribe(params => {
+        this._routerSubscription = this.route.params.subscribe(params => {
           this._questionIndex = +params['questionIndex'];
           this._question = <IQuestionChoice>this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
-          this.answers = this._question.answerOptionList;
-          this.answers.forEach(answer => {
-            const matchForDollar = answer.answerText.match(/( ?\${1,2}\s.*)/g);
-            const matchForBlock = answer.answerText.match(/(\\(.)*\\.*)/g);
-            let mathjaxValues = [];
-            if (matchForDollar) {
-              mathjaxValues = mathjaxValues.concat(matchForDollar);
-            }
-            if (matchForBlock) {
-              mathjaxValues = mathjaxValues.concat(matchForBlock);
-            }
-            if (mathjaxValues.length) {
-              this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
-                mathjaxValues.forEach((mathjaxValue: string, index: number) => {
-                  // Escape the mathjax html characters so that we can find it in the parsed output of marked
-                  const escapedMathjaxValue = mathjaxValue.replace(/&/g, '&amp;')
-                                                          .replace(/\\\\/g, '\\');
-                  const styleElem = document.getElementById('mathjaxStyle');
-                  const style = document.createElement('style');
-                  style.innerHTML = mathjaxRendered[index].css;
-                  if (styleElem.hasChildNodes()) {
-                    styleElem.removeChild(styleElem.children.item(0));
-                  }
-                  styleElem.appendChild(style);
-                  this.mathjaxAnswers.push(this.sanitizeHTML(answer.answerText.replace(escapedMathjaxValue, mathjaxRendered[index].html)));
-                });
-              });
-            } else {
-              this.mathjaxAnswers.push(this.sanitizeHTML(this.parseMarkdown(answer.answerText)));
-            }
-          });
+          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
         });
+        break;
+      case this.ENVIRONMENT_TYPE.QUESTION:
         break;
       default:
         throw new Error('Unsupported environment type in live preview');
@@ -181,6 +122,9 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this._subscription) {
       this._subscription.unsubscribe();
+    }
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
     }
   }
 

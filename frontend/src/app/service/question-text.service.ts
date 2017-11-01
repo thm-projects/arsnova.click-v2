@@ -7,9 +7,8 @@ import {IMathjaxResponse} from '../../lib/common.interfaces';
 @Injectable()
 export class QuestionTextService {
 
-  @Output() fire: EventEmitter<string> = new EventEmitter();
+  @Output() fire: EventEmitter<string | Array<string>> = new EventEmitter();
   public currentValue = '';
-  public mathjaxStyles = '';
 
   constructor(private http: HttpClient) {
   }
@@ -19,16 +18,17 @@ export class QuestionTextService {
       this.http.post(`${DefaultSettings.httpLibEndpoint}/mathjax`, {
         mathjax: JSON.stringify(value),
         format: 'TeX',
-        output: 'html'
+        output: 'svg'
       }).subscribe((data: any) => {
         resolve(data);
       });
     });
   }
 
-  change(value: string): void {
+  parseInput(value: string) {
     const matchForDollar = value.match(/( ?\${1,2}\s.*)/g);
     const matchForBlock = value.match(/(\\(.)*\\.*)/g);
+    let result = '';
     let mathjaxValues = [];
     if (matchForDollar) {
       mathjaxValues = mathjaxValues.concat(matchForDollar);
@@ -37,24 +37,43 @@ export class QuestionTextService {
       mathjaxValues = mathjaxValues.concat(matchForBlock);
     }
 
-    this.currentValue = parseGithubFlavoredMarkdown(value);
-    if (mathjaxValues.length) {
-      this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
-        mathjaxValues.forEach((mathjaxValue: string, index: number) => {
-          // Escape the mathjax html characters so that we can find it in the parsed output of marked
-          const escapedMathjaxValue = mathjaxValue.replace(/&/g, '&amp;')
-                                                  .replace(/\\\\/g, '\\');
-          this.mathjaxStyles = mathjaxRendered[index].css;
-          this.currentValue = this.currentValue.replace(escapedMathjaxValue, mathjaxRendered[index].html);
+    result = parseGithubFlavoredMarkdown(value);
+    return new Promise((resolve) => {
+      if (mathjaxValues.length) {
+        this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
+          mathjaxValues.forEach((mathjaxValue: string, index: number) => {
+            // Escape the mathjax html characters so that we can find it in the parsed output of marked
+            const escapedMathjaxValue = mathjaxValue.replace(/&/g, '&amp;')
+                                                    .replace(/\\\\/g, '\\');
+            result = result.replace(escapedMathjaxValue, mathjaxRendered[index].svg);
+          });
+          resolve(result);
         });
-        this.fire.emit(this.currentValue);
-      });
-    } else {
-      this.fire.emit(this.currentValue);
-    }
+      } else {
+        resolve(result);
+      }
+    });
   }
 
-  getEmitter(): EventEmitter<string> {
+  change(value: string): void {
+    this.parseInput(value).then((result: string) => {
+      this.fire.emit(result);
+    });
+  }
+
+  changeMultiple(value: Array<string>): void {
+    const allResults = [];
+    value.forEach((singleValue, index) => {
+      this.parseInput(singleValue).then((result: string) => {
+        allResults[index] = result;
+        if (allResults.length === value.length) {
+          this.fire.emit(allResults);
+        }
+      });
+    });
+  }
+
+  getEmitter(): EventEmitter<string | Array<string>> {
     return this.fire;
   }
 

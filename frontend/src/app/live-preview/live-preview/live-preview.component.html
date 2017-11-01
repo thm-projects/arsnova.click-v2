@@ -5,12 +5,12 @@
   <app-header [headerLabel]="'region.header.answers'"></app-header>
   <div id="answer-option-element-wrapper"
        class="d-flex justify-content-around align-items-center flex-wrap">
-    <div *ngFor="let elem of answers; let i = index"
+    <div *ngFor="let elem of dataSource; let i = index"
          class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
          [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
       <p *ngIf="question.displayAnswerText"
          class="markdown-answer"
-         [innerHTML]="mathjaxAnswers[i]"></p>
+         [innerHTML]="sanitizeHTML(elem)"></p>
       <p *ngIf="!question.displayAnswerText"
          class="mb-0"
          [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
@@ -21,6 +21,6 @@
      id="question-preview"
      [class]="'preview-frame overflow-auto ' + deviceClass()">
   <app-header [headerLabel]="'region.header.question'"></app-header>
-  <p class="p-0" [innerHTML]="questionTextDataSource"></p>
+  <p class="p-0" [innerHTML]="sanitizeHTML(dataSource)"></p>
 </div>
 <div *ngIf="targetDevice === DEVICE_TYPE.XS" class="homeButton hidden"></div>
