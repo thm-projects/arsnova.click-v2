@@ -25,7 +25,6 @@ export class VotingComponent implements OnInit, OnDestroy {
 
   private _countdown: Countdown;
   private _countdownValue: number;
-  private _startResponseTime;
   private _selectedAnswers: Array<number> = [];
   private _toggleSelectedAnswers: boolean;
   public answers: Array<string> = [];
@@ -44,8 +43,7 @@ export class VotingComponent implements OnInit, OnDestroy {
 
     this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${this.currentQuizService.hashtag}`)
         .subscribe((data: IMessage) => {
-          this._startResponseTime = new Date().getTime();
-          if (data.status === 'STATUS:SUCCESSFUL') {
+          if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
             this._countdown = new Countdown(this.currentQuizService.currentQuestion, data.payload.startTimestamp);
             this._countdown.onChange.subscribe((value) => {
               this._countdownValue = value;
@@ -57,6 +55,12 @@ export class VotingComponent implements OnInit, OnDestroy {
                 ]);
               }
             });
+          } else {
+            this.router.navigate([
+              '/quiz',
+              'flow',
+              'results'
+            ]);
           }
         });
 
@@ -79,6 +83,9 @@ export class VotingComponent implements OnInit, OnDestroy {
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
           this.router.navigate(['/quiz', 'flow', 'lobby']);
+          break;
+        case 'LOBBY:CLOSED':
+          this.router.navigate(['/']);
           break;
       }
       this.handleMessagesForAttendee(data);

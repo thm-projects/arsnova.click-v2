@@ -35,7 +35,7 @@ export abstract class AbstractAnswerOption {
 
   /**
    * Serialize the instance object to a JSON compatible object
-   * @returns {{hashtag: String, type: String, questionIndex: Number, answerText: String, answerOptionNumber: Number}}
+   * @returns {{hashtag: String, TYPE: String, questionIndex: Number, answerText: String, answerOptionNumber: Number}}
    */
   serialize(): any {
     return {

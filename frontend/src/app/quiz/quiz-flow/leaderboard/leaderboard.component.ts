@@ -4,11 +4,12 @@ import {ActiveQuestionGroupService} from 'app/service/active-question-group.serv
 import {AttendeeService} from 'app/service/attendee.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {Subscription} from 'rxjs/Subscription';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {DefaultSettings} from '../../../service/settings.service';
 import {Http} from '@angular/http';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
+import {ConnectionService} from '../../../service/connection.service';
 
 export interface ILeaderBoardItem {
   name: string;
@@ -50,6 +51,8 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private currentQuizService: CurrentQuizService,
     private http: Http,
+    private router: Router,
+    private connectionService: ConnectionService,
     public attendeeService: AttendeeService) {
 
     if (this.activeQuestionGroupService.activeQuestionGroup) {
@@ -69,7 +72,30 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     this._leaderBoard = [];
   }
 
+  private handleMessages() {
+    this.connectionService.socket.subscribe((data: IMessage) => {
+      switch (data.step) {
+        case 'QUIZ:START':
+          this.router.navigate(['/quiz', 'flow', 'voting']);
+          break;
+        case 'MEMBER:UPDATED_RESPONSE':
+          console.log('modify response data for nickname in confidence rate view', data.payload.nickname);
+          this.attendeeService.modifyResponse(data.payload.nickname);
+          break;
+        case 'QUIZ:RESET':
+          this.attendeeService.clearResponses();
+          this.router.navigate(['/quiz', 'flow', 'lobby']);
+          break;
+        case 'LOBBY:CLOSED':
+          this.router.navigate(['/']);
+          break;
+      }
+    });
+  }
+
   ngOnInit() {
+    this.connectionService.authorizeWebSocket(this.currentQuizService.hashtag);
+    this.handleMessages();
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._isGlobalRanking = isNaN(this._questionIndex);

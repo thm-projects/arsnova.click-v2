@@ -140,7 +140,7 @@ class ActiveQuizItem implements IActiveQuiz {
   public onDestroy(): void {
     this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
-      step: 'QUIZ:DELETED',
+      step: 'LOBBY:CLOSED',
       payload: {}
     });
   }
@@ -445,6 +445,7 @@ export default class QuizManagerDAO {
 
   public static removeActiveQuiz(originalName: string): boolean {
     const name: string = QuizManagerDAO.normalizeQuizName(originalName);
+    activeQuizzes[name].onDestroy();
     activeQuizzes[name] = new ActiveQuizItemPlaceholder(name);
     return true;
   }

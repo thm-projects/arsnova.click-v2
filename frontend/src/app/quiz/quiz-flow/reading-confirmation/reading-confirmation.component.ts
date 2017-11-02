@@ -81,6 +81,9 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
           this.attendeeService.clearResponses();
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
+        case 'LOBBY:CLOSED':
+          this.router.navigate(['/']);
+          break;
       }
     });
   }

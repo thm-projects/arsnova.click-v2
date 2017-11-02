@@ -31,7 +31,7 @@
       <i class="fa fa-question" aria-hidden="true"></i>
       <span>{{'component.liveResults.question' | translate}}</span>
     </button>
-    <button *ngIf="sessionConfig.readingConfirmationEnabled"
+    <button *ngIf="showStartQuizButton(i)"
             (click)="startQuiz()"
             type="button"
             class="btn btn-info w-100 pointer">

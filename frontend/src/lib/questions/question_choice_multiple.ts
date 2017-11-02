@@ -23,7 +23,7 @@ export class MultipleChoiceQuestion extends AbstractChoiceQuestion implements IQ
    * @returns {{hashtag:String,questionText:String,type:AbstractQuestion,timer:Number,startTime:Number,questionIndex:Number,answerOptionList:Array}}
    */
   serialize(): Object {
-    return Object.assign(super.serialize(), {type: this.TYPE});
+    return Object.assign(super.serialize(), {TYPE: this.TYPE});
   }
 
   translationReferrer(): string {

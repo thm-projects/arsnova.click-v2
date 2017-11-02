@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress-bar-freetext',
@@ -39,6 +39,10 @@ export class ProgressBarFreetextComponent implements OnInit {
   sanitizeStyle(value: string): SafeStyle {
     value = value.replace(/\s/g, '');
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+  }
+
+  sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
   constructor(private sanitizer: DomSanitizer) {

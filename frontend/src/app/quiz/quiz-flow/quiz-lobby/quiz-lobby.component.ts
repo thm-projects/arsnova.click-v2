@@ -99,6 +99,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         case 'MEMBER:REMOVED':
           this.attendeeService.attendees = this.attendeeService.attendees.filter(player => player.name !== data.payload.name);
           break;
+        case 'LOBBY:CLOSED':
+          this.router.navigate(['/']);
+          break;
       }
       this._isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });

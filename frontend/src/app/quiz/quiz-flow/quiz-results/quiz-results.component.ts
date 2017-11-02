@@ -29,7 +29,7 @@ export class Countdown {
   constructor(question: IQuestion, startTimestamp: number) {
     this._time = question.timer;
     const endTimestamp = startTimestamp + this._time * 1000;
-    this._remainingTime = (endTimestamp - startTimestamp) / 1000;
+    this._remainingTime = (endTimestamp - startTimestamp - new Date().getTime()) / 1000;
     this._isRunning = true;
     const interval = setInterval(() => {
       this._remainingTime--;
@@ -116,6 +116,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return ['SurveyQuestion'].indexOf(elem.TYPE) === -1;
   }
 
+  showStartQuizButton(index: number): boolean {
+    return this._isOwner && this.sessionConfig.readingConfirmationEnabled && this._currentQuestionIndex === index && this._currentQuestionIndex < this.questions.length;
+  }
+
   showQuestionButton(elem: IQuestion): boolean {
     return ['ABCDQuestion'].indexOf(elem.TYPE) === -1;
   }
@@ -187,10 +191,18 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         case 'MEMBER:UPDATED_RESPONSE':
           console.log('modify response data for nickname in live results view', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
+          if (this.attendeeService.attendees.filter(attendee => {
+            return attendee.responses[this._currentQuestionIndex].value;
+          }).length === this.attendeeService.attendees.length && this._countdown) {
+            this._countdown.remainingTime = 1;
+          }
           break;
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
           this.router.navigate(['/quiz', 'flow', 'lobby']);
+          break;
+        case 'LOBBY:CLOSED':
+          this.router.navigate(['/']);
           break;
       }
       this._isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
