@@ -1,7 +1,12 @@
 <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h2>
 
-<h4 [innerHTML]="questionText"></h4>
+<div [innerHTML]="sanitizeHTML(questionText)"></div>
 
-<div *ngFor="let elem of question.answerOptionList; let i = index">
-  <p>{{i + 1}}&nbsp;{{elem.answerText}}</p>
+<hr/>
+
+<div *ngFor="let elem of answers; let i = index">
+  <p class="d-flex align-items-center">
+    <span>{{normalizeAnswerIndex(i)}}:&nbsp;</span>
+    <span [innerHTML]="sanitizeHTML(elem)"></span>
+  </p>
 </div>

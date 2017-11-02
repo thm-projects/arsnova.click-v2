@@ -10,8 +10,9 @@ import {I18nService, NumberTypes} from '../../../../service/i18n.service';
 })
 export class ProgressBarComponent implements OnInit, OnDestroy {
 
-  @Input() data: IQuestion;
+  @Input() data: Array<string>;
   @Input() questionIndex: number;
+  @Input() question: IQuestion;
 
   constructor(
     private attendeeService: AttendeeService,
@@ -21,7 +22,7 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
   attendeeDataForAnswer(answerIndex: number): Object {
     const result = {
       answerIndex: answerIndex,
-      label: this.data.answerOptionList[answerIndex].answerText,
+      label: this.data[answerIndex],
       absolute: 0,
       base: this.attendeeService.attendees.length,
       percent: '0'

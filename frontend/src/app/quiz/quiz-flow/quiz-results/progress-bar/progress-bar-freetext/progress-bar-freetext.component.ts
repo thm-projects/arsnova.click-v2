@@ -33,6 +33,8 @@ export class ProgressBarFreetextComponent implements OnInit {
   private _percent: number;
   private _base: number;
   private absolute: number;
+  private label: string;
+  private normalizedAnswerIndex: string;
 
   sanitizeStyle(value: string): SafeStyle {
     value = value.replace(/\s/g, '');

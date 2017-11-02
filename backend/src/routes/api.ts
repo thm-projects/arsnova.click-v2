@@ -157,6 +157,26 @@ export class ApiRouter {
     }
   }
 
+  public addReadingConfirmation(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
+    activeQuiz.setReadingConfirmation(req.body.nickname, req.body.questionIndex);
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:ADD_READING_CONFIRMATION',
+      payload: {}
+    });
+  }
+
+  public addConfidenceValue(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
+    activeQuiz.setConfidenceValue(req.body.nickname, req.body.questionIndex, req.body.confidenceValue);
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:ADD_CONFIDENCE_VALUE',
+      payload: {}
+    });
+  }
+
   public deleteMember(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const result: boolean = activeQuiz.removeMember(req.params.nickname);
@@ -253,7 +273,10 @@ export class ApiRouter {
         payload: {startTimestamp: activeQuiz.currentStartTimestamp, nextQuestionIndex: activeQuiz.currentQuestionIndex}
       });
     } else {
-      const nextQuestionIndex: number = activeQuiz.nextQuestion();
+      const nextQuestionIndex = activeQuiz.originalObject.sessionConfig.readingConfirmationEnabled ?
+                                activeQuiz.currentQuestionIndex :
+                                activeQuiz.nextQuestion();
+
       if (nextQuestionIndex === -1) {
         res.send({
           status: 'STATUS:FAILED',
@@ -272,12 +295,48 @@ export class ApiRouter {
     }
   }
 
+  public showReadingConfirmation(req: Request, res: Response, next: NextFunction): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    activeQuiz.nextQuestion();
+    activeQuiz.requestReadingConfirmation();
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:READING_CONFIRMATION_REQUESTED',
+      payload: {}
+    });
+  }
+
   public getQuizStartTime(req: Request, res: Response, next: NextFunction): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:GET_STARTTIME',
       payload: {startTimestamp: activeQuiz.currentStartTimestamp}
+    });
+  }
+
+  public getQuizSettings(req: Request, res: Response, next: NextFunction): void {
+    if (!req.body.quizName || !req.body.privateKey) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:INVALID_DATA',
+        payload: {}
+      });
+      return;
+    }
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    if (!activeQuiz) {
+      res.send({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:NOT_FOUND',
+        payload: {}
+      });
+      return;
+    }
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:SETTINGS',
+      payload: {settings: activeQuiz.originalObject.sessionConfig}
     });
   }
 
@@ -375,6 +434,7 @@ export class ApiRouter {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     const dbResult: Object = DbDao.read(DatabaseTypes.quiz, {quizName: req.body.quizName, privateKey: req.body.privateKey});
     if (activeQuiz && dbResult) {
+      activeQuiz.onDestroy();
       QuizManager.removeActiveQuiz(req.body.quizName);
       res.send({
         status: 'STATUS:SUCCESS',
@@ -416,7 +476,7 @@ export class ApiRouter {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     if (activeQuiz.nicknames.filter(value => {
         return value.name === req.body.nickname;
-      })[0].responses[activeQuiz.currentQuestionIndex]) {
+      })[0].responses[activeQuiz.currentQuestionIndex].responseTime) {
       res.send({
         status: 'STATUS:FAILED',
         step: 'QUIZ:DUPLICATE_MEMBER_RESPONSE',
@@ -425,7 +485,7 @@ export class ApiRouter {
       return;
     }
 
-    if (typeof req.body.value === 'undefined' || !req.body.responseTime) {
+    if (typeof req.body.value === 'undefined') {
       res.send({
         status: 'STATUS:FAILED',
         step: 'QUIZ:INVALID_MEMBER_RESPONSE',
@@ -434,12 +494,7 @@ export class ApiRouter {
       return;
     }
 
-    activeQuiz.addResponse(req.body.nickname, activeQuiz.currentQuestionIndex, <IQuizResponse>{
-      value: req.body.value,
-      responseTime: parseInt(req.body.responseTime, 10),
-      confidence: parseInt(req.body.confidence, 10) || 0, // TODO: Separate to extra update method
-      readingConfirmation: req.body.readingConfirmation || false // TODO: Separate to extra update method
-    });
+    activeQuiz.addResponseValue(req.body.nickname, activeQuiz.currentQuestionIndex, req.body.value);
 
     res.send({
       status: 'STATUS:SUCCESSFUL',
@@ -544,13 +599,17 @@ export class ApiRouter {
 
     this._router.put('/lobby', this.putOpenLobby);
     this._router.delete('/lobby', this.putCloseLobby);
+    this._router.delete('/lobby/:quizName/member/:nickname', this.deleteMember);
 
     this._router.put('/lobby/member', this.addMember);
-    this._router.delete('/lobby/:quizName/member/:nickname', this.deleteMember);
+    this._router.put('/lobby/member/reading-confirmation', this.addReadingConfirmation);
+    this._router.put('/lobby/member/confidence-value', this.addConfidenceValue);
 
     this._router.post('/quiz/upload', this.uploadQuiz);
     this._router.post('/quiz/start', this.startQuiz);
+    this._router.post('/quiz/reading-confirmation', this.showReadingConfirmation);
     this._router.get('/quiz/startTime/:quizName', this.getQuizStartTime);
+    this._router.get('/quiz/settings', this.getQuizSettings);
     this._router.post('/quiz/settings/update', this.updateQuizSettings);
     this._router.patch('/quiz/reset/:quizName', this.resetQuiz);
     this._router.post('/quiz/reserve', this.reserveQuiz);

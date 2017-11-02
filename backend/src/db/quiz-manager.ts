@@ -149,6 +149,11 @@ class ActiveQuizItem implements IActiveQuiz {
     this._nicknames.forEach(value => {
       if (value.webSocket && value.webSocket.readyState === WebSocket.OPEN) {
         value.webSocket.send(JSON.stringify(message));
+      } else if (value.webSocket) {
+        console.log('websocket status for nickname',
+          value.name, 'is', value.webSocket, 'readystate is', value.webSocket.readyState, 'open state is', WebSocket.OPEN);
+      } else {
+        console.log('websocket for nickname', value.name, 'is undefined');
       }
     });
     if (this._ownerSocket) {
@@ -156,6 +161,14 @@ class ActiveQuizItem implements IActiveQuiz {
     } else {
       console.log('no owner socket defined');
     }
+  }
+
+  public requestReadingConfirmation(): void {
+    this.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:READING_CONFIRMATION_REQUESTED',
+      payload: {}
+    });
   }
 
   public reset(): void {
@@ -187,6 +200,7 @@ class ActiveQuizItem implements IActiveQuiz {
   public nextQuestion(): number {
     if (this.currentQuestionIndex < this.originalObject.questionList.length - 1) {
       this.currentQuestionIndex++;
+      this.nicknames.forEach(member => member.responses.push({value: [], responseTime: 0, confidence: 0, readingConfirmation: false}));
       this.pushMessageToClients({
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:NEXT_QUESTION',
@@ -246,10 +260,45 @@ class ActiveQuizItem implements IActiveQuiz {
     return false;
   }
 
-  public addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void {
+  public addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void {
     this.nicknames.filter(value => {
       return value.name === nickname;
-    })[0].responses[questionIndex] = data;
+    })[0].responses[questionIndex].value = data;
+    this.nicknames.filter(value => {
+      return value.name === nickname;
+    })[0].responses[questionIndex].responseTime = (new Date().getTime() - this.currentStartTimestamp) / 1000;
+
+    this.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'MEMBER:UPDATED_RESPONSE',
+      payload: {
+        nickname: this.nicknames.filter(value => {
+          return value.name === nickname;
+        })[0].serialize()
+      }
+    });
+  }
+
+  public setConfidenceValue(nickname: string, questionIndex: number, confidenceValue: number): void {
+    this.nicknames.filter(member => {
+      return member.name === nickname;
+    })[0].responses[questionIndex].confidence = confidenceValue;
+
+    this.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'MEMBER:UPDATED_RESPONSE',
+      payload: {
+        nickname: this.nicknames.filter(value => {
+          return value.name === nickname;
+        })[0].serialize()
+      }
+    });
+  }
+
+  public setReadingConfirmation(nickname: string, questionIndex: number): void {
+    this.nicknames.filter(member => {
+      return member.name === nickname;
+    })[0].responses[questionIndex].readingConfirmation = true;
 
     this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
@@ -289,6 +338,18 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
     this.name = name;
   }
 
+  public requestReadingConfirmation(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public setConfidenceValue(nickname: string, questionIndex: number, confidenceValue: number): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public setReadingConfirmation(nickname: string, questionIndex: number): void {
+    throw new Error('Method not implemented.');
+  }
+
   public addMember(name: string, webSocketAuthorization: number): boolean {
     throw new Error('Method not implemented.');
   }
@@ -297,7 +358,7 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
     throw new Error('Method not implemented.');
   }
 
-  public addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void {
+  public addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void {
     throw new Error('Method not implemented.');
   }
 

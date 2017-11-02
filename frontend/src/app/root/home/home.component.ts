@@ -20,6 +20,7 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {IMathjaxResponse} from 'lib/common.interfaces';
 import {ABCDSingleChoiceQuestion} from '../../../lib/questions/question_choice_single_abcd';
 import {DefaultAnswerOption} from '../../../lib/answeroptions/answeroption_default';
+import {CasService} from '../../service/cas.service';
 
 @Component({
   selector: 'app-home',
@@ -58,6 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
+    private casService: CasService,
     private settingsService: SettingsService,
     private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElements([
@@ -176,6 +178,10 @@ export class HomeComponent implements OnInit, OnDestroy {
                   this.canAddQuiz = false;
                   this.canJoinQuiz = true;
                   this._provideNickSelection = value.payload.provideNickSelection;
+                  this.casService.casLoginRequired = value.payload.authorizeViaCas;
+                  if (this.casService.casLoginRequired) {
+                    this.casService.quizName = quizname;
+                  }
                   break;
                 case 'QUIZ:UNDEFINED':
                   this.canAddQuiz = true;

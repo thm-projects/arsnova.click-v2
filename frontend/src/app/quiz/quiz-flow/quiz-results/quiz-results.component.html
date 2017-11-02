@@ -31,12 +31,19 @@
       <i class="fa fa-question" aria-hidden="true"></i>
       <span>{{'component.liveResults.question' | translate}}</span>
     </button>
+    <button *ngIf="sessionConfig.readingConfirmationEnabled"
+            (click)="startQuiz()"
+            type="button"
+            class="btn btn-info w-100 pointer">
+      <i class="fa fa-paper-plane" aria-hidden="true"></i>
+      <span>{{'component.liveResults.start_round' | translate}}</span>
+    </button>
   </div>
   <app-reading-confirmation *ngIf="showReadingConfirmation()"
                             [data]="getReadingConfirmationData(i)"></app-reading-confirmation>
   <app-confidence-rate *ngIf="showConfidenceRate()"
                        [data]="getConfidenceData(i)"></app-confidence-rate>
-  <app-progress-bar *ngIf="showResponseProgress()" [data]="elem" [questionIndex]="i"></app-progress-bar>
+  <app-progress-bar *ngIf="showResponseProgress()" [data]="getAnswers(i)" [questionIndex]="i" [question]="elem"></app-progress-bar>
 </div>
 <app-audio-player *ngIf="isActiveQuiz && countdownValue && sessionConfig && sessionConfig.music.countdownRunningEnabled"
                   [original_volume]="sessionConfig.music.volumeConfig.useGlobalVolume ? sessionConfig.music.volumeConfig.global : sessionConfig.music.volumeConfig.countdownRunning"

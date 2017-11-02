@@ -1,10 +1,6 @@
 <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h2>
 
-<h4 [innerHTML]="questionText"></h4>
+<p [innerHTML]="sanitizeHTML(questionText)"></p>
 
-<div *ngFor="let elem of question.answerOptionList; let i = index">
-  <p>{{i + 1}}&nbsp;{{elem.answerText}}</p>
-</div>
-
-<button class="btn btn-default"
+<button class="btn btn-default w-100 mt-5 pointer"
         (click)="confirmReading()"><i class="fa fa-send"></i>{{'component.liveResults.confirm_read' | translate}}</button>

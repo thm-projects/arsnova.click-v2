@@ -25,7 +25,6 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
 
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private http: Http) {
     this.footerBarService.replaceFooterElements([

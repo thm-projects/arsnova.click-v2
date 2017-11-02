@@ -50,7 +50,13 @@ export declare interface IActiveQuiz {
 
   removeMember(name: string): boolean;
 
-  addResponse(nickname: string, questionIndex: number, data: IQuizResponse): void;
+  addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void;
+
+  setConfidenceValue(nickname: string, questionIndex: number, confidenceValue: number): void;
+
+  setReadingConfirmation(nickname: string, questionIndex: number): void;
+
+  requestReadingConfirmation(): void;
 
   nextQuestion(): number;
 

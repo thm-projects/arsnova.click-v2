@@ -80,6 +80,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages() {
+    if (!this.attendeeService.attendees.length) {
+      this.connectionService.sendMessage({status: 'STATUS:SUCCESSFULL', step: 'LOBBY:GET_PLAYERS', payload: {quizName: this._hashtag}});
+    }
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'LOBBY:INACTIVE':
@@ -121,11 +124,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.currentQuizService.currentQuestion = data.payload.question;
         break;
       case 'QUIZ:START':
-        let target = 'voting';
-        if (this.currentQuizService.sessionConfiguration.readingConfirmationEnabled) {
-          target = 'reading-confirmation';
-        }
-        this.router.navigate(['/quiz', 'flow', target]);
+        this.router.navigate(['/quiz', 'flow', 'voting']);
+        break;
+      case 'QUIZ:READING_CONFIRMATION_REQUESTED':
+        this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         break;
       case 'MEMBER:REMOVED':
         const existingNickname = window.sessionStorage.getItem(`${this._hashtag}_nick`);
@@ -211,9 +213,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.handleMessages();
       }
     });
-    if (!this.attendeeService.attendees.length) {
-      this.connectionService.sendMessage({status: 'STATUS:SUCCESSFULL', step: 'LOBBY:GET_PLAYERS', payload: {quizName: this._hashtag}});
-    }
   }
 
   ngOnDestroy() {

@@ -3,14 +3,18 @@
 <div class="row">
   <div class="col-12">
     <input type="range"
+           class="w-100"
            [value]="confidenceValue"
            (input)="updateConficence($event)"
            (propertyChange)="updateConficence($event)">
   </div>
   <div class="col-12">
+    <p class="text-center">{{('component.voting.confidence_level.' + getConfidenceLevel()) | translate}}</p>
+  </div>
+  <div class="col-12">
     <button type="button"
             (click)="sendConfidence()"
-            class="btn btn-warning">
+            class="btn btn-default mt-5 w-100 pointer">
       <span class="fa fa-send" aria-hidden="true"></span>
       <span>{{("component.voting." + (confidenceValue ? 'send' : 'abstention')) | translate}}</span>
     </button>

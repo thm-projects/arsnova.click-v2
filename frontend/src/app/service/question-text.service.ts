@@ -8,7 +8,7 @@ import {IMathjaxResponse} from '../../lib/common.interfaces';
 export class QuestionTextService {
 
   @Output() fire: EventEmitter<string | Array<string>> = new EventEmitter();
-  public currentValue = '';
+  private _inputCache = {};
 
   constructor(private http: HttpClient) {
   }
@@ -26,6 +26,9 @@ export class QuestionTextService {
   }
 
   parseInput(value: string) {
+    if (this._inputCache[value]) {
+      return new Promise((resolve => resolve(this._inputCache[value])));
+    }
     const matchForDollar = value.match(/( ?\${1,2}\s.*)/g);
     const matchForBlock = value.match(/(\\(.)*\\.*)/g);
     let result = '';
@@ -47,9 +50,11 @@ export class QuestionTextService {
                                                     .replace(/\\\\/g, '\\');
             result = result.replace(escapedMathjaxValue, mathjaxRendered[index].svg);
           });
+          this._inputCache[value] = result;
           resolve(result);
         });
       } else {
+        this._inputCache[value] = result;
         resolve(result);
       }
     });
@@ -66,7 +71,7 @@ export class QuestionTextService {
     value.forEach((singleValue, index) => {
       this.parseInput(singleValue).then((result: string) => {
         allResults[index] = result;
-        if (allResults.length === value.length) {
+        if (allResults.filter(singleResult => !!singleResult).length === value.length) {
           this.fire.emit(allResults);
         }
       });

@@ -44,13 +44,12 @@ export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
     return this._previousQuestions;
   }
 
-  get currentQuestion(): any {
+  get currentQuestion(): IQuestion {
     return this._currentQuestion;
   }
 
-  set currentQuestion(value: any) {
+  set currentQuestion(value: IQuestion) {
     this._currentQuestion = questionReflection[value.TYPE](value);
-    this._previousQuestions.push(this._currentQuestion);
     this.persistToSessionStorage();
   }
 

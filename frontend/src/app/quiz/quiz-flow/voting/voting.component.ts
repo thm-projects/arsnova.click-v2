@@ -8,6 +8,10 @@ import {Router} from '@angular/router';
 import {AttendeeService} from '../../../service/attendee.service';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {ConnectionService} from '../../../service/connection.service';
+import {SingleChoiceQuestion} from '../../../../lib/questions/question_choice_single';
+import {SurveyQuestion} from '../../../../lib/questions/question_survey';
+import {QuestionTextService} from '../../../service/question-text.service';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-voting',
@@ -24,6 +28,7 @@ export class VotingComponent implements OnInit, OnDestroy {
   private _startResponseTime;
   private _selectedAnswers: Array<number> = [];
   private _toggleSelectedAnswers: boolean;
+  public answers: Array<string> = [];
 
   constructor(
     public currentQuizService: CurrentQuizService,
@@ -31,6 +36,8 @@ export class VotingComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
     private connectionService: ConnectionService,
+    private questionTextService: QuestionTextService,
+    private sanitizer: DomSanitizer,
     private router: Router) {
 
     this.footerBarService.replaceFooterElements([]);
@@ -43,14 +50,23 @@ export class VotingComponent implements OnInit, OnDestroy {
             this._countdown.onChange.subscribe((value) => {
               this._countdownValue = value;
               if (!value) {
-                this.router.navigate(['/quiz', 'flow', 'results']);
+                this.router.navigate([
+                  '/quiz',
+                  'flow',
+                  this.currentQuizService.sessionConfiguration.confidenceSliderEnabled ? 'confidence-rate' : 'results'
+                ]);
               }
             });
           }
         });
 
-    this._toggleSelectedAnswers = ['SingleChoiceQuestion'].indexOf(this.currentQuizService.currentQuestion.TYPE) > -1;
-    this._toggleSelectedAnswers = this._toggleSelectedAnswers && !this.currentQuizService.currentQuestion.multipleSelectionEnabled;
+    this._toggleSelectedAnswers = this.currentQuizService.currentQuestion instanceof SingleChoiceQuestion;
+    this._toggleSelectedAnswers = this._toggleSelectedAnswers &&
+                                  !(<SurveyQuestion>this.currentQuizService.currentQuestion).multipleSelectionEnabled;
+  }
+
+  public sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
   handleMessages() {
@@ -85,6 +101,13 @@ export class VotingComponent implements OnInit, OnDestroy {
   public toggleSelectAnswer(index: number): void {
     this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) : this._toggleSelectedAnswers
       ? this._selectedAnswers = [index] : this._selectedAnswers.push(index);
+    if (
+      this.currentQuizService.currentQuestion instanceof SingleChoiceQuestion ||
+      (this.currentQuizService.currentQuestion instanceof SurveyQuestion &&
+      this.currentQuizService.currentQuestion.multipleSelectionEnabled)
+    ) {
+      this._countdown.remainingTime = 1;
+    }
   }
 
   ngOnInit() {
@@ -92,14 +115,15 @@ export class VotingComponent implements OnInit, OnDestroy {
       this.connectionService.authorizeWebSocket(this.currentQuizService.hashtag);
       this.handleMessages();
     });
+    this.questionTextService.getEmitter().subscribe((value: Array<string>) => this.answers = value);
+    this.questionTextService.changeMultiple(this.currentQuizService.currentQuestion.answerOptionList.map(answer => answer.answerText));
   }
 
   ngOnDestroy() {
     this.http.put(`${DefaultSettings.httpApiEndpoint}/quiz/member/response`, {
       quizName: this.currentQuizService.hashtag,
       nickname: this.attendeeService.getOwnNick(),
-      value: this._selectedAnswers,
-      responseTime: (new Date().getTime() - this._startResponseTime) / 1000
+      value: this._selectedAnswers
     }).subscribe(
       (data: IMessage) => {
         if (data.status !== 'STATUS:SUCCESSFUL') {

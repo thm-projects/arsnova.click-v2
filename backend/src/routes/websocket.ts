@@ -82,6 +82,12 @@ export class WebSocketRouter {
           ws.send(`Hello, you sent -> ${message}`);
         }
       });
+      ws.on('close', (code, message) => {
+        console.log('ws closed', code, message);
+      });
+      ws.on('error', (err) => {
+        console.log('ws error', err);
+      });
 
       ws.send(JSON.stringify({status: 'STATUS:SUCCESSFULL', step: 'CONNECTED', payload: {}}), (err) => {
         console.log('error while sending ws message', err);
