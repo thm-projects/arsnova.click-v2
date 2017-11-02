@@ -77,22 +77,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     this.connectionService.initConnection().then(() => {
       this.http.get(`${DefaultSettings.httpLibEndpoint}/mathjax/example/third`).subscribe(
-        (result: IMathjaxResponse) => {
-          this.mathjax = result.svg;
+        (result: string) => {
+          this.mathjax = result;
         });
-      this.connectionService.initConnection().then(() => {
-        this.connectionService.socket.subscribe(
-          (data: IMessage) => {
-            this.connectionService.websocketAvailable = true;
-          },
-          () => {
-            this.connectionService.websocketAvailable = false;
-          },
-          () => {
-            this.connectionService.websocketAvailable = false;
-          }
-        );
-      });
+      this.connectionService.socket.subscribe(
+        () => this.connectionService.websocketAvailable = true,
+        () => this.connectionService.websocketAvailable = false,
+        () => this.connectionService.websocketAvailable = false
+      );
     });
     this.cleanUpSessionStorage();
   }

@@ -9,6 +9,7 @@ import * as sha256 from 'crypto-js/sha256';
 import * as Hex from 'crypto-js/enc-hex';
 import * as CAS from 'cas';
 import * as crypto from 'crypto';
+import * as path from 'path';
 
 const casSettings = {base_url: 'https://cas.thm.de/cas', service: 'arsnova_click_v2'};
 const cas = new CAS(casSettings);
@@ -139,17 +140,8 @@ export class LibRouter {
   }
 
   public getThirdMathjaxExample(req: Request, res: Response, next: NextFunction): void {
-    mjAPI.typeset({
-      math: '\\begin{align} \\nabla \\times \\vec{\\mathbf{B}} -\\, \\frac1c\\, \\frac{\\partial\\vec{\\mathbf{E}}}{\\partial t} & = ' +
-            '\\frac{4\\pi}{c}\\vec{\\mathbf{j}} \\end{align}',
-      format: 'TeX', // 'inline-TeX', 'MathML'
-      html: true, //  svg:true, mml: true
-      css: true, //  svg:true, mml: true
-      svg: true
-    }, function (data) {
-      if (!data.errors) {
-        res.send(data);
-      }
+    fs.readFile(path.join(__dirname, '..', '..', 'images', 'mathjax', 'example_3.svg'), (err, data: Buffer) => {
+      res.send(JSON.stringify(data.toString('utf8')));
     });
   }
 

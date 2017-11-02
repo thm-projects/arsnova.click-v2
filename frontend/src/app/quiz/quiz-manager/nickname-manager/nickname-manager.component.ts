@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
-import {TranslateService} from '@ngx-translate/core';
-import {Headers, Http, RequestOptions, RequestOptionsArgs} from '@angular/http';
 import {DefaultSettings} from '../../../service/settings.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
   selector: 'app-nickname-manager',
@@ -26,7 +25,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   constructor(
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
-    private http: Http) {
+    private http: HttpClient) {
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemBlockRudeNicknames,
@@ -86,12 +85,10 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const headers = new Headers();
+    const headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
-    const options = new RequestOptions(<RequestOptionsArgs>headers);
-    this.http.get(`${this._apiEndPoint}`, options)
-        .map(res => res.json())
+    this.http.get(`${this._apiEndPoint}`, {headers})
         .subscribe(
           data => {
             this._availableNicks = data;

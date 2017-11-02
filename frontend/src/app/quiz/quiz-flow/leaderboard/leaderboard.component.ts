@@ -6,10 +6,10 @@ import {HeaderLabelService} from '../../../service/header-label.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DefaultSettings} from '../../../service/settings.service';
-import {Http} from '@angular/http';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {ConnectionService} from '../../../service/connection.service';
+import {HttpClient} from '@angular/common/http';
 
 export interface ILeaderBoardItem {
   name: string;
@@ -50,7 +50,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private currentQuizService: CurrentQuizService,
-    private http: Http,
+    private http: HttpClient,
     private router: Router,
     private connectionService: ConnectionService,
     public attendeeService: AttendeeService) {
@@ -100,7 +100,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       this._questionIndex = +params['questionIndex'];
       this._isGlobalRanking = isNaN(this._questionIndex);
       this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex}`)
-          .map(res => res.json())
           .subscribe(
             (data: IMessage) => {
               this._leaderBoard = data.payload;

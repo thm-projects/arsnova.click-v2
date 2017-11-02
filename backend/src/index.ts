@@ -19,8 +19,8 @@ import {ITheme} from './interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from './db/DbDao';
 
 debug('arsnova.click: ts-express:server');
-const cert: any = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
-const key: any = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
+const cert = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
+const key = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
 
 const port: string | number | boolean = normalizePort(process.env.PORT || 3000);
 App.set('port', port);
@@ -38,7 +38,7 @@ themes.forEach((theme: ITheme) => {
   languages.forEach((languageKey) => {
     pnFs.readFile(path.join(__dirname, `../images/favicons/favicon.svg`))
         .then(svg2png)
-        .then(buffer => fs.writeFile(path.join(__dirname, `../images/favicons/favicon_${theme.id}.png`), buffer))
+        .then(buffer => fs.writeFile(path.join(__dirname, `../images/favicons/favicon_${theme.id}.png`), buffer, (err => console.log(err))))
         .catch(e => console.error(e));
     params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);
   });
@@ -58,7 +58,7 @@ command.on('exit', () => {
       imageminPngquant({quality: '65-80'})
     ]
   }).then(files => {
-    files.forEach(file => fs.writeFileSync(path.join(__dirname, file.path), file.data));
+    files.forEach(file => fs.writeFile(path.join(__dirname, file.path), file.data, (err) => console.log(err)));
   });
 });
 
