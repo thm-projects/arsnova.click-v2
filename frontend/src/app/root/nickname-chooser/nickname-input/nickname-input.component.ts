@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
@@ -13,7 +13,7 @@ import {ConnectionService} from '../../../service/connection.service';
   templateUrl: './nickname-input.component.html',
   styleUrls: ['./nickname-input.component.scss']
 })
-export class NicknameInputComponent implements OnInit {
+export class NicknameInputComponent implements OnInit, OnDestroy {
   get failedLoginReason(): string {
     return this._failedLoginReason;
   }
@@ -30,6 +30,9 @@ export class NicknameInputComponent implements OnInit {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);
+    this.footerBarService.footerElemBack.onClickCallback = () => {
+      this.router.navigate(['/']);
+    };
   }
 
   joinQuiz(): void {
@@ -70,6 +73,10 @@ export class NicknameInputComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.footerBarService.footerElemBack.restoreClickCallback();
   }
 
 }

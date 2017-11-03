@@ -10,6 +10,7 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {AttendeeService, INickname} from '../../../service/attendee.service';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
+import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 export declare interface IMessage extends Object {
   status?: string;
@@ -47,6 +48,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   private _qrCodeContent = '';
   private _isOwner: boolean;
   private _hashtag: string;
+  private _nickToRemove: string;
+  private _kickMemberModalRef: NgbActiveModal;
 
   constructor(
     private footerBarService: FooterBarService,
@@ -58,7 +61,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
-    public attendeeService: AttendeeService) {
+    public attendeeService: AttendeeService,
+    private modalService: NgbModal) {
     if (activeQuestionGroupService.activeQuestionGroup) {
       footerBarService.replaceFooterElements([
         this.footerBarService.footerElemEditQuiz,
@@ -159,7 +163,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     }
   }
 
+  openKickMemberModal(content: string, name: string): void {
+    this._kickMemberModalRef = this.modalService.open(content);
+    this._nickToRemove = name;
+  }
+
   kickMember(name: string): void {
+    this._kickMemberModalRef.close();
     const quizName = this._hashtag;
     this.http.delete(`${DefaultSettings.httpApiEndpoint}/lobby/${quizName}/member/${name}`)
         .subscribe(

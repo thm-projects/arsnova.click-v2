@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe} from '@ngx-translate/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {HomeComponent} from './home/home.component';
 import {FooterModule} from '../footer/footer.module';
 import {SharedModule} from '../shared/shared.module';
@@ -111,7 +111,8 @@ const appRoutes: Routes = [
     UserService,
     CasService,
     FileUploadService,
-    SettingsService
+    SettingsService,
+    NgbActiveModal
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

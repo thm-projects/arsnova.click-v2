@@ -247,7 +247,6 @@ class ActiveQuizItem implements IActiveQuiz {
   public removeMember(name: string): boolean {
     const foundMembers: Array<INickname> = this.findMemberByName(name);
     if (foundMembers.length === 1) {
-      this.nicknames.splice(this.nicknames.indexOf(foundMembers[0]), 1);
       this.pushMessageToClients({
         status: 'STATUS:SUCCESSFUL',
         step: 'MEMBER:REMOVED',
@@ -255,6 +254,7 @@ class ActiveQuizItem implements IActiveQuiz {
           name: name
         }
       });
+      this.nicknames.splice(this.nicknames.indexOf(foundMembers[0]), 1);
       return true;
     }
     return false;

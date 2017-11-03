@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMessage} from '../../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
@@ -13,7 +13,7 @@ import {ConnectionService} from '../../../service/connection.service';
   templateUrl: './nickname-select.component.html',
   styleUrls: ['./nickname-select.component.scss']
 })
-export class NicknameSelectComponent implements OnInit {
+export class NicknameSelectComponent implements OnInit, OnDestroy {
   get nicks(): Array<string> {
     return this._nicks;
   }
@@ -30,6 +30,9 @@ export class NicknameSelectComponent implements OnInit {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);
+    this.footerBarService.footerElemBack.onClickCallback = () => {
+      this.router.navigate(['/']);
+    };
   }
 
   joinQuiz(name: string): void {
@@ -68,6 +71,10 @@ export class NicknameSelectComponent implements OnInit {
         }
       }
     );
+  }
+
+  ngOnDestroy() {
+    this.footerBarService.footerElemBack.restoreClickCallback();
   }
 
 }
