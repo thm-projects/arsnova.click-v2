@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {HttpClient} from '@angular/common/http';

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, CanLoad, Router} from '@angular/router';
 import {UserService} from 'app/service/user.service';
-import {DefaultSettings} from './settings.service';
+import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {ISessionConfiguration} from '../../lib/session_configuration/interfaces';

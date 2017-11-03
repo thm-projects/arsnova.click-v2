@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
-import {DefaultSettings} from './settings.service';
+import {DefaultSettings} from '../../lib/default.settings';
 import {ITheme} from '../../lib/common.interfaces';
 import {HttpClient} from '@angular/common/http';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';

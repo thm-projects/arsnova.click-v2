@@ -1,4 +1,4 @@
-import {DefaultSettings} from '../../app/service/settings.service';
+import {DefaultSettings} from '../default.settings';
 import {INickSessionConfiguration} from './interfaces';
 
 export class NickSessionConfiguration implements INickSessionConfiguration {

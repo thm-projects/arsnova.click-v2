@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {Observer} from 'rxjs/Observer';
 import {Subject} from 'rxjs/Subject';
-import {DefaultSettings} from './settings.service';
+import {DefaultSettings} from '../../lib/default.settings';
 
 @Injectable()
 export class WebsocketService {

@@ -5,7 +5,7 @@ import {MultipleChoiceQuestion} from './question_choice_multiple';
 import {RangedQuestion} from './question_ranged';
 import {SurveyQuestion} from './question_survey';
 import {FreeTextQuestion} from './question_freetext';
-import {DefaultSettings} from '../../app/service/settings.service';
+import {DefaultSettings} from '../default.settings';
 import {answerOptionReflection} from '../answeroptions/answeroption_reflection';
 import {ABCDSingleChoiceQuestion} from 'lib/questions/question_choice_single_abcd';
 

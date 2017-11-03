@@ -5,7 +5,7 @@ import {IQuestion} from '../../../../lib/questions/interfaces';
 import {AttendeeService, INickname} from '../../../service/attendee.service';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {ISessionConfiguration} from '../../../../lib/session_configuration/interfaces';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {ConnectionService} from '../../../service/connection.service';
 import {HeaderLabelService} from '../../../service/header-label.service';

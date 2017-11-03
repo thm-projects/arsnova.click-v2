@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMessage} from '../../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
@@ -18,7 +18,6 @@ export class NicknameSelectComponent implements OnInit {
     return this._nicks;
   }
 
-  private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
   private _nicks: Array<string> = [];
 
   constructor(
@@ -35,7 +34,7 @@ export class NicknameSelectComponent implements OnInit {
 
   joinQuiz(name: string): void {
     const promise = new Promise((resolve, reject) => {
-      this.http.put(`${this._httpApiEndpoint}/lobby/member/`, {
+      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/`, {
         quizName: this.currentQuiz.hashtag,
         nickname: name
       }).subscribe((data: IMessage) => {
@@ -61,7 +60,7 @@ export class NicknameSelectComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get(`${this._httpApiEndpoint}/quiz/member/${this.currentQuiz.hashtag}/available`).subscribe(
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/member/${this.currentQuiz.hashtag}/available`).subscribe(
       (data: IMessage) => {
         console.log(data);
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {

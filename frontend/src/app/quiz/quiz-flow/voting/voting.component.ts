@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {Countdown} from '../quiz-results/quiz-results.component';
 import {Router} from '@angular/router';

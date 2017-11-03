@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Component({
@@ -18,7 +18,6 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     return this._availableNicks;
   }
 
-  private _apiEndPoint = `${DefaultSettings.httpApiEndpoint}/availableNicks/all`;
   private _availableNicks = {};
   private _selectedCategory = '';
 
@@ -88,7 +87,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
-    this.http.get(`${this._apiEndPoint}`, {headers})
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/availableNicks/all`, {headers})
         .subscribe(
           data => {
             this._availableNicks = data;

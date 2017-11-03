@@ -4,7 +4,7 @@ import {HeaderLabelService} from '../../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {ThemesService} from '../../../service/themes.service';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {ConnectionService} from '../../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {AttendeeService, INickname} from '../../../service/attendee.service';
@@ -28,7 +28,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     return this._isOwner;
   }
 
-  private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
   private _isOwner: boolean;
   private _hashtag: string;
 
@@ -144,7 +143,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   kickMember(name: string): void {
     const quizName = this._hashtag;
-    this.http.delete(`${this._httpApiEndpoint}/lobby/${quizName}/member/${name}`)
+    this.http.delete(`${DefaultSettings.httpApiEndpoint}/lobby/${quizName}/member/${name}`)
         .subscribe(
           (data: IMessage) => {
             if (data.status !== 'STATUS:SUCCESSFUL') {
@@ -179,7 +178,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   addTestPlayer(name: string) {
-    this.http.put(`${this._httpApiEndpoint}/lobby/member`, {
+    this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member`, {
       quizName: this._hashtag,
       nickname: name
     }).subscribe(
@@ -197,7 +196,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     this.themesService.updateCurrentlyUsedTheme();
     this.connectionService.initConnection().then(() => {
       if (this._isOwner) {
-        this.http.put(`${this._httpApiEndpoint}/lobby`, {
+        this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
           quiz: this.activeQuestionGroupService.activeQuestionGroup.serialize()
         }).subscribe(
           () => {

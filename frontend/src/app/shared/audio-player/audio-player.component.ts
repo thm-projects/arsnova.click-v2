@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {DefaultSettings} from '../../service/settings.service';
+import {DefaultSettings} from '../../../lib/default.settings';
 
 @Component({
   selector: 'app-audio-player',

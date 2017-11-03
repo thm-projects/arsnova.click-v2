@@ -8,7 +8,7 @@ import {ThemesService} from '../../service/themes.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../../lib/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings, SettingsService} from '../../service/settings.service';
+import {SettingsService} from '../../service/settings.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
@@ -17,10 +17,10 @@ import {Subscription} from 'rxjs/Subscription';
 import {AttendeeService} from '../../service/attendee.service';
 import {ConnectionService} from '../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {IMathjaxResponse} from 'lib/common.interfaces';
 import {ABCDSingleChoiceQuestion} from '../../../lib/questions/question_choice_single_abcd';
 import {DefaultAnswerOption} from '../../../lib/answeroptions/answeroption_default';
 import {CasService} from '../../service/cas.service';
+import {DefaultSettings} from '../../../lib/default.settings';
 
 @Component({
   selector: 'app-home',
@@ -41,7 +41,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public enteredSessionName = '';
   public mathjax = '';
 
-  private _httpApiEndpoint = DefaultSettings.httpApiEndpoint;
   private _provideNickSelection = false;
   private _routerSubscription: Subscription;
   private _serverPassword = '';
@@ -159,7 +158,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         if ((JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(quizname) > -1) {
           this.canEditQuiz = true;
         } else {
-          this.http.get(`${this._httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe((value: IMessage) => {
+          this.http.get(`${DefaultSettings.httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe((value: IMessage) => {
             if (value.status === 'STATUS:SUCCESS') {
               switch (value.step) {
                 case 'QUIZ:EXISTS':
@@ -207,14 +206,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     const createQuizPromise = new Promise((resolve) => {
       if (this.isAddingDemoQuiz) {
-        const url = `${this._httpApiEndpoint}/demoquiz/generate/${this.i18nService.currentLanguage.toString()}`;
+        const url = `${DefaultSettings.httpApiEndpoint}/demoquiz/generate/${this.i18nService.currentLanguage.toString()}`;
         this.http.get(url).subscribe((value: any) => {
           questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
           this.enteredSessionName = questionGroup.hashtag;
           resolve();
         });
       } else if (this.isAddingABCDQuiz) {
-        const url = `${this._httpApiEndpoint}/abcdquiz/generate/${this.i18nService.currentLanguage.toString()}`;
+        const url = `${DefaultSettings.httpApiEndpoint}/abcdquiz/generate/${this.i18nService.currentLanguage.toString()}`;
         this.http.get(url).subscribe((value: any) => {
           questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
           const answerOptionList = (<Array<DefaultAnswerOption>>[]);
@@ -239,7 +238,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!window.localStorage.getItem('config.private_key')) {
         window.localStorage.setItem('config.private_key', this.activeQuestionGroupService.generatePrivateKey());
       }
-      this.http.post(`${this._httpApiEndpoint}/quiz/reserve`, {
+      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/reserve`, {
         quizName: this.enteredSessionName,
         privateKey: window.localStorage.getItem('config.private_key'),
         serverPassword: this._serverPassword

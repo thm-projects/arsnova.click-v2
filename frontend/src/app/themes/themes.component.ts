@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {ThemesService} from '../service/themes.service';
-import {DefaultSettings} from '../service/settings.service';
+import {DefaultSettings} from '../../lib/default.settings';
 
 @Component({
   selector: 'app-themes',

@@ -5,7 +5,7 @@ import {ActiveQuestionGroupService} from '../../service/active-question-group.se
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../service/settings.service';
+import {DefaultSettings} from '../../../lib/default.settings';
 import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 
 @Component({

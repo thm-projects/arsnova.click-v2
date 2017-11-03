@@ -5,7 +5,7 @@ import {AttendeeService} from 'app/service/attendee.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {ConnectionService} from '../../../service/connection.service';

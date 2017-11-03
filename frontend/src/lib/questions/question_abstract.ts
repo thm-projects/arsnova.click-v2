@@ -1,5 +1,5 @@
 import {DefaultAnswerOption} from '../answeroptions/answeroption_default';
-import {DefaultSettings} from '../../app/service/settings.service';
+import {DefaultSettings} from '../default.settings';
 import {answerOptionReflection} from '../answeroptions/answeroption_reflection';
 import {IAnswerOption} from '../answeroptions/interfaces';
 import {AbstractAnswerOption} from '../answeroptions/answeroption_abstract';

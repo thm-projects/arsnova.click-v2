@@ -1,4 +1,4 @@
-import {DefaultSettings} from '../../app/service/settings.service';
+import {DefaultSettings} from '../default.settings';
 import {IAnswerOption} from './interfaces';
 import {IValidationStackTrace} from '../questions/interfaces';
 

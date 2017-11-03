@@ -1,6 +1,6 @@
 import {DefaultAnswerOption} from './answeroption_default';
 import {FreeTextAnswerOption} from './answeroption_freetext';
-import {DefaultSettings} from '../../app/service/settings.service';
+import {DefaultSettings} from '../default.settings';
 
 export const answerOptionReflection = {
   DefaultAnswerOption: function ({answerText, isCorrect}) {

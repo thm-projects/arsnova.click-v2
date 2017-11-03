@@ -1,6 +1,7 @@
 import {inject, TestBed} from '@angular/core/testing';
 
-import {DefaultSettings} from './settings.service';
+import {DefaultSettings} from '../../lib/default.settings';
+import {SettingsService} from './settings.service';
 
 describe('DefaultSettings', () => {
   beforeEach(() => {

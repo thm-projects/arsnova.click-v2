@@ -2,15 +2,10 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {QuestionTextService} from '../../service/question-text.service';
 import {Subscription} from 'rxjs/Subscription';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../environments/environment';
-import {IAnswerOption} from '../../../lib/answeroptions/interfaces';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice} from '../../../lib/questions/interfaces';
-import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
-import {DefaultSettings} from '../../service/settings.service';
-import {HttpClient} from '@angular/common/http';
-import {IMathjaxResponse} from '../../../lib/common.interfaces';
-import {parseGithubFlavoredMarkdown} from '../../../lib/markdown/markdown';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-live-preview',

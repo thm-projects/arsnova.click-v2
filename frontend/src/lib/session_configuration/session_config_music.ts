@@ -1,4 +1,4 @@
-import {DefaultSettings} from '../../app/service/settings.service';
+import {DefaultSettings} from '../default.settings';
 import {IMusicSessionConfiguration, ITitleMusicSessionConfiguration, IVolumeMusicSessionConfiguration} from './interfaces';
 
 class VolumeConfiguration implements IVolumeMusicSessionConfiguration {

@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConnectionService} from '../../../service/connection.service';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {Subscription} from 'rxjs/Subscription';
 import {AttendeeService} from '../../../service/attendee.service';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {QuestionTextService} from '../../../service/question-text.service';

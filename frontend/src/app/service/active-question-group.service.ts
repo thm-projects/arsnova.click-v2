@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../lib/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
-import {DefaultSettings, SettingsService} from './settings.service';
+import {SettingsService} from './settings.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {QrCodeService} from 'app/service/qr-code.service';
+import {DefaultSettings} from '../../lib/default.settings';
 
 @Injectable()
 export class ActiveQuestionGroupService {

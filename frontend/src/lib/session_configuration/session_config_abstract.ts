@@ -17,7 +17,7 @@
 
 import {MusicSessionConfiguration} from './session_config_music';
 import {NickSessionConfiguration} from './session_config_nicks';
-import {DefaultSettings} from '../../app/service/settings.service';
+import {DefaultSettings} from '../default.settings';
 import {IMusicSessionConfiguration, INickSessionConfiguration, ISessionConfiguration} from './interfaces';
 
 export abstract class AbstractSessionConfiguration implements ISessionConfiguration {

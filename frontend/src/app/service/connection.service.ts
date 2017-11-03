@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {DefaultSettings} from './settings.service';
+import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
 import {Subject} from 'rxjs/Subject';
@@ -35,13 +35,11 @@ export class ConnectionService {
   private _serverAvailable: Boolean;
   private _websocketAvailable: Boolean = false;
   private _rtt = 0;
-  private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}/`;
   private _isWebSocketAuthorized = false;
 
   constructor(
     private websocketService: WebsocketService,
     private http: HttpClient) {
-    this.initConnection();
     this.initWebsocket();
   }
 
@@ -98,30 +96,34 @@ export class ConnectionService {
     this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER', window.localStorage.getItem('config.private_key'));
   }
 
-  initConnection(): Promise<boolean> {
-    const self = this;
-    return new Promise<boolean>((resolve, reject) => {
-      if (self.serverAvailable) {
+  initConnection(): Promise<any> {
+    return new Promise((resolve) => {
+      if (this.serverAvailable) {
         resolve();
+        return;
       }
-      self.http.get(`${self._httpApiEndpoint}`).subscribe(
-        () => {
-          self.serverAvailable = true;
-          resolve();
-        },
-        () => {
-          self.serverAvailable = false;
-          self._websocketAvailable = false;
-          //reject();
-        }
-      );
+      new Promise(resolve2 => {
+        this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
+          (data) => {
+            this.serverAvailable = true;
+            resolve2(data);
+          },
+          () => {
+            this.serverAvailable = false;
+            this._websocketAvailable = false;
+            resolve2();
+          }
+        );
+      }).then((data) => {
+        resolve(data);
+      });
     });
   }
 
   calculateRTT() {
     const self = this;
     const start_time = new Date().getTime();
-    self.http.get(`${self._httpApiEndpoint}`).subscribe(
+    self.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
       () => {
         self.serverAvailable = true;
         self._rtt = new Date().getTime() - start_time;

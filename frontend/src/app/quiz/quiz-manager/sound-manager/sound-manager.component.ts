@@ -3,7 +3,7 @@ import {FooterBarService} from 'app/service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {IMusicSessionConfiguration} from '../../../../lib/session_configuration/interfaces';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 
 export declare interface ISong {
   id: string;

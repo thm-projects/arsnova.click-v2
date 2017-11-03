@@ -4,7 +4,7 @@ import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {IMessage} from '../../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
-import {DefaultSettings} from '../../../service/settings.service';
+import {DefaultSettings} from '../../../../lib/default.settings';
 import {AttendeeService} from '../../../service/attendee.service';
 import {ConnectionService} from '../../../service/connection.service';
 
@@ -18,7 +18,6 @@ export class NicknameInputComponent implements OnInit {
     return this._failedLoginReason;
   }
 
-  private _httpApiEndpoint = `${DefaultSettings.httpApiEndpoint}`;
   private _failedLoginReason = '';
 
   constructor(
@@ -36,7 +35,7 @@ export class NicknameInputComponent implements OnInit {
   joinQuiz(): void {
     const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
     const promise = new Promise((resolve, reject) => {
-      this.http.put(`${this._httpApiEndpoint}/lobby/member/`, {
+      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/`, {
         quizName: this.currentQuiz.hashtag,
         nickname: nickname
       }).subscribe((data: IMessage) => {
