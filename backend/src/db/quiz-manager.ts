@@ -385,7 +385,7 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
 
 const activeQuizzes: Object = {};
 DbDao.getState()[DatabaseTypes.quiz].forEach(value => {
-  return activeQuizzes[value.quizName] = new ActiveQuizItemPlaceholder(value.quizName);
+  return activeQuizzes[value.quizName.toLowerCase()] = new ActiveQuizItemPlaceholder(value.quizName);
 });
 
 export default class QuizManagerDAO {
@@ -409,7 +409,10 @@ export default class QuizManagerDAO {
 
   public static getRenameRecommendations(quizName: string): Array<string> {
     const result = [];
-    const count = Object.keys(activeQuizzes).filter(activeQuizName => activeQuizName.startsWith(quizName)).length;
+    const count = Object.keys(activeQuizzes).filter((value: string) => {
+      const name: string = QuizManagerDAO.normalizeQuizName(value);
+      return name.startsWith(quizName.toLowerCase());
+    }).length;
     const date = new Date();
     const dateYearPart = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}`;
     const dateFormatted = `${dateYearPart}-${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;

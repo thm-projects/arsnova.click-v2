@@ -1,18 +1,30 @@
-import {NextFunction, Request, Response, Router} from 'express';
+import {Request, Response, Router} from 'express';
 import QuizManager, {default as QuizManagerDAO} from '../db/quiz-manager';
 import * as fs from 'fs';
 import * as path from 'path';
-import {IQuestionGroup} from '../interfaces/questions/interfaces';
+import {IQuestion, IQuestionGroup} from '../interfaces/questions/interfaces';
 import {ISessionConfiguration} from '../interfaces/session_configuration/interfaces';
 import availableNicks from '../nicknames/availableNicks';
 import {themes} from '../themes/availableThemes';
-import {IActiveQuiz, INickname, IQuizResponse} from '../interfaces/common.interfaces';
+import {IActiveQuiz, INickname} from '../interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from '../db/DbDao';
 import {ExcelWorkbook} from '../export/excel-workbook';
+import {MatchTextToAssetsDb} from '../cache/assets';
+import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
 
 const privateServerConfig = require('../../settings.json');
 privateServerConfig.public.limitActiveQuizzes = parseFloat(privateServerConfig.public.limitActiveQuizzes);
 const publicServerConfig = privateServerConfig.public;
+
+declare global {
+  interface UploadRequest extends Request {
+    busboy: any;
+  }
+
+  interface I18nResponse extends Response {
+    __mf: any;
+  }
+}
 
 export class ApiRouter {
   get router(): Router {
@@ -29,17 +41,13 @@ export class ApiRouter {
     this.init();
   }
 
-  /**
-   * GET all Data.
-   * TODO: Return REST Spec here
-   */
-  public getAll(req: Request, res: Response, next: NextFunction): void {
+  public getAll(req: Request, res: Response): void {
     res.send({
       serverConfig: publicServerConfig
     });
   }
 
-  public getThemes(req: Request, res: Response, next: NextFunction): void {
+  public getThemes(req: Request, res: Response): void {
     res.send({
       status: 'STATUS:SUCCESSFULL',
       step: 'GET_THEMES',
@@ -47,16 +55,16 @@ export class ApiRouter {
     });
   }
 
-  public getFavicon(req: Request, res: Response, next: NextFunction): void {
+  public getFavicon(req: Request, res: Response): void {
     const imagePath = req.params.themeId ? `favicons/${req.params.themeId}` : `arsnova_click_small`;
     res.send(fs.readFileSync(path.join(__dirname, `../../images/${imagePath}.png`)));
   }
 
-  public getTheme(req: Request, res: Response, next: NextFunction): void {
+  public getTheme(req: Request, res: Response): void {
     res.send(fs.readFileSync(path.join(__dirname, `../../images/themes/${req.params.themeId}_${req.params.languageId}.png`)));
   }
 
-  public getIsAvailableQuiz(req: Request, res: Response, next: NextFunction): void {
+  public getIsAvailableQuiz(req: Request, res: Response): void {
     const quizzes: Array<string> = QuizManager.getAllActiveQuizNames();
     const quizExists: boolean = quizzes.indexOf(req.params.quizName) > -1;
     const payload: { available?: boolean, provideNickSelection?: boolean, authorizeViaCas?: boolean } = {};
@@ -80,7 +88,7 @@ export class ApiRouter {
     res.send(result);
   }
 
-  public generateDemoQuiz(req: Request, res: Response, next: NextFunction): void {
+  public generateDemoQuiz(req: Request, res: Response): void {
     try {
       const demoQuizPath = path.join(__dirname, `../../predefined_quizzes/demo_quiz/${req.params.languageId}.demo_quiz.json`);
       const result: IQuestionGroup = JSON.parse(fs.readFileSync(demoQuizPath).toString());
@@ -93,7 +101,7 @@ export class ApiRouter {
     }
   }
 
-  public generateAbcdQuiz(req: Request, res: Response, next: NextFunction): void {
+  public generateAbcdQuiz(req: Request, res: Response): void {
     try {
       const abcdQuizPath = path.join(__dirname, `../../predefined_quizzes/abcd_quiz/${req.params.languageId}.abcd_quiz.json`);
       const result: IQuestionGroup = JSON.parse(fs.readFileSync(abcdQuizPath).toString());
@@ -106,11 +114,11 @@ export class ApiRouter {
     }
   }
 
-  public getAllAvailableNicks(req: Request, res: Response, next: NextFunction): void {
+  public getAllAvailableNicks(req: Request, res: Response): void {
     res.send(availableNicks);
   }
 
-  public putOpenLobby(req: Request, res: Response, next: NextFunction): void {
+  public putOpenLobby(req: Request, res: Response): void {
     QuizManager.initActiveQuiz(req.body.quiz);
     res.send({
       status: 'STATUS:SUCCESSFUL',
@@ -119,7 +127,7 @@ export class ApiRouter {
     });
   }
 
-  public putCloseLobby(req: Request, res: Response, next: NextFunction): void {
+  public putCloseLobby(req: Request, res: Response): void {
     const result: boolean = QuizManager.removeActiveQuiz(req.body.quizName);
     const response: Object = {status: `STATUS:${result ? 'SUCCESSFUL' : 'FAILED'}`};
     if (result) {
@@ -131,7 +139,7 @@ export class ApiRouter {
     res.send(response);
   }
 
-  public addMember(req: Request, res: Response, next: NextFunction): void {
+  public addMember(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     try {
       const webSocketAuthorization: number = Math.random();
@@ -157,7 +165,7 @@ export class ApiRouter {
     }
   }
 
-  public addReadingConfirmation(req: Request, res: Response, next: NextFunction): void {
+  public addReadingConfirmation(req: Request, res: Response): void {
     const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
     activeQuiz.setReadingConfirmation(req.body.nickname, req.body.questionIndex);
     res.send({
@@ -167,7 +175,7 @@ export class ApiRouter {
     });
   }
 
-  public addConfidenceValue(req: Request, res: Response, next: NextFunction): void {
+  public addConfidenceValue(req: Request, res: Response): void {
     const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
     activeQuiz.setConfidenceValue(req.body.nickname, req.body.questionIndex, req.body.confidenceValue);
     res.send({
@@ -177,7 +185,7 @@ export class ApiRouter {
     });
   }
 
-  public deleteMember(req: Request, res: Response, next: NextFunction): void {
+  public deleteMember(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const result: boolean = activeQuiz.removeMember(req.params.nickname);
     const response: Object = {status: `STATUS:${result ? 'SUCCESSFUL' : 'FAILED'}`};
@@ -190,7 +198,7 @@ export class ApiRouter {
     res.send(response);
   }
 
-  public getAllMembers(req: Request, res: Response, next: NextFunction): void {
+  public getAllMembers(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     res.send({
       status: 'STATUS:SUCCESSFUL',
@@ -203,40 +211,32 @@ export class ApiRouter {
     });
   }
 
-  public uploadQuiz(req: Request, res: Response, next: NextFunction): void {
+  public uploadQuiz(req: UploadRequest, res: Response): void {
     const duplicateQuizzes = [];
     const quizData = [];
     let privateKey = '';
-    // noinspection TypeScriptUnresolvedVariable
     if (req.busboy) {
       const promise = new Promise((resolve) => {
         req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
           if (fieldname === 'uploadFiles[]') {
             let quiz = '';
             file.on('data', (buffer) => {
-              console.log(buffer.toString('utf8'));
-              const part = buffer.toString('utf8');
-              quiz += part;
-              console.log('stream data ' + part);
+              quiz += buffer.toString('utf8');
             });
             file.on('end', () => {
-              console.log('final output ' + quiz);
               quizData.push({
                 fileName: filename,
                 quiz: JSON.parse(quiz)
               });
             });
           }
-          console.log('file', fieldname, file, filename, encoding, mimetype);
         });
-        req.busboy.on('field', function(key, value, keyTruncated, valueTruncated) {
+        req.busboy.on('field', function(key, value) {
           if (key === 'privateKey') {
             privateKey = value;
           }
         });
         req.busboy.on('finish', function() {
-          console.log('form parsing finished');
-          console.log('result finish', quizData, privateKey);
           resolve();
         });
         req.pipe(req.busboy);
@@ -252,8 +252,15 @@ export class ApiRouter {
             });
           } else {
             DbDao.create(DatabaseTypes.quiz, {quizName: data.quiz.hashtag, privateKey});
+            QuizManagerDAO.initInactiveQuiz(data.quiz.hashtag, privateKey);
             if (publicServerConfig.cacheQuizAssets) {
-              // TODO: Cache assets if the server setting is enabled
+              const quiz: IQuestionGroup = data.quiz;
+              quiz.questionList.forEach((question: IQuestion) => {
+                MatchTextToAssetsDb(question.questionText);
+                question.answerOptionList.forEach((answerOption: IAnswerOption) => {
+                  MatchTextToAssetsDb(answerOption.answerText);
+                });
+              });
             }
           }
         });
@@ -264,7 +271,7 @@ export class ApiRouter {
     }
   }
 
-  public startQuiz(req: Request, res: Response, next: NextFunction): void {
+  public startQuiz(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     if (activeQuiz.currentStartTimestamp) {
       res.send({
@@ -295,7 +302,7 @@ export class ApiRouter {
     }
   }
 
-  public showReadingConfirmation(req: Request, res: Response, next: NextFunction): void {
+  public showReadingConfirmation(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     activeQuiz.nextQuestion();
     activeQuiz.requestReadingConfirmation();
@@ -306,7 +313,7 @@ export class ApiRouter {
     });
   }
 
-  public getQuizStartTime(req: Request, res: Response, next: NextFunction): void {
+  public getQuizStartTime(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     res.send({
       status: 'STATUS:SUCCESSFUL',
@@ -315,7 +322,7 @@ export class ApiRouter {
     });
   }
 
-  public getQuizSettings(req: Request, res: Response, next: NextFunction): void {
+  public getQuizSettings(req: Request, res: Response): void {
     if (!req.body.quizName || !req.body.privateKey) {
       res.send({
         status: 'STATUS:FAILED',
@@ -340,7 +347,7 @@ export class ApiRouter {
     });
   }
 
-  public updateQuizSettings(req: Request, res: Response, next: NextFunction): void {
+  public updateQuizSettings(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     activeQuiz.updateQuizSettings(req.body.target, req.body.state);
     res.send({
@@ -350,7 +357,7 @@ export class ApiRouter {
     });
   }
 
-  public reserveQuiz(req: Request, res: Response, next: NextFunction): void {
+  public reserveQuiz(req: Request, res: Response): void {
     if (!req.body.quizName || !req.body.privateKey) {
       res.send({
         status: 'STATUS:FAILED',
@@ -396,7 +403,7 @@ export class ApiRouter {
     });
   }
 
-  public deleteQuiz(req: Request, res: Response, next: NextFunction): void {
+  public deleteQuiz(req: Request, res: Response): void {
     if (!req.body.quizName || !req.body.privateKey) {
       res.send({
         status: 'STATUS:FAILED',
@@ -422,7 +429,7 @@ export class ApiRouter {
     }
   }
 
-  public deleteActiveQuiz(req: Request, res: Response, next: NextFunction): void {
+  public deleteActiveQuiz(req: Request, res: Response): void {
     if (!req.body.quizName || !req.body.privateKey) {
       res.send({
         status: 'STATUS:FAILED',
@@ -450,7 +457,7 @@ export class ApiRouter {
     }
   }
 
-  public resetQuiz(req: Request, res: Response, next: NextFunction): void {
+  public resetQuiz(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     activeQuiz.reset();
     res.send({
@@ -460,7 +467,7 @@ export class ApiRouter {
     });
   }
 
-  public getRemainingNicks(req: Request, res: Response, next: NextFunction): void {
+  public getRemainingNicks(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const names: Array<String> = activeQuiz.originalObject.sessionConfig.nicks.selectedNicks.filter((nick) => {
       return activeQuiz.nicknames.filter(value => value.name === nick).length === 0;
@@ -472,7 +479,7 @@ export class ApiRouter {
     });
   }
 
-  public addMemberResponse(req: Request, res: Response, next: NextFunction): void {
+  public addMemberResponse(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     if (activeQuiz.nicknames.filter(value => {
         return value.name === req.body.nickname;
@@ -503,7 +510,7 @@ export class ApiRouter {
     });
   }
 
-  public setMemberConfidenceRate(req: Request, res: Response, next: NextFunction): void {
+  public setMemberConfidenceRate(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     activeQuiz.nicknames.filter((member) => {
       return member.name === req.body.nickname;
@@ -515,7 +522,7 @@ export class ApiRouter {
     });
   }
 
-  public setMemberReadingConfirmation(req: Request, res: Response, next: NextFunction): void {
+  public setMemberReadingConfirmation(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     activeQuiz.nicknames.filter((member) => {
       return member.name === req.body.nickname;
@@ -527,7 +534,7 @@ export class ApiRouter {
     });
   }
 
-  public getExportFile(req: Request, res: Response, next: NextFunction): void {
+  public getExportFile(req: Request, res: I18nResponse): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const dbResult: Object = DbDao.read(DatabaseTypes.quiz, {quizName: req.params.quizName, privateKey: req.params.privateKey});
 
@@ -568,7 +575,7 @@ export class ApiRouter {
     });
   }
 
-  public getFileByName(req: Request, res: Response, next: NextFunction): void {
+  public getFileByName(req: Request, res: Response): void {
     const pathToFiles: string = path.join(__dirname, `../../${req.params.directory}/${req.params.subdirectory}`);
     if (req.params.fileName.indexOf('Random') > -1) {
       this.randomFile(pathToFiles).then((file: string) => {

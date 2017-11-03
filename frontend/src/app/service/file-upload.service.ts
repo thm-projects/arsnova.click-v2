@@ -44,9 +44,9 @@ export class FileUploadService {
             if (data.payload.duplicateQuizzes.length) {
               this._duplicateQuizzes = data.payload.duplicateQuizzes;
               data.payload.duplicateQuizzes.forEach((duplicateQuiz: IDuplicateQuiz) => {
-                if (formData.has(duplicateQuiz.fileName)) {
-                  this._renameFilesQueue.append('uploadFiles[]', <File>formData.get(duplicateQuiz.fileName), duplicateQuiz.fileName);
-                }
+                this._renameFilesQueue.append('uploadFiles[]', <File>formData.getAll('uploadFiles[]').filter((file) => {
+                  return (<File>file).name === duplicateQuiz.fileName;
+                })[0], duplicateQuiz.fileName);
               });
               this.router.navigate(['/quiz', 'rename']);
             } else {
@@ -61,14 +61,11 @@ export class FileUploadService {
                   const parsedFile = JSON.parse(reader.result);
                   this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[parsedFile.TYPE](parsedFile);
                   this.activeQuestionGroupService.persist();
-                  if (index === allUploadedFiles.length - 1) {
-                    this.modalService.open(AvailableQuizzesComponent);
-                  }
+                  this.router.navigate(['/']);
                 };
                 reader.readAsText(file);
               });
             }
-            console.log(data);
           },
           error => {
             console.log(error);

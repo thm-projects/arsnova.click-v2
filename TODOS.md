@@ -3,14 +3,10 @@
 - [ ] CAS Login Support
 
 ###### Medium Priority Features:
-- [ ] Mathjax & Markdown in Voting View
-- [ ] Display of question content in the Live Results
-- [ ] Support renaming of duplicate quizzes on upload
 
 ###### Low Priority Features:
 - [ ] Styling of the online indicator image
 - [ ] Theming of Dialog Modals
-- [ ] Support assets caching when importing quizzes
 
 ###### Done:
 - [x] Product Tour
@@ -32,6 +28,10 @@
 - [x] Client: Translation (DE, FR, ES, IT)
 - [x] Server: Translation for Excel export files (EN, DE, FR, ES, IT)
 - [x] Server: Caching of previously rendered mathjax
+- [x] Mathjax & Markdown in Voting View
+- [x] Display of question content in the Live Results
+- [x] Support renaming of duplicate quizzes on upload
+- [x] Support assets caching when importing quizzes
 
 #### Known issues
 - [x] Add translation files for the export files to the messageformat instance
@@ -39,6 +39,8 @@
 - [ ] Size of QR Code in the Quiz Lobby too small
 - [ ] Adjust some of the introjs initializations
 - [ ] Add missing translation keys
+- [ ] Fix question handling of quizzes with multiple questions
+- [ ] Fix repeated firing reading confirmation request
 
 #### Refactoring required
 - [x] MathJax / Markdown parsing in the client (use svg only)

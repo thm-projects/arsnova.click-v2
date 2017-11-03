@@ -631,6 +631,10 @@
         "quite_sure": "Quite sure",
         "very_sure": "Truly convinced!"
       }
+    },
+    "quiz_rename": {
+      "title": "Choose an alternative",
+      "rename": "The Quiz {NAME} is already taken"
     }
   },
   "plugins": {

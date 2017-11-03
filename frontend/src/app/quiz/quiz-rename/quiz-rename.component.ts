@@ -21,17 +21,15 @@ export class QuizRenameComponent implements OnInit, OnDestroy {
 
   sendRecommendation(duplicateQuiz: IDuplicateQuiz, renameRecommendation: string, index: number) {
     const reader = new FileReader();
-    const formData = new FormData();
-    const file: File = <File>this.fileUploadService.renameFilesQueue.get(duplicateQuiz.fileName);
-    console.log(this.fileUploadService.renameFilesQueue);
+    const file: File = <File>this.fileUploadService.renameFilesQueue.getAll('uploadFiles[]').filter((uploadedFile) => {
+      return (<File>uploadedFile).name === duplicateQuiz.fileName;
+    })[0];
     reader.addEventListener('load', () => {
       const jsonData = JSON.parse(reader.result);
       const quizData: IQuestionGroup = questionGroupReflection[jsonData.TYPE](jsonData);
       quizData.hashtag = renameRecommendation;
       const blob = new Blob([JSON.stringify(quizData.serialize())], {type: 'application/json'});
-      formData.append('uploadFiles[]', blob, duplicateQuiz.fileName);
-      this.fileUploadService.renameFilesQueue.set(duplicateQuiz.fileName, formData.get('uploadFile'));
-      console.log(this.fileUploadService.renameFilesQueue);
+      this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, duplicateQuiz.fileName);
       this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
     });
     reader.readAsText(file);

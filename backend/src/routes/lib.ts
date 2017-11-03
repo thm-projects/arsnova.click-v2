@@ -1,15 +1,13 @@
 import {NextFunction, Request, Response, Router} from 'express';
 import * as mjAPI from 'mathjax-node';
-import * as request from 'request';
 import {IQuestion, IQuestionGroup} from '../interfaces/questions/interfaces';
 import * as fs from 'fs';
 import {DatabaseTypes, DbDao} from '../db/DbDao';
 import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
-import * as sha256 from 'crypto-js/sha256';
-import * as Hex from 'crypto-js/enc-hex';
 import * as CAS from 'cas';
 import * as crypto from 'crypto';
 import * as path from 'path';
+import {MatchTextToAssetsDb} from '../cache/assets';
 
 const casSettings = {base_url: 'https://cas.thm.de/cas', service: 'arsnova_click_v2'};
 const cas = new CAS(casSettings);
@@ -59,17 +57,15 @@ export class LibRouter {
     });
   }
 
-  /**
-   * GET all Data.
-   * TODO: Return REST Spec here
-   */
   public getAll(req: Request, res: Response, next: NextFunction): void {
     res.send({
       paths: [
         {name: '/mathjax', description: 'Returns the rendered output of a given mathjax string'},
         {name: '/mathjax/example/first', description: 'Returns the rendered output of an example mathjax MathMl string as svg'},
-        {name: '/mathjax/example/second', description: 'Returns the rendered output of an example mathjax TeX string as mml'},
-        {name: '/mathjax/example/third', description: 'Returns the rendered output of an example mathjax TeX string as html and css'},
+        {name: '/mathjax/example/second', description: 'Returns the rendered output of an example mathjax TeX string as svg'},
+        {name: '/mathjax/example/third', description: 'Returns the rendered output of an example mathjax TeX string as svg'},
+        {name: '/cache/quiz/assets', description: 'Parses the quiz content and caches all external resources'},
+        {name: '/authorize', description: 'Handles authentication via CAS'}
       ]
     });
   }
@@ -184,9 +180,9 @@ export class LibRouter {
     }
     const quiz: IQuestionGroup = req.body.quiz;
     quiz.questionList.forEach((question: IQuestion) => {
-      this.matchTextToAssetsDb(question.questionText);
+      MatchTextToAssetsDb(question.questionText);
       question.answerOptionList.forEach((answerOption: IAnswerOption) => {
-        this.matchTextToAssetsDb(answerOption.answerText);
+        MatchTextToAssetsDb(answerOption.answerText);
       });
     });
     res.send({
@@ -194,37 +190,6 @@ export class LibRouter {
       step: 'CACHE:QUIZ_ASSETS',
       payload: {}
     });
-  }
-
-  private matchTextToAssetsDb(value: string) {
-    const acceptedFileTypes = [/image\/*/];
-    const matchedValue = value.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
-    if (matchedValue) {
-      matchedValue.forEach((matchedValueElement: string) => {
-        const digest = Hex.stringify(sha256(matchedValueElement));
-        const path = `${__dirname}/../../cache/${digest}`;
-        if (fs.existsSync(path)) {
-          return;
-        }
-        if (!matchedValueElement.startsWith('http')) {
-          matchedValueElement = `http://${matchedValueElement}`;
-        }
-        const req = request(matchedValueElement);
-        req.on('response', (response) => {
-          const contentType = response.headers['content-type'];
-          const hasContentTypeMatched = acceptedFileTypes.some((contentTypeRegex) => contentType.match(contentTypeRegex));
-          if (!hasContentTypeMatched) {
-            req.abort();
-            fs.unlink(path);
-          } else {
-            DbDao.create(DatabaseTypes.assets, {url: matchedValueElement, digest, path}, digest);
-          }
-        }).on('error', (err) => {
-          console.log(err);
-          req.abort();
-        }).pipe(fs.createWriteStream(path));
-      });
-    }
   }
 
   private randomValueHex (len: number = 40) {
