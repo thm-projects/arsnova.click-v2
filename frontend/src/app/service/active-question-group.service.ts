@@ -6,7 +6,6 @@ import {SettingsService} from './settings.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
-import {QrCodeService} from 'app/service/qr-code.service';
 import {DefaultSettings} from '../../lib/default.settings';
 
 @Injectable()
@@ -28,11 +27,11 @@ export class ActiveQuestionGroupService {
   private _cacheAssets = false;
 
   constructor(
-    private qrCodeService: QrCodeService,
     private translateService: TranslateService,
     private http: HttpClient,
     private footerBarService: FooterBarService,
-    private settingsService: SettingsService) {
+    private settingsService: SettingsService
+  ) {
     if (window.sessionStorage.getItem('questionGroup')) {
       const serializedObject = window.sessionStorage.getItem('questionGroup');
       const parsedObject = JSON.parse(serializedObject);
@@ -116,7 +115,9 @@ export class ActiveQuestionGroupService {
         this.footerBarService.footerElemSaveAssets.isActive = true;
       }
       this.footerBarService.footerElemQRCode.onClickCallback = () => {
-        this.qrCodeService.toggleQrCode(this.activeQuestionGroup.hashtag);
+        const classList = document.getElementsByClassName('qr-code-element').item(0).classList;
+        classList.toggle('d-none');
+        classList.toggle('d-flex');
       };
       this.footerBarService.footerElemEnableCasLogin.onClickCallback = () => {
         const newState = !this.footerBarService.footerElemEnableCasLogin.isActive;

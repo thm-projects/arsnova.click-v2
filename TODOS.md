@@ -37,7 +37,7 @@
 #### Known issues
 - [x] Add translation files for the export files to the messageformat instance
 - [x] Order of mathjax output in answeroption live preview currently depends on async rendering race conditions
-- [ ] Size of QR Code in the Quiz Lobby too small
+- [x] Size of QR Code in the Quiz Lobby too small
 - [ ] Adjust some of the introjs initializations
 - [ ] Add missing translation keys
 - [ ] Fix question handling of quizzes with multiple questions

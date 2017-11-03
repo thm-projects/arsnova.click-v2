@@ -11,7 +11,6 @@ import {AttendeeService, INickname} from '../../../service/attendee.service';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
 
-
 export declare interface IMessage extends Object {
   status?: string;
   payload?: any;
@@ -28,6 +27,24 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     return this._isOwner;
   }
 
+  get qrCodeContent(): string {
+    return this._qrCodeContent;
+  }
+
+  set qrCodeContent(value: string) {
+    this._qrCodeContent = value;
+  }
+
+  get showQrCode(): boolean {
+    return this._showQrCode;
+  }
+
+  set showQrCode(value: boolean) {
+    this._showQrCode = value;
+  }
+
+  private _showQrCode = false;
+  private _qrCodeContent = '';
   private _isOwner: boolean;
   private _hashtag: string;
 
@@ -58,6 +75,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       ]);
       this._isOwner = true;
       this._hashtag = activeQuestionGroupService.activeQuestionGroup.hashtag;
+      this.qrCodeContent = `${document.location.origin}/quiz/${encodeURIComponent(this._hashtag.toLowerCase())}`;
       this.footerBarService.footerElemStartQuiz.linkTarget = (self) => {
         return self.isActive ? ['/quiz', 'flow', 'results'] : null;
       };

@@ -12,6 +12,7 @@ import {AttendeeService} from '../../service/attendee.service';
 import {QuestionDetailsComponent} from './quiz-results/question-details/question-details.component';
 import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
+import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
 
 const quizFlowRoutes: Routes = [
   {
@@ -66,7 +67,8 @@ const quizFlowRoutes: Routes = [
     SharedModule,
     ThemesModule,
     RouterModule.forChild(quizFlowRoutes),
-    QuizResultsModule
+    QuizResultsModule,
+    NgxQRCodeModule
   ],
   declarations: [
     QuizLobbyComponent,
@@ -76,7 +78,9 @@ const quizFlowRoutes: Routes = [
     ReadingConfirmationComponent,
     ConfidenceRateComponent
   ],
-  providers: [AttendeeService]
+  providers: [
+    AttendeeService
+  ]
 })
 export class QuizFlowModule {
 }

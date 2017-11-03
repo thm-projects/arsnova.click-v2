@@ -19,8 +19,6 @@ import {CurrentQuizService} from '../service/current-quiz.service';
 import {NicknameChooserModule} from './nickname-chooser/nickname-chooser.module';
 import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
 import {I18nService} from '../service/i18n.service';
-import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
-import {QrCodeService} from '../service/qr-code.service';
 import {SoundService} from '../service/sound.service';
 import {BrowserModule} from '@angular/platform-browser';
 import {CommonModule} from '@angular/common';
@@ -99,8 +97,7 @@ const appRoutes: Routes = [
     QuizModule,
     NicknameChooserModule,
     ModalsModule,
-    NgbModule.forRoot(),
-    NgxQRCodeModule
+    NgbModule.forRoot()
   ],
   providers: [
     I18nService,
@@ -109,7 +106,6 @@ const appRoutes: Routes = [
     ConnectionService,
     WebsocketService,
     CurrentQuizService,
-    QrCodeService,
     SoundService,
     TranslateModule,
     UserService,

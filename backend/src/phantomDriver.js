@@ -38,8 +38,8 @@ function nextPage() {
   const host = /localhost/.test(url) ? 'localhost' : /staging.arsnova.click/.test(url) ? 'staging.arsnova.click' : /arsnova.click/.test(url)
     ? 'arsnova.click' : '';
   phantom.addCookie({
-    'name': 'cookieconsent_dismissed',
-    'value': 'yes',
+    'name': 'cookieconsent_status',
+    'value': 'dismiss',
     'domain': host,
     'path': '/',
     'expires': (new Date()).getTime() + (1000 * 60 * 60)   /* <-- expires in 1 hour */

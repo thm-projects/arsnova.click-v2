@@ -7,3 +7,10 @@
   <p class="mb-0"
      [innerText]="elem.name"></p>
 </div>
+
+<ngx-qrcode [qrc-value]="qrCodeContent"
+            qrc-class="qrCodeContent"
+            qrc-errorCorrectionLevel="L"
+            qrc-element-type="img"
+            [class]="(!showQrCode ? 'd-none' : 'd-flex') + ' justify-content-center align-items-center qr-code-element'">
+</ngx-qrcode>

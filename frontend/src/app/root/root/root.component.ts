@@ -2,7 +2,6 @@ import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ThemesService} from '../../service/themes.service';
-import {QrCodeService} from '../../service/qr-code.service';
 import {TranslateService} from '@ngx-translate/core';
 import {NavigationEnd, Router} from '@angular/router';
 import * as IntroJs from 'intro.js';
@@ -30,24 +29,6 @@ export class RootComponent implements OnInit, AfterViewInit {
   get loadCookieConsent(): boolean {
     return this._loadCookieConsent;
   }
-  get showQrCode(): boolean {
-    return this._showQrCode;
-  }
-
-  set showQrCode(value: boolean) {
-    this._showQrCode = value;
-  }
-
-  get qrCodeContent(): string {
-    return this._qrCodeContent;
-  }
-
-  set qrCodeContent(value: string) {
-    this._qrCodeContent = value;
-  }
-
-  private _showQrCode = false;
-  private _qrCodeContent = '';
   private _loadCookieConsent = false;
 
   constructor(
@@ -56,13 +37,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     private headerLabelService: HeaderLabelService,
     private themesService: ThemesService,
     private translateService: TranslateService,
-    private router: Router,
-    private qrCodeService: QrCodeService) {
+    private router: Router) {
     themesService.updateCurrentlyUsedTheme();
-    this.qrCodeContent = qrCodeService.qrCodeContent;
-    qrCodeService.getSubscription().subscribe(value => {
-      this.showQrCode = value;
-    });
   }
 
   getFooterBarElements() {

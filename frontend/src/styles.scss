@@ -15,6 +15,13 @@ body {
   outline: none;
 }
 
+.qrCodeContent {
+  img {
+    height: 50vh !important;
+    width: 50vh !important;
+  }
+}
+
 #theme-wrapper {
   z-index: 1000;
 }
