@@ -7,6 +7,7 @@
 ###### Low Priority Features:
 - [ ] Styling of the online indicator image
 - [ ] Theming of Dialog Modals
+- [ ] Server: Image minification in the startup gulp process
 
 ###### Done:
 - [x] Product Tour

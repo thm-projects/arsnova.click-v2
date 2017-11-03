@@ -5,10 +5,6 @@ import * as WebSocket from 'ws';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as pnFs from 'pn/fs';
-import * as svg2png from 'svg2png';
-import * as imagemin from 'imagemin';
-import * as imageminPngquant from 'imagemin-pngquant';
 import {WebSocketRouter} from './routes/websocket';
 import {Server} from 'https';
 import * as process from 'process';
@@ -36,10 +32,6 @@ const params: any = [path.join(__dirname, 'phantomDriver.js')];
 const themePreviewEndpoint = 'http://localhost:4200/preview';
 themes.forEach((theme: ITheme) => {
   languages.forEach((languageKey) => {
-    pnFs.readFile(path.join(__dirname, `../images/favicons/favicon.svg`))
-        .then(svg2png)
-        .then(buffer => fs.writeFile(path.join(__dirname, `../images/favicons/favicon_${theme.id}.png`), buffer, (err => console.log('err in writing favicon', err))))
-        .catch(e => console.error('catched while generating favicons', e));
     params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);
   });
 });
@@ -52,14 +44,6 @@ command.stderr.on('data', (data) => {
 });
 command.on('exit', () => {
   console.log(`phantomjs (exit): All preview images have been generated`);
-
-  imagemin([path.join(__dirname, '../images/**/*.{png}')], path.join(__dirname, '../images'), {
-    plugins: [
-      imageminPngquant({quality: '65-80'})
-    ]
-  }).then(files => {
-    files.forEach(file => fs.writeFile(path.join(__dirname, file.path), file.data, (err) => console.log('error while minifiing pngs', err)));
-  });
 });
 
 

@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
-import {cpus, freemem, loadavg, totalmem, uptime} from 'os';
+import {cpus, freemem, loadavg, totalmem} from 'os';
 import * as cors from 'cors';
 import * as busboy from 'connect-busboy';
 
@@ -40,16 +40,15 @@ i18n.configure({
   // setting extension of json files - defaults to '.json' (you might want to set this to '.js' according to webtranslateit)
   extension: '.json',
 
-  // setting prefix of json files name - default to none '' (in case you use different locale files naming scheme (webapp-en.json), rather then just en.json)
+  // setting prefix of json files name - default to none ''
+  // (in case you use different locale files naming scheme (webapp-en.json), rather then just en.json)
   prefix: '',
 
   // enable object notation
   objectNotation: true,
 
   // setting of log level DEBUG - default to require('debug')('i18n:debug')
-  logDebugFn: function (msg) {
-    console.log('debug', msg);
-  },
+  logDebugFn: require('debug')('i18n:debug'),
 
   // setting of log level WARN - default to require('debug')('i18n:warn')
   logWarnFn: function (msg) {
@@ -67,8 +66,8 @@ i18n.configure({
   // hash to specify different aliases for i18n's internal methods to apply on the request/response objects (method -> alias).
   // note that this will *not* overwrite existing properties with the same name
   api: {
-    '__': 't',  //now req.__ becomes req.t
-    '__n': 'tn' //and req.__n can be called as req.tn
+    '__': 't',  // now req.__ becomes req.t
+    '__n': 'tn' // and req.__n can be called as req.tn
   }
 });
 
@@ -101,7 +100,7 @@ class App {
     const router: Router = express.Router();
     router.get('/', (req, res, next) => {
       res.json({
-        uptime: uptime(),
+        uptime: process.uptime(),
         loadavg: loadavg(),
         freemem: freemem(),
         totalmem: totalmem(),
