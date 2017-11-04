@@ -3,10 +3,15 @@ import * as Hex from 'crypto-js/enc-hex';
 import * as fs from 'fs';
 import * as request from 'request';
 import {DatabaseTypes, DbDao} from '../db/DbDao';
+import {IQuestion} from '../interfaces/questions/interfaces';
+import {staticStatistics} from '../statistics';
+import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
+
+export const assetsUrlRegex = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
 
 export function MatchTextToAssetsDb(value: string) {
   const acceptedFileTypes = [/image\/*/];
-  const matchedValue = value.match(/[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi);
+  const matchedValue = value.match(assetsUrlRegex);
   if (matchedValue) {
     matchedValue.forEach((matchedValueElement: string) => {
       const digest = Hex.stringify(sha256(matchedValueElement));
@@ -22,7 +27,7 @@ export function MatchTextToAssetsDb(value: string) {
         const contentType = response.headers['content-type'];
         const hasContentTypeMatched = acceptedFileTypes.some((contentTypeRegex) => contentType.match(contentTypeRegex));
         if (hasContentTypeMatched) {
-          DbDao.create(DatabaseTypes.assets, {url: matchedValueElement, digest, path: cachePath}, digest);
+          DbDao.create(DatabaseTypes.assets, {url: matchedValueElement, digest, path: cachePath}, matchedValueElement.replace(/\./g, '_'));
         } else {
           req.abort();
           fs.unlink(cachePath);
@@ -33,4 +38,36 @@ export function MatchTextToAssetsDb(value: string) {
       }).pipe(fs.createWriteStream(cachePath));
     });
   }
+}
+
+export function parseCachedAssetQuiz(cacheAwareQuestions: Array<IQuestion>) {
+  const assetsCache = DbDao.read(DatabaseTypes.assets);
+  cacheAwareQuestions.forEach((question: IQuestion) => {
+    const matchedQuestionText = question.questionText.match(assetsUrlRegex);
+    if (matchedQuestionText) {
+      matchedQuestionText.forEach((matchedValueElement: string) => {
+        const encodedText = matchedValueElement.replace(/\./g, '_');
+        if (!assetsCache[encodedText]) {
+          return;
+        }
+        const digest = assetsCache[encodedText].digest;
+        const cachedUrl = `https://${staticStatistics.localIpv4Address}:${staticStatistics.port}/lib/cache/quiz/assets/${digest}`;
+        question.questionText = question.questionText.replace(matchedValueElement, cachedUrl);
+      });
+    }
+    question.answerOptionList.forEach((answerOption: IAnswerOption) => {
+      const matchedAnswerText = answerOption.answerText.match(assetsUrlRegex);
+      if (matchedAnswerText) {
+        matchedAnswerText.forEach((matchedValueElement: string) => {
+          const encodedText = matchedValueElement.replace(/\./g, '_');
+          if (!assetsCache[encodedText]) {
+            return;
+          }
+          const digest = assetsCache[encodedText].digest;
+          const cachedUrl = `https://${staticStatistics.localIpv4Address}:${staticStatistics.port}/lib/cache/quiz/assets/${digest}`;
+          answerOption.answerText = answerOption.answerText.replace(matchedValueElement, cachedUrl);
+        });
+      }
+    });
+  });
 }

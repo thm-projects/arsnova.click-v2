@@ -63,7 +63,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemExport
       ]);
     } else {
-      this._hashtag = this.currentQuizService.hashtag;
+      this._hashtag = this.currentQuizService.quiz.hashtag;
       this.footerBarService.replaceFooterElements([
         this.footerBarService.footerElemBack,
         this.footerBarService.footerElemFullscreen
@@ -84,6 +84,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
           break;
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
+          this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
         case 'LOBBY:CLOSED':
@@ -94,7 +95,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.connectionService.authorizeWebSocket(this.currentQuizService.hashtag);
+    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
     this.handleMessages();
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];

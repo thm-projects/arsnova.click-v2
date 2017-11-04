@@ -85,7 +85,7 @@ export class ConnectionService {
       return;
     }
     this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE', window.sessionStorage.getItem('webSocketAuthorization'));
+    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE', window.sessionStorage.getItem('config.websocket_authorization'));
   }
 
   authorizeWebSocketAsOwner(hashtag: string): void {
@@ -96,9 +96,9 @@ export class ConnectionService {
     this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER', window.localStorage.getItem('config.private_key'));
   }
 
-  initConnection(): Promise<any> {
+  initConnection(overrideCurrentState?: boolean): Promise<any> {
     return new Promise((resolve) => {
-      if (this.serverAvailable) {
+      if (this.serverAvailable && !overrideCurrentState) {
         resolve();
         return;
       }

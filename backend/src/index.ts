@@ -12,13 +12,14 @@ import * as phantomjs from 'phantomjs-prebuilt';
 import {ChildProcess, spawn} from 'child_process';
 import {themes} from './themes/availableThemes';
 import {ITheme} from './interfaces/common.interfaces';
-import {DatabaseTypes, DbDao} from './db/DbDao';
+import {DbDao} from './db/DbDao';
+import {staticStatistics} from './statistics';
 
 debug('arsnova.click: ts-express:server');
 const cert = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
 const key = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
 
-const port: string | number | boolean = normalizePort(process.env.PORT || 3000);
+const port: string | number | boolean = normalizePort(staticStatistics.port);
 App.set('port', port);
 
 const server: Server = https.createServer({key: key, cert: cert}, App);
@@ -86,8 +87,7 @@ function onListening(): void {
 }
 
 function onClose(): void {
-  DbDao.closeConnection(DatabaseTypes.quiz);
-  DbDao.closeConnection(DatabaseTypes.assets);
+  DbDao.closeConnections();
 
   WebSocketRouter.wss.close();
 }

@@ -12,6 +12,10 @@ import {SingleChoiceQuestion} from '../../../../lib/questions/question_choice_si
 import {SurveyQuestion} from '../../../../lib/questions/question_survey';
 import {QuestionTextService} from '../../../service/question-text.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {HeaderLabelService} from '../../../service/header-label.service';
+import {MultipleChoiceQuestion} from '../../../../lib/questions/question_choice_multiple';
+import {RangedQuestion} from '../../../../lib/questions/question_ranged';
+import {FreeTextQuestion} from '../../../../lib/questions/question_freetext';
 
 @Component({
   selector: 'app-voting',
@@ -19,14 +23,16 @@ import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
   styleUrls: ['./voting.component.scss']
 })
 export class VotingComponent implements OnInit, OnDestroy {
+  get selectedAnswers(): Array<number> | string | number {
+    return this._selectedAnswers;
+  }
   get countdownValue(): number {
     return this._countdownValue;
   }
 
   private _countdown: Countdown;
   private _countdownValue: number;
-  private _selectedAnswers: Array<number> = [];
-  private _toggleSelectedAnswers: boolean;
+  private _selectedAnswers: Array<number> | string | number = [];
   public answers: Array<string> = [];
 
   constructor(
@@ -36,23 +42,22 @@ export class VotingComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private connectionService: ConnectionService,
     private questionTextService: QuestionTextService,
+    private headerLabelService: HeaderLabelService,
     private sanitizer: DomSanitizer,
     private router: Router) {
 
+    headerLabelService.setHeaderLabel('component.voting.title');
+
     this.footerBarService.replaceFooterElements([]);
 
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${this.currentQuizService.hashtag}`)
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${currentQuizService.quiz.hashtag}`)
         .subscribe((data: IMessage) => {
           if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
-            this._countdown = new Countdown(this.currentQuizService.currentQuestion, data.payload.startTimestamp);
+            this._countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
             this._countdown.onChange.subscribe((value) => {
               this._countdownValue = value;
               if (!value) {
-                this.router.navigate([
-                  '/quiz',
-                  'flow',
-                  this.currentQuizService.sessionConfiguration.confidenceSliderEnabled ? 'confidence-rate' : 'results'
-                ]);
+                this.sendResponses();
               }
             });
           } else {
@@ -63,17 +68,28 @@ export class VotingComponent implements OnInit, OnDestroy {
             ]);
           }
         });
-
-    this._toggleSelectedAnswers = this.currentQuizService.currentQuestion instanceof SingleChoiceQuestion;
-    this._toggleSelectedAnswers = this._toggleSelectedAnswers &&
-                                  !(<SurveyQuestion>this.currentQuizService.currentQuestion).multipleSelectionEnabled;
   }
 
   public sanitizeHTML(value: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  handleMessages() {
+  displayAnswerButtons(): boolean {
+    const question = this.currentQuizService.currentQuestion();
+    return question instanceof SingleChoiceQuestion ||
+           question instanceof SurveyQuestion ||
+           question instanceof MultipleChoiceQuestion;
+  }
+
+  displayRangedButtons(): boolean {
+    return this.currentQuizService.currentQuestion() instanceof RangedQuestion;
+  }
+
+  displayFreetextInput(): boolean {
+    return this.currentQuizService.currentQuestion() instanceof FreeTextQuestion;
+  }
+
+  handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'MEMBER:UPDATED_RESPONSE':
@@ -82,19 +98,14 @@ export class VotingComponent implements OnInit, OnDestroy {
           break;
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
+          this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
         case 'LOBBY:CLOSED':
           this.router.navigate(['/']);
           break;
       }
-      this.handleMessagesForAttendee(data);
     });
-  }
-
-  private handleMessagesForAttendee(data: IMessage) {
-    switch (data.step) {
-    }
   }
 
   public normalizeAnswerOptionIndex(index: number): string {
@@ -102,33 +113,58 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public isSelected(index: number): boolean {
-    return this._selectedAnswers.indexOf(index) > -1;
+    return this._selectedAnswers instanceof Array && this._selectedAnswers.indexOf(index) > -1;
+  }
+
+  public parseTextInput(event: Event): void {
+    this._selectedAnswers = (<HTMLInputElement>event.target).value;
+  }
+
+  public parseNumberInput(event: Event): void {
+    this._selectedAnswers = parseInt((<HTMLInputElement>event.target).value, 10);
+  }
+
+  public isNumber(value: any): boolean {
+    return +value === value;
   }
 
   public toggleSelectAnswer(index: number): void {
-    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) : this._toggleSelectedAnswers
-      ? this._selectedAnswers = [index] : this._selectedAnswers.push(index);
-    if (
-      this.currentQuizService.currentQuestion instanceof SingleChoiceQuestion ||
-      (this.currentQuizService.currentQuestion instanceof SurveyQuestion &&
-      this.currentQuizService.currentQuestion.multipleSelectionEnabled)
-    ) {
-      this._countdown.remainingTime = 1;
+    if (!(this._selectedAnswers instanceof Array)) {
+      return;
     }
+    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) :
+    this.toggleSelectedAnswers() ? this._selectedAnswers = [index] : this._selectedAnswers.push(index);
+    if (this.toggleSelectedAnswers()) {
+      this.sendResponses();
+    }
+  }
+
+  toggleSelectedAnswers(): boolean {
+    return this.currentQuizService.currentQuestion() instanceof SingleChoiceQuestion ||
+           (this.currentQuizService.currentQuestion() instanceof SurveyQuestion &&
+            !(<SurveyQuestion>this.currentQuizService.currentQuestion()).multipleSelectionEnabled);
+  }
+
+  sendResponses(): void {
+    this.router.navigate([
+      '/quiz',
+      'flow',
+      this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results'
+    ]);
   }
 
   ngOnInit() {
     this.connectionService.initConnection().then(() => {
-      this.connectionService.authorizeWebSocket(this.currentQuizService.hashtag);
+      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
       this.handleMessages();
     });
     this.questionTextService.getEmitter().subscribe((value: Array<string>) => this.answers = value);
-    this.questionTextService.changeMultiple(this.currentQuizService.currentQuestion.answerOptionList.map(answer => answer.answerText));
+    this.questionTextService.changeMultiple(this.currentQuizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
   }
 
   ngOnDestroy() {
     this.http.put(`${DefaultSettings.httpApiEndpoint}/quiz/member/response`, {
-      quizName: this.currentQuizService.hashtag,
+      quizName: this.currentQuizService.quiz.hashtag,
       nickname: this.attendeeService.getOwnNick(),
       value: this._selectedAnswers
     }).subscribe(

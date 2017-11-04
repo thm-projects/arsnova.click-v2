@@ -2,8 +2,9 @@ import * as WebSocket from 'ws';
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
 import {WebSocketRouter} from '../routes/websocket';
 import illegalNicks from '../nicknames/illegalNicks';
-import {IActiveQuiz, ICas, INickname, IQuizResponse} from '../interfaces/common.interfaces';
+import {IActiveQuiz, IActiveQuizSerialized, ICas, INickname, IQuizResponse, INicknameSerialized} from '../interfaces/common.interfaces';
 import {DatabaseTypes, DbDao} from './DbDao';
+import {parseCachedAssetQuiz} from '../cache/assets';
 
 class Member implements INickname {
   get casProfile(): ICas {
@@ -77,7 +78,7 @@ class Member implements INickname {
     return this.intToRGB(this.hashCode(this.name));
   }
 
-  public serialize(): Object {
+  public serialize(): INicknameSerialized {
     return {
       id: this.id,
       name: this.name,
@@ -124,17 +125,29 @@ class ActiveQuizItem implements IActiveQuiz {
 
   private _name: string;
   private _nicknames: Array<INickname>;
-  private _currentQuestionIndex = -1;
+  private _currentQuestionIndex: number;
   private _originalObject: IQuestionGroup;
   private _webSocketRouter: WebSocketRouter;
-  private _currentStartTimestamp: number;
+  private _currentStartTimestamp = 0;
   private _ownerSocket: WebSocket;
 
-  constructor({nicknames, originalObject}: { nicknames: Array<INickname>, originalObject: IQuestionGroup }) {
+  constructor(
+    {nicknames, originalObject, currentQuestionIndex}:
+    { nicknames: Array<INickname>, originalObject: IQuestionGroup, currentQuestionIndex?: number }
+    ) {
     this._name = originalObject.hashtag;
     this._nicknames = nicknames;
     this._originalObject = originalObject;
+    this._currentQuestionIndex = typeof currentQuestionIndex !== 'undefined' ? currentQuestionIndex : -1;
     this._webSocketRouter = new WebSocketRouter();
+  }
+
+  public serialize(): IActiveQuizSerialized {
+    return {
+      nicknames: this._nicknames.map(nick => nick.serialize()),
+      originalObject: this._originalObject,
+      currentQuestionIndex: this._currentQuestionIndex
+    };
   }
 
   public onDestroy(): void {
@@ -149,10 +162,7 @@ class ActiveQuizItem implements IActiveQuiz {
     this._nicknames.forEach(value => {
       if (value.webSocket && value.webSocket.readyState === WebSocket.OPEN) {
         value.webSocket.send(JSON.stringify(message));
-      } else if (value.webSocket) {
-        console.log('websocket status for nickname',
-          value.name, 'is', value.webSocket, 'readystate is', value.webSocket.readyState, 'open state is', WebSocket.OPEN);
-      } else {
+      } else if (value.webSocket) {} else {
         console.log('websocket for nickname', value.name, 'is undefined');
       }
     });
@@ -187,8 +197,15 @@ class ActiveQuizItem implements IActiveQuiz {
   public setTimestamp(startTimestamp: number): void {
     this._currentStartTimestamp = startTimestamp;
 
-    setTimeout(() => this._currentStartTimestamp = 0,
-               this.originalObject.questionList[this.currentQuestionIndex].timer * 1000);
+    let timer = this.originalObject.questionList[this.currentQuestionIndex].timer;
+    const interval = setInterval(() => {
+      if (!timer || this.nicknames.filter(nick => nick.responses[this.currentQuestionIndex]).length === this.nicknames.length) {
+        this._currentStartTimestamp = 0;
+        clearInterval(interval);
+      } else {
+        timer--;
+      }
+    }, 1000);
 
     this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
@@ -205,7 +222,7 @@ class ActiveQuizItem implements IActiveQuiz {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:NEXT_QUESTION',
         payload: {
-          question: this.originalObject.questionList[this.currentQuestionIndex]
+          questionIndex: this.currentQuestionIndex
         }
       });
       return this.currentQuestionIndex;
@@ -279,10 +296,10 @@ class ActiveQuizItem implements IActiveQuiz {
     });
   }
 
-  public setConfidenceValue(nickname: string, questionIndex: number, confidenceValue: number): void {
+  public setConfidenceValue(nickname: string, confidenceValue: number): void {
     this.nicknames.filter(member => {
       return member.name === nickname;
-    })[0].responses[questionIndex].confidence = confidenceValue;
+    })[0].responses[this.currentQuestionIndex].confidence = confidenceValue;
 
     this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
@@ -295,10 +312,10 @@ class ActiveQuizItem implements IActiveQuiz {
     });
   }
 
-  public setReadingConfirmation(nickname: string, questionIndex: number): void {
+  public setReadingConfirmation(nickname: string): void {
     this.nicknames.filter(member => {
       return member.name === nickname;
-    })[0].responses[questionIndex].readingConfirmation = true;
+    })[0].responses[this.currentQuestionIndex].readingConfirmation = true;
 
     this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
@@ -338,15 +355,19 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
     this.name = name;
   }
 
+  public serialize(): IActiveQuizSerialized {
+    throw new Error('Method not implemented.');
+  }
+
   public requestReadingConfirmation(): void {
     throw new Error('Method not implemented.');
   }
 
-  public setConfidenceValue(nickname: string, questionIndex: number, confidenceValue: number): void {
+  public setConfidenceValue(nickname: string, confidenceValue: number): void {
     throw new Error('Method not implemented.');
   }
 
-  public setReadingConfirmation(nickname: string, questionIndex: number): void {
+  public setReadingConfirmation(nickname: string): void {
     throw new Error('Method not implemented.');
   }
 
@@ -437,13 +458,15 @@ export default class QuizManagerDAO {
     activeQuizzes[name] = new ActiveQuizItemPlaceholder(name);
   }
 
-  public static initActiveQuiz(quiz: IQuestionGroup): void {
+  public static initActiveQuiz(quiz: IQuestionGroup): IActiveQuiz {
     const name: string = QuizManagerDAO.normalizeQuizName(quiz.hashtag);
     if (activeQuizzes[name] && !(activeQuizzes[name] instanceof ActiveQuizItemPlaceholder)) {
       return;
     }
     QuizManagerDAO.convertLegacyQuiz(quiz);
+    parseCachedAssetQuiz(quiz.questionList);
     activeQuizzes[name] = new ActiveQuizItem({nicknames: [], originalObject: quiz});
+    return activeQuizzes[name];
   }
 
   public static removeActiveQuiz(originalName: string): boolean {

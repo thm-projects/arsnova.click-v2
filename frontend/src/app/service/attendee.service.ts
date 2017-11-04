@@ -75,9 +75,8 @@ export class AttendeeService implements OnDestroy {
   private _attendees: Array<INickname> = [];
 
   constructor(
-    private currentQuizService: CurrentQuizService,
     private footerBarService: FooterBarService) {
-    const restoreAttendees = window.sessionStorage.getItem('_attendees');
+    const restoreAttendees = window.sessionStorage.getItem('config.attendees');
     if (restoreAttendees) {
       this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
         return new Player(attendee);
@@ -90,12 +89,20 @@ export class AttendeeService implements OnDestroy {
 
   cleanUp(): void {
     this.attendees = [];
-    window.sessionStorage.removeItem('_attendees');
+    window.sessionStorage.removeItem('config.attendees');
   }
 
   addMember(attendee: INickname): void {
     if (!this.getMember(attendee.name)) {
       this._attendees.push(new Player(attendee));
+      this.persistToSessionStorage();
+    }
+  }
+
+  removeMember(attendee: INickname): void {
+    const member = this.getMember(attendee.name);
+    if (member) {
+      this._attendees.splice(this._attendees.indexOf(member), 1);
       this.persistToSessionStorage();
     }
   }
@@ -108,11 +115,11 @@ export class AttendeeService implements OnDestroy {
   }
 
   isOwnNick(name: string): boolean {
-    return name === window.sessionStorage.getItem(`${this.currentQuizService.hashtag}_nick`);
+    return name === window.sessionStorage.getItem(`config.nick`);
   }
 
   getOwnNick(): string {
-    return window.sessionStorage.getItem(`${this.currentQuizService.hashtag}_nick`);
+    return window.sessionStorage.getItem(`config.nick`);
   }
 
   getMember(nickname: string): INickname {
@@ -125,7 +132,7 @@ export class AttendeeService implements OnDestroy {
   }
 
   persistToSessionStorage(): void {
-    window.sessionStorage.setItem('_attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
+    window.sessionStorage.setItem('config.attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
   }
 
   ngOnDestroy() {

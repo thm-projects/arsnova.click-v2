@@ -6,6 +6,7 @@ import {DefaultSettings} from '../../../lib/default.settings';
 import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {CasService} from '../../service/cas.service';
 import {CurrentQuizService} from '../../service/current-quiz.service';
+import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 
 @Component({
   selector: 'app-quiz-join',
@@ -34,8 +35,13 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
           if (this.casService.casLoginRequired) {
             this.casService.quizName = quizname;
           }
-          this.currentQuizService.hashtag = quizname;
-          this.router.navigate(['/nicks/' + (value.payload.provideNickSelection ? 'select' : 'input')]);
+          this.http.get(`${DefaultSettings.httpApiEndpoint}/lobby/${quizname}`).subscribe(
+            (data: IMessage) => {
+              const quiz = data.payload.quiz.originalObject;
+              this.currentQuizService.quiz = new questionGroupReflection[quiz.TYPE](quiz);
+              this.router.navigate(['/nicks/' + (value.payload.provideNickSelection ? 'select' : 'input')]);
+            }
+          );
         } else {
           this.router.navigate(['/']);
         }

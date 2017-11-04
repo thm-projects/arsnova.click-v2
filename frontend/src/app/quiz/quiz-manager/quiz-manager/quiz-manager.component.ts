@@ -1,17 +1,19 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {questionReflection} from '../../../../lib/questions/question_reflection';
 import {IQuestionGroup} from '../../../../lib/questions/interfaces';
+import {DefaultSettings} from '../../../../lib/default.settings';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-quiz-manager',
   templateUrl: './quiz-manager.component.html',
   styleUrls: ['./quiz-manager.component.scss']
 })
-export class QuizManagerComponent implements OnInit {
+export class QuizManagerComponent implements OnInit, OnDestroy {
   get showMoreOrLess(): string {
     return this._showMoreOrLess;
   }
@@ -66,6 +68,7 @@ export class QuizManagerComponent implements OnInit {
     @Inject(DOCUMENT) readonly document,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
+    private http: HttpClient,
     private activeQuestionGroupService: ActiveQuestionGroupService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
@@ -80,9 +83,20 @@ export class QuizManagerComponent implements OnInit {
     this.footerBarService.footerElemStartQuiz.linkTarget = (self) => {
       return self.isActive ? '/quiz/flow/lobby' : null;
     };
+    this.footerBarService.footerElemStartQuiz.onClickCallback = () => {
+      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+        quiz: activeQuestionGroupService.activeQuestionGroup.serialize()
+      }).subscribe(
+        () => {}
+      );
+    };
   }
 
   ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    this.footerBarService.footerElemStartQuiz.restoreClickCallback();
   }
 
   switchShowMoreOrLess() {

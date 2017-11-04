@@ -49,7 +49,7 @@ export class ApiRouter {
 
   public getThemes(req: Request, res: Response): void {
     res.send({
-      status: 'STATUS:SUCCESSFULL',
+      status: 'STATUS:SUCCESSFUL',
       step: 'GET_THEMES',
       payload: themes
     });
@@ -119,11 +119,24 @@ export class ApiRouter {
   }
 
   public putOpenLobby(req: Request, res: Response): void {
-    QuizManager.initActiveQuiz(req.body.quiz);
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'LOBBY:OPENED',
-      payload: req.body.quiz
+      payload: {
+        quiz: QuizManager.initActiveQuiz(req.body.quiz).serialize()
+      }
+    });
+  }
+
+  public getLobbyData(req: Request, res: Response): void {
+    const isInactive: boolean = QuizManager.isInactiveQuiz(req.params.quizName);
+    const quiz = isInactive ? null : QuizManagerDAO.getActiveQuizByName(req.params.quizName).serialize();
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: `LOBBY:${isInactive ? 'CLOSED' : 'OPENED'}`,
+      payload: {
+        quiz
+      }
     });
   }
 
@@ -167,7 +180,7 @@ export class ApiRouter {
 
   public addReadingConfirmation(req: Request, res: Response): void {
     const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
-    activeQuiz.setReadingConfirmation(req.body.nickname, req.body.questionIndex);
+    activeQuiz.setReadingConfirmation(req.body.nickname);
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:ADD_READING_CONFIRMATION',
@@ -177,7 +190,7 @@ export class ApiRouter {
 
   public addConfidenceValue(req: Request, res: Response): void {
     const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
-    activeQuiz.setConfidenceValue(req.body.nickname, req.body.questionIndex, req.body.confidenceValue);
+    activeQuiz.setConfidenceValue(req.body.nickname, req.body.confidenceValue);
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:ADD_CONFIDENCE_VALUE',
@@ -300,6 +313,21 @@ export class ApiRouter {
         });
       }
     }
+  }
+
+  public getCurrentQuizState(req: Request, res: Response): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
+    const index = activeQuiz.currentQuestionIndex < 0 ? 0 : activeQuiz.currentQuestionIndex;
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:CURRENT_STATE',
+      payload: {
+        questions: activeQuiz.originalObject.questionList.slice(0, index + 1),
+        questionIndex: index,
+        startTimestamp: activeQuiz.currentStartTimestamp,
+        numberOfQuestions: activeQuiz.originalObject.questionList.length
+      }
+    });
   }
 
   public showReadingConfirmation(req: Request, res: Response): void {
@@ -516,7 +544,7 @@ export class ApiRouter {
       return member.name === req.body.nickname;
     })[0].responses[req.body.questionIndex].confidence = req.body.confidenceValue;
     res.send({
-      status: 'STATUS:SUCCESSFULL',
+      status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:CONFIDENCE_VALUE',
       payload: {}
     });
@@ -528,7 +556,7 @@ export class ApiRouter {
       return member.name === req.body.nickname;
     })[0].responses[req.body.questionIndex].readingConfirmation = true;
     res.send({
-      status: 'STATUS:SUCCESSFULL',
+      status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:READING_CONFIRMATION',
       payload: {}
     });
@@ -605,6 +633,7 @@ export class ApiRouter {
     this._router.get('/availableNicks/all', this.getAllAvailableNicks);
 
     this._router.put('/lobby', this.putOpenLobby);
+    this._router.get('/lobby/:quizName', this.getLobbyData);
     this._router.delete('/lobby', this.putCloseLobby);
     this._router.delete('/lobby/:quizName/member/:nickname', this.deleteMember);
 
@@ -614,6 +643,7 @@ export class ApiRouter {
 
     this._router.post('/quiz/upload', this.uploadQuiz);
     this._router.post('/quiz/start', this.startQuiz);
+    this._router.get('/quiz/currentState/:quizName', this.getCurrentQuizState);
     this._router.post('/quiz/reading-confirmation', this.showReadingConfirmation);
     this._router.get('/quiz/startTime/:quizName', this.getQuizStartTime);
     this._router.get('/quiz/settings', this.getQuizSettings);

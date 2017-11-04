@@ -33,7 +33,7 @@ export class WebSocketRouter {
             activeQuiz.nicknames.forEach(nickname => {
               if (nickname.webSocketAuthorization === parseFloat(message.payload.webSocketAuthorization)) {
                 nickname.webSocket = ws;
-                ws.send(JSON.stringify({status: 'STATUS:SUCCESSFULL', step: 'WEBSOCKET:AUTHORIZED'}));
+                ws.send(JSON.stringify({status: 'STATUS:SUCCESSFUL', step: 'WEBSOCKET:AUTHORIZED'}));
               }
             });
           }
@@ -46,7 +46,7 @@ export class WebSocketRouter {
             });
             if (Object.keys(isOwner).length > 0) {
               activeQuiz.ownerSocket = ws;
-              ws.send(JSON.stringify({status: 'STATUS:SUCCESSFULL', step: 'WEBSOCKET:AUTHORIZED'}));
+              ws.send(JSON.stringify({status: 'STATUS:SUCCESSFUL', step: 'WEBSOCKET:AUTHORIZED'}));
             } else {
               ws.send(JSON.stringify({status: 'STATUS:FAILED', step: 'INSUFFICIENT_PERMISSIONS'}));
             }
@@ -89,7 +89,7 @@ export class WebSocketRouter {
         console.log('ws error', err);
       });
 
-      ws.send(JSON.stringify({status: 'STATUS:SUCCESSFULL', step: 'CONNECTED', payload: {}}), (err) => {
+      ws.send(JSON.stringify({status: 'STATUS:SUCCESSFUL', step: 'CONNECTED', payload: {}}), (err) => {
         console.log('error while sending ws message', err);
       });
     });

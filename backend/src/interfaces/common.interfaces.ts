@@ -25,23 +25,30 @@ export declare interface IQuizResponse {
   readingConfirmation: boolean;
 }
 
-export declare interface INickname {
+export declare interface INicknameSerialized {
   id: number;
   name: string;
   colorCode: string;
-  webSocket: WebSocket;
-  webSocketAuthorization: number;
   responses: Array<IQuizResponse>;
-  casProfile: {id: string, mail: Array<string> | string};
-
-  serialize(): Object;
 }
 
-export declare interface IActiveQuiz {
-  name: string;
-  nicknames: Array<INickname>;
+export declare interface INickname extends INicknameSerialized {
+  webSocket: WebSocket;
+  webSocketAuthorization: number;
+  casProfile: {id: string, mail: Array<string> | string};
+
+  serialize(): INicknameSerialized;
+}
+
+export declare interface IActiveQuizSerialized {
+  nicknames: Array<INicknameSerialized>;
   currentQuestionIndex: number;
   originalObject: IQuestionGroup;
+}
+
+export declare interface IActiveQuiz extends IActiveQuizSerialized {
+  nicknames: Array<INickname>;
+  name: string;
   webSocketRouter: WebSocketRouter;
   currentStartTimestamp: number;
   ownerSocket: WebSocket;
@@ -52,9 +59,9 @@ export declare interface IActiveQuiz {
 
   addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void;
 
-  setConfidenceValue(nickname: string, questionIndex: number, confidenceValue: number): void;
+  setConfidenceValue(nickname: string, confidenceValue: number): void;
 
-  setReadingConfirmation(nickname: string, questionIndex: number): void;
+  setReadingConfirmation(nickname: string): void;
 
   requestReadingConfirmation(): void;
 
@@ -67,4 +74,6 @@ export declare interface IActiveQuiz {
   updateQuizSettings(target: string, state: boolean): void;
 
   onDestroy(): void;
+
+  serialize(): IActiveQuizSerialized;
 }

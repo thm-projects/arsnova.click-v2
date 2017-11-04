@@ -5,7 +5,7 @@ import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {IMessage} from '../../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {DefaultSettings} from '../../../../lib/default.settings';
-import {AttendeeService} from '../../../service/attendee.service';
+import {AttendeeService, INickname} from '../../../service/attendee.service';
 import {ConnectionService} from '../../../service/connection.service';
 
 @Component({
@@ -39,14 +39,15 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
     const promise = new Promise((resolve, reject) => {
       this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/`, {
-        quizName: this.currentQuiz.hashtag,
+        quizName: this.currentQuiz.quiz.hashtag,
         nickname: nickname
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-          this.currentQuiz.sessionConfiguration = data.payload.sessionConfiguration;
-          this.attendeeService.attendees = data.payload.nicknames;
-          window.sessionStorage.setItem('webSocketAuthorization', data.payload.webSocketAuthorization);
-          this.connectionService.authorizeWebSocket(this.currentQuiz.hashtag);
+          data.payload.nicknames.forEach((elem: INickname) => {
+            this.attendeeService.addMember(elem);
+          });
+          window.sessionStorage.setItem('config.websocket_authorization', data.payload.webSocketAuthorization);
+          this.connectionService.authorizeWebSocket(this.currentQuiz.quiz.hashtag);
           resolve();
         } else {
           reject(data);
@@ -56,7 +57,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       });
     });
     promise.then(() => {
-      window.sessionStorage.setItem(`${this.currentQuiz.hashtag}_nick`, nickname);
+      window.sessionStorage.setItem(`config.nick`, nickname);
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (data: IMessage) => {
       switch (data.step) {

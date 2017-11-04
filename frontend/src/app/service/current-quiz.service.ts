@@ -1,17 +1,14 @@
-import {Injectable, OnDestroy} from '@angular/core';
-import {IQuestion} from '../../lib/questions/interfaces';
-import {questionReflection} from '../../lib/questions/question_reflection';
-import {ISessionConfiguration} from '../../lib/session_configuration/interfaces';
+import {Injectable} from '@angular/core';
+import {IQuestion, IQuestionGroup} from '../../lib/questions/interfaces';
 import {SessionConfiguration} from '../../lib/session_configuration/session_config';
-import {ThemesService} from './themes.service';
 import {ConnectionService} from './connection.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
 
 export declare interface ICurrentQuizData {
-  hashtag: string;
-  currentQuestion: IQuestion;
-  previousQuestions: Array<IQuestion>;
-  sessionConfiguration: ISessionConfiguration;
+  quiz: IQuestionGroup;
+  questionIndex: number;
+  readingConfirmationRequested: boolean;
 }
 
 export declare interface ICurrentQuiz extends ICurrentQuizData {
@@ -19,98 +16,90 @@ export declare interface ICurrentQuiz extends ICurrentQuizData {
 }
 
 @Injectable()
-export class CurrentQuizService implements ICurrentQuiz, OnDestroy {
-  set previousQuestions(value: Array<IQuestion>) {
-    this._previousQuestions = value.map(elem => {
-      return questionReflection[elem.TYPE](elem);
-    });
+export class CurrentQuizService implements ICurrentQuiz {
+  set readingConfirmationRequested(value: boolean) {
+    this._readingConfirmationRequested = value;
+  }
+  get readingConfirmationRequested(): boolean {
+    return this._readingConfirmationRequested;
+  }
+  set questionIndex(value: number) {
+    this._questionIndex = value;
+    this.persistToSessionStorage();
   }
 
-  set sessionConfiguration(value: ISessionConfiguration) {
-    if (!value) {
-      return;
+  get questionIndex(): number {
+    return this._questionIndex;
+  }
+
+  get isOwner(): boolean {
+    return this._isOwner;
+  }
+
+  get quiz(): IQuestionGroup {
+    return this._quiz;
+  }
+
+  set quiz(value: IQuestionGroup) {
+    this._quiz = value;
+    if (value) {
+      this._isOwner = (JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(value.hashtag) > -1;
     }
-    this._sessionConfiguration = new SessionConfiguration(value);
-    window.sessionStorage.setItem(`config.quiz_theme`, value.theme);
-    this.themesService.updateCurrentlyUsedTheme();
     this.persistToSessionStorage();
   }
 
-  get sessionConfiguration(): ISessionConfiguration {
-    return this._sessionConfiguration;
-  }
-
-  get previousQuestions(): Array<IQuestion> {
-    return this._previousQuestions;
-  }
-
-  get currentQuestion(): IQuestion {
-    return this._currentQuestion;
-  }
-
-  set currentQuestion(value: IQuestion) {
-    this._currentQuestion = questionReflection[value.TYPE](value);
-    this.persistToSessionStorage();
-  }
-
-  set hashtag(value: string) {
-    this._hashtag = value;
-    this.persistToSessionStorage();
-  }
-
-  get hashtag(): string {
-    return this._hashtag;
-  }
-
-  private _hashtag: string;
-  private _currentQuestion: IQuestion;
-  private _previousQuestions: Array<IQuestion> = [];
-  private _sessionConfiguration: ISessionConfiguration;
+  private _isOwner = false;
+  private _quiz: IQuestionGroup;
+  private _questionIndex = 0;
+  private _readingConfirmationRequested = false;
 
   constructor(
-    private themesService: ThemesService,
     private connectionService: ConnectionService) {
-    const instance = window.sessionStorage.getItem('current_quiz');
+    const instance = window.sessionStorage.getItem('config.current_quiz');
     if (instance) {
       const parsedInstance = JSON.parse(instance);
-      this.hashtag = parsedInstance.hashtag;
-      if (parsedInstance.currentQuestion) {
-        this.currentQuestion = parsedInstance.currentQuestion;
+      if (parsedInstance.questionIndex) {
+        this._questionIndex = parsedInstance.questionIndex;
       }
-      if (parsedInstance.previousQuestions.length > 0) {
-        this.previousQuestions = parsedInstance.previousQuestions;
+      if (parsedInstance.readingConfirmationRequested) {
+        this._readingConfirmationRequested = parsedInstance.readingConfirmationRequested;
       }
-      if (parsedInstance.sessionConfiguration) {
-        this.sessionConfiguration = parsedInstance.sessionConfiguration;
+      if (parsedInstance.quiz) {
+        this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
       }
     }
     connectionService.socket.subscribe((data: IMessage) => {
-      if (data.status === 'STATUS:SUCCESSFULL' && data.step === 'QUIZ:UPDATE_SETTINGS') {
-        this.sessionConfiguration = data.payload.sessionConfiguration;
+      if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATE_SETTINGS') {
+        this._quiz.sessionConfig = new SessionConfiguration(data.payload.sessionConfiguration);
+        this.persistToSessionStorage();
       }
     });
   }
 
+  public currentQuestion(): IQuestion {
+    console.log(this._questionIndex, this._quiz.questionList);
+    return this._quiz.questionList[this._questionIndex];
+  }
+
   public cleanUp(): void {
-    window.sessionStorage.removeItem(`${this.hashtag}_nick`);
-    window.sessionStorage.removeItem(`current_quiz`);
+    window.sessionStorage.removeItem(`config.nick`);
+    window.sessionStorage.removeItem(`config.current_quiz`);
+    this._isOwner = false;
+    this._quiz = null;
+    this._questionIndex = 0;
+    this._readingConfirmationRequested = false;
   }
 
   public serialize(): ICurrentQuizData {
     return {
-      hashtag: this.hashtag,
-      currentQuestion: this.currentQuestion ? this.currentQuestion.serialize() : null,
-      previousQuestions: this.previousQuestions ? this.previousQuestions.map(value => value.serialize()) : null,
-      sessionConfiguration: this.sessionConfiguration ? this.sessionConfiguration.serialize() : null
+      quiz: this._quiz ? this._quiz.serialize() : null,
+      questionIndex: this._questionIndex,
+      readingConfirmationRequested: this._readingConfirmationRequested
     };
   }
 
   public persistToSessionStorage(): void {
-    window.sessionStorage.setItem('current_quiz', JSON.stringify(this.serialize()));
-  }
-
-  ngOnDestroy(): void {
-    this.persistToSessionStorage();
+    window.sessionStorage.setItem('config.current_quiz', JSON.stringify(this.serialize()));
   }
 
 }

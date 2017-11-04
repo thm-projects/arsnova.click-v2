@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../lib/default.settings';
 import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {CurrentQuizService} from '../../service/current-quiz.service';
 
 @Component({
   selector: 'app-quiz-overview',
@@ -24,6 +25,7 @@ export class QuizOverviewComponent implements OnInit {
     private footerBarService: FooterBarService,
     private http: HttpClient,
     private headerLabelService: HeaderLabelService,
+    private currentQuizService: CurrentQuizService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private router: Router) {
     footerBarService.replaceFooterElements([
@@ -47,15 +49,28 @@ export class QuizOverviewComponent implements OnInit {
   }
 
   startQuiz(session: string): void {
-    const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
-    this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
-    this.router.navigate(['/quiz/flow']);
+    const localQuiz = JSON.parse(window.localStorage.getItem(session));
+    const localQuestionGroup = new questionGroupReflection[localQuiz.TYPE](localQuiz);
+
+    this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+      quiz: localQuestionGroup.serialize()
+    }).subscribe(
+      (data: IMessage) => {
+        if (data.status === 'STATUS:SUCCESSFUL') {
+          const quiz = data.payload.quiz.originalObject;
+          const questionGroup = new questionGroupReflection[quiz.TYPE](quiz);
+          this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
+          this.currentQuizService.quiz = questionGroup;
+          this.router.navigate(['/quiz', 'flow']);
+        }
+      }
+    );
   }
 
   editQuiz(session: string): void {
     const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
     this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
-    this.router.navigate(['/quiz/manager']);
+    this.router.navigate(['/quiz', 'manager']);
   }
 
   exportQuiz(session: string): void {

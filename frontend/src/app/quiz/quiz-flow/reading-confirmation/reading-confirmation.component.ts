@@ -9,6 +9,7 @@ import {AttendeeService} from '../../../service/attendee.service';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {QuestionTextService} from '../../../service/question-text.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {HeaderLabelService} from '../../../service/header-label.service';
 
 @Component({
   selector: 'app-reading-confirmation',
@@ -28,9 +29,11 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     private currentQuizService: CurrentQuizService,
     private questionTextService: QuestionTextService,
     private sanitizer: DomSanitizer,
+    private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService
   ) {
-    this.questionIndex = currentQuizService.previousQuestions.length;
+    headerLabelService.setHeaderLabel('component.liveResults.reading_confirmation');
+    this.questionIndex = currentQuizService.quiz.questionList.length;
     this.footerBarService.replaceFooterElements([]);
   }
 
@@ -43,12 +46,12 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.connectionService.authorizeWebSocket(this.currentQuizService.hashtag);
+    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
     this.handleMessages();
     this.questionTextService.getEmitter().subscribe((value: string) => {
       this.questionText = value;
     });
-    this.questionTextService.change(this.currentQuizService.currentQuestion.questionText);
+    this.questionTextService.change(this.currentQuizService.currentQuestion().questionText);
   }
 
   ngOnDestroy() {
@@ -56,8 +59,8 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
   confirmReading() {
     this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/reading-confirmation`, {
-      quizName: this.currentQuizService.hashtag,
-      nickname: window.sessionStorage.getItem(`${this.currentQuizService.hashtag}_nick`),
+      quizName: this.currentQuizService.quiz.hashtag,
+      nickname: window.sessionStorage.getItem(`config.nick`),
       questionIndex: this.questionIndex
     }).subscribe(
       (data: IMessage) => {
@@ -78,6 +81,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
           break;
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
+          this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
         case 'LOBBY:CLOSED':

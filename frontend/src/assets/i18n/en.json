@@ -371,8 +371,10 @@
       "countdown": "Countdown",
       "answer_option": "Answer",
       "guessed_correct": "Correctly estimated",
+      "guessed_in_range": "Not correctly estimated, but acceptable",
       "guessed_wrong": "Wrong estimated",
       "correct_answer": "Correct answer",
+      "wrong_answer": "Wrong answer",
       "abort_countdown": "Abort Countdown",
       "no_data": "No data available"
     },

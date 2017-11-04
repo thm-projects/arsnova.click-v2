@@ -4,10 +4,10 @@ import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {Subscription} from 'rxjs/Subscription';
 import {ConnectionService} from '../../../service/connection.service';
 import {AttendeeService} from '../../../service/attendee.service';
 import {FooterBarService} from '../../../service/footer-bar.service';
+import {HeaderLabelService} from '../../../service/header-label.service';
 
 @Component({
   selector: 'app-confidence-rate',
@@ -20,22 +20,22 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   }
 
   private _confidenceValue = 100;
-  public questionIndex: number;
 
   constructor(
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
     private http: HttpClient,
-    private currentQuizService: CurrentQuizService,
+    public currentQuizService: CurrentQuizService,
     private router: Router,
+    private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService
   ) {
-    this.questionIndex = currentQuizService.previousQuestions.length;
+    headerLabelService.setHeaderLabel('component.liveResults.confidence_grade');
     this.footerBarService.replaceFooterElements([]);
   }
 
   ngOnInit() {
-    this.connectionService.authorizeWebSocket(this.currentQuizService.hashtag);
+    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
     this.handleMessages();
   }
 
@@ -54,6 +54,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
           break;
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
+          this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
         case 'LOBBY:CLOSED':
@@ -83,10 +84,9 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
 
   sendConfidence() {
     this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/confidence-value`, {
-      quizName: this.currentQuizService.hashtag,
-      nickname: window.sessionStorage.getItem(`${this.currentQuizService.hashtag}_nick`),
-      confidenceValue: this._confidenceValue,
-      questionIndex: this.questionIndex
+      quizName: this.currentQuizService.quiz.hashtag,
+      nickname: window.sessionStorage.getItem(`config.nick`),
+      confidenceValue: this._confidenceValue
     }).subscribe(
       (data: IMessage) => {
         this.router.navigate(['/quiz', 'flow', 'results']);

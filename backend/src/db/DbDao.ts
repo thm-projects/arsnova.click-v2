@@ -24,9 +24,13 @@ export class DbDao {
     }
   }
 
-  public static read(database: DatabaseTypes, query: Object): Object {
+  public static read(database: DatabaseTypes, query?: Object): Object {
+    if (query) {
+      return DbDao.db.get(database)
+                  .find(query)
+                  .value();
+    }
     return DbDao.db.get(database)
-                .find(query)
                 .value();
   }
 
@@ -50,6 +54,10 @@ export class DbDao {
 
   public static closeConnection(database: DatabaseTypes): void {
     DbDao.db.get(database).close();
+  }
+
+  public static closeConnections(): void {
+    Object.keys(DatabaseTypes).forEach((type) => DbDao.closeConnection(DatabaseTypes[type]));
   }
 
   public static getState(): lowdb {

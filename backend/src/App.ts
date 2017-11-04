@@ -1,7 +1,6 @@
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
-import {cpus, freemem, loadavg, totalmem} from 'os';
 import * as cors from 'cors';
 import * as busboy from 'connect-busboy';
 
@@ -10,10 +9,10 @@ import LeaderboardRouter from './routes/leaderboard';
 import LibRouter from './routes/lib';
 import LegacyApiRouter from './routes/legacy-api';
 import options from './cors.config';
-import {Router} from 'express';
-import QuizManager from './db/quiz-manager';
+import {NextFunction, Router, Response, Request} from 'express';
 import * as i18n from 'i18n';
 import * as path from 'path';
+import {dynamicStatistics, staticStatistics} from './statistics';
 
 i18n.configure({
   // setup some locales - other locales default to en silently
@@ -98,17 +97,8 @@ class App {
   // Configure API endpoints.
   private routes(): void {
     const router: Router = express.Router();
-    router.get('/', (req, res, next) => {
-      res.json({
-        uptime: process.uptime(),
-        loadavg: loadavg(),
-        freemem: freemem(),
-        totalmem: totalmem(),
-        cpuCores: cpus().length,
-        connectedUsers: QuizManager.getAllActiveMembers(),
-        activeQuizzes: QuizManager.getAllActiveQuizNames(),
-        persistedQuizzes: Object.keys(QuizManager.getAllPersistedQuizzes()).length
-      });
+    router.get('/', (req: Request, res: Response, next: NextFunction) => {
+      res.json(Object.assign({}, staticStatistics, dynamicStatistics()));
     });
     this.express.use('/', router);
     this.express.use('/lib', LibRouter);

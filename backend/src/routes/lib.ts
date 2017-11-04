@@ -7,6 +7,7 @@ import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
 import * as CAS from 'cas';
 import * as crypto from 'crypto';
 import * as path from 'path';
+import * as fileType from 'file-type';
 import {MatchTextToAssetsDb} from '../cache/assets';
 
 const casSettings = {base_url: 'https://cas.thm.de/cas', service: 'arsnova_click_v2'};
@@ -177,6 +178,7 @@ export class LibRouter {
     if (!req.body.quiz) {
       res.writeHead(500);
       res.end(`Malformed request received -> ${req.body}`);
+      return;
     }
     const quiz: IQuestionGroup = req.body.quiz;
     quiz.questionList.forEach((question: IQuestion) => {
@@ -186,9 +188,21 @@ export class LibRouter {
       });
     });
     res.send({
-      status: 'STATUS:SUCCESSFULL',
+      status: 'STATUS:SUCCESSFUL',
       step: 'CACHE:QUIZ_ASSETS',
       payload: {}
+    });
+  }
+
+  public getCache(req: Request, res: Response, next: NextFunction): void {
+    if (!req.params.digest) {
+      res.writeHead(500);
+      res.end(`Malformed request received -> ${req.body}, ${req.params}`);
+      return;
+    }
+    fs.readFile(path.join(__dirname, '..', '..', 'cache', req.params.digest), (err, data: Buffer) => {
+      res.contentType(fileType(data).mime);
+      res.end(data);
     });
   }
 
@@ -229,6 +243,7 @@ export class LibRouter {
     this._router.get('/mathjax/example/third', this.getThirdMathjaxExample);
 
     this._router.post('/cache/quiz/assets', this.cacheQuizAssets.bind(this));
+    this._router.get('/cache/quiz/assets/:digest', this.getCache.bind(this));
 
     this._router.get('/authorize', this.authorize.bind(this));
   }

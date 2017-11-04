@@ -1,12 +1,10 @@
-import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {ActivatedRoute} from '@angular/router';
-import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
+import {ActivatedRoute, Router} from '@angular/router';
 import {IQuestion} from '../../../../../lib/questions/interfaces';
 import {CurrentQuizService} from '../../../../service/current-quiz.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {parseGithubFlavoredMarkdown} from '../../../../../lib/markdown/markdown';
 import {QuestionTextService} from '../../../../service/question-text.service';
 
 @Component({
@@ -37,10 +35,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   private _answers: Array<string>;
 
   constructor(
-    private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
     private currentQuizService: CurrentQuizService,
     private sanitizer: DomSanitizer,
+    private router: Router,
     private questionTextService: QuestionTextService,
     private footerBarService: FooterBarService) {
     footerBarService.replaceFooterElements([
@@ -66,15 +64,11 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     });
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
-      if (this.activeQuestionGroupService.activeQuestionGroup) {
-        this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
-      } else {
-        if (this._questionIndex >= this.currentQuizService.previousQuestions.length) {
-          this._question = this.currentQuizService.currentQuestion;
-        } else {
-          this._question = this.currentQuizService.previousQuestions[this._questionIndex];
-        }
+      if (this._questionIndex < 0 || this._questionIndex > this.currentQuizService.questionIndex) {
+        this.router.navigate(['/quiz', 'flow', 'results']);
+        return;
       }
+      this._question = this.currentQuizService.quiz.questionList[this._questionIndex];
       this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
       this.questionTextService.change(this._question.questionText);
     });

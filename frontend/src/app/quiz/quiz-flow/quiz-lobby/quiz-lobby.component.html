@@ -2,8 +2,8 @@
   <div *ngFor="let elem of attendeeService.attendees"
        class="mb-1 col-sm-4 col-md-3">
     <div [id]="elem.id"
-         (click)="isOwner ? openKickMemberModal(removeMemberModal, elem.name) : return"
-         [class]="'member-wrapper ' + (isOwner ? 'pointer ' : '') + (attendeeService.isOwnNick(elem.name) ? 'own-nick' : '')"
+         (click)="currentQuizService.isOwner ? openKickMemberModal(removeMemberModal, elem.name) : return"
+         [class]="'member-wrapper ' + (currentQuizService.isOwner ? 'pointer ' : '') + (attendeeService.isOwnNick(elem.name) ? 'own-nick' : '')"
          [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
          [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
       <p class="mb-0"

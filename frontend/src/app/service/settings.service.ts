@@ -1,4 +1,4 @@
-import {HostListener, Injectable, OnDestroy} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ConnectionService} from './connection.service';
 
 export declare interface IServerSettings {
@@ -8,7 +8,7 @@ export declare interface IServerSettings {
 }
 
 @Injectable()
-export class SettingsService implements OnDestroy {
+export class SettingsService {
   get serverSettings(): IServerSettings {
     return this._serverSettings;
   }
@@ -18,20 +18,16 @@ export class SettingsService implements OnDestroy {
   constructor(
     private connectionService: ConnectionService
   ) {
-    this._serverSettings = <IServerSettings>(JSON.parse(window.sessionStorage.getItem('_serverSettings')));
+    this._serverSettings = <IServerSettings>(JSON.parse(window.localStorage.getItem('config.server_settings')));
     if (!this._serverSettings) {
       this.initServerSettings();
     }
   }
 
   private initServerSettings() {
-    this.connectionService.initConnection().then((data: any) => {
+    this.connectionService.initConnection(true).then((data: any) => {
       this._serverSettings = data.serverConfig;
+      window.localStorage.setItem('config.server_settings', JSON.stringify(this._serverSettings));
     });
-  }
-
-  @HostListener('window:beforeunload', [ '$event' ])
-  ngOnDestroy() {
-    window.sessionStorage.setItem('_serverSettings', JSON.stringify(this._serverSettings));
   }
 }

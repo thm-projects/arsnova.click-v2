@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private modalService: NgbModal,
     private activeQuestionGroupService: ActiveQuestionGroupService,
+    private currentQuizService: CurrentQuizService,
     private http: HttpClient,
     private router: Router,
     private themesService: ThemesService,
@@ -95,12 +96,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   private cleanUpSessionStorage(): void {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       this.activeQuestionGroupService.cleanUp();
-      window.sessionStorage.removeItem('questionGroup');
+      window.sessionStorage.removeItem('config.active_question_group');
     }
     window.sessionStorage.removeItem('config.quiz_theme');
     this.attendeeService.cleanUp();
     this.currentQuiz.cleanUp();
     this.connectionService.cleanUp();
+    this.currentQuizService.cleanUp();
   }
 
   ngOnInit(): void {
@@ -191,10 +193,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  joinQuiz(): void {
-    this.currentQuiz.hashtag = this.enteredSessionName;
-  }
-
   setPassword(event: Event): void {
     this._serverPassword = (<HTMLInputElement>event.target).value;
   }
@@ -246,7 +244,20 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (value.status === 'STATUS:SUCCESSFUL') {
           this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
           this.activeQuestionGroupService.persist();
-          this.router.navigate(routingTarget);
+
+          new Promise((resolve) => {
+            if (this.isAddingABCDQuiz || this.isAddingDemoQuiz) {
+              this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+                quiz: questionGroup.serialize()
+              }).subscribe(
+                () => {
+                  resolve();
+                }
+              );
+            } else {
+              resolve();
+            }
+          }).then(() => this.router.navigate(routingTarget));
         } else {
           console.log(value);
         }

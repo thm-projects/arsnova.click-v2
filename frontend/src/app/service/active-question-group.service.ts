@@ -32,8 +32,8 @@ export class ActiveQuestionGroupService {
     private footerBarService: FooterBarService,
     private settingsService: SettingsService
   ) {
-    if (window.sessionStorage.getItem('questionGroup')) {
-      const serializedObject = window.sessionStorage.getItem('questionGroup');
+    if (window.sessionStorage.getItem('config.active_question_group')) {
+      const serializedObject = window.sessionStorage.getItem('config.active_question_group');
       const parsedObject = JSON.parse(serializedObject);
       this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
     }
@@ -55,7 +55,7 @@ export class ActiveQuestionGroupService {
   }
 
   public close(): void {
-    window.sessionStorage.removeItem(`${this.activeQuestionGroup.hashtag}_nick`);
+    window.sessionStorage.removeItem(`config.nick`);
     if (this.activeQuestionGroup) {
       this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
         body: {
@@ -71,7 +71,7 @@ export class ActiveQuestionGroupService {
   }
 
   persistForSession() {
-    window.sessionStorage.setItem('questionGroup', JSON.stringify(this.activeQuestionGroup.serialize()));
+    window.sessionStorage.setItem('config.active_question_group', JSON.stringify(this.activeQuestionGroup.serialize()));
   }
 
   persist() {
@@ -86,7 +86,7 @@ export class ActiveQuestionGroupService {
       this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
         quiz: this.activeQuestionGroup.serialize()
       }).subscribe((response: IMessage) => {
-        if (response.status !== 'STATUS:SUCCESSFULL') {
+        if (response.status !== 'STATUS:SUCCESSFUL') {
           console.log(response);
         }
       });
