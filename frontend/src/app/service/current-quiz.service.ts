@@ -4,6 +4,8 @@ import {SessionConfiguration} from '../../lib/session_configuration/session_conf
 import {ConnectionService} from './connection.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
+import {DefaultSettings} from '../../lib/default.settings';
+import {HttpClient} from '@angular/common/http';
 
 export declare interface ICurrentQuizData {
   quiz: IQuestionGroup;
@@ -54,6 +56,7 @@ export class CurrentQuizService implements ICurrentQuiz {
   private _readingConfirmationRequested = false;
 
   constructor(
+    private http: HttpClient,
     private connectionService: ConnectionService) {
     const instance = window.sessionStorage.getItem('config.current_quiz');
     if (instance) {
@@ -82,6 +85,11 @@ export class CurrentQuizService implements ICurrentQuiz {
   }
 
   public cleanUp(): void {
+    const nickname = window.sessionStorage.getItem(`config.nick`);
+    if (nickname) {
+      const url = `${DefaultSettings.httpApiEndpoint}/lobby/${this._quiz.hashtag}/member/${nickname}`;
+      this.http.request('delete', url).subscribe(() => {});
+    }
     window.sessionStorage.removeItem(`config.nick`);
     window.sessionStorage.removeItem(`config.current_quiz`);
     this._isOwner = false;

@@ -13,6 +13,7 @@ import {I18nService, NumberTypes} from '../../../service/i18n.service';
 import {QuestionTextService} from '../../../service/question-text.service';
 import {RangedQuestion} from '../../../../lib/questions/question_ranged';
 import {FreeTextQuestion} from '../../../../lib/questions/question_freetext';
+import {SurveyQuestion} from '../../../../lib/questions/question_survey';
 
 export class Countdown {
   get isRunning(): boolean {
@@ -110,8 +111,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     }
   }
 
-  showLeaderBoardButton(): boolean {
-    return ['SurveyQuestion'].indexOf(this.currentQuizService.currentQuestion().TYPE) === -1;
+  showLeaderBoardButton(index: number): boolean {
+    return !(this.currentQuizService.quiz.questionList[index] instanceof SurveyQuestion);
   }
 
   showStartQuizButton(): boolean {

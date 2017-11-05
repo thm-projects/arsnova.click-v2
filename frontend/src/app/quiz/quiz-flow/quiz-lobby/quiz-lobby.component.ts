@@ -163,7 +163,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       case 'MEMBER:REMOVED':
         const existingNickname = window.sessionStorage.getItem(`config.nick`);
         if (existingNickname === data.payload.name) {
-          window.sessionStorage.removeItem(`config.nick`);
           this.router.navigate(['/']);
         }
         break;

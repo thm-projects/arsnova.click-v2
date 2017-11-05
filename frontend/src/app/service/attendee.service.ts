@@ -99,8 +99,8 @@ export class AttendeeService implements OnDestroy {
     }
   }
 
-  removeMember(attendee: INickname): void {
-    const member = this.getMember(attendee.name);
+  removeMember(name: string): void {
+    const member = this.getMember(name);
     if (member) {
       this._attendees.splice(this._attendees.indexOf(member), 1);
       this.persistToSessionStorage();

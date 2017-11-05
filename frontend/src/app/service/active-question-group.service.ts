@@ -55,7 +55,6 @@ export class ActiveQuestionGroupService {
   }
 
   public close(): void {
-    window.sessionStorage.removeItem(`config.nick`);
     if (this.activeQuestionGroup) {
       this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
         body: {

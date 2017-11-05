@@ -23,7 +23,7 @@
     <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} / {{currentQuizService.quiz.questionList.length}}</h2>
   </div>
   <div class="btn-group w-100">
-    <button *ngIf="showLeaderBoardButton()"
+    <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
             [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
