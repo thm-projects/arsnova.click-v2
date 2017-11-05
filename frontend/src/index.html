@@ -115,9 +115,8 @@
 
 <script type="text/javascript">
   window.onload = function () {
-    if (!document.body.className) {
-      console.log(window.sessionStorage.getItem('config.quiz_theme'));
-      document.body.className = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme') || '');
+    if (!document.getElementsByTagName('html').item(0).className) {
+      document.getElementsByTagName('html').item(0).className = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme') || '');
     }
   };
 </script>

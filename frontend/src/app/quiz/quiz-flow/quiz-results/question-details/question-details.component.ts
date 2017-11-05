@@ -42,7 +42,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private footerBarService: FooterBarService) {
     footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack
+      this.footerBarService.footerElemBack,
+      this.footerBarService.footerElemFullscreen
     ]);
   }
 

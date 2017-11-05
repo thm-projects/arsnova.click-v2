@@ -23,24 +23,24 @@ export class ThemeSwitcherComponent implements OnInit {
       this.footerBarService.footerElemImport,
     ]);
     headerLabelService.headerLabel = 'component.theme_switcher.set_theme';
-    this.previewThemeBackup = document.getElementsByTagName('body')[0].className;
+    this.previewThemeBackup = document.getElementsByTagName('html').item(0).className;
   }
 
   ngOnInit() {
   }
 
   updateTheme(id: string) {
-    document.getElementsByTagName('body')[0].className = id;
-    this.previewThemeBackup = document.getElementsByTagName('body')[0].className;
+    document.getElementsByTagName('html').item(0).className = id;
+    this.previewThemeBackup = document.getElementsByTagName('html').item(0).className;
     window.localStorage.setItem('config.default_theme', this.previewThemeBackup);
   }
 
   previewTheme(id) {
-    document.getElementsByTagName('body')[0].className = id;
+    document.getElementsByTagName('html').item(0).className = id;
   }
 
   restoreTheme() {
-    document.getElementsByTagName('body')[0].className = this.previewThemeBackup;
+    document.getElementsByTagName('html').item(0).className = this.previewThemeBackup;
   }
 
 }
