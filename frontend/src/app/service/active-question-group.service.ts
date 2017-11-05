@@ -79,15 +79,6 @@ export class ActiveQuestionGroupService {
 
   public updateFooterElementsState() {
     if (this.activeQuestionGroup) {
-      if (this.activeQuestionGroup.sessionConfig.readingConfirmationEnabled) {
-        this.footerBarService.footerElemReadingConfirmation.isActive = true;
-      }
-      if (this.activeQuestionGroup.sessionConfig.showResponseProgress) {
-        this.footerBarService.footerElemResponseProgress.isActive = true;
-      }
-      if (this.activeQuestionGroup.sessionConfig.confidenceSliderEnabled) {
-        this.footerBarService.footerElemConfidenceSlider.isActive = true;
-      }
       if (this.activeQuestionGroup.sessionConfig.nicks.restrictToCasLogin) {
         this.footerBarService.footerElemEnableCasLogin.isActive = true;
       }
@@ -125,44 +116,6 @@ export class ActiveQuestionGroupService {
           'config.private_key')}/${this.activeQuestionGroup.sessionConfig.theme}/${this.translateService.currentLang}`;
         window.open(link);
       };
-    }
-  }
-
-  toggleSetting(elem: FooterbarElement) {
-    let target: string = null;
-    switch (elem) {
-      case this.footerBarService.footerElemResponseProgress:
-        target = 'showResponseProgress';
-        break;
-      case this.footerBarService.footerElemConfidenceSlider:
-        target = 'confidenceSliderEnabled';
-        break;
-      case this.footerBarService.footerElemProductTour:
-        target = null;
-        break;
-      case this.footerBarService.footerElemReadingConfirmation:
-        target = 'readingConfirmationEnabled';
-        break;
-    }
-    if (target) {
-      this.activeQuestionGroup.sessionConfig[target] = !elem.isActive;
-      elem.isActive = !elem.isActive;
-      this.persistForSession();
-
-      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/settings/update`, {
-        quizName: this.activeQuestionGroup.hashtag,
-        target: target,
-        state: elem.isActive
-      }).subscribe(
-        (data: IMessage) => {
-          if (data.status !== 'STATUS:SUCCESS') {
-            console.log(data);
-          }
-        },
-        error => {
-          console.log(error);
-        }
-      );
     }
   }
 }

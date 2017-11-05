@@ -93,7 +93,6 @@ export class VotingComponent implements OnInit, OnDestroy {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'MEMBER:UPDATED_RESPONSE':
-          console.log('modify response data for nickname in voting view', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
         case 'QUIZ:RESET':

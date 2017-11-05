@@ -28,7 +28,6 @@ export class LeaderboardRouter {
     const endIndex: number = isNaN(index) || index < 0 || index > questionAmount ? questionAmount : index + 1;
     const correctResponses: any = {};
     const partiallyCorrectResponses: any = {};
-    console.log('leaderboard starting with index', questionIndex, 'ending with index', endIndex);
     activeQuiz.nicknames.forEach(attendee => {
       for (let i: number = questionIndex; i < endIndex; i++) {
         const question: IQuestion = activeQuiz.originalObject.questionList[i];
@@ -36,16 +35,19 @@ export class LeaderboardRouter {
           continue;
         }
         const isCorrect = this._leaderboard.isCorrectResponse(attendee.responses[i], question);
-        console.log('leaderboard correct value is', isCorrect, 'for question index', i);
         if (isCorrect === 1) {
           if (!correctResponses[attendee.name]) {
-            correctResponses[attendee.name] = {responseTime: 0};
+            correctResponses[attendee.name] = {responseTime: 0, correctQuestions: [], confidenceValue: 0};
           }
+          correctResponses[attendee.name].correctQuestions.push(i);
+          correctResponses[attendee.name].confidenceValue += <number>attendee.responses[i].confidence;
           correctResponses[attendee.name].responseTime += <number>attendee.responses[i].responseTime;
         } else if (isCorrect === 0) {
           if (!partiallyCorrectResponses[attendee.name]) {
-            partiallyCorrectResponses[attendee.name] = {responseTime: 0};
+            partiallyCorrectResponses[attendee.name] = {responseTime: 0, correctQuestions: [], confidenceValue: 0};
           }
+          partiallyCorrectResponses[attendee.name].correctQuestions.push(i);
+          partiallyCorrectResponses[attendee.name].confidenceValue += <number>attendee.responses[i].confidence;
           partiallyCorrectResponses[attendee.name].responseTime += <number>attendee.responses[i].responseTime;
         } else {
           delete correctResponses[attendee.name];
@@ -54,7 +56,6 @@ export class LeaderboardRouter {
         }
       }
     });
-    console.log('leaderboard before converting object to array', correctResponses, partiallyCorrectResponses);
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:GET_LEADERBOARD_DATA',

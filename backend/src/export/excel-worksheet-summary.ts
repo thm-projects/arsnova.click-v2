@@ -81,7 +81,8 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     this.leaderBoardData.forEach((leaderboardItem, indexInList) => {
       let hasNotAllQuestionsCorrect = false;
       this.quiz.originalObject.questionList.forEach((item, index) => {
-        if (item.TYPE !== 'SurveyQuestion' && leaderboardItem.correctQuestions.indexOf((index + 1)) === -1) {
+        if (['SurveyQuestion', 'ABCDSingleChoiceQuestion'].indexOf(item.TYPE) > -1 &&
+            leaderboardItem.correctQuestions.indexOf((index + 1)) === -1) {
           hasNotAllQuestionsCorrect = true;
         }
       });

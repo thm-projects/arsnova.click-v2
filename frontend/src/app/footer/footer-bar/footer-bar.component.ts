@@ -2,8 +2,8 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FooterbarElement, FooterBarService} from '../../service/footer-bar.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
-import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {FileUploadService} from '../../service/file-upload.service';
+import {CurrentQuizService} from '../../service/current-quiz.service';
 
 @Component({
   selector: 'app-footer-bar',
@@ -23,7 +23,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private footerBarService: FooterBarService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private currentQuizService: CurrentQuizService,
     private fileUploadService: FileUploadService) {
   }
 
@@ -44,7 +44,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
   }
 
   toggleSetting(elem: FooterbarElement) {
-    this.activeQuestionGroupService.toggleSetting(elem);
+    this.currentQuizService.toggleSetting(elem);
   }
 
   public fileChange(event: any) {

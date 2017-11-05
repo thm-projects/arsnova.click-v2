@@ -17,7 +17,7 @@ export function calculateNumberOfRangedAnswers(quiz: IActiveQuiz, questionIndex:
   let numberOfAnswersInMinRange = 0;
   let numberOfAnswersInMaxRange = 0;
   let numberOfCorrectAnswers = 0;
-  quiz.nicknames.forEach(function (nickname) {
+  quiz.nicknames.forEach((nickname) => {
       if (nickname.responses[questionIndex].value <= maxRange && nickname.responses[questionIndex].value > correctValue) {
         numberOfAnswersInMaxRange++;
       } else if (nickname.responses[questionIndex].value === correctValue) {

@@ -81,9 +81,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemStartQuiz.onClickCallback = () => {
         const target = currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ?
                        'reading-confirmation' : 'start';
+        console.log(currentQuizService.quiz.sessionConfig.readingConfirmationEnabled);
         this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
           quizName: this.currentQuizService.quiz.hashtag
-        }).subscribe(() => {
+        }).subscribe((data: IMessage) => {
+          this.currentQuizService.readingConfirmationRequested = data.step === 'QUIZ:READING_CONFIRMATION_REQUESTED';
           this.router.navigate(['/quiz', 'flow', 'results']);
         });
       };

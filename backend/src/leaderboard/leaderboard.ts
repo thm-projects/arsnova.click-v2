@@ -5,6 +5,8 @@ import {IQuizResponse} from '../interfaces/common.interfaces';
 export declare interface ILeaderBoardItem {
   name: string;
   responseTime: number;
+  correctQuestions: Array<number>;
+  confidenceValue: number;
 }
 
 export class Leaderboard {
@@ -80,16 +82,15 @@ export class Leaderboard {
 
   public objectToArray(obj: Object): Array<ILeaderBoardItem> {
     const keyList: Array<string> = Object.keys(obj);
-    console.log('converting object to array', keyList, keyList.map((value, index) => {
-      return {
-        name: keyList[index],
-        responseTime: obj[value].responseTime || -1
-      };
-    }));
+    if (!keyList.length) {
+      return [];
+    }
     return keyList.map((value, index) => {
       return {
         name: keyList[index],
-        responseTime: obj[value].responseTime || -1
+        responseTime: obj[value].responseTime || -1,
+        correctQuestions: obj[value].correctQuestions,
+        confidenceValue: obj[value].confidenceValue / obj[value].correctQuestions.length
       };
     });
   }

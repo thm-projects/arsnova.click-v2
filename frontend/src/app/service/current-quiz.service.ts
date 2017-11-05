@@ -6,6 +6,7 @@ import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
+import {FooterbarElement, FooterBarService} from './footer-bar.service';
 
 export declare interface ICurrentQuizData {
   quiz: IQuestionGroup;
@@ -60,6 +61,7 @@ export class CurrentQuizService implements ICurrentQuiz {
 
   constructor(
     private http: HttpClient,
+    private footerBarService: FooterBarService,
     private connectionService: ConnectionService) {
     const instance = window.sessionStorage.getItem('config.current_quiz');
     if (instance) {
@@ -74,6 +76,15 @@ export class CurrentQuizService implements ICurrentQuiz {
         this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
       }
     }
+    if (this._quiz.sessionConfig.readingConfirmationEnabled) {
+      this.footerBarService.footerElemReadingConfirmation.isActive = true;
+    }
+    if (this._quiz.sessionConfig.showResponseProgress) {
+      this.footerBarService.footerElemResponseProgress.isActive = true;
+    }
+    if (this._quiz.sessionConfig.confidenceSliderEnabled) {
+      this.footerBarService.footerElemConfidenceSlider.isActive = true;
+    }
     connectionService.socket.subscribe((data: IMessage) => {
       if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATE_SETTINGS') {
         this._quiz.sessionConfig = new SessionConfiguration(data.payload.sessionConfiguration);
@@ -83,7 +94,6 @@ export class CurrentQuizService implements ICurrentQuiz {
   }
 
   public currentQuestion(): IQuestion {
-    console.log(this._questionIndex, this._quiz.questionList);
     return this._quiz.questionList[this._questionIndex];
   }
 
@@ -114,6 +124,44 @@ export class CurrentQuizService implements ICurrentQuiz {
           console.log(response);
         }
       });
+    }
+  }
+
+  public toggleSetting(elem: FooterbarElement) {
+    let target: string = null;
+    switch (elem) {
+      case this.footerBarService.footerElemResponseProgress:
+        target = 'showResponseProgress';
+        break;
+      case this.footerBarService.footerElemConfidenceSlider:
+        target = 'confidenceSliderEnabled';
+        break;
+      case this.footerBarService.footerElemProductTour:
+        target = null;
+        break;
+      case this.footerBarService.footerElemReadingConfirmation:
+        target = 'readingConfirmationEnabled';
+        break;
+    }
+    if (target) {
+      this._quiz.sessionConfig[target] = !elem.isActive;
+      elem.isActive = !elem.isActive;
+      this.persistToSessionStorage();
+
+      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/settings/update`, {
+        quizName: this._quiz.hashtag,
+        target: target,
+        state: elem.isActive
+      }).subscribe(
+        (data: IMessage) => {
+          if (data.status !== 'STATUS:SUCCESS') {
+            console.log(data);
+          }
+        },
+        error => {
+          console.log(error);
+        }
+      );
     }
   }
 

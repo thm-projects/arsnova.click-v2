@@ -1,4 +1,4 @@
-import {INickname} from '../interfaces/common.interfaces';
+import {INickname, IQuizResponse} from '../interfaces/common.interfaces';
 import {IQuestion} from '../interfaces/questions/interfaces';
 import {calculateNumberOfAnswers} from './lib/excel_function_library';
 import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
@@ -188,7 +188,7 @@ export class SingleChoiceExcelWorksheet extends ExcelWorksheet implements IExcel
         this.ws.cell(nextStartRow, nextColumnIndex++).string(profile.mail instanceof Array ? profile.mail.slice(-1)[0] : profile.mail);
       }
       const chosenAnswer: IAnswerOption = this._question.answerOptionList[<number>responseItem.responses[this._questionIndex].value];
-      this.ws.cell(nextStartRow, nextColumnIndex++).string(chosenAnswer);
+      this.ws.cell(nextStartRow, nextColumnIndex++).string(chosenAnswer.answerText);
       if (this.responsesWithConfidenceValue.length > 0) {
         this.ws.cell(nextStartRow, nextColumnIndex++).number(Math.round(responseItem.responses[this._questionIndex].confidence));
       }

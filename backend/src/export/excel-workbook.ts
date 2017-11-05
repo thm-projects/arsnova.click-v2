@@ -61,6 +61,7 @@ export class ExcelWorkbook implements IExcelWorkbook {
         case 'SingleChoiceQuestion':
         case 'YesNoSingleChoiceQuestion':
         case 'TrueFalseSingleChoiceQuestion':
+        case 'ABCDSingleChoiceQuestion':
           this._worksheets.push(new SingleChoiceExcelWorksheet(worksheetOptions));
           break;
         case 'MultipleChoiceQuestion':

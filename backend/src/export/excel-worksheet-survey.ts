@@ -77,7 +77,7 @@ export class SurveyExcelWorksheet extends ExcelWorksheet implements IExcelWorksh
                                   });
     this.ws.cell(10, 1, attendeeEntryRows + 9, columnsToFormat, !hasEntries).style(attendeeEntryRowStyle);
 
-    this.quiz.nicknames.forEach(function (responseItem, indexInList) {
+    this.quiz.nicknames.forEach((responseItem, indexInList) => {
       let nextColumnIndex = 3;
       const targetRow = indexInList + 10;
       if (this._isCasRequired) {

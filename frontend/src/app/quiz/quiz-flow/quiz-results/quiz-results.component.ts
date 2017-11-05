@@ -218,7 +218,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           });
           break;
         case 'MEMBER:UPDATED_RESPONSE':
-          console.log('modify response data for nickname in live results view', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
           if (this.attendeeService.attendees.filter(attendee => {
               return attendee.responses[this.currentQuizService.questionIndex] ?
@@ -268,6 +267,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
                    !this.currentQuizService.readingConfirmationRequested ?
                    'reading-confirmation' : 'start';
 
+    console.log('start quiz target', this.currentQuizService.readingConfirmationRequested);
     this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
       quizName: this.currentQuizService.quiz.hashtag
     }).subscribe((data: IMessage) => {

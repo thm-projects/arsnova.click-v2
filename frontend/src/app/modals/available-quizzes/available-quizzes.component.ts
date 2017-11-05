@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalI} from '../modals.module';
-import {TranslateService} from '@ngx-translate/core';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
 import {IQuestionGroup} from '../../../lib/questions/interfaces';

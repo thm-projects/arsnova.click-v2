@@ -75,7 +75,7 @@ export abstract class ExcelWorksheet {
       this._columnsToFormat += 2;
     }
 
-    this._leaderBoardData = this.getLeaderboardData(questionIndex || -1);
+    this._leaderBoardData = this.getLeaderboardData(questionIndex);
   }
 
   private prefixNumberWithZero(num: number): string {
@@ -103,12 +103,13 @@ export abstract class ExcelWorksheet {
     this.quiz.nicknames.forEach(attendee => {
       for (let i: number = questionIndex; i < endIndex; i++) {
         const question: IQuestion = this.quiz.originalObject.questionList[i];
-        if (question.TYPE === 'SurveyQuestion') {
+        if (['SurveyQuestion', 'ABCDSingleChoiceQuestion'].indexOf(question.TYPE)) {
           continue;
         }
+        console.log('leaderboard export', i, attendee.responses[i], question);
         if (leaderBoard.isCorrectResponse(attendee.responses[i], question) === 1) {
           if (!correctResponses[attendee.name]) {
-            correctResponses[attendee.name] = {responseTime: 0, correctQuestions: []};
+            correctResponses[attendee.name] = {responseTime: 0, correctQuestions: [], confidenceValue: 0};
           }
           correctResponses[attendee.name].responseTime += <number>attendee.responses[i].responseTime;
           correctResponses[attendee.name].correctQuestions.push(i);
@@ -118,8 +119,6 @@ export abstract class ExcelWorksheet {
           break;
         }
       }
-      correctResponses[attendee.name].confidenceValue = correctResponses[attendee.name].confidenceValue /
-                                                        correctResponses[attendee.name].correctQuestions.length;
     });
 
     return leaderBoard.objectToArray(correctResponses);
