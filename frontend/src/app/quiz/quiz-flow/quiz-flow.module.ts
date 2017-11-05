@@ -41,6 +41,11 @@ const quizFlowRoutes: Routes = [
     data: {}
   },
   {
+    path: 'quiz/flow/leaderboard',
+    component: LeaderboardComponent,
+    data: {}
+  },
+  {
     path: 'quiz/flow/leaderboard/:questionIndex',
     component: LeaderboardComponent,
     data: {}

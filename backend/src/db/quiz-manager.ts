@@ -166,9 +166,9 @@ class ActiveQuizItem implements IActiveQuiz {
         console.log('websocket for nickname', value.name, 'is undefined');
       }
     });
-    if (this._ownerSocket) {
+    if (this._ownerSocket && this._ownerSocket.readyState === WebSocket.OPEN) {
       this._ownerSocket.send(JSON.stringify(message));
-    } else {
+    } else if (this._ownerSocket) {} else {
       console.log('no owner socket defined');
     }
   }

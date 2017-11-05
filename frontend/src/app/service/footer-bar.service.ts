@@ -326,6 +326,16 @@ export class FooterBarService {
     linkTarget: null
   }, function () {
   });
+  public footerElemLeaderboard: FooterbarElement = new FooterbarElement({
+    id: 'leaderboard',
+    iconClass: 'fa fa-trophy',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.global_leaderboard',
+    selectable: false,
+    showIntro: false,
+    linkTarget: '/quiz/flow/leaderboard',
+  }, function () {
+  });
 
   get footerElements(): Array<FooterbarElement> {
     return this._footerElements;

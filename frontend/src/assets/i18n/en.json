@@ -54,6 +54,7 @@
         "cache_assets": "Cache Assets",
         "block_rude_nicknames": "Block rude nicknames",
         "enable_cas_login": "Enable CAS Login",
+        "global_leaderboard": "Global Leaderboard",
         "description": {
           "qr-code": "Attendees can scan the QR code via their mobile devices to join the quiz.",
           "sound": "Set the sound for the background music or the countdown here.",
@@ -332,7 +333,7 @@
       "header": "Leaderboard",
       "global_header": "Global leaderboard",
       "title": {
-        "single_question": "Question __questionId__ - Correct answers from...",
+        "single_question": "Question {QUESTION_ID} - Correct answers from...",
         "all_questions": "Correct answers from..."
       },
       "no_attendee_correct": "No one has answered this question correctly",

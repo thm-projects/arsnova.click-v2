@@ -128,6 +128,12 @@ export class VotingComponent implements OnInit, OnDestroy {
     return +value === value;
   }
 
+  public showSendResponseButton(): boolean {
+    return this.isNumber(this.selectedAnswers) ||
+           (this.selectedAnswers instanceof Array && !!this.selectedAnswers.length) ||
+           (typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length);
+  }
+
   public toggleSelectAnswer(index: number): void {
     if (!(this._selectedAnswers instanceof Array)) {
       return;
@@ -146,6 +152,8 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   sendResponses(): void {
+    this._countdown.onChange.unsubscribe();
+    this._countdown.stop();
     this.router.navigate([
       '/quiz',
       'flow',

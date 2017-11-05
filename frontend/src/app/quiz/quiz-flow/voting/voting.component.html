@@ -43,7 +43,7 @@
          class="w-100" />
 </div>
 
-<button *ngIf="selectedAnswers.length || isNumber(selectedAnswers)"
+<button *ngIf="showSendResponseButton()"
         class="btn btn-default w-100 mt-5 pointer"
         (click)="sendResponses()">
   <span>{{'component.voting.send' | translate}}</span>

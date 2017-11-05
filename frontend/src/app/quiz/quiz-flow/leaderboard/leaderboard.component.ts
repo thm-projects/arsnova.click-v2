@@ -34,13 +34,18 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     return this._isGlobalRanking;
   }
 
-  get leaderBoard(): Array<ILeaderBoard> {
-    return this._leaderBoard;
+  get leaderBoardPartiallyCorrect(): Array<ILeaderBoard> {
+    return this._leaderBoardPartiallyCorrect;
+  }
+
+  get leaderBoardCorrect(): Array<ILeaderBoard> {
+    return this._leaderBoardCorrect;
   }
 
   private _routerSubscription: Subscription;
   private _questionIndex: number;
-  private _leaderBoard: Array<ILeaderBoard>;
+  private _leaderBoardCorrect: Array<ILeaderBoard>;
+  private _leaderBoardPartiallyCorrect: Array<ILeaderBoard>;
   private _isGlobalRanking: boolean;
   private _hashtag: string;
 
@@ -69,7 +74,8 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemFullscreen
       ]);
     }
-    this._leaderBoard = [];
+    this._leaderBoardCorrect = [];
+    this._leaderBoardPartiallyCorrect = [];
   }
 
   private handleMessages() {
@@ -100,13 +106,19 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._isGlobalRanking = isNaN(this._questionIndex);
-      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex}`)
+      if (this._isGlobalRanking) {
+        this._questionIndex = null;
+        if (params['questionIndex']) {
+          this.router.navigate(['/quiz', 'flow', 'leaderboard']);
+          return;
+        }
+      }
+      const url = `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex ? this._questionIndex : ''}`;
+      this.http.get(url)
           .subscribe(
             (data: IMessage) => {
-              this._leaderBoard = data.payload;
-            },
-            error => {
-              console.log(error);
+              this._leaderBoardCorrect = data.payload.correctResponses;
+              this._leaderBoardPartiallyCorrect = data.payload.partiallyCorrectResponses;
             }
           );
     });

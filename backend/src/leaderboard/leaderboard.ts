@@ -4,9 +4,7 @@ import {IQuizResponse} from '../interfaces/common.interfaces';
 
 export declare interface ILeaderBoardItem {
   name: string;
-  correctQuestions: Array<number>;
   responseTime: number;
-  confidenceValue: number;
 }
 
 export class Leaderboard {
@@ -16,69 +14,47 @@ export class Leaderboard {
 
   private isCorrectMultipleChoiceQuestion(response: Array<number>, question: IQuestionChoice): number {
     let hasCorrectAnswer = 0;
-    let hasWrongAnswer = 0;
-    const correctAnswers: Array<IAnswerOption> = question.answerOptionList.filter((answeroption) => {
+    response.forEach((element) => {
+      if (question.answerOptionList[element].isCorrect) {
+        hasCorrectAnswer++;
+      }
+    });
+    return question.answerOptionList.filter((answeroption) => {
       return answeroption.isCorrect;
-    });
-    response.every((element) => {
-      const tmpCorrectAnswer: number = hasCorrectAnswer;
-      correctAnswers.every((item, index) => {
-        if (element === index) {
-          hasCorrectAnswer++;
-          return false;
-        }
-        return true;
-      });
-      if (tmpCorrectAnswer === hasCorrectAnswer) {
-        hasWrongAnswer++;
-      }
-      return true;
-    });
-    if (hasWrongAnswer > 0) {
-      return -1;
-    }
-    if (hasCorrectAnswer > 0) {
-      if (correctAnswers.length === hasCorrectAnswer) {
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-    return -1;
+    }).length === hasCorrectAnswer ? 1 : hasCorrectAnswer ? 0 : -1;
   }
 
-  private isCorrectRangedQuestion(response: Array<number>, question: IQuestionRanged): number {
-    return response[0] >= question.rangeMin && response[1] <= question.rangeMax ? 0 : response[2] === question.correctValue ? 1 : -1;
+  private isCorrectRangedQuestion(response: number, question: IQuestionRanged): number {
+    return response === question.correctValue ? 1 : response >= question.rangeMin && response <= question.rangeMax ? 0 : -1;
   }
 
   private isCorrectFreeTextQuestion(response: string, question: IQuestionFreetext): boolean {
     const answerOption: IFreetextAnswerOption = <IFreetextAnswerOption>question.answerOptionList[0];
-    let userHasRightAnswers = false;
-    let clonedResponse: string = JSON.parse(JSON.stringify(response));
+    let refValue = answerOption.answerText;
+    let result = false;
     if (!answerOption.configCaseSensitive) {
-      answerOption.answerText = answerOption.answerText.toLowerCase();
-      clonedResponse = clonedResponse.toLowerCase();
+      refValue = refValue.toLowerCase();
+      response = response.toLowerCase();
+      result = refValue === response;
     }
-    if (!answerOption.configUsePunctuation) {
-      answerOption.answerText = answerOption.answerText.replace(/(\.)*(,)*(!)*(")*(;)*(\?)*/g, '');
-      clonedResponse = clonedResponse.replace(/(\.)*(,)*(!)*(")*(;)*(\?)*/g, '');
-    }
-    if (answerOption.configUseKeywords) {
-      if (!answerOption.configTrimWhitespaces) {
-        answerOption.answerText = answerOption.answerText.replace(/ /g, '');
-        clonedResponse = clonedResponse.replace(/ /g, '');
-      }
-      userHasRightAnswers = answerOption.answerText === clonedResponse;
+    if (answerOption.configTrimWhitespaces) {
+      refValue = refValue.replace(/ /g, '');
+      response = response.replace(/ /g, '');
+      result = refValue === response;
     } else {
-      let hasCorrectKeywords = true;
-      answerOption.answerText.split(' ').forEach(keyword => {
-        if (clonedResponse.indexOf(keyword) === -1) {
-          hasCorrectKeywords = false;
-        }
-      });
-      userHasRightAnswers = hasCorrectKeywords;
+      if (!answerOption.configUsePunctuation) {
+        refValue = refValue.replace(/[,:\(\)\[\]\.\*\?]/g, '');
+        response = response.replace(/[,:\(\)\[\]\.\*\?]/g, '');
+      }
+      if (!answerOption.configUseKeywords) {
+        result = refValue.split(' ').filter(function (elem) {
+          return response.indexOf(elem) === -1;
+        }).length === 0;
+      } else {
+        result = refValue === response;
+      }
     }
-    return userHasRightAnswers;
+    return result;
   }
 
   public isCorrectResponse(response: IQuizResponse, question: IQuestion): number {
@@ -93,7 +69,7 @@ export class Leaderboard {
       case 'SurveyQuestion':
         return 1;
       case 'RangedQuestion':
-        return this.isCorrectRangedQuestion(<Array<number>>response.value, <IQuestionRanged>question);
+        return this.isCorrectRangedQuestion(<number>response.value, <IQuestionRanged>question);
       case 'FreeTextQuestion':
         return this.isCorrectFreeTextQuestion(<string>response.value, <IQuestionFreetext>question) ? 1 : -1;
       default:
@@ -104,12 +80,16 @@ export class Leaderboard {
 
   public objectToArray(obj: Object): Array<ILeaderBoardItem> {
     const keyList: Array<string> = Object.keys(obj);
+    console.log('converting object to array', keyList, keyList.map((value, index) => {
+      return {
+        name: keyList[index],
+        responseTime: obj[value].responseTime || -1
+      };
+    }));
     return keyList.map((value, index) => {
       return {
         name: keyList[index],
-        correctQuestions: obj[value].correctQuestions || [],
-        responseTime: obj[value].responseTime || -1,
-        confidenceValue: obj[value].confidenceValue || -1
+        responseTime: obj[value].responseTime || -1
       };
     });
   }
