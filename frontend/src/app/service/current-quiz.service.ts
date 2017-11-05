@@ -85,6 +85,7 @@ export class CurrentQuizService implements ICurrentQuiz {
   }
 
   public cleanUp(): void {
+    this.close();
     const nickname = window.sessionStorage.getItem(`config.nick`);
     if (nickname) {
       const url = `${DefaultSettings.httpApiEndpoint}/lobby/${this._quiz.hashtag}/member/${nickname}`;
@@ -96,6 +97,21 @@ export class CurrentQuizService implements ICurrentQuiz {
     this._quiz = null;
     this._questionIndex = 0;
     this._readingConfirmationRequested = false;
+  }
+
+  public close(): void {
+    if (this._isOwner && this._quiz) {
+      this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
+        body: {
+          quizName: this._quiz.hashtag,
+          privateKey: window.localStorage.getItem('config.private_key')
+        }
+      }).subscribe((response: IMessage) => {
+        if (response.status !== 'STATUS:SUCCESS') {
+          console.log(response);
+        }
+      });
+    }
   }
 
   public serialize(): ICurrentQuizData {

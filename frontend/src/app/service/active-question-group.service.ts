@@ -50,23 +50,7 @@ export class ActiveQuestionGroupService {
   }
 
   public cleanUp(): void {
-    this.close();
     this.activeQuestionGroup = null;
-  }
-
-  public close(): void {
-    if (this.activeQuestionGroup) {
-      this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
-        body: {
-          quizName: this.activeQuestionGroup.hashtag,
-          privateKey: window.localStorage.getItem('config.private_key')
-        }
-      }).subscribe((response: IMessage) => {
-        if (response.status !== 'STATUS:SUCCESS') {
-          console.log(response);
-        }
-      });
-    }
   }
 
   persistForSession() {

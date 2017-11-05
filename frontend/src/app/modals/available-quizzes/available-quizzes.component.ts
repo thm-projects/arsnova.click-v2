@@ -70,6 +70,7 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
 
   editQuiz(session: IQuestionGroup): void {
     this.activeQuestionGroupService.activeQuestionGroup = session;
+    this.router.navigate(['/quiz/manager']);
     this.next();
   }
 

@@ -200,7 +200,7 @@ export class ApiRouter {
 
   public deleteMember(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
-    const result: boolean = activeQuiz.removeMember(req.params.nickname);
+    const result: boolean = activeQuiz ? activeQuiz.removeMember(req.params.nickname) : false;
     const response: Object = {status: `STATUS:${result ? 'SUCCESSFUL' : 'FAILED'}`};
     if (result) {
       Object.assign(response, {
