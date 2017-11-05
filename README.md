@@ -16,27 +16,27 @@ Please consider the list of the [ToDo's](./TODOS.md) including the known issues 
 #### Installation
 
 ###### Backend
-Head over to the /backend directory and hit `npm install`
+Head over to the /backend directory and enter `npm install`
 
 ###### Frontend
-Head over to the /frontend directory and hit `npm install`
+Head over to the /frontend directory and enter `npm install`
 
 ---
 #### Run (DEV deployment)
 
 ###### Backend
-Head over to the /backend directory and hit `npm start`
+Head over to the /backend directory and enter `npm start`
 
 ###### Frontend
-Head over to the /frontend directory and hit `npm run start`
+Head over to the /frontend directory and enter `npm run start`
 
 ---
 #### Build (LIVE deployment)
 
 ###### Backend
-Head over to the /backend directory and hit `npm start`
+Head over to the /backend directory and enter `npm start`
 
 ###### Frontend
-Head over to the /frontend directory and hit `npm run prod`
+Head over to the /frontend directory and enter `npm run prod`
 
 Note that the build time can take up to ~1 minute
