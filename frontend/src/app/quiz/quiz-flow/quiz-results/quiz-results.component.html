@@ -20,17 +20,17 @@
 
 <div class="question">
   <div *ngIf="currentQuizService.quiz.questionList.length">
-    <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{currentQuizService.questionIndex + 1}} / {{currentQuizService.quiz.questionList.length}}</h2>
+    <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} / {{currentQuizService.quiz.questionList.length}}</h2>
   </div>
   <div class="btn-group w-100">
     <button *ngIf="showLeaderBoardButton()"
-            [routerLink]="['/quiz', 'flow', 'leaderboard', currentQuizService.questionIndex]"
+            [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
       <i class="fa fa-flag" aria-hidden="true"></i>
       <span>{{'component.liveResults.ranking' | translate}}</span>
     </button>
-    <button [routerLink]="['/quiz', 'flow', 'results', currentQuizService.questionIndex]"
+    <button [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
       <i class="fa fa-question" aria-hidden="true"></i>
@@ -38,10 +38,17 @@
     </button>
   </div>
   <app-reading-confirmation *ngIf="showReadingConfirmation()"
-                            [data]="getReadingConfirmationData(currentQuizService.questionIndex)"></app-reading-confirmation>
+                            [data]="getReadingConfirmationData(selectedQuestionIndex)"></app-reading-confirmation>
   <app-confidence-rate *ngIf="showConfidenceRate()"
-                       [data]="getConfidenceData(currentQuizService.questionIndex)"></app-confidence-rate>
-  <app-progress-bar *ngIf="showResponseProgress()" [data]="answers" [questionIndex]="currentQuizService.questionIndex" [question]="currentQuizService.currentQuestion()"></app-progress-bar>
+                       [data]="getConfidenceData(selectedQuestionIndex)"></app-confidence-rate>
+  <app-progress-bar *ngIf="showResponseProgress()" [data]="answers" [questionIndex]="selectedQuestionIndex" [question]="currentQuizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
+</div>
+
+<div *ngFor="let question of currentQuizService.getVisibleQuestions(); let i = index"
+     [class]="'btn btn-default w-100 ' + (i === selectedQuestionIndex ? 'disabled' : 'pointer')"
+     [attr.disabled]="i === selectedQuestionIndex"
+     (click)="modifyVisibleQuestion(i)">
+  <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
 </div>
 
 <app-audio-player *ngIf="countdown && countdown.isRunning && countdown.remainingTime && currentQuizService.quiz.sessionConfig && currentQuizService.quiz.sessionConfig.music.countdownRunningEnabled"

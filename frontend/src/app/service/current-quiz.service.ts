@@ -98,6 +98,10 @@ export class CurrentQuizService implements ICurrentQuiz {
     };
   }
 
+  public getVisibleQuestions(maxIndex?: number): Array<IQuestion> {
+    return this._quiz.questionList.slice(0, maxIndex || this._questionIndex + 1);
+  }
+
   public persistToSessionStorage(): void {
     window.sessionStorage.setItem('config.current_quiz', JSON.stringify(this.serialize()));
   }

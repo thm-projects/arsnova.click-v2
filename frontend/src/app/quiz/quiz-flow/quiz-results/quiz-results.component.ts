@@ -63,6 +63,9 @@ export class Countdown {
   styleUrls: ['./quiz-results.component.scss']
 })
 export class QuizResultsComponent implements OnInit, OnDestroy {
+  get selectedQuestionIndex(): number {
+    return this._selectedQuestionIndex;
+  }
   private _selectedQuestionIndex: number;
 
   public countdown: Countdown;
@@ -120,6 +123,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   showConfidenceRate(): boolean {
     return this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled;
+  }
+
+  modifyVisibleQuestion(index: number): void {
+    this._selectedQuestionIndex = index;
+    this.generateAnswers(this.currentQuizService.quiz.questionList[index]);
   }
 
   getConfidenceData(questionIndex: number): Object {
@@ -249,20 +257,24 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           const question = this.currentQuizService.currentQuestion();
           this.countdown = new Countdown(question, data.payload.startTimestamp);
 
-          if (question instanceof RangedQuestion) {
-            this.answers = ['guessed_correct', 'guessed_in_range', 'guessed_wrong'];
-
-          } else if (question instanceof FreeTextQuestion) {
-            this.answers = ['correct_answer', 'wrong_answer'];
-
-          } else {
-            this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {
-              return answer.answerText;
-            }));
-          }
+          this.generateAnswers(question);
         }
       }
     });
+  }
+
+  private generateAnswers(question: IQuestion): void {
+    if (question instanceof RangedQuestion) {
+      this.answers = ['guessed_correct', 'guessed_in_range', 'guessed_wrong'];
+
+    } else if (question instanceof FreeTextQuestion) {
+      this.answers = ['correct_answer', 'wrong_answer'];
+
+    } else {
+      this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {
+        return answer.answerText;
+      }));
+    }
   }
 
   ngOnInit() {
@@ -277,17 +289,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           const question = this.currentQuizService.currentQuestion();
           this.countdown = new Countdown(question, data.payload.startTimestamp);
 
-          if (question instanceof RangedQuestion) {
-            this.answers = ['guessed_correct', 'guessed_in_range', 'guessed_wrong'];
-
-          } else if (question instanceof FreeTextQuestion) {
-            this.answers = ['correct_answer', 'wrong_answer'];
-
-          } else {
-            this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {
-              return answer.answerText;
-            }));
-          }
+          this.generateAnswers(question);
         }
       });
       if (this.currentQuizService.isOwner) {
