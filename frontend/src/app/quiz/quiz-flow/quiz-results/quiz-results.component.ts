@@ -83,13 +83,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private attendeeService: AttendeeService) {
 
-    headerLabelService.setHeaderLabel('component.liveResults.title');
+    headerLabelService.headerLabel = 'component.liveResults.title';
 
     this._selectedQuestionIndex = currentQuizService.questionIndex;
+    let footerElems;
 
     if (currentQuizService.isOwner) {
       this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
-      let footerElems;
       if (this.currentQuizService.questionIndex === this.currentQuizService.quiz.questionList.length - 1) {
         footerElems = [
           this.footerBarService.footerElemBack,
@@ -106,7 +106,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.footerBarService.footerElemSound,
         ];
       }
-      this.footerBarService.replaceFooterElements(footerElems);
       this.footerBarService.footerElemBack.onClickCallback = () => {
         this.http.patch(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${this.currentQuizService.quiz.hashtag}`, {}).subscribe(
           (data: IMessage) => {
@@ -116,9 +115,18 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         );
       };
     } else {
-      this.footerBarService.replaceFooterElements([
-      ]);
+      if (this.currentQuizService.questionIndex === this.currentQuizService.quiz.questionList.length - 1) {
+        footerElems = [
+          this.footerBarService.footerElemLeaderboard,
+          this.footerBarService.footerElemFullscreen,
+        ];
+      } else {
+        footerElems = [
+          this.footerBarService.footerElemFullscreen
+        ];
+      }
     }
+    this.footerBarService.replaceFooterElements(footerElems);
   }
 
   showLeaderBoardButton(index: number): boolean {

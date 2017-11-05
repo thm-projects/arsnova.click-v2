@@ -27,7 +27,7 @@ export class LanguageSwitcherComponent implements OnInit {
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);
-    headerLabelService.setHeaderLabel('component.translation.translations');
+    headerLabelService.headerLabel = 'component.translation.translations';
     Object.keys(Languages).forEach((lang) => {
       this._availableLanguages.push({
         text: LanguageTranslations[lang],

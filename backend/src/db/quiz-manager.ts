@@ -199,7 +199,10 @@ class ActiveQuizItem implements IActiveQuiz {
 
     let timer = this.originalObject.questionList[this.currentQuestionIndex].timer;
     const interval = setInterval(() => {
-      if (!timer || this.nicknames.filter(nick => nick.responses[this.currentQuestionIndex]).length === this.nicknames.length) {
+      if (!timer || this.nicknames.filter(nick => {
+        const value = nick.responses[this.currentQuestionIndex].value;
+        return typeof value === 'number' ? !isNaN(value) : value.length;
+        }).length === this.nicknames.length) {
         this._currentStartTimestamp = 0;
         clearInterval(interval);
       } else {
@@ -280,10 +283,10 @@ class ActiveQuizItem implements IActiveQuiz {
   public addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void {
     this.nicknames.filter(value => {
       return value.name === nickname;
-    })[0].responses[questionIndex].value = data;
+    })[0].responses[questionIndex].responseTime = (new Date().getTime() - this._currentStartTimestamp) / 1000;
     this.nicknames.filter(value => {
       return value.name === nickname;
-    })[0].responses[questionIndex].responseTime = (new Date().getTime() - this.currentStartTimestamp) / 1000;
+    })[0].responses[questionIndex].value = data;
 
     this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',

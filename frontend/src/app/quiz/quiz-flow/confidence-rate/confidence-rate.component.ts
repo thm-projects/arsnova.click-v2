@@ -30,7 +30,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService
   ) {
-    headerLabelService.setHeaderLabel('component.liveResults.confidence_grade');
+    headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
   }
 

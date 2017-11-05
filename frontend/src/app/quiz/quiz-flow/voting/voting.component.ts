@@ -46,7 +46,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router) {
 
-    headerLabelService.setHeaderLabel('component.voting.title');
+    headerLabelService.headerLabel = 'component.voting.title';
 
     this.footerBarService.replaceFooterElements([]);
 

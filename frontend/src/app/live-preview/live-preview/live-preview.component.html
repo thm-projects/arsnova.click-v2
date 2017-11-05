@@ -2,7 +2,7 @@
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.ANSWEROPTIONS"
      id="answer-option-preview"
      [class]="'preview-frame ' + deviceClass()">
-  <app-header [headerLabel]="'region.header.answers'"></app-header>
+  <app-header></app-header>
   <div id="answer-option-element-wrapper"
        class="d-flex justify-content-around align-items-center flex-wrap">
     <div *ngFor="let elem of dataSource; let i = index"
@@ -20,7 +20,7 @@
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.QUESTION"
      id="question-preview"
      [class]="'preview-frame overflow-auto ' + deviceClass()">
-  <app-header [headerLabel]="'region.header.question'"></app-header>
+  <app-header></app-header>
   <p class="p-0" [innerHTML]="sanitizeHTML(dataSource)"></p>
 </div>
 <div *ngIf="targetDevice === DEVICE_TYPE.XS" class="homeButton hidden"></div>

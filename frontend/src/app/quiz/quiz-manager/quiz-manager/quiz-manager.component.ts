@@ -77,7 +77,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemNicknames,
       this.footerBarService.footerElemSaveAssets
     ]);
-    headerLabelService.setHeaderLabel('component.quiz_manager.title');
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
     this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
     this.footerBarService.footerElemStartQuiz.linkTarget = (self) => {

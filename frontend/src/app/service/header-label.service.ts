@@ -2,6 +2,9 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class HeaderLabelService {
+  set headerLabel(value: string) {
+    this._headerLabel = value;
+  }
   get headerLabel(): string {
     return this._headerLabel;
   }
@@ -9,9 +12,5 @@ export class HeaderLabelService {
   private _headerLabel = 'default';
 
   constructor() {
-  }
-
-  setHeaderLabel(value: string) {
-    this._headerLabel = value;
   }
 }

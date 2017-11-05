@@ -100,6 +100,24 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     });
   }
 
+  roundResponseTime(value: number | Array<string>, exp: number): number {
+    value = +value;
+
+    if (typeof exp === 'undefined' || +exp === 0) {
+      return Math.round(value);
+    }
+
+    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+      return NaN;
+    }
+
+    value = value.toString().split('e');
+    value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
+
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
+  }
+
   ngOnInit() {
     this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
     this.handleMessages();
@@ -107,11 +125,14 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       this._questionIndex = +params['questionIndex'];
       this._isGlobalRanking = isNaN(this._questionIndex);
       if (this._isGlobalRanking) {
+        this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
         this._questionIndex = null;
         if (params['questionIndex']) {
           this.router.navigate(['/quiz', 'flow', 'leaderboard']);
           return;
         }
+      } else {
+        this.headerLabelService.headerLabel = 'component.leaderboard.header';
       }
       const url = `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex ? this._questionIndex : ''}`;
       this.http.get(url)

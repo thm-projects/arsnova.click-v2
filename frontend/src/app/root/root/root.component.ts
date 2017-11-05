@@ -45,10 +45,6 @@ export class RootComponent implements OnInit, AfterViewInit {
     return this.footerBarService.footerElements;
   }
 
-  getHeaderLabel() {
-    return this.headerLabelService.headerLabel;
-  }
-
   private getTooltipForRoute(route: string): void {
     let hasStartedIntroJs = false;
     const introState = JSON.parse(localStorage.getItem('config.intro-state')) || {};

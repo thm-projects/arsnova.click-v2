@@ -13,7 +13,7 @@
   </div>
   <div class="header-title d-flex align-items-center">
     <div class="container-fluid center-block">
-      <div class="text-center header-label" *ngIf="headerLabel !== 'default'" [innerHTML]="headerLabel | translate"></div>
+      <div class="text-center header-label" *ngIf="headerLabelService.headerLabel !== 'default'" [innerHTML]="headerLabelService.headerLabel | translate"></div>
     </div>
   </div>
   <div class="text-right d-flex align-items-center pointer" id="connectionQualityHeader" role="dialog">

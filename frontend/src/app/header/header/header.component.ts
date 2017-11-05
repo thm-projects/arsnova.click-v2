@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConnectionService} from '../../service/connection.service';
+import {HeaderLabelService} from '../../service/header-label.service';
 
 function isLocalStorageSupported(): boolean {
   try {
@@ -73,8 +74,6 @@ export class HeaderComponent implements OnInit {
   private _sessionStorageAvailable: boolean = isSessionStorageSupported();
   private _offline = false;
 
-  @Input() headerLabel: string;
-
   get finishedWithErrors(): Boolean {
     return this._finishedWithErrors;
   }
@@ -98,6 +97,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private modalService: NgbModal,
+    public headerLabelService: HeaderLabelService,
     private connectionService: ConnectionService) {
   }
 

@@ -36,7 +36,7 @@ export class QuizOverviewComponent implements OnInit {
       this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemImport,
     ]);
-    headerLabelService.setHeaderLabel('component.hashtag_management.session_management');
+    headerLabelService.headerLabel = 'component.hashtag_management.session_management';
     this._sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
   }
 

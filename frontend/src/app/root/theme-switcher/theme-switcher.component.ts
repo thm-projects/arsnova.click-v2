@@ -22,7 +22,7 @@ export class ThemeSwitcherComponent implements OnInit {
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);
-    headerLabelService.setHeaderLabel('component.theme_switcher.set_theme');
+    headerLabelService.headerLabel = 'component.theme_switcher.set_theme';
     this.previewThemeBackup = document.getElementsByTagName('body')[0].className;
   }
 

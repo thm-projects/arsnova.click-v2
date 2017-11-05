@@ -334,10 +334,14 @@
       "global_header": "Global leaderboard",
       "title": {
         "single_question": "Question {QUESTION_ID} - Correct answers from...",
-        "all_questions": "Correct answers from..."
+        "single_question_partially": "Question {QUESTION_ID} - Partially correct answers from...",
+        "all_questions": "Correct answers from...",
+        "all_questions_partially": "Partially correct answers from..."
       },
       "no_attendee_correct": "No one has answered this question correctly",
+      "no_attendee_partially_correct": "No one has answered this question partially correct",
       "no_attendee_correct_global": "Nobody has answered all the questions correctly",
+      "no_attendee_partially_correct_global": "Nobody has answered any of the questions partially correct",
       "question": "Question",
       "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
       "show_more": "Show 1 more",

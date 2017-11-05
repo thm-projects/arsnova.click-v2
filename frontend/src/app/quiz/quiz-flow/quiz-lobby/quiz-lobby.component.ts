@@ -58,7 +58,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private modalService: NgbModal) {
 
     this.themesService.updateCurrentlyUsedTheme();
-    this.headerLabelService.setHeaderLabel('component.lobby.waiting_for_players');
+    this.headerLabelService.headerLabel = 'component.lobby.waiting_for_players';
 
     if (this.currentQuizService.isOwner) {
       footerBarService.replaceFooterElements([
@@ -115,12 +115,12 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         case 'LOBBY:ALL_PLAYERS':
           data.payload.members.forEach((elem: INickname) => {
             this.attendeeService.addMember(elem);
-            this.headerLabelService.setHeaderLabel('component.lobby.title');
+            this.headerLabelService.headerLabel = 'component.lobby.title';
           });
           break;
         case 'MEMBER:ADDED':
           this.attendeeService.addMember(data.payload.member);
-          this.headerLabelService.setHeaderLabel('component.lobby.title');
+          this.headerLabelService.headerLabel = 'component.lobby.title';
           break;
         case 'MEMBER:REMOVED':
           this.attendeeService.removeMember(data.payload.name);

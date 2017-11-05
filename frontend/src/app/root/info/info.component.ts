@@ -28,7 +28,7 @@ export class InfoComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);
-    headerLabelService.setHeaderLabel('region.footer.about.title');
+    headerLabelService.headerLabel = 'region.footer.about.title';
   }
 
   ngOnInit() {

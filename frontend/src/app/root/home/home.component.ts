@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);
-    headerLabelService.setHeaderLabel('default');
+    headerLabelService.headerLabel = 'default';
     const ownedQuizzes = window.localStorage.getItem('config.owned_quizzes');
     if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
       this.modalService.open(AvailableQuizzesComponent);

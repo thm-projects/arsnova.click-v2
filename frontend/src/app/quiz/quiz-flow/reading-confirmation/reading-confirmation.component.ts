@@ -32,7 +32,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService
   ) {
-    headerLabelService.setHeaderLabel('component.liveResults.reading_confirmation');
+    headerLabelService.headerLabel = 'component.liveResults.reading_confirmation';
     this.questionIndex = currentQuizService.quiz.questionList.length;
     this.footerBarService.replaceFooterElements([]);
   }
