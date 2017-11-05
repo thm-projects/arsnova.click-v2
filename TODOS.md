@@ -12,8 +12,7 @@
 #### Known issues
 - [ ] Adjust some of the introjs initializations
 - [ ] Add missing translation keys
-- [ ] Fix question handling of quizzes with multiple questions
-- [ ] Fix repeated firing reading confirmation request
+- [ ] Exporting fires exceptions
 
 #### Refactoring required
 - [ ] Format ABCD Quiz Name depending on the number of answers
@@ -23,5 +22,3 @@
 
 #### Testing required
 - [ ] Export of Results
-- [ ] Reading confirmation
-- [ ] Confidence grade
