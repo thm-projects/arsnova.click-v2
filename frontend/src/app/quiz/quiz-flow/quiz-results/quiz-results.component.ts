@@ -119,11 +119,16 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return this.currentQuizService.isOwner &&
            (!this.countdown || !this.countdown.isRunning) &&
            this.currentQuizService.questionIndex === this._selectedQuestionIndex &&
-           this.currentQuizService.questionIndex < this.currentQuizService.quiz.questionList.length - 1;
+           (this.currentQuizService.questionIndex < this.currentQuizService.quiz.questionList.length - 1 ||
+            this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled &&
+            this.currentQuizService.readingConfirmationRequested);
   }
 
-  showConfidenceRate(): boolean {
-    return this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled;
+  showConfidenceRate(questionIndex: number): boolean {
+    const matches = this.attendeeService.attendees.filter(value => {
+      return value.responses[questionIndex] ? value.responses[questionIndex].confidence : false;
+    });
+    return matches.length > 0 || this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled;
   }
 
   modifyVisibleQuestion(index: number): void {
@@ -152,8 +157,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  showReadingConfirmation(): boolean {
-    return this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled;
+  showReadingConfirmation(questionIndex: number): boolean {
+    const matchCount = this.attendeeService.attendees.filter(value => {
+      return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
+    }).length;
+    return matchCount > 0 || this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled;
   }
 
   showResponseProgress(): boolean {
@@ -239,7 +247,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private startQuiz(): void {
     const target = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled &&
-                   this.currentQuizService.readingConfirmationRequested ?
+                   !this.currentQuizService.readingConfirmationRequested ?
                    'reading-confirmation' : 'start';
 
     this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
@@ -247,18 +255,16 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     }).subscribe((data: IMessage) => {
 
       if (data.status === 'STATUS:SUCCESSFUL') {
+        const question = this.currentQuizService.currentQuestion();
+        this.generateAnswers(question);
 
-        if (this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled &&
-            !this.currentQuizService.readingConfirmationRequested) {
+        if (data.step === 'QUIZ:READING_CONFIRMATION_REQUESTED') {
           this.currentQuizService.readingConfirmationRequested = true;
 
         } else {
-
           this.currentQuizService.readingConfirmationRequested = false;
-          const question = this.currentQuizService.currentQuestion();
           this.countdown = new Countdown(question, data.payload.startTimestamp);
 
-          this.generateAnswers(question);
         }
       }
     });

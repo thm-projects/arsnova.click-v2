@@ -21,10 +21,13 @@ export declare interface ICurrentQuiz extends ICurrentQuizData {
 export class CurrentQuizService implements ICurrentQuiz {
   set readingConfirmationRequested(value: boolean) {
     this._readingConfirmationRequested = value;
+    this.persistToSessionStorage();
   }
+
   get readingConfirmationRequested(): boolean {
     return this._readingConfirmationRequested;
   }
+
   set questionIndex(value: number) {
     this._questionIndex = value;
     this.persistToSessionStorage();

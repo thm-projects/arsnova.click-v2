@@ -11,12 +11,22 @@
   </div>
 </div>
 
-<button *ngIf="showStartQuizButton()"
-        (click)="startQuiz()"
-        class="btn btn-default w-100 my-3 pointer">
-  <span>{{'component.liveResults.start_round' | translate}}</span>
-  <i class="fa fa-paper-plane"></i>
-</button>
+<div class="overflow-auto">
+  <div class="my-3 btn-group">
+    <button *ngIf="showStartQuizButton()"
+            (click)="startQuiz()"
+            [class]="'btn btn-default pointer ' + (currentQuizService.getVisibleQuestions().length ? '' : 'w-100')">
+      <span [innerHTML]="('component.liveResults.' + (currentQuizService.readingConfirmationRequested ? 'start_round' : 'show_question')) | translate"></span>
+      <i class="fa fa-paper-plane"></i>
+    </button>
+    <button *ngFor="let question of currentQuizService.getVisibleQuestions(); let i = index"
+            [class]="'btn btn-default ' + (i === selectedQuestionIndex ? 'disabled' : 'pointer')"
+            [disabled]="i === selectedQuestionIndex"
+            (click)="modifyVisibleQuestion(i)">
+      <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
+    </button>
+  </div>
+</div>
 
 <div class="question">
   <div *ngIf="currentQuizService.quiz.questionList.length">
@@ -37,18 +47,11 @@
       <span>{{'component.liveResults.question' | translate}}</span>
     </button>
   </div>
-  <app-reading-confirmation *ngIf="showReadingConfirmation()"
+  <app-reading-confirmation *ngIf="showReadingConfirmation(selectedQuestionIndex)"
                             [data]="getReadingConfirmationData(selectedQuestionIndex)"></app-reading-confirmation>
-  <app-confidence-rate *ngIf="showConfidenceRate()"
+  <app-confidence-rate *ngIf="showConfidenceRate(selectedQuestionIndex)"
                        [data]="getConfidenceData(selectedQuestionIndex)"></app-confidence-rate>
   <app-progress-bar *ngIf="showResponseProgress()" [data]="answers" [questionIndex]="selectedQuestionIndex" [question]="currentQuizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
-</div>
-
-<div *ngFor="let question of currentQuizService.getVisibleQuestions(); let i = index"
-     [class]="'btn btn-default w-100 ' + (i === selectedQuestionIndex ? 'disabled' : 'pointer')"
-     [attr.disabled]="i === selectedQuestionIndex"
-     (click)="modifyVisibleQuestion(i)">
-  <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
 </div>
 
 <app-audio-player *ngIf="countdown && countdown.isRunning && countdown.remainingTime && currentQuizService.quiz.sessionConfig && currentQuizService.quiz.sessionConfig.music.countdownRunningEnabled"

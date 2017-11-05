@@ -111,6 +111,9 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe((nav: any) => {
       if (nav instanceof NavigationEnd) {
         window.addEventListener('load', () => {
+          if (!window.cookieconsent) {
+            return;
+          }
           window.cookieconsent.initialise({
             palette: {
               popup: {

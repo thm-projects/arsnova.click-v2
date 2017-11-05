@@ -59,6 +59,9 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
           return false;
         }
         const responseValue = <string>value.responses[this.questionIndex].value;
+        if (!responseValue || !responseValue.length) {
+          return;
+        }
         const answer = <IFreetextAnswerOption>question.answerOptionList[0];
         if (result.label === 'correct_answer') {
           return answer.isCorrectInput(responseValue);

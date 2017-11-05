@@ -2,11 +2,12 @@ import {cpus, freemem, loadavg, totalmem, hostname, networkInterfaces} from 'os'
 import QuizManager from './db/quiz-manager';
 
 const interfaces = networkInterfaces();
-const localIpv4Address = interfaces[Object.keys(interfaces).filter(netIface => {
+const localAddress = interfaces[Object.keys(interfaces).filter(netIface => {
   const singleInterface = interfaces[netIface][0];
   return singleInterface.family === 'IPv4' &&
          singleInterface.internal === false;
-})[0]][0].address;
+})[0]];
+const localIpv4Address = localAddress ? localAddress[0].address : '127.0.0.1';
 
 export const staticStatistics = {
   hostname: hostname(),
