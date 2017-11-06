@@ -31,11 +31,16 @@ function parseCustomMarkdown(value: string): string {
   const youtubeMatch = value.match(/<a href=".*(youtube|youtu).*">.*<\/a>/g);
   if (youtubeMatch) {
     youtubeMatch.forEach(token => {
+      const originalToken = token;
+      if (token.indexOf('embed') === -1) {
+        // Convert to embed uri. Direct youtube urls are restricted by the sameorigin policy and cannot be embedded in iframes
+        token = token.replace('watch?v=', 'embed/');
+      }
       const videoTag = token.replace('<a', `<iframe`)
                             .replace('</a>', `</iframe>`)
                             .replace('<iframe', `<iframe ${iframeOptions}`)
                             .replace('href', 'src');
-      value = value.replace(token, videoTag);
+      value = value.replace(originalToken, videoTag);
     });
   }
 
