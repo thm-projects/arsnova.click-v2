@@ -1,10 +1,11 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {QuestionTextService} from '../../../../service/question-text.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute} from '@angular/router';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from 'environments/environment';
+import {HeaderLabelService} from '../../../../service/header-label.service';
 
 @Component({
   selector: 'app-questiontext',
@@ -21,8 +22,9 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   private _routerSubscription: Subscription;
 
   constructor(
-    @Inject(ActiveQuestionGroupService) private activeQuestionGroupService: ActiveQuestionGroupService,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
+    private headerLabelService: HeaderLabelService,
     private questionTextService: QuestionTextService,
     private route: ActivatedRoute) {
     this.footerBarService.replaceFooterElements([
@@ -31,6 +33,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemSaveAssets,
       this.footerBarService.footerElemProductTour
     ]);
+    this.headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
   private insertMarkupSymbol(symbol: string) {
