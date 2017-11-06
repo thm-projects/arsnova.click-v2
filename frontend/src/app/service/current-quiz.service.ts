@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {IQuestion, IQuestionGroup} from '../../lib/questions/interfaces';
-import {SessionConfiguration} from '../../lib/session_configuration/session_config';
 import {ConnectionService} from './connection.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
@@ -164,22 +163,25 @@ export class CurrentQuizService implements ICurrentQuiz {
       this._quiz.sessionConfig[target] = !elem.isActive;
       elem.isActive = !elem.isActive;
       this.persistToSessionStorage();
-
-      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/settings/update`, {
-        quizName: this._quiz.hashtag,
-        target: target,
-        state: elem.isActive
-      }).subscribe(
-        (data: IMessage) => {
-          if (data.status !== 'STATUS:SUCCESSFUL') {
-            console.log(data);
-          }
-        },
-        error => {
-          console.log(error);
-        }
-      );
+      this.toggleSettingByName(target, elem.isActive);
     }
+  }
+
+  public toggleSettingByName(target: string, state: boolean | string): void {
+    this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/settings/update`, {
+      quizName: this._quiz.hashtag,
+      target: target,
+      state: state
+    }).subscribe(
+      (data: IMessage) => {
+        if (data.status !== 'STATUS:SUCCESSFUL') {
+          console.log(data);
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
   public serialize(): ICurrentQuizData {

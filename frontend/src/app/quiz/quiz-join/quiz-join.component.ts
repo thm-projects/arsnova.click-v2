@@ -7,6 +7,7 @@ import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {CasService} from '../../service/cas.service';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
+import {ThemesService} from '../../service/themes.service';
 
 @Component({
   selector: 'app-quiz-join',
@@ -22,7 +23,8 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private casService: CasService,
-    private currentQuizService: CurrentQuizService
+    private currentQuizService: CurrentQuizService,
+    private themesService: ThemesService
   ) {
   }
 
@@ -39,6 +41,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
             (data: IMessage) => {
               const quiz = data.payload.quiz.originalObject;
               this.currentQuizService.quiz = new questionGroupReflection[quiz.TYPE](quiz);
+              this.themesService.updateCurrentlyUsedTheme();
               this.router.navigate(['/nicks/' + (value.payload.provideNickSelection ? 'select' : 'input')]);
             }
           );

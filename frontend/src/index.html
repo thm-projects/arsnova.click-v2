@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="theme-Material">
 <head>
 
   <title>arsnova.click</title>
@@ -87,7 +87,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
 
 </head>
-<body class="theme-Material">
+<body>
 
 <script>
   var giftofspeed = document.createElement('link');
@@ -112,14 +112,6 @@
 
 <!-- piwik -->
 <script async="async" defer="defer" type="text/javascript" src="https://arsnova.thm.de/stats/piwik.js"></script>
-
-<script type="text/javascript">
-  window.onload = function () {
-    if (!document.getElementsByTagName('html').item(0).className) {
-      document.getElementsByTagName('html').item(0).className = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme') || '');
-    }
-  };
-</script>
 
 <div id="theme-wrapper">
   <div id="content">

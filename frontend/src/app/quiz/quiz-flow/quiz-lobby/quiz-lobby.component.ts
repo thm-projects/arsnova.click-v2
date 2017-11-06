@@ -60,7 +60,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private modalService: NgbModal
   ) {
 
-    this.themesService.updateCurrentlyUsedTheme();
     this.headerLabelService.headerLabel = this.currentQuizService.quiz.hashtag;
 
     if (this.currentQuizService.isOwner) {
