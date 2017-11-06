@@ -7,6 +7,8 @@ import {questionReflection} from '../../../../lib/questions/question_reflection'
 import {IQuestionGroup} from '../../../../lib/questions/interfaces';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
+import {CurrentQuizService} from '../../../service/current-quiz.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-quiz-manager',
@@ -69,6 +71,8 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private http: HttpClient,
+    private router: Router,
+    private currentQuizService: CurrentQuizService,
     private activeQuestionGroupService: ActiveQuestionGroupService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
@@ -80,14 +84,17 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
     this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
-    this.footerBarService.footerElemStartQuiz.linkTarget = (self) => {
-      return self.isActive ? '/quiz/flow/lobby' : null;
-    };
-    this.footerBarService.footerElemStartQuiz.onClickCallback = () => {
+    this.footerBarService.footerElemStartQuiz.onClickCallback = (self) => {
+      if (!self.isActive) {
+        return;
+      }
       this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
         quiz: activeQuestionGroupService.activeQuestionGroup.serialize()
       }).subscribe(
-        () => {}
+        () => {
+          this.currentQuizService.quiz = this.questionGroupItem;
+          this.router.navigate(['/quiz', 'flow', 'lobby']);
+        }
       );
     };
   }
