@@ -257,7 +257,10 @@ export class HomeComponent implements OnInit, OnDestroy {
             } else {
               resolve();
             }
-          }).then(() => this.router.navigate(routingTarget));
+          }).then(() => {
+            this.currentQuizService.quiz = questionGroup;
+            this.router.navigate(routingTarget);
+          });
         } else {
           console.log(value);
         }
