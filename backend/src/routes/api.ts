@@ -65,13 +65,12 @@ export class ApiRouter {
   }
 
   public getIsAvailableQuiz(req: Request, res: Response): void {
-    const quizzes: Array<string> = QuizManager.getAllActiveQuizNames();
-    const quizExists: boolean = quizzes.indexOf(req.params.quizName) > -1;
+    const quiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const payload: { available?: boolean, provideNickSelection?: boolean, authorizeViaCas?: boolean } = {};
 
     const isInactive: boolean = QuizManager.isInactiveQuiz(req.params.quizName);
 
-    if (quizExists) {
+    if (quiz) {
       const sessionConfig: ISessionConfiguration = QuizManager.getActiveQuizByName(req.params.quizName).originalObject.sessionConfig;
       const provideNickSelection: boolean = sessionConfig.nicks.selectedNicks.length > 0;
 
@@ -82,7 +81,7 @@ export class ApiRouter {
 
     const result: Object = {
       status: `STATUS:SUCCESS`,
-      step: `QUIZ:${quizExists ? 'AVAILABLE' : isInactive ? 'EXISTS' : 'UNDEFINED'}`,
+      step: `QUIZ:${quiz ? 'AVAILABLE' : isInactive ? 'EXISTS' : 'UNDEFINED'}`,
       payload
     };
     res.send(result);

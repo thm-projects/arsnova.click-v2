@@ -16,6 +16,27 @@ import {DbDao} from './db/DbDao';
 import {staticStatistics} from './statistics';
 
 debug('arsnova.click: ts-express:server');
+
+function createPath(pathRelativeToBase) {
+  fs.exists(path.join(__dirname, '..', pathRelativeToBase), (exists => {
+    if (!exists) {
+      fs.mkdir(path.join(__dirname, '..', pathRelativeToBase), (err) => console.log(err));
+    }
+  }));
+}
+
+createPath('cache');
+createPath('certs');
+createPath('predefined_quizzes');
+createPath(path.join('predefined_quizzes', 'abcd_quiz'));
+createPath(path.join('predefined_quizzes', 'demo_quiz'));
+createPath('images');
+createPath(path.join('images', 'favicons'));
+createPath(path.join('images', 'mathjax'));
+createPath(path.join('images', 'themes'));
+createPath('i18n');
+createPath('sound');
+
 const cert = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
 const key = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
 
