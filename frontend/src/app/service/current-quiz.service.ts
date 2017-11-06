@@ -51,6 +51,18 @@ export class CurrentQuizService implements ICurrentQuiz {
     this._quiz = value;
     if (value) {
       this._isOwner = (JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(value.hashtag) > -1;
+
+      if (this._isOwner) {
+        if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
+          this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
+            quiz: this._quiz.serialize()
+          }).subscribe((response: IMessage) => {
+            if (response.status !== 'STATUS:SUCCESSFUL') {
+              console.log(response);
+            }
+          });
+        }
+      }
     }
     this.persistToSessionStorage();
   }
@@ -86,24 +98,15 @@ export class CurrentQuizService implements ICurrentQuiz {
         if (this._quiz.sessionConfig.confidenceSliderEnabled) {
           this.footerBarService.footerElemConfidenceSlider.isActive = true;
         }
-        if (this._isOwner) {
-          if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
-            this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
-              quiz: this._quiz.serialize()
-            }).subscribe((response: IMessage) => {
-              if (response.status !== 'STATUS:SUCCESSFUL') {
-                console.log(response);
-              }
-            });
-          }
-        }
       }
     }
-    connectionService.socket.subscribe((data: IMessage) => {
-      if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATE_SETTINGS') {
-        this._quiz.sessionConfig = new SessionConfiguration(data.payload.sessionConfiguration);
-        this.persistToSessionStorage();
-      }
+    this.connectionService.initConnection().then(() => {
+      connectionService.socket.subscribe((data: IMessage) => {
+        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATED_SETTINGS') {
+          this._quiz.sessionConfig[data.payload.target] = data.payload.state;
+          this.persistToSessionStorage();
+        }
+      });
     });
   }
 
@@ -168,7 +171,7 @@ export class CurrentQuizService implements ICurrentQuiz {
         state: elem.isActive
       }).subscribe(
         (data: IMessage) => {
-          if (data.status !== 'STATUS:SUCCESS') {
+          if (data.status !== 'STATUS:SUCCESSFUL') {
             console.log(data);
           }
         },

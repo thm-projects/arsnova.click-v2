@@ -28,6 +28,9 @@ import {DefaultSettings} from '../../../lib/default.settings';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  get hasErrors(): string {
+    return this._hasErrors;
+  }
   get provideNickSelection(): boolean {
     return this._provideNickSelection;
   }
@@ -44,6 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _provideNickSelection = false;
   private _routerSubscription: Subscription;
   private _serverPassword = '';
+  private _hasErrors = '';
 
   constructor(
     private footerBarService: FooterBarService,
@@ -140,7 +144,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.canJoinQuiz = false;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
-    this.passwordRequired = false;
     this.isAddingDemoQuiz = false;
     this.isAddingABCDQuiz = false;
 
@@ -169,6 +172,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 case 'QUIZ:AVAILABLE':
                   this.canAddQuiz = false;
                   this.canJoinQuiz = true;
+                  this.passwordRequired = false;
                   this._provideNickSelection = value.payload.provideNickSelection;
                   this.casService.casLoginRequired = value.payload.authorizeViaCas;
                   if (this.casService.casLoginRequired) {
@@ -261,7 +265,15 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.router.navigate(routingTarget);
           });
         } else {
-          console.log(value);
+          if (value.step === 'QUIZ:TOO_MUCH_ACTIVE_QUIZZES') {
+            this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
+          } else if (value.step === 'QUIZ:SERVER_PASSWORD_REQUIRED') {
+            this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
+          } else if (value.step === 'QUIZ:INSUFFICIENT_PERMISSIONS') {
+            this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
+          } else {
+            console.log(value);
+          }
         }
       });
     });

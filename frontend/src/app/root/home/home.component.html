@@ -72,6 +72,9 @@
       </div>
     </div>
   </div>
+  <div *ngIf="hasErrors" class="col-12 mt-5">
+    <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
+  </div>
   <div class="col-12 text-center mt-5" id="demo-quiz-description">
     <p>{{'component.hashtag_home.demo_quiz.title.2' | translate}}</p>
     <p>{{'component.hashtag_home.demo_quiz.title.3' | translate}}</p>

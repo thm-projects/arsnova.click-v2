@@ -27,6 +27,12 @@ export class SettingsService {
   private initServerSettings() {
     this.connectionService.initConnection(true).then((data: any) => {
       this._serverSettings = data.serverConfig;
+
+      // Workaround required because JSON serializes Infinity to null which is then deserialized to NaN by EcmaScript
+      if (this._serverSettings.limitActiveQuizzes === null) {
+        this._serverSettings.limitActiveQuizzes = Infinity;
+      }
+
       window.localStorage.setItem('config.server_settings', JSON.stringify(this._serverSettings));
     });
   }

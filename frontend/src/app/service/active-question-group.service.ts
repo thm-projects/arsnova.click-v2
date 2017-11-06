@@ -79,11 +79,6 @@ export class ActiveQuestionGroupService {
       if (window.localStorage.getItem('config.cache_assets') === 'true') {
         this.footerBarService.footerElemSaveAssets.isActive = true;
       }
-      this.footerBarService.footerElemQRCode.onClickCallback = () => {
-        const classList = document.getElementsByClassName('qr-code-element').item(0).classList;
-        classList.toggle('d-none');
-        classList.toggle('d-flex');
-      };
       this.footerBarService.footerElemEnableCasLogin.onClickCallback = () => {
         const newState = !this.footerBarService.footerElemEnableCasLogin.isActive;
         this.footerBarService.footerElemEnableCasLogin.isActive = newState;

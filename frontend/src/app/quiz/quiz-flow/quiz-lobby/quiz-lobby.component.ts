@@ -91,6 +91,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'results']);
         });
       };
+      this.footerBarService.footerElemQRCode.onClickCallback = () => {
+        const classList = document.getElementsByClassName('qr-code-element').item(0).classList;
+        classList.toggle('d-none');
+        classList.toggle('d-flex');
+      };
       this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
         if (currentQuizService.quiz) {
           activeQuestionGroup.activeQuestionGroup = currentQuizService.quiz;
@@ -98,6 +103,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           attendeeService.cleanUp();
           connectionService.cleanUp();
         }
+        this.router.navigate(['/quiz', 'manager', 'overview']);
       };
     } else {
       footerBarService.replaceFooterElements([

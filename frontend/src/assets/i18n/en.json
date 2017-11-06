@@ -746,7 +746,10 @@
           "session_closed": "The quiz session has been closed",
           "invalid_data": "The imported files are corrupt or the access is denied!",
           "invalid_input_data": "The entered data is either invalid or the access is denied!",
-          "duplicate_user": "You are attempting to participate with a second identity. This is not possible!"
+          "duplicate_user": "You are attempting to participate with a second identity. This is not possible!",
+          "too_much_active_quizzes": "There are currently too much quizzes active.",
+          "server_password_required": "Creating a quiz on this server requires a password.",
+          "server_password_invalid": "The server password is invalid."
         }
       }
     }

@@ -200,6 +200,9 @@ class ActiveQuizItem implements IActiveQuiz {
     let timer = this.originalObject.questionList[this.currentQuestionIndex].timer;
     const interval = setInterval(() => {
       if (!timer || this.nicknames.filter(nick => {
+        if (!nick.responses[this.currentQuestionIndex]) {
+          return false;
+        }
         const value = nick.responses[this.currentQuestionIndex].value;
         return typeof value === 'number' ? !isNaN(value) : value.length;
         }).length === this.nicknames.length) {
