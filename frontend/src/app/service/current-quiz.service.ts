@@ -74,16 +74,16 @@ export class CurrentQuizService implements ICurrentQuiz {
       }
       if (parsedInstance.quiz) {
         this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
+        if (this._quiz.sessionConfig.readingConfirmationEnabled) {
+          this.footerBarService.footerElemReadingConfirmation.isActive = true;
+        }
+        if (this._quiz.sessionConfig.showResponseProgress) {
+          this.footerBarService.footerElemResponseProgress.isActive = true;
+        }
+        if (this._quiz.sessionConfig.confidenceSliderEnabled) {
+          this.footerBarService.footerElemConfidenceSlider.isActive = true;
+        }
       }
-    }
-    if (this._quiz.sessionConfig.readingConfirmationEnabled) {
-      this.footerBarService.footerElemReadingConfirmation.isActive = true;
-    }
-    if (this._quiz.sessionConfig.showResponseProgress) {
-      this.footerBarService.footerElemResponseProgress.isActive = true;
-    }
-    if (this._quiz.sessionConfig.confidenceSliderEnabled) {
-      this.footerBarService.footerElemConfidenceSlider.isActive = true;
     }
     connectionService.socket.subscribe((data: IMessage) => {
       if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATE_SETTINGS') {
