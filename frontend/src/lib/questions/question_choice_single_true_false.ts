@@ -1,5 +1,6 @@
 import {SingleChoiceQuestion} from './question_choice_single';
 import {IQuestionChoice} from './interfaces';
+import {DefaultAnswerOption} from '../answeroptions/answeroption_default';
 
 export class TrueFalseSingleChoiceQuestion extends SingleChoiceQuestion implements IQuestionChoice {
 
@@ -21,6 +22,12 @@ export class TrueFalseSingleChoiceQuestion extends SingleChoiceQuestion implemen
    */
   constructor(options) {
     super(options);
+    if (!options.answerOptionList.length) {
+      this.answerOptionList = [
+        new DefaultAnswerOption({answerText: '', isCorrect: true}),
+        new DefaultAnswerOption({answerText: '', isCorrect: false}),
+      ];
+    }
   }
 
   /**

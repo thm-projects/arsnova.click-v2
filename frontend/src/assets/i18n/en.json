@@ -8,8 +8,8 @@
     "abort": "Abort",
     "yes": "Yes",
     "no": "No",
-    "true": "Yes",
-    "false": "No",
+    "true": "True",
+    "false": "False",
     "close_window": "Close window",
     "aria_description": {
       "arsnova_slogan": "Quizzes for everyone & anything"

@@ -90,7 +90,7 @@ export class ApiRouter {
 
   public generateDemoQuiz(req: Request, res: Response): void {
     try {
-      const demoQuizPath = path.join(__dirname, `../../predefined_quizzes/demo_quiz/${req.params.languageId}.demo_quiz.json`);
+      const demoQuizPath = path.join(__dirname, `../../predefined_quizzes/demo_quiz/${req.params.languageId.toLowerCase()}.demo_quiz.json`);
       const result: IQuestionGroup = JSON.parse(fs.readFileSync(demoQuizPath).toString());
       result.hashtag = 'Demo Quiz ' + (QuizManager.getAllPersistedDemoQuizzes().length + 1);
       QuizManager.convertLegacyQuiz(result);
@@ -103,7 +103,7 @@ export class ApiRouter {
 
   public generateAbcdQuiz(req: Request, res: Response): void {
     try {
-      const abcdQuizPath = path.join(__dirname, `../../predefined_quizzes/abcd_quiz/${req.params.languageId}.abcd_quiz.json`);
+      const abcdQuizPath = path.join(__dirname, `../../predefined_quizzes/abcd_quiz/${req.params.languageId.toLowerCase()}.abcd_quiz.json`);
       const result: IQuestionGroup = JSON.parse(fs.readFileSync(abcdQuizPath).toString());
       result.hashtag = 'ABCD Quiz ' + (QuizManager.getAllPersistedAbcdQuizzes().length + 1);
       QuizManager.convertLegacyQuiz(result);
