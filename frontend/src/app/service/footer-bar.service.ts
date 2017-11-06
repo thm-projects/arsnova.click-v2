@@ -227,7 +227,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.edit_quiz',
     selectable: false,
     showIntro: false,
-    linkTarget: '/quiz/manager',
+    linkTarget: '/quiz/manager/overview',
   }, function () {
 
   });

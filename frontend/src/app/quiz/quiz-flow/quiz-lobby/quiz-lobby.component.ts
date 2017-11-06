@@ -10,6 +10,7 @@ import {AttendeeService, INickname} from '../../../service/attendee.service';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 
 export declare interface IMessage extends Object {
   status?: string;
@@ -55,10 +56,12 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
     public attendeeService: AttendeeService,
-    private modalService: NgbModal) {
+    private activeQuestionGroup: ActiveQuestionGroupService,
+    private modalService: NgbModal
+  ) {
 
     this.themesService.updateCurrentlyUsedTheme();
-    this.headerLabelService.headerLabel = 'component.lobby.waiting_for_players';
+    this.headerLabelService.headerLabel = this.currentQuizService.quiz.hashtag;
 
     if (this.currentQuizService.isOwner) {
       footerBarService.replaceFooterElements([
@@ -75,13 +78,12 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemConfidenceSlider,
       ]);
       this.qrCodeContent = `${document.location.origin}/quiz/${encodeURIComponent(this.currentQuizService.quiz.hashtag.toLowerCase())}`;
-      this.footerBarService.footerElemStartQuiz.linkTarget = (self) => {
-        return null;
-      };
       this.footerBarService.footerElemStartQuiz.onClickCallback = () => {
+        if (!this.attendeeService.attendees.length) {
+          return;
+        }
         const target = currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ?
                        'reading-confirmation' : 'start';
-        console.log(currentQuizService.quiz.sessionConfig.readingConfirmationEnabled);
         this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
           quizName: this.currentQuizService.quiz.hashtag
         }).subscribe((data: IMessage) => {
@@ -89,8 +91,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'results']);
         });
       };
-      this.footerBarService.footerElemEditQuiz.onClickCallback = function () {
+      this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
         if (currentQuizService.quiz) {
+          activeQuestionGroup.activeQuestionGroup = currentQuizService.quiz;
           currentQuizService.cleanUp();
           attendeeService.cleanUp();
           connectionService.cleanUp();
@@ -117,18 +120,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         case 'LOBBY:ALL_PLAYERS':
           data.payload.members.forEach((elem: INickname) => {
             this.attendeeService.addMember(elem);
-            this.headerLabelService.headerLabel = 'component.lobby.title';
           });
           break;
         case 'MEMBER:ADDED':
           this.attendeeService.addMember(data.payload.member);
-          this.headerLabelService.headerLabel = 'component.lobby.title';
           break;
         case 'MEMBER:REMOVED':
           this.attendeeService.removeMember(data.payload.name);
-          break;
-        case 'LOBBY:CLOSED':
-          this.router.navigate(['/']);
           break;
       }
       this.currentQuizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
@@ -167,6 +165,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         if (existingNickname === data.payload.name) {
           this.router.navigate(['/']);
         }
+        break;
+      case 'LOBBY:CLOSED':
+        this.router.navigate(['/']);
         break;
     }
   }

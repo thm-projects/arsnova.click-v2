@@ -1,4 +1,8 @@
 <div class="row">
+  <div class="col-12">
+    <h3 *ngIf="!attendeeService.attendees.length"
+        class="text-center no-attendees-label">{{'component.lobby.waiting_for_players' | translate}}</h3>
+  </div>
   <div *ngFor="let elem of attendeeService.attendees"
        class="mb-1 col-sm-4 col-md-3">
     <div [id]="elem.id"
