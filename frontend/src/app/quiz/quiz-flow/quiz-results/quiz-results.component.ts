@@ -236,9 +236,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
-        case 'LOBBY:CLOSED':
-          this.router.navigate(['/']);
-          break;
       }
       this.currentQuizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
@@ -258,6 +255,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         break;
       case 'QUIZ:READING_CONFIRMATION_REQUESTED':
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        break;
+      case 'LOBBY:CLOSED':
+        this.router.navigate(['/']);
         break;
     }
   }
