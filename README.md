@@ -1,6 +1,6 @@
 #### Project description
 
-arsnova.click is back! Now completely rewritten with Angular4 and Typescript.
+arsnova.click is back! Now completely rewritten with Angular5 and Typescript.
 
 Still the same styles, still the same features. Yet, nearly the entire code has been rewritten for full feature support of a fast, small, chunked, progressive web app setting the standards of gamificated Audience Response Systems.
 
@@ -9,8 +9,8 @@ Please consider the list of the [ToDo's](./TODOS.md) including the known issues 
 ---
 #### Global Dependency Requirements
 
-- NodeJS (Version 7+)
-- NPM (Version 4+)
+- NodeJS (Version 7)
+- NPM (Version 4)
 
 ---
 #### Installation
