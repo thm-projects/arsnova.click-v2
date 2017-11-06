@@ -96,7 +96,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   private cleanUpSessionStorage(): void {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       this.activeQuestionGroupService.cleanUp();
-      window.sessionStorage.removeItem('config.active_question_group');
     }
     window.sessionStorage.removeItem('config.quiz_theme');
     this.attendeeService.cleanUp();

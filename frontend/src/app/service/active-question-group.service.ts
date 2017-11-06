@@ -24,7 +24,6 @@ export class ActiveQuestionGroupService {
   }
 
   private _activeQuestionGroup: IQuestionGroup;
-  private _cacheAssets = false;
 
   constructor(
     private translateService: TranslateService,
@@ -51,6 +50,7 @@ export class ActiveQuestionGroupService {
 
   public cleanUp(): void {
     this.activeQuestionGroup = null;
+    window.sessionStorage.removeItem('config.active_question_group');
   }
 
   persistForSession() {
@@ -64,15 +64,6 @@ export class ActiveQuestionGroupService {
     if (questionList.indexOf(this.activeQuestionGroup.hashtag) === -1) {
       questionList.push(this.activeQuestionGroup.hashtag);
       window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
-    }
-    if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
-      this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
-        quiz: this.activeQuestionGroup.serialize()
-      }).subscribe((response: IMessage) => {
-        if (response.status !== 'STATUS:SUCCESSFUL') {
-          console.log(response);
-        }
-      });
     }
   }
 

@@ -7,6 +7,7 @@ import {questionGroupReflection} from '../../lib/questions/questionGroup_reflect
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
+import {SettingsService} from './settings.service';
 
 export declare interface ICurrentQuizData {
   quiz: IQuestionGroup;
@@ -58,10 +59,12 @@ export class CurrentQuizService implements ICurrentQuiz {
   private _quiz: IQuestionGroup;
   private _questionIndex = 0;
   private _readingConfirmationRequested = false;
+  private _cacheAssets = false;
 
   constructor(
     private http: HttpClient,
     private footerBarService: FooterBarService,
+    private settingsService: SettingsService,
     private connectionService: ConnectionService) {
     const instance = window.sessionStorage.getItem('config.current_quiz');
     if (instance) {
@@ -82,6 +85,17 @@ export class CurrentQuizService implements ICurrentQuiz {
         }
         if (this._quiz.sessionConfig.confidenceSliderEnabled) {
           this.footerBarService.footerElemConfidenceSlider.isActive = true;
+        }
+        if (this._isOwner) {
+          if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
+            this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
+              quiz: this._quiz.serialize()
+            }).subscribe((response: IMessage) => {
+              if (response.status !== 'STATUS:SUCCESSFUL') {
+                console.log(response);
+              }
+            });
+          }
         }
       }
     }
