@@ -1,0 +1,39 @@
+build:
+  stage: build
+  only:
+    - master
+    - CI
+  tags:
+    - nodejs
+  script:
+    - npm install -g n
+    - n 7.10.0
+    - cd backend
+    - npm install
+    - npm run prod
+    - cd ../frontend
+    - npm install
+    - npm run prod
+  artifacts:
+    paths:
+      - backend/dist
+      - frontend/dist
+
+deploy:
+  stage: deploy
+  only:
+    - master
+    - CI
+  tags:
+    - ssh
+  dependencies:
+    - build
+  script:
+    - chmod -R a+rX,ug+w backend
+    - chmod -R a+rX,ug+w frontend
+    - eval $(ssh-agent -s)
+    - mkdir ~/.ssh && echo "$STAGING_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
+    - scp -r backend/* "$STAGING_BACKEND_SSH_URL"
+    - scp -r frontend/* "$STAGING_BACKEND_SSH_URL"
+
