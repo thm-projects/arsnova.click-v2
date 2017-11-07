@@ -1,1 +1,15 @@
-{  "pattern": "/**/*.js",  "options": {    "UseMinExt": false,    "MinifyOptions": {      "screw-ie8": true,      "compress": true,      "mangle": true    },    "OutDir": "dist",    "RootDir": "dist",    "RemoveSource": true,    "Debug": false  }}
+{
+  "pattern": "/**/*",
+  "options": {
+    "UseMinExt": false,
+    "MinifyOptions": {
+      "screw-ie8": true,
+      "compress": true,
+      "mangle": true
+    },
+    "OutDir": "dist",
+    "RootDir": "dist",
+    "RemoveSource": true,
+    "Debug": false
+  }
+}

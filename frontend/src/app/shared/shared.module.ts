@@ -9,7 +9,6 @@ import {AudioPlayerComponent} from './audio-player/audio-player.component';
 import {GamificationAnimationComponent} from './gamification-animation/gamification-animation.component';
 import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
 import {createTranslateLoader} from '../../lib/translation.factory';
-import {I18nService, Languages} from '../service/i18n.service';
 
 @NgModule({
   imports: [
