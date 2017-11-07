@@ -1,0 +1,28 @@
+build:
+  stage: build
+  only:
+    - master
+    - CI
+  tags:
+    - nodejs
+  script:
+    - cd backend
+    - npm install
+
+deploy:
+  stage: deploy
+  only:
+    - master
+    - CI
+  tags:
+    - ssh
+  dependencies:
+    - build
+  script:
+    - chmod -R a+rX,ug+w build
+    - eval $(ssh-agent -s)
+    - mkdir ~/.ssh && echo "$STAGING_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
+    - scp -r backend/dist/* "$STAGING_SSH_URL"/backend
+    - scp -r frontend/dist/* "$STAGING_SSH_URL"/frontend
+
