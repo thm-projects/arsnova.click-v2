@@ -13,6 +13,29 @@ Please consider the list of the [ToDo's](./TODOS.md) including the known issues 
 - NPM (Version 4)
 
 ---
+#### Core Technologies
+
+- Angular 5
+- Express Backend with TypeScript
+- Bootstrap 4
+- WebSocket Communication
+- Progressive WebApp
+
+---
+#### Major Features
+- Customizable Themes
+- 8 unique Types of Questions
+- LaTeX
+- MathJax
+- Github Flavored Markdown
+- Export reports as Excel File
+- Authentication via CAS
+- 5 supported languages
+- QR Code for quick quiz joining
+- Lists of predefined Nicknames available
+- Sounds for the Quiz Lobby and the Countdown
+- Gamification animations
+
 #### Installation
 
 ###### Backend
@@ -28,13 +51,13 @@ Head over to the /frontend directory and enter `npm install`
 Head over to the /backend directory and enter `npm start`
 
 ###### Frontend
-Head over to the /frontend directory and enter `npm run start`
+Head over to the /frontend directory and enter `npm start`
 
 ---
 #### Build (LIVE deployment)
 
 ###### Backend
-Head over to the /backend directory and enter `npm start`
+Head over to the /backend directory and enter `npm run prod`
 
 ###### Frontend
 Head over to the /frontend directory and enter `npm run prod`
