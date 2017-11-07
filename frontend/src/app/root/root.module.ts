@@ -4,7 +4,7 @@ import {NgbModule, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {HomeComponent} from './home/home.component';
 import {FooterModule} from '../footer/footer.module';
 import {SharedModule} from '../shared/shared.module';
-import {RouterModule, Routes} from '@angular/router';
+import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {RootComponent} from './root/root.component';
 import {HeaderModule} from '../header/header.module';
 import {FooterBarService} from '../service/footer-bar.service';
@@ -88,7 +88,10 @@ const appRoutes: Routes = [
     }),
     RouterModule.forRoot(
       appRoutes,
-      {enableTracing: false} // <-- debugging purposes only
+      {
+        preloadingStrategy: PreloadAllModules,
+        enableTracing: false // <-- debugging purposes only
+      }
     ),
     SharedModule,
     ThemesModule,
