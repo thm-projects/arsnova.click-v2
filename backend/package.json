@@ -32,7 +32,8 @@
     "node-sass-middleware": "0.9.8",
     "phantomjs-prebuilt": "^2.1.15",
     "request": "^2.83.0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "slimerjs": "^0.10.3"
   },
   "devDependencies": {
     "@types/body-parser": "0.0.33",

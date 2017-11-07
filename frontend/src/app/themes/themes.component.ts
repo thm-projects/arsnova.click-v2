@@ -14,9 +14,12 @@ export class ThemesComponent implements OnInit, OnDestroy {
   @Output() previewTheme = new EventEmitter<string>();
   @Output() restoreTheme = new EventEmitter<string>();
 
+  private _currentTheme: string;
+
   constructor(
     private translateService: TranslateService,
     public themesService: ThemesService) {
+    this._currentTheme = this.themesService.currentTheme;
   }
 
   ngOnInit() {
@@ -26,12 +29,17 @@ export class ThemesComponent implements OnInit, OnDestroy {
     this.themesService.updateCurrentlyUsedTheme();
   }
 
+  isThemeSelected(id: string): boolean {
+    return this._currentTheme === id;
+  }
+
   getThemePreviewUrl(id: string): string {
     return `${DefaultSettings.httpApiEndpoint}/theme/${id}/${this.translateService.currentLang}`;
   }
 
   change(id: string): void {
     this.updateTheme.emit(id);
+    this._currentTheme = id;
   }
 
   preview(id: string): void {

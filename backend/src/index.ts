@@ -8,7 +8,7 @@ import * as path from 'path';
 import {WebSocketRouter} from './routes/websocket';
 import {Server} from 'https';
 import * as process from 'process';
-import * as phantomjs from 'phantomjs-prebuilt';
+import * as slimerjs from 'slimerjs';
 import {ChildProcess, spawn} from 'child_process';
 import {themes} from './themes/availableThemes';
 import {ITheme} from './interfaces/common.interfaces';
@@ -57,9 +57,9 @@ themes.forEach((theme: ITheme) => {
     params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);
   });
 });
-const command: ChildProcess = spawn(phantomjs.path, params);
+const command: ChildProcess = spawn(slimerjs.path, params);
 command.stdout.on('data', (data) => {
-  debug(`phantomjs (stdout): ${data.toString()}`);
+  console.log(`phantomjs (stdout): ${data.toString()}`);
 });
 command.stderr.on('data', (data) => {
   console.log(`phantomjs (stderr): ${data.toString()}`);

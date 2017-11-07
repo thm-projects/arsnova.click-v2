@@ -1,30 +1,23 @@
 const system = require('system');
 const webpage = require('webpage');
-
-const args = system.args;
 const page = webpage.create();
+const args = system.args;
 
-page.viewportSize = {
-  width: 350,
-  height: 720
-};
-page.onConsoleMessage = function (message) {
-  console.log('Received message from phantomjs process:', message);
-};
+args.shift();
+handlePageLoad();
 
-function handlePage(url) {
-  console.log('Requesting page load:', url);
-  page.open(url, function (status) {
-    const urlSeparated = url.split('/');
-    page.onCallback = function () {
-      console.log('Page', url, 'is loaded and ready with status:', status);
-      page.render('images/themes/' + urlSeparated[urlSeparated.length - 2] + '_' + urlSeparated[urlSeparated.length - 1] + '.png');
-      setTimeout(nextPage, 100);
-    };
-    setTimeout(function () {
-      page.evaluate(function () {
-        callPhantom();
-      });
+function handlePageLoad() {
+  const url = nextPage();
+  if (!url) {
+    return;
+  }
+  page.open(url).then(function() {
+    page.viewportSize = { width:1280, height:720 };
+    setTimeout(function() {
+      const urlSeparated = url.split('/');
+      page.render('images/themes/' + urlSeparated[urlSeparated.length - 2] + '_' + urlSeparated[urlSeparated.length - 1] + '.png',
+        {onlyViewport: false});
+      handlePageLoad();
     }, 800);
   });
 }
@@ -34,6 +27,7 @@ function nextPage() {
   if (!url) {
     console.log('All files have been handled, exiting process');
     phantom.exit(0);
+    return;
   }
   const host = /localhost/.test(url) ? 'localhost' : /staging.arsnova.click/.test(url) ? 'staging.arsnova.click' : /arsnova.click/.test(url)
     ? 'arsnova.click' : '';
@@ -45,8 +39,7 @@ function nextPage() {
     'expires': (new Date()).getTime() + (1000 * 60 * 60)   /* <-- expires in 1 hour */
   });
   console.log('Handling url', url, 'from args', args);
-  handlePage(url);
+  return url;
 }
 
-args.shift();
-nextPage();
+

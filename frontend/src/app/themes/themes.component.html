@@ -1,9 +1,9 @@
 <div *ngFor="let elem of themesService.themes"
-     class="themePreview selectedTheme d-flex align-items-center mb-2 flex-wrap flex-sm-nowrap"
+     [class]="'themePreview d-flex align-items-center mb-2 flex-wrap flex-sm-nowrap ' + (isThemeSelected(elem.id) ? 'selectedTheme' : '')"
      [id]="elem.id" role="listitem">
   <img [src]="getThemePreviewUrl(elem.id)"
        [alt]="'Preview of theme ' + (elem.name | translate)"
-       class="imagePreviewFile"
+       class="imagePreviewFile pointer"
        (click)="change(elem.id)"
        (mouseenter)="preview(elem.id)"
        (mouseleave)="restore()"
