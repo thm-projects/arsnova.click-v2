@@ -47,7 +47,8 @@ $themes: (
     *:fullscreen,
     :-webkit-full-screen,
     *:-webkit-full-screen,
-    *:-moz-full-screen {
+    *:-moz-full-screen,
+    body {
       background-color: map-get($map, "background-color");
       -webkit-transition: background-color 800ms linear;
       -moz-transition: background-color 800ms linear;
