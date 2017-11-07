@@ -8,6 +8,10 @@ build:
   script:
     - cd backend
     - npm install
+    - npm run prod
+    - cd ../frontend
+    - npm install
+    - npm run prod
 
 deploy:
   stage: deploy
@@ -23,6 +27,6 @@ deploy:
     - eval $(ssh-agent -s)
     - mkdir ~/.ssh && echo "$STAGING_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
-    - scp -r backend/dist/* "$STAGING_SSH_URL"/backend
-    - scp -r frontend/dist/* "$STAGING_SSH_URL"/frontend
+    - scp -r backend/* "$STAGING_SSH_URL"/backend
+    - scp -r frontend/* "$STAGING_SSH_URL"/frontend
 
