@@ -40,6 +40,8 @@ createPath('sound');
 const cert = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
 const key = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
 
+const privateServerConfig = require('../settings.json');
+
 const port: string | number | boolean = normalizePort(staticStatistics.port);
 App.set('port', port);
 
@@ -51,7 +53,7 @@ server.on('close', onClose);
 
 const languages = ['en', 'de', 'fr', 'it', 'es'];
 const params: any = [path.join(__dirname, 'phantomDriver.js')];
-const themePreviewEndpoint = 'http://localhost:4200/preview';
+const themePreviewEndpoint = `${privateServerConfig.frontendHttpServer}/preview`;
 themes.forEach((theme: ITheme) => {
   languages.forEach((languageKey) => {
     params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);
