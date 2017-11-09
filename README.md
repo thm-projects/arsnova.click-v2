@@ -12,6 +12,8 @@ Please consider the list of the [ToDo's](./TODOS.md) including the known issues 
 - NodeJS (Version 7)
 - NPM (Version 4)
 
+For full instructions on how to set up the correct environment, visit the [DEV Page](./DEV.md)
+
 ---
 #### Core Technologies
 
