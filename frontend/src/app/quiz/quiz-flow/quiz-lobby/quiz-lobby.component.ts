@@ -109,6 +109,15 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemBack
       ]);
     }
+
+    this.connectionService.initConnection().then(() => {
+      if (this.currentQuizService.isOwner) {
+        this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
+      } else {
+        this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+      }
+      this.handleMessages();
+    });
   }
 
   private handleMessages() {
@@ -214,14 +223,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.handleMessages();
-    this.connectionService.initConnection().then(() => {
-      if (this.currentQuizService.isOwner) {
-        this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
-      } else {
-        this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-      }
-    });
   }
 
   ngOnDestroy() {

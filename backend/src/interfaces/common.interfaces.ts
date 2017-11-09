@@ -57,7 +57,7 @@ export declare interface IActiveQuiz extends IActiveQuizSerialized {
 
   removeMember(name: string): boolean;
 
-  addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void;
+  addResponseValue(nickname: string, data: Array<number>): void;
 
   setConfidenceValue(nickname: string, confidenceValue: number): void;
 

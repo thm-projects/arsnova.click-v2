@@ -190,7 +190,7 @@
     /* Voting results */
     "bg-button_result": $primary_color,
     "progress-bar-success-color": $accent_color,
-    "progress-bar-failure-color": map-get($stdStyle, "md_red_500"),
+    "progress-bar-danger-color": map-get($stdStyle, "md_red_500"),
     "progress-bar-default-color": map-get($stdStyle, "md_blue_grey_700"), /* partially correct */
     "bg-button-result-progress": $dark_primary_color,
     "fg-button-result-percentage": white,

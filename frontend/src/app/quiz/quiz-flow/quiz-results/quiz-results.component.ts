@@ -142,11 +142,35 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
             this.currentQuizService.readingConfirmationRequested);
   }
 
+  hideProgressbarCssStyle(): boolean {
+    const resultLength = this.attendeeService.attendees.filter(nick => {
+      const responses = nick.responses[this._selectedQuestionIndex];
+      if (responses) {
+        if (typeof responses.value === 'number') {
+          return responses.value > 0;
+        }
+        return responses.value.length > 0;
+      }
+    }).length;
+
+    const res = (
+        this._selectedQuestionIndex <= this.currentQuizService.questionIndex &&
+        !resultLength &&
+        !this.currentQuizService.readingConfirmationRequested
+      );
+
+    return res;
+  }
+
   showConfidenceRate(questionIndex: number): boolean {
     const matches = this.attendeeService.attendees.filter(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].confidence : false;
     });
-    return matches.length > 0 || this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled;
+    const hasConfidenceSet = typeof this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled !== 'undefined';
+    const isConfidenceEnabled = typeof hasConfidenceSet ?
+      this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled :
+      false;
+    return hasConfidenceSet ? matches.length > 0 || isConfidenceEnabled : matches.length > 0;
   }
 
   modifyVisibleQuestion(index: number): void {
@@ -179,7 +203,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     const matchCount = this.attendeeService.attendees.filter(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
     }).length;
-    return matchCount > 0 || this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled;
+    const isReadingConfirmationEnabled = typeof this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled === 'undefined' ?
+      false : this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled;
+    return matchCount > 0 || isReadingConfirmationEnabled;
   }
 
   showResponseProgress(): boolean {
@@ -310,7 +336,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.handleMessages();
     this.questionTextService.getEmitter().subscribe((data: Array<string>) => {
       this.answers = data;
     });
@@ -324,6 +349,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.generateAnswers(question);
         }
       });
+      this.handleMessages();
       if (this.currentQuizService.isOwner) {
         this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
       } else {

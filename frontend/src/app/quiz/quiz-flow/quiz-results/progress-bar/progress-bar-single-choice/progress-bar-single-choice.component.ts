@@ -30,6 +30,9 @@ export class ProgressBarSingleChoiceComponent implements OnInit {
     this.absolute = value.absolute;
     this.label = value.label;
     this.normalizedAnswerIndex = String.fromCharCode(65 + value.answerIndex);
+    this.progressbarCssClass = typeof value.isCorrect === 'undefined' ? 'default' :
+      value.isCorrect === -1 ? 'danger' :
+        value.isCorrect === 0 ? 'warning' : 'success';
   }
 
   private _percent: number;
@@ -37,6 +40,7 @@ export class ProgressBarSingleChoiceComponent implements OnInit {
   private absolute: number;
   private label: string;
   private normalizedAnswerIndex: string;
+  private progressbarCssClass: string;
 
   sanitizeStyle(value: string): SafeStyle {
     value = value.replace(/\s/g, '');

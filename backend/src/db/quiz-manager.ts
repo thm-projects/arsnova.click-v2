@@ -283,13 +283,13 @@ class ActiveQuizItem implements IActiveQuiz {
     return false;
   }
 
-  public addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void {
+  public addResponseValue(nickname: string, data: Array<number>): void {
     this.nicknames.filter(value => {
       return value.name === nickname;
-    })[0].responses[questionIndex].responseTime = (new Date().getTime() - this._currentStartTimestamp) / 1000;
+    })[0].responses[this.currentQuestionIndex].responseTime = (new Date().getTime() - this._currentStartTimestamp) / 1000;
     this.nicknames.filter(value => {
       return value.name === nickname;
-    })[0].responses[questionIndex].value = data;
+    })[0].responses[this.currentQuestionIndex].value = data;
 
     this.pushMessageToClients({
       status: 'STATUS:SUCCESSFUL',
@@ -385,7 +385,7 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
     throw new Error('Method not implemented.');
   }
 
-  public addResponseValue(nickname: string, questionIndex: number, data: Array<number>): void {
+  public addResponseValue(nickname: string, data: Array<number>): void {
     throw new Error('Method not implemented.');
   }
 

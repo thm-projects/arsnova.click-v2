@@ -51,7 +51,11 @@
                             [data]="getReadingConfirmationData(selectedQuestionIndex)"></app-reading-confirmation>
   <app-confidence-rate *ngIf="showConfidenceRate(selectedQuestionIndex)"
                        [data]="getConfidenceData(selectedQuestionIndex)"></app-confidence-rate>
-  <app-progress-bar *ngIf="showResponseProgress()" [data]="answers" [questionIndex]="selectedQuestionIndex" [question]="currentQuizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
+  <app-progress-bar *ngIf="showResponseProgress()"
+                    [data]="answers"
+                    [hideProgressbarCssStyle]="hideProgressbarCssStyle()"
+                    [questionIndex]="selectedQuestionIndex"
+                    [question]="currentQuizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
 </div>
 
 <div *ngIf="currentQuizService.isOwner">

@@ -29,12 +29,16 @@ export class ProgressBarFreetextComponent implements OnInit {
     this.base = value.base;
     this.absolute = value.absolute;
     this.label = value.label;
+    this.progressbarCssClass = typeof value.isCorrect === 'undefined' ? 'default' :
+      value.isCorrect === -1 ? 'danger' :
+        value.isCorrect === 0 ? 'warning' : 'success';
   }
 
   private _percent: number;
   private _base: number;
   private absolute: number;
   private label: string;
+  private progressbarCssClass: string;
 
   sanitizeStyle(value: string): SafeStyle {
     value = value.replace(/\s/g, '');

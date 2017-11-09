@@ -528,7 +528,7 @@ export class ApiRouter {
       return;
     }
 
-    activeQuiz.addResponseValue(req.body.nickname, activeQuiz.currentQuestionIndex, req.body.value);
+    activeQuiz.addResponseValue(req.body.nickname, req.body.value);
 
     res.send({
       status: 'STATUS:SUCCESSFUL',
@@ -541,7 +541,7 @@ export class ApiRouter {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     activeQuiz.nicknames.filter((member) => {
       return member.name === req.body.nickname;
-    })[0].responses[req.body.questionIndex].confidence = req.body.confidenceValue;
+    })[0].responses[activeQuiz.currentQuestionIndex].confidence = req.body.confidenceValue;
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:CONFIDENCE_VALUE',
@@ -553,7 +553,7 @@ export class ApiRouter {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
     activeQuiz.nicknames.filter((member) => {
       return member.name === req.body.nickname;
-    })[0].responses[req.body.questionIndex].readingConfirmation = true;
+    })[0].responses[activeQuiz.currentQuestionIndex].readingConfirmation = true;
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:READING_CONFIRMATION',

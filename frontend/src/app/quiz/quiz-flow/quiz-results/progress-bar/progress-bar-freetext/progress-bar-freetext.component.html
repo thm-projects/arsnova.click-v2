@@ -1,11 +1,11 @@
-<div class="progress my-2 relative" style="height: 2rem;">
+<div [class]="('progress my-2 relative')" style="height: 2rem;">
   <div *ngIf="base && percent"
-       class="progress-bar bg-info overflow-hidden"
-       role="progressbar"
-       [style.width]="sanitizeStyle(percent)"
-       [attr.aria-valuenow]="percent"
-       aria-valuemin="0"
-       aria-valuemax="100"></div>
+       [class]="('progress-bar overflow-hidden progress-' + progressbarCssClass)"
+     role="progressbar"
+     [style.width]="sanitizeStyle(percent)"
+     [attr.aria-valuenow]="percent"
+     aria-valuemin="0"
+     aria-valuemax="100"></div>
   <div *ngIf="base"
        class="d-flex align-self-center align-items-center"
        style="position: absolute; left: 10px;"><span [innerHTML]="sanitizeHTML(label)"></span>

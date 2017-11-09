@@ -481,13 +481,19 @@ $themes: (
           }
         }
       }
-      .progress-success {
+      .progress-success { // Correct answer
         background-color: map-get($map, "progress-bar-success-color") !important;
       }
-      .progress-failure {
-        background-color: map-get($map, "progress-bar-failure-color") !important;
+      .progress-danger { // Wrong answer
+        background-color: map-get($map, "progress-bar-danger-color") !important;
       }
-      .progress-default {
+      .progress-warning { // Guessed in range
+        background-color: map-get($map, "progress-bar-warning-color") !important;
+      }
+      .progress-secondary { // Survey question
+        background-color: map-get($map, "progress-bar-secondary-color") !important;
+      }
+      .progress-default { // Active question
         background-color: map-get($map, "progress-bar-default-color") !important;
       }
       .textarea {
