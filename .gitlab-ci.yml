@@ -35,5 +35,5 @@ deploy:
     - mkdir ~/.ssh && echo "$STAGING_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
     - scp -r backend/* "$STAGING_BACKEND_SSH_URL"
-    - scp -r frontend/* "$STAGING_BACKEND_SSH_URL"
+    - scp -r frontend/* "$STAGING_FRONTEND_SSH_URL"
 
