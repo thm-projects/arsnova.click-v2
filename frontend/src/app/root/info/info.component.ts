@@ -4,6 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
+import {TrackingService} from "../../service/tracking.service";
 
 @Component({
   selector: 'app-info',
@@ -18,6 +19,7 @@ export class InfoComponent implements OnInit, OnDestroy {
   constructor(
     private footerBarService: FooterBarService,
     private translateService: TranslateService,
+    private trackingService: TrackingService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService) {
     footerBarService.replaceFooterElements([
@@ -34,6 +36,7 @@ export class InfoComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._routerSubscription = this.route.data.subscribe(data => {
       this.currentData = data.content;
+      this.trackingService.trackPageView(`InfoComponent/${this.currentData}`);
     });
   }
 

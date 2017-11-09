@@ -1,4 +1,5 @@
 export const DefaultSettings = {
+  siteId: 'arsnova.click-v2',
   httpApiEndpoint: `https://${location.hostname}:3000/api/v1`,
   httpLibEndpoint: `https://${location.hostname}:3000/lib`,
   wsApiEndpoint: `wss://${location.hostname}:3000`,

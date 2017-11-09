@@ -6,6 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {NavigationEnd, Router} from '@angular/router';
 import * as IntroJs from 'intro.js';
 import {I18nService} from '../../service/i18n.service';
+import {TrackingService} from "../../service/tracking.service";
 
 // Update global window.* object interface (https://stackoverflow.com/a/12709880/7992104)
 declare global {
@@ -33,12 +34,14 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   constructor(
     public i18nService: I18nService, // Must be instantiated here to be available in all child components
+    private trackingService: TrackingService,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private themesService: ThemesService,
     private translateService: TranslateService,
     private router: Router) {
     themesService.updateCurrentlyUsedTheme();
+    trackingService.trackPageView('RootComponent');
   }
 
   getFooterBarElements() {

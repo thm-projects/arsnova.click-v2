@@ -29,6 +29,7 @@ import {UserService} from '../service/user.service';
 import {QuizModule} from '../quiz/quiz.module';
 import {FileUploadService} from '../service/file-upload.service';
 import {SettingsService} from '../service/settings.service';
+import {TrackingService} from "../service/tracking.service";
 
 const appRoutes: Routes = [
   {
@@ -115,7 +116,8 @@ const appRoutes: Routes = [
     CasService,
     FileUploadService,
     SettingsService,
-    NgbActiveModal
+    NgbActiveModal,
+    TrackingService
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],
