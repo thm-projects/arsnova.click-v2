@@ -213,18 +213,31 @@ export class HomeComponent implements OnInit, OnDestroy {
           resolve();
         });
       } else if (this.isAddingABCDQuiz) {
-        const url = `${DefaultSettings.httpApiEndpoint}/abcdquiz/generate/${this.i18nService.currentLanguage.toString()}`;
-        this.http.get(url).subscribe((value: any) => {
-          questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
-          const answerOptionList = (<Array<DefaultAnswerOption>>[]);
-          this.enteredSessionName.split('').forEach((character, index) => {
-            answerOptionList.push(new DefaultAnswerOption({answerText: (String.fromCharCode(index + 65))}));
+        const language = this.i18nService.currentLanguage.toString();
+        const answerList = this.enteredSessionName.split('');
+        new Promise((resolveABCDGeneration) => {
+          const hasMatchedABCDQuiz = JSON.parse(window.localStorage.getItem('config.owned_quizzes')).filter(quizName => {
+            return quizName.startsWith(this.enteredSessionName);
           });
-          this.enteredSessionName = questionGroup.hashtag;
-          const abcdQuestion = new ABCDSingleChoiceQuestion({
-            questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false
+          if (hasMatchedABCDQuiz.length) {
+            resolveABCDGeneration();
+            return;
+          }
+          const url = `${DefaultSettings.httpApiEndpoint}/abcdquiz/generate/${language}/${answerList.length}`;
+          this.http.get(url).subscribe((value: any) => {
+            questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
+            const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+            answerList.forEach((character, index) => {
+              answerOptionList.push(new DefaultAnswerOption({answerText: (String.fromCharCode(index + 65))}));
+            });
+            this.enteredSessionName = questionGroup.hashtag;
+            const abcdQuestion = new ABCDSingleChoiceQuestion({
+              questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false
+            });
+            questionGroup.questionList = [abcdQuestion];
+            resolveABCDGeneration();
           });
-          questionGroup.questionList = [abcdQuestion];
+        }).then(() => {
           resolve();
         });
       } else {

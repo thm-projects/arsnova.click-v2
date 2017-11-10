@@ -89,7 +89,11 @@ export class ApiRouter {
 
   public generateDemoQuiz(req: Request, res: Response): void {
     try {
-      const demoQuizPath = path.join(__dirname, `../../predefined_quizzes/demo_quiz/${req.params.languageId.toLowerCase()}.demo_quiz.json`);
+      const basePath = path.join(__dirname, '..', '..', 'predefined_quizzes', 'demo_quiz');
+      let demoQuizPath = path.join(basePath, `${req.params.languageId.toLowerCase()}.demo_quiz.json`);
+      if (!fs.existsSync(demoQuizPath)) {
+        demoQuizPath = path.join(basePath, 'en.demo_quiz.json');
+      }
       const result: IQuestionGroup = JSON.parse(fs.readFileSync(demoQuizPath).toString());
       result.hashtag = 'Demo Quiz ' + (QuizManager.getAllPersistedDemoQuizzes().length + 1);
       QuizManager.convertLegacyQuiz(result);
@@ -102,9 +106,18 @@ export class ApiRouter {
 
   public generateAbcdQuiz(req: Request, res: Response): void {
     try {
-      const abcdQuizPath = path.join(__dirname, `../../predefined_quizzes/abcd_quiz/${req.params.languageId.toLowerCase()}.abcd_quiz.json`);
+      const answerLength = req.params.answerLength || 4;
+      const basePath = path.join(__dirname, '..', '..', 'predefined_quizzes', 'abcd_quiz');
+      let abcdQuizPath = path.join(basePath, `${req.params.languageId.toLowerCase()}.abcd_quiz.json`);
+      if (!fs.existsSync(abcdQuizPath)) {
+        abcdQuizPath = path.join(basePath, 'en.abcd_quiz.json');
+      }
       const result: IQuestionGroup = JSON.parse(fs.readFileSync(abcdQuizPath).toString());
-      result.hashtag = 'ABCD Quiz ' + (QuizManager.getAllPersistedAbcdQuizzes().length + 1);
+      let abcdName = '';
+      for (let i  = 0; i < answerLength; i++) {
+        abcdName += String.fromCharCode(65 + i);
+      }
+      result.hashtag = `${abcdName} ${(QuizManager.getAllPersistedAbcdQuizzesByLength(answerLength).length + 1)}`;
       QuizManager.convertLegacyQuiz(result);
       res.setHeader('Response-Type', 'application/json');
       res.send(result);
@@ -627,7 +640,7 @@ export class ApiRouter {
     this._router.get('/getAvailableQuiz/:quizName', this.getIsAvailableQuiz);
 
     this._router.get('/demoquiz/generate/:languageId', this.generateDemoQuiz);
-    this._router.get('/abcdquiz/generate/:languageId', this.generateAbcdQuiz);
+    this._router.get('/abcdquiz/generate/:languageId/:answerLength?', this.generateAbcdQuiz);
 
     this._router.get('/availableNicks/all', this.getAllAvailableNicks);
 

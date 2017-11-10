@@ -544,6 +544,14 @@ export default class QuizManagerDAO {
     });
   }
 
+  public static getAllPersistedAbcdQuizzesByLength(length: number): String[] {
+    return Object.keys(activeQuizzes).filter((value: string) => {
+      const name: string = QuizManagerDAO.normalizeQuizName(value);
+      return QuizManagerDAO.checkABCDOrdering(activeQuizzes[name].name) &&
+        activeQuizzes[name].originalObject.questionList[0].answerOptionList.length === length;
+    });
+  }
+
   private static replaceTypeInformationOnLegacyQuiz(obj): void {
     if (obj.hasOwnProperty('type')) {
       obj.TYPE = obj.type;
