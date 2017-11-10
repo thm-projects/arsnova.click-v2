@@ -217,7 +217,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         const answerList = this.enteredSessionName.split('');
         new Promise((resolveABCDGeneration) => {
           const hasMatchedABCDQuiz = JSON.parse(window.localStorage.getItem('config.owned_quizzes')).filter(quizName => {
-            return quizName.startsWith(this.enteredSessionName);
+            return quizName.split(' ')[0] === this.enteredSessionName;
           });
           if (hasMatchedABCDQuiz.length) {
             resolveABCDGeneration();
