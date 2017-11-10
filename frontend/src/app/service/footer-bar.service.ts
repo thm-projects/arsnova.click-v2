@@ -158,7 +158,7 @@ export class FooterBarService {
     selectable: true,
     showIntro: false,
     linkTarget: null,
-    isActive: window.innerWidth === window.outerWidth && window.innerHeight === window.outerHeight
+    isActive: window.innerWidth === screen.width && window.innerHeight === screen.height
   }, function () {
     this.isActive = !this.isActive;
     const elem = document.documentElement;
