@@ -5,15 +5,16 @@
   "scripts": {
     "ng": "ng",
 
-    "start": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check --prod --aot --build-optimizer",
-    "build": "ng build",
+    "start": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check --aot",
+    "build:DEV": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check --prod --aot --build-optimizer",
+    "build:PROD": "ng build --output-path=dist/ --no-sourcemap --prod --aot --build-optimizer",
 
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
 
     "prod-test": "npm run prod && http-server dist/ -p 4711 --gzip",
-    "prod": "ng build --output-path=dist/ --no-sourcemap --prod --aot --build-optimizer",
+    "prod": "npm run build:PROD",
     "postprod": "npm run cleanup-sass && npm run imagemin && npm run cache",
 
     "cleanup-sass": "rimraf dist/assets/fonts/font-awesome-4.7.0/scss",
