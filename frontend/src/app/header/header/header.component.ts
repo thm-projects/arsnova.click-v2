@@ -91,7 +91,16 @@ export class HeaderComponent implements OnInit {
   }
 
   get origin(): string {
-    return this._origin;
+    switch (this._origin) {
+      case 'beta.arsnova.click':
+        return 'Beta';
+      case 'staging.arsnova.click':
+        return 'Staging';
+      case 'localhost':
+        return 'DEV';
+      default:
+        return '';
+    }
   }
 
   constructor(

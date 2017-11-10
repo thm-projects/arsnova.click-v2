@@ -47,14 +47,14 @@ export class I18nService {
     let selectedLanguage: Languages;
     if (Languages[window.localStorage.getItem('config.language')]) {
       selectedLanguage = Languages[window.localStorage.getItem('config.language')];
-    } else if (Languages[navigator.language]) {
-      selectedLanguage = Languages[navigator.language];
+    } else if (Languages[translate.getBrowserLang().toUpperCase()]) {
+      selectedLanguage = Languages[translate.getBrowserLang().toUpperCase()];
     } else {
       selectedLanguage = Languages.EN;
     }
 
     // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang(selectedLanguage.toString().toLowerCase());
+    translate.setDefaultLang(Languages.EN.toString().toLowerCase());
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use(selectedLanguage.toString().toLowerCase());

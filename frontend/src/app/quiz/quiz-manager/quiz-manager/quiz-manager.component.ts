@@ -4,11 +4,13 @@ import {FooterBarService} from '../../../service/footer-bar.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {questionReflection} from '../../../../lib/questions/question_reflection';
-import {IQuestionGroup} from '../../../../lib/questions/interfaces';
+import {IQuestion, IQuestionGroup} from '../../../../lib/questions/interfaces';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
+import {DefaultAnswerOption} from '../../../../lib/answeroptions/answeroption_default';
 
 @Component({
   selector: 'app-quiz-manager',
@@ -73,6 +75,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     private http: HttpClient,
     private router: Router,
     private currentQuizService: CurrentQuizService,
+    private translateService: TranslateService,
     private activeQuestionGroupService: ActiveQuestionGroupService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
@@ -115,7 +118,21 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   addQuestion(id: string) {
-    this.activeQuestionGroupService.activeQuestionGroup.addQuestion(questionReflection[id]({}));
+    const question: IQuestion = questionReflection[id]({});
+    switch (id) {
+      case 'TrueFalseSingleChoiceQuestion':
+        question.answerOptionList = [
+          new DefaultAnswerOption({answerText: this.translateService.instant('global.true'), isCorrect: false}),
+          new DefaultAnswerOption({answerText: this.translateService.instant('global.false'), isCorrect: false}),
+        ];
+        break;
+      case 'YesNoSingleChoiceQuestion':
+        question.answerOptionList = [
+          new DefaultAnswerOption({answerText: this.translateService.instant('global.yes'), isCorrect: false}),
+          new DefaultAnswerOption({answerText: this.translateService.instant('global.no'), isCorrect: false}),
+        ];
+    }
+    this.activeQuestionGroupService.activeQuestionGroup.addQuestion(question);
     this.footerBarService.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
     this.activeQuestionGroupService.persist();
   }
