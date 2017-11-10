@@ -9,7 +9,7 @@
 
 ###### Global
 Install NodeJS and NPM and add the binaries to the path variable.
-To install the angular core globally, enter `npm install -g @angular/core`. Test with ng -v in the console.
+To install the angular core globally, enter `npm install -g @angular/core`. Test with `ng -v` in the console.
 
 ###### Backend
 Head over to the /backend directory and enter `npm install`
