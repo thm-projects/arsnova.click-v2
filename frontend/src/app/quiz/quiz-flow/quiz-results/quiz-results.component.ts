@@ -293,7 +293,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
                    !this.currentQuizService.readingConfirmationRequested ?
                    'reading-confirmation' : 'start';
 
-    console.log('start quiz target', this.currentQuizService.readingConfirmationRequested);
     this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
       quizName: this.currentQuizService.quiz.hashtag
     }).subscribe((data: IMessage) => {
@@ -349,12 +348,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.generateAnswers(question);
         }
       });
-      this.handleMessages();
       if (this.currentQuizService.isOwner) {
         this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
       } else {
         this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
       }
+      this.handleMessages();
       if (this.attendeeService.attendees.filter(attendee => {
           return attendee.responses[this.currentQuizService.questionIndex] ?
                  attendee.responses[this.currentQuizService.questionIndex].value :

@@ -106,6 +106,7 @@ export class ConnectionService {
         this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
           (data) => {
             this.serverAvailable = true;
+            this._websocketAvailable = true;
             resolve2(data);
           },
           () => {
@@ -127,9 +128,6 @@ export class ConnectionService {
       () => {
         self.serverAvailable = true;
         self._rtt = new Date().getTime() - start_time;
-        if (!this._socket) {
-          self.initWebsocket();
-        }
       },
       () => {
         self.serverAvailable = false;

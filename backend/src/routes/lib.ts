@@ -71,6 +71,14 @@ export class LibRouter {
     });
   }
 
+  public getFavicon(req: Request, res: Response, next: NextFunction): void {
+    const theme = req.params.theme || 'theme-Material';
+    fs.readFile(path.join(__dirname, '..', '..', 'images', `favicon-${theme}.png`), (err, data: Buffer) => {
+      res.contentType(fileType(data).mime);
+      res.end(data);
+    });
+  }
+
   public getFirstMathjaxExample(req: Request, res: Response, next: NextFunction): void {
     mjAPI.typeset({
       math: `<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" mathcolor="black">
@@ -236,6 +244,8 @@ export class LibRouter {
    */
   private init(): void {
     this._router.get('/', this.getAll);
+
+    this._router.get('/favicon/theme?', this.getFavicon);
 
     this._router.post('/mathjax', this.renderMathjax);
     this._router.get('/mathjax/example/first', this.getFirstMathjaxExample);

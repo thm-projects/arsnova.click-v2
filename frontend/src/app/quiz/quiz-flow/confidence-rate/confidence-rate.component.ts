@@ -35,8 +35,10 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-    this.handleMessages();
+    this.connectionService.initConnection().then(() => {
+      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+      this.handleMessages();
+    });
   }
 
   ngOnDestroy() {

@@ -51,19 +51,29 @@ export class CurrentQuizService implements ICurrentQuiz {
     if (value) {
       this._isOwner = (JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(value.hashtag) > -1;
 
-      if (this._isOwner) {
-        if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
-          this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
-            quiz: this._quiz.serialize()
-          }).subscribe((response: IMessage) => {
-            if (response.status !== 'STATUS:SUCCESSFUL') {
-              console.log(response);
-            }
-          });
+      new Promise((resolve => {
+        if (this._isOwner) {
+          if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
+            this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
+              quiz: this._quiz.serialize()
+            }).subscribe((response: IMessage) => {
+              if (response.status !== 'STATUS:SUCCESSFUL') {
+                console.log(response);
+              } else {
+                console.log('persisting quiz as owner with caching');
+                resolve();
+              }
+            });
+          } else {
+            console.log('persisting quiz as owner without caching');
+            resolve();
+          }
+        } else {
+          console.log('persisting quiz as attendee');
+          resolve();
         }
-      }
+      })).then(() => this.persistToSessionStorage());
     }
-    this.persistToSessionStorage();
   }
 
   private _isOwner = false;

@@ -119,8 +119,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-    this.handleMessages();
+    this.connectionService.initConnection().then(() => {
+      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+      this.handleMessages();
+    });
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._isGlobalRanking = isNaN(this._questionIndex);
