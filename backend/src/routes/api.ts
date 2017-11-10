@@ -327,6 +327,16 @@ export class ApiRouter {
     }
   }
 
+  public stopQuiz(req: Request, res: Response): void {
+    const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.body.quizName);
+    activeQuiz.stop();
+    res.send({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:STOP',
+      payload: {}
+    });
+  }
+
   public getCurrentQuizState(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManager.getActiveQuizByName(req.params.quizName);
     const index = activeQuiz.currentQuestionIndex < 0 ? 0 : activeQuiz.currentQuestionIndex;
@@ -655,6 +665,7 @@ export class ApiRouter {
 
     this._router.post('/quiz/upload', this.uploadQuiz);
     this._router.post('/quiz/start', this.startQuiz);
+    this._router.post('/quiz/stop', this.stopQuiz);
     this._router.get('/quiz/currentState/:quizName', this.getCurrentQuizState);
     this._router.post('/quiz/reading-confirmation', this.showReadingConfirmation);
     this._router.get('/quiz/startTime/:quizName', this.getQuizStartTime);

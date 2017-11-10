@@ -103,6 +103,10 @@ export class VotingComponent implements OnInit, OnDestroy {
         case 'LOBBY:CLOSED':
           this.router.navigate(['/']);
           break;
+        case 'QUIZ:STOP':
+          this._selectedAnswers = [];
+          this.router.navigate(['/quiz', 'flow', 'results']);
+          break;
       }
     });
   }

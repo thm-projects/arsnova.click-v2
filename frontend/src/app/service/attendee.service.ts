@@ -127,6 +127,10 @@ export class AttendeeService implements OnDestroy {
   }
 
   modifyResponse(attendee: INickname): void {
+    const member = this.getMember(attendee.name);
+    if (!member) {
+      return;
+    }
     this.getMember(attendee.name).responses = attendee.responses;
     this.persistToSessionStorage();
   }

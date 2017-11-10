@@ -130,6 +130,7 @@ class ActiveQuizItem implements IActiveQuiz {
   private _webSocketRouter: WebSocketRouter;
   private _currentStartTimestamp = 0;
   private _ownerSocket: WebSocket;
+  private _countdownInterval: any;
 
   constructor(
     {nicknames, originalObject, currentQuestionIndex}:
@@ -198,16 +199,18 @@ class ActiveQuizItem implements IActiveQuiz {
     this._currentStartTimestamp = startTimestamp;
 
     let timer = this.originalObject.questionList[this.currentQuestionIndex].timer;
-    const interval = setInterval(() => {
-      if (!timer || this.nicknames.filter(nick => {
-        if (!nick.responses[this.currentQuestionIndex]) {
-          return false;
-        }
-        const value = nick.responses[this.currentQuestionIndex].value;
-        return typeof value === 'number' ? !isNaN(value) : value.length;
-        }).length === this.nicknames.length) {
+    this._countdownInterval = setInterval(() => {
+      if (
+        !timer || this.nicknames.filter(nick => {
+          if (!nick.responses[this.currentQuestionIndex]) {
+            return false;
+          }
+          const value = nick.responses[this.currentQuestionIndex].value;
+          return typeof value === 'number' ? !isNaN(value) : value.length;
+        }).length === this.nicknames.length
+      ) {
+        clearInterval(this._countdownInterval);
         this._currentStartTimestamp = 0;
-        clearInterval(interval);
       } else {
         timer--;
       }
@@ -217,6 +220,17 @@ class ActiveQuizItem implements IActiveQuiz {
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:START',
       payload: { startTimestamp }
+    });
+  }
+
+  public stop(): void {
+    clearInterval(this._countdownInterval);
+    this._currentStartTimestamp = 0;
+
+    this.pushMessageToClients({
+      status: 'STATUS:SUCCESSFUL',
+      step: 'QUIZ:STOP',
+      payload: {}
     });
   }
 
@@ -394,6 +408,10 @@ class ActiveQuizItemPlaceholder implements IActiveQuiz {
   }
 
   public setTimestamp(startTimestamp: number): void {
+    throw new Error('Method not implemented.');
+  }
+
+  public stop(): void {
     throw new Error('Method not implemented.');
   }
 

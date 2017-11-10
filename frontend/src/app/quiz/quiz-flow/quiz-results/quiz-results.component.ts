@@ -285,6 +285,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       case 'LOBBY:CLOSED':
         this.router.navigate(['/']);
         break;
+      case 'QUIZ:STOP':
+        this.countdown.stop();
+        break;
     }
   }
 
@@ -317,6 +320,17 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
         }
       }
+    });
+  }
+
+  private stopQuiz(): void {
+    this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/stop`, {
+      quizName: this.currentQuizService.quiz.hashtag
+    }).subscribe((data: IMessage) => {
+      if (data.status !== 'STATUS:SUCCESSFUL') {
+        console.log(data);
+      }
+      this.countdown.stop();
     });
   }
 

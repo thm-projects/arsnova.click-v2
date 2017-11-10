@@ -20,17 +20,19 @@ export class WebsocketService {
   private create(): Subject<MessageEvent> {
     const socket = new WebSocket(this.url);
     const observable = Observable.create(
-      (observer: Observer<MessageEvent>) => {
-        socket.onmessage = observer.next.bind(observer);
-        socket.onerror = observer.error.bind(observer);
-        socket.onclose = observer.complete.bind(observer);
-        return socket.close.bind(socket);
+      (obsvr: Observer<MessageEvent>) => {
+        socket.onmessage = obsvr.next.bind(obsvr);
+        socket.onerror = obsvr.error.bind(obsvr);
+        socket.onclose = obsvr.complete.bind(obsvr);
+        return socket;
       }
     );
     const observer = {
       next: (data: Object) => {
         if (socket.readyState === WebSocket.OPEN) {
           socket.send(JSON.stringify(data));
+        } else if (socket.readyState === WebSocket.CONNECTING) {
+          setTimeout(() => observer.next(data), 500);
         }
       }
     };

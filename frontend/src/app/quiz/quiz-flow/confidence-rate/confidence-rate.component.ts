@@ -47,8 +47,14 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   private handleMessages() {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
+        case 'QUIZ:NEXT_QUESTION':
+          this.currentQuizService.questionIndex = data.payload.questionIndex;
+          break;
         case 'QUIZ:START':
           this.router.navigate(['/quiz', 'flow', 'voting']);
+          break;
+        case 'QUIZ:STOP':
+          this.router.navigate(['/quiz', 'flow', 'results']);
           break;
         case 'MEMBER:UPDATED_RESPONSE':
           console.log('modify response data for nickname in confidence rate view', data.payload.nickname);

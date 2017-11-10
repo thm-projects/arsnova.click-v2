@@ -69,6 +69,8 @@ export declare interface IActiveQuiz extends IActiveQuizSerialized {
 
   setTimestamp(startTimestamp: number): void;
 
+  stop(): void;
+
   reset(): void;
 
   updateQuizSettings(target: string, state: boolean): void;
