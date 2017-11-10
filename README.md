@@ -6,12 +6,6 @@ Still the same styles, still the same features. Yet, nearly the entire code has 
 
 Please consider the list of the [ToDo's](./TODOS.md) including the known issues section.
 
----
-#### Global Dependency Requirements
-
-- NodeJS (Version 7)
-- NPM (Version 4)
-
 For full instructions on how to set up the correct environment, visit the [DEV Page](./DEV.md)
 
 ---
@@ -38,14 +32,6 @@ For full instructions on how to set up the correct environment, visit the [DEV P
 - Sounds for the Quiz Lobby and the Countdown
 - Gamification animations
 
-#### Installation
-
-###### Backend
-Head over to the /backend directory and enter `npm install`
-
-###### Frontend
-Head over to the /frontend directory and enter `npm install`
-
 ---
 #### Run (DEV deployment)
 
@@ -63,5 +49,6 @@ Head over to the /backend directory and enter `npm run prod`
 
 ###### Frontend
 Head over to the /frontend directory and enter `npm run prod`
+To test the live build enter `npm run prod-test`. This will build the regular production bundle and startup a simple http-server which will serve the files.
 
 Note that the build time can take up to ~1 minute
