@@ -4,17 +4,22 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
+
     "start": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check --prod --aot --build-optimizer",
     "build": "ng build",
+
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+
     "prod-test": "npm run prod && http-server dist/ -p 4711 --gzip",
     "prod": "ng build --output-path=dist/ --no-sourcemap --prod --aot --build-optimizer",
     "postprod": "npm run cleanup-sass && npm run imagemin && npm run cache",
-    "precache": "gzip dist/** -r",
+
     "cleanup-sass": "rimraf dist/assets/fonts/font-awesome-4.7.0/scss",
     "imagemin": "find dist/assets/icons/ -type d -exec imagemin {}/* --out-dir={} --plugin=pngquant \\;",
+
+    "precache": "gzip dist/** -r",
     "cache": "sw-precache --config=sw-precache.config.js",
     "postcache": "uglifyjs dist/service-worker.js --screw-ie8 --compress --mangle --output dist/service-worker.js && gzip dist/service-worker.js"
   },
