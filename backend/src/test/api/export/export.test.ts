@@ -29,7 +29,7 @@ import {IFreetextAnswerOption} from '../../../interfaces/answeroptions/interface
   }
 
   static after() {
-    QuizManagerDAO.removeQuiz('mocha:export-test');
+    QuizManagerDAO.removeQuiz('mocha-export-test');
   }
 
   private _mfInstance = key => key; // Simply return the MessageFormat key - don't parse it
