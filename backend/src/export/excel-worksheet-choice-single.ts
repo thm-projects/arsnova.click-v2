@@ -187,7 +187,7 @@ export class SingleChoiceExcelWorksheet extends ExcelWorksheet implements IExcel
         this.ws.cell(nextStartRow, nextColumnIndex++).string(profile.id);
         this.ws.cell(nextStartRow, nextColumnIndex++).string(profile.mail instanceof Array ? profile.mail.slice(-1)[0] : profile.mail);
       }
-      const chosenAnswer: IAnswerOption = this._question.answerOptionList[<number>responseItem.responses[this._questionIndex].value];
+      const chosenAnswer: IAnswerOption = this._question.answerOptionList[responseItem.responses[this._questionIndex].value[0]];
       this.ws.cell(nextStartRow, nextColumnIndex++).string(chosenAnswer.answerText);
       if (this.responsesWithConfidenceValue.length > 0) {
         this.ws.cell(nextStartRow, nextColumnIndex++).number(Math.round(responseItem.responses[this._questionIndex].confidence));

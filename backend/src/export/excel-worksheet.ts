@@ -90,34 +90,21 @@ export abstract class ExcelWorksheet {
             ${this.prefixNumberWithZero(date.getMinutes())} ${this._mf('export.exported_at_time')}`;
   }
 
-  private getLeaderboardData(questionIndex: number): Array<ILeaderBoardItem> {
+  protected getLeaderboardData(questionIndex: number): Array<ILeaderBoardItem> {
     const leaderBoard = new Leaderboard();
-    const questionAmount: number = this.quiz.originalObject.questionList.length;
-    const endIndex: number = questionIndex < 0 ? questionAmount : questionIndex === questionAmount ? questionAmount : questionIndex + 1;
     const correctResponses: any = {};
 
-    if (questionIndex < 0) {
-      questionIndex = 0;
-    }
-
+    const question: IQuestion = this.quiz.originalObject.questionList[questionIndex];
     this.quiz.nicknames.forEach(attendee => {
-      for (let i: number = questionIndex; i < endIndex; i++) {
-        const question: IQuestion = this.quiz.originalObject.questionList[i];
-        if (['SurveyQuestion', 'ABCDSingleChoiceQuestion'].indexOf(question.TYPE)) {
-          continue;
+      if (leaderBoard.isCorrectResponse(attendee.responses[questionIndex], question) === 1) {
+        if (!correctResponses[attendee.name]) {
+          correctResponses[attendee.name] = {responseTime: 0, correctQuestions: [], confidenceValue: 0};
         }
-        console.log('leaderboard export', i, attendee.responses[i], question);
-        if (leaderBoard.isCorrectResponse(attendee.responses[i], question) === 1) {
-          if (!correctResponses[attendee.name]) {
-            correctResponses[attendee.name] = {responseTime: 0, correctQuestions: [], confidenceValue: 0};
-          }
-          correctResponses[attendee.name].responseTime += <number>attendee.responses[i].responseTime;
-          correctResponses[attendee.name].correctQuestions.push(i);
-          correctResponses[attendee.name].confidenceValue += <number>attendee.responses[i].confidence;
-        } else {
-          delete correctResponses[attendee.name];
-          break;
-        }
+        correctResponses[attendee.name].responseTime += <number>attendee.responses[questionIndex].responseTime;
+        correctResponses[attendee.name].correctQuestions.push(questionIndex);
+        correctResponses[attendee.name].confidenceValue += <number>attendee.responses[questionIndex].confidence;
+      } else {
+        delete correctResponses[attendee.name];
       }
     });
 

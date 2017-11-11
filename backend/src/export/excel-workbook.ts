@@ -10,6 +10,7 @@ import {MultipleChoiceExcelWorksheet} from './excel-worksheet-choice-multiple';
 import {RangedExcelWorksheet} from './excel-worksheet-ranged';
 import {SurveyExcelWorksheet} from './excel-worksheet-survey';
 import {FreeTextExcelWorksheet} from './excel-worksheet-freetext';
+import {Response} from 'express';
 
 export class ExcelWorkbook implements IExcelWorkbook {
   get theme(): ExcelTheme {
@@ -82,7 +83,11 @@ export class ExcelWorkbook implements IExcelWorkbook {
     }
   }
 
-  public write(name: string, location: any) {
-    this._wb.write(name, location);
+  public write(name: string, handler?: Response | Function): void {
+    this._wb.write(name, handler);
+  }
+
+  public writeToBuffer(): any {
+    return this._wb.writeToBuffer();
   }
 }

@@ -4,13 +4,18 @@ const ts = require('gulp-typescript');
 const JSON_FILES = ['src/*.json', 'src/**/*.json'];
 const JS_FILES = ['src/*.js', 'src/**/*.js'];
 
-// pull in the project TypeScript config
-const tsProject = ts.createProject('tsconfig.json');
-
 gulp.task('scripts', () => {
-   const tsResult = tsProject.src()
-      .pipe(tsProject());
-   return tsResult.js.pipe(gulp.dest('dist'));
+  const tsProject = ts.createProject('tsconfig.json');
+  const tsResult = tsProject.src()
+    .pipe(tsProject());
+  return tsResult.js.pipe(gulp.dest('dist'));
+});
+
+gulp.task('scripts-test', () => {
+  const tsProject = ts.createProject('src/test/tsconfig.json');
+  const tsResult = tsProject.src()
+    .pipe(tsProject());
+  return tsResult.js.pipe(gulp.dest('dist'));
 });
 
 gulp.task('watch', ['scripts', 'js-scripts'], () => {
@@ -32,4 +37,11 @@ gulp.task('clean', function () {
     .pipe(clean());
 });
 
+gulp.task('clean-test-generated', function () {
+  return gulp.src('test-generated', {read: false})
+    .pipe(clean());
+});
+
 gulp.task('default', ['scripts', 'js-scripts', 'assets']);
+
+gulp.task('test', ['scripts-test', 'js-scripts', 'assets', 'clean-test-generated']);

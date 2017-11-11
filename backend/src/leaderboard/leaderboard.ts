@@ -1,4 +1,4 @@
-import {IAnswerOption, IFreetextAnswerOption} from '../interfaces/answeroptions/interfaces';
+import {IFreetextAnswerOption} from '../interfaces/answeroptions/interfaces';
 import {IQuestion, IQuestionChoice, IQuestionFreetext, IQuestionRanged} from '../interfaces/questions/interfaces';
 import {IQuizResponse} from '../interfaces/common.interfaces';
 
@@ -75,7 +75,6 @@ export class Leaderboard {
       case 'FreeTextQuestion':
         return this.isCorrectFreeTextQuestion(<string>response.value, <IQuestionFreetext>question) ? 1 : -1;
       default:
-        console.log(question);
         throw new Error(`Unsupported question type while checking correct response. Received type ${question.TYPE}`);
     }
   }

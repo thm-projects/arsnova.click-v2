@@ -6,7 +6,11 @@ import {IActiveQuiz, IActiveQuizSerialized, ICas, INickname, IQuizResponse, INic
 import {DatabaseTypes, DbDao} from './DbDao';
 import {parseCachedAssetQuiz} from '../cache/assets';
 
-class Member implements INickname {
+const privateServerConfig = require('../../settings.json');
+privateServerConfig.public.limitActiveQuizzes = parseFloat(privateServerConfig.public.limitActiveQuizzes);
+const publicServerConfig = privateServerConfig.public;
+
+export class Member implements INickname {
   get casProfile(): ICas {
     return this._casProfile;
   }
@@ -488,7 +492,9 @@ export default class QuizManagerDAO {
       return;
     }
     QuizManagerDAO.convertLegacyQuiz(quiz);
-    parseCachedAssetQuiz(quiz.questionList);
+    if (privateServerConfig.public.cacheQuizAssets) {
+      parseCachedAssetQuiz(quiz.questionList);
+    }
     activeQuizzes[name] = new ActiveQuizItem({nicknames: [], originalObject: quiz});
     return activeQuizzes[name];
   }
@@ -529,6 +535,10 @@ export default class QuizManagerDAO {
 
   public static getAllPersistedQuizzes(): Object {
     return activeQuizzes;
+  }
+
+  public static isActiveQuiz(name: string): boolean {
+    return activeQuizzes[name] && activeQuizzes[name] instanceof ActiveQuizItem;
   }
 
   public static isInactiveQuiz(name: string): boolean {

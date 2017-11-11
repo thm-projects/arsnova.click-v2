@@ -46,3 +46,5 @@ Thumbs.db
 arsnova-click-v2-db-v*.json
 /images/favicons/*.png
 /images/themes/*.png
+test-generated/*
+.nyc_output/

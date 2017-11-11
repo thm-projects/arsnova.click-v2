@@ -1,6 +1,8 @@
 import {INickname} from '../interfaces/common.interfaces';
 import {IExcelWorksheet} from '../interfaces/excel.interfaces';
 import {ExcelWorksheet} from './excel-worksheet';
+import {ILeaderBoardItem, Leaderboard} from '../leaderboard/leaderboard';
+import {IQuestion} from '../interfaces/questions/interfaces';
 
 export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorksheet {
   private _isCasRequired = this.quiz.originalObject.sessionConfig.nicks.restrictToCasLogin;
@@ -315,6 +317,30 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
       this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(leaderboardItem.responseTime));
       this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(leaderboardItem.responseTime / this.leaderBoardData.length));
     });
+  }
+
+  protected getLeaderboardData(): Array<ILeaderBoardItem> {
+    const leaderBoard = new Leaderboard();
+    const correctResponses: any = {};
+
+    this.quiz.nicknames.forEach(attendee => {
+      for (let i = 0; i < this.quiz.originalObject.questionList.length; i++) {
+        const question: IQuestion = this.quiz.originalObject.questionList[i];
+        if (leaderBoard.isCorrectResponse(attendee.responses[i], question) === 1) {
+          if (!correctResponses[attendee.name]) {
+            correctResponses[attendee.name] = {responseTime: 0, correctQuestions: [], confidenceValue: 0};
+          }
+          correctResponses[attendee.name].responseTime += <number>attendee.responses[i].responseTime;
+          correctResponses[attendee.name].correctQuestions.push(i);
+          correctResponses[attendee.name].confidenceValue += <number>attendee.responses[i].confidence;
+        } else {
+          delete correctResponses[attendee.name];
+          break;
+        }
+      }
+    });
+
+    return leaderBoard.objectToArray(correctResponses);
   }
 
   constructor({wb, theme, translation, quiz, mf}) {

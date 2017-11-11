@@ -250,7 +250,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
                      attendee.responses[this.currentQuizService.questionIndex].value :
                      false;
           }).length === this.attendeeService.attendees.length && this.countdown) {
-            this.countdown.remainingTime = 1;
+            this.countdown.stop();
           }
           break;
         case 'QUIZ:NEXT_QUESTION':
