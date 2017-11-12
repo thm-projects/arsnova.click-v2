@@ -24,6 +24,15 @@ export class MemberRouter {
 
   public addMember(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end(JSON.stringify({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:ADD_MEMBER:QUIZ_INACTIVE',
+        payload: {}
+      }));
+      return;
+    }
     try {
       const webSocketAuthorization: number = Math.random();
       activeQuiz.addMember(req.body.nickname, webSocketAuthorization);
@@ -40,16 +49,26 @@ export class MemberRouter {
         }
       });
     } catch (ex) {
-      res.send({
+      res.sendStatus(500);
+      res.end(JSON.stringify({
         status: 'STATUS:FAILED',
         step: 'LOBBY:MEMBER_ADDED',
         payload: {message: ex.message}
-      });
+      }));
     }
   }
 
   public addReadingConfirmation(req: Request, res: Response): void {
     const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end(JSON.stringify({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:ADD_READING_CONFIRMATION:QUIZ_INACTIVE',
+        payload: {}
+      }));
+      return;
+    }
     activeQuiz.setReadingConfirmation(req.body.nickname);
     res.send({
       status: 'STATUS:SUCCESSFUL',
@@ -60,6 +79,15 @@ export class MemberRouter {
 
   public addConfidenceValue(req: Request, res: Response): void {
     const activeQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end(JSON.stringify({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:ADD_CONFIDENCE_VALUE:QUIZ_INACTIVE',
+        payload: {}
+      }));
+      return;
+    }
     activeQuiz.setConfidenceValue(req.body.nickname, req.body.confidenceValue);
     res.send({
       status: 'STATUS:SUCCESSFUL',
@@ -70,6 +98,15 @@ export class MemberRouter {
 
   public deleteMember(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(req.params.quizName);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end(JSON.stringify({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:REMOVE_MEMBER:QUIZ_INACTIVE',
+        payload: {}
+      }));
+      return;
+    }
     const result: boolean = activeQuiz ? activeQuiz.removeMember(req.params.nickname) : false;
     const response: Object = {status: `STATUS:${result ? 'SUCCESSFUL' : 'FAILED'}`};
     if (result) {
@@ -83,6 +120,15 @@ export class MemberRouter {
 
   public getAllMembers(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(req.params.quizName);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end(JSON.stringify({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:GET_MEMBERS:QUIZ_INACTIVE',
+        payload: {}
+      }));
+      return;
+    }
     res.send({
       status: 'STATUS:SUCCESSFUL',
       step: 'QUIZ:GET_MEMBERS',
@@ -96,6 +142,15 @@ export class MemberRouter {
 
   public getRemainingNicks(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(req.params.quizName);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end(JSON.stringify({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:GET_REMAINING_NICKS:QUIZ_INACTIVE',
+        payload: {}
+      }));
+      return;
+    }
     const names: Array<String> = activeQuiz.originalObject.sessionConfig.nicks.selectedNicks.filter((nick) => {
       return activeQuiz.nicknames.filter(value => value.name === nick).length === 0;
     });
@@ -106,25 +161,36 @@ export class MemberRouter {
     });
   }
 
-  public addMemberResponse(req: Request, res: Response): void {
+  public addResponse(req: Request, res: Response): void {
     const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(req.body.quizName);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end(JSON.stringify({
+        status: 'STATUS:FAILED',
+        step: 'QUIZ:ADD_MEMBER_RESPONSE:QUIZ_INACTIVE',
+        payload: {}
+      }));
+      return;
+    }
     if (activeQuiz.nicknames.filter(value => {
         return value.name === req.body.nickname;
       })[0].responses[activeQuiz.currentQuestionIndex].responseTime) {
-      res.send({
+      res.sendStatus(500);
+      res.end(JSON.stringify({
         status: 'STATUS:FAILED',
         step: 'QUIZ:DUPLICATE_MEMBER_RESPONSE',
         payload: {}
-      });
+      }));
       return;
     }
 
     if (typeof req.body.value === 'undefined') {
-      res.send({
+      res.sendStatus(500);
+      res.end(JSON.stringify({
         status: 'STATUS:FAILED',
         step: 'QUIZ:INVALID_MEMBER_RESPONSE',
         payload: {}
-      });
+      }));
       return;
     }
 
@@ -146,7 +212,7 @@ export class MemberRouter {
     this._router.put('/', this.addMember);
     this._router.put('/reading-confirmation', this.addReadingConfirmation);
     this._router.put('/confidence-value', this.addConfidenceValue);
-    this._router.put('/response', this.addMemberResponse);
+    this._router.put('/response', this.addResponse);
 
     this._router.delete('/:quizName/:nickname', this.deleteMember);
 

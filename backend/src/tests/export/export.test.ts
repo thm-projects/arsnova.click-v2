@@ -39,7 +39,7 @@ import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
   }
 
   @test async initQuiz() {
-    QuizManagerDAO.initInactiveQuiz(this._hashtag, Math.random().toString(10));
+    QuizManagerDAO.initInactiveQuiz(this._hashtag);
     await assert.equal(QuizManagerDAO.isInactiveQuiz(this._hashtag), true, 'Expected to find an inactive quiz item');
 
     const quiz: IQuestionGroup = JSON.parse(fs.readFileSync(

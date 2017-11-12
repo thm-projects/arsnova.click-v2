@@ -139,7 +139,7 @@ export class QuizRouter {
             });
           } else {
             DbDao.create(DatabaseTypes.quiz, {quizName: data.quiz.hashtag, privateKey});
-            QuizManagerDAO.initInactiveQuiz(data.quiz.hashtag, privateKey);
+            QuizManagerDAO.initInactiveQuiz(data.quiz.hashtag);
             if (publicServerConfig.cacheQuizAssets) {
               const quiz: IQuestionGroup = data.quiz;
               quiz.questionList.forEach((question: IQuestion) => {
@@ -355,7 +355,7 @@ export class QuizRouter {
       }));
       return;
     }
-    QuizManagerDAO.initInactiveQuiz(req.body.quizName, req.body.privateKey);
+    QuizManagerDAO.initInactiveQuiz(req.body.quizName);
     DbDao.create(DatabaseTypes.quiz, {quizName: req.body.quizName, privateKey: req.body.privateKey});
     res.send({
       status: 'STATUS:SUCCESSFUL',

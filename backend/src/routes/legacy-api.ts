@@ -34,7 +34,7 @@ export class LegacyApiRouter {
       res.end('Hashtag already in use');
       return;
     }
-    QuizManagerDAO.initInactiveQuiz(sessionConfiguration.hashtag, sessionConfiguration.privateKey);
+    QuizManagerDAO.initInactiveQuiz(sessionConfiguration.hashtag);
     DbDao.create(DatabaseTypes.quiz, {quizName: sessionConfiguration.hashtag, privateKey: sessionConfiguration.privateKey});
     res.send('Hashtag successfully created');
   }

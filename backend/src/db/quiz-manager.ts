@@ -478,7 +478,7 @@ export default class QuizManagerDAO {
     }
   }
 
-  public static initInactiveQuiz(quizName: string, privateKey: string): void {
+  public static initInactiveQuiz(quizName: string): void {
     const name: string = QuizManagerDAO.normalizeQuizName(quizName);
     if (activeQuizzes[name]) {
       return;
