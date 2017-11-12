@@ -1,6 +1,11 @@
 {
   "extends": "tsconfig",
   "compilerOptions": {
-    "sourceMap": true
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "outDir": "dist/",
+    "lib": ["es6"]
   }
 }
