@@ -89,7 +89,12 @@ export class ProgressBarComponent implements OnInit, OnDestroy {
         return responseValue === answerIndex ||
                (responseValue instanceof Array && (<Array<number>>responseValue).indexOf(answerIndex) > -1);
       });
-      result.isCorrect = question.answerOptionList[answerIndex].isCorrect ? 1 : -1;
+      if (answerIndex > question.answerOptionList.length - 1) {
+        // Race condition with the Mathjax / Markdown parsing in the quiz results component
+        result.isCorrect = null;
+      } else {
+        result.isCorrect = question.answerOptionList[answerIndex].isCorrect ? 1 : -1;
+      }
       result.absolute = matches.length;
       result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberTypes.percent);
     }

@@ -60,6 +60,9 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
           console.log('modify response data for nickname in confidence rate view', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
+        case 'QUIZ:READING_CONFIRMATION_REQUESTED':
+          this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+          break;
         case 'QUIZ:RESET':
           this.attendeeService.clearResponses();
           this.currentQuizService.questionIndex = 0;

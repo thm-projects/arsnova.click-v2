@@ -1,4 +1,4 @@
-<h2>{{'component.voting.confidence_level.title' | translate}}</h2>
+<h2 class="mb-5 text-light">{{'component.voting.confidence_level.title' | translate}}</h2>
 
 <div class="row">
   <div class="col-12">
@@ -9,7 +9,7 @@
            (propertyChange)="updateConficence($event)">
   </div>
   <div class="col-12">
-    <p class="text-center">{{('component.voting.confidence_level.' + getConfidenceLevel()) | translate}}</p>
+    <p class="text-center mb-5">{{('component.voting.confidence_level.' + getConfidenceLevel()) | translate}}</p>
   </div>
   <div class="col-12">
     <button type="button"

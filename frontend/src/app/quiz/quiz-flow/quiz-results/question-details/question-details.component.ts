@@ -6,6 +6,9 @@ import {IQuestion} from '../../../../../lib/questions/interfaces';
 import {CurrentQuizService} from '../../../../service/current-quiz.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {QuestionTextService} from '../../../../service/question-text.service';
+import {AttendeeService, INickname} from '../../../../service/attendee.service';
+import {ConnectionService} from '../../../../service/connection.service';
+import {IMessage} from '../../quiz-lobby/quiz-lobby.component';
 
 @Component({
   selector: 'app-question-details',
@@ -40,6 +43,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private questionTextService: QuestionTextService,
+    private attendeeService: AttendeeService,
+    private connectionService: ConnectionService,
     private footerBarService: FooterBarService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
@@ -55,7 +60,62 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     return String.fromCharCode(65 + index);
   }
 
+  handleMessages() {
+    if (!this.attendeeService.attendees.length) {
+      this.connectionService.sendMessage({
+        status: 'STATUS:SUCCESSFUL',
+        step: 'LOBBY:GET_PLAYERS',
+        payload: {quizName: this.currentQuizService.quiz.hashtag}
+      });
+    }
+    this.connectionService.socket.subscribe((data: IMessage) => {
+      switch (data.step) {
+        case 'LOBBY:ALL_PLAYERS':
+          data.payload.members.forEach((elem: INickname) => {
+            this.attendeeService.addMember(elem);
+          });
+          break;
+        case 'MEMBER:UPDATED_RESPONSE':
+          this.attendeeService.modifyResponse(data.payload.nickname);
+          break;
+        case 'QUIZ:NEXT_QUESTION':
+          this.currentQuizService.questionIndex = data.payload.questionIndex;
+          break;
+        case 'QUIZ:RESET':
+          this.attendeeService.clearResponses();
+          this.currentQuizService.questionIndex = 0;
+          this.router.navigate(['/quiz', 'flow', 'lobby']);
+          break;
+      }
+      this.currentQuizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
+    });
+  }
+
+  private handleMessagesForOwner(data: IMessage) {
+    switch (data.step) {
+      default:
+        return;
+    }
+  }
+
+  private handleMessagesForAttendee(data: IMessage) {
+    switch (data.step) {
+      case 'QUIZ:START':
+        this.router.navigate(['/quiz', 'flow', 'voting']);
+        break;
+      case 'QUIZ:READING_CONFIRMATION_REQUESTED':
+        this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        break;
+      case 'LOBBY:CLOSED':
+        this.router.navigate(['/']);
+        break;
+    }
+  }
+
   ngOnInit() {
+    this.connectionService.initConnection().then(() => {
+      this.handleMessages();
+    });
     this.questionTextService.getEmitter().subscribe((value: string | Array<string>) => {
       if (value instanceof Array) {
         this._answers = value;
