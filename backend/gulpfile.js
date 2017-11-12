@@ -12,7 +12,7 @@ gulp.task('scripts', () => {
 });
 
 gulp.task('scripts-test', () => {
-  const tsProject = ts.createProject('src/test/tsconfig.json');
+  const tsProject = ts.createProject('src/tests/tsconfig.json');
   const tsResult = tsProject.src()
     .pipe(tsProject());
   return tsResult.js.pipe(gulp.dest('dist'));

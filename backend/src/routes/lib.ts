@@ -73,7 +73,7 @@ export class LibRouter {
 
   public getFavicon(req: Request, res: Response, next: NextFunction): void {
     const theme = req.params.theme || 'theme-Material';
-    fs.readFile(path.join(__dirname, '..', '..', 'images', `favicon-${theme}.png`), (err, data: Buffer) => {
+    fs.readFile(path.join(__dirname, '..', '..', 'images', 'favicons', `favicon-${theme}.png`), (err, data: Buffer) => {
       res.contentType(fileType(data).mime);
       res.end(data);
     });
@@ -153,9 +153,10 @@ export class LibRouter {
   public renderMathjax(req: Request, res: Response, next: NextFunction): void {
     if (!req.body.mathjax || !req.body.format || !req.body.output) {
       res.writeHead(500);
-      res.send(`Malformed request received -> ${req.body}`);
+      res.end(`Malformed request received -> ${req.body}`);
+      return;
     }
-    const mathjaxArray = JSON.parse(req.body.mathjax);
+    const mathjaxArray = [].concat(JSON.parse(req.body.mathjax));
     const result = [];
     if (mathjaxArray) {
       mathjaxArray.forEach((mathjaxPlain, index) => {
@@ -195,7 +196,7 @@ export class LibRouter {
         MatchTextToAssetsDb(answerOption.answerText);
       });
     });
-    res.send({
+    res.json({
       status: 'STATUS:SUCCESSFUL',
       step: 'CACHE:QUIZ_ASSETS',
       payload: {}
@@ -203,14 +204,19 @@ export class LibRouter {
   }
 
   public getCache(req: Request, res: Response, next: NextFunction): void {
-    if (!req.params.digest) {
+    if (!req.params.digest || !fs.existsSync(path.join(__dirname, '..', '..', 'cache', req.params.digest))) {
       res.writeHead(500);
       res.end(`Malformed request received -> ${req.body}, ${req.params}`);
       return;
     }
     fs.readFile(path.join(__dirname, '..', '..', 'cache', req.params.digest), (err, data: Buffer) => {
-      res.contentType(fileType(data).mime);
-      res.end(data);
+      const fileTypeOfBuffer = fileType(data);
+      if (fileTypeOfBuffer) {
+        res.contentType(fileTypeOfBuffer.mime);
+      } else {
+        res.contentType('text/html');
+      }
+      res.end(data.toString('UTF-8'));
     });
   }
 
@@ -245,9 +251,9 @@ export class LibRouter {
   private init(): void {
     this._router.get('/', this.getAll);
 
-    this._router.get('/favicon/theme?', this.getFavicon);
+    this._router.get('/favicon/:theme?', this.getFavicon);
 
-    this._router.post('/mathjax', this.renderMathjax);
+    this._router.post('/mathjax', this.renderMathjax.bind(this));
     this._router.get('/mathjax/example/first', this.getFirstMathjaxExample);
     this._router.get('/mathjax/example/second', this.getSecondMathjaxExample);
     this._router.get('/mathjax/example/third', this.getThirdMathjaxExample);

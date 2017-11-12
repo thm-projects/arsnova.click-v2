@@ -19,14 +19,17 @@ export class LegacyApiRouter {
     this.init();
   }
 
+  private getAll(req: Request, res: Response, next: NextFunction): void {
+    res.json({});
+  }
+
   private setKeepalive(req: Request, res: Response, next: NextFunction): void {
-    const sessionConfiguration = req.body.sessionConfiguration;
     res.send('Ok');
   }
 
   private addHashtag(req: Request, res: Response, next: NextFunction): void {
     const sessionConfiguration = req.body.sessionConfiguration;
-    if (QuizManagerDAO.getAllPersistedQuizzes()[sessionConfiguration.hashtag]) {
+    if (QuizManagerDAO.getPersistedQuizByName(sessionConfiguration.hashtag)) {
       res.sendStatus(500);
       res.end('Hashtag already in use');
       return;
@@ -49,8 +52,7 @@ export class LegacyApiRouter {
 
   private removeLocalData(req: Request, res: Response, next: NextFunction): void {
     const sessionConfiguration = req.body.sessionConfiguration;
-    const dbResult = DbDao.read(DatabaseTypes.quiz, {quizName: sessionConfiguration.hashtag, privateKey: sessionConfiguration.privateKey});
-    if (!dbResult) {
+    if (!QuizManagerDAO.isActiveQuiz(sessionConfiguration.hashtag)) {
       res.sendStatus(500);
       res.end('Missing permissions.');
       return;
@@ -61,29 +63,40 @@ export class LegacyApiRouter {
 
   private showReadingConfirmation(req: Request, res: Response, next: NextFunction): void {
     const sessionConfiguration = req.body.sessionConfiguration;
+    const activeQuiz = QuizManagerDAO.getActiveQuizByName(sessionConfiguration.hashtag);
+    if (!activeQuiz) {
+      res.sendStatus(500);
+      res.end('Hashtag not found');
+      return;
+    }
+    activeQuiz.requestReadingConfirmation();
+    res.sendStatus(200);
+    res.end();
   }
 
   private openSession(req: Request, res: Response, next: NextFunction): void {
     const sessionConfiguration = req.body.sessionConfiguration;
 
+    res.sendStatus(200);
+    res.end();
     // TODO: Figure out how to combine req with /updateQuestionGroup request.
   }
 
   private startNextQuestion(req: Request, res: Response, next: NextFunction): void {
     const sessionConfiguration = req.body.sessionConfiguration;
-    const dbResult = DbDao.read(DatabaseTypes.quiz, {quizName: sessionConfiguration.hashtag, privateKey: sessionConfiguration.privateKey});
-    if (!dbResult || !QuizManagerDAO.getActiveQuizByName(sessionConfiguration.hashtag)) {
+    const activeQuiz = QuizManagerDAO.getActiveQuizByName(sessionConfiguration.hashtag);
+    if (!activeQuiz) {
       res.sendStatus(500);
       res.end('Hashtag not found');
       return;
     }
+    activeQuiz.nextQuestion();
     res.send(`Next Question with index ${sessionConfiguration.questionIndex} started.`);
   }
 
   private updateQuestionGroup(req: Request, res: Response, next: NextFunction): void {
     const questionGroup = <IQuestionGroup>req.body.questionGroupModel;
-    const dbResult = DbDao.read(DatabaseTypes.quiz, {quizName: questionGroup.hashtag, privateKey: req.body.privateKey});
-    if (!dbResult) {
+    if (!QuizManagerDAO.isInactiveQuiz(questionGroup.hashtag)) {
       res.sendStatus(500);
       res.end('Hashtag not found');
       return;
@@ -93,6 +106,7 @@ export class LegacyApiRouter {
   }
 
   public init(): void {
+    this._router.get('/', this.getAll);
     this._router.post('/keepalive', this.setKeepalive);
     this._router.post('/addHashtag', this.addHashtag);
     this._router.get('/createPrivateKey', this.createPrivateKey);

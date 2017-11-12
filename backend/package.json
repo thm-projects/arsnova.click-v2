@@ -9,7 +9,7 @@
     "predebug": "npm run bootstrap",
     "debug": "node-debug dist/index.js",
     "pretest": "gulp test",
-    "test": "nyc mocha --opts src/test/mocha.opts"
+    "test": "nyc mocha --opts src/tests/mocha.opts"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

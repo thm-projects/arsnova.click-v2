@@ -1,15 +1,15 @@
 // Reference mocha-typescript's global definitions:
-/// <reference path="../../../../node_modules/mocha-typescript/globals.d.ts" />
+/// <reference path="../../../node_modules/mocha-typescript/globals.d.ts" />
 
 import * as assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
-import QuizManagerDAO, {Member} from '../../../db/quiz-manager';
-import {IQuestionFreetext, IQuestionGroup, IQuestionRanged, IQuestionSurvey} from '../../../interfaces/questions/interfaces';
-import {ExcelWorkbook} from '../../../export/excel-workbook';
-import {IFreetextAnswerOption} from '../../../interfaces/answeroptions/interfaces';
+import QuizManagerDAO, {Member} from '../../db/quiz-manager';
+import {IQuestionFreetext, IQuestionGroup, IQuestionRanged, IQuestionSurvey} from '../../interfaces/questions/interfaces';
+import {ExcelWorkbook} from '../../export/excel-workbook';
+import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
 
-@suite class ExcelExportSuite {
+@suite class ExcelExportTestSuite {
   private _hashtag = 'mocha-export-test';
   private _memberCount = 20;
   private _theme = 'theme-Material';
@@ -18,11 +18,11 @@ import {IFreetextAnswerOption} from '../../../interfaces/answeroptions/interface
   private _dateDay = `${this._date.getDate()}_${this._date.getMonth() + 1}_${this._date.getFullYear()}`;
   private _dateFormatted = `${this._dateDay}-${this._date.getHours()}_${this._date.getMinutes()}`;
   private _exportLocation = path.join(
-    __dirname, '..', '..', '..', '..', 'test-generated', `Export-${this._hashtag}-${this._dateFormatted}.xlsx`
+    __dirname, '..', '..', '..', 'test-generated', `Export-${this._hashtag}-${this._dateFormatted}.xlsx`
   );
 
   static before() {
-    const basedir = path.join(__dirname, '..', '..', '..', '..', 'test-generated');
+    const basedir = path.join(__dirname, '..', '..', '..', 'test-generated');
     if (!fs.existsSync(basedir)) {
       fs.mkdirSync(basedir);
     }
@@ -43,7 +43,7 @@ import {IFreetextAnswerOption} from '../../../interfaces/answeroptions/interface
     await assert.equal(QuizManagerDAO.isInactiveQuiz(this._hashtag), true, 'Expected to find an inactive quiz item');
 
     const quiz: IQuestionGroup = JSON.parse(fs.readFileSync(
-      path.join(__dirname, '..', '..', '..', '..', 'predefined_quizzes', 'demo_quiz', 'en.demo_quiz.json')
+      path.join(__dirname, '..', '..', '..', 'predefined_quizzes', 'demo_quiz', 'en.demo_quiz.json')
     ).toString('UTF-8'));
     quiz.hashtag = this._hashtag;
     QuizManagerDAO.initActiveQuiz(quiz);

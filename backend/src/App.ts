@@ -3,16 +3,20 @@ import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as busboy from 'connect-busboy';
-
-import ApiRouter from './routes/api';
-import LeaderboardRouter from './routes/leaderboard';
-import LibRouter from './routes/lib';
-import LegacyApiRouter from './routes/legacy-api';
-import options from './cors.config';
-import {NextFunction, Router, Response, Request} from 'express';
 import * as i18n from 'i18n';
 import * as path from 'path';
+
+import {NextFunction, Router, Response, Request} from 'express';
+import options from './cors.config';
 import {dynamicStatistics, staticStatistics} from './statistics';
+
+import ApiRouter from './routes/api';
+import LibRouter from './routes/lib';
+import LegacyApiRouter from './routes/legacy-api';
+import QuizRouter from './routes/quiz';
+import LobbyRouter from './routes/lobby';
+import NicksRouter from './routes/nicks';
+import ThemesRouter from './routes/themes';
 
 i18n.configure({
   // setup some locales - other locales default to en silently
@@ -104,7 +108,10 @@ class App {
     this.express.use('/lib', LibRouter);
     this.express.use('/api', LegacyApiRouter);
     this.express.use('/api/v1', ApiRouter);
-    this.express.use('/api/v1/quiz/leaderboard', LeaderboardRouter);
+    this.express.use('/api/v1/quiz', QuizRouter);
+    this.express.use('/api/v1/lobby', LobbyRouter);
+    this.express.use('/api/v1/nicks', NicksRouter);
+    this.express.use('/api/v1/themes', ThemesRouter);
   }
 
 }

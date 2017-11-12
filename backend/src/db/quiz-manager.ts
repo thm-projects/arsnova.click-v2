@@ -439,7 +439,7 @@ DbDao.getState()[DatabaseTypes.quiz].forEach(value => {
 
 export default class QuizManagerDAO {
   private static normalizeQuizName(quizName: string): string {
-    return quizName.toLowerCase();
+    return quizName ? quizName.toLowerCase() : '';
   }
 
   private static checkABCDOrdering(hashtag: string): boolean {
@@ -499,15 +499,11 @@ export default class QuizManagerDAO {
     return activeQuizzes[name];
   }
 
-  public static removeActiveQuiz(originalName: string): boolean {
-    const name: string = QuizManagerDAO.normalizeQuizName(originalName);
-    activeQuizzes[name].onDestroy();
-    activeQuizzes[name] = new ActiveQuizItemPlaceholder(name);
-    return true;
-  }
-
   public static removeQuiz(originalName: string): boolean {
     const name: string = QuizManagerDAO.normalizeQuizName(originalName);
+    if (!activeQuizzes[name]) {
+      return;
+    }
     delete activeQuizzes[name];
     return true;
   }
@@ -537,11 +533,18 @@ export default class QuizManagerDAO {
     return activeQuizzes;
   }
 
-  public static isActiveQuiz(name: string): boolean {
+  public static getPersistedQuizByName(originalName: string): IActiveQuiz {
+    const name: string = QuizManagerDAO.normalizeQuizName(originalName);
+    return activeQuizzes[name];
+  }
+
+  public static isActiveQuiz(originalName: string): boolean {
+    const name: string = QuizManagerDAO.normalizeQuizName(originalName);
     return activeQuizzes[name] && activeQuizzes[name] instanceof ActiveQuizItem;
   }
 
-  public static isInactiveQuiz(name: string): boolean {
+  public static isInactiveQuiz(originalName: string): boolean {
+    const name: string = QuizManagerDAO.normalizeQuizName(originalName);
     return activeQuizzes[name] && activeQuizzes[name] instanceof ActiveQuizItemPlaceholder;
   }
 
