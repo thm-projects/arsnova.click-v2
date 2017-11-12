@@ -17,6 +17,7 @@ import QuizRouter from './routes/quiz';
 import LobbyRouter from './routes/lobby';
 import NicksRouter from './routes/nicks';
 import ThemesRouter from './routes/themes';
+import MemberRouter from './routes/member';
 
 i18n.configure({
   // setup some locales - other locales default to en silently
@@ -109,6 +110,7 @@ class App {
     this.express.use('/api', LegacyApiRouter);
     this.express.use('/api/v1', ApiRouter);
     this.express.use('/api/v1/quiz', QuizRouter);
+    this.express.use('/api/v1/member', MemberRouter);
     this.express.use('/api/v1/lobby', LobbyRouter);
     this.express.use('/api/v1/nicks', NicksRouter);
     this.express.use('/api/v1/themes', ThemesRouter);

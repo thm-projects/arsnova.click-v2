@@ -37,7 +37,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
 
   joinQuiz(name: string): void {
     const promise = new Promise((resolve, reject) => {
-      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/`, {
+      this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
         quizName: this.currentQuiz.quiz.hashtag,
         nickname: name
       }).subscribe((data: IMessage) => {
@@ -64,9 +64,8 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/member/${this.currentQuiz.quiz.hashtag}/available`).subscribe(
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/member/${this.currentQuiz.quiz.hashtag}/available`).subscribe(
       (data: IMessage) => {
-        console.log(data);
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {
           this._nicks = this._nicks.concat(data.payload.nicknames);
         }

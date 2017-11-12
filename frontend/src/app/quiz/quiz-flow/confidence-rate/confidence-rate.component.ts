@@ -91,7 +91,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   }
 
   sendConfidence() {
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/confidence-value`, {
+    this.http.put(`${DefaultSettings.httpApiEndpoint}/member/confidence-value`, {
       quizName: this.currentQuizService.quiz.hashtag,
       nickname: window.sessionStorage.getItem(`config.nick`),
       confidenceValue: this._confidenceValue

@@ -194,7 +194,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   kickMember(name: string): void {
     this._kickMemberModalRef.close();
     const quizName = this.currentQuizService.quiz.hashtag;
-    this.http.delete(`${DefaultSettings.httpApiEndpoint}/lobby/${quizName}/member/${name}`)
+    this.http.delete(`${DefaultSettings.httpApiEndpoint}/member/${quizName}/${name}`)
         .subscribe(
           (data: IMessage) => {
             if (data.status !== 'STATUS:SUCCESSFUL') {

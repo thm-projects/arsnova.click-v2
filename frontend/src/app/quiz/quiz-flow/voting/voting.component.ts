@@ -174,7 +174,7 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/quiz/member/response`, {
+    this.http.put(`${DefaultSettings.httpApiEndpoint}/member/response`, {
       quizName: this.currentQuizService.quiz.hashtag,
       nickname: this.attendeeService.getOwnNick(),
       value: this._selectedAnswers

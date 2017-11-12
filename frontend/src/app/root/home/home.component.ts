@@ -161,7 +161,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         if ((JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(quizname) > -1) {
           this.canEditQuiz = true;
         } else {
-          this.http.get(`${DefaultSettings.httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe((value: IMessage) => {
+          this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
             if (value.status === 'STATUS:SUCCESS') {
               switch (value.step) {
                 case 'QUIZ:EXISTS':
@@ -206,7 +206,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
     const createQuizPromise = new Promise((resolve) => {
       if (this.isAddingDemoQuiz) {
-        const url = `${DefaultSettings.httpApiEndpoint}/demoquiz/generate/${this.i18nService.currentLanguage.toString()}`;
+        const url = `${DefaultSettings.httpApiEndpoint}/quiz/generate/demo/${this.i18nService.currentLanguage.toString()}`;
         this.http.get(url).subscribe((value: any) => {
           questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
           this.enteredSessionName = questionGroup.hashtag;
@@ -223,7 +223,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             resolveABCDGeneration();
             return;
           }
-          const url = `${DefaultSettings.httpApiEndpoint}/abcdquiz/generate/${language}/${answerList.length}`;
+          const url = `${DefaultSettings.httpApiEndpoint}/quiz/generate/abcd/${language}/${answerList.length}`;
           this.http.get(url).subscribe((value: any) => {
             questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
             const answerOptionList = (<Array<DefaultAnswerOption>>[]);

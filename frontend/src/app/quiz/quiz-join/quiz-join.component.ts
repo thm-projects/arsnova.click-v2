@@ -31,7 +31,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this._routerSubscription = this.route.params.subscribe(params => {
       const quizname = params.quizName;
-      this.http.get(`${DefaultSettings.httpApiEndpoint}/getAvailableQuiz/${quizname}`).subscribe((value: IMessage) => {
+      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
         if (value.status === 'STATUS:SUCCESS' && value.step === 'QUIZ:AVAILABLE') {
           this.casService.casLoginRequired = value.payload.authorizeViaCas;
           if (this.casService.casLoginRequired) {

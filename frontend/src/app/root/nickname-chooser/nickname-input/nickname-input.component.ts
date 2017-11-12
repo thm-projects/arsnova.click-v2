@@ -38,7 +38,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   joinQuiz(): void {
     const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
     const promise = new Promise((resolve, reject) => {
-      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/`, {
+      this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
         quizName: this.currentQuiz.quiz.hashtag,
         nickname: nickname
       }).subscribe((data: IMessage) => {

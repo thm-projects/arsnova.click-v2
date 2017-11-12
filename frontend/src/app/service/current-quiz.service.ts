@@ -127,7 +127,7 @@ export class CurrentQuizService implements ICurrentQuiz {
     this.close();
     const nickname = window.sessionStorage.getItem(`config.nick`);
     if (nickname) {
-      const url = `${DefaultSettings.httpApiEndpoint}/lobby/${this._quiz.hashtag}/member/${nickname}`;
+      const url = `${DefaultSettings.httpApiEndpoint}/member/${this._quiz.hashtag}/${nickname}`;
       this.http.request('delete', url).subscribe(() => {});
     }
     window.sessionStorage.removeItem(`config.nick`);

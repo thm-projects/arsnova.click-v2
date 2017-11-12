@@ -60,7 +60,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   }
 
   confirmReading() {
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby/member/reading-confirmation`, {
+    this.http.put(`${DefaultSettings.httpApiEndpoint}/member/reading-confirmation`, {
       quizName: this.currentQuizService.quiz.hashtag,
       nickname: window.sessionStorage.getItem(`config.nick`),
       questionIndex: this.questionIndex

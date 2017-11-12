@@ -13,11 +13,10 @@
 #### Known issues
 - [ ] Adjust some of the introjs initializations
 - [ ] Add missing translation keys
-- [ ] Exporting fires exceptions
 
 #### Refactoring required
 - [ ] Move color styles from the components to the theme switcher
 - [ ] Remove unused language keys
+- [ ] Export of Results
 
 #### Testing required
-- [ ] Export of Results

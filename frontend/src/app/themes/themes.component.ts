@@ -34,7 +34,7 @@ export class ThemesComponent implements OnInit, OnDestroy {
   }
 
   getThemePreviewUrl(id: string): string {
-    return `${DefaultSettings.httpApiEndpoint}/theme/${id}/${this.translateService.currentLang}`;
+    return `${DefaultSettings.httpApiEndpoint}/themes/${id}/${this.translateService.currentLang}`;
   }
 
   change(id: string): void {

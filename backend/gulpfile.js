@@ -12,7 +12,7 @@ gulp.task('scripts', () => {
 });
 
 gulp.task('scripts-test', () => {
-  const tsProject = ts.createProject('src/tests/tsconfig.json');
+  const tsProject = ts.createProject('tsconfig.test.json');
   const tsResult = tsProject.src()
     .pipe(tsProject());
   return tsResult.js.pipe(gulp.dest('dist'));
@@ -42,6 +42,6 @@ gulp.task('clean-test-generated', function () {
     .pipe(clean());
 });
 
-gulp.task('default', ['scripts', 'js-scripts', 'assets']);
+gulp.task('default', ['scripts', 'js-scripts', 'assets', 'clean-test-generated']);
 
 gulp.task('test', ['scripts-test', 'js-scripts', 'assets', 'clean-test-generated']);
