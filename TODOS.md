@@ -17,6 +17,5 @@
 #### Refactoring required
 - [ ] Move color styles from the components to the theme switcher
 - [ ] Remove unused language keys
-- [ ] Export of Results
 
 #### Testing required
