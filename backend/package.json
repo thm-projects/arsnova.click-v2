@@ -5,7 +5,7 @@
   "scripts": {
     "prod": "gulp",
     "prestart": "npm run prod",
-    "start": "node dist/index.js",
+    "start": "node dist/index.js --routePrefix=/backend",
     "predebug": "npm run bootstrap",
     "debug": "node-debug dist/index.js",
     "pretest": "gulp test",
@@ -29,6 +29,7 @@
     "messageformat": "^1.0.2",
     "mime": "^2.0.3",
     "mime-types": "^2.1.17",
+    "minimist": "^1.2.0",
     "morgan": "^1.7.0",
     "node-sass-middleware": "0.9.8",
     "phantomjs-prebuilt": "^2.1.15",

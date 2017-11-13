@@ -5,12 +5,13 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import app from '../../App';
+import {staticStatistics} from '../../statistics';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
 
 @suite class ApiRouterTestSuite {
-  private _baseApiRoute = `/api/v1/`;
+  private _baseApiRoute = `${staticStatistics.routePrefix}/api/v1/`;
 
   @test async baseApiExists() {
     const res = await chai.request(app).get(`${this._baseApiRoute}`);

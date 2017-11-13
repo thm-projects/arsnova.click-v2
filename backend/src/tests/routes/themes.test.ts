@@ -4,12 +4,13 @@
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 import app from '../../App';
+import {staticStatistics} from '../../statistics';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
 
 @suite class ThemeApiRouterTestSuite {
-  private _baseApiRoute = `/api/v1/themes`;
+  private _baseApiRoute = `${staticStatistics.routePrefix}/api/v1/themes`;
 
   @test
   async getAllThemes() {

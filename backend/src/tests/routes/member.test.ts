@@ -9,6 +9,7 @@ import chaiHttp = require('chai-http');
 import app from '../../App';
 import QuizManagerDAO from '../../db/quiz-manager';
 import {IQuestionGroup} from '../../interfaces/questions/interfaces';
+import {staticStatistics} from '../../statistics';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
@@ -16,7 +17,7 @@ const expect = chai.expect;
 const hashtag = 'mocha-test-api-v1-member';
 
 @suite class MemberApiRouterTestSuite {
-  private _baseApiRoute = `/api/v1/member`;
+  private _baseApiRoute = `${staticStatistics.routePrefix}/api/v1/member`;
   private _hashtag = hashtag;
   private _nickname = 'testNickname';
 

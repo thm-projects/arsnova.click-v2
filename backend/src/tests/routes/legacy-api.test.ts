@@ -10,6 +10,7 @@ import app from '../../App';
 import QuizManagerDAO from '../../db/quiz-manager';
 import {IQuestionGroup} from '../../interfaces/questions/interfaces';
 import {DatabaseTypes, DbDao} from '../../db/DbDao';
+import {staticStatistics} from '../../statistics';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
@@ -18,7 +19,7 @@ const hashtag = 'mocha-legacy-api-test';
 const privateKey = Math.random().toString(10);
 
 @suite class LegacyApiRouterTestSuite {
-  private _baseApiRoute = `/api`;
+  private _baseApiRoute = `${staticStatistics.routePrefix}/api`;
   private _hashtag = hashtag;
   private _privateKey = privateKey;
 

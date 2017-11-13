@@ -8,12 +8,13 @@ import chaiHttp = require('chai-http');
 
 import router from '../../App';
 import {IQuestionGroup} from '../../interfaces/questions/interfaces';
+import {staticStatistics} from '../../statistics';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
 
 @suite class LibRouterTestSuite {
-  private _baseApiRoute = `/lib`;
+  private _baseApiRoute = `${staticStatistics.routePrefix}/lib`;
 
   @test async baseApiExists() {
     const res = await chai.request(router).get(`${this._baseApiRoute}`);
@@ -31,7 +32,7 @@ const expect = chai.expect;
 }
 
 @suite class MathjaxLibRouterTestSuite {
-  private _baseApiRoute = '/lib/mathjax';
+  private _baseApiRoute = `${staticStatistics.routePrefix}/lib/mathjax`;
 
   @test async mathjaxExists() {
     const res = await chai.request(router).post(`${this._baseApiRoute}`).send({
@@ -59,7 +60,7 @@ const expect = chai.expect;
 }
 
 @suite class CacheQuizAssetsLibRouterTestSuite {
-  private _baseApiRoute = '/lib/cache/quiz/assets';
+  private _baseApiRoute = `${staticStatistics.routePrefix}/lib/cache/quiz/assets`;
 
   @test async postNewAssetExists() {
     const quiz: IQuestionGroup = JSON.parse(fs.readFileSync(
@@ -76,7 +77,7 @@ const expect = chai.expect;
 }
 
 @suite class AuthorizeLibRouterTestSuite {
-  private _baseApiRoute = '/lib/authorize';
+  private _baseApiRoute = `${staticStatistics.routePrefix}/lib/authorize`;
 
   @test async authorizeExists() {
     const res = await chai.request(router).get(`${this._baseApiRoute}`);

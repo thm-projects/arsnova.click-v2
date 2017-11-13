@@ -102,18 +102,18 @@ class App {
   // Configure API endpoints.
   private routes(): void {
     const router: Router = express.Router();
-    router.get('/', (req: Request, res: Response, next: NextFunction) => {
-      res.json(Object.assign({}, staticStatistics, dynamicStatistics()));
+    router.get(`/`, (req: Request, res: Response, next: NextFunction) => {
+      res.send(Object.assign({}, staticStatistics, dynamicStatistics()));
     });
-    this.express.use('/', router);
-    this.express.use('/lib', LibRouter);
-    this.express.use('/api', LegacyApiRouter);
-    this.express.use('/api/v1', ApiRouter);
-    this.express.use('/api/v1/quiz', QuizRouter);
-    this.express.use('/api/v1/member', MemberRouter);
-    this.express.use('/api/v1/lobby', LobbyRouter);
-    this.express.use('/api/v1/nicks', NicksRouter);
-    this.express.use('/api/v1/themes', ThemesRouter);
+    this.express.use(`${staticStatistics.routePrefix}/`, router);
+    this.express.use(`${staticStatistics.routePrefix}/lib`, LibRouter);
+    this.express.use(`${staticStatistics.routePrefix}/api`, LegacyApiRouter);
+    this.express.use(`${staticStatistics.routePrefix}/api/v1`, ApiRouter);
+    this.express.use(`${staticStatistics.routePrefix}/api/v1/quiz`, QuizRouter);
+    this.express.use(`${staticStatistics.routePrefix}/api/v1/member`, MemberRouter);
+    this.express.use(`${staticStatistics.routePrefix}/api/v1/lobby`, LobbyRouter);
+    this.express.use(`${staticStatistics.routePrefix}/api/v1/nicks`, NicksRouter);
+    this.express.use(`${staticStatistics.routePrefix}/api/v1/themes`, ThemesRouter);
   }
 
 }

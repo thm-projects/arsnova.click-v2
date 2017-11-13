@@ -44,13 +44,13 @@ themes.forEach((theme: ITheme) => {
 });
 const command: ChildProcess = spawn(slimerjs.path, params);
 command.stdout.on('data', (data) => {
-  console.log(`phantomjs (stdout): ${data.toString()}`);
+  debug(`arsnova.click:phantomjs (stdout): ${data.toString()}`);
 });
 command.stderr.on('data', (data) => {
-  console.log(`phantomjs (stderr): ${data.toString()}`);
+  debug(`arsnova.click:phantomjs (stderr): ${data.toString()}`);
 });
 command.on('exit', () => {
-  console.log(`phantomjs (exit): All preview images have been generated`);
+  debug(`arsnova.click:phantomjs (exit): All preview images have been generated`);
 });
 
 

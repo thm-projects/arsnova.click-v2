@@ -5,6 +5,7 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import app from '../../App';
+import {staticStatistics} from '../../statistics';
 
 chai.use(chaiHttp);
 const expect = chai.expect;
@@ -12,7 +13,7 @@ const expect = chai.expect;
 const hashtag = 'mocha-test-api-v1';
 
 @suite class NicksApiRouterTestSuite {
-  private _baseApiRoute = `/api/v1/nicks`;
+  private _baseApiRoute = `${staticStatistics.routePrefix}/api/v1/nicks`;
 
   @test async getBlockedNicks() {
     const res = await chai.request(app).get(`${this._baseApiRoute}/blocked`);
