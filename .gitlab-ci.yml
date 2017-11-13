@@ -1,3 +1,14 @@
+test:
+  stage: test
+  tags:
+    - nodejs
+  script:
+    - npm install -g n
+    - n 7.10.0
+    - cd backend
+    - npm install
+    - npm test
+
 build:
   stage: build
   only:
