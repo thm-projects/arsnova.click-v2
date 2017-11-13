@@ -103,7 +103,7 @@ export class SingleChoiceExcelWorksheet extends ExcelWorksheet implements IExcel
       if (this._isCasRequired) {
         nextColumnIndex += 2;
       }
-      const responseValue = <number>responseItem.value;
+      const responseValue = <number>responseItem.value[0];
       let correctIndex = -1;
       this._question.answerOptionList.forEach((answer, index) => answer.isCorrect ? correctIndex = index : null);
       const isAnswerCorrect = responseValue > -1 && responseValue === correctIndex;
@@ -136,9 +136,9 @@ export class SingleChoiceExcelWorksheet extends ExcelWorksheet implements IExcel
   public addSheetData(): void {
     const answerList = this._question.answerOptionList;
     const allResponses: Array<INickname> = this.quiz.nicknames.filter(nickname => {
-      return nickname.responses.filter(response => {
-        return !!response.value && response.value !== -1;
-      }).length;
+      return nickname.responses.map(response => {
+        return !!response.value && response.value !== -1 ? response.value : null;
+      });
     });
 
     this.ws.cell(1, 1).string(`${this.mf('export.question_type')}: ${this.mf(`export.type.${this._question.TYPE}`)}`);
@@ -159,8 +159,8 @@ export class SingleChoiceExcelWorksheet extends ExcelWorksheet implements IExcel
     if (this.responsesWithConfidenceValue.length > 0) {
       this.ws.cell(8, 1).string(this.mf('export.average_confidence') + ':');
       let confidenceSummary = 0;
-      allResponses.forEach((item): void => {
-        item.responses.forEach((singleResponse) => confidenceSummary += singleResponse.confidence);
+      this.quiz.nicknames.forEach((nickItem) => {
+        confidenceSummary += nickItem.responses[this._questionIndex].confidence;
       });
       this.ws.cell(8, 2).number(Math.round(confidenceSummary / this.responsesWithConfidenceValue.length));
     }

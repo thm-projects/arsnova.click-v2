@@ -33,9 +33,9 @@ export abstract class ExcelWorksheet {
   private _createdAt: string;
   private _quiz: IActiveQuiz;
   private _columnsToFormat: number;
-  private _leaderBoardData: Array<ILeaderBoardItem>;
   private _responsesWithConfidenceValue: Array<INickname>;
 
+  protected _leaderBoardData: Array<ILeaderBoardItem>;
   protected _ws: xlsx.Worksheet;
   protected _options: Object;
   protected _theme: ExcelTheme;
@@ -63,11 +63,15 @@ export abstract class ExcelWorksheet {
     });
 
     this._columnsToFormat = 4;
-    this._responsesWithConfidenceValue = this._quiz.nicknames.filter(nickname => {
-      return nickname.responses.filter(response => {
-        return response.confidence > -1;
-      }).length;
-    });
+    if (questionIndex) {
+      this._responsesWithConfidenceValue = this._quiz.nicknames.filter(nickname => {
+        return nickname.responses[questionIndex].confidence > -1;
+      });
+    } else {
+      this._responsesWithConfidenceValue = this._quiz.nicknames.filter(nickname => {
+        return nickname.responses.filter(responseItem => responseItem.confidence > -1).length;
+      });
+    }
     if (this._responsesWithConfidenceValue.length > 0) {
       this._columnsToFormat++;
     }
@@ -84,10 +88,9 @@ export abstract class ExcelWorksheet {
 
   protected generateCreatedAtString(): string {
     const date = new Date();
-    return `${this.prefixNumberWithZero(date.getDate())}.
-            ${this.prefixNumberWithZero(date.getMonth() + 1)}.
-            ${date.getFullYear()} ${this._mf('export.exported_at')} ${this.prefixNumberWithZero(date.getHours())}:
-            ${this.prefixNumberWithZero(date.getMinutes())} ${this._mf('export.exported_at_time')}`;
+    const dateYMD = `${this.prefixNumberWithZero(date.getDate())}.${this.prefixNumberWithZero(date.getMonth() + 1)}.${date.getFullYear()}`;
+    const dateHM = `${this.prefixNumberWithZero(date.getHours())}:${this.prefixNumberWithZero(date.getMinutes())}`;
+    return `${dateYMD} ${this._mf('export.exported_at')} ${dateHM} ${this._mf('export.exported_at_time')}`;
   }
 
   protected getLeaderboardData(questionIndex: number): Array<ILeaderBoardItem> {

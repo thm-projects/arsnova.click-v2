@@ -4,6 +4,7 @@
 import * as assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as i18n from 'i18n';
 import QuizManagerDAO, {Member} from '../../db/quiz-manager';
 import {IQuestionFreetext, IQuestionGroup, IQuestionRanged, IQuestionSurvey} from '../../interfaces/questions/interfaces';
 import {ExcelWorkbook} from '../../export/excel-workbook';
@@ -22,6 +23,51 @@ import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
   );
 
   static before() {
+    i18n.configure({
+      // setup some locales - other locales default to en silently
+      locales: ['en'],
+      defaultLocale: 'en',
+
+      // where to store json files - defaults to './locales' relative to modules directory
+      directory: path.join(__dirname, '..', '..', '..', 'i18n'),
+
+      // what to use as the indentation unit - defaults to "\t"
+      indent: '\t',
+
+      // setting extension of json files - defaults to '.json' (you might want to set this to '.js' according to webtranslateit)
+      extension: '.json',
+
+      // setting prefix of json files name - default to none ''
+      // (in case you use different locale files naming scheme (webapp-en.json), rather then just en.json)
+      prefix: '',
+
+      // enable object notation
+      objectNotation: true,
+
+      // setting of log level DEBUG - default to require('debug')('i18n:debug')
+      logDebugFn: require('debug')('i18n:debug'),
+
+      // setting of log level WARN - default to require('debug')('i18n:warn')
+      logWarnFn: function (msg) {
+        console.log('warn', msg);
+      },
+
+      // setting of log level ERROR - default to require('debug')('i18n:error')
+      logErrorFn: function (msg) {
+        console.log('error', msg);
+      },
+
+      // object or [obj1, obj2] to bind the i18n api and current locale to - defaults to null
+      register: global,
+
+      // hash to specify different aliases for i18n's internal methods to apply on the request/response objects (method -> alias).
+      // note that this will *not* overwrite existing properties with the same name
+      api: {
+        '__': 't',  // now req.__ becomes req.t
+        '__n': 'tn' // and req.__n can be called as req.tn
+      }
+    });
+    i18n.init();
     const basedir = path.join(__dirname, '..', '..', '..', 'test-generated');
     if (!fs.existsSync(basedir)) {
       fs.mkdirSync(basedir);
@@ -31,8 +77,6 @@ import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
   static after() {
     QuizManagerDAO.removeQuiz('mocha-export-test');
   }
-
-  private _mfInstance = key => key; // Simply return the MessageFormat key - don't parse it
 
   randomIntFromInterval(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -140,7 +184,7 @@ import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
       themeName: this._theme,
       translation: this._language,
       quiz: quiz,
-      mf: this._mfInstance
+      mf: i18n.__mf
     });
 
     const buffer = await wb.writeToBuffer();

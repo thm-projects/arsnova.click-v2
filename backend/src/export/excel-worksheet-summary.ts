@@ -49,7 +49,7 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
 
     this.ws.cell(1, 1, 2, 1).style({
       alignment: {
-        indent: 5
+        indent: 7
       }
     });
 
@@ -83,8 +83,8 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     this.leaderBoardData.forEach((leaderboardItem, indexInList) => {
       let hasNotAllQuestionsCorrect = false;
       this.quiz.originalObject.questionList.forEach((item, index) => {
-        if (['SurveyQuestion', 'ABCDSingleChoiceQuestion'].indexOf(item.TYPE) > -1 &&
-            leaderboardItem.correctQuestions.indexOf((index + 1)) === -1) {
+        if (['SurveyQuestion', 'ABCDSingleChoiceQuestion'].indexOf(item.TYPE) === -1 &&
+            leaderboardItem.correctQuestions.indexOf((index)) === -1) {
           hasNotAllQuestionsCorrect = true;
         }
       });
@@ -174,6 +174,11 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
         return !!response.value && response.value !== -1;
       }).length;
     }).length;
+    const allResponses: Array<INickname> = this.quiz.nicknames.filter(nickname => {
+      return nickname.responses.map(response => {
+        return !!response.value && response.value !== -1 ? response.value : null;
+      });
+    });
     const numberOfAttendees = this.quiz.nicknames.length;
     const numberOfQuestions = this.quiz.originalObject.questionList.length;
 
@@ -248,7 +253,7 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     this.leaderBoardData.forEach((leaderboardItem, indexInList) => {
       let hasNotAllQuestionsCorrect = false;
       this.quiz.originalObject.questionList.forEach((item, index) => {
-        if (item.TYPE !== 'SurveyQuestion' && leaderboardItem.correctQuestions.indexOf((index + 1)) === -1) {
+        if (item.TYPE !== 'SurveyQuestion' && leaderboardItem.correctQuestions.indexOf((index)) === -1) {
           hasNotAllQuestionsCorrect = true;
         }
       });
@@ -266,7 +271,8 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
         this.ws.cell(targetRow, nextColumnIndex++).string(profile.id);
         this.ws.cell(targetRow, nextColumnIndex++).string(profile.mail instanceof Array ? profile.mail.slice(-1)[0] : profile.mail);
       }
-      this.ws.cell(targetRow, nextColumnIndex++).string(leaderboardItem.correctQuestions.join(', '));
+      const correctQuestionNumbers = this.leaderBoardData[indexInList].correctQuestions.map((item) => item + 1);
+      this.ws.cell(targetRow, nextColumnIndex++).string(correctQuestionNumbers.join(', '));
       if (this.responsesWithConfidenceValue.length > 0) {
         this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(leaderboardItem.confidenceValue));
       }
@@ -295,27 +301,33 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
     this.ws.cell(nextStartRow, nextColumnIndex++).string(this.mf('export.overall_response_time'));
     this.ws.cell(nextStartRow++, nextColumnIndex++).string(this.mf('export.average_response_time'));
 
-    this.leaderBoardData.forEach((leaderboardItem, indexInList) => {
+    allResponses.forEach((responseItem, indexInList) => {
       nextColumnIndex = 1;
       const targetRow = indexInList + nextStartRow;
-      this.ws.cell(targetRow, nextColumnIndex++).string(leaderboardItem.name);
+      this.ws.cell(targetRow, nextColumnIndex++).string(responseItem.name);
       if (this._isCasRequired) {
         const profile = this.quiz.nicknames.filter((nick: INickname) => {
-          return nick.name === leaderboardItem.name;
+          return nick.name === responseItem.name;
         })[0].casProfile;
         this.ws.cell(targetRow, nextColumnIndex++).string(profile.id);
         this.ws.cell(targetRow, nextColumnIndex++).string(profile.mail instanceof Array ? profile.mail.slice(-1)[0] : profile.mail);
       }
-      if (leaderboardItem.correctQuestions.length === 0) {
-        this.ws.cell(targetRow, nextColumnIndex++).string(this.mf('export.correct_questions_none_available'));
+      const leaderboardItem = this._leaderBoardData.filter((item) => item.name === responseItem.name)[0];
+      if (leaderboardItem) {
+        if (leaderboardItem.correctQuestions.length > 0) {
+          const correctQuestionNumbers = this._leaderBoardData[indexInList].correctQuestions.map((item) => item + 1);
+          this.ws.cell(targetRow, nextColumnIndex++).string(correctQuestionNumbers.join(', '));
+        }
+        if (this.responsesWithConfidenceValue.length > 0) {
+          this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(this._leaderBoardData[indexInList].confidenceValue));
+        }
+        this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(this._leaderBoardData[indexInList].responseTime));
+        this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(
+          this._leaderBoardData[indexInList].responseTime /
+          this._leaderBoardData[indexInList].correctQuestions.length));
       } else {
-        this.ws.cell(targetRow, nextColumnIndex++).string(leaderboardItem.correctQuestions.join(', '));
+        this.ws.cell(targetRow, nextColumnIndex++).string(this.mf('export.correct_questions_none_available'));
       }
-      if (this.responsesWithConfidenceValue.length > 0) {
-        this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(leaderboardItem.confidenceValue));
-      }
-      this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(leaderboardItem.responseTime));
-      this.ws.cell(targetRow, nextColumnIndex++).number(Math.round(leaderboardItem.responseTime / this.leaderBoardData.length));
     });
   }
 
@@ -333,13 +345,11 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
           correctResponses[attendee.name].responseTime += <number>attendee.responses[i].responseTime;
           correctResponses[attendee.name].correctQuestions.push(i);
           correctResponses[attendee.name].confidenceValue += <number>attendee.responses[i].confidence;
-        } else {
-          delete correctResponses[attendee.name];
-          break;
         }
       }
     });
 
+    console.log(correctResponses);
     return leaderBoard.objectToArray(correctResponses);
   }
 

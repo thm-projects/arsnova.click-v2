@@ -3,11 +3,17 @@ import {calculateNumberOfAnswers} from './lib/excel_function_library';
 import {IFreetextAnswerOption} from '../interfaces/answeroptions/interfaces';
 import {IExcelWorksheet} from '../interfaces/excel.interfaces';
 import {ExcelWorksheet} from './excel-worksheet';
+import {INickname, IQuizResponse} from '../interfaces/common.interfaces';
 
 export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWorksheet {
   private _isCasRequired = this.quiz.originalObject.sessionConfig.nicks.restrictToCasLogin;
   private _question: IQuestion;
   private _questionIndex: number;
+  private allResponses: Array<INickname> = this.quiz.nicknames.filter(nickname => {
+    return nickname.responses.filter(response => {
+      return !!response.value && response.value !== -1 ? response.value : null;
+    })[0];
+  });
 
   public formatSheet(): void {
     const defaultStyles = this._theme.getStyles();
@@ -83,12 +89,15 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
                                   });
     this.ws.cell(11, 1, attendeeEntryRows + 10, columnsToFormat, !hasEntries).style(attendeeEntryRowStyle);
 
-    this.leaderBoardData.forEach((responseItem, indexInList) => {
+    console.log('freetext allresponses', this.allResponses);
+    this.allResponses.forEach((responseItem, indexInList) => {
+      const leaderboardItem = this.leaderBoardData.filter(lbItem => lbItem.name === responseItem.name)[0];
       let nextColumnIndex = 2;
       const targetRow = indexInList + 11;
       if (this._isCasRequired) {
         nextColumnIndex += 2;
       }
+      console.log('freetext', this.leaderBoardData[indexInList], indexInList);
       this.ws.cell(targetRow, nextColumnIndex++).style({
         font: {
           color: 'FFFFFFFF'
@@ -96,7 +105,7 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
         fill: {
           type: 'pattern',
           patternType: 'solid',
-          fgColor: responseItem.correctQuestions.length ? 'FF008000' : 'FFB22222'
+          fgColor: leaderboardItem && leaderboardItem.correctQuestions.indexOf(this._questionIndex) > -1 ? 'FF008000' : 'FFB22222'
         }
       });
       if (this.responsesWithConfidenceValue.length > 0) {
@@ -126,7 +135,7 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
     this.ws.cell(4, 2).string(answerOption.answerText);
 
     this.ws.cell(6, 1).string(this.mf('export.number_of_answers') + ':');
-    this.ws.cell(6, 2).number(calculateNumberOfAnswers(this.quiz, this._questionIndex, 0));
+    this.ws.cell(6, 2).number(this.allResponses.length);
     this.ws.cell(6, 3).string(this.mf('view.answeroptions.free_text_question.config_case_sensitive') + ': ' +
                               this.mf('global.' + (answerOption.configCaseSensitive ? 'yes' : 'no')));
     this.ws.cell(6, 4).string(this.mf('view.answeroptions.free_text_question.config_trim_whitespaces') + ': ' +
@@ -162,7 +171,7 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
     this.ws.cell(10, nextColumnIndex++).string(this.mf('export.time'));
 
     let nextStartRow = 10;
-    this.quiz.nicknames.forEach((nickItem) => {
+    this.allResponses.forEach((nickItem) => {
       nextColumnIndex = 1;
       nextStartRow++;
       this.ws.cell(nextStartRow, nextColumnIndex++).string(nickItem.name);

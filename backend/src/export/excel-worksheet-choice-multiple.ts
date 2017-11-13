@@ -1,5 +1,4 @@
 import {INickname, IQuizResponse} from '../interfaces/common.interfaces';
-import {ILeaderBoardItem} from '../leaderboard/leaderboard';
 import {IQuestion} from '../interfaces/questions/interfaces';
 import {calculateNumberOfAnswers} from './lib/excel_function_library';
 import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
@@ -122,6 +121,11 @@ export class MultipleChoiceExcelWorksheet extends ExcelWorksheet implements IExc
 
   public addSheetData(): void {
     const answerList = this._question.answerOptionList;
+    const allResponses: Array<INickname> = this.quiz.nicknames.filter(nickname => {
+      return nickname.responses.map(response => {
+        return !!response.value && response.value !== -1 ? response.value : null;
+      });
+    });
 
     this.ws.cell(1, 1).string(`${this.mf('export.question_type')}: ${this.mf(`export.type.${this._question.TYPE}`)}`);
     this.ws.cell(2, 1).string(this.mf('export.question'));
@@ -132,10 +136,10 @@ export class MultipleChoiceExcelWorksheet extends ExcelWorksheet implements IExc
     if (this.responsesWithConfidenceValue.length > 0) {
       this.ws.cell(8, 1).string(this.mf('export.average_confidence') + ':');
       let confidenceSummary = 0;
-      this.quiz.nicknames.forEach((nickname: INickname) => {
-        confidenceSummary += nickname.responses[this._questionIndex].confidence;
+      this.quiz.nicknames.forEach((nickItem) => {
+        confidenceSummary += nickItem.responses[this._questionIndex].confidence;
       });
-      this.ws.cell(8, 2).number(Math.round((confidenceSummary / this.responsesWithConfidenceValue.length)));
+      this.ws.cell(8, 2).number(Math.round(confidenceSummary / this.responsesWithConfidenceValue.length));
     }
     this.ws.cell(4, 1).string(this._question.questionText.replace(/[#]*[*]*/g, ''));
     for (let j = 0; j < answerList.length; j++) {
@@ -155,24 +159,19 @@ export class MultipleChoiceExcelWorksheet extends ExcelWorksheet implements IExc
     }
     this.ws.cell(10, nextColumnIndex++).string(this.mf('export.time'));
 
-    const sortedResponses: Array<ILeaderBoardItem> = this.leaderBoardData.sort(
-      (response: ILeaderBoardItem, previous: ILeaderBoardItem): 1 | 0 | -1 => {
-        return response.responseTime > previous.responseTime ? 1 : response.responseTime < previous.responseTime ? -1 : 0;
-      }
-    );
     let nextStartRow = 10;
-    sortedResponses.forEach((leaderboardItem: ILeaderBoardItem): void => {
+    allResponses.forEach((responseItem): void => {
       nextColumnIndex = 1;
       nextStartRow++;
-      this.ws.cell(nextStartRow, nextColumnIndex++).string(leaderboardItem.name);
+      this.ws.cell(nextStartRow, nextColumnIndex++).string(responseItem.name);
       if (this._isCasRequired) {
         const profile = this.quiz.nicknames.filter((nick: INickname) => {
-          return nick.name === leaderboardItem.name;
+          return nick.name === responseItem.name;
         })[0].casProfile;
         this.ws.cell(nextStartRow, nextColumnIndex++).string(profile.id);
         this.ws.cell(nextStartRow, nextColumnIndex++).string(profile.mail instanceof Array ? profile.mail.slice(-1)[0] : profile.mail);
       }
-      const nickItem = this.quiz.nicknames.filter(nick => nick.name === leaderboardItem.name)[0];
+      const nickItem = this.quiz.nicknames.filter(nick => nick.name === responseItem.name)[0];
       const chosenAnswer = this._question.answerOptionList.filter((answer, index) => {
         const responseValue = nickItem.responses[this._questionIndex].value;
         if (responseValue instanceof Array) {
@@ -190,9 +189,9 @@ export class MultipleChoiceExcelWorksheet extends ExcelWorksheet implements IExc
       chosenAnswerString.pop();
       this.ws.cell(nextStartRow, nextColumnIndex++).string(chosenAnswerString);
       if (this.responsesWithConfidenceValue.length > 0) {
-        this.ws.cell(nextStartRow, nextColumnIndex++).number(Math.round(leaderboardItem.confidenceValue));
+        this.ws.cell(nextStartRow, nextColumnIndex++).number(Math.round(responseItem.responses[this._questionIndex].confidence));
       }
-      this.ws.cell(nextStartRow, nextColumnIndex++).number(leaderboardItem.responseTime);
+      this.ws.cell(nextStartRow, nextColumnIndex++).number(responseItem.responses[this._questionIndex].responseTime);
     });
     if (nextStartRow === 10) {
       this.ws.cell(11, 1).string(this.mf('export.attendee_complete_correct_none_available'));
