@@ -48,9 +48,7 @@ import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
       logDebugFn: require('debug')('i18n:debug'),
 
       // setting of log level WARN - default to require('debug')('i18n:warn')
-      logWarnFn: function (msg) {
-        console.log('warn', msg);
-      },
+      logWarnFn: require('debug')('i18n:warn'),
 
       // setting of log level ERROR - default to require('debug')('i18n:error')
       logErrorFn: function (msg) {
@@ -67,7 +65,7 @@ import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
         '__n': 'tn' // and req.__n can be called as req.tn
       }
     });
-    i18n.init();
+    i18n.init({});
     const basedir = path.join(__dirname, '..', '..', '..', 'test-generated');
     if (!fs.existsSync(basedir)) {
       fs.mkdirSync(basedir);

@@ -62,6 +62,7 @@ const expect = chai.expect;
       path.join(__dirname, '..', '..', '..', 'predefined_quizzes', 'demo_quiz', 'en.demo_quiz.json')
     ).toString('UTF-8'));
     const res = await chai.request(router).post(`${this._baseApiRoute}/`).send({quiz});
+    console.log(res.body);
     expect(res.type).to.eql('application/json');
   }
 

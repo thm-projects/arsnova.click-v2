@@ -89,7 +89,6 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
                                   });
     this.ws.cell(11, 1, attendeeEntryRows + 10, columnsToFormat, !hasEntries).style(attendeeEntryRowStyle);
 
-    console.log('freetext allresponses', this.allResponses);
     this.allResponses.forEach((responseItem, indexInList) => {
       const leaderboardItem = this.leaderBoardData.filter(lbItem => lbItem.name === responseItem.name)[0];
       let nextColumnIndex = 2;
@@ -97,7 +96,6 @@ export class FreeTextExcelWorksheet extends ExcelWorksheet implements IExcelWork
       if (this._isCasRequired) {
         nextColumnIndex += 2;
       }
-      console.log('freetext', this.leaderBoardData[indexInList], indexInList);
       this.ws.cell(targetRow, nextColumnIndex++).style({
         font: {
           color: 'FFFFFFFF'

@@ -349,7 +349,6 @@ export class SummaryExcelWorksheet extends ExcelWorksheet implements IExcelWorks
       }
     });
 
-    console.log(correctResponses);
     return leaderBoard.objectToArray(correctResponses);
   }
 
