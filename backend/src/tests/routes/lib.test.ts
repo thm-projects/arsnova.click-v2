@@ -20,7 +20,11 @@ const expect = chai.expect;
     expect(res.type).to.eql('application/json');
   }
 
-  @test async faviconExists() {
+  /*
+  This Test will fail or not fail depending if the backend has been able to generate the frontend favicons before
+   */
+  @test.skip
+  async faviconExists() {
     const res = await chai.request(router).get(`${this._baseApiRoute}/favicon`);
     expect(res.type).to.eql('image/png');
   }
@@ -62,7 +66,6 @@ const expect = chai.expect;
       path.join(__dirname, '..', '..', '..', 'predefined_quizzes', 'demo_quiz', 'en.demo_quiz.json')
     ).toString('UTF-8'));
     const res = await chai.request(router).post(`${this._baseApiRoute}/`).send({quiz});
-    console.log(res.body);
     expect(res.type).to.eql('application/json');
   }
 

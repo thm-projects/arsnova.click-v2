@@ -26,8 +26,6 @@ export class WebSocketRouter {
         try {
           message = JSON.parse(message);
 
-          console.log(`received message step ${message.step} with content ${message.payload}`);
-
           if (message.step === 'WEBSOCKET:AUTHORIZE') {
             const activeQuiz: IActiveQuiz = QuizManagerDAO.getActiveQuizByName(message.payload.quizName);
             activeQuiz.nicknames.forEach(nickname => {
@@ -89,9 +87,7 @@ export class WebSocketRouter {
         console.log('ws error', err);
       });
 
-      ws.send(JSON.stringify({status: 'STATUS:SUCCESSFUL', step: 'CONNECTED', payload: {}}), (err) => {
-        console.log('error while sending ws message', err);
-      });
+      ws.send(JSON.stringify({status: 'STATUS:SUCCESSFUL', step: 'CONNECTED', payload: {}}));
     });
   }
 }

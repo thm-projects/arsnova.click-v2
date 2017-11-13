@@ -30,7 +30,11 @@ export function MatchTextToAssetsDb(value: string) {
           DbDao.create(DatabaseTypes.assets, {url: matchedValueElement, digest, path: cachePath}, matchedValueElement.replace(/\./g, '_'));
         } else {
           req.abort();
-          fs.unlink(cachePath, (err) => console.log('error while unlinking file', err));
+          fs.exists(cachePath, (exists: boolean) => {
+            if (exists) {
+              fs.unlink(cachePath, (err) => console.log('error while unlinking file', err));
+            }
+          });
         }
       }).on('error', (err) => {
         console.log(err);

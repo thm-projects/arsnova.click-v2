@@ -73,9 +73,17 @@ export class LibRouter {
 
   public getFavicon(req: Request, res: Response, next: NextFunction): void {
     const theme = req.params.theme || 'theme-Material';
-    fs.readFile(path.join(__dirname, '..', '..', 'images', 'favicons', `favicon-${theme}.png`), (err, data: Buffer) => {
-      res.contentType(fileType(data).mime);
-      res.end(data);
+    const filePath = path.join(__dirname, '..', '..', 'images', 'favicons', `favicon-${theme}.png`);
+    fs.exists(filePath, (exists: boolean) => {
+      if (exists) {
+        fs.readFile(filePath, (err, data: Buffer) => {
+          res.contentType(fileType(data).mime);
+          res.end(data);
+        });
+      } else {
+        res.sendStatus(404);
+        res.end();
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-import {Router, Request, Response, NextFunction} from 'express';
+import {Router, Request, Response} from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
 import {themes} from '../themes/availableThemes';
@@ -27,7 +27,15 @@ export class ThemesRouter {
   }
 
   public getTheme(req: Request, res: Response): void {
-    res.send(fs.readFileSync(path.join(__dirname, `../../images/themes/${req.params.themeId}_${req.params.languageId}.png`)));
+    const filePath = path.join(__dirname, `../../images/themes/${req.params.themeId}_${req.params.languageId}.png`);
+    fs.exists(filePath, (exists: boolean) => {
+      if (exists) {
+        fs.readFile(filePath, (err, data: Buffer) => {
+          res.setHeader('Content-Type', 'image/png');
+          res.end(data.toString('UTF-8'));
+        });
+      }
+    });
   }
 
   public init(): void {
