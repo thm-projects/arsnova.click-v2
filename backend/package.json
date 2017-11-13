@@ -5,7 +5,7 @@
   "scripts": {
     "prod": "gulp",
     "prestart": "npm run prod",
-    "start": "node dist/index.js --routePrefix=/backend",
+    "start": "node dist/index.js",
     "predebug": "npm run bootstrap",
     "debug": "node-debug dist/index.js",
     "pretest": "gulp test",
