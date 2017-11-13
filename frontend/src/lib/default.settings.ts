@@ -1,8 +1,23 @@
+const isLiveEnvironment = !location.hostname.match(/localhost/g);
+const serverEndpoints = {
+  live: {
+    httpApiEndpoint: `https://${location.hostname}/backend/api/v1`,
+    httpLibEndpoint: `https://${location.hostname}/backend/lib`,
+    wsApiEndpoint: `wss://${location.hostname}`,
+  },
+  local: {
+    httpApiEndpoint: `https://${location.hostname}:3000/api/v1`,
+    httpLibEndpoint: `https://${location.hostname}:3000/lib`,
+    wsApiEndpoint: `wss://${location.hostname}:3000`,
+  }
+};
+const serverEndpoint = isLiveEnvironment ? serverEndpoints.live : serverEndpoints.local;
+
 export const DefaultSettings = {
   siteId: 'arsnova.click-v2',
-  httpApiEndpoint: `https://${location.hostname}:3000/api/v1`,
-  httpLibEndpoint: `https://${location.hostname}:3000/lib`,
-  wsApiEndpoint: `wss://${location.hostname}:3000`,
+  httpApiEndpoint: serverEndpoint.httpApiEndpoint,
+  httpLibEndpoint: serverEndpoint.httpLibEndpoint,
+  wsApiEndpoint: serverEndpoint.wsApiEndpoint,
   defaultSettings: {
     answers: {
       displayAnswerTextOnButtons: true,
