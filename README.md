@@ -33,13 +33,24 @@ For full instructions on how to set up the correct environment, visit the [DEV P
 - Gamification animations
 
 ---
+#### Configuration
+
+###### Backend
+The backend can be configured via npm. There are the following options available:
+- `portExternal [number]` This is the external port used for rewriting the urls of cached quizzes.
+- `portInternal [number]` This is the internal port used during the startup of the server
+- `routePrefix [string]` The routePrefix is used to prefix the access of the Express routes. E.g if set to 'backend' the access to '/api/v1/myPath' will become '/backend/api/v1/myPath'
+
+The command to use is `npm config set backend:[config] [value]`. It is required to use this command inside the /backend directory.
+
+---
 #### Run (DEV deployment)
 
 ###### Backend
 Head over to the /backend directory and enter `npm start`
 
 ###### Frontend
-Head over to the /frontend directory and enter `npm start`
+Go to the /frontend directory and enter `npm start`
 
 ---
 #### Build (LIVE deployment)
@@ -48,7 +59,7 @@ Head over to the /frontend directory and enter `npm start`
 Head over to the /backend directory and enter `npm run prod`
 
 ###### Frontend
-Head over to the /frontend directory and enter `npm run prod`
+Go to the /frontend directory and enter `npm run prod`
 To test the live build enter `npm run prod-test`. This will build the regular production bundle and startup a simple http-server which will serve the files.
 
 Note that the build time can take up to ~1 minute

@@ -32,12 +32,12 @@ export function MatchTextToAssetsDb(value: string) {
           req.abort();
           fs.exists(cachePath, (exists: boolean) => {
             if (exists) {
-              fs.unlink(cachePath, (err) => console.log('error while unlinking file', err));
+              fs.unlink(cachePath, (err) => !err ? null : console.log('error while unlinking file', err));
             }
           });
         }
       }).on('error', (err) => {
-        console.log(err);
+        console.log('error at requesting asset url', err);
         req.abort();
       }).pipe(fs.createWriteStream(cachePath));
     });
@@ -46,6 +46,7 @@ export function MatchTextToAssetsDb(value: string) {
 
 export function parseCachedAssetQuiz(cacheAwareQuestions: Array<IQuestion>) {
   const assetsCache = DbDao.read(DatabaseTypes.assets);
+  const assetsBasePath = `${staticStatistics.rewriteAssetCacheUrl}/lib/cache/quiz/assets`;
   cacheAwareQuestions.forEach((question: IQuestion) => {
     const matchedQuestionText = question.questionText.match(assetsUrlRegex);
     if (matchedQuestionText) {
@@ -54,8 +55,7 @@ export function parseCachedAssetQuiz(cacheAwareQuestions: Array<IQuestion>) {
         if (!assetsCache[encodedText]) {
           return;
         }
-        const digest = assetsCache[encodedText].digest;
-        const cachedUrl = `https://${staticStatistics.localIpv4Address}:${staticStatistics.port}/lib/cache/quiz/assets/${digest}`;
+        const cachedUrl = `${assetsBasePath}/${assetsCache[encodedText].digest}`;
         question.questionText = question.questionText.replace(matchedValueElement, cachedUrl);
       });
     }
@@ -67,8 +67,7 @@ export function parseCachedAssetQuiz(cacheAwareQuestions: Array<IQuestion>) {
           if (!assetsCache[encodedText]) {
             return;
           }
-          const digest = assetsCache[encodedText].digest;
-          const cachedUrl = `https://${staticStatistics.localIpv4Address}:${staticStatistics.port}/lib/cache/quiz/assets/${digest}`;
+          const cachedUrl = `${assetsBasePath}/${assetsCache[encodedText].digest}`;
           answerOption.answerText = answerOption.answerText.replace(matchedValueElement, cachedUrl);
         });
       }

@@ -6,7 +6,7 @@
       [id]="elem.TYPE"
       [attr.aria-selected]="isActiveQuestionType(elem.TYPE)"
       (click)="morphToQuestionType(elem.TYPE)">
-    <div class="wrapper">
+    <div class="wrapper rounded pointer p-3 text-light">
       <p class="title" [innerHTML]="elem.translationReferrer() | translate"></p>
       <p class="description" [innerHTML]="elem.translationDescription() | translate"></p>
     </div>

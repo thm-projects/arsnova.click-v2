@@ -87,7 +87,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'multipart/form-data');
     headers.append('Accept', 'application/json');
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/availableNicks/all`, {headers})
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/nicks/predefined`, {headers})
         .subscribe(
           data => {
             this._availableNicks = data;

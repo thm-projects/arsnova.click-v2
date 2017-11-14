@@ -2,6 +2,13 @@
   "name": "backend",
   "version": "1.0.0",
   "license": "MIT",
+  "repository": "git@git.thm.de:arsnova/arsnova.click-v2.git",
+  "description": "Version 2 of arsnova.click (Backend)",
+  "config" : {
+    "portInternal" : "3000",
+    "portExternal" : "8443",
+    "routePrefix" : "/abc"
+  },
   "scripts": {
     "prod": "gulp",
     "prestart": "npm run prod",
@@ -29,7 +36,6 @@
     "messageformat": "^1.0.2",
     "mime": "^2.0.3",
     "mime-types": "^2.1.17",
-    "minimist": "^1.2.0",
     "morgan": "^1.7.0",
     "node-sass-middleware": "0.9.8",
     "phantomjs-prebuilt": "^2.1.15",

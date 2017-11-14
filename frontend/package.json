@@ -2,6 +2,8 @@
   "name": "frontend",
   "version": "1.0.0",
   "license": "MIT",
+  "repository": "git@git.thm.de:arsnova/arsnova.click-v2.git",
+  "description": "Version 2 of arsnova.click (Frontend WebApp)",
   "scripts": {
     "ng": "ng",
 

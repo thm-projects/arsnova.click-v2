@@ -1,8 +1,6 @@
 import {cpus, freemem, loadavg, totalmem, hostname, networkInterfaces} from 'os';
-import * as minimist from 'minimist';
 import QuizManager from './db/quiz-manager';
 
-const argumentMap = minimist(process.argv.slice(2));
 const interfaces = networkInterfaces();
 const localAddress = interfaces[Object.keys(interfaces).filter(netIface => {
   const singleInterface = interfaces[netIface][0];
@@ -10,12 +8,16 @@ const localAddress = interfaces[Object.keys(interfaces).filter(netIface => {
          singleInterface.internal === false;
 })[0]];
 const localIpv4Address = localAddress ? localAddress[0].address : '127.0.0.1';
+const portInternal = process.env.npm_package_config_portInternal || 3000;
+const portExternal = process.env.npm_package_config_portExternal || 3000;
+const routePrefix = process.env.npm_package_config_routePrefix || '/';
 
 export const staticStatistics = {
   hostname: hostname(),
-  port: argumentMap.port || 3000,
-  routePrefix: argumentMap.routePrefix || '',
+  port: portInternal,
+  routePrefix: `${routePrefix}`,
   localIpv4Address: localIpv4Address,
+  rewriteAssetCacheUrl: `https://${hostname()}:${portExternal}${routePrefix}`,
   cpuCores: cpus().length,
 };
 
