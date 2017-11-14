@@ -2,11 +2,11 @@ import App from './App';
 
 import * as debug from 'debug';
 import * as WebSocket from 'ws';
-import * as https from 'https';
+import * as http from 'http';
 import * as fs from 'fs';
 import * as path from 'path';
 import {WebSocketRouter} from './routes/websocket';
-import {Server} from 'https';
+import {Server} from 'http';
 import * as process from 'process';
 import * as slimerjs from 'slimerjs';
 import {ChildProcess, spawn} from 'child_process';
@@ -20,15 +20,12 @@ debug('arsnova.click: ts-express:server');
 
 createDefaultPaths();
 
-const cert = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
-const key = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
-
 const privateServerConfig = require('../settings.json');
 
 const port: string | number | boolean = normalizePort(staticStatistics.port);
 App.set('port', port);
 
-const server: Server = https.createServer({key: key, cert: cert}, App);
+const server: Server = http.createServer(App);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
