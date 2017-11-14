@@ -20,10 +20,11 @@ debug('arsnova.click: ts-express:server');
 
 createDefaultPaths();
 
-const cert = fs.readFileSync(path.join(__dirname, '../certs/server.crt'));
-const key = fs.readFileSync(path.join(__dirname, '../certs/server.key'));
+const certLocation = process.env.npm_package_config_sslCrtPath || '/certs/server.crt';
+const keyLocation = process.env.npm_package_config_sslKeyPath || '/certs/server.key';
 
-const privateServerConfig = require('../settings.json');
+const cert = fs.readFileSync(path.join(__dirname, '..', certLocation));
+const key = fs.readFileSync(path.join(__dirname, '..', keyLocation));
 
 const port: string | number | boolean = normalizePort(staticStatistics.port);
 App.set('port', port);

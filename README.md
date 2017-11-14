@@ -36,12 +36,14 @@ For full instructions on how to set up the correct environment, visit the [DEV P
 #### Configuration
 
 ###### Backend
-The backend can be configured via npm. There are the following options available:
+The backend can be configured via npm. The following options available:
 - `portExternal [number]` This is the external port used for rewriting the urls of cached quizzes.
 - `portInternal [number]` This is the internal port used during the startup of the server.
 - `routePrefix [string]` The routePrefix is used to prefix the access of the Express routes. E.g if set to 'backend' the access to '/api/v1/myPath' will become '/backend/api/v1/myPath'.
 - `rewriteAssetCacheUrl [string]` This configuration is used as base endpoint for cached assets.
 - `themePreviewHost [string]` Target of the Http Server which delivers the template for the theme preview generation.
+- `sslCrtPath [string]` Location of the .crt file relative to the backend/ directory
+- `sslKeytPath [string]` Location of the .key file relative to the backend/ directory
 
 The command to use is `npm config set backend:[config] [value]`. It is required to use this command inside the /backend directory.
 

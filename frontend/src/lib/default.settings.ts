@@ -3,7 +3,7 @@ const serverEndpoints = {
   live: {
     httpApiEndpoint: `https://${location.hostname}/backend/api/v1`,
     httpLibEndpoint: `https://${location.hostname}/backend/lib`,
-    wsApiEndpoint: `wss://${location.hostname}`,
+    wsApiEndpoint: `wss://${location.hostname}/backend`,
   },
   local: {
     httpApiEndpoint: `https://${location.hostname}:3000/api/v1`,

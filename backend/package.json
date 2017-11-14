@@ -9,7 +9,9 @@
     "portExternal" : "3000",
     "routePrefix" : "/",
     "rewriteAssetCacheUrl": "",
-    "themePreviewHost": "http://localhost:4200"
+    "themePreviewHost": "http://localhost:4200",
+    "sslCrtPath": "certs/server.crt",
+    "sslKeyPath": "certs/server.key"
   },
   "scripts": {
     "prod": "gulp",
