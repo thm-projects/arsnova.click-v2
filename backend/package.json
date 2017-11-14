@@ -6,8 +6,8 @@
   "description": "Version 2 of arsnova.click (Backend)",
   "config" : {
     "portInternal" : "3000",
-    "portExternal" : "8443",
-    "routePrefix" : "/abc",
+    "portExternal" : "3000",
+    "routePrefix" : "/",
     "rewriteAssetCacheUrl": "",
     "themePreviewHost": "http://localhost:4200"
   },
