@@ -47,6 +47,11 @@ The backend can be configured via npm. The following options available:
 
 The command to use is `npm config set backend:[config] [value]`. It is required to use this command inside the /backend directory.
 
+#### Test
+###### Backend
+Enter `npm test` in the /backend directory to run all unit tests.
+Currently all routing and the quiz export is covered by the tests. The export unit test will generate an random filled Excel export file in the /backend/test-generated folder.
+
 ---
 #### Run (DEV deployment)
 
