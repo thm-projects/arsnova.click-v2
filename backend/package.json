@@ -7,7 +7,9 @@
   "config" : {
     "portInternal" : "3000",
     "portExternal" : "8443",
-    "routePrefix" : "/abc"
+    "routePrefix" : "/abc",
+    "rewriteAssetCacheUrl": "",
+    "themePreviewHost": "http://localhost:4200"
   },
   "scripts": {
     "prod": "gulp",

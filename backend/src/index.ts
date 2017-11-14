@@ -36,7 +36,7 @@ server.on('close', onClose);
 
 const languages = ['en', 'de', 'fr', 'it', 'es'];
 const params: any = [path.join(__dirname, 'phantomDriver.js')];
-const themePreviewEndpoint = `${privateServerConfig.frontendHttpServer}/preview`;
+const themePreviewEndpoint = `${process.env.npm_package_config_themePreviewHost}/preview`;
 themes.forEach((theme: ITheme) => {
   languages.forEach((languageKey) => {
     params.push(`${themePreviewEndpoint}/${theme.id}/${languageKey}`);

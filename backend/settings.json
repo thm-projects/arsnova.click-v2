@@ -5,6 +5,5 @@
     "limitActiveQuizzes": "Infinity"
   },
   "limitQuizCreationToCasAccounts": [],
-  "createQuizPassword": "abc",
-  "frontendHttpServer": "http://localhost:4200"
+  "createQuizPassword": "abc"
 }

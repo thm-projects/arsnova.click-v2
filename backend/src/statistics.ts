@@ -9,15 +9,16 @@ const localAddress = interfaces[Object.keys(interfaces).filter(netIface => {
 })[0]];
 const localIpv4Address = localAddress ? localAddress[0].address : '127.0.0.1';
 const portInternal = process.env.npm_package_config_portInternal || 3000;
-const portExternal = process.env.npm_package_config_portExternal || 3000;
+const portExternal = process.env.npm_package_config_portExternal || portInternal;
 const routePrefix = process.env.npm_package_config_routePrefix || '/';
+const rewriteAssetCacheUrl = process.env.npm_package_config_rewriteAssetCacheUrl || `https://${hostname()}:${portExternal}${routePrefix}`;
 
 export const staticStatistics = {
   hostname: hostname(),
   port: portInternal,
   routePrefix: `${routePrefix}`,
   localIpv4Address: localIpv4Address,
-  rewriteAssetCacheUrl: `https://${hostname()}:${portExternal}${routePrefix}`,
+  rewriteAssetCacheUrl: rewriteAssetCacheUrl,
   cpuCores: cpus().length,
 };
 
