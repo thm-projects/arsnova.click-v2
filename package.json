@@ -1,8 +1,11 @@
 {
-  "name": "frontend",
+  "name": "arsnova-click-v2-frontend",
   "version": "1.0.0",
   "license": "MIT",
-  "repository": "git@git.thm.de:arsnova/arsnova.click-v2.git",
+  "repository": {
+    "type": "git",
+    "url": "git@git.thm.de:arsnova/arsnova.click-v2.git"
+  },
   "description": "Version 2 of arsnova.click (Frontend WebApp)",
   "scripts": {
     "ng": "ng",
@@ -77,5 +80,14 @@
     "ts-node": "~3.3.0",
     "tslint": "~5.8.0",
     "typescript": "2.4.2"
-  }
+  },
+  "main": "index.js",
+  "keywords": [
+    "arsnova",
+    "arsnova.click",
+    "Audience",
+    "Response",
+    "System"
+  ],
+  "author": "Christopher Fullarton"
 }
