@@ -1,0 +1,51 @@
+<div id="countdown-header"
+     class="overflow-hidden mb-3">
+  <div class="pull-left">
+    <i class="fa fa-users"></i>
+    <span>{{'component.voting.title' | translate}}</span>
+  </div>
+  <div class="pull-right">
+    <span>{{countdownValue}}</span>
+    <i class="fa fa-hourglass"></i>
+  </div>
+</div>
+
+<div *ngIf="displayAnswerButtons()"
+     id="answer-option-element-wrapper"
+     class="d-flex justify-content-around align-items-center flex-wrap">
+  <div *ngFor="let elem of answers; let i = index"
+       [id]="i"
+       [class]="'answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer ' + (isSelected(i) ? 'selected' : '')"
+       (click)="toggleSelectAnswer(i)"
+       [style.flex-basis]="currentQuizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
+    <p *ngIf="currentQuizService.currentQuestion().displayAnswerText"
+       class="mb-0"
+       [innerHTML]="sanitizeHTML(elem)"></p>
+    <p *ngIf="!currentQuizService.currentQuestion().displayAnswerText"
+       class="mb-0"
+       [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
+  </div>
+</div>
+
+<div *ngIf="displayRangedButtons()">
+  <input type="number"
+         [placeholder]="'component.voting.ranged_question.title' | translate"
+         (input)="parseNumberInput($event)"
+         (propertyChange)="parseNumberInput($event)"
+         class="w-100"/>
+</div>
+
+<div *ngIf="displayFreetextInput()">
+  <input type="text"
+         [placeholder]="'component.voting.free_text_question.title' | translate"
+         (input)="parseTextInput($event)"
+         (propertyChange)="parseTextInput($event)"
+         class="w-100" />
+</div>
+
+<button *ngIf="showSendResponseButton()"
+        class="btn btn-default w-100 mt-5 pointer"
+        (click)="sendResponses()">
+  <span>{{'component.voting.send' | translate}}</span>
+  <i class="fa fa-send"></i>
+</button>

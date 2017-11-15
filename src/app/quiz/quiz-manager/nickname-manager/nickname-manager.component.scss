@@ -1,0 +1,71 @@
+h3 {
+  text-align: center;
+}
+
+.nickNameWrapper {
+  background: white;
+  border-radius: 10px;
+}
+
+.selectedNickName {
+  text-decoration: underline;
+}
+
+.nickCategory {
+  .nickCategoryText {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 1px;
+  }
+}
+
+.selectedCategory {
+  text-decoration: underline;
+  &:after {
+    content: ' ';
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 10px solid white;
+    border-bottom: 10px solid transparent;
+    right: 0;
+    top: 35%;
+    position: absolute;
+  }
+}
+
+.nickStyle:not(#block_illegal_nicks_wrapper):not(#restrict_to_cas_wrapper) {
+  border-radius: 20px;
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+
+  p {
+    margin: 0;
+    width: 100%;
+  }
+
+  &.nickCategory {
+    display: flex;
+    flex-basis: 20%;
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    p {
+      text-align: center;
+    }
+  }
+
+  &#select_all,
+  &#remove_all,
+  &#no_nick_selected {
+    p {
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+<h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h2>
+
+<p [innerHTML]="sanitizeHTML(questionText)"></p>
+
+<button class="btn btn-default w-100 mt-5 pointer"
+        (click)="confirmReading()"><i class="fa fa-send"></i>{{'component.liveResults.confirm_read' | translate}}</button>

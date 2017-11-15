@@ -1,0 +1,85 @@
+<div class="row center-vertical" id="landingPageContent">
+  <div class="col-12 text-center mb-5" id="arsnova-click-description">
+    <div class="text-center header-label text-bold">
+      <span class="color-changing-ars logo-header-chars">a r s </span>
+      <span class="color-changing-nova logo-header-chars">n o v a </span>
+      <span class="color-changing-dot logo-header-dot">. </span>
+      <span class="color-changing-click logo-header-chars logo-header-margin-for-dot">c l i c k</span>
+    </div>
+  </div>
+  <div class="col-md-10 col-lg-8 m-auto">
+    <div class="row">
+      <div class="col-12 px-1">
+        <input type="text"
+               class="text-center rounded w-100 mb-2 border-0 input-field"
+               id="hashtag-input-field"
+               autocomplete="off"
+               spellcheck="false"
+               [value]="enteredSessionName"
+               (input)="parseQuiznameInput($event)"
+               [placeholder]="'component.hashtag_management.enter_quiz_name' | translate"/>
+      </div>
+      <div *ngIf="passwordRequired" class="col-12 px-1">
+        <input type="password"
+               class="text-center rounded w-100 mb-2 border-0 input-field"
+               id="server-password-input-field"
+               autocomplete="off"
+               spellcheck="false"
+               (input)="setPassword($event)"
+               [placeholder]="'component.hashtag_management.enter_server_password' | translate"/>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6 col-join-session px-1">
+        <button id="joinSession"
+                [class]="'btn btn-success btn-block ' + (!canJoinQuiz ? 'disabled' : '')"
+                [routerLink]="['/quiz', enteredSessionName]"
+                [disabled]="!canJoinQuiz">
+          <i class="fa fa-thumbs-up"></i>
+          <span [innerHTML]="'component.hashtag_management.join_session' | translate"></span>
+        </button>
+      </div>
+      <div class="col-6 col-create-session px-1">
+        <button id="addSession"
+                [class]="'btn btn-success btn-block ' + (!canAddQuiz ? 'disabled' : '')"
+                *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
+                (click)="setActiveQuestionGroup(['/quiz', 'manager', 'overview'])"
+                [disabled]="!canAddQuiz">
+          <span [innerHTML]="'component.hashtag_management.create_session' | translate"></span>
+          <i class="fa fa-edit"></i>
+        </button>
+        <button id="editSession"
+                class="btn btn-success btn-block"
+                (click)="setActiveQuestionGroup(['/quiz', 'manager', 'overview'])"
+                *ngIf="canEditQuiz">
+          <span [innerHTML]="'component.hashtag_management.edit_session' | translate"></span>
+          <i class="fa fa-edit"></i>
+        </button>
+        <button id="runDemoQuizSession"
+                class="btn btn-success btn-block"
+                (click)="setActiveQuestionGroup(['/quiz', 'flow', 'lobby'])"
+                *ngIf="isAddingDemoQuiz">
+          <span [innerHTML]="'component.hashtag_management.create_demo_session' | translate"></span>
+          <i class="fa fa-send"></i>
+        </button>
+        <button id="runABCDQuizSession"
+                class="btn btn-success btn-block"
+                (click)="setActiveQuestionGroup(['/quiz', 'flow', 'lobby'])"
+                *ngIf="isAddingABCDQuiz">
+          <span [innerHTML]="'component.hashtag_management.create_abcd_session' | translate"></span>
+          <i class="fa fa-send"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="hasErrors" class="col-12 mt-5">
+    <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
+  </div>
+  <div class="col-12 text-center mt-5" id="demo-quiz-description">
+    <p>{{'component.hashtag_home.demo_quiz.title.2' | translate}}</p>
+    <p>{{'component.hashtag_home.demo_quiz.title.3' | translate}}</p>
+  </div>
+  <div class="col-12 px-1 mb-5 mt-2 justify-content-center d-flex mathjax-container">
+    <div class="mathjax-content-container" [innerHTML]="sanitizeHTML(mathjax)"></div>
+  </div>
+</div>

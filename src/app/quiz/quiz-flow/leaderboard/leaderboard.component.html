@@ -1,0 +1,45 @@
+<div [class]="'row'">
+  <h4 *ngIf="!leaderBoardCorrect.length"
+      class="col-12 mt-5 text-center"
+      [innerHTML]="'component.leaderboard.no_attendee_correct' + (isGlobalRanking ? '_global' : '') | translate"></h4>
+
+  <h4 *ngIf="leaderBoardCorrect.length && !isGlobalRanking"
+      class="col-12">{{'component.leaderboard.title.single_question' | translate:{QUESTION_ID: (questionIndex + 1)} }}</h4>
+
+  <h4 *ngIf="leaderBoardCorrect.length && isGlobalRanking"
+      class="col-12">{{'component.leaderboard.title.all_questions' | translate }}</h4>
+
+  <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
+       [class]="(!i ? 'col-12' : 'col-sm-6')">
+    <div [class]="'leaderboard-item rounded p-2 my-2 ' + (!i ? 'own-nick text-center' : attendeeService.isOwnNick(attendee.name) ? 'own-nick' : '')">
+      <i *ngIf="!i"
+         class="fa fa-trophy"
+         aria-hidden="true"></i>
+      <span *ngIf="i">{{i + 1}}.&nbsp;</span>
+      <span>{{attendee.name}}&nbsp;-&nbsp;</span>
+      <span>{{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
+    </div>
+  </div>
+</div>
+
+<hr/>
+
+<div [class]="'row'">
+  <h4 *ngIf="!leaderBoardPartiallyCorrect.length"
+      class="col-12 text-center"
+      [innerHTML]="'component.leaderboard.no_attendee_partially_correct' + (isGlobalRanking ? '_global' : '') | translate"></h4>
+
+  <h4 *ngIf="leaderBoardPartiallyCorrect.length && !isGlobalRanking"
+      class="col-12">{{'component.leaderboard.title.single_question_partially' | translate:{QUESTION_ID: (questionIndex + 1)} }}</h4>
+
+  <h4 *ngIf="leaderBoardPartiallyCorrect.length && isGlobalRanking"
+      class="col-12">{{'component.leaderboard.title.all_questions_partially' | translate }}</h4>
+
+  <div *ngFor="let attendee of leaderBoardPartiallyCorrect; let i = index"
+       class="ml-3">
+    <div [class]="'partially-correct-leaderboard-item rounded p-2 my-2 ' + (attendeeService.isOwnNick(attendee.name) ? 'own-nick' : '')">
+      <span>{{attendee.name}}&nbsp;-&nbsp;</span>
+      <span>{{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
+    </div>
+  </div>
+</div>

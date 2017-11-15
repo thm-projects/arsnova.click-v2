@@ -1,0 +1,14 @@
+<nav *ngIf="footerElements.length"
+     class="nav navbar-footer flex-nowrap flex-sm-column justify-content-sm-start p-1"
+     role="navigation">
+  <input class="hidden" id="upload-session" type="file" (change)="fileChange($event)" accept="application/json" multiple="multiple"/>
+  <div *ngFor="let elem of footerElements"
+       [class]="'footerElement py-sm-2 px-sm-1 justify-content-center justify-content-sm-start ' + (elem.selectable ? elem.isActive ? 'success' : 'error' : '')"
+       [id]="elem.id"
+       [routerLink]="getLinkTarget(elem)"
+       [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
+       (click)="toggleSetting(elem);elem.onClickCallback(elem)">
+    <p class="footerElemIcon"><i [class]="elem.iconClass" aria-hidden="true"></i></p>
+    <p class="footerElemText text-left ml-2"><span [class]="elem.textClass" [innerHTML]="elem.textName | translate"></span></p>
+  </div>
+</nav>

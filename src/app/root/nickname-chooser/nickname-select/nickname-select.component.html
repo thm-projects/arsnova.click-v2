@@ -1,0 +1,4 @@
+<div *ngFor="let elem of nicks"
+     (click)="joinQuiz(elem)">
+  <div class="nickName rounded pointer my-2 p-2" [innerHTML]="elem"></div>
+</div>

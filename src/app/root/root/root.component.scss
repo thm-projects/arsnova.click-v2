@@ -1,0 +1,33 @@
+@import "../../../styles_vendor";
+
+#content-container {
+  @include media-breakpoint-down(xs) {
+    height: 80vh;
+    top: 10vh;
+    position: absolute;
+  }
+  @include media-breakpoint-up(sm) {
+    height: 90vh;
+  }
+}
+
+.footer-bar-wrapper {
+  flex-shrink: 0;
+  flex-grow: 1;
+
+  /* TODO: media-breakpoint-only(xs) currently buggy in Bootstrap-v4-Beta-1 (29.09.2017) */
+  @include media-breakpoint-down(xs) {
+    width: 100%;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.qr-code-element {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+}

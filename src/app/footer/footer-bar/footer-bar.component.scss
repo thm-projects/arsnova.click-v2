@@ -1,0 +1,56 @@
+@import "../../../styles_vendor";
+
+.navbar-footer {
+  position: absolute;
+  left: 0;
+  z-index: 1040;
+
+  @include media-breakpoint-up(sm) {
+    @include border-right-radius($border-radius);
+    &:hover {
+      opacity: 0.95;
+      .footerElement {
+        .footerElemText {
+          display: block;
+        }
+      }
+    }
+  }
+
+  @include media-breakpoint-down(xs) {
+    overflow: scroll;
+    justify-content: left;
+    width: 100%;
+  }
+  @include media-breakpoint-up(sm) {
+    justify-content: center;
+  }
+
+  .footerElement {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    @include media-breakpoint-down(xs) {
+      padding: 10px;
+      flex-grow: 1;
+    }
+    @include media-breakpoint-up(sm) {
+      padding: 0;
+      flex-grow: 0;
+    }
+
+    .footerElemText {
+      flex-shrink: 0;
+      @include media-breakpoint-up(sm) {
+        display: none;
+      }
+    }
+
+    p {
+      margin: 0;
+      line-height: 25px;
+    }
+  }
+}
