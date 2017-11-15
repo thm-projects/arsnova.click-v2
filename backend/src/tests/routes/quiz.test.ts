@@ -7,10 +7,10 @@ import * as path from 'path';
 import chaiHttp = require('chai-http');
 
 import app from '../../App';
-import QuizManagerDAO from '../../db/quiz-manager';
-import {DatabaseTypes, DbDao} from '../../db/DbDao';
+import {DatabaseTypes, DbDao} from '../../db/DbDAO';
 import {IQuestionGroup} from '../../interfaces/questions/interfaces';
 import {staticStatistics} from '../../statistics';
+import {QuizManagerDAO} from '../../db/QuizManagerDAO';
 
 chai.use(chaiHttp);
 const expect = chai.expect;

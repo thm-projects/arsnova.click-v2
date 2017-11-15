@@ -1,7 +1,7 @@
 import * as WebSocket from 'ws';
-import QuizManagerDAO from '../db/quiz-manager';
 import {IActiveQuiz, INickname} from '../interfaces/common.interfaces';
-import {DatabaseTypes, DbDao} from '../db/DbDao';
+import {DatabaseTypes, DbDao} from '../db/DbDAO';
+import {QuizManagerDAO} from '../db/QuizManagerDAO';
 
 export declare interface IMessage {
   status: string;

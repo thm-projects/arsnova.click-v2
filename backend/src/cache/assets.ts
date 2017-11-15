@@ -2,7 +2,7 @@ import * as sha256 from 'crypto-js/sha256';
 import * as Hex from 'crypto-js/enc-hex';
 import * as fs from 'fs';
 import * as request from 'request';
-import {DatabaseTypes, DbDao} from '../db/DbDao';
+import {DatabaseTypes, DbDao} from '../db/DbDAO';
 import {IQuestion} from '../interfaces/questions/interfaces';
 import {staticStatistics} from '../statistics';
 import {IAnswerOption} from '../interfaces/answeroptions/interfaces';

@@ -7,9 +7,9 @@ import * as path from 'path';
 import chaiHttp = require('chai-http');
 
 import app from '../../App';
-import QuizManagerDAO from '../../db/quiz-manager';
 import {IQuestionGroup} from '../../interfaces/questions/interfaces';
 import {staticStatistics} from '../../statistics';
+import {QuizManagerDAO} from '../../db/QuizManagerDAO';
 
 chai.use(chaiHttp);
 const expect = chai.expect;

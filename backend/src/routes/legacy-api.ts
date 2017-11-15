@@ -1,8 +1,8 @@
 import {Router, Request, Response, NextFunction} from 'express';
-import QuizManagerDAO from '../db/quiz-manager';
 import * as crypto from 'crypto';
-import {DatabaseTypes, DbDao} from '../db/DbDao';
+import {DatabaseTypes, DbDao} from '../db/DbDAO';
 import {IQuestionGroup} from '../interfaces/questions/interfaces';
+import {QuizManagerDAO} from '../db/QuizManagerDAO';
 
 export class LegacyApiRouter {
   get router(): Router {

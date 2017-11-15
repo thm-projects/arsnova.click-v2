@@ -2,13 +2,13 @@ import {NextFunction, Request, Response, Router} from 'express';
 import * as mjAPI from 'mathjax-node';
 import {IQuestion, IQuestionGroup} from '../interfaces/questions/interfaces';
 import * as fs from 'fs';
-import {DatabaseTypes, DbDao} from '../db/DbDao';
 import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
 import * as CAS from 'cas';
 import * as crypto from 'crypto';
 import * as path from 'path';
 import * as fileType from 'file-type';
 import {MatchTextToAssetsDb} from '../cache/assets';
+import {MathjaxDAO} from '../db/MathjaxDAO';
 
 const casSettings = {base_url: 'https://cas.thm.de/cas', service: 'arsnova_click_v2'};
 const cas = new CAS(casSettings);
@@ -168,7 +168,7 @@ export class LibRouter {
     const result = [];
     if (mathjaxArray) {
       mathjaxArray.forEach((mathjaxPlain, index) => {
-        const dbResult = DbDao.read(DatabaseTypes.mathjax, mathjaxPlain);
+        const dbResult = MathjaxDAO.getAllPreviouslyRenderedData(mathjaxPlain);
         if (dbResult) {
           result.push(dbResult);
           return;
@@ -182,7 +182,7 @@ export class LibRouter {
           mml: req.body.output === 'mml'
         }).then(data => {
           result.push(data);
-          DbDao.create(DatabaseTypes.mathjax, data, mathjaxPlain);
+          MathjaxDAO.updateRenderedData(data, mathjaxPlain);
           if (index === mathjaxArray.length - 1) {
             res.send(JSON.stringify(result));
           }

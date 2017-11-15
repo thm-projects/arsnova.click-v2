@@ -11,7 +11,7 @@ import * as slimerjs from 'slimerjs';
 import {ChildProcess, spawn} from 'child_process';
 import {themes} from './themes/availableThemes';
 import {ITheme} from './interfaces/common.interfaces';
-import {DbDao} from './db/DbDao';
+import {DbDao} from './db/DbDAO';
 import {staticStatistics} from './statistics';
 import {createDefaultPaths} from './app_bootstrap';
 

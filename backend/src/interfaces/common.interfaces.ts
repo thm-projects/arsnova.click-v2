@@ -1,11 +1,5 @@
 import * as WebSocket from 'ws';
 import {IQuestionGroup} from './questions/interfaces';
-import {WebSocketRouter} from '../routes/websocket';
-
-export declare interface IMathjaxFormat {
-  format: 'TeX' | 'inline-TeX' | 'MathML';
-  output: 'svg' | 'html' | 'mml';
-}
 
 export declare interface ICas {
   id: string;
@@ -49,7 +43,6 @@ export declare interface IActiveQuizSerialized {
 export declare interface IActiveQuiz extends IActiveQuizSerialized {
   nicknames: Array<INickname>;
   name: string;
-  webSocketRouter: WebSocketRouter;
   currentStartTimestamp: number;
   ownerSocket: WebSocket;
 

@@ -1,7 +1,6 @@
 import {Router, Request, Response, NextFunction} from 'express';
-import QuizManagerDAO from '../db/quiz-manager';
-import {IQuestion} from '../interfaces/questions/interfaces';
 import {IActiveQuiz, INickname} from '../interfaces/common.interfaces';
+import {QuizManagerDAO} from '../db/QuizManagerDAO';
 
 export class MemberRouter {
   get router(): Router {

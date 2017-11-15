@@ -1,5 +1,5 @@
 import {Router, Request, Response, NextFunction} from 'express';
-import QuizManagerDAO from '../db/quiz-manager';
+import {QuizManagerDAO} from '../db/QuizManagerDAO';
 
 export class LobbyRouter {
   get router(): Router {

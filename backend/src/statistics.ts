@@ -1,5 +1,5 @@
 import {cpus, freemem, loadavg, totalmem, hostname, networkInterfaces} from 'os';
-import QuizManager from './db/quiz-manager';
+import {QuizManagerDAO} from './db/QuizManagerDAO';
 
 const interfaces = networkInterfaces();
 const localAddress = interfaces[Object.keys(interfaces).filter(netIface => {
@@ -28,8 +28,8 @@ export const dynamicStatistics = () => {
     loadavg: loadavg(),
     freemem: freemem(),
     totalmem: totalmem(),
-    connectedUsers: QuizManager.getAllActiveMembers(),
-    activeQuizzes: QuizManager.getAllActiveQuizNames(),
-    persistedQuizzes: Object.keys(QuizManager.getAllPersistedQuizzes()).length
+    connectedUsers: QuizManagerDAO.getAllActiveMembers(),
+    activeQuizzes: QuizManagerDAO.getAllActiveQuizNames(),
+    persistedQuizzes: Object.keys(QuizManagerDAO.getAllPersistedQuizzes()).length
   };
 };

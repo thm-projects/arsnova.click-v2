@@ -5,8 +5,7 @@ import * as FileSync from 'lowdb/adapters/FileSync';
 
 export enum DatabaseTypes {
   quiz = 'quiz',
-  assets = 'assets',
-  mathjax = 'mathjax'
+  assets = 'assets'
 }
 
 const adapter: FileSync = new FileSync('arsnova-click-v2-db-v1.json');
@@ -74,9 +73,6 @@ export class DbDao {
       }
       if (!state[DatabaseTypes.assets]) {
         DbDao.initDb(DatabaseTypes.assets, {});
-      }
-      if (!state[DatabaseTypes.mathjax]) {
-        DbDao.initDb(DatabaseTypes.mathjax, {});
       }
     }
     return DbDao.instance;

@@ -1,8 +1,7 @@
 import {Router, Request, Response, NextFunction} from 'express';
-import QuizManagerDAO from '../db/quiz-manager';
 import {IQuestion, IQuestionGroup} from '../interfaces/questions/interfaces';
 import {IActiveQuiz} from '../interfaces/common.interfaces';
-import {DatabaseTypes, DbDao} from '../db/DbDao';
+import {DatabaseTypes, DbDao} from '../db/DbDAO';
 import {MatchTextToAssetsDb} from '../cache/assets';
 import {IAnswerOption} from '../interfaces/answeroptions/interfaces';
 import {ISessionConfiguration} from '../interfaces/session_configuration/interfaces';
@@ -10,6 +9,7 @@ import {ExcelWorkbook} from '../export/excel-workbook';
 import {Leaderboard} from '../leaderboard/leaderboard';
 import * as fs from 'fs';
 import * as path from 'path';
+import {QuizManagerDAO} from '../db/QuizManagerDAO';
 
 const privateServerConfig = require('../../settings.json');
 privateServerConfig.public.limitActiveQuizzes = parseFloat(privateServerConfig.public.limitActiveQuizzes);

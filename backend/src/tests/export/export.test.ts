@@ -5,10 +5,11 @@ import * as assert from 'assert';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as i18n from 'i18n';
-import QuizManagerDAO, {Member} from '../../db/quiz-manager';
+import {Member} from '../../quiz-manager/quiz-manager';
 import {IQuestionFreetext, IQuestionGroup, IQuestionRanged, IQuestionSurvey} from '../../interfaces/questions/interfaces';
 import {ExcelWorkbook} from '../../export/excel-workbook';
 import {IFreetextAnswerOption} from '../../interfaces/answeroptions/interfaces';
+import {QuizManagerDAO} from '../../db/QuizManagerDAO';
 
 @suite class ExcelExportTestSuite {
   private _hashtag = 'mocha-export-test';
