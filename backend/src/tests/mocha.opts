@@ -1,4 +1,0 @@
---ui mocha-typescript
---exit
---require source-map-support/register
-dist/tests/**/*.test.js

@@ -1,0 +1,9 @@
+[submodule "backend"]
+	path = backend
+	url = git@git.thm.de:arsnova/arsnova-click-v2-backend.git
+[submodule "arsnova-click-v2-types"]
+	path = arsnova-click-v2-types
+	url = git@git.thm.de:arsnova/arsnova-click-v2-types.git
+[submodule "arsnova-click-v2-frontend"]
+	path = arsnova-click-v2-frontend
+	url = git@git.thm.de:arsnova/arsnova-click-v2-frontend.git

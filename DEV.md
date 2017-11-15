@@ -11,8 +11,5 @@
 Install NodeJS and NPM and add the binaries to the path variable.
 To install the angular core globally, enter `npm install -g @angular/core`. Test with `ng -v` in the terminal.
 
-###### Backend
-Head over to the /backend directory and enter `npm install`
-
-###### Frontend
-Go to the /frontend directory and enter `npm install`
+Clone the project via `git clone --recursive git@git.thm.de:arsnova/arsnova.click-v2.git`
+Switch into the project directory and enter `npm i`.
