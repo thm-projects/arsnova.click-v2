@@ -1,20 +1,9 @@
 stages:
-  - test
   - build
+  - test
   - deploy
 
-test:
-  stage: test
-  tags:
-    - nodejs
-  script:
-    - npm install -g n
-    - n 7.10.0
-    - cd backend
-    - npm install
-    - npm test
-
-build:
+build_backend:
   stage: build
   only:
     - master
@@ -22,18 +11,36 @@ build:
   tags:
     - nodejs
   script:
-    - npm install -g n
-    - n 7.10.0
     - cd backend
-    - npm install
-    - npm run prod
-    - cd ../frontend
     - npm install
     - npm run prod
   artifacts:
     paths:
       - backend/dist
+
+build_frontend:
+  stage: build
+  only:
+    - master
+    - CI
+  tags:
+    - nodejs
+  script:
+    - cd frontend
+    - npm install
+    - npm run prod
+  artifacts:
+    paths:
       - frontend/dist
+
+test:
+  stage: test
+  tags:
+    - nodejs
+  script:
+    - cd backend
+    - npm install
+    - npm test
 
 deploy:
   stage: deploy
@@ -43,7 +50,8 @@ deploy:
   tags:
     - ssh
   dependencies:
-    - build
+    - build_backend
+    - build_frontend
   script:
     - chmod -R a+rX,ug+w backend
     - chmod -R a+rX,ug+w frontend
