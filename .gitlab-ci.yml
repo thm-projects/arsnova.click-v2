@@ -7,7 +7,6 @@ build_backend:
   stage: build
   only:
     - master
-    - CI
   tags:
     - nodejs
   script:
@@ -22,7 +21,6 @@ build_frontend:
   stage: build
   only:
     - master
-    - CI
   tags:
     - nodejs
   script:
@@ -46,7 +44,6 @@ deploy:
   stage: deploy
   only:
     - master
-    - CI
   tags:
     - ssh
   dependencies:
