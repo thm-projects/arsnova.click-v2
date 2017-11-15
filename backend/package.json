@@ -16,7 +16,7 @@
     "prestart": "npm run prod",
     "start": "node dist/index.js",
     "pretest": "gulp test",
-    "test": "nyc mocha --opts src/tests/mocha.opts"
+    "test": "nyc -c mocha --opts src/tests/mocha.opts"
   },
   "dependencies": {
     "body-parser": "^1.18.2",

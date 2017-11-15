@@ -42,6 +42,4 @@ gulp.task('clean-test-generated', function () {
 
 gulp.task('default', gulp.series(gulp.parallel('scripts', 'js-scripts', 'assets', 'clean')));
 
-gulp.task('test', function () {
-  gulp.series('scripts-test', 'js-scripts', 'assets', 'clean');
-});
+gulp.task('test', gulp.series(gulp.parallel('scripts-test', 'js-scripts', 'assets', 'clean')));
