@@ -19,4 +19,8 @@ export class TrackingService {
     this.dataLayer.push(['trackPageView']);
   }
 
+  trackClickEvent(action: string, label: string, value?: any) {
+    this.dataLayer.push(['trackEvent', 'click', action, label, value]);
+  }
+
 }

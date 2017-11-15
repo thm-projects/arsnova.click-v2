@@ -3,7 +3,6 @@ import App from './App';
 import * as debug from 'debug';
 import * as WebSocket from 'ws';
 import * as http from 'http';
-import * as fs from 'fs';
 import * as path from 'path';
 import {WebSocketRouter} from './routes/websocket';
 import {Server} from 'http';
@@ -19,9 +18,6 @@ import {createDefaultPaths} from './app_bootstrap';
 debug('arsnova.click: ts-express:server');
 
 createDefaultPaths();
-
-
-const privateServerConfig = require('../settings.json');
 
 const port: string | number | boolean = normalizePort(staticStatistics.port);
 App.set('port', port);

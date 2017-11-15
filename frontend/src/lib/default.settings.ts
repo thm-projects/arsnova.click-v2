@@ -6,9 +6,9 @@ const serverEndpoints = {
     wsApiEndpoint: `wss://${location.hostname}/backend`,
   },
   local: {
-    httpApiEndpoint: `https://${location.hostname}:3000/api/v1`,
-    httpLibEndpoint: `https://${location.hostname}:3000/lib`,
-    wsApiEndpoint: `wss://${location.hostname}:3000`,
+    httpApiEndpoint: `http://${location.hostname}:3000/api/v1`,
+    httpLibEndpoint: `http://${location.hostname}:3000/lib`,
+    wsApiEndpoint: `ws://${location.hostname}:3000`,
   }
 };
 const serverEndpoint = isLiveEnvironment ? serverEndpoints.live : serverEndpoints.local;
