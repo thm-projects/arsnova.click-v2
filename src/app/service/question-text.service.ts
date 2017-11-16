@@ -2,7 +2,7 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {parseGithubFlavoredMarkdown} from '../../lib/markdown/markdown';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../lib/default.settings';
-import {IMathjaxResponse} from '../../lib/common.interfaces';
+import {IMathjaxResponse} from 'arsnova-click-v2-types/src/common';
 
 @Injectable()
 export class QuestionTextService {

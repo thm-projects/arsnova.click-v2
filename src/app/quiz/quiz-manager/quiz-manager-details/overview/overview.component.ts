@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {IQuestion} from '../../../../../lib/questions/interfaces';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 
 @Component({
   selector: 'app-overview',

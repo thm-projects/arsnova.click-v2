@@ -5,8 +5,8 @@ import {ActiveQuestionGroupService} from '../../service/active-question-group.se
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AvailableQuizzesComponent} from '../../modals/available-quizzes/available-quizzes.component';
 import {ThemesService} from '../../service/themes.service';
-import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
-import {IQuestionGroup} from '../../../lib/questions/interfaces';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
 import {SettingsService} from '../../service/settings.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -17,8 +17,8 @@ import {Subscription} from 'rxjs/Subscription';
 import {AttendeeService} from '../../service/attendee.service';
 import {ConnectionService} from '../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {ABCDSingleChoiceQuestion} from '../../../lib/questions/question_choice_single_abcd';
-import {DefaultAnswerOption} from '../../../lib/answeroptions/answeroption_default';
+import {ABCDSingleChoiceQuestion} from 'arsnova-click-v2-types/src/questions/question_choice_single_abcd';
+import {DefaultAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
 import {CasService} from '../../service/cas.service';
 import {DefaultSettings} from '../../../lib/default.settings';
 
@@ -162,7 +162,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canEditQuiz = true;
         } else {
           this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
-            if (value.status === 'STATUS:SUCCESS') {
+            if (value.status === 'STATUS:SUCCESSFUL') {
               switch (value.step) {
                 case 'QUIZ:EXISTS':
                   this.canAddQuiz = false;

@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
-import {CurrentQuizService} from '../../../../../service/current-quiz.service';
 
 @Component({
   selector: 'app-progress-bar-ranged',

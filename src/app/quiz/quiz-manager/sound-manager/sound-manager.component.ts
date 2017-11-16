@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from 'app/service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
-import {IMusicSessionConfiguration} from '../../../../lib/session_configuration/interfaces';
+import {IMusicSessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {DefaultSettings} from '../../../../lib/default.settings';
 

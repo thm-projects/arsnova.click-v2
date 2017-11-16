@@ -4,9 +4,8 @@ import {Router} from '@angular/router';
 import {DefaultSettings} from '../../lib/default.settings';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AvailableQuizzesComponent} from '../modals/available-quizzes/available-quizzes.component';
 import {ActiveQuestionGroupService} from './active-question-group.service';
-import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 
 export declare interface IDuplicateQuiz {
   quizName: string;

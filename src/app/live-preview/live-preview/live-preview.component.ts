@@ -4,7 +4,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../environments/environment';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
-import {IQuestionChoice} from '../../../lib/questions/interfaces';
+import {IQuestionChoice} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({

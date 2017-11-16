@@ -1,9 +1,8 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
 import {Subscription} from 'rxjs/Subscription';
-import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
-import {IQuestionRanged} from '../../../../../../lib/questions/interfaces';
+import {IQuestionRanged} from 'arsnova-click-v2-types/src/questions/interfaces';
 
 @Component({
   selector: 'app-answeroptions-ranged',

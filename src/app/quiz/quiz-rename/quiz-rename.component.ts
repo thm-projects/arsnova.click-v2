@@ -2,8 +2,8 @@ import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {FileUploadService, IDuplicateQuiz} from '../../service/file-upload.service';
 import {Router} from '@angular/router';
 import {FooterBarService} from '../../service/footer-bar.service';
-import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
-import {IQuestionGroup} from '../../../lib/questions/interfaces';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 
 @Component({
   selector: 'app-quiz-rename',

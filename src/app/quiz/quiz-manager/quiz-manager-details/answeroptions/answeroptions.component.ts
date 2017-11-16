@@ -3,7 +3,7 @@ import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {IQuestion} from '../../../../../lib/questions/interfaces';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 
 @Component({
   selector: 'app-answeroptions',

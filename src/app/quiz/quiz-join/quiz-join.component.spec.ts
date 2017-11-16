@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { QuizJoinComponent } from './quiz-join.component';
+import {QuizJoinComponent} from './quiz-join.component';
 
 describe('QuizJoinComponent', () => {
   let component: QuizJoinComponent;

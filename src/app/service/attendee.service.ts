@@ -1,5 +1,4 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {CurrentQuizService} from './current-quiz.service';
 import {FooterBarService} from './footer-bar.service';
 
 export declare interface IQuizResponse {

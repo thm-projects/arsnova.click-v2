@@ -15,6 +15,10 @@ export function parseGithubFlavoredMarkdown(value: string): string {
       return highlight.highlightAuto(code).value;
     }
   });
+  return postMarkdownRenderer(marked(preMarkdownRenderer(value)));
+}
+
+function preMarkdownRenderer(value: string): string {
   const emojiMatch = value.match(/:([a-z0-9_\+\-]+):/g);
   if (emojiMatch) {
     emojiMatch.forEach(token => {
@@ -22,10 +26,10 @@ export function parseGithubFlavoredMarkdown(value: string): string {
       value = value.replace(token, `![emoji](/assets/icons/emojis/${emoji}.png)`);
     });
   }
-  return parseCustomMarkdown(marked(value));
+  return value;
 }
 
-function parseCustomMarkdown(value: string): string {
+function postMarkdownRenderer(value: string): string {
   const iframeOptions = `frameborder="0" gesture="media" webkitallowfullscreen mozallowfullscreen allowfullscreen`;
 
   const youtubeMatch = value.match(/<a href=".*(youtube|youtu).*">.*<\/a>/g);

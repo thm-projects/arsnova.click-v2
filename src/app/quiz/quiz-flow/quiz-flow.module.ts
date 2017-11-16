@@ -10,8 +10,8 @@ import {ThemesModule} from '../../themes/themes.module';
 import {QuizResultsModule} from './quiz-results/quiz-results.module';
 import {AttendeeService} from '../../service/attendee.service';
 import {QuestionDetailsComponent} from './quiz-results/question-details/question-details.component';
-import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
-import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
+import {ReadingConfirmationComponent} from './reading-confirmation/reading-confirmation.component';
+import {ConfidenceRateComponent} from './confidence-rate/confidence-rate.component';
 import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
 
 const quizFlowRoutes: Routes = [

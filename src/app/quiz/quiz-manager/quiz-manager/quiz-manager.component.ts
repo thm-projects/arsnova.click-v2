@@ -3,14 +3,14 @@ import {DOCUMENT} from '@angular/common';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
-import {questionReflection} from '../../../../lib/questions/question_reflection';
-import {IQuestion, IQuestionGroup} from '../../../../lib/questions/interfaces';
+import {questionReflection} from 'arsnova-click-v2-types/src/questions/question_reflection';
+import {IQuestion, IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
-import {DefaultAnswerOption} from '../../../../lib/answeroptions/answeroption_default';
+import {DefaultAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
 
 @Component({
   selector: 'app-quiz-manager',

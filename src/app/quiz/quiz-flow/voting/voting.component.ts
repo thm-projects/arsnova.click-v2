@@ -8,14 +8,14 @@ import {Router} from '@angular/router';
 import {AttendeeService} from '../../../service/attendee.service';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {ConnectionService} from '../../../service/connection.service';
-import {SingleChoiceQuestion} from '../../../../lib/questions/question_choice_single';
-import {SurveyQuestion} from '../../../../lib/questions/question_survey';
+import {SingleChoiceQuestion} from 'arsnova-click-v2-types/src/questions/question_choice_single';
+import {SurveyQuestion} from 'arsnova-click-v2-types/src/questions/question_survey';
 import {QuestionTextService} from '../../../service/question-text.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {HeaderLabelService} from '../../../service/header-label.service';
-import {MultipleChoiceQuestion} from '../../../../lib/questions/question_choice_multiple';
-import {RangedQuestion} from '../../../../lib/questions/question_ranged';
-import {FreeTextQuestion} from '../../../../lib/questions/question_freetext';
+import {MultipleChoiceQuestion} from 'arsnova-click-v2-types/src/questions/question_choice_multiple';
+import {RangedQuestion} from 'arsnova-click-v2-types/src/questions/question_ranged';
+import {FreeTextQuestion} from 'arsnova-click-v2-types/src/questions/question_freetext';
 
 @Component({
   selector: 'app-voting',

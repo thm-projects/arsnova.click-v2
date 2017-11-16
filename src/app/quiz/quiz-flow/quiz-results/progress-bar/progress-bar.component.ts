@@ -1,12 +1,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {IQuestion} from '../../../../../lib/questions/interfaces';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {AttendeeService} from '../../../../service/attendee.service';
 import {I18nService, NumberTypes} from '../../../../service/i18n.service';
-import {RangedQuestion} from '../../../../../lib/questions/question_ranged';
-import {FreeTextQuestion} from '../../../../../lib/questions/question_freetext';
+import {RangedQuestion} from 'arsnova-click-v2-types/src/questions/question_ranged';
+import {FreeTextQuestion} from 'arsnova-click-v2-types/src/questions/question_freetext';
 import {CurrentQuizService} from '../../../../service/current-quiz.service';
 import {TranslateService} from '@ngx-translate/core';
-import {IFreetextAnswerOption} from '../../../../../lib/answeroptions/interfaces';
+import {IFreetextAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/interfaces';
 
 @Component({
   selector: 'app-progress-bar',

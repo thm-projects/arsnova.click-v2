@@ -6,7 +6,7 @@ import {QuizOverviewComponent} from './quiz-overview/quiz-overview.component';
 import {QuizFlowModule} from './quiz-flow/quiz-flow.module';
 import {QuizManagerModule} from './quiz-manager/quiz-manager.module';
 import {SharedModule} from '../shared/shared.module';
-import { QuizJoinComponent } from './quiz-join/quiz-join.component';
+import {QuizJoinComponent} from './quiz-join/quiz-join.component';
 
 const quizRoutes: Routes = [
   {

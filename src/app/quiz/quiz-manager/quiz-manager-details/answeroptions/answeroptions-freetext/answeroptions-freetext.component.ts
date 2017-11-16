@@ -1,11 +1,10 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
-import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
-import {FreeTextAnswerOption} from '../../../../../../lib/answeroptions/answeroption_freetext';
-import {IQuestion} from '../../../../../../lib/questions/interfaces';
-import {IFreetextAnswerOption} from '../../../../../../lib/answeroptions/interfaces';
+import {FreeTextAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answeroption_freetext';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
+import {IFreetextAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/interfaces';
 
 @Component({
   selector: 'app-answeroptions-freetext',

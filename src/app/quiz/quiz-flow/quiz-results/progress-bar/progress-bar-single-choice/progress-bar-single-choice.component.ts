@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DomSanitizer, SafeStyle, SafeHtml} from '@angular/platform-browser';
+import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress-bar-single-choice',

@@ -6,7 +6,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {NavigationEnd, Router} from '@angular/router';
 import * as IntroJs from 'intro.js';
 import {I18nService} from '../../service/i18n.service';
-import {TrackingService} from "../../service/tracking.service";
+import {TrackingService} from '../../service/tracking.service';
 
 // Update global window.* object interface (https://stackoverflow.com/a/12709880/7992104)
 declare global {

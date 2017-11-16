@@ -4,7 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
-import {TrackingService} from "../../service/tracking.service";
+import {TrackingService} from '../../service/tracking.service';
 
 @Component({
   selector: 'app-info',

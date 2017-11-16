@@ -4,7 +4,7 @@ import {ActiveQuestionGroupService} from '../../../../service/active-question-gr
 import {TranslateService} from '@ngx-translate/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {ActivatedRoute} from '@angular/router';
-import {IQuestion} from '../../../../../lib/questions/interfaces';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 
 @Component({
   selector: 'app-countdown',

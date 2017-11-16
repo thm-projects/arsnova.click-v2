@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
-import {IQuestion} from '../../../../lib/questions/interfaces';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {AttendeeService, INickname} from '../../../service/attendee.service';
 import {IMessage} from '../quiz-lobby/quiz-lobby.component';
 import {DefaultSettings} from '../../../../lib/default.settings';
@@ -11,9 +11,9 @@ import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {I18nService, NumberTypes} from '../../../service/i18n.service';
 import {QuestionTextService} from '../../../service/question-text.service';
-import {RangedQuestion} from '../../../../lib/questions/question_ranged';
-import {FreeTextQuestion} from '../../../../lib/questions/question_freetext';
-import {SurveyQuestion} from '../../../../lib/questions/question_survey';
+import {RangedQuestion} from 'arsnova-click-v2-types/src/questions/question_ranged';
+import {FreeTextQuestion} from 'arsnova-click-v2-types/src/questions/question_freetext';
+import {SurveyQuestion} from 'arsnova-click-v2-types/src/questions/question_survey';
 
 export class Countdown {
   get isRunning(): boolean {

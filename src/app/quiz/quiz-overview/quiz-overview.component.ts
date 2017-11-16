@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../lib/default.settings';
@@ -48,23 +48,48 @@ export class QuizOverviewComponent implements OnInit {
     return questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized).isValid();
   }
 
-  startQuiz(session: string): void {
-    const localQuiz = JSON.parse(window.localStorage.getItem(session));
-    const localQuestionGroup = new questionGroupReflection[localQuiz.TYPE](localQuiz);
+  startQuiz(sessionName: string): void {
+    const sessionSerialized = JSON.parse(window.localStorage.getItem(sessionName));
+    const session = new questionGroupReflection[sessionSerialized.TYPE](sessionSerialized);
 
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-      quiz: localQuestionGroup.serialize()
-    }).subscribe(
-      (data: IMessage) => {
+    new Promise((resolve, reject) => {
+      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${session.hashtag}`).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL') {
-          const quiz = data.payload.quiz.originalObject;
-          const questionGroup = new questionGroupReflection[quiz.TYPE](quiz);
-          this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-          this.currentQuizService.quiz = questionGroup;
-          this.router.navigate(['/quiz', 'flow']);
+          if (data.step === 'QUIZ:UNDEFINED') {
+            this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/reserve/override`, {
+              quizName: session.hashtag,
+              privateKey: window.localStorage.getItem('config.private_key')
+            }).subscribe((reserveResponse: IMessage) => {
+              if (reserveResponse.status === 'STATUS:SUCCESSFUL') {
+                resolve();
+              } else {
+                reject([data, reserveResponse]);
+              }
+            });
+          } else {
+            resolve();
+          }
+        } else {
+          reject(data);
         }
-      }
-    );
+      });
+    }).then(() => {
+      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+        quiz: session.serialize()
+      }).subscribe(
+        (data: IMessage) => {
+          if (data.status === 'STATUS:SUCCESSFUL') {
+            const quiz = data.payload.quiz.originalObject;
+            const questionGroup = new questionGroupReflection[quiz.TYPE](quiz);
+            this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
+            this.currentQuizService.quiz = questionGroup;
+            this.router.navigate(['/quiz', 'flow']);
+          }
+        }
+      );
+    }, (reason => {
+      console.log(reason);
+    }));
   }
 
   editQuiz(session: string): void {
@@ -99,7 +124,7 @@ export class QuizOverviewComponent implements OnInit {
         privateKey: localStorage.getItem('config.private_key')
       }
     }).subscribe((response: IMessage) => {
-      if (response.status !== 'STATUS:SUCCESS') {
+      if (response.status !== 'STATUS:SUCCESSFUL') {
         console.log(response);
       }
     });

@@ -1,4 +1,4 @@
-import { Injectable, Component } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 declare global {
   interface Window {

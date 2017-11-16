@@ -2,7 +2,7 @@ import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
-import {IQuestionChoice, IQuestionSurvey} from '../../../../../../lib/questions/interfaces';
+import {IQuestionChoice, IQuestionSurvey} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../../environments/environment';
 import {QuestionTextService} from '../../../../../service/question-text.service';
 

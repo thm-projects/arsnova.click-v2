@@ -6,7 +6,7 @@ import {DefaultSettings} from '../../../lib/default.settings';
 import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
 import {CasService} from '../../service/cas.service';
 import {CurrentQuizService} from '../../service/current-quiz.service';
-import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {ThemesService} from '../../service/themes.service';
 
 @Component({
@@ -32,7 +32,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     this._routerSubscription = this.route.params.subscribe(params => {
       const quizname = params.quizName;
       this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
-        if (value.status === 'STATUS:SUCCESS' && value.step === 'QUIZ:AVAILABLE') {
+        if (value.status === 'STATUS:SUCCESSFUL' && value.step === 'QUIZ:AVAILABLE') {
           this.casService.casLoginRequired = value.payload.authorizeViaCas;
           if (this.casService.casLoginRequired) {
             this.casService.quizName = quizname;

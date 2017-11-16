@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs/Subscription';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {IQuestion} from '../../../../../lib/questions/interfaces';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {CurrentQuizService} from '../../../../service/current-quiz.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {QuestionTextService} from '../../../../service/question-text.service';

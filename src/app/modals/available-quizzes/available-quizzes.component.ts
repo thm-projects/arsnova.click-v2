@@ -2,8 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalI} from '../modals.module';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {questionGroupReflection} from '../../../lib/questions/questionGroup_reflection';
-import {IQuestionGroup} from '../../../lib/questions/interfaces';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {DefaultSettings} from '../../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
@@ -52,19 +52,44 @@ export class AvailableQuizzesComponent implements OnInit, ModalI {
   }
 
   startQuiz(session: IQuestionGroup): void {
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-      quiz: session.serialize()
-    }).subscribe(
-      (data: IMessage) => {
+    new Promise((resolve, reject) => {
+      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${session.hashtag}`).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL') {
-          const questionGroup = new questionGroupReflection[data.payload.quiz.originalObject.TYPE](data.payload.quiz.originalObject);
-          this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-          this.currentQuizService.quiz = questionGroup;
-          this.router.navigate([session.isValid() ? '/quiz/flow' : '/quiz/manager']);
+          if (data.step === 'QUIZ:UNDEFINED') {
+            this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/reserve/override`, {
+              quizName: session.hashtag,
+              privateKey: window.localStorage.getItem('config.private_key')
+            }).subscribe((reserveResponse: IMessage) => {
+              if (reserveResponse.status === 'STATUS:SUCCESSFUL') {
+                resolve();
+              } else {
+                reject([data, reserveResponse]);
+              }
+            });
+          } else {
+            resolve();
+          }
+        } else {
+          reject(data);
         }
-        this.next();
-      }
-    );
+      });
+    }).then(() => {
+      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+        quiz: session.serialize()
+      }).subscribe(
+        (data: IMessage) => {
+          if (data.status === 'STATUS:SUCCESSFUL') {
+            const questionGroup = new questionGroupReflection[data.payload.quiz.originalObject.TYPE](data.payload.quiz.originalObject);
+            this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
+            this.currentQuizService.quiz = questionGroup;
+            this.router.navigate([session.isValid() ? '/quiz/flow' : '/quiz/manager']);
+          }
+          this.next();
+        }
+      );
+    }, (reason => {
+      console.log(reason);
+    }));
   }
 
   editQuiz(session: IQuestionGroup): void {

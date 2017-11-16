@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
-import {IQuestionGroup} from '../../lib/questions/interfaces';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {HttpClient} from '@angular/common/http';
 import {SettingsService} from './settings.service';
-import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
-import {FooterbarElement, FooterBarService} from './footer-bar.service';
+import {FooterBarService} from './footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {DefaultSettings} from '../../lib/default.settings';
 

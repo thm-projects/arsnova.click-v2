@@ -4,8 +4,8 @@ import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {Subscription} from 'rxjs/Subscription';
-import {questionReflection} from '../../../../../lib/questions/question_reflection';
-import {IQuestion} from '../../../../../lib/questions/interfaces';
+import {questionReflection} from 'arsnova-click-v2-types/src/questions/question_reflection';
+import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 
 @Component({
   selector: 'app-questiontype',

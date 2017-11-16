@@ -1,12 +1,10 @@
 import {NgModule} from '@angular/core';
 import {FooterBarComponent} from './footer-bar/footer-bar.component';
 import {SharedModule} from '../shared/shared.module';
-import {HttpModule} from '@angular/http';
 
 @NgModule({
   imports: [
-    SharedModule,
-    HttpModule
+    SharedModule
   ],
   declarations: [FooterBarComponent],
   providers: [SharedModule],

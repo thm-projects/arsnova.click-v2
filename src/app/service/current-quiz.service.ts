@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {IQuestion, IQuestionGroup} from '../../lib/questions/interfaces';
+import {IQuestion, IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {ConnectionService} from './connection.service';
 import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
-import {questionGroupReflection} from '../../lib/questions/questionGroup_reflection';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
@@ -53,6 +53,16 @@ export class CurrentQuizService implements ICurrentQuiz {
 
       new Promise((resolve => {
         if (this._isOwner) {
+          if (value.sessionConfig.readingConfirmationEnabled) {
+            this.footerBarService.footerElemReadingConfirmation.isActive = true;
+          }
+          if (value.sessionConfig.showResponseProgress) {
+            this.footerBarService.footerElemResponseProgress.isActive = true;
+          }
+          if (value.sessionConfig.confidenceSliderEnabled) {
+            this.footerBarService.footerElemConfidenceSlider.isActive = true;
+          }
+
           if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
             this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
               quiz: this._quiz.serialize()
@@ -60,16 +70,16 @@ export class CurrentQuizService implements ICurrentQuiz {
               if (response.status !== 'STATUS:SUCCESSFUL') {
                 console.log(response);
               } else {
-                console.log('persisting quiz as owner with caching');
+                console.log('loading quiz as owner with caching');
                 resolve();
               }
             });
           } else {
-            console.log('persisting quiz as owner without caching');
+            console.log('loading quiz as owner without caching');
             resolve();
           }
         } else {
-          console.log('persisting quiz as attendee');
+          console.log('loading quiz as attendee');
           resolve();
         }
       })).then(() => this.persistToSessionStorage());
@@ -97,16 +107,7 @@ export class CurrentQuizService implements ICurrentQuiz {
         this._readingConfirmationRequested = parsedInstance.readingConfirmationRequested;
       }
       if (parsedInstance.quiz) {
-        this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
-        if (this._quiz.sessionConfig.readingConfirmationEnabled) {
-          this.footerBarService.footerElemReadingConfirmation.isActive = true;
-        }
-        if (this._quiz.sessionConfig.showResponseProgress) {
-          this.footerBarService.footerElemResponseProgress.isActive = true;
-        }
-        if (this._quiz.sessionConfig.confidenceSliderEnabled) {
-          this.footerBarService.footerElemConfidenceSlider.isActive = true;
-        }
+        this._quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
       }
     }
     this.connectionService.initConnection().then(() => {
@@ -146,7 +147,7 @@ export class CurrentQuizService implements ICurrentQuiz {
           privateKey: window.localStorage.getItem('config.private_key')
         }
       }).subscribe((response: IMessage) => {
-        if (response.status !== 'STATUS:SUCCESS') {
+        if (response.status !== 'STATUS:SUCCESSFUL') {
           console.log(response);
         }
       });
