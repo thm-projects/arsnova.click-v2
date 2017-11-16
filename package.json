@@ -59,7 +59,7 @@
     "@types/jasmine": "^2.8.2",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^8.0.53",
-    "arsnova-click-v2-types": "git+ssh://git@git.thm.de:arsnova/arsnova-click-v2-types.git",
+    "arsnova-click-v2-types": "git+https://git.thm.de/arsnova/arsnova-click-v2-types.git",
     "codelyzer": "~4.0.1",
     "http-server": "^0.10.0",
     "imagemin-pngquant": "^5.0.1",
