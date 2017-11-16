@@ -9,12 +9,11 @@ build:
   tags:
     - nodejs
   script:
-    - cd frontend
     - npm install
     - npm run prod
   artifacts:
     paths:
-      - frontend/dist
+      - dist
 
 deploy:
   stage: deploy
@@ -25,10 +24,9 @@ deploy:
   dependencies:
     - build
   script:
-    - chmod -R a+rX,ug+w backend
-    - chmod -R a+rX,ug+w frontend
+    - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
     - mkdir ~/.ssh && echo "$STAGING_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
-    - scp -r frontend/dist/* "$STAGING_FRONTEND_SSH_URL"
+    - scp -r dist/* "$STAGING_FRONTEND_SSH_URL"
 
