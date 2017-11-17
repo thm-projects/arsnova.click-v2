@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "arsnova.click version 2",
   "scripts": {
-    "install": "node install.js",
+    "install": "node npm_recursive_command.js install",
+    "update": "node npm_recursive_command.js update",
     "test": "cd arsnova-click-v2-backend && npm test"
   },
   "repository": {
