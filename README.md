@@ -6,7 +6,7 @@ Still the same styles, still the same features. Yet, nearly the entire code has 
 
 Submit bug reports to the [Gitlab Issue Board](https://git.thm.de/arsnova/arsnova.click-v2/issues). Please be very specific on how to reproduce the issue. Attach screenshots or link repo where the error occurs. Provide details of your environment.
 
-For full instructions on how to set up the correct environment, visit the [DEV Page](./DEV.md)
+For full instructions on how to set up the correct environment, visit the [Contribution Guide](./CONTRIBUTING.md)
 
 ---
 #### Core Technologies
