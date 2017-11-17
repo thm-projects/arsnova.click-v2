@@ -21,6 +21,6 @@
       "dom"
     ]
   },
-  "include": ["src/**/*.ts", "../arsnova-click-v2-types/src/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
