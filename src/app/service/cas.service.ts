@@ -11,6 +11,7 @@ export class CasService implements CanLoad, CanActivate {
 
   public casLoginRequired = false;
   public quizName = '';
+  public ticket: string = null;
 
   constructor(
     private userService: UserService,
@@ -22,23 +23,27 @@ export class CasService implements CanLoad, CanActivate {
     return this.canLoad();
   }
 
-  canLoad() {
+  async canLoad() {
     console.log('OnlyLoggedInUsers');
     if (this.userService.isLoggedIn || !this.casLoginRequired) {
       return true;
     } else {
-      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/settings/${this.quizName}`).subscribe((data: IMessage) => {
-        if (data.status === 'STATUS:SUCCESSFUL') {
-          const settings = <ISessionConfiguration>data.payload.settings;
-          if (settings.nicks.restrictToCasLogin) {
-            console.log('You don\'t have permission to view this page');
-            location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
-            return false;
-          } else {
-            return true;
+      if (this.ticket) {
+        return await this.userService.authenticate(this.ticket);
+      } else {
+        await this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/settings/${this.quizName}`).subscribe((data: IMessage) => {
+          if (data.status === 'STATUS:SUCCESSFUL') {
+            const settings = <ISessionConfiguration>data.payload.settings;
+            if (settings.nicks.restrictToCasLogin) {
+              console.log('You don\'t have permission to view this page');
+              location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
+              return false;
+            } else {
+              return true;
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
 }

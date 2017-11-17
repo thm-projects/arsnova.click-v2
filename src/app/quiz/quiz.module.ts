@@ -29,7 +29,7 @@ const quizRoutes: Routes = [
   {
     path: 'quiz/:quizName',
     component: QuizJoinComponent
-  }
+  },
 ];
 
 @NgModule({

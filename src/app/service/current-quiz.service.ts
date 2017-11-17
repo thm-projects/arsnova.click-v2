@@ -53,7 +53,11 @@ export class CurrentQuizService implements ICurrentQuiz {
             this.footerBarService.footerElemConfidenceSlider.isActive = true;
           }
 
-          if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultQuizSettings.cacheQuizAssets) {
+          if (
+            this._cacheAssets ||
+            this.settingsService.serverSettings.cacheQuizAssets ||
+            DefaultSettings.defaultQuizSettings.cacheQuizAssets
+          ) {
             this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
               quiz: this._quiz.serialize()
             }).subscribe((response: IMessage) => {
@@ -97,7 +101,7 @@ export class CurrentQuizService implements ICurrentQuiz {
         this._readingConfirmationRequested = parsedInstance.readingConfirmationRequested;
       }
       if (parsedInstance.quiz) {
-        this._quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
+        this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
       }
     }
     this.connectionService.initConnection().then(() => {

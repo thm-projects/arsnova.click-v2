@@ -7,6 +7,7 @@ import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {AttendeeService} from '../../../service/attendee.service';
 import {ConnectionService} from '../../../service/connection.service';
+import {UserService} from '../../../service/user.service';
 
 @Component({
   selector: 'app-nickname-input',
@@ -26,6 +27,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private router: Router,
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
+    private userService: UserService,
     private currentQuiz: CurrentQuizService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
@@ -40,7 +42,8 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     const promise = new Promise((resolve, reject) => {
       this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
         quizName: this.currentQuiz.quiz.hashtag,
-        nickname: nickname
+        nickname: nickname,
+        ticket: this.userService.ticket
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           data.payload.nicknames.forEach((elem: INickname) => {

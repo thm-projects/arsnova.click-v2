@@ -29,31 +29,39 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._routerSubscription = this.route.params.subscribe(params => {
-      const quizname = params.quizName;
-      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
-        if (value.status === 'STATUS:SUCCESSFUL' && value.step === 'QUIZ:AVAILABLE') {
-          this.casService.casLoginRequired = value.payload.authorizeViaCas;
-          if (this.casService.casLoginRequired) {
-            this.casService.quizName = quizname;
-          }
-          this.http.get(`${DefaultSettings.httpApiEndpoint}/lobby/${quizname}`).subscribe(
-            (data: IMessage) => {
-              const quiz = data.payload.quiz.originalObject;
-              this.currentQuizService.quiz = new questionGroupReflection[quiz.TYPE](quiz);
-              this.themesService.updateCurrentlyUsedTheme();
-              this.router.navigate(['/nicks/' + (value.payload.provideNickSelection ? 'select' : 'input')]);
+    this.route.queryParams.subscribe(queryParams => {
+      const ticket = queryParams.ticket;
+      console.log('queryparams', queryParams);
+      if (ticket) {
+        // TODO: authorize via cas;
+        this.casService.ticket = ticket;
+      }
+      this.route.params.subscribe(params => {
+        const quizname = params.quizName;
+        console.log('params', params);
+        this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
+          if (value.status === 'STATUS:SUCCESSFUL' && value.step === 'QUIZ:AVAILABLE') {
+            this.casService.casLoginRequired = value.payload.authorizeViaCas;
+            if (this.casService.casLoginRequired) {
+              this.casService.quizName = quizname;
             }
-          );
-        } else {
-          this.router.navigate(['/']);
-        }
+            this.http.get(`${DefaultSettings.httpApiEndpoint}/lobby/${quizname}`).subscribe(
+              (data: IMessage) => {
+                const quiz = data.payload.quiz.originalObject;
+                this.currentQuizService.quiz = new questionGroupReflection[quiz.TYPE](quiz);
+                this.themesService.updateCurrentlyUsedTheme();
+                this.router.navigate(['/nicks/' + (value.payload.provideNickSelection ? 'select' : 'input')]);
+              }
+            );
+          } else {
+            this.router.navigate(['/']);
+          }
+        });
       });
     });
   }
 
   ngOnDestroy() {
-    this._routerSubscription.unsubscribe();
   }
 
 }
