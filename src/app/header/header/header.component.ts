@@ -42,14 +42,6 @@ function isSessionStorageSupported(): boolean {
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  get offline(): boolean {
-    return this._offline;
-  }
-
-  set offline(value: boolean) {
-    this._offline = value;
-  }
-
   get localStorageAvailable(): Boolean {
     return this._localStorageAvailable;
   }
@@ -66,29 +58,10 @@ export class HeaderComponent implements OnInit {
     return this._inHomeRoute;
   }
 
-  private _finishedWithErrors: Boolean = false;
-  private _finishedWithWarnings: Boolean = false;
   private _origin: string = location.hostname;
   private _inHomeRoute: Boolean;
   private _localStorageAvailable: boolean = isLocalStorageSupported();
   private _sessionStorageAvailable: boolean = isSessionStorageSupported();
-  private _offline = false;
-
-  get finishedWithErrors(): Boolean {
-    return this._finishedWithErrors;
-  }
-
-  set finishedWithErrors(state: Boolean) {
-    this._finishedWithErrors = state;
-  }
-
-  get finishedWithWarnings(): Boolean {
-    return this._finishedWithWarnings;
-  }
-
-  set finishedWithWarnings(state: Boolean) {
-    this._finishedWithWarnings = state;
-  }
 
   get origin(): string {
     switch (this._origin) {
@@ -107,7 +80,7 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     public headerLabelService: HeaderLabelService,
-    private connectionService: ConnectionService) {
+    public connectionService: ConnectionService) {
   }
 
   ngOnInit() {

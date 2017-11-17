@@ -36,6 +36,8 @@ export class ConnectionService {
   private _websocketAvailable: Boolean = false;
   private _rtt = 0;
   private _isWebSocketAuthorized = false;
+  private lowSpeed = false;
+  private mediumSpeed = false;
 
   constructor(
     private websocketService: WebsocketService,
@@ -102,11 +104,14 @@ export class ConnectionService {
         resolve();
         return;
       }
+      const start_time = new Date().getTime();
       new Promise(resolve2 => {
         this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
           (data) => {
+            this._rtt = new Date().getTime() - start_time;
             this.serverAvailable = true;
             this._websocketAvailable = true;
+            this.calculateConnectionSpeedIndicator();
             resolve2(data);
           },
           () => {
@@ -121,17 +126,30 @@ export class ConnectionService {
     });
   }
 
+  calculateConnectionSpeedIndicator() {
+    if (this._rtt > 800) {
+      this.lowSpeed = true;
+      this.mediumSpeed = false;
+    } else if (this._rtt > 300) {
+      this.lowSpeed = false;
+      this.mediumSpeed = true;
+    } else {
+      this.lowSpeed = false;
+      this.mediumSpeed = false;
+    }
+  }
+
   calculateRTT() {
-    const self = this;
     const start_time = new Date().getTime();
-    self.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
+    this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
       () => {
-        self.serverAvailable = true;
-        self._rtt = new Date().getTime() - start_time;
+        this.serverAvailable = true;
+        this._rtt = new Date().getTime() - start_time;
+        this.calculateConnectionSpeedIndicator();
       },
       () => {
-        self.serverAvailable = false;
-        self._websocketAvailable = false;
+        this.serverAvailable = false;
+        this._websocketAvailable = false;
         this._socket = null;
       }
     );
