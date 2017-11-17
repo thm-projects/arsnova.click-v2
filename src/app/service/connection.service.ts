@@ -7,6 +7,12 @@ import {IMessage} from 'arsnova-click-v2-types/src/common';
 
 @Injectable()
 export class ConnectionService {
+  get lowSpeed(): boolean {
+    return this._lowSpeed;
+  }
+  get mediumSpeed(): boolean {
+    return this._mediumSpeed;
+  }
   set websocketAvailable(value: Boolean) {
     this._websocketAvailable = value;
   }
@@ -36,8 +42,8 @@ export class ConnectionService {
   private _websocketAvailable: Boolean = false;
   private _rtt = 0;
   private _isWebSocketAuthorized = false;
-  private lowSpeed = false;
-  private mediumSpeed = false;
+  private _lowSpeed = false;
+  private _mediumSpeed = false;
 
   constructor(
     private websocketService: WebsocketService,
@@ -128,14 +134,14 @@ export class ConnectionService {
 
   calculateConnectionSpeedIndicator() {
     if (this._rtt > 800) {
-      this.lowSpeed = true;
-      this.mediumSpeed = false;
+      this._lowSpeed = true;
+      this._mediumSpeed = false;
     } else if (this._rtt > 300) {
-      this.lowSpeed = false;
-      this.mediumSpeed = true;
+      this._lowSpeed = false;
+      this._mediumSpeed = true;
     } else {
-      this.lowSpeed = false;
-      this.mediumSpeed = false;
+      this._lowSpeed = false;
+      this._mediumSpeed = false;
     }
   }
 

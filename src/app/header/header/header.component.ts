@@ -42,24 +42,24 @@ function isSessionStorageSupported(): boolean {
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  get localStorageAvailable(): Boolean {
+  get localStorageAvailable(): boolean {
     return this._localStorageAvailable;
   }
 
-  get sessionStorageAvailable(): Boolean {
+  get sessionStorageAvailable(): boolean {
     return this._sessionStorageAvailable;
   }
 
-  set inHomeRoute(value: Boolean) {
+  set inHomeRoute(value: boolean) {
     this._inHomeRoute = value;
   }
 
-  get inHomeRoute(): Boolean {
+  get inHomeRoute(): boolean {
     return this._inHomeRoute;
   }
 
   private _origin: string = location.hostname;
-  private _inHomeRoute: Boolean;
+  private _inHomeRoute: boolean;
   private _localStorageAvailable: boolean = isLocalStorageSupported();
   private _sessionStorageAvailable: boolean = isSessionStorageSupported();
 
