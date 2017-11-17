@@ -4,7 +4,7 @@ arsnova.click is back! Now completely rewritten with Angular5 and Typescript.
 
 Still the same styles, still the same features. Yet, nearly the entire code has been rewritten for full feature support of a fast, small, chunked, progressive web app setting the standards of gamificated Audience Response Systems.
 
-Please consider the list of the [ToDo's](./TODOS.md) including the known issues section.
+Submit bug reports to the [Gitlab Issue Board](https://git.thm.de/arsnova/arsnova.click-v2/issues) including the known issues section.
 
 For full instructions on how to set up the correct environment, visit the [DEV Page](./DEV.md)
 
