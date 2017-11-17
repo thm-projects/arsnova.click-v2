@@ -23,7 +23,7 @@ export class ThemesService {
     private connectionService: ConnectionService,
     private http: HttpClient) {
     if (!window.localStorage.getItem('config.default_theme')) {
-      window.localStorage.setItem('config.default_theme', DefaultSettings.defaultSettings.theme);
+      window.localStorage.setItem('config.default_theme', DefaultSettings.defaultQuizSettings.theme);
     }
     this.updateCurrentlyUsedTheme();
     http.get(`${DefaultSettings.httpApiEndpoint}/themes`)

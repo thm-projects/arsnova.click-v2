@@ -18,9 +18,8 @@ export const DefaultSettings = {
   httpApiEndpoint: serverEndpoint.httpApiEndpoint,
   httpLibEndpoint: serverEndpoint.httpLibEndpoint,
   wsApiEndpoint: serverEndpoint.wsApiEndpoint,
-  defaultSettings: {
+  defaultQuizSettings: {
     answers: {
-      displayAnswerTextOnButtons: true,
       answerText: '',
       isCorrect: true,
       configCaseSensitive: false,
@@ -29,13 +28,15 @@ export const DefaultSettings = {
       configUsePunctuation: false
     },
     question: {
-      showOneAnswerPerRow: true,
-      text: '',
-      timer: 0,
-      multipleSurveySelectionEnabled: true,
+      dispayAnswerText: true,
+      showOneAnswerPerRow: false,
+      questionText: '',
+      timer: 60,
+      multipleSelectionEnabled: true,
       rangeMin: 0,
       rangeMax: 60,
-      correctValue: 30
+      correctValue: 30,
+      answerOptionList: []
     },
     music: {
       enabled: {
@@ -43,14 +44,14 @@ export const DefaultSettings = {
         countdownRunning: true,
         countdownEnd: true
       },
-      volume: {
+      volumeConfig: {
         global: 60,
         lobby: 60,
         countdownRunning: 60,
         countdownEnd: 60,
-        useGlobal: true
+        useGlobalVolume: true
       },
-      title: {
+      titleConfig: {
         lobby: 'Song0',
         countdownRunning: 'Song0',
         countdownEnd: 'Song0'
@@ -64,7 +65,8 @@ export const DefaultSettings = {
     },
     nicks: {
       blockIllegalNicks: true,
-      restrictToCasLogin: false
+      restrictToCasLogin: false,
+      selectedNicks: []
     },
     theme: 'theme-Material',
     readingConfirmationEnabled: true,

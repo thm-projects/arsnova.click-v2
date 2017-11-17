@@ -539,7 +539,7 @@
           "invalid_correct_value": "The correct value must be in the scope of the range",
           "answer_text_empty": "The answer's text is not allowed to be empty",
           "no_answers_defined": "No answers have been defined",
-          "empty_question_text": "&lt;&nbsp;none&nbsp;&gt;"
+          "empty_question_text": "<none>"
         }
       },
       "edit_quiz": "Edit quiz",

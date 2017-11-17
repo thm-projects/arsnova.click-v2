@@ -53,7 +53,7 @@ export class CurrentQuizService implements ICurrentQuiz {
             this.footerBarService.footerElemConfidenceSlider.isActive = true;
           }
 
-          if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultSettings.cacheQuizAssets) {
+          if (this._cacheAssets || this.settingsService.serverSettings.cacheQuizAssets || DefaultSettings.defaultQuizSettings.cacheQuizAssets) {
             this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
               quiz: this._quiz.serialize()
             }).subscribe((response: IMessage) => {

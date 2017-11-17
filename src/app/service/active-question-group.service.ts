@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
-import {HttpClient} from '@angular/common/http';
 import {SettingsService} from './settings.service';
 import {FooterBarService} from './footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
@@ -26,7 +25,6 @@ export class ActiveQuestionGroupService {
 
   constructor(
     private translateService: TranslateService,
-    private http: HttpClient,
     private footerBarService: FooterBarService,
     private settingsService: SettingsService
   ) {

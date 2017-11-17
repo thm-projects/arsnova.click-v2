@@ -87,15 +87,15 @@
       </div>
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.lobbyEnabled ? 'success' : 'danger')">
+        <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.enabled.lobby ? 'success' : 'danger')">
           <input type="checkbox"
                  class="hidden"
                  id="toggle-lobby-music"
                  [attr.aria-label]="'Activate/Deactivate Lobby Music Button'"
                  autocomplete="off"
                  role="switch"
-                 [checked]="config.lobbyEnabled"
-                 (change)="config.lobbyEnabled = !config.lobbyEnabled"
+                 [checked]="config.enabled.lobby"
+                 (change)="config.lobbyEnabled = !config.enabled.lobby"
                  [title]="'Activate/Deactivate Lobby Music Button'">
           {{('plugins.sound.' + (config.lobbyEnabled ? 'active' : 'inactive')) | translate}}
         </label>
@@ -161,17 +161,17 @@
           <div class="col-12 col-sm-6">
             <div class="col-12 mb-2 d-flex"
                  [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-              <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.countdownRunningEnabled ? 'success' : 'danger')">
+              <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.enabled.countdownRunning ? 'success' : 'danger')">
                 <input type="checkbox"
                        class="hidden"
                        id="toggle-countdown-running-music"
                        [attr.aria-label]="'Activate/Deactivate Countdown Running Button'"
                        autocomplete="off"
                        role="switch"
-                       [checked]="config.countdownRunningEnabled"
-                       (change)="config.countdownRunningEnabled = !config.countdownRunningEnabled"
+                       [checked]="config.enabled.countdownRunning"
+                       (change)="config.enabled.countdownRunning = !config.enabled.countdownRunning"
                        [title]="'Activate/Deactivate Countdown Running Button'">
-                {{('plugins.sound.' + (config.countdownRunningEnabled ? 'active' : 'inactive')) | translate}}
+                {{('plugins.sound.' + (config.enabled.countdownRunning ? 'active' : 'inactive')) | translate}}
               </label>
             </div>
           </div>
@@ -214,17 +214,17 @@
           <div class="col-12 col-sm-6">
             <div class="col-12 mb-2 d-flex"
                  [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-              <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.countdownEndEnabled ? 'success' : 'danger')">
+              <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.enabled.countdownEnd ? 'success' : 'danger')">
                 <input type="checkbox"
                        class="hidden"
                        id="toggle-countdown-end-music"
                        [attr.aria-label]="'Activate/Deactivate Countdown End Button'"
                        autocomplete="off"
                        role="switch"
-                       [checked]="config.countdownEndEnabled"
-                       (change)="config.countdownEndEnabled = !config.countdownEndEnabled"
+                       [checked]="config.enabled.countdownEnd"
+                       (change)="config.enabled.countdownEnd = !config.enabled.countdownEnd"
                        [title]="'Activate/Deactivate Countdown End Button'">
-                {{('plugins.sound.' + (config.countdownEndEnabled ? 'active' : 'inactive')) | translate}}
+                {{('plugins.sound.' + (config.enabled.countdownEnd ? 'active' : 'inactive')) | translate}}
               </label>
             </div>
           </div>

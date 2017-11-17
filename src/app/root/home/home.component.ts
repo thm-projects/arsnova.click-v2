@@ -21,6 +21,9 @@ import {ABCDSingleChoiceQuestion} from 'arsnova-click-v2-types/src/questions/que
 import {DefaultAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
 import {CasService} from '../../service/cas.service';
 import {DefaultSettings} from '../../../lib/default.settings';
+import {SessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/session_config';
+import {MusicSessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/session_config_music';
+import {NickSessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/session_config_nicks';
 
 @Component({
   selector: 'app-home',
@@ -242,7 +245,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       } else {
         questionGroup = questionGroupReflection.DefaultQuestionGroup({
-          hashtag: this.enteredSessionName
+          hashtag: this.enteredSessionName,
+          sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings)
         });
         resolve();
       }

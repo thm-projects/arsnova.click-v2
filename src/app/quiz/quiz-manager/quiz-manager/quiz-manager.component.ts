@@ -118,7 +118,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   addQuestion(id: string) {
-    const question: IQuestion = questionReflection[id]({});
+    const question: IQuestion = questionReflection[id](DefaultSettings.defaultQuizSettings.question);
     switch (id) {
       case 'TrueFalseSingleChoiceQuestion':
         question.answerOptionList = [
