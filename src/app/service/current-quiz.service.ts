@@ -1,22 +1,12 @@
 import {Injectable} from '@angular/core';
 import {IQuestion, IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {ConnectionService} from './connection.service';
-import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage, ICurrentQuiz, ICurrentQuizData} from 'arsnova-click-v2-types/src/common';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
 import {SettingsService} from './settings.service';
-
-export declare interface ICurrentQuizData {
-  quiz: IQuestionGroup;
-  questionIndex: number;
-  readingConfirmationRequested: boolean;
-}
-
-export declare interface ICurrentQuiz extends ICurrentQuizData {
-  serialize(): ICurrentQuizData;
-}
 
 @Injectable()
 export class CurrentQuizService implements ICurrentQuiz {

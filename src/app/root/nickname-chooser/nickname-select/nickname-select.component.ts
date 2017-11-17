@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMessage} from '../../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {AttendeeService, INickname} from '../../../service/attendee.service';
+import {AttendeeService} from '../../../service/attendee.service';
 import {ConnectionService} from '../../../service/connection.service';
 
 @Component({

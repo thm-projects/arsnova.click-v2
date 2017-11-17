@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMessage} from '../quiz-lobby/quiz-lobby.component';
+import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {Countdown} from '../quiz-results/quiz-results.component';
 import {Router} from '@angular/router';
 import {AttendeeService} from '../../../service/attendee.service';

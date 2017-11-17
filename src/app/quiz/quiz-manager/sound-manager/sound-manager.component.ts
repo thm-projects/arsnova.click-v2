@@ -4,11 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {IMusicSessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {DefaultSettings} from '../../../../lib/default.settings';
-
-export declare interface ISong {
-  id: string;
-  text: string;
-}
+import {ISong} from 'arsnova-click-v2-types/src/common';
 
 @Component({
   selector: 'app-sound-manager',

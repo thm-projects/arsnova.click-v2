@@ -6,17 +6,12 @@ import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {ConnectionService} from '../../../service/connection.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {AttendeeService, INickname} from '../../../service/attendee.service';
+import {AttendeeService} from '../../../service/attendee.service';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
-
-export declare interface IMessage extends Object {
-  status?: string;
-  payload?: any;
-  step: string;
-}
+import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 
 @Component({
   selector: 'app-quiz-lobby',

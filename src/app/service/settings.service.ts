@@ -1,11 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ConnectionService} from './connection.service';
-
-export declare interface IServerSettings {
-  cacheQuizAssets: boolean;
-  createQuizPasswordRequired: boolean;
-  limitActiveQuizzes: number;
-}
+import {IServerSettings} from 'arsnova-click-v2-types/src/common';
 
 @Injectable()
 export class SettingsService {

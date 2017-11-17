@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {ModalI} from '../modals.module';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import {IModal} from 'arsnova-click-v2-types/src/modals/interfaces';
 import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {DefaultSettings} from '../../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
-import {IMessage} from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {Router} from '@angular/router';
 
@@ -15,7 +15,7 @@ import {Router} from '@angular/router';
   templateUrl: './available-quizzes.component.html',
   styleUrls: ['./available-quizzes.component.scss']
 })
-export class AvailableQuizzesComponent implements OnInit, ModalI {
+export class AvailableQuizzesComponent implements OnInit, IModal {
   private _sessions: Array<IQuestionGroup> = [];
 
   dismiss(result?: any): void {

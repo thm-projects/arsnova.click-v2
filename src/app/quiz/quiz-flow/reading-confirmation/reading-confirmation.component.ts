@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ConnectionService} from '../../../service/connection.service';
-import {IMessage} from '../quiz-lobby/quiz-lobby.component';
+import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';

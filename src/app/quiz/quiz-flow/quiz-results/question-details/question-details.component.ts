@@ -6,9 +6,9 @@ import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {CurrentQuizService} from '../../../../service/current-quiz.service';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {QuestionTextService} from '../../../../service/question-text.service';
-import {AttendeeService, INickname} from '../../../../service/attendee.service';
+import {AttendeeService} from '../../../../service/attendee.service';
 import {ConnectionService} from '../../../../service/connection.service';
-import {IMessage} from '../../quiz-lobby/quiz-lobby.component';
+import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 
 @Component({
   selector: 'app-question-details',

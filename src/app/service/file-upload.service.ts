@@ -2,16 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {DefaultSettings} from '../../lib/default.settings';
-import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage, IDuplicateQuiz} from 'arsnova-click-v2-types/src/common';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActiveQuestionGroupService} from './active-question-group.service';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-
-export declare interface IDuplicateQuiz {
-  quizName: string;
-  fileName: string;
-  renameRecommendation: Array<string>;
-}
 
 @Injectable()
 export class FileUploadService {

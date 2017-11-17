@@ -1,22 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {FooterBarService} from './footer-bar.service';
-
-export declare interface IQuizResponse {
-  value: Array<number> | number | string;
-  responseTime: number;
-  confidence: number;
-  readingConfirmation: boolean;
-}
-
-export declare interface INickname {
-  id: number;
-  name: string;
-  colorCode: string;
-  webSocket?: number;
-  responses?: Array<IQuizResponse>;
-
-  serialize(): Object;
-}
+import {INickname, INicknameSerialized, IQuizResponse} from 'arsnova-click-v2-types/src/common';
 
 class Player implements INickname {
   set responses(value: Array<IQuizResponse>) {
@@ -43,6 +27,9 @@ class Player implements INickname {
   private _name: string;
   private _colorCode: string;
   private _responses: Array<IQuizResponse>;
+  public webSocket;
+  public webSocketAuthorization;
+  public casProfile;
 
   constructor({id, name, colorCode, responses}: INickname) {
     this._id = id;
@@ -51,7 +38,7 @@ class Player implements INickname {
     this._responses = responses || [];
   }
 
-  serialize(): Object {
+  serialize(): INicknameSerialized {
     return {
       id: this.id,
       name: this.name,

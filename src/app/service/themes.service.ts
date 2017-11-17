@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DefaultSettings} from '../../lib/default.settings';
-import {ITheme} from 'arsnova-click-v2-types/src/common';
+import {ITheme, IMessage} from 'arsnova-click-v2-types/src/common';
 import {HttpClient} from '@angular/common/http';
-import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import {CurrentQuizService} from './current-quiz.service';
 import {ConnectionService} from './connection.service';
 

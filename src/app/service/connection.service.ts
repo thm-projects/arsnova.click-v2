@@ -3,7 +3,7 @@ import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
 import {Subject} from 'rxjs/Subject';
-import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from 'arsnova-click-v2-types/src/common';
 
 @Injectable()
 export class ConnectionService {

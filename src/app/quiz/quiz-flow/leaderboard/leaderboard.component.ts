@@ -6,19 +6,10 @@ import {HeaderLabelService} from '../../../service/header-label.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMessage} from '../quiz-lobby/quiz-lobby.component';
+import {IMessage, ILeaderBoard} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {ConnectionService} from '../../../service/connection.service';
 import {HttpClient} from '@angular/common/http';
-
-export interface ILeaderBoardItem {
-  name: string;
-  responseTime: number;
-}
-
-export interface ILeaderBoard {
-  attendees: Array<ILeaderBoardItem>;
-}
 
 @Component({
   selector: 'app-leaderboard',

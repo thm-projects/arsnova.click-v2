@@ -3,7 +3,7 @@ import {CanActivate, CanLoad} from '@angular/router';
 import {UserService} from 'app/service/user.service';
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
-import {IMessage} from '../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {ISessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 
 @Injectable()

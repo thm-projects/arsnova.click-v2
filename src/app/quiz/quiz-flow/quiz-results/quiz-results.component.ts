@@ -1,8 +1,8 @@
 import {Component, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
-import {AttendeeService, INickname} from '../../../service/attendee.service';
-import {IMessage} from '../quiz-lobby/quiz-lobby.component';
+import {AttendeeService} from '../../../service/attendee.service';
+import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {ConnectionService} from '../../../service/connection.service';

@@ -6,7 +6,7 @@ import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/ques
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../lib/default.settings';
-import {IMessage} from '../quiz-flow/quiz-lobby/quiz-lobby.component';
+import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 
 @Component({
