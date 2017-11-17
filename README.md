@@ -43,7 +43,7 @@ The backend can be configured via npm. The following options available:
 - `rewriteAssetCacheUrl [string]` This configuration is used as base endpoint for cached assets.
 - `themePreviewHost [string]` Target of the Http Server which delivers the template for the theme preview generation.
 
-The command to use is `npm config set backend:[config] [value]`. It is required to use this command inside the arsnova-click-v2-backend repo.
+The command to use is `npm config set arsnova-click-v2-backend:[config] [value]`. It is required to use this command inside the arsnova-click-v2-backend repo.
 
 #### Test
 ###### Backend
