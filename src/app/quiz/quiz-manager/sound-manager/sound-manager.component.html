@@ -95,9 +95,9 @@
                  autocomplete="off"
                  role="switch"
                  [checked]="config.enabled.lobby"
-                 (change)="config.lobbyEnabled = !config.enabled.lobby"
+                 (change)="config.enabled.lobby = !config.enabled.lobby"
                  [title]="'Activate/Deactivate Lobby Music Button'">
-          {{('plugins.sound.' + (config.lobbyEnabled ? 'active' : 'inactive')) | translate}}
+          {{('plugins.sound.' + (config.enabled.lobby ? 'active' : 'inactive')) | translate}}
         </label>
         <p>{{'plugins.sound.volume' | translate}}: {{config.volumeConfig.lobby}} %</p>
       </div>
