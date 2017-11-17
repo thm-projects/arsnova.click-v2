@@ -43,7 +43,7 @@ The backend can be configured via npm. The following options available:
 - `rewriteAssetCacheUrl [string]` This configuration is used as base endpoint for cached assets.
 - `themePreviewHost [string]` Target of the Http Server which delivers the template for the theme preview generation.
 
-The command to use is `npm config set backend:[config] [value]`. It is required to use this command inside the /backend directory.
+The command to use is `npm config set backend:[config] [value]`. It is required to use this command inside the arsnova-click-v2-backend repo.
 
 #### Test
 ###### Backend
@@ -57,16 +57,16 @@ Currently the routing and the quiz export is covered by the tests. The export un
 Head over to the arsnova-click-v2-backend repo and enter `npm start`
 
 ###### Frontend
-Go to the arsnova-click-v2-frontend directory and enter `npm start`
+Go to the arsnova-click-v2-frontend repo and enter `npm start`
 
 ---
 #### Build (LIVE deployment)
 
 ###### Backend
-Head over to the arsnova-click-v2-backend directory and enter `npm run prod`
+Head over to the arsnova-click-v2-backend repo and enter `npm run prod`
 
 ###### Frontend
-Go to the arsnova-click-v2-frontend directory and enter `npm run prod`
+Go to the arsnova-click-v2-frontend repo and enter `npm run prod`
 To test the live build enter `npm run prod-test`. This will build the regular production bundle and startup a simple http-server which will serve the files.
 
 Note that the build time can take up to ~1 minute
