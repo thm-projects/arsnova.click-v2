@@ -5,6 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
+import {HeaderLabelService} from '../../../../service/header-label.service';
 
 @Component({
   selector: 'app-countdown',
@@ -54,10 +55,11 @@ export class CountdownComponent implements OnInit, OnDestroy {
   private _countdown: number = this.minCountdownValue;
 
   constructor(
+    private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private translateService: TranslateService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,

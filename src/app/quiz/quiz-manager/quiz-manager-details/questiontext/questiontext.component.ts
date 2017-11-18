@@ -22,18 +22,18 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   private _routerSubscription: Subscription;
 
   constructor(
+    private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
-    private headerLabelService: HeaderLabelService,
     private questionTextService: QuestionTextService,
     private route: ActivatedRoute) {
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,
       this.footerBarService.footerElemSaveAssets,
       this.footerBarService.footerElemProductTour
     ]);
-    this.headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
   private insertMarkupSymbol(symbol: string) {

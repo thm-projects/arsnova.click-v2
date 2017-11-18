@@ -6,6 +6,7 @@ import {FooterBarService} from '../../../../service/footer-bar.service';
 import {Subscription} from 'rxjs/Subscription';
 import {questionReflection} from 'arsnova-click-v2-types/src/questions/question_reflection';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
+import {HeaderLabelService} from '../../../../service/header-label.service';
 
 @Component({
   selector: 'app-questiontype',
@@ -57,9 +58,11 @@ export class QuestiontypeComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
+    private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,

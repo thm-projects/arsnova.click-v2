@@ -1,4 +1,4 @@
-<nav class="navbar navbar-header" id="header">
+<nav class="navbar navbar-header flex-nowrap" id="header">
   <div class="arsnova-logo d-flex align-items-center pointer">
     <!--suppress HtmlUnknownAttribute -->
     <svg [routerLink]="['/']" version="1.1" id="arsnova-logo-image" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px" viewBox="0 0 1024 1024" xml:space="preserve">
@@ -12,7 +12,7 @@
       </svg>
   </div>
   <div class="header-title d-flex align-items-center">
-    <div class="container-fluid center-block">
+    <div class="center-block">
       <div class="text-center header-label" *ngIf="headerLabelService.headerLabel !== 'default'" [innerHTML]="headerLabelService.headerLabel | translate"></div>
     </div>
   </div>

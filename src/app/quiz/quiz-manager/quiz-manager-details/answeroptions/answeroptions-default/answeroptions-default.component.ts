@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice, IQuestionSurvey} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../../environments/environment';
 import {QuestionTextService} from '../../../../../service/question-text.service';
+import {HeaderLabelService} from '../../../../../service/header-label.service';
 
 @Component({
   selector: 'app-answeroptions-default',
@@ -25,10 +26,12 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   private _routerSubscription: Subscription;
 
   constructor(
+    private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private questionTextService: QuestionTextService,
     private route: ActivatedRoute
   ) {
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
   addAnswer(): void {

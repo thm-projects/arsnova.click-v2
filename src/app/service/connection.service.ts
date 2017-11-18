@@ -110,14 +110,12 @@ export class ConnectionService {
         resolve();
         return;
       }
-      const start_time = new Date().getTime();
       new Promise(resolve2 => {
         this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
           (data) => {
-            this._rtt = new Date().getTime() - start_time;
             this.serverAvailable = true;
             this._websocketAvailable = true;
-            this.calculateConnectionSpeedIndicator();
+            setTimeout(this.calculateRTT.bind(this), 500);
             resolve2(data);
           },
           () => {

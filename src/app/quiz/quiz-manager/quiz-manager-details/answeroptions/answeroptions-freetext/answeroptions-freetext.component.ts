@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {FreeTextAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answeroption_freetext';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {IFreetextAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/interfaces';
+import {HeaderLabelService} from '../../../../../service/header-label.service';
 
 @Component({
   selector: 'app-answeroptions-freetext',
@@ -30,9 +31,11 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute
   ) {
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
 

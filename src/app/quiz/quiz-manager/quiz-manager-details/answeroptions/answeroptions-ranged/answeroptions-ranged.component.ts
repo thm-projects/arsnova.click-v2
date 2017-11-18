@@ -3,6 +3,7 @@ import {ActiveQuestionGroupService} from '../../../../../service/active-question
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionRanged} from 'arsnova-click-v2-types/src/questions/interfaces';
+import {HeaderLabelService} from '../../../../../service/header-label.service';
 
 @Component({
   selector: 'app-answeroptions-ranged',
@@ -34,9 +35,11 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   private _correctValue: number;
 
   constructor(
+    private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute
   ) {
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
   updateMinRange(event: Event): void {

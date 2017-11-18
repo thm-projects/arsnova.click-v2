@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs/Subscription';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
+import {HeaderLabelService} from '../../../../service/header-label.service';
 
 @Component({
   selector: 'app-overview',
@@ -25,10 +26,11 @@ export class OverviewComponent implements OnInit, OnDestroy {
   private _routerSubscription: Subscription;
 
   constructor(
+    private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private translateService: TranslateService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
+    headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,
