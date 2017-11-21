@@ -264,10 +264,12 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
           this.activeQuestionGroupService.persist();
 
-          new Promise((resolve) => {
+          new Promise(async (resolve) => {
+            this.currentQuizService.quiz = questionGroup;
             if (this.isAddingABCDQuiz || this.isAddingDemoQuiz) {
+              await this.currentQuizService.cacheQuiz(questionGroup);
               this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-                quiz: questionGroup.serialize()
+                quiz: this.currentQuizService.quiz.serialize()
               }).subscribe(
                 () => {
                   resolve();
@@ -277,7 +279,6 @@ export class HomeComponent implements OnInit, OnDestroy {
               resolve();
             }
           }).then(() => {
-            this.currentQuizService.quiz = questionGroup;
             this.router.navigate(routingTarget);
           });
         } else {

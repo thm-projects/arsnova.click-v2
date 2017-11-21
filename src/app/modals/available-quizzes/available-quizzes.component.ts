@@ -73,16 +73,20 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
           reject(data);
         }
       });
-    }).then(() => {
-      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-        quiz: session.serialize()
+    }).then(async () => {
+      if (!session.isValid()) {
+        this.activeQuestionGroupService.activeQuestionGroup = session;
+        this.router.navigate(['/quiz', 'manager']);
+        return;
+      }
+      this.currentQuizService.quiz = session;
+      await this.currentQuizService.cacheQuiz(session);
+      await this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+        quiz: this.currentQuizService.quiz.serialize()
       }).subscribe(
         (data: IMessage) => {
           if (data.status === 'STATUS:SUCCESSFUL') {
-            const questionGroup = new questionGroupReflection[data.payload.quiz.originalObject.TYPE](data.payload.quiz.originalObject);
-            this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-            this.currentQuizService.quiz = questionGroup;
-            this.router.navigate([session.isValid() ? '/quiz/flow' : '/quiz/manager']);
+            this.router.navigate(['/quiz', 'flow']);
           }
           this.next();
         }

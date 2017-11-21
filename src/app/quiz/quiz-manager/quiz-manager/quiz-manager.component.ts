@@ -87,15 +87,16 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
     this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
-    this.footerBarService.footerElemStartQuiz.onClickCallback = (self) => {
+    this.footerBarService.footerElemStartQuiz.onClickCallback = async (self) => {
       if (!self.isActive) {
         return;
       }
-      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-        quiz: activeQuestionGroupService.activeQuestionGroup.serialize()
+      this.currentQuizService.quiz = this.questionGroupItem;
+      await this.currentQuizService.cacheQuiz(this.questionGroupItem);
+      await this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+        quiz: this.currentQuizService.quiz.serialize()
       }).subscribe(
         () => {
-          this.currentQuizService.quiz = this.questionGroupItem;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
         }
       );

@@ -73,16 +73,14 @@ export class QuizOverviewComponent implements OnInit {
           reject(data);
         }
       });
-    }).then(() => {
-      this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+    }).then(async () => {
+      this.currentQuizService.quiz = session;
+      await this.currentQuizService.cacheQuiz(session);
+      await this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
         quiz: session.serialize()
       }).subscribe(
         (data: IMessage) => {
           if (data.status === 'STATUS:SUCCESSFUL') {
-            const quiz = data.payload.quiz.originalObject;
-            const questionGroup = new questionGroupReflection[quiz.TYPE](quiz);
-            this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-            this.currentQuizService.quiz = questionGroup;
             this.router.navigate(['/quiz', 'flow']);
           }
         }

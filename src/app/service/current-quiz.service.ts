@@ -40,43 +40,6 @@ export class CurrentQuizService implements ICurrentQuiz {
     this._quiz = value;
     if (value) {
       this._isOwner = (JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(value.hashtag) > -1;
-
-      new Promise((resolve => {
-        if (this._isOwner) {
-          if (value.sessionConfig.readingConfirmationEnabled) {
-            this.footerBarService.footerElemReadingConfirmation.isActive = true;
-          }
-          if (value.sessionConfig.showResponseProgress) {
-            this.footerBarService.footerElemResponseProgress.isActive = true;
-          }
-          if (value.sessionConfig.confidenceSliderEnabled) {
-            this.footerBarService.footerElemConfidenceSlider.isActive = true;
-          }
-
-          if (
-            this._cacheAssets ||
-            this.settingsService.serverSettings.cacheQuizAssets ||
-            DefaultSettings.defaultQuizSettings.cacheQuizAssets
-          ) {
-            this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
-              quiz: this._quiz.serialize()
-            }).subscribe((response: IMessage) => {
-              if (response.status !== 'STATUS:SUCCESSFUL') {
-                console.log(response);
-              } else {
-                console.log('loading quiz as owner with caching');
-                resolve();
-              }
-            });
-          } else {
-            console.log('loading quiz as owner without caching');
-            resolve();
-          }
-        } else {
-          console.log('loading quiz as attendee');
-          resolve();
-        }
-      })).then(() => this.persistToSessionStorage());
     }
   }
 
@@ -114,38 +77,83 @@ export class CurrentQuizService implements ICurrentQuiz {
     });
   }
 
+  public cacheQuiz(quiz: IQuestionGroup): Promise<any> {
+    return new Promise((resolve => {
+      if (this._isOwner) {
+        if (quiz.sessionConfig.readingConfirmationEnabled) {
+          this.footerBarService.footerElemReadingConfirmation.isActive = true;
+        }
+        if (quiz.sessionConfig.showResponseProgress) {
+          this.footerBarService.footerElemResponseProgress.isActive = true;
+        }
+        if (quiz.sessionConfig.confidenceSliderEnabled) {
+          this.footerBarService.footerElemConfidenceSlider.isActive = true;
+        }
+
+        if (
+          this._cacheAssets ||
+          this.settingsService.serverSettings.cacheQuizAssets ||
+          DefaultSettings.defaultQuizSettings.cacheQuizAssets
+        ) {
+          this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
+            quiz: this._quiz.serialize()
+          }).subscribe((response: IMessage) => {
+            if (response.status !== 'STATUS:SUCCESSFUL') {
+              console.log(response);
+            } else {
+              console.log('loading quiz as owner with caching');
+              resolve();
+            }
+          });
+        } else {
+          console.log('loading quiz as owner without caching');
+          resolve();
+        }
+      } else {
+        console.log('loading quiz as attendee');
+        resolve();
+      }
+    })).then(() => this.persistToSessionStorage());
+  }
+
   public currentQuestion(): IQuestion {
     return this._quiz.questionList[this._questionIndex];
   }
 
-  public cleanUp(): void {
-    this.close();
-    const nickname = window.sessionStorage.getItem(`config.nick`);
-    if (nickname) {
-      const url = `${DefaultSettings.httpApiEndpoint}/member/${this._quiz.hashtag}/${nickname}`;
-      this.http.request('delete', url).subscribe(() => {});
-    }
-    window.sessionStorage.removeItem(`config.nick`);
-    window.sessionStorage.removeItem(`config.current_quiz`);
-    this._isOwner = false;
-    this._quiz = null;
-    this._questionIndex = 0;
-    this._readingConfirmationRequested = false;
+  public cleanUp(): Promise<any> {
+    return new Promise((async resolve => {
+      await this.close();
+      const nickname = window.sessionStorage.getItem(`config.nick`);
+      if (nickname) {
+        const url = `${DefaultSettings.httpApiEndpoint}/member/${this._quiz.hashtag}/${nickname}`;
+        await this.http.request('delete', url).subscribe(() => {});
+      }
+      window.sessionStorage.removeItem(`config.nick`);
+      window.sessionStorage.removeItem(`config.current_quiz`);
+      this._isOwner = false;
+      this._quiz = null;
+      this._questionIndex = 0;
+      this._readingConfirmationRequested = false;
+      resolve();
+    }));
   }
 
-  public close(): void {
-    if (this._isOwner && this._quiz) {
-      this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
-        body: {
-          quizName: this._quiz.hashtag,
-          privateKey: window.localStorage.getItem('config.private_key')
-        }
-      }).subscribe((response: IMessage) => {
-        if (response.status !== 'STATUS:SUCCESSFUL') {
-          console.log(response);
-        }
-      });
-    }
+  public close(): Promise<any> {
+    return new Promise((resolve => {
+      if (this._isOwner && this._quiz) {
+        this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
+          body: {
+            quizName: this._quiz.hashtag,
+            privateKey: window.localStorage.getItem('config.private_key')
+          }
+        }).subscribe((response: IMessage) => {
+          if (response.status !== 'STATUS:SUCCESSFUL') {
+            console.log(response);
+          }
+          resolve();
+        });
+      }
+    }));
   }
 
   public toggleSetting(elem: FooterbarElement) {
