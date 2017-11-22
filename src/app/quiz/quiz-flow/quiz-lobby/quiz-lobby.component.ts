@@ -12,6 +12,7 @@ import {Router} from '@angular/router';
 import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
+import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 
 @Component({
   selector: 'app-quiz-lobby',
@@ -92,7 +93,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       };
       this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
         if (currentQuizService.quiz) {
-          this.activeQuestionGroupService.activeQuestionGroup = JSON.parse(localStorage.getItem(currentQuizService.quiz.hashtag));
+          const questionGroupSerialized = JSON.parse(window.localStorage.getItem(currentQuizService.quiz.hashtag));
+          this.activeQuestionGroupService.activeQuestionGroup =
+            questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
           currentQuizService.cleanUp();
           attendeeService.cleanUp();
           connectionService.cleanUp();

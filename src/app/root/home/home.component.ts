@@ -163,6 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (quizname.length > 3) {
         if ((JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(quizname) > -1) {
           this.canEditQuiz = true;
+          this.passwordRequired = false;
         } else {
           this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
             if (value.status === 'STATUS:SUCCESSFUL') {
@@ -205,6 +206,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   setActiveQuestionGroup(routingTarget: Array<string>): void {
     let questionGroup: IQuestionGroup;
     if (this.passwordRequired && !(this._serverPassword && this._serverPassword.length)) {
+      return;
+    }
+    if (this.canEditQuiz) {
+
+      const questionGroupSerialized = JSON.parse(window.localStorage.getItem(this.enteredSessionName));
+      this.activeQuestionGroupService.activeQuestionGroup =
+        questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
+      this.router.navigate(routingTarget);
       return;
     }
     const createQuizPromise = new Promise((resolve) => {
