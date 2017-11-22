@@ -67,6 +67,10 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (this.attendeeService.getOwnNick()) {
+      this.router.navigate(['/']);
+      return;
+    }
     this.http.get(`${DefaultSettings.httpApiEndpoint}/member/${this.currentQuiz.quiz.hashtag}/available`).subscribe(
       (data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {

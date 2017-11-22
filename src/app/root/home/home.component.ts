@@ -92,7 +92,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         () => this.connectionService.websocketAvailable = false
       );
     });
-    this.cleanUpSessionStorage();
   }
 
   sanitizeHTML(value: string): SafeHtml {
@@ -111,6 +110,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.cleanUpSessionStorage();
     this.themesService.updateCurrentlyUsedTheme();
     this._routerSubscription = this.route.params.subscribe(params => {
       if (!Object.keys(params).length) {

@@ -152,6 +152,8 @@ export class CurrentQuizService implements ICurrentQuiz {
           }
           resolve();
         });
+      } else {
+        resolve();
       }
     }));
   }
