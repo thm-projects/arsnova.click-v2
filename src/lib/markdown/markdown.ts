@@ -2,19 +2,21 @@ import marked from 'marked';
 import highlight from 'highlight.js';
 
 export function parseGithubFlavoredMarkdown(value: string): string {
-  marked.setOptions({
-    renderer: new marked.Renderer(),
+  const renderer = new marked.Renderer();
+  const options = {
+    renderer: renderer,
     gfm: true,
     tables: true,
     breaks: true,
-    pedantic: false,
-    sanitize: true,
-    smartLists: true,
-    smartypants: true,
+    pedantic: true,
+    sanitize: false,
+    smartLists: false,
+    smartypants: false,
     highlight: function (code) {
       return highlight.highlightAuto(code).value;
     }
-  });
+  };
+  marked.setOptions(options);
   return postMarkdownRenderer(marked(preMarkdownRenderer(value)));
 }
 

@@ -29,9 +29,9 @@ export class QuestionTextService {
     if (this._inputCache[value]) {
       return new Promise((resolve => resolve(this._inputCache[value])));
     }
-    const matchForDollar = value.match(/( ?\${1,2}\s.*)/g);
+    const matchForDollar = value.match(/( ?\${1,2}.*\$)/g);
     const matchForBlock = value.match(/(\\(.)*\\.*)/g);
-    let result = '';
+    let result = value;
     let mathjaxValues = [];
     if (matchForDollar) {
       mathjaxValues = mathjaxValues.concat(matchForDollar);
@@ -40,20 +40,18 @@ export class QuestionTextService {
       mathjaxValues = mathjaxValues.concat(matchForBlock);
     }
 
-    result = parseGithubFlavoredMarkdown(value);
     return new Promise((resolve) => {
       if (mathjaxValues.length) {
         this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
           mathjaxValues.forEach((mathjaxValue: string, index: number) => {
-            // Escape the mathjax html characters so that we can find it in the parsed output of marked
-            const escapedMathjaxValue = mathjaxValue.replace(/&/g, '&amp;')
-                                                    .replace(/\\\\/g, '\\');
-            result = result.replace(escapedMathjaxValue, mathjaxRendered[index].svg);
+            result = result.replace(mathjaxValue, mathjaxRendered[index].svg);
           });
+          result = parseGithubFlavoredMarkdown(result);
           this._inputCache[value] = result;
           resolve(result);
         });
       } else {
+        result = parseGithubFlavoredMarkdown(result);
         this._inputCache[value] = result;
         resolve(result);
       }
