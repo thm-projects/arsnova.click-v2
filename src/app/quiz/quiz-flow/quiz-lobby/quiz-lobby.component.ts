@@ -51,7 +51,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
     public attendeeService: AttendeeService,
-    private activeQuestionGroup: ActiveQuestionGroupService,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
     private modalService: NgbModal
   ) {
 
@@ -92,7 +92,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       };
       this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
         if (currentQuizService.quiz) {
-          activeQuestionGroup.activeQuestionGroup = currentQuizService.quiz;
+          this.activeQuestionGroupService.activeQuestionGroup = JSON.parse(localStorage.getItem(currentQuizService.quiz.hashtag));
           currentQuizService.cleanUp();
           attendeeService.cleanUp();
           connectionService.cleanUp();
