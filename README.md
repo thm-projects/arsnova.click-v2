@@ -36,14 +36,14 @@ For full instructions on how to set up the correct environment, visit the [Contr
 #### Configuration
 
 ###### Backend
-The backend can be configured via npm. The following options available:
-- `portExternal [number]` This is the external port used for rewriting the urls of cached quizzes.
-- `portInternal [number]` This is the internal port used during the startup of the server.
-- `routePrefix [string]` The routePrefix is used to prefix the access of the Express routes. E.g if set to 'backend' the access to '/api/v1/myPath' will become '/backend/api/v1/myPath'.
-- `rewriteAssetCacheUrl [string]` This configuration is used as base endpoint for cached assets.
-- `themePreviewHost [string]` Target of the Http Server which delivers the template for the theme preview generation.
+The backend can be configured environment variables. The following options available:
+- `BACKEND_PORT_INTERNAL [number]` This is the external port used for rewriting the urls of cached quizzes.
+- `BACKEND_PORT_EXTERNAL [number]` This is the internal port used during the startup of the server.
+- `BACKEND_ROUTE_PREFIX [string]` The routePrefix is used to prefix the access of the Express routes. E.g if set to 'backend' the access to '/api/v1/myPath' will become '/backend/api/v1/myPath'.
+- `BACKEND_REWRITE_ASSET_CACHE_URL [string]` This configuration is used as base endpoint for cached assets.
+- `BACKEND_THEME_PREVIEW_HOST [string]` Target of the Http Server which delivers the template for the theme preview generation.
 
-The command to use is `npm config set arsnova-click-v2-backend:[config] [value]`. It is required to use this command inside the arsnova-click-v2-backend repo.
+The command to use is `export [config] [value]`.
 
 #### Test
 ###### Backend
