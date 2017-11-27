@@ -59,7 +59,7 @@ export class I18nService {
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use(selectedLanguage.toString().toLowerCase());
 
-    this.currentLanguage = selectedLanguage;
+    this.setLanguage(selectedLanguage);
   }
 
   public formatNumber(number: number, type: NumberTypes = NumberTypes.decimal): string {
@@ -72,6 +72,9 @@ export class I18nService {
   setLanguage(language: Languages) {
     this.currentLanguage = language;
     this.translate.use(language.toString().toLowerCase());
+    const typ = document.createAttribute("lang");
+    typ.value = language.toString().toLowerCase();
+    document.getElementsByTagName('html').item(0).attributes.setNamedItem(typ);
   }
 
 }
