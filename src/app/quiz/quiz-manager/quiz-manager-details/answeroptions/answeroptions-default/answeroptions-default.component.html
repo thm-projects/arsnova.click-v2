@@ -30,8 +30,10 @@
                      (propertychange)="updateAnswerValue($event, i)">
               <i class="fa fa-trash delete-icon pointer"
                  (click)="deleteAnswer(i)"></i>
-              <label [class]="'btn pointer mb-0 btn-' + (elem.isCorrect ? 'success' : 'danger')"
-                     *ngIf="question.TYPE !== 'SurveyQuestion'">
+              <label *ngIf="question.TYPE !== 'SurveyQuestion'"
+                     class="btn pointer mb-0"
+                     [class.btn-success]="elem.isCorrect"
+                     [class.btn-danger]="!elem.isCorrect">
                 <input type="checkbox"
                        class="hidden"
                        [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
@@ -53,7 +55,9 @@
             <p class="mb-0 mr-2 text-light align-self-center"
                style="width: 100%;line-height: 1.2;"
                [innerHTML]="'component.answeroptions.show_answer_content_on_buttons' | translate"></p>
-            <label [class]="'btn pointer mb-0 align-self-center btn-' + (question.displayAnswerText ? 'success' : 'danger')">
+            <label class="btn pointer mb-0 align-self-center"
+                   [class.btn-success]="question.displayAnswerText"
+                   [class.btn-danger]="!question.displayAnswerText">
               <input type="checkbox"
                      class="hidden"
                      id="config_showAnswerContentOnButtons_switch"
@@ -71,7 +75,9 @@
             <p class="mb-0 mr-2 text-light align-self-center"
                style="width: 100%;line-height: 1.2;"
                [innerHTML]="'component.answeroptions.show_one_answer_per_row' | translate"></p>
-            <label [class]="'btn pointer mb-0 align-self-center btn-' + (question.showOneAnswerPerRow ? 'success' : 'danger')">
+            <label class="btn pointer mb-0 align-self-center"
+                   [class.btn-success]="question.showOneAnswerPerRow"
+                   [class.btn-danger]="!question.showOneAnswerPerRow">
               <input type="checkbox"
                      class="hidden"
                      id="config_showOneAnswerPerRow_switch"
@@ -90,7 +96,9 @@
             <p class="mb-0 mr-2 text-light align-self-center"
                style="width: 100%;line-height: 1.2;"
                [innerHTML]="'component.answeroptions.multiple_selection_survey' | translate"></p>
-            <label [class]="'btn pointer mb-0 align-self-center btn-' + (question.multipleSelectionEnabled ? 'success' : 'danger')">
+            <label class="btn pointer mb-0 align-self-center"
+                   [class.btn-success]="question.multipleSelectionEnabled"
+                   [class.btn-danger]="!question.multipleSelectionEnabled">
               <input type="checkbox"
                      class="hidden"
                      id="config_multipleSelectionSurvey_switch"

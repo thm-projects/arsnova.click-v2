@@ -7,7 +7,9 @@
        class="mb-1 col-sm-4 col-md-3">
     <div [id]="elem.id"
          (click)="currentQuizService.isOwner ? openKickMemberModal(removeMemberModal, elem.name) : return"
-         [class]="'member-wrapper ' + (currentQuizService.isOwner ? 'pointer ' : '') + (attendeeService.isOwnNick(elem.name) ? 'own-nick' : '')"
+         class="member-wrapper"
+         [class.pointer]="currentQuizService.isOwner"
+         [class.own-nick]="attendeeService.isOwnNick(elem.name)"
          [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
          [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
       <p class="mb-0"
@@ -20,7 +22,9 @@
             qrc-class="qrCodeContent"
             qrc-errorCorrectionLevel="L"
             qrc-element-type="img"
-            [class]="(!showQrCode ? 'd-none' : 'd-flex') + ' justify-content-center align-items-center qr-code-element'">
+            class="justify-content-center align-items-center qr-code-element"
+            [class.d-flex]="showQrCode"
+            [class.d-none]="!showQrCode">
 </ngx-qrcode>
 
 <ng-template #removeMemberModal let-c="close" let-d="dismiss">
@@ -28,12 +32,26 @@
     <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
+
   </div>
+
   <div class="modal-body">
     <p>{{'component.lobby.kick_member_confirmation' | translate:{NAME: _nickToRemove} }}</p>
+
   </div>
+
   <div class="modal-footer">
-    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="kickMember(_nickToRemove)" [innerHTML]="'global.yes' | translate"></button>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="d()" [innerHTML]="'global.no' | translate"></button>
+    <button type="button"
+            class="btn btn-danger"
+            data-dismiss="modal"
+            (click)="kickMember(_nickToRemove)"
+            [innerHTML]="'global.yes' | translate"></button>
+
+    <button type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            (click)="d()"
+            [innerHTML]="'global.no' | translate"></button>
+
   </div>
 </ng-template>

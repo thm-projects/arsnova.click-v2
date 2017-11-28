@@ -2,8 +2,9 @@
     [attr.data-intro]="'view.question_type.description.type_wrapper' | translate"
     [attr.aria-label]="'view.question_type.description.type_wrapper' | translate">
   <li *ngFor="let elem of selectableQuestionTypes"
-      [class]="'col-12 col-sm-6 ' + (isActiveQuestionType(elem.id) ? 'active' : '')"
       [id]="elem.id"
+      class="col-12 col-sm-6"
+      [class.active]="isActiveQuestionType(elem.id)"
       [attr.aria-selected]="isActiveQuestionType(elem.id)"
       (click)="morphToQuestionType(elem.id)">
     <div class="wrapper rounded pointer p-3 text-light">

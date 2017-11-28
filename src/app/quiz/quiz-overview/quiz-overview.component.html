@@ -1,9 +1,14 @@
-<div [class]="'session-management row ' + (!sessions.length ? 'center-vertical' : '')">
+<div class="session-management row"
+     [class.center-vertical]="!sessions.length">
   <div class="col-12">
-    <h2 class="text-center text-light" *ngIf="sessions.length === 0" [innerHTML]="'component.hashtag_management.no_sessions' | translate"></h2>
+    <h2 *ngIf="sessions.length === 0"
+        class="text-center text-light"
+        [innerHTML]="'component.hashtag_management.no_sessions' | translate"></h2>
   </div>
   <div class="col-12">
-    <div class="row" *ngFor="let elem of sessions; let i = index" [id]="elem">
+    <div *ngFor="let elem of sessions; let i = index"
+         [id]="elem"
+         class="row">
       <div class="col-12">
         <p class="hashtag-name">{{elem}}</p>
       </div>

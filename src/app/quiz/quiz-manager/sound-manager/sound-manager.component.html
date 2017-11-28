@@ -63,7 +63,9 @@
     <div class="col-12 col-sm-6">
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.volumeConfig.useGlobalVolume ? 'success' : 'danger')">
+        <label class="btn pointer mb-0 align-self-center"
+               [class.btn-success]="config.volumeConfig.useGlobalVolume"
+               [class.btn-danger]="!config.volumeConfig.useGlobalVolume">
           <input type="checkbox"
                  class="hidden"
                  id="toggle-global-volume"
@@ -87,10 +89,12 @@
       </div>
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.enabled.lobby ? 'success' : 'danger')">
-          <input type="checkbox"
+        <label class="btn pointer mb-0 align-self-center"
+               [class.btn-success]="config.enabled.lobby"
+               [class.btn-danger]="!config.enabled.lobby">
+          <input id="toggle-lobby-music"
+                 type="checkbox"
                  class="hidden"
-                 id="toggle-lobby-music"
                  [attr.aria-label]="'Activate/Deactivate Lobby Music Button'"
                  autocomplete="off"
                  role="switch"
@@ -161,7 +165,9 @@
           <div class="col-12 col-sm-6">
             <div class="col-12 mb-2 d-flex"
                  [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-              <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.enabled.countdownRunning ? 'success' : 'danger')">
+              <label class="btn pointer mb-0 align-self-center"
+                     [class.btn-success]="config.enabled.countdownRunning"
+                     [class.btn-danger]="!config.enabled.countdownRunning">
                 <input type="checkbox"
                        class="hidden"
                        id="toggle-countdown-running-music"
@@ -214,7 +220,9 @@
           <div class="col-12 col-sm-6">
             <div class="col-12 mb-2 d-flex"
                  [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-              <label [class]="'btn pointer mb-0 align-self-center btn-' + (config.enabled.countdownEnd ? 'success' : 'danger')">
+              <label class="btn pointer mb-0 align-self-center"
+                     [class.btn-success]="config.enabled.countdownEnd"
+                     [class.btn-danger]="!config.enabled.countdownEnd">
                 <input type="checkbox"
                        class="hidden"
                        id="toggle-countdown-end-music"

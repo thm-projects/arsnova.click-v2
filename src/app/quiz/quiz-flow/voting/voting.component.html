@@ -15,7 +15,8 @@
      class="d-flex justify-content-around align-items-center flex-wrap">
   <div *ngFor="let elem of answers; let i = index"
        [id]="i"
-       [class]="'answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer ' + (isSelected(i) ? 'selected' : '')"
+       class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
+       [class.selected]="isSelected(i)"
        (click)="toggleSelectAnswer(i)"
        [style.flex-basis]="currentQuizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
     <p *ngIf="currentQuizService.currentQuestion().displayAnswerText"

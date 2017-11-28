@@ -63,35 +63,45 @@
   <div class="modal-body">
     <ul class="p-0">
       <li>
-        <i [class]="'fa ' + (connectionService.serverAvailable ? 'fa-check-square-o' : 'fa-square')"></i>
+        <i class="fa"
+           [class.fa-check-quare-o]="connectionService.serverAvailable"
+           [class.fa-quare]="!connectionService.serverAvailable"></i>
         <p class="mb-0 d-inline">
           <span>Server: </span>
           <span>{{'region.header.connection_status.server_status.' + (connectionService.serverAvailable ? 'available' : 'not_available') | translate}}</span>
         </p>
       </li>
       <li>
-        <i [class]="'fa ' + (connectionService.websocketAvailable ? 'fa-check-square-o' : 'fa-square')"></i>
+        <i class="fa"
+           [class.fa-check-quare-o]="connectionService.websocketAvailable"
+           [class.fa-quare]="!connectionService.websocketAvailable"></i>
         <p class="mb-0 d-inline">
           <span>Websocket: </span>
           <span>{{'region.header.connection_status.websocket_status.' + (connectionService.websocketAvailable ? 'connected' : 'not_connected') | translate}}</span>
         </p>
       </li>
       <li>
-        <i [class]="'fa ' + (localStorageAvailable ? 'fa-check-square-o' : 'fa-square')"></i>
+        <i class="fa"
+           [class.fa-check-quare-o]="localStorageAvailable"
+           [class.fa-quare]="!localStorageAvailable"></i>
         <p class="mb-0 d-inline">
           <span>LocalStorage: </span>
           <span>{{'region.header.connection_status.localStorage_status.' + (localStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
       </li>
       <li>
-        <i [class]="'fa ' + (sessionStorageAvailable ? 'fa-check-square-o' : 'fa-square')"></i>
+        <i class="fa"
+           [class.fa-check-quare-o]="sessionStorageAvailable"
+           [class.fa-quare]="!sessionStorageAvailable"></i>
         <p class="mb-0 d-inline">
           <span>SessionStorage: </span>
           <span>{{'region.header.connection_status.sessionStorage_status.' + (sessionStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
       </li>
       <li>
-        <i [class]="'fa ' + (connectionService.rtt < 300 && connectionService.serverAvailable ? 'fa-check-square-o' : 'fa-square')"></i>
+        <i class="fa"
+           [class.fa-check-quare-o]="connectionService.rtt < 300 && connectionService.serverAvailable"
+           [class.fa-quare]="connectionService.rtt > 300 || !connectionService.serverAvailable"></i>
         <p class="mb-0 d-inline">
           <span>Round-Trip-Time: </span>
           <span>{{connectionService.serverAvailable ? (connectionService.rtt + 'ms') : ('region.header.connection_status.server_status.not_available' | translate)}}</span>

@@ -1,5 +1,6 @@
 <div *ngFor="let elem of themesService.themes"
-     [class]="'themePreview d-flex align-items-center mb-2 flex-wrap flex-sm-nowrap ' + (isThemeSelected(elem.id) ? 'selectedTheme' : '')"
+     class="themePreview d-flex align-items-center mb-2 flex-wrap flex-sm-nowrap"
+     [class.selected]="isThemeSelected(elem.id)"
      [id]="elem.id" role="listitem">
   <img [src]="getThemePreviewUrl(elem.id)"
        [alt]="'Preview of theme ' + (elem.name | translate)"

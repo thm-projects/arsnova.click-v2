@@ -15,18 +15,21 @@
   <div class="my-3 btn-group">
     <button *ngIf="showStartQuizButton()"
             (click)="startQuiz()"
-            [class]="'btn btn-default pointer ' + (currentQuizService.getVisibleQuestions().length ? '' : 'w-100')">
+            class="btn btn-default pointer"
+            [class.w-100]="currentQuizService.getVisibleQuestions().length">
       <span [innerHTML]="('component.liveResults.' + (currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ? currentQuizService.readingConfirmationRequested ? 'start_round' : 'show_question' : 'start_round')) | translate"></span>
       <i class="fa fa-paper-plane"></i>
     </button>
     <button *ngIf="countdown && countdown.isRunning && countdown.remainingTime"
             (click)="stopQuiz()"
-            [class]="'btn btn-default pointer ' + (currentQuizService.getVisibleQuestions().length ? '' : 'w-100')">
+            class="btn btn-default pointer"
+            [class.w-100]="!currentQuizService.getVisibleQuestions().length">
       <span [innerHTML]="'component.liveResults.abort_countdown' | translate"></span>
       <i class="fa fa-paper-plane"></i>
     </button>
     <button *ngFor="let question of currentQuizService.getVisibleQuestions(); let i = index"
-            [class]="'btn btn-default ' + (i === selectedQuestionIndex ? 'disabled' : 'pointer')"
+            class="btn btn-default pointer"
+            [class.disabled]="i === selectedQuestionIndex"
             [disabled]="i === selectedQuestionIndex"
             (click)="modifyVisibleQuestion(i)">
       <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>

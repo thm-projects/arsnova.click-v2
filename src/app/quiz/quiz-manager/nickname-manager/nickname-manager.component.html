@@ -1,8 +1,12 @@
 <div class="row">
-  <div [class]="'col-12 nickCategoryWrapper ' + (hasSelectedCategory() ? 'col-sm-4' : '')">
+  <div class="col-12 nickCategoryWrapper"
+       [class.col-sm-4]="hasSelectedCategory()">
     <div class="row">
       <div *ngFor="let cat of availableNickCategories()"
-           [class]="'nickCategory pointer col-6 ' + (hasSelectedCategory(cat) ? 'selectedCategory' : '') + ' ' + (hasSelectedCategory() ? 'col-sm-12' : 'col-sm-6')"
+           class="nickCategory pointer col-6"
+           [class.selectedCategory]="hasSelectedCategory(cat)"
+           [class.col-sm-12]="hasSelectedCategory()"
+           [class.col-sm-6]="!hasSelectedCategory()"
            (click)="toggleSelectedCategory(cat)">
         <div class="nickCategoryText">
           <p class="mb-0" [innerHTML]="('component.nickname_categories.category.' + cat) | translate"></p>
@@ -14,11 +18,14 @@
   <div *ngIf="hasSelectedCategory()"
        class="col-12 col-sm-8 nickNameWrapper pt-2 mt-2 mt-sm-0">
     <button [innerHTML]="('component.nickname_categories.' + (hasSelectedAllNicks() ? 'remove' : 'choose') + '_all') | translate"
-            [class]="'btn btn-block pointer ' + (hasSelectedAllNicks() ? 'btn-warning' : 'btn-success') "
+            class="btn btn-block pointer"
+            [class.btn-warning]="hasSelectedAllNicks()"
+            [class.btn-success]="!hasSelectedAllNicks()"
             (click)="toggleAllNicks()"></button>
     <div *ngFor="let nick of availableNicks[selectedCategory]"
          (click)="selectNick(nick)"
-         [class]="'nickStyle nickName pointer ' + (hasSelectedNick(nick) ? 'selectedNickName' : '')">
+         class="nickStyle nickName pointer"
+         [class.selectedNickName]="hasSelectedNick(nick)">
       <span [innerHTML]="nick" class="nickName"></span>
     </div>
   </div>

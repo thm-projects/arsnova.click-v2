@@ -15,6 +15,7 @@ export class InfoComponent implements OnInit, OnDestroy {
 
   private _routerSubscription: Subscription;
   public currentData: string;
+  public readonly infoButtons = ['about', 'tos', 'imprint', 'dataprivacy'];
 
   constructor(
     private footerBarService: FooterBarService,
