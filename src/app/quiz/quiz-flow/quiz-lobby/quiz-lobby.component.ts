@@ -45,7 +45,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   constructor(
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
-    private currentQuizService: CurrentQuizService,
+    public currentQuizService: CurrentQuizService,
     private themesService: ThemesService,
     private router: Router,
     private http: HttpClient,

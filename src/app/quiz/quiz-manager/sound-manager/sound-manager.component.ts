@@ -2,9 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from 'app/service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {IMusicSessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/interfaces';
-import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {ISong} from 'arsnova-click-v2-types/src/common';
+import {CurrentQuizService} from "../../../service/current-quiz.service";
 
 @Component({
   selector: 'app-sound-manager',
@@ -38,7 +38,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   constructor(
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
-    private activeQuestionGroupService: ActiveQuestionGroupService) {
+    private currentQuizService: CurrentQuizService) {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);
@@ -50,7 +50,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     this.translateService.get('plugins.sound.whistle').subscribe(value => {
       this._countdownEndSounds.push({id: 'Song0', text: value});
     });
-    this._config = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.music;
+    this._config = this.currentQuizService.quiz.sessionConfig.music;
 
     this._lobbySongs.push({id: 'Song0', text: 'Happy & fun mood: "Clear day" | Bensound.com'});
     this._lobbySongs.push({id: 'Song1', text: 'House music: "House" | Bensound.com'});
@@ -99,8 +99,8 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.music = this._config;
-    this.activeQuestionGroupService.persistForSession();
+    this.currentQuizService.quiz.sessionConfig.music = this._config;
+    this.currentQuizService.persistToSessionStorage();
   }
 
 }

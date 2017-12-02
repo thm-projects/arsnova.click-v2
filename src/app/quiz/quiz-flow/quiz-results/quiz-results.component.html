@@ -68,13 +68,13 @@
 </div>
 
 <div *ngIf="currentQuizService.isOwner">
-  <app-audio-player *ngIf="countdown && countdown.isRunning && countdown.remainingTime && currentQuizService.quiz.sessionConfig && currentQuizService.quiz.sessionConfig.music.countdownRunningEnabled"
+  <app-audio-player *ngIf="countdown?.isRunning && countdown?.remainingTime && currentQuizService.quiz.sessionConfig?.music.enabled.countdownRunning"
                     [original_volume]="currentQuizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? currentQuizService.quiz.sessionConfig.music.volumeConfig.global : currentQuizService.quiz.sessionConfig.music.volumeConfig.countdownRunning"
                     [autostart]="true"
                     [target]="'countdownRunning'"
                     [src]="currentQuizService.quiz.sessionConfig.music.titleConfig.countdownRunning"></app-audio-player>
 
-  <app-audio-player *ngIf="countdown && countdown.isRunning && !countdown.remainingTime && currentQuizService.quiz.sessionConfig && currentQuizService.quiz.sessionConfig.music.countdownEndEnabled"
+  <app-audio-player *ngIf="!countdown?.isRunning && !countdown?.remainingTime && !currentQuizService.readingConfirmationRequested && currentQuizService.quiz.sessionConfig?.music.enabled.countdownEnd"
                     [original_volume]="currentQuizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? currentQuizService.quiz.sessionConfig.music.volumeConfig.global : currentQuizService.quiz.sessionConfig.music.volumeConfig.countdownEnd"
                     [autostart]="true"
                     [loop]="false"

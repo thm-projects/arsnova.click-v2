@@ -39,12 +39,19 @@
       padding: 1rem;
       flex-grow: 1;
       flex-shrink: 1;
+      max-width: calc(100% - 1rem);
 
       .markdown-answer {
         align-items: center;
         display: flex;
         height: 100%;
-        margin-bottom: 0 !important; // Remove bottom margin of marked generated paragraph element
+        max-width: 100%;
+        overflow: hidden;
+
+        * {
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
       }
     }
   }

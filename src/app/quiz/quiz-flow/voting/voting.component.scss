@@ -11,11 +11,20 @@
     padding: 1rem;
     flex-grow: 1;
     flex-shrink: 1;
+    max-width: calc(100% - 1rem);
     transition: background-color 800ms linear;
 
     &.selected {
       background-color: rebeccapurple;
       color: #fff;
+    }
+
+    .markdown-answer {
+      align-items: center;
+      display: flex;
+      height: 100%;
+      max-width: 100%;
+      overflow: hidden;
     }
   }
 }

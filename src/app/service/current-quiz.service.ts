@@ -65,6 +65,17 @@ export class CurrentQuizService implements ICurrentQuiz {
       }
       if (parsedInstance.quiz) {
         this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
+        if (this._isOwner) {
+          if (this.quiz.sessionConfig.readingConfirmationEnabled) {
+            this.footerBarService.footerElemReadingConfirmation.isActive = true;
+          }
+          if (this.quiz.sessionConfig.showResponseProgress) {
+            this.footerBarService.footerElemResponseProgress.isActive = true;
+          }
+          if (this.quiz.sessionConfig.confidenceSliderEnabled) {
+            this.footerBarService.footerElemConfidenceSlider.isActive = true;
+          }
+        }
       }
     }
     this.connectionService.initConnection().then(() => {
@@ -80,16 +91,6 @@ export class CurrentQuizService implements ICurrentQuiz {
   public cacheQuiz(quiz: IQuestionGroup): Promise<any> {
     return new Promise((resolve => {
       if (this._isOwner) {
-        if (quiz.sessionConfig.readingConfirmationEnabled) {
-          this.footerBarService.footerElemReadingConfirmation.isActive = true;
-        }
-        if (quiz.sessionConfig.showResponseProgress) {
-          this.footerBarService.footerElemResponseProgress.isActive = true;
-        }
-        if (quiz.sessionConfig.confidenceSliderEnabled) {
-          this.footerBarService.footerElemConfidenceSlider.isActive = true;
-        }
-
         if (
           this._cacheAssets ||
           this.settingsService.serverSettings.cacheQuizAssets ||

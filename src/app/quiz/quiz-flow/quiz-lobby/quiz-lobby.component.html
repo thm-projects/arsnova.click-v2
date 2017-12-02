@@ -18,6 +18,12 @@
   </div>
 </div>
 
+<app-audio-player *ngIf="currentQuizService.isOwner && currentQuizService.quiz.sessionConfig?.music.enabled.lobby"
+                  [original_volume]="currentQuizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? currentQuizService.quiz.sessionConfig.music.volumeConfig.global : currentQuizService.quiz.sessionConfig.music.volumeConfig.lobby"
+                  [autostart]="true"
+                  [target]="'lobby'"
+                  [src]="currentQuizService.quiz.sessionConfig.music.titleConfig.lobby"></app-audio-player>
+
 <ngx-qrcode [qrc-value]="qrCodeContent"
             qrc-class="qrCodeContent"
             qrc-errorCorrectionLevel="L"

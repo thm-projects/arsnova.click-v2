@@ -20,7 +20,7 @@
        (click)="toggleSelectAnswer(i)"
        [style.flex-basis]="currentQuizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
     <p *ngIf="currentQuizService.currentQuestion().displayAnswerText"
-       class="mb-0"
+       class="mb-0 markdown-answer"
        [innerHTML]="sanitizeHTML(elem)"></p>
     <p *ngIf="!currentQuizService.currentQuestion().displayAnswerText"
        class="mb-0"

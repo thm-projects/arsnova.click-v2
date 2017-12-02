@@ -4,6 +4,10 @@
          [autoplay]="autostart ? 'autoplay' : null"
          [src]="apiUrl + target + '/' + src + '.mp3'"></audio>
   <div *ngIf="!autostart"
+       class="input-group mr-5">
+    <input type="range" [value]="volume" (input)="emitVolumeChange($event)">
+  </div>
+  <div *ngIf="!autostart"
        class="btn-group">
     <button *ngIf="!_isPlaying"
             class="btn btn-secondary"
@@ -20,9 +24,5 @@
             [disabled]="isStopped()">
       <i class="fa fa-stop"></i>
     </button>
-  </div>
-  <div *ngIf="!autostart"
-       class="input-group">
-    <input type="range" [value]="volume" (input)="emitVolumeChange($event)">
   </div>
 </div>

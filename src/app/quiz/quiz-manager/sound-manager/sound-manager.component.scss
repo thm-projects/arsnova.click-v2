@@ -1,41 +1,16 @@
 @import "../../../../styles_vendor";
 
-.soundConfig {
-  .modal-content {
-    .modal-header {
-      min-height: initial;
-    }
-    .modal-body {
-      #soundTab {
-        overflow: hidden;
-        .btn-group {
-          margin-bottom: 20px;
-          span {
-            text-decoration: none;
-          }
-        }
-        #slider-global-volume-description {
-          text-align: center;
-          margin: 0;
-        }
-        .tab-content {
-          padding: 5px 15px;
-          h3 {
-            margin-bottom: 20px;
-          }
-          #countdownRunningSelect,
-          #lobbySoundSelect,
-          #countdownEndSelect {
-            width: 100%;
-            height: 46px;
-            padding: 0 10px;
-            outline: none;
-            margin-bottom: 20px;
-          }
-        }
-      }
-    }
-  }
+h3 {
+  margin-bottom: 20px;
+}
+#countdownRunningSelect,
+#lobbySoundSelect,
+#countdownEndSelect {
+  width: 100%;
+  height: 46px;
+  padding: 0 10px;
+  outline: none;
+  margin-bottom: 20px;
 }
 
 .collapse {
