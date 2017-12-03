@@ -10,7 +10,7 @@
 
         <button [id]="'translation_' + elem.tag"
                 type="button"
-                class="btn btn-block"
+                class="btn btn-block pointer"
                 [class.selectedLanguageButton]="i18nService.currentLanguage === elem.tag"
                 [class.btn-success]="i18nService.currentLanguage === elem.tag"
                 [class.btn-grey]="i18nService.currentLanguage !== elem.tag"

@@ -10,16 +10,16 @@
   <div *ngIf="!autostart"
        class="btn-group">
     <button *ngIf="!_isPlaying"
-            class="btn btn-secondary"
+            class="btn btn-secondary pointer"
             (click)="playMusic()">
       <i class="fa fa-play"></i>
     </button>
     <button *ngIf="_isPlaying"
-            class="btn btn-secondary"
+            class="btn btn-secondary pointer"
             (click)="pauseMusic()">
       <i class="fa fa-pause"></i>
     </button>
-    <button class="btn btn-secondary"
+    <button class="btn btn-secondary pointer"
             (click)="stopMusic()"
             [disabled]="isStopped()">
       <i class="fa fa-stop"></i>

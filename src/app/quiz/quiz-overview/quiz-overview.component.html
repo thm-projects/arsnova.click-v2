@@ -14,7 +14,7 @@
       </div>
       <div class="col-3">
         <button type="button"
-                class="btn btn-default btn-block"
+                class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.start_session' | translate"
                 [disabled]="!isValid(elem)"
@@ -25,7 +25,7 @@
       </div>
       <div class="col-3">
         <button type="button"
-                class="btn btn-default btn-block"
+                class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.edit_session' | translate"
                 (click)="editQuiz(elem)"
@@ -34,7 +34,7 @@
         </button>
       </div>
       <div class="col-3">
-        <button class="btn btn-default btn-block"
+        <button class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.export' | translate"
                 (click)="exportQuiz(elem)"
@@ -44,7 +44,7 @@
       </div>
       <div class="col-3">
         <button type="button"
-                class="btn btn-default btn-block"
+                class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.delete_session' | translate"
                 (click)="deleteQuiz(elem)"
