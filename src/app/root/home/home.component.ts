@@ -161,7 +161,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
     } else {
       if (quizname.length > 3) {
-        if ((JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(quizname) > -1) {
+        if ((JSON.parse(window.localStorage.getItem('config.owned_quizzes').toLowerCase()) || []).indexOf(quizname) > -1) {
           this.canEditQuiz = true;
           this.passwordRequired = false;
         } else {
@@ -210,8 +210,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
     if (this.canEditQuiz) {
-
-      const questionGroupSerialized = JSON.parse(window.localStorage.getItem(this.enteredSessionName));
+      const questionGroupSerialized = JSON.parse(window.localStorage.getItem(
+        JSON.parse(window.localStorage.getItem('config.owned_quizzes')).filter((name) => {
+          return name.toLowerCase() === this.enteredSessionName;
+        })[0]
+      ));
       this.activeQuestionGroupService.activeQuestionGroup =
         questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
       this.router.navigate(routingTarget);
