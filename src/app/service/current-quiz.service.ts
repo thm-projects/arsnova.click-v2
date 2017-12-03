@@ -10,6 +10,7 @@ import {SettingsService} from './settings.service';
 
 @Injectable()
 export class CurrentQuizService implements ICurrentQuiz {
+
   set readingConfirmationRequested(value: boolean) {
     this._readingConfirmationRequested = value;
     this.persistToSessionStorage();
@@ -27,7 +28,20 @@ export class CurrentQuizService implements ICurrentQuiz {
   get questionIndex(): number {
     return this._questionIndex;
   }
-
+  set isOwner(value: boolean) {
+    this._isOwner = value;
+    if (value) {
+      if (this.quiz.sessionConfig.readingConfirmationEnabled) {
+        this.footerBarService.footerElemReadingConfirmation.isActive = true;
+      }
+      if (this.quiz.sessionConfig.showResponseProgress) {
+        this.footerBarService.footerElemResponseProgress.isActive = true;
+      }
+      if (this.quiz.sessionConfig.confidenceSliderEnabled) {
+        this.footerBarService.footerElemConfidenceSlider.isActive = true;
+      }
+    }
+  }
   get isOwner(): boolean {
     return this._isOwner;
   }
@@ -39,7 +53,7 @@ export class CurrentQuizService implements ICurrentQuiz {
   set quiz(value: IQuestionGroup) {
     this._quiz = value;
     if (value) {
-      this._isOwner = (JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(value.hashtag) > -1;
+      this.isOwner = (JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(value.hashtag) > -1;
     }
   }
 
@@ -65,17 +79,6 @@ export class CurrentQuizService implements ICurrentQuiz {
       }
       if (parsedInstance.quiz) {
         this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
-        if (this._isOwner) {
-          if (this.quiz.sessionConfig.readingConfirmationEnabled) {
-            this.footerBarService.footerElemReadingConfirmation.isActive = true;
-          }
-          if (this.quiz.sessionConfig.showResponseProgress) {
-            this.footerBarService.footerElemResponseProgress.isActive = true;
-          }
-          if (this.quiz.sessionConfig.confidenceSliderEnabled) {
-            this.footerBarService.footerElemConfidenceSlider.isActive = true;
-          }
-        }
       }
     }
     this.connectionService.initConnection().then(() => {

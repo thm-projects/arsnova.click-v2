@@ -171,6 +171,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                 case 'QUIZ:EXISTS':
                   this.canAddQuiz = false;
                   this.canJoinQuiz = false;
+                  this.passwordRequired = false;
                   break;
                 case 'QUIZ:AVAILABLE':
                   this.canAddQuiz = false;
