@@ -6,6 +6,7 @@ import {ActiveQuestionGroupService} from '../../service/active-question-group.se
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {ConnectionService} from '../../service/connection.service';
 
 @Component({
   selector: 'app-live-preview',
@@ -49,6 +50,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     public questionTextService: QuestionTextService,
+    public connectionService: ConnectionService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute

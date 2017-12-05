@@ -1,26 +1,37 @@
+
 <div id="mathjaxStyle"></div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.ANSWEROPTIONS"
      id="answer-option-preview"
      [class]="'preview-frame ' + deviceClass()">
   <app-header></app-header>
-  <div id="answer-option-element-wrapper"
-       class="d-flex justify-content-around align-items-center flex-wrap">
-    <div *ngFor="let elem of dataSource; let i = index"
-         class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
-         [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
-      <p *ngIf="question.displayAnswerText"
-         class="markdown-answer"
-         [innerHTML]="sanitizeHTML(elem)"></p>
-      <p *ngIf="!question.displayAnswerText"
-         class="mb-0"
-         [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
+
+  <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
+    <div id="answer-option-element-wrapper"
+         class="d-flex justify-content-around align-items-center flex-wrap">
+      <div *ngFor="let elem of dataSource; let i = index"
+           class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
+           [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
+        <p *ngIf="question.displayAnswerText"
+           class="markdown-answer"
+           [innerHTML]="sanitizeHTML(elem)"></p>
+        <p *ngIf="!question.displayAnswerText"
+           class="mb-0"
+           [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.QUESTION"
      id="question-preview"
      [class]="'preview-frame overflow-auto ' + deviceClass()">
   <app-header></app-header>
-  <p class="p-0" [innerHTML]="sanitizeHTML(dataSource)"></p>
+  <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
+    <p class="p-0" [innerHTML]="sanitizeHTML(dataSource)"></p>
+  </ng-container>
 </div>
 <div *ngIf="targetDevice === DEVICE_TYPE.XS" class="homeButton hidden"></div>
+
+
+<ng-template #notAvailableTmpl>
+  <h3 class="text-light text-center d-flex align-items-center server-not-available-label">{{'plugins.splashscreen.error.error_messages.no_preview_available' | translate}}</h3>
+</ng-template>
