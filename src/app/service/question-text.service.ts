@@ -29,10 +29,12 @@ export class QuestionTextService {
     if (this._inputCache[value]) {
       return new Promise((resolve => resolve(this._inputCache[value])));
     }
-    const matchForDollar = value.match(/( ?\${1,2}.*\$)/g);
+
+    const matchForDollar = value.match(/(\${1,2}.*\$)/g);
     const matchForBlock = value.match(/(\\(.)*\\.*)/g);
     let result = value;
     let mathjaxValues = [];
+
     if (matchForDollar) {
       mathjaxValues = mathjaxValues.concat(matchForDollar);
     }
@@ -43,17 +45,23 @@ export class QuestionTextService {
     return new Promise((resolve) => {
       if (mathjaxValues.length) {
         this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
+
+          result = parseGithubFlavoredMarkdown(result);
+
           mathjaxValues.forEach((mathjaxValue: string, index: number) => {
             result = result.replace(mathjaxValue, mathjaxRendered[index].svg);
           });
-          result = parseGithubFlavoredMarkdown(result);
+
           this._inputCache[value] = result;
           resolve(result);
+
         });
       } else {
+
         result = parseGithubFlavoredMarkdown(result);
         this._inputCache[value] = result;
         resolve(result);
+
       }
     });
   }

@@ -12,6 +12,7 @@ export function parseGithubFlavoredMarkdown(value: string): string {
     sanitize: false,
     smartLists: false,
     smartypants: false,
+    mathDelimiters: [['$', '$'], ['\\(', '\\)'], ['\\[', '\\]'], ['$$', '$$'], 'beginend'],
     highlight: function (code) {
       return highlight.highlightAuto(code).value;
     }
