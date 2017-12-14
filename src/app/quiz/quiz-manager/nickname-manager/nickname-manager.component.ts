@@ -3,6 +3,9 @@ import {FooterBarService} from '../../../service/footer-bar.service';
 import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {IAvailableNicks} from 'arsnova-click-v2-types/src/common';
 
 @Component({
   selector: 'app-nickname-manager',
@@ -14,14 +17,22 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     return this._selectedCategory;
   }
 
+  set availableNicks(value: IAvailableNicks) {
+    this._availableNicks = value;
+    this._availableNicks.emojis = this._availableNicks.emojis.map(nick => this.sanitizeHTML(parseGithubFlavoredMarkdown(nick)));
+    this._availableNicksBackup = Object.assign({}, value);
+  }
   get availableNicks() {
     return this._availableNicks;
   }
 
-  private _availableNicks = {};
+  private _availableNicks: IAvailableNicks;
+  private _availableNicksBackup: IAvailableNicks;
   private _selectedCategory = '';
+  private _previousSearchValue = '';
 
   constructor(
+    private sanitizer: DomSanitizer,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
     private http: HttpClient) {
@@ -32,11 +43,43 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     ]);
   }
 
+  filterForKeyword(event: Event): void {
+    const searchValue = (<HTMLInputElement>event.target).value;
+
+    if (searchValue.length < this._previousSearchValue.length) {
+      this._availableNicks = Object.assign({}, this._availableNicksBackup);
+    }
+
+    this._previousSearchValue = searchValue;
+
+    if (!searchValue.length) {
+      return;
+    }
+
+    Object.keys(this._availableNicks).forEach(category => {
+      this._availableNicks[category] = this._availableNicks[category].filter(baseNick => {
+        return baseNick.toString().toLowerCase().indexOf(searchValue) > -1;
+      });
+    });
+  }
+
+  sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+  }
+
+  parseAvailableNick(name: string): SafeHtml {
+    return name;
+  }
+
   availableNickCategories(): Array<string> {
-    return Object.keys(this._availableNicks);
+    return Object.keys(this._availableNicks || {});
   }
 
   toggleSelectedCategory(name: string): void {
+    if (!this.getNumberOfAvailableNicksForCategory(name)) {
+      return;
+    }
+
     this._selectedCategory = this._selectedCategory === name ? '' : name;
   }
 
@@ -89,8 +132,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     headers.append('Accept', 'application/json');
     this.http.get(`${DefaultSettings.httpApiEndpoint}/nicks/predefined`, {headers})
         .subscribe(
-          data => {
-            this._availableNicks = data;
+          (data: IAvailableNicks) => {
+            this.availableNicks = data;
           },
           error => {
             console.log(error);

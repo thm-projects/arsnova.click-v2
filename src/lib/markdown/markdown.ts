@@ -1,5 +1,6 @@
 import marked from 'marked';
 import highlight from 'highlight.js';
+import {DefaultSettings} from '../default.settings';
 
 export function parseGithubFlavoredMarkdown(value: string): string {
   const renderer = new marked.Renderer();
@@ -21,15 +22,19 @@ export function parseGithubFlavoredMarkdown(value: string): string {
   return postMarkdownRenderer(marked(preMarkdownRenderer(value)));
 }
 
-function preMarkdownRenderer(value: string): string {
+export function emojiRenderer(value: string): string {
   const emojiMatch = value.match(/:([a-z0-9_\+\-]+):/g);
   if (emojiMatch) {
     emojiMatch.forEach(token => {
       const emoji = token.replace(/:/g, '');
-      value = value.replace(token, `![emoji](/assets/icons/emojis/${emoji}.png)`);
+      value = value.replace(token, `![emoji](${DefaultSettings.httpApiEndpoint}/files/images/emojis/${emoji}.png)`);
     });
   }
   return value;
+}
+
+function preMarkdownRenderer(value: string): string {
+  return emojiRenderer(value);
 }
 
 function postMarkdownRenderer(value: string): string {

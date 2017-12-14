@@ -1,9 +1,16 @@
 <div class="row">
+  <div class="col-12 nicknameFilter">
+    <input type="text"
+           class="rounded p-1 w-100 mb-3"
+           [placeholder]="'component.nickname_categories.filter' | translate"
+           (input)="filterForKeyword($event)"/>
+  </div>
   <div class="col-12 nickCategoryWrapper"
        [class.col-sm-4]="hasSelectedCategory()">
     <div class="row">
       <div *ngFor="let cat of availableNickCategories()"
            class="nickCategory pointer col-6"
+           [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
            [class.selectedCategory]="hasSelectedCategory(cat)"
            [class.col-sm-12]="hasSelectedCategory()"
            [class.col-sm-6]="!hasSelectedCategory()"
@@ -26,7 +33,7 @@
          (click)="selectNick(nick)"
          class="nickStyle nickName pointer"
          [class.selectedNickName]="hasSelectedNick(nick)">
-      <span [innerHTML]="nick" class="nickName"></span>
+      <span [innerHTML]="parseAvailableNick(nick)" class="nickName d-inline-block pb-1"></span>
     </div>
   </div>
 </div>

@@ -9,14 +9,27 @@ h3 {
 
 .selectedNickName {
   text-decoration: underline;
+
+  .nickName {
+    border-bottom: 1px solid;
+  }
 }
 
 .nickCategory {
+
   .nickCategoryText {
     background: white;
+    cursor: pointer;
     border-radius: 10px;
     padding: 10px;
     margin: 1px;
+  }
+
+  &.disabled {
+    .nickCategoryText {
+      background: #d0d0d0;
+      cursor: not-allowed;
+    }
   }
 }
 
