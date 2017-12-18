@@ -19,7 +19,8 @@
          class="fa fa-trophy"
          aria-hidden="true"></i>
       <span *ngIf="i">{{i + 1}}.&nbsp;</span>
-      <span>{{attendee.name}}&nbsp;-&nbsp;</span>
+      <span><span class="d-inline-flex"
+                  [innerHTML]="parseNickname(attendee.name)"></span>&nbsp;-&nbsp;</span>
       <span>{{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
     </div>
   </div>
@@ -42,7 +43,8 @@
        class="ml-3">
     <div class="partially-correct-leaderboard-item rounded p-2 my-2"
          [class.own-nick]="attendeeService.isOwnNick(attendee.name)">
-      <span>{{attendee.name}}&nbsp;-&nbsp;</span>
+      <span><span class="d-inline-flex"
+                  [innerHTML]="parseNickname(attendee.name)"></span>&nbsp;-&nbsp;</span>
       <span>{{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
 
     </div>

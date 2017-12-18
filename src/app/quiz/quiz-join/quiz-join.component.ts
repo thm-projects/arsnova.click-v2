@@ -49,6 +49,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
               (data: IMessage) => {
                 const quiz = data.payload.quiz.originalObject;
                 this.currentQuizService.quiz = new questionGroupReflection[quiz.TYPE](quiz);
+                this.currentQuizService.persistToSessionStorage();
                 this.themesService.updateCurrentlyUsedTheme();
                 this.router.navigate(['/nicks/' + (value.payload.provideNickSelection ? 'select' : 'input')]);
               }

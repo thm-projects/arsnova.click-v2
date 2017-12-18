@@ -13,6 +13,7 @@ import {NgbActiveModal, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
 
 @Component({
   selector: 'app-quiz-lobby',
@@ -218,6 +219,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   sanitizeHTML(value: string): SafeHtml {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  }
+
+  parseNickname(value: string): SafeHtml {
+    if (value.match(/:[\w\+\-]+:/g)) {
+      return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
+    }
+    return value;
   }
 
   ngOnInit() {

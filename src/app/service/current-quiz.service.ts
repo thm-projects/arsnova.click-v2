@@ -7,6 +7,7 @@ import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
 import {SettingsService} from './settings.service';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class CurrentQuizService implements ICurrentQuiz {
@@ -40,6 +41,11 @@ export class CurrentQuizService implements ICurrentQuiz {
       if (this.quiz.sessionConfig.confidenceSliderEnabled) {
         this.footerBarService.footerElemConfidenceSlider.isActive = true;
       }
+      this.footerBarService.footerElemExport.onClickCallback = () => {
+        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this._quiz.hashtag}/${window.localStorage.getItem(
+          'config.private_key')}/${this._quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
+        window.open(link);
+      };
     }
   }
   get isOwner(): boolean {
@@ -65,6 +71,7 @@ export class CurrentQuizService implements ICurrentQuiz {
 
   constructor(
     private http: HttpClient,
+    private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private settingsService: SettingsService,
     private connectionService: ConnectionService) {

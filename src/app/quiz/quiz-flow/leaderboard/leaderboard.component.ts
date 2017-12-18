@@ -1,15 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
-import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
 import {AttendeeService} from 'app/service/attendee.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {Subscription} from 'rxjs/Subscription';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMessage, ILeaderBoard} from 'arsnova-click-v2-types/src/common';
+import {IMessage, ILeaderBoardItem} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {ConnectionService} from '../../../service/connection.service';
 import {HttpClient} from '@angular/common/http';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
 
 @Component({
   selector: 'app-leaderboard',
@@ -25,48 +26,48 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     return this._isGlobalRanking;
   }
 
-  get leaderBoardPartiallyCorrect(): Array<ILeaderBoard> {
+  get leaderBoardPartiallyCorrect(): Array<ILeaderBoardItem> {
     return this._leaderBoardPartiallyCorrect;
   }
 
-  get leaderBoardCorrect(): Array<ILeaderBoard> {
+  get leaderBoardCorrect(): Array<ILeaderBoardItem> {
     return this._leaderBoardCorrect;
   }
 
   private _routerSubscription: Subscription;
   private _questionIndex: number;
-  private _leaderBoardCorrect: Array<ILeaderBoard>;
-  private _leaderBoardPartiallyCorrect: Array<ILeaderBoard>;
+  private _leaderBoardCorrect: Array<ILeaderBoardItem>;
+  private _leaderBoardPartiallyCorrect: Array<ILeaderBoardItem>;
   private _isGlobalRanking: boolean;
   private _hashtag: string;
 
   constructor(
+    private sanitizer: DomSanitizer,
     private footerBarService: FooterBarService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
     private currentQuizService: CurrentQuizService,
     private http: HttpClient,
     private router: Router,
     private connectionService: ConnectionService,
     public attendeeService: AttendeeService) {
 
-    if (this.activeQuestionGroupService.activeQuestionGroup) {
-      this._hashtag = this.activeQuestionGroupService.activeQuestionGroup.hashtag;
+    this._hashtag = this.currentQuizService.quiz.hashtag;
+    this._leaderBoardCorrect = [];
+    this._leaderBoardPartiallyCorrect = [];
+
+    if (this.currentQuizService.isOwner) {
       this.footerBarService.replaceFooterElements([
         this.footerBarService.footerElemBack,
         this.footerBarService.footerElemFullscreen,
         this.footerBarService.footerElemExport
       ]);
     } else {
-      this._hashtag = this.currentQuizService.quiz.hashtag;
       this.footerBarService.replaceFooterElements([
         this.footerBarService.footerElemBack,
         this.footerBarService.footerElemFullscreen
       ]);
     }
-    this._leaderBoardCorrect = [];
-    this._leaderBoardPartiallyCorrect = [];
   }
 
   private handleMessages() {
@@ -89,6 +90,17 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
           break;
       }
     });
+  }
+
+  sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  }
+
+  parseNickname(value: string): SafeHtml {
+    if (value.match(/:[\w\+\-]+:/g)) {
+      return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
+    }
+    return value;
   }
 
   roundResponseTime(value: number | Array<string>, exp: number): number {
@@ -133,6 +145,14 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
             (data: IMessage) => {
               this._leaderBoardCorrect = data.payload.correctResponses;
               this._leaderBoardPartiallyCorrect = data.payload.partiallyCorrectResponses;
+
+              this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
+                this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
+                  if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
+                    this._leaderBoardCorrect.splice(index, 1);
+                  }
+                });
+              });
             }
           );
     });

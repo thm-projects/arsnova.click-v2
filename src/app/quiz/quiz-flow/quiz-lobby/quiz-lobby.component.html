@@ -12,8 +12,8 @@
          [class.own-nick]="attendeeService.isOwnNick(elem.name)"
          [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
          [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
-      <p class="mb-0"
-         [innerText]="elem.name"></p>
+      <p class="mb-0 text-center"
+         [innerHTML]="parseNickname(elem.name)"></p>
     </div>
   </div>
 </div>
@@ -42,8 +42,7 @@
   </div>
 
   <div class="modal-body">
-    <p>{{'component.lobby.kick_member_confirmation' | translate:{NAME: _nickToRemove} }}</p>
-
+    <p class="d-inline-flex" [innerHTML]="'component.lobby.kick_member_confirmation' | translate:{NAME: parseNickname(_nickToRemove)}"></p>
   </div>
 
   <div class="modal-footer">

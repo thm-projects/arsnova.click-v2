@@ -83,12 +83,18 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this._selectedCategory = this._selectedCategory === name ? '' : name;
   }
 
-  selectNick(name: string): void {
-    this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick(name);
+  selectNick(name: any): void {
+    if (this._selectedCategory === 'emojis') {
+      name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+    }
+    this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick(name.toString());
   }
 
-  hasSelectedNick(name: string): boolean {
-    return this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.hasSelectedNick(name);
+  hasSelectedNick(name: any): boolean {
+    if (this._selectedCategory === 'emojis') {
+      name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+    }
+    return this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.hasSelectedNick(name.toString());
   }
 
   hasSelectedCategory(category?: string): boolean {
@@ -98,7 +104,12 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   hasSelectedAllNicks(): boolean {
     const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
     const filteredNicksLength = this._availableNicks[this._selectedCategory].filter(elem => {
-      return selectedNicks.indexOf(elem) > -1;
+      if (this._selectedCategory === 'emojis') {
+        const emojiMatch = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g);
+        return selectedNicks.indexOf(emojiMatch ? emojiMatch[0] : null) > -1;
+      } else {
+        return selectedNicks.indexOf(elem) > -1;
+      }
     }).length;
     return filteredNicksLength === this._availableNicks[this._selectedCategory].length;
   }
@@ -106,7 +117,12 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   getNumberOfSelectedNicksOfCategory(category: string): number {
     const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
     return this._availableNicks[category].filter(elem => {
-      return selectedNicks.indexOf(elem) > -1;
+      if (category === 'emojis') {
+        const emojiMatch = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g);
+        return selectedNicks.indexOf(emojiMatch ? emojiMatch[0] : null) > -1;
+      } else {
+        return selectedNicks.indexOf(elem) > -1;
+      }
     }).length;
   }
 
@@ -117,11 +133,17 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   toggleAllNicks(): void {
     if (this.hasSelectedAllNicks()) {
       this._availableNicks[this._selectedCategory].forEach(elem => {
-        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.removeSelectedNickByName(elem);
+        if (this._selectedCategory === 'emojis') {
+          elem = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+        }
+        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.removeSelectedNickByName(elem.toString());
       });
     } else {
       this._availableNicks[this._selectedCategory].forEach(elem => {
-        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.addSelectedNick(elem);
+        if (this._selectedCategory === 'emojis') {
+          elem = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+        }
+        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.addSelectedNick(elem.toString());
       });
     }
   }

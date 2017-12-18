@@ -94,11 +94,6 @@ export class ActiveQuestionGroupService {
         this.settingsService.serverSettings.cacheQuizAssets = newState;
         window.localStorage.setItem('config.cache_assets', `${newState}`);
       };
-      this.footerBarService.footerElemExport.onClickCallback = () => {
-        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.activeQuestionGroup.hashtag}/${window.localStorage.getItem(
-          'config.private_key')}/${this.activeQuestionGroup.sessionConfig.theme}/${this.translateService.currentLang}`;
-        window.open(link);
-      };
     }
   }
 }

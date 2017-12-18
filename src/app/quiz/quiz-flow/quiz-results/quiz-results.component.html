@@ -20,7 +20,7 @@
       <span [innerHTML]="('component.liveResults.' + (currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ? currentQuizService.readingConfirmationRequested ? 'start_round' : 'show_question' : 'start_round')) | translate"></span>
       <i class="fa fa-paper-plane"></i>
     </button>
-    <button *ngIf="countdown && countdown.isRunning && countdown.remainingTime"
+    <button *ngIf="isOwner && countdown && countdown.isRunning && countdown.remainingTime"
             (click)="stopQuiz()"
             class="btn btn-default pointer"
             [class.w-100]="!currentQuizService.getVisibleQuestions().length">

@@ -8,6 +8,8 @@ import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {AttendeeService} from '../../../service/attendee.service';
 import {ConnectionService} from '../../../service/connection.service';
 import {UserService} from '../../../service/user.service';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
 
 @Component({
   selector: 'app-nickname-select',
@@ -22,6 +24,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   private _nicks: Array<string> = [];
 
   constructor(
+    private sanitizer: DomSanitizer,
     private http: HttpClient,
     private footerBarService: FooterBarService,
     private router: Router,
@@ -37,7 +40,11 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     };
   }
 
-  joinQuiz(name: string): void {
+  joinQuiz(name: any): void {
+    if (name.changingThisBreaksApplicationSecurity) {
+      name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+    }
+    name = name.toString();
     const promise = new Promise((resolve, reject) => {
       this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
         quizName: this.currentQuiz.quiz.hashtag,
@@ -64,6 +71,14 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     }, (err) => {
       console.log(err);
     });
+  }
+
+  sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+  }
+
+  parseAvailableNick(name: string): SafeHtml {
+    return name.match(/:[\w\+\-]+:/g) ? this.sanitizeHTML(parseGithubFlavoredMarkdown(name)) : name;
   }
 
   ngOnInit() {

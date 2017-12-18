@@ -70,7 +70,7 @@ button:disabled {
   cursor: not-allowed !important;
 }
 
-img[alt="emoji"] {
+img[alt*="emoji_"] {
   height: 24px;
   width: 24px;
 }

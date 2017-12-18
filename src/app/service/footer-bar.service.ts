@@ -214,7 +214,7 @@ export class FooterBarService {
     iconClass: 'fa fa-users',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.nicknames',
-    selectable: true,
+    selectable: false,
     showIntro: true,
     linkTarget: '/quiz/manager/nicknames',
   }, function () {

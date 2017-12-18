@@ -27,7 +27,7 @@ export function emojiRenderer(value: string): string {
   if (emojiMatch) {
     emojiMatch.forEach(token => {
       const emoji = token.replace(/:/g, '');
-      value = value.replace(token, `![emoji](${DefaultSettings.httpApiEndpoint}/files/images/emojis/${emoji}.png)`);
+      value = value.replace(token, `![emoji_:${emoji}:](${DefaultSettings.httpApiEndpoint}/files/images/emojis/${emoji}.png)`);
     });
   }
   return value;
