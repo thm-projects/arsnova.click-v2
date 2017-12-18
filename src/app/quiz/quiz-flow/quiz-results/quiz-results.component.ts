@@ -133,6 +133,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return !(this.currentQuizService.quiz.questionList[index] instanceof SurveyQuestion);
   }
 
+  showStopQuizButton(): boolean {
+    return this.currentQuizService.isOwner &&
+           this.countdown &&
+           this.countdown.isRunning &&
+           this.countdown.remainingTime > 0;
+  }
+
   showStartQuizButton(): boolean {
     return this.currentQuizService.isOwner &&
            (!this.countdown || !this.countdown.isRunning) &&
