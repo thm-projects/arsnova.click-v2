@@ -1,4 +1,4 @@
-import marked from 'marked';
+import * as marked from 'marked';
 import highlight from 'highlight.js';
 import {DefaultSettings} from '../default.settings';
 

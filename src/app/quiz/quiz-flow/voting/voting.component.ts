@@ -23,6 +23,9 @@ import {FreeTextQuestion} from 'arsnova-click-v2-types/src/questions/question_fr
   styleUrls: ['./voting.component.scss']
 })
 export class VotingComponent implements OnInit, OnDestroy {
+  get countdown(): Countdown {
+    return this._countdown;
+  }
   get selectedAnswers(): Array<number> | string | number {
     return this._selectedAnswers;
   }
@@ -53,19 +56,25 @@ export class VotingComponent implements OnInit, OnDestroy {
     this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${currentQuizService.quiz.hashtag}`)
         .subscribe((data: IMessage) => {
           if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
-            this._countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
-            this._countdown.onChange.subscribe((value) => {
-              this._countdownValue = value;
-              if (!value) {
-                this.sendResponses();
-              }
-            });
+
+            if (currentQuizService.currentQuestion().timer) {
+              this._countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
+              this._countdown.onChange.subscribe((value) => {
+                this._countdownValue = value;
+                if (!value) {
+                  this.sendResponses();
+                }
+              });
+            }
+
           } else {
+
             this.router.navigate([
               '/quiz',
               'flow',
               'results'
             ]);
+
           }
         });
   }
@@ -155,8 +164,10 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   sendResponses(): void {
-    this._countdown.onChange.unsubscribe();
-    this._countdown.stop();
+    if (this._countdown) {
+      this._countdown.onChange.unsubscribe();
+      this._countdown.stop();
+    }
     this.router.navigate([
       '/quiz',
       'flow',

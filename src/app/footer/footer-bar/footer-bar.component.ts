@@ -45,6 +45,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
 
   toggleSetting(elem: FooterbarElement) {
     this.currentQuizService.toggleSetting(elem);
+    elem.onClickCallback(elem);
   }
 
   public fileChange(event: any) {

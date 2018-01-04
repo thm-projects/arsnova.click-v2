@@ -117,12 +117,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   getNumberOfSelectedNicksOfCategory(category: string): number {
     const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
     return this._availableNicks[category].filter(elem => {
-      if (category === 'emojis') {
-        const emojiMatch = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g);
-        return selectedNicks.indexOf(emojiMatch ? emojiMatch[0] : null) > -1;
-      } else {
-        return selectedNicks.indexOf(elem) > -1;
-      }
+      return selectedNicks.indexOf(elem) > -1;
     }).length;
   }
 

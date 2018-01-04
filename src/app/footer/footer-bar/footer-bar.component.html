@@ -9,7 +9,7 @@
        [id]="elem.id"
        [routerLink]="getLinkTarget(elem)"
        [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
-       (click)="toggleSetting(elem);elem.onClickCallback(elem)">
+       (click)="toggleSetting(elem)">
     <p class="footerElemIcon"><i [class]="elem.iconClass" aria-hidden="true"></i></p>
     <p class="footerElemText text-left ml-2"><span [class]="elem.textClass" [innerHTML]="elem.textName | translate"></span></p>
   </div>

@@ -1,4 +1,5 @@
-<div id="countdown-header"
+<div *ngIf="countdown && countdown.isRunning"
+     id="countdown-header"
      class="overflow-hidden mb-3">
   <div class="pull-left">
     <i class="fa fa-users"></i>

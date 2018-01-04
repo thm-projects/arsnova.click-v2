@@ -74,14 +74,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   constructor(
     public currentQuizService: CurrentQuizService,
+    public attendeeService: AttendeeService,
     private http: HttpClient,
     private router: Router,
     private headerLabelService: HeaderLabelService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
     private i18nService: I18nService,
-    private questionTextService: QuestionTextService,
-    private attendeeService: AttendeeService) {
+    private questionTextService: QuestionTextService
+  ) {
 
     headerLabelService.headerLabel = 'component.liveResults.title';
 
@@ -134,19 +135,41 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   showStopQuizButton(): boolean {
-    return this.currentQuizService.isOwner &&
-           this.countdown &&
-           this.countdown.isRunning &&
-           this.countdown.remainingTime > 0;
+    return this.currentQuizService.isOwner
+      && !this.currentQuizService.currentQuestion().timer
+      &&
+      (
+        this.attendeeService.attendees.length > this.attendeeService.attendees.filter(nick => {
+          return nick.responses[this.currentQuizService.questionIndex];
+        }).length
+      );
+  }
+
+  showStopCountdownButton(): boolean {
+    return this.currentQuizService.isOwner
+      &&
+      (
+        this.attendeeService.attendees.length > this.attendeeService.attendees.filter(nick => {
+          return nick.responses[this.currentQuizService.questionIndex];
+        }).length
+      ) &&
+      (
+        this.countdown &&
+        this.countdown.isRunning &&
+        this.countdown.remainingTime > 0
+      );
   }
 
   showStartQuizButton(): boolean {
     return this.currentQuizService.isOwner &&
-           (!this.countdown || !this.countdown.isRunning) &&
-           this.currentQuizService.questionIndex === this._selectedQuestionIndex &&
-           (this.currentQuizService.questionIndex < this.currentQuizService.quiz.questionList.length - 1 ||
-            this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled &&
-            this.currentQuizService.readingConfirmationRequested);
+      !this.showStopCountdownButton() &&
+      !this.showStopQuizButton() &&
+      this.currentQuizService.questionIndex === this._selectedQuestionIndex &&
+      (
+        this.currentQuizService.questionIndex < this.currentQuizService.quiz.questionList.length - 1 ||
+        this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled &&
+        this.currentQuizService.readingConfirmationRequested
+      );
   }
 
   hideProgressbarCssStyle(): boolean {
@@ -316,7 +339,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
         } else {
           this.currentQuizService.readingConfirmationRequested = false;
-          this.countdown = new Countdown(question, data.payload.startTimestamp);
+
+          if (question.timer) {
+            this.countdown = new Countdown(question, data.payload.startTimestamp);
+          }
+
           if (this.currentQuizService.questionIndex === this.currentQuizService.quiz.questionList.length - 1) {
             this.footerBarService.replaceFooterElements([
               this.footerBarService.footerElemBack,
@@ -364,7 +391,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this.http.get(url).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL') {
           const question = this.currentQuizService.currentQuestion();
-          this.countdown = new Countdown(question, data.payload.startTimestamp);
+
+          if (question.timer) {
+            this.countdown = new Countdown(question, data.payload.startTimestamp);
+          }
 
           this.generateAnswers(question);
         }
@@ -376,9 +406,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
       this.handleMessages();
       if (this.attendeeService.attendees.filter(attendee => {
-          return attendee.responses[this.currentQuizService.questionIndex] ?
-                 attendee.responses[this.currentQuizService.questionIndex].value :
-                 false;
+          return attendee.responses[this.currentQuizService.questionIndex];
         }).length === this.attendeeService.attendees.length && this.countdown) {
         this.countdown.stop();
       }
