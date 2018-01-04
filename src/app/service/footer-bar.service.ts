@@ -87,7 +87,7 @@ export class FooterBarService {
 
   public footerElemTranslation: FooterbarElement = new FooterbarElement({
     id: 'translation',
-    iconClass: 'fa fa-globe',
+    iconClass: 'fasfa-globe',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.languages',
     selectable: false,
@@ -97,7 +97,7 @@ export class FooterBarService {
   });
   public footerElemSound: FooterbarElement = new FooterbarElement({
     id: 'sound',
-    iconClass: 'fa fa-music',
+    iconClass: 'fasfa-music',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.sound',
     selectable: false,
@@ -108,7 +108,7 @@ export class FooterBarService {
   });
   public footerElemReadingConfirmation: FooterbarElement = new FooterbarElement({
     id: 'reading-confirmation',
-    iconClass: 'fa fa-eye',
+    iconClass: 'fasfa-eye',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.reading-confirmation',
     selectable: true,
@@ -119,7 +119,7 @@ export class FooterBarService {
   });
   public footerElemTheme: FooterbarElement = new FooterbarElement({
     id: 'theme',
-    iconClass: 'fa fa-apple',
+    iconClass: 'fasfa-apple',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.style',
     selectable: false,
@@ -130,7 +130,7 @@ export class FooterBarService {
   });
   public footerElemImport: FooterbarElement = new FooterbarElement({
     id: 'import',
-    iconClass: 'fa fa-upload',
+    iconClass: 'fasfa-upload',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.import',
     selectable: false,
@@ -141,7 +141,7 @@ export class FooterBarService {
   });
   public footerElemHashtagManagement: FooterbarElement = new FooterbarElement({
     id: 'sessionManagement',
-    iconClass: 'fa fa-wrench',
+    iconClass: 'fasfa-wrench',
     textClass: 'footerElementText',
     textName: 'component.hashtag_management.session_management',
     selectable: false,
@@ -152,7 +152,7 @@ export class FooterBarService {
   });
   public footerElemFullscreen: FooterbarElement = new FooterbarElement({
     id: 'fullscreen',
-    iconClass: 'fa fa-arrows-alt',
+    iconClass: 'fasfa-arrows-alt',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.fullscreen',
     selectable: true,
@@ -179,7 +179,7 @@ export class FooterBarService {
   });
   public footerElemHome: FooterbarElement = new FooterbarElement({
     id: 'home',
-    iconClass: 'fa fa-home',
+    iconClass: 'fasfa-home',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.home',
     selectable: false,
@@ -190,7 +190,7 @@ export class FooterBarService {
   });
   public footerElemAbout: FooterbarElement = new FooterbarElement({
     id: 'about',
-    iconClass: 'fa fa-info-circle',
+    iconClass: 'fasfa-info-circle',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.info',
     selectable: false,
@@ -201,7 +201,7 @@ export class FooterBarService {
   });
   public footerElemQRCode: FooterbarElement = new FooterbarElement({
     id: 'qr-code',
-    iconClass: 'fa fa-qrcode',
+    iconClass: 'fasfa-qrcode',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.qr_code',
     selectable: false,
@@ -211,7 +211,7 @@ export class FooterBarService {
   });
   public footerElemNicknames: FooterbarElement = new FooterbarElement({
     id: 'nicknames',
-    iconClass: 'fa fa-users',
+    iconClass: 'fasfa-users',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.nicknames',
     selectable: false,
@@ -222,7 +222,7 @@ export class FooterBarService {
   });
   public footerElemEditQuiz: FooterbarElement = new FooterbarElement({
     id: 'edit-quiz',
-    iconClass: 'fa fa-pencil-square-o',
+    iconClass: 'fasfa-pencil-square-o',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.edit_quiz',
     selectable: false,
@@ -233,7 +233,7 @@ export class FooterBarService {
   });
   public footerElemProductTour: FooterbarElement = new FooterbarElement({
     id: 'product-tour',
-    iconClass: 'fa fa-flag',
+    iconClass: 'fasfa-flag',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.show_product_tour',
     selectable: true,
@@ -246,7 +246,7 @@ export class FooterBarService {
   });
   public footerElemResponseProgress: FooterbarElement = new FooterbarElement({
     id: 'response-progress',
-    iconClass: 'fa fa-align-left',
+    iconClass: 'fasfa-align-left',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.show_response_progress',
     selectable: true,
@@ -257,7 +257,7 @@ export class FooterBarService {
   });
   public footerElemConfidenceSlider: FooterbarElement = new FooterbarElement({
     id: 'confidence-slider',
-    iconClass: 'fa fa-sliders',
+    iconClass: 'fasfa-sliders',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.show_confidence_slider',
     selectable: true,
@@ -268,7 +268,7 @@ export class FooterBarService {
   });
   public footerElemBack: FooterbarElement = new FooterbarElement({
     id: 'back',
-    iconClass: 'fa fa-undo',
+    iconClass: 'fasfa-undo',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.back',
     selectable: false,
@@ -279,7 +279,7 @@ export class FooterBarService {
   });
   public footerElemStartQuiz: FooterbarElement = new FooterbarElement({
     id: 'startQuiz',
-    iconClass: 'fa fa-paper-plane',
+    iconClass: 'fasfa-paper-plane',
     textClass: 'footerElementText',
     textName: 'component.lobby.start_quiz',
     selectable: true,
@@ -288,7 +288,7 @@ export class FooterBarService {
   });
   public footerElemExport: FooterbarElement = new FooterbarElement({
     id: 'startQuiz',
-    iconClass: 'fa fa-download',
+    iconClass: 'fasfa-download',
     textClass: 'footerElementText',
     textName: 'component.leaderboard.export',
     selectable: false,
@@ -298,7 +298,7 @@ export class FooterBarService {
   });
   public footerElemSaveAssets: FooterbarElement = new FooterbarElement({
     id: 'saveAssets',
-    iconClass: 'fa fa-cloud',
+    iconClass: 'fasfa-cloud',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.cache_assets',
     selectable: true,
@@ -308,7 +308,7 @@ export class FooterBarService {
   });
   public footerElemBlockRudeNicknames: FooterbarElement = new FooterbarElement({
     id: 'blockRudeNicknames',
-    iconClass: 'fa fa-lock',
+    iconClass: 'fasfa-lock',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.block_rude_nicknames',
     selectable: true,
@@ -318,7 +318,7 @@ export class FooterBarService {
   });
   public footerElemEnableCasLogin: FooterbarElement = new FooterbarElement({
     id: 'enableCasLogin',
-    iconClass: 'fa fa-sign-in',
+    iconClass: 'fasfa-sign-in',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.enable_cas_login',
     selectable: true,
@@ -328,7 +328,7 @@ export class FooterBarService {
   });
   public footerElemLeaderboard: FooterbarElement = new FooterbarElement({
     id: 'leaderboard',
-    iconClass: 'fa fa-trophy',
+    iconClass: 'fasfa-trophy',
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.global_leaderboard',
     selectable: false,
