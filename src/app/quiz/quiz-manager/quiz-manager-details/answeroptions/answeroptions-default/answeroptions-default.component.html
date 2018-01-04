@@ -28,7 +28,7 @@
                      [value]="elem.answerText"
                      (input)="updateAnswerValue($event, i)"
                      (propertychange)="updateAnswerValue($event, i)">
-              <i class="fasfa-trash delete-icon pointer"
+              <i class="fas fa-trash delete-icon pointer"
                  (click)="deleteAnswer(i)"></i>
               <label *ngIf="question.TYPE !== 'SurveyQuestion'"
                      class="btn pointer mb-0"

@@ -46,7 +46,7 @@
       list-style: none;
     }
 
-    .fa-check-square-o {
+    .fa-check-square {
       color: green;
     }
 
@@ -63,45 +63,45 @@
   <div class="modal-body">
     <ul class="p-0">
       <li>
-        <i class="fa"
-           [class.fa-check-quare-o]="connectionService.serverAvailable"
-           [class.fa-quare]="!connectionService.serverAvailable"></i>
+        <i class="far"
+           [class.fa-check-square]="connectionService.serverAvailable"
+           [class.fa-square]="!connectionService.serverAvailable"></i>
         <p class="mb-0 d-inline">
           <span>Server: </span>
           <span>{{'region.header.connection_status.server_status.' + (connectionService.serverAvailable ? 'available' : 'not_available') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="fa"
-           [class.fa-check-quare-o]="connectionService.websocketAvailable"
-           [class.fa-quare]="!connectionService.websocketAvailable"></i>
+        <i class="far"
+           [class.fa-check-square]="connectionService.websocketAvailable"
+           [class.fa-square]="!connectionService.websocketAvailable"></i>
         <p class="mb-0 d-inline">
           <span>Websocket: </span>
           <span>{{'region.header.connection_status.websocket_status.' + (connectionService.websocketAvailable ? 'connected' : 'not_connected') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="fa"
-           [class.fa-check-quare-o]="localStorageAvailable"
-           [class.fa-quare]="!localStorageAvailable"></i>
+        <i class="far"
+           [class.fa-check-square]="localStorageAvailable"
+           [class.fa-square]="!localStorageAvailable"></i>
         <p class="mb-0 d-inline">
           <span>LocalStorage: </span>
           <span>{{'region.header.connection_status.localStorage_status.' + (localStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="fa"
-           [class.fa-check-quare-o]="sessionStorageAvailable"
-           [class.fa-quare]="!sessionStorageAvailable"></i>
+        <i class="far"
+           [class.fa-check-square]="sessionStorageAvailable"
+           [class.fa-square]="!sessionStorageAvailable"></i>
         <p class="mb-0 d-inline">
           <span>SessionStorage: </span>
           <span>{{'region.header.connection_status.sessionStorage_status.' + (sessionStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="fa"
-           [class.fa-check-quare-o]="connectionService.rtt < 300 && connectionService.serverAvailable"
-           [class.fa-quare]="connectionService.rtt > 300 || !connectionService.serverAvailable"></i>
+        <i class="far"
+           [class.fa-check-square]="connectionService.rtt < 300 && connectionService.serverAvailable"
+           [class.fa-square]="connectionService.rtt > 300 || !connectionService.serverAvailable"></i>
         <p class="mb-0 d-inline">
           <span>Round-Trip-Time: </span>
           <span>{{connectionService.serverAvailable ? (connectionService.rtt + 'ms') : ('region.header.connection_status.server_status.not_available' | translate)}}</span>

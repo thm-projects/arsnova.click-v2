@@ -79,10 +79,10 @@
           [class]="'questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + i">
         <span [innerHTML]="elem.translationReferrer() | translate"></span>
         <span class="questionButtonOptions text-right">
-          <i *ngIf="i" (click)="moveQuestionUp(i)" class="fasfa-arrow-up"></i>
-          <i *ngIf="i !== questionGroupItem.questionList.length - 1" (click)="moveQuestionDown(i)" class="fasfa-arrow-down"></i>
-          <i [routerLink]="['/quiz', 'manager', i,  'overview']" class="fasfa-pencil"></i>
-          <i (click)="deleteQuestion(i)" class="fasfa-trash"></i>
+          <i *ngIf="i" (click)="moveQuestionUp(i)" class="fas fa-arrow-up"></i>
+          <i *ngIf="i !== questionGroupItem.questionList.length - 1" (click)="moveQuestionDown(i)" class="fas fa-arrow-down"></i>
+          <i [routerLink]="['/quiz', 'manager', i,  'overview']" class="fas fa-pencil"></i>
+          <i (click)="deleteQuestion(i)" class="fas fa-trash"></i>
         </span>
       </li>
     </ul>

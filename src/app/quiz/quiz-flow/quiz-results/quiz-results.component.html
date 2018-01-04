@@ -2,12 +2,12 @@
      id="countdown-header"
      class="overflow-hidden mb-3">
   <div class="pull-left">
-    <i class="fasfa-users"></i>
+    <i class="fas fa-users"></i>
     <span>{{attendeeService.attendees.length}}</span>
   </div>
   <div class="pull-right">
     <span>{{countdown.remainingTime}}</span>
-    <i class="fasfa-hourglass"></i>
+    <i class="fas fa-hourglass"></i>
   </div>
 </div>
 
@@ -18,21 +18,21 @@
             class="btn btn-default pointer"
             [class.w-100]="currentQuizService.getVisibleQuestions().length">
       <span [innerHTML]="('component.liveResults.' + (currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ? currentQuizService.readingConfirmationRequested ? 'start_round' : 'show_question' : 'start_round')) | translate"></span>
-      <i class="fasfa-paper-plane"></i>
+      <i class="fas fa-paper-plane"></i>
     </button>
     <button *ngIf="showStopCountdownButton()"
             (click)="stopQuiz()"
             class="btn btn-default pointer"
             [class.w-100]="!currentQuizService.getVisibleQuestions().length">
       <span [innerHTML]="'component.liveResults.abort_countdown' | translate"></span>
-      <i class="fasfa-ban"></i>
+      <i class="fas fa-ban"></i>
     </button>
     <button *ngIf="showStopQuizButton()"
             (click)="stopQuiz()"
             class="btn btn-default pointer"
             [class.w-100]="!currentQuizService.getVisibleQuestions().length">
       <span [innerHTML]="'component.liveResults.abort_question' | translate"></span>
-      <i class="fasfa-ban"></i>
+      <i class="fas fa-ban"></i>
     </button>
     <button *ngFor="let question of currentQuizService.getVisibleQuestions(); let i = index"
             class="btn btn-default pointer"
@@ -53,13 +53,13 @@
             [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
-      <i class="fasfa-trophy" aria-hidden="true"></i>
+      <i class="fas fa-trophy" aria-hidden="true"></i>
       <span>{{'component.liveResults.ranking' | translate}}</span>
     </button>
     <button [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
-      <i class="fasfa-question" aria-hidden="true"></i>
+      <i class="fas fa-question" aria-hidden="true"></i>
       <span>{{'component.liveResults.question' | translate}}</span>
     </button>
   </div>

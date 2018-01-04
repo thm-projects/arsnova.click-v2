@@ -20,7 +20,7 @@
                 [disabled]="!isValid(elem)"
                 (click)="startQuiz(elem)"
                 data-animation="false">
-          <span class="fasfa-send" aria-hidden="true"></span>
+          <span class="fas fa-paper-plane" aria-hidden="true"></span>
         </button>
       </div>
       <div class="col-3">
@@ -30,7 +30,7 @@
                 [title]="'component.hashtag_management.edit_session' | translate"
                 (click)="editQuiz(elem)"
                 data-animation="false">
-          <span class="fasfa-edit" aria-hidden="true"></span>
+          <span class="fas fa-edit" aria-hidden="true"></span>
         </button>
       </div>
       <div class="col-3">
@@ -39,7 +39,7 @@
                 [title]="'component.hashtag_management.export' | translate"
                 (click)="exportQuiz(elem)"
                 data-animation="false">
-          <span class="fasfa-download" aria-hidden="true"></span>
+          <span class="fas fa-download" aria-hidden="true"></span>
         </button>
       </div>
       <div class="col-3">
@@ -49,7 +49,7 @@
                 [title]="'component.hashtag_management.delete_session' | translate"
                 (click)="deleteQuiz(elem)"
                 data-animation="false">
-          <span class="fasfa-trash" aria-hidden="true"></span>
+          <span class="fas fa-trash" aria-hidden="true"></span>
         </button>
       </div>
       <hr *ngIf="i < sessions.length - 1"/>

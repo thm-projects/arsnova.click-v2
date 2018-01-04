@@ -123,7 +123,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
+    }
   }
 
   private checkABCDOrdering(hashtag: string): boolean {

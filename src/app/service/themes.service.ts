@@ -54,11 +54,13 @@ export class ThemesService {
     if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
       usedTheme = this.currentQuizService.quiz.sessionConfig.theme;
     }
-    if (document.getElementsByTagName('html').item(0).className) {
-      document.getElementsByTagName('html').item(0).classList.remove(document.getElementsByTagName('html').item(0).className);
+    const htmlTagClassNames = document.getElementsByTagName('html').item(0).className;
+    const oldTheme = htmlTagClassNames.split(' ').filter(tagName => tagName.startsWith('theme-'));
+    if (oldTheme.length) {
+      htmlTagClassNames.replace(oldTheme[0], usedTheme);
     }
     this._currentTheme = usedTheme;
-    document.getElementsByTagName('html').item(0).className = usedTheme;
+    document.getElementsByTagName('html').item(0).className = htmlTagClassNames;
   }
 
 }

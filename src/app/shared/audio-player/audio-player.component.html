@@ -12,17 +12,17 @@
     <button *ngIf="!_isPlaying"
             class="btn btn-secondary pointer"
             (click)="playMusic()">
-      <i class="fasfa-play"></i>
+      <i class="fas fa-play"></i>
     </button>
     <button *ngIf="_isPlaying"
             class="btn btn-secondary pointer"
             (click)="pauseMusic()">
-      <i class="fasfa-pause"></i>
+      <i class="fas fa-pause"></i>
     </button>
     <button class="btn btn-secondary pointer"
             (click)="stopMusic()"
             [disabled]="isStopped()">
-      <i class="fasfa-stop"></i>
+      <i class="fas fa-stop"></i>
     </button>
   </div>
 </div>
