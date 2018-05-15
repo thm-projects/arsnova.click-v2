@@ -11,6 +11,7 @@ import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {DefaultAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
+import {TrackingService} from '../../../service/tracking.service';
 
 @Component({
   selector: 'app-quiz-manager',
@@ -18,6 +19,8 @@ import {DefaultAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answ
   styleUrls: ['./quiz-manager.component.scss']
 })
 export class QuizManagerComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuizManagerComponent';
+
   get showMoreOrLess(): string {
     return this._showMoreOrLess;
   }
@@ -76,13 +79,18 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     private router: Router,
     private currentQuizService: CurrentQuizService,
     private translateService: TranslateService,
-    private activeQuestionGroupService: ActiveQuestionGroupService) {
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private trackingService: TrackingService
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = QuizManagerComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemStartQuiz,
       this.footerBarService.footerElemProductTour,
       this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemSaveAssets
+      this.footerBarService.footerElemSaveAssets,
+      this.footerBarService.footerElemMemberGroup
     ]);
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
@@ -113,13 +121,25 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   switchShowMoreOrLess() {
     if (this._showMoreOrLess.indexOf('more') > -1) {
       this._showMoreOrLess = this._showMoreOrLess.replace('more', 'less');
+      this.trackingService.trackClickEvent({
+        action: QuizManagerComponent.TYPE,
+        label: `show-more`,
+      });
     } else {
       this._showMoreOrLess = this._showMoreOrLess.replace('less', 'more');
+      this.trackingService.trackClickEvent({
+        action: QuizManagerComponent.TYPE,
+        label: `show-less`,
+      });
     }
   }
 
   addQuestion(id: string) {
     const question: IQuestion = questionReflection[id](DefaultSettings.defaultQuizSettings.question);
+    this.trackingService.trackClickEvent({
+      action: QuizManagerComponent.TYPE,
+      label: `add-question`
+    });
     switch (id) {
       case 'TrueFalseSingleChoiceQuestion':
         question.answerOptionList = [
@@ -140,6 +160,10 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
 
   moveQuestionUp(id: number) {
     const question = this.activeQuestionGroupService.activeQuestionGroup.questionList[id];
+    this.trackingService.trackClickEvent({
+      action: QuizManagerComponent.TYPE,
+      label: `move-question-up`,
+    });
     this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(id);
     this.activeQuestionGroupService.activeQuestionGroup.addQuestion(question, id - 1);
     this.activeQuestionGroupService.persist();
@@ -147,14 +171,29 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
 
   moveQuestionDown(id: number) {
     const question = this.activeQuestionGroupService.activeQuestionGroup.questionList[id];
+    this.trackingService.trackClickEvent({
+      action: QuizManagerComponent.TYPE,
+      label: `move-question-down`,
+    });
     this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(id);
     this.activeQuestionGroupService.activeQuestionGroup.addQuestion(question, id + 1);
     this.activeQuestionGroupService.persist();
   }
 
   deleteQuestion(id: number) {
+    this.trackingService.trackClickEvent({
+      action: QuizManagerComponent.TYPE,
+      label: `delete-question`,
+    });
     this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(id);
     this.footerBarService.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
     this.activeQuestionGroupService.persist();
+  }
+
+  trackEditQuestion() {
+    this.trackingService.trackClickEvent({
+      action: QuizManagerComponent.TYPE,
+      label: `edit-question`,
+    });
   }
 }

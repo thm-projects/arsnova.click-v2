@@ -9,6 +9,8 @@ import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./reading-confirmation.component.scss']
 })
 export class ReadingConfirmationComponent implements OnInit {
+  public static TYPE = 'ReadingConfirmationComponent';
+
   get percent(): string {
     return this._percent;
   }
@@ -55,7 +57,8 @@ export class ReadingConfirmationComponent implements OnInit {
 
   constructor(
     private i18nService: I18nService,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer
+  ) {
   }
 
   ngOnInit() {

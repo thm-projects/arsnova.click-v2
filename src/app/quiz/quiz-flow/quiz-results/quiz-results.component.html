@@ -1,11 +1,11 @@
 <div *ngIf="countdown && countdown.isRunning"
      id="countdown-header"
-     class="overflow-hidden mb-3">
-  <div class="pull-left">
+     class="overflow-hidden mb-3 d-flex justify-content-between">
+  <div>
     <i class="fas fa-users"></i>
     <span>{{attendeeService.attendees.length}}</span>
   </div>
-  <div class="pull-right">
+  <div>
     <span>{{countdown.remainingTime}}</span>
     <i class="fas fa-hourglass"></i>
   </div>

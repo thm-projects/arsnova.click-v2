@@ -1,23 +1,13 @@
-const isLiveEnvironment = !location.hostname.match(/localhost/g);
-const serverEndpoints = {
-  live: {
-    httpApiEndpoint: `https://${location.hostname}/backend/api/v1`,
-    httpLibEndpoint: `https://${location.hostname}/backend/lib`,
-    wsApiEndpoint: `wss://${location.hostname}/backend`,
-  },
-  local: {
-    httpApiEndpoint: `http://${location.hostname}:3000/api/v1`,
-    httpLibEndpoint: `http://${location.hostname}:3000/lib`,
-    wsApiEndpoint: `ws://${location.hostname}:3000`,
-  }
-};
-const serverEndpoint = isLiveEnvironment ? serverEndpoints.live : serverEndpoints.local;
+declare var require: any;
+
+const environmentData = require(`../assets/serverEndpoint.json`);
 
 export const DefaultSettings = {
   siteId: 'arsnova.click-v2',
-  httpApiEndpoint: serverEndpoint.httpApiEndpoint,
-  httpLibEndpoint: serverEndpoint.httpLibEndpoint,
-  wsApiEndpoint: serverEndpoint.wsApiEndpoint,
+  httpApiEndpoint: environmentData.httpApiEndpoint,
+  httpLibEndpoint: environmentData.httpLibEndpoint,
+  serverEndpoint: environmentData.serverEndpoint,
+  wsApiEndpoint: environmentData.wsApiEndpoint,
   defaultQuizSettings: {
     answers: {
       answerText: '',
@@ -55,15 +45,12 @@ export const DefaultSettings = {
         lobby: 'Song0',
         countdownRunning: 'Song0',
         countdownEnd: 'Song0'
-      },
-      availableTitles: {
-        basePath: 'public/songs',
-        lobby: ['Song0', 'Song1', 'Song2', 'Song3'],
-        countdownRunning: ['Song0', 'Song1', 'Song2'],
-        countdownEnd: ['Song0', 'Song1']
       }
     },
     nicks: {
+      memberGroups: ['Default'],
+      maxMembersPerGroup: 10,
+      autoJoinToGroup: false,
       blockIllegalNicks: true,
       restrictToCasLogin: false,
       selectedNicks: []

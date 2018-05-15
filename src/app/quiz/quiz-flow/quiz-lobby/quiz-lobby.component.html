@@ -1,21 +1,24 @@
 <div class="row">
-  <div class="col-12">
-    <h3 *ngIf="!attendeeService.attendees.length"
-        class="text-center no-attendees-label">{{'component.lobby.waiting_for_players' | translate}}</h3>
-  </div>
-  <div *ngFor="let elem of attendeeService.attendees"
-       class="mb-1 col-sm-4 col-md-3">
-    <div [id]="elem.id"
-         (click)="currentQuizService.isOwner ? openKickMemberModal(removeMemberModal, elem.name) : return"
-         class="member-wrapper"
-         [class.pointer]="currentQuizService.isOwner"
-         [class.own-nick]="attendeeService.isOwnNick(elem.name)"
-         [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-         [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
-      <p class="mb-0 text-center"
-         [innerHTML]="parseNickname(elem.name)"></p>
+  <ng-container *ngIf="attendeeService.getMemberGroups().length === 1; else attendeesByGroup">
+    <div class="col-12">
+      <ng-container *ngIf="!attendeeService.attendees.length">
+        <h3 class="text-center text-light center-top d-flex align-self-center justify-content-center">{{'component.lobby.waiting_for_players' | translate}}</h3>
+      </ng-container>
+      <div *ngFor="let elem of attendeeService.attendees"
+           class="mb-1 col-sm-4 col-md-3">
+        <div [id]="elem.id"
+             (click)="currentQuizService.isOwner ? openKickMemberModal(removeMemberModal, elem.name) : return"
+             class="member-wrapper"
+             [class.pointer]="currentQuizService.isOwner"
+             [class.own-nick]="attendeeService.isOwnNick(elem.name)"
+             [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
+             [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
+          <p class="mb-0 text-center"
+             [innerHTML]="parseNickname(elem.name)"></p>
+        </div>
+      </div>
     </div>
-  </div>
+  </ng-container>
 </div>
 
 <app-audio-player *ngIf="currentQuizService.isOwner && currentQuizService.quiz.sessionConfig?.music.enabled.lobby"
@@ -25,13 +28,36 @@
                   [src]="currentQuizService.quiz.sessionConfig.music.titleConfig.lobby"></app-audio-player>
 
 <ngx-qrcode [qrc-value]="qrCodeContent"
-            qrc-class="qrCodeContent"
+            qrc-class="qrCodeContent position-absolute"
             qrc-errorCorrectionLevel="L"
             qrc-element-type="img"
             class="justify-content-center align-items-center qr-code-element"
             [class.d-flex]="showQrCode"
             [class.d-none]="!showQrCode">
 </ngx-qrcode>
+
+<ng-template #attendeesByGroup>
+  <div class="col-12 col-sm-6" *ngFor="let group of attendeeService.getMemberGroups()">
+    <div class="pb-4">
+      <h4 class="text-light">Team {{group}}</h4>
+      <ng-container *ngIf="!attendeeService.getMembersOfGroup(group).length">
+        <span class="text-light attendee-text">{{'component.lobby.waiting_for_players' | translate}}</span>
+      </ng-container>
+      <div *ngFor="let elem of attendeeService.getMembersOfGroup(group)"
+           (click)="currentQuizService.isOwner ? openKickMemberModal(removeMemberModal, elem.name) : return"
+           [class.pointer]="currentQuizService.isOwner"
+           class="d-inline-flex mw-100">
+        <i [id]="elem.id"
+           class="member-wrapper px-1 py-1 fas fa-user fa-2x"
+           [class.own-nick]="attendeeService.isOwnNick(elem.name)"
+           [style.background-color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
+           [style.color]="'#' + sanitizeHTML(elem.colorCode)">
+        </i>
+        <p class="ml-2 attendee-text text-light text-truncate" [innerHTML]="parseNickname(elem.name)"></p>
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #removeMemberModal let-c="close" let-d="dismiss">
   <div class="modal-header">

@@ -14,7 +14,7 @@ import {ReadingConfirmationComponent} from './reading-confirmation/reading-confi
 import {ConfidenceRateComponent} from './confidence-rate/confidence-rate.component';
 import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
 
-const quizFlowRoutes: Routes = [
+export const quizFlowRoutes: Routes = [
   {
     path: 'quiz/flow',
     redirectTo: 'quiz/flow/lobby',

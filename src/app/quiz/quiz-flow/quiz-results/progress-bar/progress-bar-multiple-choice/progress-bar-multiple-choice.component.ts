@@ -7,6 +7,8 @@ import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./progress-bar-multiple-choice.component.scss']
 })
 export class ProgressBarMultipleChoiceComponent implements OnInit {
+  public static TYPE = 'ProgressBarMultipleChoiceComponent';
+
   get percent(): number {
     return this._percent;
   }
@@ -42,8 +44,8 @@ export class ProgressBarMultipleChoiceComponent implements OnInit {
   private normalizedAnswerIndex: string;
   private progressbarCssClass: string;
 
-  sanitizeStyle(value: string): SafeStyle {
-    value = value.replace(/\s/g, '');
+  sanitizeStyle(value: string | number): SafeStyle {
+    value = value.toString().replace(/\s/g, '');
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
   }
 

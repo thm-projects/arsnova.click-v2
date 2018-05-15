@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
-import {TranslateService} from '@ngx-translate/core';
 import {ActivatedRoute} from '@angular/router';
 import {FooterBarService} from '../../../../service/footer-bar.service';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {questionReflection} from 'arsnova-click-v2-types/src/questions/question_reflection';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {HeaderLabelService} from '../../../../service/header-label.service';
@@ -14,6 +13,8 @@ import {HeaderLabelService} from '../../../../service/header-label.service';
   styleUrls: ['./questiontype.component.scss']
 })
 export class QuestiontypeComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuestiontypeComponent';
+
   private _routerSubscription: Subscription;
   private _question: IQuestion;
   private _questionIndex: number;
@@ -62,6 +63,8 @@ export class QuestiontypeComponent implements OnInit, OnDestroy {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
+
+    this.footerBarService.TYPE_REFERENCE = QuestiontypeComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
@@ -92,7 +95,9 @@ export class QuestiontypeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
+    }
   }
 
 }

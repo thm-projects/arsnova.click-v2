@@ -7,11 +7,14 @@ import {ConnectionService} from './connection.service';
 
 @Injectable()
 export class ThemesService {
+  set themes(value: Array<ITheme>) {
+    this._themes = value;
+  }
   get currentTheme(): string {
     return this._currentTheme;
   }
 
-  get themes(): Array<Object> {
+  get themes(): Array<{id: string, name: string, description: string}> {
     return this._themes;
   }
 
@@ -21,7 +24,8 @@ export class ThemesService {
   constructor(
     private currentQuizService: CurrentQuizService,
     private connectionService: ConnectionService,
-    private http: HttpClient) {
+    private http: HttpClient
+  ) {
     if (!window.localStorage.getItem('config.default_theme')) {
       window.localStorage.setItem('config.default_theme', DefaultSettings.defaultQuizSettings.theme);
     }
@@ -29,7 +33,7 @@ export class ThemesService {
     http.get(`${DefaultSettings.httpApiEndpoint}/themes`)
         .subscribe(
           (data: IMessage) => {
-            this._themes = data.payload;
+            this.themes = data.payload;
           },
           error => {
             console.log(error);
@@ -54,13 +58,76 @@ export class ThemesService {
     if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
       usedTheme = this.currentQuizService.quiz.sessionConfig.theme;
     }
-    const htmlTagClassNames = document.getElementsByTagName('html').item(0).className;
-    const oldTheme = htmlTagClassNames.split(' ').filter(tagName => tagName.startsWith('theme-'));
-    if (oldTheme.length) {
-      htmlTagClassNames.replace(oldTheme[0], usedTheme);
+    const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
+    if (themeDataset === usedTheme) {
+      return;
     }
     this._currentTheme = usedTheme;
-    document.getElementsByTagName('html').item(0).className = htmlTagClassNames;
+
+    document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
+
+    this.reloadLinkNodes();
+  }
+
+  public reloadLinkNodes(target?): void {
+
+    if (!target) {
+      target = this._currentTheme;
+    }
+
+    this.http.get(`${DefaultSettings.httpLibEndpoint}/linkImages/${target}`).subscribe((data: Array<any>) => {
+      data.forEach(elem => {
+
+        const previousElement = document.getElementById(elem.id);
+        if (previousElement) {
+          if (elem.className) {
+            previousElement.setAttribute('className', elem.className);
+          }
+          if (elem.type) {
+            previousElement.setAttribute('type', elem.type);
+          }
+          if (elem.id) {
+            previousElement.setAttribute('id', elem.id);
+          }
+          if (elem.rel) {
+            previousElement.setAttribute('rel', elem.rel);
+          }
+          if (elem.href) {
+            previousElement.setAttribute('href', elem.href);
+          }
+          if (elem.name) {
+            previousElement.setAttribute('name', elem.name);
+          }
+          if (elem.content) {
+            previousElement.setAttribute('content', elem.content);
+          }
+        } else {
+          const child = document.createElement(elem.tagName);
+          if (elem.className) {
+            child.className = elem.className;
+          }
+          if (elem.type) {
+            child.type = elem.type;
+          }
+          if (elem.id) {
+            child.id = elem.id;
+          }
+          if (elem.rel) {
+            child.rel = elem.rel;
+          }
+          if (elem.href) {
+            child.href = elem.href;
+          }
+          if (elem.name) {
+            child.name = elem.name;
+          }
+          if (elem.content) {
+            child.content = elem.content;
+          }
+          document.head.appendChild(child);
+        }
+      });
+    });
   }
 
 }

@@ -1,6 +1,6 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionRanged} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {HeaderLabelService} from '../../../../../service/header-label.service';
@@ -11,6 +11,8 @@ import {HeaderLabelService} from '../../../../../service/header-label.service';
   styleUrls: ['./answeroptions-ranged.component.scss']
 })
 export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
+  public static TYPE = 'AnsweroptionsRangedComponent';
+
   get minRange(): number {
     return this._minRange;
   }
@@ -71,7 +73,9 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     this._question.correctValue = this._correctValue;
     this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex] = this._question;
     this.activeQuestionGroupService.persist();
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
+    }
   }
 
 }

@@ -72,19 +72,38 @@
     <h4 class="text-light"
         *ngIf="!questionGroupItem.questionList.length"
         [innerHTML]="'component.quiz_manager.no_added_questions' | translate"></h4>
-    <ul id="added_questions_wrapper"
-        [attr.data-intro]="'component.quiz_manager.description.added_questions' | translate">
-      <li *ngFor="let elem of questionGroupItem.questionList; let i = index;"
-          [id]="i + '_draggable'"
-          [class]="'questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + i">
-        <span [innerHTML]="elem.translationReferrer() | translate"></span>
-        <span class="questionButtonOptions text-right">
-          <i *ngIf="i" (click)="moveQuestionUp(i)" class="fas fa-arrow-up"></i>
-          <i *ngIf="i !== questionGroupItem.questionList.length - 1" (click)="moveQuestionDown(i)" class="fas fa-arrow-down"></i>
-          <i [routerLink]="['/quiz', 'manager', i,  'overview']" class="fas fa-pencil"></i>
-          <i (click)="deleteQuestion(i)" class="fas fa-trash"></i>
-        </span>
-      </li>
-    </ul>
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <ul id="added_questions_wrapper"
+            [attr.data-intro]="'component.quiz_manager.description.added_questions' | translate">
+          <li *ngFor="let elem of questionGroupItem.questionList; let i = index;"
+              [id]="i + '_draggable'"
+              [class]="'questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + i">
+            <span [innerHTML]="elem.translationReferrer() | translate"></span>
+            <span class="questionButtonOptions text-right">
+              <span class="pointer mr-2"
+                    *ngIf="i"
+                    (click)="moveQuestionUp(i)" >
+                <i class="fas fa-arrow-up"></i>
+              </span>
+              <span class="pointer mr-2"
+                    *ngIf="i !== questionGroupItem.questionList.length - 1"
+                    (click)="moveQuestionDown(i)">
+                <i class="fas fa-arrow-down"></i>
+              </span>
+              <span class="pointer mr-2"
+                    [routerLink]="['/quiz', 'manager', i,  'overview']"
+                    (click)="trackEditQuestion()">
+                <i class="far fa-edit"></i>
+              </span>
+              <span class="pointer"
+                    (click)="deleteQuestion(i)">
+                <i class="fas fa-trash"></i>
+              </span>
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </div>

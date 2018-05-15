@@ -1,11 +1,7 @@
 <div *ngIf="countdown && countdown.isRunning"
      id="countdown-header"
-     class="overflow-hidden mb-3">
-  <div class="pull-left">
-    <i class="fas fa-users"></i>
-    <span>{{'component.voting.title' | translate}}</span>
-  </div>
-  <div class="pull-right">
+     class="overflow-hidden mb-3 d-flex">
+  <div class="ml-auto">
     <span>{{countdownValue}}</span>
     <i class="fas fa-hourglass"></i>
   </div>
@@ -49,5 +45,5 @@
         class="btn btn-default w-100 mt-5 pointer"
         (click)="sendResponses()">
   <span>{{'component.voting.send' | translate}}</span>
-  <i class="fas fa-send"></i>
+  <i class="fas fa-paper-plane"></i>
 </button>

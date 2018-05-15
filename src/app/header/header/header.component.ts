@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConnectionService} from '../../service/connection.service';
 import {HeaderLabelService} from '../../service/header-label.service';
+import {TrackingService} from '../../service/tracking.service';
 
 function isLocalStorageSupported(): boolean {
   try {
@@ -42,6 +43,8 @@ function isSessionStorageSupported(): boolean {
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  public static TYPE = 'HeaderComponent';
+
   get localStorageAvailable(): boolean {
     return this._localStorageAvailable;
   }
@@ -80,7 +83,9 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private modalService: NgbModal,
     public headerLabelService: HeaderLabelService,
-    public connectionService: ConnectionService) {
+    public connectionService: ConnectionService,
+    private trackingService: TrackingService
+  ) {
   }
 
   ngOnInit() {
@@ -90,6 +95,20 @@ export class HeaderComponent implements OnInit {
   }
 
   openConnectionQualityModal(content: string): void {
+    this.trackingService.trackClickEvent({
+      action: 'ConnectionQualityModal',
+      label: 'open-dialog',
+      customDimensions: {
+        dimension1: this.connectionService.lowSpeed,
+        dimension2: this.connectionService.mediumSpeed,
+        dimension3: this.connectionService.rtt,
+        dimension4: this.connectionService.serverAvailable,
+        dimension5: this.connectionService.websocketAvailable,
+        dimension6: this.localStorageAvailable,
+        dimension7: this.sessionStorageAvailable
+      }
+    });
+
     this.modalService.open(content);
     this.connectionService.calculateRTT();
   }

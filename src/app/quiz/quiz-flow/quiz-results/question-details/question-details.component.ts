@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
@@ -16,6 +16,11 @@ import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
   styleUrls: ['./question-details.component.scss']
 })
 export class QuestionDetailsComponent implements OnInit, OnDestroy {
+  set questionIndex(value: number) {
+    this._questionIndex = value;
+  }
+  public static TYPE = 'QuestionDetailsComponent';
+
   get answers(): Array<string> {
     return this._answers;
   }
@@ -46,6 +51,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService) {
+
+    this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemFullscreen
@@ -136,7 +143,9 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription && this._routerSubscription.unsubscribe) {
+      this._routerSubscription.unsubscribe();
+    }
   }
 
 }

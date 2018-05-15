@@ -23,6 +23,14 @@ import {FreeTextQuestion} from 'arsnova-click-v2-types/src/questions/question_fr
   styleUrls: ['./voting.component.scss']
 })
 export class VotingComponent implements OnInit, OnDestroy {
+  set countdownValue(value: number) {
+    this._countdownValue = value;
+  }
+  set countdown(value: Countdown) {
+    this._countdown = value;
+  }
+  public static TYPE = 'VotingComponent';
+
   get countdown(): Countdown {
     return this._countdown;
   }
@@ -47,7 +55,10 @@ export class VotingComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private headerLabelService: HeaderLabelService,
     private sanitizer: DomSanitizer,
-    private router: Router) {
+    private router: Router
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.voting.title';
 
@@ -58,9 +69,9 @@ export class VotingComponent implements OnInit, OnDestroy {
           if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
 
             if (currentQuizService.currentQuestion().timer) {
-              this._countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
-              this._countdown.onChange.subscribe((value) => {
-                this._countdownValue = value;
+              this.countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
+              this.countdown.onChange.subscribe((value) => {
+                this.countdownValue = value;
                 if (!value) {
                   this.sendResponses();
                 }
@@ -164,9 +175,9 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   sendResponses(): void {
-    if (this._countdown) {
-      this._countdown.onChange.unsubscribe();
-      this._countdown.stop();
+    if (this.countdown) {
+      this.countdown.onChange.unsubscribe();
+      this.countdown.stop();
     }
     this.router.navigate([
       '/quiz',

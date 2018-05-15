@@ -41,19 +41,6 @@
 </nav>
 
 <ng-template #connectionQualityModal let-c="close" let-d="dismiss">
-  <style>
-    li {
-      list-style: none;
-    }
-
-    .fa-check-square {
-      color: green;
-    }
-
-    .fa-square {
-      color: red;
-    }
-  </style>
   <div class="modal-header">
     <h5 class="modal-title" id="exampleModalLabel" [innerHTML]="'region.header.connection_status.title' | translate"></h5>
     <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" (click)="d()">
@@ -61,47 +48,67 @@
     </button>
   </div>
   <div class="modal-body">
-    <ul class="p-0">
+    <ul class="p-0 list-unstyled">
       <li>
-        <i class="far"
+        <i class="fas"
            [class.fa-check-square]="connectionService.serverAvailable"
-           [class.fa-square]="!connectionService.serverAvailable"></i>
+           [class.text-success]="connectionService.serverAvailable"
+           [class.fa-times]="!connectionService.serverAvailable"
+           [class.text-danger]="!connectionService.serverAvailable"
+           data-fa-transform="shrink-5"
+           data-fa-mask="fas fa-square"></i>
         <p class="mb-0 d-inline">
           <span>Server: </span>
           <span>{{'region.header.connection_status.server_status.' + (connectionService.serverAvailable ? 'available' : 'not_available') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="far"
+        <i class="fas"
            [class.fa-check-square]="connectionService.websocketAvailable"
-           [class.fa-square]="!connectionService.websocketAvailable"></i>
+           [class.text-success]="connectionService.websocketAvailable"
+           [class.fa-times]="!connectionService.websocketAvailable"
+           [class.text-danger]="!connectionService.websocketAvailable"
+           data-fa-transform="shrink-5"
+           data-fa-mask="fas fa-square"></i>
         <p class="mb-0 d-inline">
           <span>Websocket: </span>
           <span>{{'region.header.connection_status.websocket_status.' + (connectionService.websocketAvailable ? 'connected' : 'not_connected') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="far"
+        <i class="fas"
            [class.fa-check-square]="localStorageAvailable"
-           [class.fa-square]="!localStorageAvailable"></i>
+           [class.text-success]="localStorageAvailable"
+           [class.fa-times]="!localStorageAvailable"
+           [class.text-danger]="!localStorageAvailable"
+           data-fa-transform="shrink-5"
+           data-fa-mask="fas fa-square"></i>
         <p class="mb-0 d-inline">
           <span>LocalStorage: </span>
           <span>{{'region.header.connection_status.localStorage_status.' + (localStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="far"
+        <i class="fas"
            [class.fa-check-square]="sessionStorageAvailable"
-           [class.fa-square]="!sessionStorageAvailable"></i>
+           [class.text-success]="sessionStorageAvailable"
+           [class.fa-times]="!sessionStorageAvailable"
+           [class.text-danger]="!sessionStorageAvailable"
+           data-fa-transform="shrink-5"
+           data-fa-mask="fas fa-square"></i>
         <p class="mb-0 d-inline">
           <span>SessionStorage: </span>
           <span>{{'region.header.connection_status.sessionStorage_status.' + (sessionStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
       </li>
       <li>
-        <i class="far"
+        <i class="fas"
            [class.fa-check-square]="connectionService.rtt < 300 && connectionService.serverAvailable"
-           [class.fa-square]="connectionService.rtt > 300 || !connectionService.serverAvailable"></i>
+           [class.text-success]="connectionService.rtt < 300 && connectionService.serverAvailable"
+           [class.fa-times]="connectionService.rtt > 300 || !connectionService.serverAvailable"
+           [class.text-danger]="connectionService.rtt > 300 || !connectionService.serverAvailable"
+           data-fa-transform="shrink-5"
+           data-fa-mask="fas fa-square"></i>
         <p class="mb-0 d-inline">
           <span>Round-Trip-Time: </span>
           <span>{{connectionService.serverAvailable ? (connectionService.rtt + 'ms') : ('region.header.connection_status.server_status.not_available' | translate)}}</span>

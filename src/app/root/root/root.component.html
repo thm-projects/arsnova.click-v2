@@ -4,17 +4,13 @@
   </div>
 
   <div class="container-fluid" style="height: 90vh;">
-    <div class="row flex-sm-nowrap">
-      <div class="footer-bar-wrapper p-0">
+    <div class="row flex-sm-nowrap h-100">
+      <div class="footer-bar-wrapper p-0 relative" style="height: 50px;">
         <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
       </div>
 
-      <div class="col-12 col-sm-11 col-sm-offset-1">
-        <div class="row">
-          <div id="content-container" class="container">
-            <router-outlet></router-outlet>
-          </div>
-        </div>
+      <div id="content-container" class="container">
+        <router-outlet></router-outlet>
       </div>
     </div>
   </div>

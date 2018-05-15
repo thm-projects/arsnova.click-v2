@@ -2,8 +2,10 @@ import {Injectable} from '@angular/core';
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
+import {map} from 'rxjs/operators';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
+import {SharedService} from './shared.service';
 
 @Injectable()
 export class ConnectionService {
@@ -47,16 +49,25 @@ export class ConnectionService {
 
   constructor(
     private websocketService: WebsocketService,
-    private http: HttpClient) {
+    private http: HttpClient,
+    private sharedService: SharedService
+  ) {
     this.initWebsocket();
   }
 
   private initWebsocket() {
-    this._socket = <Subject<IMessage>>this.websocketService.connect()
-                                          .map((response: MessageEvent): IMessage => {
-                                            this._websocketAvailable = true;
-                                            return JSON.parse(response.data);
-                                          });
+    this._socket = <Subject<IMessage>>this.websocketService
+      .connect()
+      .pipe(map((response: MessageEvent): IMessage => {
+        const parsedResponse = JSON.parse(response.data);
+        this._websocketAvailable = true;
+
+        if (parsedResponse.payload && parsedResponse.payload.activeQuizzes) {
+          this.sharedService.activeQuizzes = [...parsedResponse.payload.activeQuizzes];
+        }
+
+        return parsedResponse;
+      }));
   }
 
   cleanUp(): void {
@@ -105,18 +116,18 @@ export class ConnectionService {
   }
 
   initConnection(overrideCurrentState?: boolean): Promise<any> {
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       if (this.serverAvailable && !overrideCurrentState) {
         resolve();
         return;
       }
-      new Promise(resolve2 => {
+      const data = await new Promise(resolve2 => {
         this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
-          (data) => {
+          (httpData) => {
             this.serverAvailable = true;
             this._websocketAvailable = true;
             setTimeout(this.calculateRTT.bind(this), 500);
-            resolve2(data);
+            resolve2(httpData);
           },
           () => {
             this.serverAvailable = false;
@@ -124,9 +135,8 @@ export class ConnectionService {
             resolve2();
           }
         );
-      }).then((data) => {
-        resolve(data);
       });
+      resolve(data);
     });
   }
 

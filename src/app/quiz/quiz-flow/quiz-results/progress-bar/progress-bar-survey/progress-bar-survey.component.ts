@@ -7,6 +7,8 @@ import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./progress-bar-survey.component.scss']
 })
 export class ProgressBarSurveyComponent implements OnInit {
+  public static TYPE = 'ProgressBarSurveyComponent';
+
   get percent(): number {
     return this._percent;
   }
@@ -38,8 +40,8 @@ export class ProgressBarSurveyComponent implements OnInit {
   private label: string;
   private normalizedAnswerIndex: string;
 
-  sanitizeStyle(value: string): SafeStyle {
-    value = value.replace(/\s/g, '');
+  sanitizeStyle(value: string | number): SafeStyle {
+    value = value.toString().replace(/\s/g, '');
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
   }
 

@@ -1,24 +1,17 @@
+@import "../../../styles_vendor";
+
 .preview-frame {
-  border: 20px solid black;
-  border-radius: 20px;
-  border-bottom-width: 50px;
 
-  height: calc(90vh - 20px);
-  width: 360px;
+  &.device_xs {
+    height: 570px;
+    width: 270px;
 
-  padding: 0 10px 10px 10px;
+    .preview-content {
+      margin-top: 76px;
+      height: calc(100% - 159px);
+    }
+  }
 
-  position: relative;
-}
-
-.homeButton {
-  position: absolute;
-  bottom: 35px;
-  width: 60px;
-  height: 20px;
-  background: silver;
-  border-radius: 50px;
-  left: calc(75% - 30px);
 }
 
 #question-preview {

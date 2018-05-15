@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
-import {ActiveQuestionGroupService} from 'app/service/active-question-group.service';
+import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
@@ -13,6 +13,8 @@ import {IAvailableNicks} from 'arsnova-click-v2-types/src/common';
   styleUrls: ['./nickname-manager.component.scss']
 })
 export class NicknameManagerComponent implements OnInit, OnDestroy {
+  public static TYPE = 'NicknameManagerComponent';
+
   get selectedCategory(): string {
     return this._selectedCategory;
   }
@@ -35,7 +37,10 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
-    private http: HttpClient) {
+    private http: HttpClient
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = NicknameManagerComponent.TYPE;
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemBlockRudeNicknames,

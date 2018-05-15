@@ -85,6 +85,8 @@ export class FooterbarElement {
 @Injectable()
 export class FooterBarService {
 
+  public TYPE_REFERENCE: string;
+
   public footerElemTranslation: FooterbarElement = new FooterbarElement({
     id: 'translation',
     iconClass: 'fas fa-globe',
@@ -334,6 +336,16 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     linkTarget: '/quiz/flow/leaderboard',
+  }, function () {
+  });
+  public footerElemMemberGroup: FooterbarElement = new FooterbarElement({
+    id: 'memberGroup',
+    iconClass: 'fas fa-users',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.member_group',
+    selectable: false,
+    showIntro: false,
+    linkTarget: '/quiz/manager/memberGroup',
   }, function () {
   });
 

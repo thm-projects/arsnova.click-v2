@@ -1,15 +1,15 @@
-import {inject, TestBed} from '@angular/core/testing';
+import {async, inject, TestBed} from '@angular/core/testing';
 
 import {FooterBarService} from './footer-bar.service';
 
 describe('FooterBarService', () => {
-  beforeEach(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [FooterBarService]
     });
-  });
-
-  it('should be created', inject([FooterBarService], (service: FooterBarService) => {
-    expect(service).toBeTruthy();
   }));
+
+  it('should be created', async(inject([FooterBarService], (service: FooterBarService) => {
+    expect(service).toBeTruthy();
+  })));
 });

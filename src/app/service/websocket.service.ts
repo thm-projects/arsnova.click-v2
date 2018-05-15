@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import {Observer} from 'rxjs/Observer';
-import {Subject} from 'rxjs/Subject';
+import {Observable, Observer, Subject} from 'rxjs';
 import {DefaultSettings} from '../../lib/default.settings';
 
 @Injectable()
@@ -18,7 +16,13 @@ export class WebsocketService {
   }
 
   private create(): Subject<MessageEvent> {
-    const socket = new WebSocket(this.url);
+    let socket: WebSocket;
+
+    try {
+      socket = new WebSocket(this.url);
+    } catch (e) {
+      return null;
+    }
     const observable = Observable.create(
       (obsvr: Observer<MessageEvent>) => {
         socket.onmessage = obsvr.next.bind(obsvr);

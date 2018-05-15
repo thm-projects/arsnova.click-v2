@@ -13,13 +13,13 @@ describe('ProgressBarSingleChoiceComponent', () => {
            .compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     fixture = TestBed.createComponent(ProgressBarSingleChoiceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }));
 
-  it('should be created', () => {
+  it('should be created', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 });

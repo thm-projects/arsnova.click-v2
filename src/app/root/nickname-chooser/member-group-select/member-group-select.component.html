@@ -1,0 +1,7 @@
+<h4 class="text-light mb-4">Select a Team</h4>
+
+<div *ngFor="let group of memberGroups"
+     class="rounded px-2 py-2 my-2 pointer"
+     (click)="addToGroup(group)">
+  {{group}}
+</div>

@@ -1,5 +1,7 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
+import {TrackingService} from '../../service/tracking.service';
+import {QuestiontextComponent} from '../../quiz/quiz-manager/quiz-manager-details/questiontext/questiontext.component';
 
 class MarkdownBarElement {
   get hiddenByDefault(): boolean {
@@ -30,11 +32,11 @@ class MarkdownBarElement {
     return this._iconClass;
   }
 
-  private _id: string;
-  private _titleRef: string;
+  private readonly _id: string;
+  private readonly _titleRef: string;
   private _iconClass: string;
   private _iconClassToggled: string;
-  private _hiddenByDefault: boolean;
+  private readonly _hiddenByDefault: boolean;
 
   constructor({id, titleRef, iconClass, iconClassToggled = iconClass, hiddenByDefault = false}) {
     this._id = id;
@@ -49,38 +51,38 @@ class MarkdownBarElement {
 const BoldMarkdownButton = new MarkdownBarElement({
   id: 'boldMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.bold',
-  iconClass: 'fa-bold'
+  iconClass: 'fas fa-bold'
 });
 const HeaderMarkdownButton = new MarkdownBarElement({
   id: 'headerMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.heading',
-  iconClass: 'fa-header'
+  iconClass: 'fas fa-heading'
 });
 const HyperlinkMarkdownButton = new MarkdownBarElement({
   id: 'hyperlinkMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.hyperlink',
-  iconClass: 'fa-globe'
+  iconClass: 'fas fa-globe'
 });
 const UlMarkdownButton = new MarkdownBarElement({
   id: 'unsortedListMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.unordered_list',
-  iconClass: 'fa-list-ul'
+  iconClass: 'fas fa-list-ul'
 });
 const CodeMarkdownButton = new MarkdownBarElement({
   id: 'codeMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.code',
-  iconClass: 'fa-code'
+  iconClass: 'fas fa-code'
 });
 const ImageMarkdownButton = new MarkdownBarElement({
   id: 'imageMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.image',
-  iconClass: 'fa-image'
+  iconClass: 'fas fa-image'
 });
 const ShowMoreMarkdownButton = new MarkdownBarElement({
   id: 'showMoreMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.show_more',
-  iconClass: 'fa-caret-square-o-down',
-  iconClassToggled: 'fa-caret-square-o-up'
+  iconClass: 'far fa-caret-square-down',
+  iconClassToggled: 'far fa-caret-square-up'
 });
 
 /* Hidden Markdown buttons - visible only by clicking on ShowMoreMarkdownButton */
@@ -93,19 +95,19 @@ const LatexMarkdownButton = new MarkdownBarElement({
 const UnderlineMarkdownButton = new MarkdownBarElement({
   id: 'underlineMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.underline',
-  iconClass: 'fa-underline',
+  iconClass: 'fas fa-underline',
   hiddenByDefault: true
 });
 const StrikeThroughMarkdownButton = new MarkdownBarElement({
   id: 'strikeThroughMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.strike_through',
-  iconClass: 'fa-strikethrough',
+  iconClass: 'fas fa-strikethrough',
   hiddenByDefault: true
 });
 const ItalicMarkdownButton = new MarkdownBarElement({
   id: 'italicMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.italic',
-  iconClass: 'fa-italic',
+  iconClass: 'fas fa-italic',
   hiddenByDefault: true
 });
 
@@ -116,6 +118,8 @@ const ItalicMarkdownButton = new MarkdownBarElement({
   styleUrls: ['./markdown-bar.component.scss']
 })
 export class MarkdownBarComponent implements OnInit, OnDestroy {
+  public static TYPE = 'MarkdownBarComponent';
+
   get showHiddenMarkdownButtons(): boolean {
     return this._showHiddenMarkdownButtons;
   }
@@ -131,7 +135,10 @@ export class MarkdownBarComponent implements OnInit, OnDestroy {
 
   @Output() connectorEmitter: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private translateService: TranslateService) {
+  constructor(
+    private translateService: TranslateService,
+    private trackingService: TrackingService
+  ) {
     this.markdownBarElements.push(
       BoldMarkdownButton,
       HeaderMarkdownButton,
@@ -150,22 +157,37 @@ export class MarkdownBarComponent implements OnInit, OnDestroy {
     this.allDisplayedMarkdownBarElements = this.markdownBarElements;
   }
 
-  connector(id: string) {
-    switch (id) {
+  connector(elem: MarkdownBarElement) {
+    switch (elem.id) {
       case 'showMoreMarkdownButton':
         this.showHiddenMarkdownButtons = !this.showHiddenMarkdownButtons;
         if (this.showHiddenMarkdownButtons) {
           this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.concat(this.hiddenMarkdownBarElements);
-          console.log(this.allDisplayedMarkdownBarElements);
+          this.trackingService.trackClickEvent({
+            action: QuestiontextComponent.TYPE,
+            label: `show-markdown-buttons`
+          });
         } else {
-          this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.filter(function (elem) {
-            return !elem.hiddenByDefault;
+          this.trackingService.trackClickEvent({
+            action: QuestiontextComponent.TYPE,
+            label: `hide-markdown-buttons`
+          });
+          this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.filter(function (value) {
+            return !value.hiddenByDefault;
           });
         }
         this.flipIconClasses(ShowMoreMarkdownButton);
         break;
+      default:
+        this.trackingService.trackClickEvent({
+          action: QuestiontextComponent.TYPE,
+          label: `markdown-button`,
+          customDimensions: {
+            dimension1: elem.id
+          }
+        });
     }
-    this.connectorEmitter.emit(id);
+    this.connectorEmitter.emit(elem.id);
   }
 
   flipIconClasses(elem: MarkdownBarElement) {

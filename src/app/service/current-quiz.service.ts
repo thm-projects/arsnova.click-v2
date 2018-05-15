@@ -74,7 +74,8 @@ export class CurrentQuizService implements ICurrentQuiz {
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private settingsService: SettingsService,
-    private connectionService: ConnectionService) {
+    private connectionService: ConnectionService
+  ) {
     const instance = window.sessionStorage.getItem('config.current_quiz');
     if (instance) {
       const parsedInstance = JSON.parse(instance);
@@ -99,32 +100,37 @@ export class CurrentQuizService implements ICurrentQuiz {
   }
 
   public cacheQuiz(quiz: IQuestionGroup): Promise<any> {
-    return new Promise((resolve => {
-      if (this._isOwner) {
-        if (
-          this._cacheAssets ||
-          this.settingsService.serverSettings.cacheQuizAssets ||
-          DefaultSettings.defaultQuizSettings.cacheQuizAssets
-        ) {
-          this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
-            quiz: this._quiz.serialize()
-          }).subscribe((response: IMessage) => {
-            if (response.status !== 'STATUS:SUCCESSFUL') {
-              console.log(response);
-            } else {
-              console.log('loading quiz as owner with caching');
-              resolve();
-            }
-          });
+    return new Promise(async (resolve) => {
+      await new Promise((resolve2 => {
+        if (this._isOwner) {
+          if (this.settingsService.serverSettings.cacheQuizAssets) {
+
+            this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
+              quiz: this._quiz.serialize()
+            }).subscribe((response: IMessage) => {
+
+              if (response.status !== 'STATUS:SUCCESSFUL') {
+                console.log(response);
+              } else {
+                console.log('loading quiz as owner with caching');
+                resolve2();
+              }
+
+            });
+
+          } else {
+            console.log('loading quiz as owner without caching');
+            resolve2();
+          }
         } else {
-          console.log('loading quiz as owner without caching');
-          resolve();
+          console.log('loading quiz as attendee');
+          resolve2();
         }
-      } else {
-        console.log('loading quiz as attendee');
-        resolve();
-      }
-    })).then(() => this.persistToSessionStorage());
+      }));
+
+      this.persistToSessionStorage();
+      resolve();
+    });
   }
 
   public currentQuestion(): IQuestion {
@@ -139,6 +145,7 @@ export class CurrentQuizService implements ICurrentQuiz {
         const url = `${DefaultSettings.httpApiEndpoint}/member/${this._quiz.hashtag}/${nickname}`;
         await this.http.request('delete', url).subscribe(() => {});
       }
+      window.sessionStorage.removeItem(`config.memberGroup`);
       window.sessionStorage.removeItem(`config.nick`);
       window.sessionStorage.removeItem(`config.current_quiz`);
       this._isOwner = false;

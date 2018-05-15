@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {FooterBarService} from '../../../../service/footer-bar.service';
@@ -12,6 +12,8 @@ import {HeaderLabelService} from '../../../../service/header-label.service';
   styleUrls: ['./answeroptions.component.scss']
 })
 export class AnsweroptionsComponent implements OnInit, OnDestroy {
+  public static TYPE = 'AnsweroptionsComponent';
+
   get renderedComponent(): string {
     return this._renderedComponent;
   }
@@ -26,6 +28,8 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService) {
+
+    this.footerBarService.TYPE_REFERENCE = AnsweroptionsComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
@@ -44,7 +48,9 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
+    }
   }
 
 }

@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - deploy
 
 build:
@@ -14,6 +15,17 @@ build:
   artifacts:
     paths:
       - dist
+
+test:
+  stage: test
+  only:
+    - master
+    - CI
+  tags:
+    - nodejs
+  script:
+    - npm install
+    - npm test
 
 deploy:
   stage: deploy

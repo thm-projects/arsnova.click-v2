@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
+import {IMemberGroup, IMessage} from 'arsnova-click-v2-types/src/common';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {AttendeeService} from '../../../service/attendee.service';
 import {ConnectionService} from '../../../service/connection.service';
@@ -15,6 +15,8 @@ import {UserService} from '../../../service/user.service';
   styleUrls: ['./nickname-input.component.scss']
 })
 export class NicknameInputComponent implements OnInit, OnDestroy {
+  public static TYPE = 'NicknameInputComponent';
+
   get failedLoginReason(): string {
     return this._failedLoginReason;
   }
@@ -29,6 +31,8 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private userService: UserService,
     private currentQuiz: CurrentQuizService) {
+
+    this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);
@@ -43,11 +47,12 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
         quizName: this.currentQuiz.quiz.hashtag,
         nickname: nickname,
+        groupName: window.sessionStorage.getItem('config.memberGroup'),
         ticket: this.userService.ticket
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-          data.payload.nicknames.forEach((elem: INickname) => {
-            this.attendeeService.addMember(elem);
+          data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
+            memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
           });
           window.sessionStorage.setItem('config.websocket_authorization', data.payload.webSocketAuthorization);
           this.connectionService.authorizeWebSocket(this.currentQuiz.quiz.hashtag);
