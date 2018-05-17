@@ -76,7 +76,7 @@ export const appRoutes: Routes = [
     HomeComponent,
     RootComponent,
     LanguageSwitcherComponent,
-    ThemeSwitcherComponent
+    ThemeSwitcherComponent,
   ],
   imports: [
     BrowserModule,
