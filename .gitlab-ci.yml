@@ -1,6 +1,7 @@
 stages:
-  - build
   - test
+  - build
+  - compress
   - deploy
 
 build:
@@ -15,6 +16,13 @@ build:
   artifacts:
     paths:
       - dist
+
+compress:
+  stage: compress
+  only:
+    - master
+  script:
+    - npm run compress
 
 test:
   allow_failure: true
