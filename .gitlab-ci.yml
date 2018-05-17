@@ -11,7 +11,7 @@ build:
     - nodejs
   script:
     - npm install
-    - npm run prod
+    - npm run build:PROD
   artifacts:
     paths:
       - dist
