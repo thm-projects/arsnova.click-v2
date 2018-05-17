@@ -11,7 +11,7 @@ For full instructions on how to set up the correct environment, visit the [Contr
 ---
 #### Core Technologies
 
-- Angular 5
+- Angular 6
 - Express Backend with TypeScript
 - Bootstrap 4
 - WebSocket Communication
@@ -45,16 +45,31 @@ The backend can be configured environment variables. The following options avail
 
 The command to use is `export [config] [value]`.
 
+The backend requires a local installation of `imagemagick` and `graphicsmagick`.
+
+Use `node --experimental-modules jobs/GenerateImages.mjs` to generate the logo and preview images. Note, that the frontend must be running for the preview screenshots.
+Available commands (via running the nodejs module or by passing the command with the --command= switch) are:
+- `all - Will call all methods below synchronously`
+- `generateFrontendPreview - Adds the preview screenshots for the frontend. The frontend and the backend must be running!`
+- `generateLogoImages - Generates the logo images (used as favicon and manifest files)`
+
 #### Test
 ###### Backend
 Enter `npm test` in the arsnova-click-v2-backend repo to run all unit tests. As an alternative you can enter `npm test` in the main project, too.
 Currently the routing and the quiz export is covered by the tests. The export unit test will generate an random filled Excel export file in the /backend/test-generated folder.
+
+###### Frontend
+Enter `npm test` in the arsnova-click-v2-frontend repo to run the unit tests.
+
+It is required to define the location of a local Google Chrome installation to use the headless mode (ex. `export CHROME_BIN=/usr/bin/google-chrome`)
 
 ---
 #### Run (DEV deployment)
 
 ###### Backend
 Head over to the arsnova-click-v2-backend repo and enter `npm start`
+
+To generate the theme preview screenshots send the following request to the backend: __GET /api/v1/themes/generateThemePreview__
 
 ###### Frontend
 Go to the arsnova-click-v2-frontend repo and enter `npm start`
