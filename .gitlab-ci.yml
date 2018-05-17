@@ -17,6 +17,7 @@ build:
       - dist
 
 test:
+  allow_failure: true
   stage: test
   only:
     - master
