@@ -10,10 +10,9 @@ For full instructions on how to set up the correct environment, visit the [Contr
 
 ---
 #### Core Technologies
-
 - Angular 6
 - Express Backend with TypeScript
-- Bootstrap 4
+- Bootstrap 4.1
 - WebSocket Communication
 - Progressive WebApp
 
@@ -31,6 +30,7 @@ For full instructions on how to set up the correct environment, visit the [Contr
 - Lists of predefined Nicknames available
 - Sounds for the Quiz Lobby and the Countdown
 - Gamification animations
+- Challenge quizzes as a team with a fair final score
 
 ---
 #### Configuration
@@ -47,11 +47,11 @@ The command to use is `export [config] [value]`.
 
 The backend requires a local installation of `imagemagick` and `graphicsmagick`.
 
-Use `node --experimental-modules jobs/GenerateImages.mjs` to generate the logo and preview images. Note, that the frontend must be running for the preview screenshots.
+Use `npm run job:images` or directly `node --experimental-modules jobs/GenerateImages.mjs` to generate the logo and preview images. Note, that the frontend must be running for the preview screenshots.
 Available commands (via running the nodejs module or by passing the command with the --command= switch) are:
 - `all - Will call all methods below synchronously`
 - `generateFrontendPreview - Adds the preview screenshots for the frontend. The frontend and the backend must be running!`
-- `generateLogoImages - Generates the logo images (used as favicon and manifest files)`
+- `generateLogoImages - Generates the logo images (used for favicon and manifest files)`
 
 #### Test
 ###### Backend
@@ -67,21 +67,19 @@ It is required to define the location of a local Google Chrome installation to u
 #### Run (DEV deployment)
 
 ###### Backend
-Head over to the arsnova-click-v2-backend repo and enter `npm start`
-
-To generate the theme preview screenshots send the following request to the backend: __GET /api/v1/themes/generateThemePreview__
+In the arsnova-click-v2-backend repo enter `npm build:DEV`.
 
 ###### Frontend
-Go to the arsnova-click-v2-frontend repo and enter `npm start`
+Go to the arsnova-click-v2-frontend repo and enter `npm start:DEV`
 
 ---
 #### Build (LIVE deployment)
 
 ###### Backend
-Head over to the arsnova-click-v2-backend repo and enter `npm run prod`
+Head over to the arsnova-click-v2-backend repo and enter `npm run build:PROD`
 
 ###### Frontend
-Go to the arsnova-click-v2-frontend repo and enter `npm run prod`
+Go to the arsnova-click-v2-frontend repo and enter `npm run build:PROD`
 To test the live build enter `npm run prod-test`. This will build the regular production bundle and startup a simple http-server which will serve the files.
 
 Note that the build time can take up to ~1 minute
