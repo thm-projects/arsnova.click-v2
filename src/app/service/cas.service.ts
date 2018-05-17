@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {CanActivate, CanLoad} from '@angular/router';
-import {UserService} from 'app/service/user.service';
+import {UserService} from './user.service';
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
@@ -24,7 +24,6 @@ export class CasService implements CanLoad, CanActivate {
   }
 
   async canLoad() {
-    console.log('OnlyLoggedInUsers');
     if (this.userService.isLoggedIn || !this.casLoginRequired) {
       return true;
     } else {
@@ -35,7 +34,6 @@ export class CasService implements CanLoad, CanActivate {
           if (data.status === 'STATUS:SUCCESSFUL') {
             const settings = <ISessionConfiguration>data.payload.settings;
             if (settings.nicks.restrictToCasLogin) {
-              console.log('You don\'t have permission to view this page');
               location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
               return false;
             } else {

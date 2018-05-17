@@ -15,6 +15,8 @@ import {HeaderLabelService} from '../../../service/header-label.service';
   styleUrls: ['./confidence-rate.component.scss']
 })
 export class ConfidenceRateComponent implements OnInit, OnDestroy {
+  public static TYPE = 'ConfidenceRateComponent';
+
   get confidenceValue(): number {
     return this._confidenceValue;
   }
@@ -30,6 +32,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService
   ) {
+
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
   }

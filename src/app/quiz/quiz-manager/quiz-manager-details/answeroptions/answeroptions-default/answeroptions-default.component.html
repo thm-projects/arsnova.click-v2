@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-12 col-sm-6">
+  <div class="col-12 col-md-6">
     <div class="row">
       <div class="col-12">
         <div *ngIf="question.canAddAnsweroptions" class="row">
@@ -23,13 +23,14 @@
                role="list">
             <div *ngFor="let elem of question.answerOptionList; let i = index"
                  class="btn-group mb-2 d-flex">
+              <span (click)="deleteAnswer(i)" class="delete-icon px-2 rounded-left">
+                <i class="fas fa-trash pointer h-100 d-flex align-items-center"></i>
+              </span>
               <input type="text"
-                     class="btn-block text-left rounded-left px-2 border-0"
+                     class="btn-block text-left px-2 border-0"
                      [value]="elem.answerText"
                      (input)="updateAnswerValue($event, i)"
                      (propertychange)="updateAnswerValue($event, i)">
-              <i class="fas fa-trash delete-icon pointer"
-                 (click)="deleteAnswer(i)"></i>
               <label *ngIf="question.TYPE !== 'SurveyQuestion'"
                      class="btn pointer mb-0"
                      [class.btn-success]="elem.isCorrect"
@@ -118,7 +119,11 @@
       </div>
     </div>
   </div>
-  <app-live-preview
-    [targetDevice]="DEVICE_TYPE.XS"
-    [targetEnvironment]="ENVIRONMENT_TYPE.ANSWEROPTIONS"></app-live-preview>
+  <div class="col-12 col-md-6">
+    <div class="d-flex justify-content-center mt-5 mt-md-0">
+      <app-live-preview
+        [targetDevice]="DEVICE_TYPE.XS"
+        [targetEnvironment]="ENVIRONMENT_TYPE.ANSWEROPTIONS"></app-live-preview>
+    </div>
+  </div>
 </div>

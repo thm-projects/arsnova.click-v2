@@ -1,8 +1,13 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {FooterBarService} from './footer-bar.service';
 import {INickname, INicknameSerialized, IQuizResponse} from 'arsnova-click-v2-types/src/common';
+import {CurrentQuizService} from './current-quiz.service';
 
 class Player implements INickname {
+  get groupName(): string {
+    return this._groupName;
+  }
+
   set responses(value: Array<IQuizResponse>) {
     this._responses = value;
   }
@@ -23,17 +28,19 @@ class Player implements INickname {
     return this._id;
   }
 
-  private _id: number;
-  private _name: string;
-  private _colorCode: string;
+  private readonly _id: number;
+  private readonly _name: string;
+  private readonly _groupName: string;
+  private readonly _colorCode: string;
   private _responses: Array<IQuizResponse>;
   public webSocket;
   public webSocketAuthorization;
   public casProfile;
 
-  constructor({id, name, colorCode, responses}: INickname) {
+  constructor({id, name, groupName, colorCode, responses}: INickname) {
     this._id = id;
     this._name = name;
+    this._groupName = groupName;
     this._colorCode = colorCode;
     this._responses = responses || [];
   }
@@ -42,6 +49,7 @@ class Player implements INickname {
     return {
       id: this.id,
       name: this.name,
+      groupName: this.groupName,
       colorCode: this.colorCode,
       responses: this.responses
     };
@@ -61,7 +69,9 @@ export class AttendeeService implements OnDestroy {
   private _attendees: Array<INickname> = [];
 
   constructor(
-    private footerBarService: FooterBarService) {
+    private footerBarService: FooterBarService,
+    private currentQuizService: CurrentQuizService
+  ) {
     const restoreAttendees = window.sessionStorage.getItem('config.attendees');
     if (restoreAttendees) {
       this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
@@ -71,6 +81,14 @@ export class AttendeeService implements OnDestroy {
         this.footerBarService.footerElemStartQuiz.isActive = true;
       }
     }
+  }
+
+  public getMemberGroups(): Array<string> {
+    return this.currentQuizService.quiz.sessionConfig.nicks.memberGroups;
+  }
+
+  public getMembersOfGroup(groupName: string): Array<INickname> {
+    return this._attendees.filter(attendee => attendee.groupName === groupName);
   }
 
   cleanUp(): void {

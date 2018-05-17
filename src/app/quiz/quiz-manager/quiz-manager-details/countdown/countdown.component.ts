@@ -1,7 +1,6 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
-import {TranslateService} from '@ngx-translate/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
@@ -13,6 +12,8 @@ import {HeaderLabelService} from '../../../../service/header-label.service';
   styleUrls: ['./countdown.component.scss']
 })
 export class CountdownComponent implements OnInit, OnDestroy {
+  public static TYPE = 'CountdownComponent';
+
   get plainHours(): number {
     return this._plainHours;
   }
@@ -58,7 +59,10 @@ export class CountdownComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
-    private footerBarService: FooterBarService) {
+    private footerBarService: FooterBarService
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
@@ -100,7 +104,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
+    }
   }
 
 }

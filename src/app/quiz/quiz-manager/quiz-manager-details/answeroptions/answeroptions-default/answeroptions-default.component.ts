@@ -1,5 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {IQuestionChoice, IQuestionSurvey} from 'arsnova-click-v2-types/src/questions/interfaces';
@@ -13,6 +13,7 @@ import {HeaderLabelService} from '../../../../../service/header-label.service';
   styleUrls: ['./answeroptions-default.component.scss']
 })
 export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
+  public static TYPE = 'AnsweroptionsDefaultComponent';
 
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
@@ -23,7 +24,6 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
 
   private _questionIndex: number;
   private _question: IQuestionChoice;
-  private _routerSubscription: Subscription;
 
   constructor(
     private headerLabelService: HeaderLabelService,
@@ -62,7 +62,7 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this._routerSubscription = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._question = <IQuestionChoice>this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
       this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
@@ -72,7 +72,6 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', [ '$event' ])
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
-    this._routerSubscription.unsubscribe();
   }
 }
 

@@ -1,0 +1,10 @@
+div {
+  background-color: #fff;
+  &:hover {
+    background-color: darken(#fff, 20);
+  }
+  &:active {
+    background-color: darken(#fff, 80);
+    color: #fff;
+  }
+}

@@ -9,6 +9,7 @@ import {HttpClient} from '@angular/common/http';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {Router} from '@angular/router';
+import {TrackingService} from '../../service/tracking.service';
 
 @Component({
   selector: 'app-available-quizzes',
@@ -16,6 +17,8 @@ import {Router} from '@angular/router';
   styleUrls: ['./available-quizzes.component.scss']
 })
 export class AvailableQuizzesComponent implements OnInit, IModal {
+  public static TYPE = 'AvailableQuizzesComponent';
+
   private _sessions: Array<IQuestionGroup> = [];
 
   dismiss(result?: any): void {
@@ -39,7 +42,9 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
     private http: HttpClient,
     private router: Router,
     private currentQuizService: CurrentQuizService,
-    private activeQuestionGroupService: ActiveQuestionGroupService) {
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private trackingService: TrackingService
+  ) {
     const sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
     sessions.sort(function (a, b) {
       return a > b;
@@ -52,6 +57,8 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
   }
 
   startQuiz(session: IQuestionGroup): void {
+    this.trackingService.trackClickEvent({action: AvailableQuizzesComponent.TYPE, label: 'start-quiz'});
+
     new Promise((resolve, reject) => {
       this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${session.hashtag}`).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL') {
@@ -97,8 +104,10 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
   }
 
   editQuiz(session: IQuestionGroup): void {
+    this.trackingService.trackClickEvent({action: AvailableQuizzesComponent.TYPE, label: 'edit-quiz'});
+
     this.activeQuestionGroupService.activeQuestionGroup = session;
-    this.router.navigate(['/quiz/manager']);
+    this.router.navigate(['/quiz', 'manager']);
     this.next();
   }
 

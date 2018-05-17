@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {I18nService, Languages, LanguageTranslations} from '../../service/i18n.service';
+import {TrackingService} from '../../service/tracking.service';
 
 @Component({
   selector: 'app-language-switcher',
@@ -9,6 +10,8 @@ import {I18nService, Languages, LanguageTranslations} from '../../service/i18n.s
   styleUrls: ['./language-switcher.component.scss']
 })
 export class LanguageSwitcherComponent implements OnInit {
+  public static TYPE = 'LanguageSwitcherComponent';
+
   get availableLanguages(): Array<Object> {
     return this._availableLanguages;
   }
@@ -18,7 +21,11 @@ export class LanguageSwitcherComponent implements OnInit {
   constructor(
     public i18nService: I18nService,
     private footerBarService: FooterBarService,
-    private headerLabelService: HeaderLabelService) {
+    private headerLabelService: HeaderLabelService,
+    private trackingService: TrackingService
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = LanguageSwitcherComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemAbout,
@@ -41,6 +48,10 @@ export class LanguageSwitcherComponent implements OnInit {
 
   changeLanguage(tag: string): void {
     this.i18nService.setLanguage(Languages[tag]);
+    this.trackingService.trackClickEvent({
+      action: LanguageSwitcherComponent.TYPE,
+      label: `language-${tag}`,
+    });
   }
 
 }

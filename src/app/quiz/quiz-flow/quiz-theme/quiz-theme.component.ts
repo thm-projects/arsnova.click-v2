@@ -9,17 +9,21 @@ import {CurrentQuizService} from '../../../service/current-quiz.service';
   styleUrls: ['./quiz-theme.component.scss']
 })
 export class QuizThemeComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuizThemeComponent';
 
   private previewThemeBackup: string;
 
   constructor(
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService,
-    private themesService: ThemesService) {
+    private themesService: ThemesService
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = QuizThemeComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);
-    this.previewThemeBackup = document.getElementsByTagName('html').item(0).className;
+    this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
   }
 
   ngOnInit() {
@@ -31,18 +35,27 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
   }
 
   updateTheme(id: string) {
-    document.getElementsByTagName('html').item(0).className = id;
-    this.previewThemeBackup = document.getElementsByTagName('html').item(0).className;
+    document.getElementsByTagName('html').item(0).dataset['theme'] = id;
+    this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
     this.currentQuizService.quiz.sessionConfig.theme = id;
     this.currentQuizService.toggleSettingByName('theme', id);
   }
 
   previewTheme(id) {
-    document.getElementsByTagName('html').item(0).className = id;
+    document.getElementsByTagName('html').item(0).dataset['theme'] = id;
   }
 
   restoreTheme() {
-    document.getElementsByTagName('html').item(0).className = this.previewThemeBackup;
+    const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
+
+    document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
+
+    if (themeDataset === this.previewThemeBackup) {
+      return;
+    }
+
+
+    this.themesService.reloadLinkNodes(this.previewThemeBackup);
   }
 
 }

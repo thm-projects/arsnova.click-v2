@@ -4,7 +4,6 @@ import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {SettingsService} from './settings.service';
 import {FooterBarService} from './footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
-import {DefaultSettings} from '../../lib/default.settings';
 
 @Injectable()
 export class ActiveQuestionGroupService {

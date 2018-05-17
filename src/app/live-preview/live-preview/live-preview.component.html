@@ -2,34 +2,39 @@
 <div id="mathjaxStyle"></div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.ANSWEROPTIONS"
      id="answer-option-preview"
-     [class]="'preview-frame ' + deviceClass()">
-  <app-header></app-header>
+     [class]="'preview-frame overflow-auto relative ' + deviceClass()">
+  <img src="/assets/icons/phone_empty.png" class="w-100 position-absolute" draggable="false"/>
+  <div class="px-4 preview-content relative overflow-auto">
+    <app-header></app-header>
 
-  <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-    <div id="answer-option-element-wrapper"
-         class="d-flex justify-content-around align-items-center flex-wrap">
-      <div *ngFor="let elem of dataSource; let i = index"
-           class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
-           [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
-        <p *ngIf="question.displayAnswerText"
-           class="markdown-answer"
-           [innerHTML]="sanitizeHTML(elem)"></p>
-        <p *ngIf="!question.displayAnswerText"
-           class="mb-0"
-           [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
+    <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
+      <div id="answer-option-element-wrapper"
+           class="d-flex justify-content-around align-items-center flex-wrap">
+        <div *ngFor="let elem of dataSource; let i = index"
+             class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
+             [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
+          <p *ngIf="question.displayAnswerText"
+             class="mb-0 markdown-answer"
+             [innerHTML]="sanitizeHTML(elem)"></p>
+          <p *ngIf="!question.displayAnswerText"
+             class="mb-0"
+             [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
+        </div>
       </div>
-    </div>
-  </ng-container>
+    </ng-container>
+  </div>
 </div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.QUESTION"
      id="question-preview"
-     [class]="'preview-frame overflow-auto ' + deviceClass()">
-  <app-header></app-header>
-  <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-    <p class="p-0" [innerHTML]="sanitizeHTML(dataSource)"></p>
-  </ng-container>
+     [class]="'preview-frame overflow-auto relative ' + deviceClass()">
+  <img src="/assets/icons/phone_empty.png" class="w-100 position-absolute" draggable="false"/>
+  <div class="px-4 preview-content relative overflow-auto">
+    <app-header></app-header>
+    <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
+      <p class="mb-0" [innerHTML]="sanitizeHTML(dataSource)"></p>
+    </ng-container>
+  </div>
 </div>
-<div *ngIf="targetDevice === DEVICE_TYPE.XS" class="homeButton hidden"></div>
 
 
 <ng-template #notAvailableTmpl>

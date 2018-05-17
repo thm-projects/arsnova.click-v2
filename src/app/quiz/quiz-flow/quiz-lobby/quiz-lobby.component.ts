@@ -14,6 +14,7 @@ import {ActiveQuestionGroupService} from '../../../service/active-question-group
 import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
+import {TrackingService} from '../../../service/tracking.service';
 
 @Component({
   selector: 'app-quiz-lobby',
@@ -21,6 +22,7 @@ import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
   styleUrls: ['./quiz-lobby.component.scss']
 })
 export class QuizLobbyComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuizLobbyComponent';
 
   get qrCodeContent(): string {
     return this._qrCodeContent;
@@ -44,27 +46,31 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   private _kickMemberModalRef: NgbActiveModal;
 
   constructor(
+    public currentQuizService: CurrentQuizService,
+    public attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
-    public currentQuizService: CurrentQuizService,
     private themesService: ThemesService,
     private router: Router,
     private http: HttpClient,
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
-    public attendeeService: AttendeeService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private trackingService: TrackingService
   ) {
 
     this.headerLabelService.headerLabel = this.currentQuizService.quiz.hashtag;
 
+    this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
+
     if (this.currentQuizService.isOwner) {
+      this.trackingService.trackConversionEvent({action: QuizLobbyComponent.TYPE});
+
       footerBarService.replaceFooterElements([
         this.footerBarService.footerElemEditQuiz,
         this.footerBarService.footerElemStartQuiz,
         this.footerBarService.footerElemProductTour,
-        this.footerBarService.footerElemNicknames,
         this.footerBarService.footerElemSound,
         this.footerBarService.footerElemReadingConfirmation,
         this.footerBarService.footerElemTheme,
@@ -128,7 +134,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'LOBBY:INACTIVE':
-          setTimeout(this.handleMessages, 500);
+          setTimeout(this.handleMessages.bind(this), 500);
           break;
         case 'LOBBY:ALL_PLAYERS':
           data.payload.members.forEach((elem: INickname) => {
@@ -212,8 +218,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     } : null;
   }
 
-  transformForegroundColor(rgbObj: {r: string, g: string, b: string}): string {
-    const o = Math.round(((parseInt(rgbObj.r, 10) * 299) + (parseInt(rgbObj.g, 10) * 587) + (parseInt(rgbObj.b, 10) * 114)) / 1000);
+  transformForegroundColor(rgbObj: {r: number, g: number, b: number}): string {
+    const o = Math.round(((rgbObj.r * 299) + (rgbObj.g * 587) + (rgbObj.b * 114)) / 1000);
     return o < 125 ? 'ffffff' : '000000';
   }
 

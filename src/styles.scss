@@ -17,6 +17,8 @@ body {
 }
 
 .qrCodeContent {
+  top: calc(50% - 25vh);
+
   img {
     height: 50vh !important;
     width: 50vh !important;
@@ -42,6 +44,12 @@ p {
 
 .text-bold {
   font-weight: bold;
+}
+
+.center-top {
+  height: 40vh;
+  align-content: center;
+  align-items: center;
 }
 
 .center-vertical {

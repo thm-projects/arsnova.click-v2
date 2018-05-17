@@ -1,56 +1,80 @@
 @import "../../../styles_vendor";
 
+@mixin showFooterElements() {
+  opacity: 0.95;
+  .footerElement {
+    .footerElemText {
+      display: block;
+    }
+  }
+}
+
+span.before,
+span.after {
+  width: 50px;
+  top: 0;
+  color: #fff;
+  font-size: 2rem;
+  z-index: 1050;
+}
+
+span.before {
+  background: linear-gradient(to right, #000, rgba(0,0,0, 0.2));
+}
+
+span.after {
+  background: linear-gradient(to left, #000, rgba(0,0,0, 0.2));
+  right: 0;
+}
+
 .navbar-footer {
-  position: absolute;
   left: 0;
   z-index: 1040;
 
-  @include media-breakpoint-up(sm) {
-    @include border-right-radius($border-radius);
-    &:hover {
-      opacity: 0.95;
-      .footerElement {
-        .footerElemText {
-          display: block;
-        }
-      }
-    }
-  }
+  @include media-breakpoint-only(sm) {
+    position: absolute;
 
-  @include media-breakpoint-down(xs) {
-    overflow: scroll;
-    justify-content: left;
-    width: 100%;
-  }
-  @include media-breakpoint-up(sm) {
-    justify-content: center;
-  }
-
-  .footerElement {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-
-    @include media-breakpoint-down(xs) {
-      padding: 10px;
-      flex-grow: 1;
-    }
-    @include media-breakpoint-up(sm) {
-      padding: 0;
-      flex-grow: 0;
-    }
-
-    .footerElemText {
-      flex-shrink: 0;
-      @include media-breakpoint-up(sm) {
+    .footerElement {
+      .footerElemText {
         display: none;
       }
     }
+    &:hover {
+      @include showFooterElements;
+    }
+  }
+  @include media-breakpoint-up(md) {
+    opacity: 0.95;
+  }
 
-    p {
-      margin: 0;
-      line-height: 25px;
+  @include media-breakpoint-down(xs) {
+    height: 50px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  @include media-breakpoint-up(sm) {
+    @include border-right-radius($border-radius);
+    max-width: 20vw;
+  }
+
+  .footerElement {
+    flex-shrink: 0;
+
+    @include media-breakpoint-down(xs) {
+      flex-grow: 1;
+
+      .footerElemText {
+        line-height: 40px;
+      }
+    }
+    @include media-breakpoint-up(sm) {
+      flex-grow: 0;
+
+      .footerElemText {
+        flex-shrink: 0;
+        max-width: 15vw;
+      }
     }
   }
 }

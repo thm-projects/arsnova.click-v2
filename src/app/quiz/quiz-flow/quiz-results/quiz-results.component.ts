@@ -27,9 +27,9 @@ export class Countdown {
   }
 
   private _isRunning: boolean;
-  private _time: number;
+  private readonly _time: number;
   private _remainingTime: number;
-  private _interval: any;
+  private readonly _interval: any;
 
   public onChange = new EventEmitter<number>();
 
@@ -64,6 +64,8 @@ export class Countdown {
   styleUrls: ['./quiz-results.component.scss']
 })
 export class QuizResultsComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuizResultsComponent';
+
   get selectedQuestionIndex(): number {
     return this._selectedQuestionIndex;
   }
@@ -75,14 +77,16 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   constructor(
     public currentQuizService: CurrentQuizService,
     public attendeeService: AttendeeService,
+    public i18nService: I18nService,
     private http: HttpClient,
     private router: Router,
     private headerLabelService: HeaderLabelService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
-    private i18nService: I18nService,
     private questionTextService: QuestionTextService
   ) {
+
+    this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.liveResults.title';
 
@@ -183,13 +187,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
     }).length;
 
-    const res = (
-        this._selectedQuestionIndex <= this.currentQuizService.questionIndex &&
-        !resultLength &&
-        !this.currentQuizService.readingConfirmationRequested
-      );
-
-    return res;
+    return (
+      this._selectedQuestionIndex <= this.currentQuizService.questionIndex &&
+      !resultLength &&
+      !this.currentQuizService.readingConfirmationRequested
+    );
   }
 
   showConfidenceRate(questionIndex: number): boolean {
@@ -392,7 +394,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         if (data.status === 'STATUS:SUCCESSFUL') {
           const question = this.currentQuizService.currentQuestion();
 
-          if (question.timer) {
+          if (question.timer && new Date().getTime() - data.payload.startTimestamp < 0) {
             this.countdown = new Countdown(question, data.payload.startTimestamp);
           }
 

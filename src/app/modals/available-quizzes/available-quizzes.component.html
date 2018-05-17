@@ -1,7 +1,11 @@
 <div class="available-quizzes-modal">
   <div class="modal-header">
     <h5 class="modal-title" [innerHTML]="'component.hashtag_management.quiz_management' | translate"></h5>
-    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" (click)="dismiss()">
+    <button type="button"
+            class="close pointer"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="dismiss()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -14,7 +18,10 @@
     </ul>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary pointer" data-dismiss="modal" (click)="abort()" [innerHTML]="'global.close_window' | translate"></button>
+    <button type="button"
+            class="btn btn-secondary pointer"
+            data-dismiss="modal"
+            (click)="abort()">{{'global.close_window' | translate}}</button>
   </div>
 
 </div>

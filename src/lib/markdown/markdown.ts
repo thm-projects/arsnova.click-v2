@@ -1,5 +1,5 @@
 import * as marked from 'marked';
-import highlight from 'highlight.js';
+import * as highlight from 'highlight.js';
 import {DefaultSettings} from '../default.settings';
 
 export function parseGithubFlavoredMarkdown(value: string): string {
@@ -38,7 +38,7 @@ function preMarkdownRenderer(value: string): string {
 }
 
 function postMarkdownRenderer(value: string): string {
-  const iframeOptions = `frameborder="0" gesture="media" webkitallowfullscreen mozallowfullscreen allowfullscreen`;
+  const iframeOptions = `frameborder="0" gesture="media" width="100%" webkitallowfullscreen mozallowfullscreen allowfullscreen`;
 
   const youtubeMatch = value.match(/<a href=".*(youtube|youtu).*">.*<\/a>/g);
   if (youtubeMatch) {

@@ -7,6 +7,8 @@ import {DomSanitizer, SafeHtml, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./progress-bar-ranged.component.scss']
 })
 export class ProgressBarRangedComponent implements OnInit {
+  public static TYPE = 'ProgressBarRangedComponent';
+
   get percent(): number {
     return this._percent;
   }
@@ -40,8 +42,8 @@ export class ProgressBarRangedComponent implements OnInit {
   private label: string;
   private progressbarCssClass: string;
 
-  sanitizeStyle(value: string): SafeStyle {
-    value = value.replace(/\s/g, '');
+  sanitizeStyle(value: string | number): SafeStyle {
+    value = value.toString().replace(/\s/g, '');
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
   }
 

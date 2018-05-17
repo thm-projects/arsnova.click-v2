@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
-import {AttendeeService} from 'app/service/attendee.service';
+import {AttendeeService} from '../../../service/attendee.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMessage, ILeaderBoardItem} from 'arsnova-click-v2-types/src/common';
@@ -11,6 +11,7 @@ import {ConnectionService} from '../../../service/connection.service';
 import {HttpClient} from '@angular/common/http';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
+import {I18nService} from '../../../service/i18n.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -18,6 +19,14 @@ import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
   styleUrls: ['./leaderboard.component.scss']
 })
 export class LeaderboardComponent implements OnInit, OnDestroy {
+  get hasMultipleAnswersAvailable(): boolean {
+    return this._hasMultipleAnswersAvailable;
+  }
+  public static TYPE = 'LeaderboardComponent';
+
+  get memberGroupResults(): Array<ILeaderBoardItem> {
+    return this._memberGroupResults;
+  }
   get questionIndex(): number {
     return this._questionIndex;
   }
@@ -38,19 +47,25 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _leaderBoardCorrect: Array<ILeaderBoardItem>;
   private _leaderBoardPartiallyCorrect: Array<ILeaderBoardItem>;
+  private _memberGroupResults: Array<ILeaderBoardItem>;
   private _isGlobalRanking: boolean;
-  private _hashtag: string;
+  private _hasMultipleAnswersAvailable: boolean;
+  private readonly _hashtag: string;
 
   constructor(
     private sanitizer: DomSanitizer,
     private footerBarService: FooterBarService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
-    private currentQuizService: CurrentQuizService,
     private http: HttpClient,
     private router: Router,
     private connectionService: ConnectionService,
-    public attendeeService: AttendeeService) {
+    public currentQuizService: CurrentQuizService,
+    public attendeeService: AttendeeService,
+    private i18nService: I18nService
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
 
     this._hashtag = this.currentQuizService.quiz.hashtag;
     this._leaderBoardCorrect = [];
@@ -77,7 +92,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'voting']);
           break;
         case 'MEMBER:UPDATED_RESPONSE':
-          console.log('modify response data for nickname in confidence rate view', data.payload.nickname);
+          console.log('modify response data for nickname in leaderboard view', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
         case 'QUIZ:RESET':
@@ -110,7 +125,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       return Math.round(value);
     }
 
-    if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
+    if (isNaN(value) || !(exp % 1 === 0)) {
       return NaN;
     }
 
@@ -138,13 +153,19 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         }
       } else {
         this.headerLabelService.headerLabel = 'component.leaderboard.header';
+
+        const questionType = this.currentQuizService.quiz.questionList[this.questionIndex].TYPE;
+        this._hasMultipleAnswersAvailable = questionType === 'MultipleChoiceQuestion';
       }
+
+
       const url = `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex ? this._questionIndex : ''}`;
       this.http.get(url)
           .subscribe(
             (data: IMessage) => {
               this._leaderBoardCorrect = data.payload.correctResponses;
               this._leaderBoardPartiallyCorrect = data.payload.partiallyCorrectResponses;
+              this._memberGroupResults = data.payload.memberGroupResults;
 
               this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
                 this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
@@ -153,9 +174,17 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
                   }
                 });
               });
+
+              this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
+                return memberGroupResult.correctQuestions.length > 0;
+              });
             }
           );
     });
+  }
+
+  private formatResponseTime(responseTime: number): string {
+    return this.i18nService.formatNumber(parseFloat(responseTime.toFixed(2)));
   }
 
   ngOnDestroy() {

@@ -8,6 +8,7 @@
             class="btn pointer"
             [class.btn-secondary]="currentData === elem"
             [class.btn-default]="currentData !== elem"
+            (click)="toInfoContent(elem)"
             [routerLink]="['/info', elem]">
       <span [innerHTML]="('region.footer.footer_bar.' + elem) | translate"></span>
     </button>

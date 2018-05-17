@@ -1,5 +1,4 @@
 .member-wrapper {
-  padding: 5px;
   border-radius: 10px;
 }
 
@@ -7,6 +6,7 @@
   cursor: pointer;
 }
 
-.no-attendees-label {
-  color: #fff;
+.attendee-text {
+  /* Font size of "fas fa-user" => fa-2x */
+  line-height: 2em;
 }

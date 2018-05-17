@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {DefaultSettings} from '../../lib/default.settings';
 import {IMessage, IDuplicateQuiz} from 'arsnova-click-v2-types/src/common';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActiveQuestionGroupService} from './active-question-group.service';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 
@@ -23,8 +22,8 @@ export class FileUploadService {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private modalService: NgbModal,
-    private activeQuestionGroupService: ActiveQuestionGroupService) {
+    private activeQuestionGroupService: ActiveQuestionGroupService
+  ) {
   }
 
   uploadFile(formData: FormData) {

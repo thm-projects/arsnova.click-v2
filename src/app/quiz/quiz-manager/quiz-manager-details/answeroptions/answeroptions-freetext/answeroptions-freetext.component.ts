@@ -1,5 +1,5 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActiveQuestionGroupService} from '../../../../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
 import {FreeTextAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/answeroption_freetext';
@@ -13,12 +13,14 @@ import {HeaderLabelService} from '../../../../../service/header-label.service';
   styleUrls: ['./answeroptions-freetext.component.scss']
 })
 export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
+  public static TYPE = 'AnsweroptionsFreetextComponent';
+
   private _questionIndex: number;
   private _routerSubscription: Subscription;
   private _testInput = '';
   private _question: IQuestion;
   private _matchText = '';
-  private _answer: IFreetextAnswerOption;
+  private _answer: Array<IFreetextAnswerOption>;
 
   get question(): IQuestion {
     return this._question;
@@ -26,7 +28,7 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   get matchText(): string {
     return this._matchText;
   }
-  get answer(): IFreetextAnswerOption {
+  get answer(): Array<IFreetextAnswerOption> {
     return this._answer;
   }
 
@@ -64,13 +66,15 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
       this._questionIndex = +params['questionIndex'];
       this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
       this._matchText = this._question.answerOptionList[0].answerText;
-      this._answer = <IFreetextAnswerOption>this._question.answerOptionList[0];
+      this._answer = <Array<IFreetextAnswerOption>>this._question.answerOptionList;
     });
   }
 
   @HostListener('window:beforeunload', [ '$event' ])
   ngOnDestroy() {
     this.activeQuestionGroupService.persist();
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
+    }
   }
 }

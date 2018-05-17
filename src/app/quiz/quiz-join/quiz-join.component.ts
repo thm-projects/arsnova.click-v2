@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../lib/default.settings';
@@ -15,6 +15,7 @@ import {ThemesService} from '../../service/themes.service';
   styleUrls: ['./quiz-join.component.scss']
 })
 export class QuizJoinComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuizJoinComponent';
 
   private _routerSubscription: Subscription;
 
@@ -23,7 +24,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private casService: CasService,
-    private currentQuizService: CurrentQuizService,
+    public currentQuizService: CurrentQuizService,
     private themesService: ThemesService
   ) {
   }
@@ -31,14 +32,11 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.queryParams.subscribe(queryParams => {
       const ticket = queryParams.ticket;
-      console.log('queryparams', queryParams);
       if (ticket) {
-        // TODO: authorize via cas;
         this.casService.ticket = ticket;
       }
       this.route.params.subscribe(params => {
         const quizname = params.quizName;
-        console.log('params', params);
         this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
           if (value.status === 'STATUS:SUCCESSFUL' && value.step === 'QUIZ:AVAILABLE') {
             this.casService.casLoginRequired = value.payload.authorizeViaCas;
@@ -51,7 +49,12 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
                 this.currentQuizService.quiz = new questionGroupReflection[quiz.TYPE](quiz);
                 this.currentQuizService.persistToSessionStorage();
                 this.themesService.updateCurrentlyUsedTheme();
-                this.router.navigate(['/nicks/' + (value.payload.provideNickSelection ? 'select' : 'input')]);
+                if (this.currentQuizService.quiz.sessionConfig.nicks.memberGroups.length > 1) {
+                  window.sessionStorage.setItem('temp.provideNickSelection', value.payload.provideNickSelection);
+                  this.router.navigate(['/nicks', 'memberGroup']);
+                } else {
+                  this.router.navigate(['/nicks', (value.payload.provideNickSelection ? 'select' : 'input')]);
+                }
               }
             );
           } else {

@@ -1,5 +1,5 @@
-<div class="row center-vertical" id="landingPageContent">
-  <div class="col-12 text-center mb-5" id="arsnova-click-description">
+<div class="row flex-column" id="landingPageContent">
+  <div class="col-12 text-center my-5 my-sm-5" id="arsnova-click-description" *ngIf="!isShowingQuiznameDatalist">
     <div class="text-center header-label text-bold">
       <span class="color-changing-ars logo-header-chars">a r s </span>
       <span class="color-changing-nova logo-header-chars">n o v a </span>
@@ -7,17 +7,37 @@
       <span class="color-changing-click logo-header-chars logo-header-margin-for-dot">c l i c k</span>
     </div>
   </div>
-  <div class="col-md-10 col-lg-8 m-auto">
+  <div class="col-md-10 col-lg-8 mx-auto"
+       [class.mt-sm-5]="!isShowingQuiznameDatalist">
     <div class="row">
-      <div class="col-12 px-1">
+      <div class="col-12 px-1 mb-2">
         <input type="text"
-               class="text-center rounded w-100 mb-2 border-0 input-field"
+               class="text-center rounded w-100 border-0 input-field"
                id="hashtag-input-field"
                autocomplete="off"
                spellcheck="false"
-               [value]="enteredSessionName"
+               [(value)]="enteredSessionName"
                (input)="parseQuiznameInput($event)"
+               (focus)="showQuiznameDatalist()"
+               [title]="'component.hashtag_management.enter_quiz_name' | translate"
                [placeholder]="'component.hashtag_management.enter_quiz_name' | translate"/>
+        <span class="position-absolute text-light px-2 pb-1 rounded-right pointer" id="collapse-quiz-name-datalist"
+              *ngIf="isShowingQuiznameDatalist"
+              (click)="hideQuiznameDatalist()">
+          &#x21E7;
+        </span>
+        <div class="list-group text-default d-none list-group-flush" id="hashtag-input-data-list">
+          <span class="list-group-item list-group-item-action list-group-item-success text-capitalize pointer"
+                (click)="autoJoinToSession(option)"
+                *ngFor="let option of sharedService.activeQuizzes">Join {{option}}</span>
+          <span class="list-group-item list-group-item-action text-capitalize pointer"
+                (click)="selectQuizByList(option)"
+                *ngFor="let option of ownQuizzes">Use {{option}}</span>
+          <span class="list-group-item list-group-item-action pointer"
+                (click)="selectQuizByList('Demo Quiz')">Create new Demo Quiz</span>
+          <span class="list-group-item list-group-item-action pointer"
+                (click)="selectQuizByList('ABCD')">Create new ABCD Quiz</span>
+        </div>
       </div>
       <div *ngIf="passwordRequired" class="col-12 px-1">
         <input type="password"
@@ -26,50 +46,66 @@
                autocomplete="off"
                spellcheck="false"
                (input)="setPassword($event)"
+               [title]="'component.hashtag_management.enter_server_password' | translate"
                [placeholder]="'component.hashtag_management.enter_server_password' | translate"/>
       </div>
     </div>
     <div class="row">
       <div class="col-6 col-join-session px-1">
-        <button id="joinSession"
+        <button *ngIf="!canStartQuiz"
+                id="joinSession"
                 class="btn btn-success btn-block pointer"
+                (click)="handleClick('joinSession')"
                 [class.disabled]="!canJoinQuiz"
                 [routerLink]="['/quiz', enteredSessionName]"
                 [disabled]="!canJoinQuiz">
           <i class="fas fa-thumbs-up"></i>
           <span [innerHTML]="'component.hashtag_management.join_session' | translate"></span>
         </button>
+        <button *ngIf="canStartQuiz"
+                id="startSession"
+                class="btn btn-success btn-block pointer"
+                (click)="handleClick('startSession') && setAsCurrentQuiz(['/quiz', 'flow'])"
+                [class.disabled]="!canStartQuiz || !serverPassword.length"
+                [disabled]="!canStartQuiz || !serverPassword.length">
+          <i class="fas fa-thumbs-up"></i>
+          <span [innerHTML]="'component.hashtag_management.start_session' | translate"></span>
+        </button>
       </div>
       <div class="col-6 col-create-session px-1">
         <button *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
                 id="addSession"
                 class="btn btn-success btn-block pointer"
-                [class.disabled]="!canAddQuiz"
-                (click)="setActiveQuestionGroup(['/quiz', 'manager', 'overview'])"
-                [disabled]="!canAddQuiz">
+                [class.disabled]="!serverPassword.length"
+                (click)="handleClick('addSession') && setAsCurrentQuiz(['/quiz', 'manager', 'overview'])"
+                [disabled]="!serverPassword.length">
           <span [innerHTML]="'component.hashtag_management.create_session' | translate"></span>
           <i class="fas fa-edit"></i>
         </button>
         <button *ngIf="canEditQuiz"
                 id="editSession"
                 class="btn btn-success btn-block pointer"
-                (click)="setActiveQuestionGroup(['/quiz', 'manager', 'overview'])">
+                (click)="handleClick('editSession') && setActiveQuestionGroup(['/quiz', 'manager', 'overview'])">
           <span [innerHTML]="'component.hashtag_management.edit_session' | translate"></span>
           <i class="fas fa-edit"></i>
         </button>
         <button *ngIf="isAddingDemoQuiz"
                 id="runDemoQuizSession"
                 class="btn btn-success btn-block pointer"
-                (click)="setActiveQuestionGroup(['/quiz', 'flow', 'lobby'])">
+                [class.disabled]="!serverPassword.length"
+                (click)="handleClick('add-demo-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
+                [disabled]="!serverPassword.length">
           <span [innerHTML]="'component.hashtag_management.create_demo_session' | translate"></span>
-          <i class="fas fa-send"></i>
+          <i class="fas fa-paper-plane"></i>
         </button>
         <button *ngIf="isAddingABCDQuiz"
                 id="runABCDQuizSession"
                 class="btn btn-success btn-block pointer"
-                (click)="setActiveQuestionGroup(['/quiz', 'flow', 'lobby'])">
+                [class.disabled]="!serverPassword.length"
+                (click)="handleClick('add-abcd-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
+                [disabled]="!serverPassword.length">
           <span [innerHTML]="'component.hashtag_management.create_abcd_session' | translate"></span>
-          <i class="fas fa-send"></i>
+          <i class="fas fa-paper-plane"></i>
         </button>
       </div>
     </div>
@@ -78,7 +114,6 @@
     <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
   </div>
   <div class="col-12 text-center mt-5" id="demo-quiz-description">
-    <p>{{'component.hashtag_home.demo_quiz.title.2' | translate}}</p>
     <p>{{'component.hashtag_home.demo_quiz.title.3' | translate}}</p>
   </div>
   <div class="col-12 px-1 mb-5 mt-2 justify-content-center d-flex mathjax-container">

@@ -1,14 +1,54 @@
 <div class="row">
   <h4 *ngIf="!leaderBoardCorrect.length"
-      class="col-12 mt-5 text-center"
+      class="col-12 mt-5 text-center text-light"
       [innerHTML]="'component.leaderboard.no_attendee_correct' + (isGlobalRanking ? '_global' : '') | translate"></h4>
 
-  <h4 *ngIf="leaderBoardCorrect.length && !isGlobalRanking"
-      class="col-12">{{'component.leaderboard.title.single_question' | translate:{QUESTION_ID: (questionIndex + 1)} }}</h4>
+  <h4 *ngIf="leaderBoardCorrect.length"
+      class="col-12 text-light">
+    {{'component.leaderboard.title.' + (isGlobalRanking ? 'all_questions' : 'single_question') | translate:{QUESTION_ID: (questionIndex + 1)} }}
+  </h4>
 
-  <h4 *ngIf="leaderBoardCorrect.length && isGlobalRanking"
-      class="col-12">{{'component.leaderboard.title.all_questions' | translate }}</h4>
+  <ng-container *ngIf="currentQuizService.quiz.sessionConfig.nicks.memberGroups.length > 1;else attendeeView">
+    <ng-container *ngFor="let group of memberGroupResults">
+      <div class="col-12 col-sm-6">
+        <div class="leaderboard-item rounded p-2 my-2 ">
+          <h6 class="text-center mb-0">Team "{{group.name}}"</h6>
+          <hr/>
+          <p>Overall Response Time: {{formatResponseTime(group.responseTime)}}</p>
+          <p>Score: {{group.score}}</p>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
 
+</div>
+
+<ng-container *ngIf="leaderBoardPartiallyCorrect.length && (isGlobalRanking || hasMultipleAnswersAvailable)">
+  <hr/>
+
+  <div class="row">
+    <h4 class="col-12 text-light">
+      {{'component.leaderboard.title.' + (isGlobalRanking ? 'all_questions_partially' : 'single_question_partially') | translate:{QUESTION_ID: (questionIndex + 1)} }}
+    </h4>
+
+    <div *ngFor="let attendee of leaderBoardPartiallyCorrect"
+         class="ml-3">
+      <div class="partially-correct-leaderboard-item rounded p-2 my-2"
+           [class.own-nick]="attendeeService.isOwnNick(attendee.name)">
+        <span class="d-inline-flex">
+          {{parseNickname(attendee.name)}}&nbsp;-&nbsp;
+        </span>
+        <span>
+          {{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+
+<ng-template #attendeeView>
   <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
        [class.col-12]="!i"
        [class.col-sm-6]="!!i">
@@ -24,29 +64,4 @@
       <span>{{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
     </div>
   </div>
-</div>
-
-<hr/>
-
-<div class="row">
-  <h4 *ngIf="!leaderBoardPartiallyCorrect.length"
-      class="col-12 text-center"
-      [innerHTML]="'component.leaderboard.no_attendee_partially_correct' + (isGlobalRanking ? '_global' : '') | translate"></h4>
-
-  <h4 *ngIf="leaderBoardPartiallyCorrect.length && !isGlobalRanking"
-      class="col-12">{{'component.leaderboard.title.single_question_partially' | translate:{QUESTION_ID: (questionIndex + 1)} }}</h4>
-
-  <h4 *ngIf="leaderBoardPartiallyCorrect.length && isGlobalRanking"
-      class="col-12">{{'component.leaderboard.title.all_questions_partially' | translate }}</h4>
-
-  <div *ngFor="let attendee of leaderBoardPartiallyCorrect; let i = index"
-       class="ml-3">
-    <div class="partially-correct-leaderboard-item rounded p-2 my-2"
-         [class.own-nick]="attendeeService.isOwnNick(attendee.name)">
-      <span><span class="d-inline-flex"
-                  [innerHTML]="parseNickname(attendee.name)"></span>&nbsp;-&nbsp;</span>
-      <span>{{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
-
-    </div>
-  </div>
-</div>
+</ng-template>

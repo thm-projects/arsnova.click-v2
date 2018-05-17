@@ -7,6 +7,8 @@ import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./gamification-animation.component.scss']
 })
 export class GamificationAnimationComponent implements OnInit {
+  public static TYPE = 'GamificationAnimationComponent';
+
   get image(): string {
     return this._image;
   }

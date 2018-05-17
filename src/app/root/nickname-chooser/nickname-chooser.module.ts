@@ -4,6 +4,7 @@ import {NicknameSelectComponent} from './nickname-select/nickname-select.compone
 import {SharedModule} from '../../shared/shared.module';
 import {RouterModule, Routes} from '@angular/router';
 import {CasService} from '../../service/cas.service';
+import {MemberGroupSelectComponent} from './member-group-select/member-group-select.component';
 
 const nicknameChooserRoutes: Routes = [
   {
@@ -18,6 +19,11 @@ const nicknameChooserRoutes: Routes = [
     component: NicknameSelectComponent,
     data: {}
   },
+  {
+    path: 'nicks/memberGroup',
+    component: MemberGroupSelectComponent,
+    data: {}
+  },
 ];
 
 @NgModule({
@@ -25,7 +31,11 @@ const nicknameChooserRoutes: Routes = [
     SharedModule,
     RouterModule.forChild(nicknameChooserRoutes),
   ],
-  declarations: [NicknameInputComponent, NicknameSelectComponent]
+  declarations: [
+    NicknameInputComponent,
+    NicknameSelectComponent,
+    MemberGroupSelectComponent
+  ]
 })
 export class NicknameChooserModule {
 }

@@ -9,6 +9,8 @@ import {DomSanitizer, SafeStyle} from '@angular/platform-browser';
   styleUrls: ['./confidence-rate.component.scss']
 })
 export class ConfidenceRateComponent implements OnInit {
+  public static TYPE = 'ConfidenceRateComponent';
+
   get percent(): string {
     return this._percent;
   }

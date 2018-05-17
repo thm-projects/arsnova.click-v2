@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FooterBarService} from 'app/service/footer-bar.service';
+import {FooterBarService} from '../../../service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {IMusicSessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {ISong} from 'arsnova-click-v2-types/src/common';
-import {CurrentQuizService} from "../../../service/current-quiz.service";
+import {CurrentQuizService} from '../../../service/current-quiz.service';
 
 @Component({
   selector: 'app-sound-manager',
@@ -12,6 +12,8 @@ import {CurrentQuizService} from "../../../service/current-quiz.service";
   styleUrls: ['./sound-manager.component.scss']
 })
 export class SoundManagerComponent implements OnInit, OnDestroy {
+  public static TYPE = 'SoundManagerComponent';
+
   get countdownEndSounds(): Array<ISong> {
     return this._countdownEndSounds;
   }
@@ -28,7 +30,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     return this._config;
   }
 
-  private _config: IMusicSessionConfiguration;
+  private readonly _config: IMusicSessionConfiguration;
   private _lobbySongs: Array<ISong> = [];
   private _countdownRunningSounds: Array<ISong> = [];
   private _countdownEndSounds: Array<ISong> = [];
@@ -39,6 +41,8 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService) {
+
+    this.footerBarService.TYPE_REFERENCE = SoundManagerComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);

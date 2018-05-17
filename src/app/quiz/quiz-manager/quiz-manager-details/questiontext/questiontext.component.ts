@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {QuestionTextService} from '../../../../service/question-text.service';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
-import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from 'environments/environment';
+import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../environments/environment';
 import {HeaderLabelService} from '../../../../service/header-label.service';
 
 @Component({
@@ -13,6 +13,7 @@ import {HeaderLabelService} from '../../../../service/header-label.service';
   styleUrls: ['./questiontext.component.scss']
 })
 export class QuestiontextComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuestiontextComponent';
 
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
@@ -26,7 +27,10 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
@@ -166,7 +170,9 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._routerSubscription.unsubscribe();
+    if (this._routerSubscription) {
+      this._routerSubscription.unsubscribe();
+    }
     this.questionTextService.change(this.questionTextElement.value);
     this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText = this.questionTextElement.value;
     this.activeQuestionGroupService.persist();

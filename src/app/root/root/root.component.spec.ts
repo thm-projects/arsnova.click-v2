@@ -75,13 +75,13 @@ describe('RootComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach((() => {
+  beforeEach(async(() => {
     fixture = TestBed.createComponent(RootComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', (inject([HttpClient, HttpTestingController],
+  it('should be created', async(inject([HttpClient, HttpTestingController],
     (http: HttpClient, backend: HttpTestingController) => {
       const environmentData = require(`../../../assets/serverEndpoint.json`);
       backend.expectOne(`assets/serverEndpoint.json`).flush(environmentData);

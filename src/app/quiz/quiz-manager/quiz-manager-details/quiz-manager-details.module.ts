@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {OverviewComponent} from './overview/overview.component';
+import {QuizManagerDetailsOverviewComponent} from './quiz-manager-details-overview/quiz-manager-details-overview.component';
 import {CountdownComponent} from './countdown/countdown.component';
 import {QuestiontextComponent} from './questiontext/questiontext.component';
 import {QuestiontypeComponent} from './questiontype/questiontype.component';
@@ -17,7 +17,7 @@ import {AnsweroptionsModule} from './answeroptions/answeroptions.module';
     AnsweroptionsModule
   ],
   providers: [QuestionTextService],
-  declarations: [OverviewComponent, CountdownComponent, QuestiontextComponent, QuestiontypeComponent]
+  declarations: [QuizManagerDetailsOverviewComponent, CountdownComponent, QuestiontextComponent, QuestiontypeComponent]
 })
 export class QuizManagerDetailsModule {
 }

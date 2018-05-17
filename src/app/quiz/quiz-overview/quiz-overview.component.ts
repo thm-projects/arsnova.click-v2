@@ -8,6 +8,7 @@ import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../lib/default.settings';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../service/current-quiz.service';
+import {TrackingService} from '../../service/tracking.service';
 
 @Component({
   selector: 'app-quiz-overview',
@@ -15,11 +16,13 @@ import {CurrentQuizService} from '../../service/current-quiz.service';
   styleUrls: ['./quiz-overview.component.scss']
 })
 export class QuizOverviewComponent implements OnInit {
+  public static TYPE = 'QuizOverviewComponent';
+
   get sessions(): Array<string> {
     return this._sessions;
   }
 
-  private _sessions: Array<string> = [];
+  private readonly _sessions: Array<string> = [];
 
   constructor(
     private footerBarService: FooterBarService,
@@ -27,7 +30,11 @@ export class QuizOverviewComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private currentQuizService: CurrentQuizService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private router: Router) {
+    private router: Router,
+    private trackingService: TrackingService
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = QuizOverviewComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemAbout,
@@ -52,6 +59,10 @@ export class QuizOverviewComponent implements OnInit {
     const sessionSerialized = JSON.parse(window.localStorage.getItem(sessionName));
     const session = new questionGroupReflection[sessionSerialized.TYPE](sessionSerialized);
 
+    this.trackingService.trackClickEvent({
+      action: QuizOverviewComponent.TYPE,
+      label: `start-quiz`,
+    });
     new Promise((resolve, reject) => {
       this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${session.hashtag}`).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL') {
@@ -92,6 +103,10 @@ export class QuizOverviewComponent implements OnInit {
 
   editQuiz(session: string): void {
     const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
+    this.trackingService.trackClickEvent({
+      action: QuizOverviewComponent.TYPE,
+      label: `edit-quiz`,
+    });
     this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
     this.router.navigate(['/quiz', 'manager']);
   }
@@ -101,6 +116,10 @@ export class QuizOverviewComponent implements OnInit {
     const a = document.createElement('a');
     const time = new Date();
     const timestring = time.getDate() + '_' + (time.getMonth() + 1) + '_' + time.getFullYear();
+    this.trackingService.trackClickEvent({
+      action: QuizOverviewComponent.TYPE,
+      label: `export-quiz`,
+    });
     a.href = 'data:' + exportData;
     a.download = session + '-' + timestring + '.json';
     a.addEventListener('click', function () {
@@ -113,6 +132,10 @@ export class QuizOverviewComponent implements OnInit {
   }
 
   deleteQuiz(session: string): void {
+    this.trackingService.trackClickEvent({
+      action: QuizOverviewComponent.TYPE,
+      label: `delete-quiz`,
+    });
     this.sessions.splice(this.sessions.indexOf(session), 1);
     window.localStorage.removeItem(session);
     window.localStorage.setItem('config.owned_quizzes', JSON.stringify(this.sessions));

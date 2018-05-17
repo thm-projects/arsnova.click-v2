@@ -1,8 +1,26 @@
+@import "../../../styles_vendor";
+
 #landingPageContent {
 
   #arsnova-click-description,
   .mathjax-content-container {
+    fill: #fff;
     color: #fff;
+  }
+
+  #collapse-quiz-name-datalist {
+    right: 4px;
+    top: 0;
+    font-size: 2rem;
+    background: rgba(0,0,0,0.5);
+
+    &:hover {
+      background: rgba(0,0,0,0.3);
+    }
+
+    &:active {
+      background: rgba(0,0,0,0.9);
+    }
   }
 
   #hashtag-input-field,
@@ -20,6 +38,11 @@
   }
 
   .header-label {
-    font-size: 1.8rem;
+    @include media-breakpoint-down(xs) {
+      font-size: 1.8rem;
+    }
+    @include media-breakpoint-up(sm) {
+      font-size: 2.8rem;
+    }
   }
 }

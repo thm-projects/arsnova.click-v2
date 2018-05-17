@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {QuestionTextService} from '../../service/question-text.service';
-import {Subscription} from 'rxjs/Subscription';
+import {Subscription} from 'rxjs';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../environments/environment';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {ActivatedRoute} from '@angular/router';
@@ -14,6 +14,8 @@ import {ConnectionService} from '../../service/connection.service';
   styleUrls: ['./live-preview.component.scss']
 })
 export class LivePreviewComponent implements OnInit, OnDestroy {
+  public static TYPE = 'LivePreviewComponent';
+
   get targetDevice(): DEVICE_TYPES {
     return this._targetDevice;
   }
@@ -91,7 +93,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return String.fromCharCode(65 + index);
   }
 
-  sanitizeHTML(value: string): SafeHtml {
+  sanitizeHTML(value: string | Array<string>): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
@@ -112,7 +114,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
       case this.ENVIRONMENT_TYPE.QUESTION:
         break;
       default:
-        throw new Error('Unsupported environment type in live preview');
+        throw new Error(`Unsupported environment type in live preview: '${this.targetEnvironment}'`);
     }
   }
 

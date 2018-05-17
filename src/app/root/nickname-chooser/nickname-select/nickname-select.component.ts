@@ -17,6 +17,8 @@ import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
   styleUrls: ['./nickname-select.component.scss']
 })
 export class NicknameSelectComponent implements OnInit, OnDestroy {
+  public static TYPE = 'NicknameSelectComponent';
+
   get nicks(): Array<string> {
     return this._nicks;
   }
@@ -31,7 +33,10 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private connectionService: ConnectionService,
-    private currentQuiz: CurrentQuizService) {
+    private currentQuiz: CurrentQuizService
+  ) {
+
+    this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);
@@ -49,6 +54,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
         quizName: this.currentQuiz.quiz.hashtag,
         nickname: name,
+        groupName: window.sessionStorage.getItem('config.memberGroup'),
         ticket: this.userService.ticket
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {

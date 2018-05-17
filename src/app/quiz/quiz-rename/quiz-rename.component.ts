@@ -12,11 +12,14 @@ import {IDuplicateQuiz} from 'arsnova-click-v2-types/src/common';
   styleUrls: ['./quiz-rename.component.scss']
 })
 export class QuizRenameComponent implements OnInit, OnDestroy {
+  public static TYPE = 'QuizRenameComponent';
 
   constructor(
     public fileUploadService: FileUploadService,
     private footerBarService: FooterBarService,
     private router: Router) {
+
+    this.footerBarService.TYPE_REFERENCE = QuizRenameComponent.TYPE;
     this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
   }
 

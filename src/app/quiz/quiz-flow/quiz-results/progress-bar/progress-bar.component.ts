@@ -14,6 +14,7 @@ import {IFreetextAnswerOption} from 'arsnova-click-v2-types/src/answeroptions/in
   styleUrls: ['./progress-bar.component.scss']
 })
 export class ProgressBarComponent implements OnInit, OnDestroy {
+  public static TYPE = 'ProgressBarComponent';
 
   @Input() data: Array<string>;
   @Input() questionIndex: number;

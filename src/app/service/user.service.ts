@@ -29,12 +29,10 @@ export class UserService {
     return new Promise(resolve => {
       this.http.get(`${DefaultSettings.httpLibEndpoint}/authorize/${token}`).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL') {
-          console.log(data);
           this._isLoggedIn = true;
           this._ticket = data.payload.ticket;
           resolve(true);
         } else {
-          console.log(data);
           this._isLoggedIn = false;
           resolve(false);
         }

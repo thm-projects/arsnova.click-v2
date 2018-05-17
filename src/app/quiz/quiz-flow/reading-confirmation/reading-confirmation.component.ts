@@ -17,6 +17,7 @@ import {HeaderLabelService} from '../../../service/header-label.service';
   styleUrls: ['./reading-confirmation.component.scss']
 })
 export class ReadingConfirmationComponent implements OnInit, OnDestroy {
+  public static TYPE = 'ReadingConfirmationComponent';
 
   public questionIndex: number;
   public questionText: string;
@@ -32,8 +33,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService
   ) {
+
+    this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
     headerLabelService.headerLabel = 'component.liveResults.reading_confirmation';
-    this.questionIndex = currentQuizService.quiz.questionList.length;
+    this.questionIndex = currentQuizService.questionIndex;
     this.footerBarService.replaceFooterElements([]);
   }
 

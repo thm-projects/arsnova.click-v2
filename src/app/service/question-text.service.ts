@@ -10,10 +10,12 @@ export class QuestionTextService {
   @Output() fire: EventEmitter<string | Array<string>> = new EventEmitter();
   private _inputCache = {};
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient
+  ) {
   }
 
-  parseMathjax(value: Array<string>) {
+  parseMathjax(value: Array<string>): Promise<Array<IMathjaxResponse>> {
     return new Promise<Array<IMathjaxResponse>>(resolve => {
       this.http.post(`${DefaultSettings.httpLibEndpoint}/mathjax`, {
         mathjax: JSON.stringify(value),
@@ -25,7 +27,7 @@ export class QuestionTextService {
     });
   }
 
-  parseInput(value: string) {
+  parseInput(value: string): Promise<string> {
     if (this._inputCache[value]) {
       return new Promise((resolve => resolve(this._inputCache[value])));
     }
@@ -42,20 +44,17 @@ export class QuestionTextService {
       mathjaxValues = mathjaxValues.concat(matchForBlock);
     }
 
-    return new Promise((resolve) => {
+    return new Promise(async (resolve) => {
       if (mathjaxValues.length) {
-        this.parseMathjax(mathjaxValues).then((mathjaxRendered) => {
+        const mathjaxRendered = await this.parseMathjax(mathjaxValues);
+        result = parseGithubFlavoredMarkdown(result);
 
-          result = parseGithubFlavoredMarkdown(result);
-
-          mathjaxValues.forEach((mathjaxValue: string, index: number) => {
-            result = result.replace(mathjaxValue, mathjaxRendered[index].svg);
-          });
-
-          this._inputCache[value] = result;
-          resolve(result);
-
+        mathjaxValues.forEach((mathjaxValue: string, index: number) => {
+          result = result.replace(mathjaxValue, mathjaxRendered[index].svg);
         });
+
+        this._inputCache[value] = result;
+        resolve(result);
       } else {
 
         result = parseGithubFlavoredMarkdown(result);
@@ -74,14 +73,10 @@ export class QuestionTextService {
 
   changeMultiple(value: Array<string>): void {
     const allResults = [];
-    value.forEach((singleValue, index) => {
-      this.parseInput(singleValue).then((result: string) => {
-        allResults[index] = result;
-        if (allResults.filter(singleResult => !!singleResult).length === value.length) {
-          this.fire.emit(allResults);
-        }
-      });
+    value.forEach(async (singleValue, index) => {
+      allResults[index] = await this.parseInput(singleValue);
     });
+    this.fire.emit(allResults);
   }
 
   getEmitter(): EventEmitter<string | Array<string>> {
