@@ -1,8 +1,28 @@
 stages:
+  - install
   - test
   - build
   - compress
   - deploy
+
+install:
+  stage: install
+  only:
+    - master
+  tags:
+    - nodejs
+  script:
+    - npm install
+
+test:
+  allow_failure: true
+  stage: test
+  only:
+    - master
+  tags:
+    - nodejs
+  script:
+    - npm test
 
 build:
   stage: build
@@ -11,7 +31,6 @@ build:
   tags:
     - nodejs
   script:
-    - npm install
     - npm run build:PROD
   artifacts:
     paths:
@@ -21,20 +40,10 @@ compress:
   stage: compress
   only:
     - master
-  script:
-    - npm run compress
-
-test:
-  allow_failure: true
-  stage: test
-  only:
-    - master
-    - CI
   tags:
     - nodejs
   script:
-    - npm install
-    - npm test
+    - npm run compress
 
 deploy:
   stage: deploy
