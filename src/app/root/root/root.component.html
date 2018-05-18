@@ -7,6 +7,9 @@
     <div class="row flex-sm-nowrap h-100">
       <div class="footer-bar-wrapper p-0 relative" style="height: 50px;">
         <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
+        <div class="d-none d-md-block">
+          <router-outlet name="additionalData-md" class="d-none d-md-block"></router-outlet>
+        </div>
       </div>
 
       <div id="content-container" class="container">

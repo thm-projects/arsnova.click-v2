@@ -17,12 +17,24 @@ import {SoundManagerComponent} from './sound-manager/sound-manager.component';
 import { MemberGroupManagerComponent } from './member-group-manager/member-group-manager.component';
 
 import {Routes, RouterModule} from '@angular/router';
+import {AdditionalDataComponent} from '../../footer/additional-data/additional-data.component';
+import {FooterModule} from '../../footer/footer.module';
 
 const quizManagerRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
     redirectTo: 'overview',
+  },
+  {
+    path: '',
+    component: AdditionalDataComponent,
+    outlet: 'additionalData-xs'
+  },
+  {
+    path: '',
+    component: AdditionalDataComponent,
+    outlet: 'additionalData-md'
   },
   {
     path: 'overview',
@@ -78,6 +90,7 @@ const quizManagerRoutes: Routes = [
 
 @NgModule({
   imports: [
+    FooterModule,
     FormsModule,
     SharedModule,
     QuizManagerDetailsModule,

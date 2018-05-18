@@ -1,5 +1,7 @@
 
-@import "assets/bootstrap4/scss/bootstrap";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
 
 @import "~intro.js/introjs.css";
 @import "~intro.js/themes/introjs-nassim.css";

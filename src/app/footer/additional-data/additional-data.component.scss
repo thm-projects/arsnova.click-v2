@@ -1,0 +1,24 @@
+@import "../../../styles_vendor";
+
+#quizSummaryHeader {
+
+  @include media-breakpoint-up(md) {
+    opacity: 0.95;
+    position: absolute;
+    max-width: 20vw;
+  }
+
+  .element-wrapper {
+    @include media-breakpoint-only(sm) {
+      border-radius: $border-radius !important;
+    }
+    @include media-breakpoint-up(md) {
+      border-top-right-radius: $border-radius !important;
+      border-bottom-right-radius: $border-radius !important;
+    }
+  }
+
+  span {
+    word-wrap: break-word;
+  }
+}

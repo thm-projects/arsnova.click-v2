@@ -1,5 +1,4 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
@@ -20,14 +19,6 @@ import {TrackingService} from '../../../service/tracking.service';
 })
 export class QuizManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizManagerComponent';
-
-  get showMoreOrLess(): string {
-    return this._showMoreOrLess;
-  }
-
-  set showMoreOrLess(value: string) {
-    this._showMoreOrLess = value;
-  }
 
   readonly selectableQuestionTypes = [
     {
@@ -69,10 +60,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
 
   readonly questionGroupItem: IQuestionGroup;
 
-  private _showMoreOrLess = 'component.quiz_manager.show_more';
-
   constructor(
-    @Inject(DOCUMENT) readonly document,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private http: HttpClient,
@@ -80,7 +68,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     private currentQuizService: CurrentQuizService,
     private translateService: TranslateService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizManagerComponent.TYPE;
@@ -116,22 +104,6 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
-  }
-
-  switchShowMoreOrLess() {
-    if (this._showMoreOrLess.indexOf('more') > -1) {
-      this._showMoreOrLess = this._showMoreOrLess.replace('more', 'less');
-      this.trackingService.trackClickEvent({
-        action: QuizManagerComponent.TYPE,
-        label: `show-more`,
-      });
-    } else {
-      this._showMoreOrLess = this._showMoreOrLess.replace('less', 'more');
-      this.trackingService.trackClickEvent({
-        action: QuizManagerComponent.TYPE,
-        label: `show-less`,
-      });
-    }
   }
 
   addQuestion(id: string) {

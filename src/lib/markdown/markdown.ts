@@ -4,6 +4,8 @@ import {DefaultSettings} from '../default.settings';
 
 export function parseGithubFlavoredMarkdown(value: string): string {
   const renderer = new marked.Renderer();
+  renderer.paragraph = (text) => `${text}\n`;
+
   const options = {
     renderer: renderer,
     gfm: true,
