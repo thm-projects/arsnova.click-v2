@@ -33,6 +33,7 @@ span.after {
 
   @include media-breakpoint-only(sm) {
     position: absolute;
+    max-width: 20vw;
 
     .footerElement {
       .footerElemText {
@@ -45,6 +46,7 @@ span.after {
   }
   @include media-breakpoint-up(md) {
     opacity: 0.95;
+    width: 20vw;
   }
 
   @include media-breakpoint-down(xs) {
@@ -55,7 +57,6 @@ span.after {
   }
   @include media-breakpoint-up(sm) {
     @include border-right-radius($border-radius);
-    max-width: 20vw;
   }
 
   .footerElement {

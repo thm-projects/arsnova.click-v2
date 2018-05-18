@@ -1,67 +1,69 @@
-<div class="text-light">
-  <h4>Organize members in teams</h4>
+<div class="row">
+  <div class="text-light col-12">
+    <h4>Organize members in teams</h4>
 
-  <div class="row">
-    <div class="col-12 col-sm-5">
-      <form>
-        <div class="form-group">
-          <label for="max-users-per-group">Max users per team</label>
-          <input type="number"
-                 class="form-control"
-                 id="max-users-per-group"
-                 placeholder="Max users per group"
-                 [ngModelOptions]="{standalone: true}"
-                 [(ngModel)]="maxMembersPerGroup"/>
+    <div class="row">
+      <div class="col-12 col-sm-5">
+        <form>
+          <div class="form-group">
+            <label for="max-users-per-group">Max users per team</label>
+            <input type="number"
+                   class="form-control"
+                   id="max-users-per-group"
+                   placeholder="Max users per group"
+                   [ngModelOptions]="{standalone: true}"
+                   [(ngModel)]="maxMembersPerGroup"/>
 
-        </div>
-      </form>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-12 col-sm-7 mb-2">
+        <label class="d-block">Add users automatically to teams</label>
+        <label class="btn pointer mb-0"
+               [class.btn-success]="autoJoinToGroup"
+               [class.btn-danger]="!autoJoinToGroup">
+          <input type="checkbox"
+                 class="hidden"
+                 [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
+                 autocomplete="off"
+                 role="switch"
+                 [(ngModel)]="autoJoinToGroup"
+                 [title]="'component.answeroptions.is_correct' | translate">
+          {{('global.' + (autoJoinToGroup ? 'yes' : 'no')) | translate}}
+        </label>
+      </div>
     </div>
 
-    <div class="col-12 col-sm-7 mb-2">
-      <label class="d-block">Add users automatically to teams</label>
-      <label class="btn pointer mb-0"
-             [class.btn-success]="autoJoinToGroup"
-             [class.btn-danger]="!autoJoinToGroup">
-        <input type="checkbox"
-               class="hidden"
-               [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
-               autocomplete="off"
-               role="switch"
-               [(ngModel)]="autoJoinToGroup"
-               [title]="'component.answeroptions.is_correct' | translate">
-        {{('global.' + (autoJoinToGroup ? 'yes' : 'no')) | translate}}
-      </label>
+
+    <div class="input-group">
+      <input type="text"
+             class="form-control"
+             placeholder="Add member group"
+             (keyup.enter)="addMemberGroup()"
+             [(ngModel)]="memberGroupName"
+             aria-label="Add member group"
+             aria-describedby="add-member-group">
+
+      <div class="input-group-append">
+        <button class="btn-success pointer"
+                id="add-member-group"
+                (click)="addMemberGroup()"
+                [class.disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length"
+                [disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length">
+          <span>Add a new team</span>
+        </button>
+      </div>
     </div>
+
+    <h6 class="mt-4">Currently added teams:</h6>
+    <p *ngIf="!memberGroups.length">No teams added yet</p>
+    <ul *ngFor="let group of memberGroups"
+        class="list-unstyled">
+      <li class="border-bottom p-2 mx-2">
+        <span>{{group}}</span>
+        <span class="pointer float-right" (click)="removeMemberGroup(group)"><i class="fas fa-trash"></i></span>
+      </li>
+    </ul>
   </div>
-
-
-  <div class="input-group">
-    <input type="text"
-           class="form-control"
-           placeholder="Add member group"
-           (keyup.enter)="addMemberGroup()"
-           [(ngModel)]="memberGroupName"
-           aria-label="Add member group"
-           aria-describedby="add-member-group">
-
-    <div class="input-group-append">
-      <button class="btn-success pointer"
-              id="add-member-group"
-              (click)="addMemberGroup()"
-              [class.disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length"
-              [disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length">
-        <span>Add a new team</span>
-      </button>
-    </div>
-  </div>
-
-  <h6 class="mt-4">Currently added teams:</h6>
-  <p *ngIf="!memberGroups.length">No teams added yet</p>
-  <ul *ngFor="let group of memberGroups"
-      class="list-unstyled">
-    <li class="border-bottom p-2 mx-2">
-      <span>{{group}}</span>
-      <span class="pointer float-right" (click)="removeMemberGroup(group)"><i class="fas fa-trash"></i></span>
-    </li>
-  </ul>
 </div>

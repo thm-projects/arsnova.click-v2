@@ -17,13 +17,13 @@
     }
   }
   @include media-breakpoint-only(md) {
-    max-width: calc(#{map_get($container-max-widths, md)} - 20vh);
+    max-width: calc(#{map_get($container-max-widths, md)} - 20vw);
   }
   @include media-breakpoint-only(lg) {
-    max-width: calc(#{map_get($container-max-widths, lg)} - 20vh);
+    max-width: calc(#{map_get($container-max-widths, lg)} - 20vw);
   }
   @include media-breakpoint-only(xl) {
-    max-width: calc(#{map_get($container-max-widths, xl)} - 20vh);
+    max-width: 70vw;
   }
 }
 
