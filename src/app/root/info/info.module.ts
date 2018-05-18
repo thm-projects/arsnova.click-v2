@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {InfoComponent} from './info.component';
 import {SharedModule} from '../../shared/shared.module';
+
 import {RouterModule, Routes} from '@angular/router';
 
 const infoRoutes: Routes = [

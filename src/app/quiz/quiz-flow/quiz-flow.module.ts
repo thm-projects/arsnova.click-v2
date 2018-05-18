@@ -3,7 +3,6 @@ import {QuizLobbyComponent} from './quiz-lobby/quiz-lobby.component';
 import {VotingComponent} from './voting/voting.component';
 import {LeaderboardComponent} from './leaderboard/leaderboard.component';
 import {QuizResultsComponent} from './quiz-results/quiz-results.component';
-import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '../../shared/shared.module';
 import {QuizThemeComponent} from './quiz-theme/quiz-theme.component';
 import {ThemesModule} from '../../themes/themes.module';
@@ -14,54 +13,58 @@ import {ReadingConfirmationComponent} from './reading-confirmation/reading-confi
 import {ConfidenceRateComponent} from './confidence-rate/confidence-rate.component';
 import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
 
+import {Routes, RouterModule} from '@angular/router';
+import {CasService} from '../../service/cas.service';
+
 export const quizFlowRoutes: Routes = [
   {
-    path: 'quiz/flow',
-    redirectTo: 'quiz/flow/lobby',
-    pathMatch: 'full'
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'lobby',
   },
   {
-    path: 'quiz/flow/lobby',
+    path: 'lobby',
+    canLoad: [CasService],
     component: QuizLobbyComponent,
     data: {}
   },
   {
-    path: 'quiz/flow/results',
+    path: 'results',
     component: QuizResultsComponent,
     data: {},
   },
   {
-    path: 'quiz/flow/results/:questionIndex',
+    path: 'results/:questionIndex',
     component: QuestionDetailsComponent,
     data: {}
   },
   {
-    path: 'quiz/flow/theme',
+    path: 'theme',
     component: QuizThemeComponent,
     data: {}
   },
   {
-    path: 'quiz/flow/leaderboard',
+    path: 'leaderboard',
     component: LeaderboardComponent,
     data: {}
   },
   {
-    path: 'quiz/flow/leaderboard/:questionIndex',
+    path: 'leaderboard/:questionIndex',
     component: LeaderboardComponent,
     data: {}
   },
   {
-    path: 'quiz/flow/voting',
+    path: 'voting',
     component: VotingComponent,
     data: {}
   },
   {
-    path: 'quiz/flow/reading-confirmation',
+    path: 'reading-confirmation',
     component: ReadingConfirmationComponent,
     data: {}
   },
   {
-    path: 'quiz/flow/confidence-rate',
+    path: 'confidence-rate',
     component: ConfidenceRateComponent,
     data: {}
   },

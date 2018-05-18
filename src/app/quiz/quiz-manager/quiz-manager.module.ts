@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import {QuizManagerComponent} from './quiz-manager/quiz-manager.component';
 import {SharedModule} from '../../shared/shared.module';
 import {QuizManagerDetailsModule} from './quiz-manager-details/quiz-manager-details.module';
-import {RouterModule, Routes} from '@angular/router';
 import {
   QuizManagerDetailsOverviewComponent
 } from './quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
@@ -17,34 +16,36 @@ import {NicknameManagerComponent} from './nickname-manager/nickname-manager.comp
 import {SoundManagerComponent} from './sound-manager/sound-manager.component';
 import { MemberGroupManagerComponent } from './member-group-manager/member-group-manager.component';
 
+import {Routes, RouterModule} from '@angular/router';
+
 const quizManagerRoutes: Routes = [
   {
-    path: 'quiz/manager',
-    redirectTo: 'quiz/manager/overview',
+    path: '',
     pathMatch: 'full',
+    redirectTo: 'overview',
   },
   {
-    path: 'quiz/manager/overview',
+    path: 'overview',
     component: QuizManagerComponent,
     data: {},
   },
   {
-    path: 'quiz/manager/memberGroup',
+    path: 'memberGroup',
     component: MemberGroupManagerComponent,
     data: {}
   },
   {
-    path: 'quiz/manager/nicknames',
+    path: 'nicknames',
     component: NicknameManagerComponent,
     data: {}
   },
   {
-    path: 'quiz/manager/sound',
+    path: 'sound',
     component: SoundManagerComponent,
     data: {}
   },
   {
-    path: 'quiz/manager/:questionIndex',
+    path: ':questionIndex',
     children: [
       {
         path: 'overview',
@@ -84,7 +85,12 @@ const quizManagerRoutes: Routes = [
     LivePreviewModule,
     RouterModule.forChild(quizManagerRoutes),
   ],
-  declarations: [QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent, MemberGroupManagerComponent]
+  declarations: [
+    QuizManagerComponent,
+    NicknameManagerComponent,
+    SoundManagerComponent,
+    MemberGroupManagerComponent
+  ]
 })
 export class QuizManagerModule {
 }
