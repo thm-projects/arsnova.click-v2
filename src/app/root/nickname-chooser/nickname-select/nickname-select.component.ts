@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
+import {IMemberGroup, IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {Router} from '@angular/router';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
@@ -62,8 +62,10 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         ticket: this.userService.ticket
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
-          data.payload.nicknames.forEach((elem: INickname) => {
-            this.attendeeService.addMember(elem);
+          data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
+            memberGroup.members.forEach((nickname: INickname) => {
+              this.attendeeService.addMember(nickname);
+            });
           });
           window.sessionStorage.setItem('config.websocket_authorization', data.payload.webSocketAuthorization);
           this.connectionService.authorizeWebSocket(this.currentQuiz.quiz.hashtag);
