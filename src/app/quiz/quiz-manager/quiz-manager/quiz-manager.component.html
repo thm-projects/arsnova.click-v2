@@ -10,7 +10,7 @@
         <button *ngFor="let elem of selectableQuestionTypes"
                 (click)="addQuestion(elem.id)"
                 [id]="elem.id + '_draggable'"
-                [class]="'btn btn-info mr-2 mr-lg-0 mb-lg-2 pointer questionElementWrapper draggable d-flex justify-content-center justify-content-lg-start align-items-center questionType_' + elem.id"
+                [class]="'btn btn-info mr-2 mr-lg-0 px-lg-2 py-lg-2 mb-lg-2 rounded pointer questionElementWrapper d-flex justify-content-center justify-content-lg-start align-items-center questionType_' + elem.id"
                 [attr.data-intro]="elem.descriptionType | translate"
                 [innerHTML]="elem.translationName | translate">
         </button>
@@ -29,7 +29,7 @@
             [attr.data-intro]="'component.quiz_manager.description.added_questions' | translate">
           <li *ngFor="let elem of questionGroupItem.questionList; let i = index;"
               [id]="i + '_draggable'"
-              [class]="'questionElementWrapper draggable d-flex justify-content-center align-items-center questionType_' + i">
+              [class]="'questionElementWrapper d-flex justify-content-center align-items-center px-2 py-2 mb-2 rounded questionType_' + i">
             <span [innerHTML]="elem.translationReferrer() | translate"></span>
             <span class="questionButtonOptions text-right">
               <span class="pointer mr-2"

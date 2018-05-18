@@ -73,7 +73,7 @@ span.after {
 
       .footerElemText {
         flex-shrink: 0;
-        max-width: 15vw;
+        max-width: calc(20vw - 36px);
       }
     }
   }

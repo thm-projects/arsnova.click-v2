@@ -8,13 +8,23 @@
     max-width: 20vw;
   }
 
+  @include media-breakpoint-down(sm) {
+    > div > div {
+      &:nth-child(2n) {
+        padding-left: map_get($spacers, 1);
+      }
+      &:nth-child(2n + 1) {
+        padding-right: map_get($spacers, 1);
+      }
+    }
+  }
+
   .element-wrapper {
     @include media-breakpoint-only(sm) {
-      border-radius: $border-radius !important;
+      @include border-radius;
     }
     @include media-breakpoint-up(md) {
-      border-top-right-radius: $border-radius !important;
-      border-bottom-right-radius: $border-radius !important;
+      @include border-right-radius($border-radius);
     }
   }
 
