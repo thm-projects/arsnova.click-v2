@@ -17,6 +17,9 @@ import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
   styleUrls: ['./nickname-select.component.scss']
 })
 export class NicknameSelectComponent implements OnInit, OnDestroy {
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
   public static TYPE = 'NicknameSelectComponent';
 
   get nicks(): Array<string> {
@@ -24,6 +27,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   private _nicks: Array<string> = [];
+  private _isLoading: boolean;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -92,8 +96,10 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
       return;
     }
+    this._isLoading = true;
     this.http.get(`${DefaultSettings.httpApiEndpoint}/member/${this.currentQuiz.quiz.hashtag}/available`).subscribe(
       (data: IMessage) => {
+        this._isLoading = false;
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {
           this._nicks = this._nicks.concat(data.payload.nicknames);
         }

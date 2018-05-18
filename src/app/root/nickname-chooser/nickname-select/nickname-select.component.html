@@ -1,3 +1,13 @@
+<h4 *ngIf="isLoading"
+     class="text-center text-warning center-vertical">
+  {{'global.please-wait' | translate}}
+</h4>
+
+<h4 *ngIf="!isLoading && !nicks.length"
+    class="text-center text-danger center-vertical">
+  {{'component.nickname-select.no-nicks-available' | translate}}
+</h4>
+
 <div *ngFor="let elem of nicks"
      (click)="joinQuiz(elem)">
   <div class="nickName rounded pointer my-2 p-2" [innerHTML]="parseAvailableNick(elem)"></div>
