@@ -1,4 +1,4 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
@@ -23,7 +23,7 @@ export class AdditionalDataComponent implements OnInit {
   }
 
   readonly questionGroupItem: IQuestionGroup;
-  private _isShowingMore: boolean;
+  private _isShowingMore: boolean = window.innerWidth >= 768;
   private _showMoreOrLess = 'component.quiz_manager.show_more';
 
   constructor(
@@ -54,6 +54,11 @@ export class AdditionalDataComponent implements OnInit {
         label: `show-less`,
       });
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this._isShowingMore = window.innerWidth >= 768;
   }
 
 }
