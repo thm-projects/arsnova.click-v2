@@ -2,7 +2,6 @@ import {Component, HostListener, Inject, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
-import {QuizManagerComponent} from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import {TrackingService} from '../../service/tracking.service';
 import {DOCUMENT} from '@angular/common';
 
@@ -43,14 +42,14 @@ export class AdditionalDataComponent implements OnInit {
       this._showMoreOrLess = this._showMoreOrLess.replace('more', 'less');
       this._isShowingMore = true;
       this.trackingService.trackClickEvent({
-        action: QuizManagerComponent.TYPE,
+        action: AdditionalDataComponent.TYPE,
         label: `show-more`,
       });
     } else {
       this._showMoreOrLess = this._showMoreOrLess.replace('less', 'more');
       this._isShowingMore = false;
       this.trackingService.trackClickEvent({
-        action: QuizManagerComponent.TYPE,
+        action: AdditionalDataComponent.TYPE,
         label: `show-less`,
       });
     }
