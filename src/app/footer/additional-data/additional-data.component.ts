@@ -13,17 +13,15 @@ import {DOCUMENT} from '@angular/common';
 export class AdditionalDataComponent implements OnInit {
   public static TYPE = 'AdditionalDataComponent';
 
-  get showMoreOrLess(): string {
-    return this._showMoreOrLess;
+  set isShowingMore(value: boolean) {
+    this._isShowingMore = value;
   }
-
-  set showMoreOrLess(value: string) {
-    this._showMoreOrLess = value;
+  get isShowingMore(): boolean {
+    return this._isShowingMore;
   }
 
   readonly questionGroupItem: IQuestionGroup;
   private _isShowingMore: boolean = window.innerWidth >= 768;
-  private _showMoreOrLess = 'component.quiz_manager.show_more';
 
   constructor(
     @Inject(DOCUMENT) readonly document,
@@ -38,26 +36,23 @@ export class AdditionalDataComponent implements OnInit {
   }
 
   switchShowMoreOrLess() {
-    if (this._showMoreOrLess.indexOf('more') > -1) {
-      this._showMoreOrLess = this._showMoreOrLess.replace('more', 'less');
-      this._isShowingMore = true;
-      this.trackingService.trackClickEvent({
-        action: AdditionalDataComponent.TYPE,
-        label: `show-more`,
-      });
-    } else {
-      this._showMoreOrLess = this._showMoreOrLess.replace('less', 'more');
-      this._isShowingMore = false;
+    if (this.isShowingMore) {
       this.trackingService.trackClickEvent({
         action: AdditionalDataComponent.TYPE,
         label: `show-less`,
       });
+    } else {
+      this.trackingService.trackClickEvent({
+        action: AdditionalDataComponent.TYPE,
+        label: `show-more`,
+      });
     }
+    this.isShowingMore = !this.isShowingMore;
   }
 
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this._isShowingMore = window.innerWidth >= 768;
+    this.isShowingMore = window.innerWidth >= 768;
   }
 
 }

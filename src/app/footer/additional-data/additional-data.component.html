@@ -88,6 +88,10 @@
       </div>
     </div>
 
-    <button class="btn btn-block d-md-none mt-sm-2" (click)="switchShowMoreOrLess()">{{showMoreOrLess | translate}}</button>
+    <button class="btn btn-block d-md-none mt-sm-2"
+            (click)="switchShowMoreOrLess()">
+      <span *ngIf="isShowingMore">{{'component.quiz_manager.show_less' | translate}}</span>
+      <span *ngIf="!isShowingMore">{{'component.quiz_manager.show_more' | translate}}</span>
+    </button>
   </div>
 </div>
