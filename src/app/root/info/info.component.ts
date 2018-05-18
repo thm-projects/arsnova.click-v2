@@ -26,6 +26,7 @@ export class InfoComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService
   ) {
 
+    headerLabelService.headerLabel = 'region.footer.about.title';
     this.footerBarService.TYPE_REFERENCE = InfoComponent.TYPE;
 
     footerBarService.replaceFooterElements([
@@ -36,8 +37,6 @@ export class InfoComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);
-
-    headerLabelService.headerLabel = 'region.footer.about.title';
   }
 
   ngOnInit() {

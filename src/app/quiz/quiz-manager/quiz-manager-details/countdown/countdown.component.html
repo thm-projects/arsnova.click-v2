@@ -26,16 +26,16 @@
     <div *ngIf="countdown"
          class="col-12">
       <p class="text-center text-light mt-4" id="parsedTime">
-          <span id="hours">
-            <span [innerHTML]="parsedHours"></span>
+          <span id="hours" class="mr-2">
+            <span [innerHTML]="parsedHours" class="mr-1"></span>
             <span [innerHTML]="'component.timer.hour' | translate:{COUNT: plainHours}"></span>
           </span>
-        <span id="minutes">
-            <span [innerHTML]="parsedMinutes"></span>
+        <span id="minutes" class="mr-2">
+            <span [innerHTML]="parsedMinutes" class="mr-1"></span>
             <span [innerHTML]="'component.timer.minute' | translate:{COUNT: plainMinutes}"></span>
           </span>
         <span id="seconds">
-            <span [innerHTML]="parsedSeconds"></span>
+            <span [innerHTML]="parsedSeconds" class="mr-1"></span>
             <span [innerHTML]="'component.timer.second' | translate:{COUNT: plainSeconds}"></span>
           </span>
       </p>

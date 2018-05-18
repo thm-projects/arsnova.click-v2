@@ -36,6 +36,7 @@ import {AttendeeService} from './service/attendee.service';
 import {RoutePreloader} from '../lib/route-preloader';
 
 import {Routes, RouterModule} from '@angular/router';
+import {HeaderLabelService} from './service/header-label.service';
 
 export const appRoutes: Routes = [
   {
@@ -145,6 +146,7 @@ export const appRoutes: Routes = [
     TrackingService,
     SharedService,
     AttendeeService,
+    HeaderLabelService
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

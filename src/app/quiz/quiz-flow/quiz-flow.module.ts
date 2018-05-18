@@ -15,6 +15,7 @@ import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
 
 import {Routes, RouterModule} from '@angular/router';
 import {CasService} from '../../service/cas.service';
+import {HeaderLabelService} from '../../service/header-label.service';
 
 export const quizFlowRoutes: Routes = [
   {
@@ -85,9 +86,6 @@ export const quizFlowRoutes: Routes = [
     QuizThemeComponent,
     ReadingConfirmationComponent,
     ConfidenceRateComponent
-  ],
-  providers: [
-    AttendeeService
   ]
 })
 export class QuizFlowModule {

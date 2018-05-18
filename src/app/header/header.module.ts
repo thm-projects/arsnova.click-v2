@@ -11,7 +11,7 @@ import {HeaderLabelService} from '../service/header-label.service';
     HeaderComponent
   ],
   declarations: [HeaderComponent],
-  providers: [HeaderLabelService],
+  providers: [],
   bootstrap: [HeaderComponent]
 })
 export class HeaderModule {

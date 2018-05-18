@@ -57,7 +57,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private modalService: NgbModal,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
   ) {
 
     this.headerLabelService.headerLabel = this.currentQuizService.quiz.hashtag;
