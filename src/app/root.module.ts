@@ -99,7 +99,7 @@ export const appRoutes: Routes = [
     ThemeSwitcherComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'frontend' }),
     ServiceWorkerModule.register('/ngsw-worker.js', {enabled: environment.production}),
     FormsModule,
     CommonModule,
@@ -153,4 +153,5 @@ export const appRoutes: Routes = [
   bootstrap: [RootComponent]
 })
 export class RootModule {
+  constructor() {}
 }

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
@@ -24,6 +24,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   private _confidenceValue = 100;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
     private http: HttpClient,

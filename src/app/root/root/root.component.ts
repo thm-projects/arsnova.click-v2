@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ThemesService} from '../../service/themes.service';
@@ -10,6 +10,7 @@ import {TrackingService} from '../../service/tracking.service';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../lib/default.settings';
 import {ConnectionService} from '../../service/connection.service';
+import {isPlatformServer} from '@angular/common';
 
 // Update global window.* object interface (https://stackoverflow.com/a/12709880/7992104)
 declare global {
@@ -39,6 +40,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   private _loadCookieConsent = false;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private connectionService: ConnectionService,
     public i18nService: I18nService, // Must be instantiated here to be available in all child components
     private trackingService: TrackingService,
@@ -123,12 +125,15 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    clearTimeout(window.slowConnectionTimeout);
   }
 
   ngAfterViewInit() {
     this.router.events.subscribe((nav: any) => {
       if (nav instanceof NavigationEnd) {
+
+        if (isPlatformServer(this.platformId)) {
+          return;
+        }
 
         window.addEventListener('load', () => {
           if (!window.cookieconsent) {

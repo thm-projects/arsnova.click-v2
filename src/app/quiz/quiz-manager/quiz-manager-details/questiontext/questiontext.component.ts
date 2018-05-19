@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {FooterBarService} from '../../../../service/footer-bar.service';
 import {QuestionTextService} from '../../../../service/question-text.service';
 import {Subscription} from 'rxjs';
@@ -6,6 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
 import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../../../environments/environment';
 import {HeaderLabelService} from '../../../../service/header-label.service';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-questiontext',
@@ -23,6 +24,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   private _routerSubscription: Subscription;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
@@ -147,9 +149,11 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   }
 
   computeQuestionTextInputHeight() {
-    const questionTextElem = <HTMLInputElement>document.getElementById('questionText');
-    const lineHeight = window.getComputedStyle(questionTextElem).getPropertyValue('line-height').replace('px', '');
-    questionTextElem.style.height = (parseInt(lineHeight, 10)) * (questionTextElem.value.split('\n').length + 2) + 'px';
+    if (isPlatformBrowser(this.platformId)) {
+      const questionTextElem = <HTMLInputElement>document.getElementById('questionText');
+      const lineHeight = window.getComputedStyle(questionTextElem).getPropertyValue('line-height').replace('px', '');
+      questionTextElem.style.height = (parseInt(lineHeight, 10)) * (questionTextElem.value.split('\n').length + 2) + 'px';
+    }
   }
 
   fireEvent(event) {
@@ -163,9 +167,11 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
     });
-    this.questionTextElement = <HTMLTextAreaElement>document.getElementById('questionText');
-    this.questionTextElement.value = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText;
-    this.questionTextService.change(this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText);
+    if (isPlatformBrowser(this.platformId)) {
+      this.questionTextElement = <HTMLTextAreaElement>document.getElementById('questionText');
+      this.questionTextElement.value = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText;
+      this.questionTextService.change(this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText);
+    }
     this.computeQuestionTextInputHeight();
   }
 

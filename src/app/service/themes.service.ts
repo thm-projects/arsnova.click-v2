@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {DefaultSettings} from '../../lib/default.settings';
 import {ITheme, IMessage} from 'arsnova-click-v2-types/src/common';
 import {HttpClient} from '@angular/common/http';
 import {CurrentQuizService} from './current-quiz.service';
 import {ConnectionService} from './connection.service';
+import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
 @Injectable()
 export class ThemesService {
@@ -22,11 +23,12 @@ export class ThemesService {
   private _currentTheme: string;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private currentQuizService: CurrentQuizService,
     private connectionService: ConnectionService,
-    private http: HttpClient
+    private http: HttpClient,
   ) {
-    if (!window.localStorage.getItem('config.default_theme')) {
+    if (isPlatformBrowser(this.platformId) && !window.localStorage.getItem('config.default_theme')) {
       window.localStorage.setItem('config.default_theme', DefaultSettings.defaultQuizSettings.theme);
     }
     this.updateCurrentlyUsedTheme();
@@ -54,22 +56,27 @@ export class ThemesService {
   }
 
   updateCurrentlyUsedTheme() {
-    let usedTheme = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme'));
-    if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
-      usedTheme = this.currentQuizService.quiz.sessionConfig.theme;
-    }
-    const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
-    if (themeDataset === usedTheme) {
-      return;
-    }
-    this._currentTheme = usedTheme;
+    if (isPlatformBrowser(this.platformId)) {
+      let usedTheme = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme'));
+      if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
+        usedTheme = this.currentQuizService.quiz.sessionConfig.theme;
+      }
+      const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
+      if (themeDataset === usedTheme) {
+        return;
+      }
+      this._currentTheme = usedTheme;
 
-    document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
+      document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
 
-    this.reloadLinkNodes();
+      this.reloadLinkNodes();
+    }
   }
 
   public reloadLinkNodes(target?): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
     if (!target) {
       target = this._currentTheme;

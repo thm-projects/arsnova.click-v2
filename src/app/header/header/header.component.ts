@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {Router} from '@angular/router';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConnectionService} from '../../service/connection.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {TrackingService} from '../../service/tracking.service';
+import {isPlatformBrowser} from '@angular/common';
 
 function isLocalStorageSupported(): boolean {
   try {
@@ -61,7 +62,7 @@ export class HeaderComponent implements OnInit {
     return this._inHomeRoute;
   }
 
-  private _origin: string = location.hostname;
+  private _origin: string = isPlatformBrowser(this.platformId) ? location.hostname : '';
   private _inHomeRoute: boolean;
   private _localStorageAvailable: boolean = isLocalStorageSupported();
   private _sessionStorageAvailable: boolean = isSessionStorageSupported();
@@ -80,6 +81,7 @@ export class HeaderComponent implements OnInit {
   }
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private modalService: NgbModal,
     public headerLabelService: HeaderLabelService,

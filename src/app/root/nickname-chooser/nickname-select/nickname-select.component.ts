@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {IMemberGroup, IMessage, INickname} from 'arsnova-click-v2-types/src/common';
@@ -30,6 +30,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   private _isLoading: boolean;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private sanitizer: DomSanitizer,
     private http: HttpClient,
     private footerBarService: FooterBarService,

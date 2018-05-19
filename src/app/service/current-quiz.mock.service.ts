@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {CurrentQuizService} from './current-quiz.service';
 import {HttpClient} from '@angular/common/http';
 import {ConnectionService} from './connection.service';
@@ -17,13 +17,14 @@ export class CurrentQuizMockService extends CurrentQuizService {
   public quiz: IQuestionGroup;
 
   constructor(
+    @Inject(PLATFORM_ID) private _platformId: Object,
     private _http: HttpClient,
     private _translateService: TranslateService,
     private _footerBarService: FooterBarService,
     private _settingsService: SettingsService,
     private _connectionService: ConnectionService
   ) {
-    super(_http, _translateService, _footerBarService, _settingsService, _connectionService);
+    super(_platformId, _http, _translateService, _footerBarService, _settingsService, _connectionService);
     this.quiz = new DefaultQuestionGroup({
       hashtag: 'test',
       sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),

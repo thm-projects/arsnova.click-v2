@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {ConnectionService} from '../../../service/connection.service';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {DefaultSettings} from '../../../../lib/default.settings';
@@ -23,6 +23,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   public questionText: string;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
     private router: Router,

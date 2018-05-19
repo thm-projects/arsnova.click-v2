@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {ThemesService} from '../../../service/themes.service';
@@ -15,6 +15,7 @@ import {IMessage, INickname} from 'arsnova-click-v2-types/src/common';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
 import {TrackingService} from '../../../service/tracking.service';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-quiz-lobby',
@@ -46,6 +47,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   private _kickMemberModalRef: NgbActiveModal;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     public currentQuizService: CurrentQuizService,
     public attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
@@ -79,7 +81,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemResponseProgress,
         this.footerBarService.footerElemConfidenceSlider,
       ]);
-      this.qrCodeContent = `${document.location.origin}/quiz/${encodeURIComponent(this.currentQuizService.quiz.hashtag.toLowerCase())}`;
+      if (isPlatformBrowser(this.platformId)) {
+        this.qrCodeContent = `${document.location.origin}/quiz/${encodeURIComponent(this.currentQuizService.quiz.hashtag.toLowerCase())}`;
+      }
       this.footerBarService.footerElemStartQuiz.onClickCallback = () => {
         if (!this.attendeeService.attendees.length) {
           return;
@@ -94,15 +98,19 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         });
       };
       this.footerBarService.footerElemQRCode.onClickCallback = () => {
-        const classList = document.getElementsByClassName('qr-code-element').item(0).classList;
-        classList.toggle('d-none');
-        classList.toggle('d-flex');
+        if (isPlatformBrowser(this.platformId)) {
+          const classList = document.getElementsByClassName('qr-code-element').item(0).classList;
+          classList.toggle('d-none');
+          classList.toggle('d-flex');
+        }
       };
       this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
         if (currentQuizService.quiz) {
-          const questionGroupSerialized = JSON.parse(window.localStorage.getItem(currentQuizService.quiz.hashtag));
-          this.activeQuestionGroupService.activeQuestionGroup =
-            questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
+          if (isPlatformBrowser(this.platformId)) {
+            const questionGroupSerialized = JSON.parse(window.localStorage.getItem(currentQuizService.quiz.hashtag));
+            this.activeQuestionGroupService.activeQuestionGroup =
+              questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
+          }
           currentQuizService.cleanUp();
           attendeeService.cleanUp();
           connectionService.cleanUp();
@@ -180,9 +188,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         break;
       case 'MEMBER:REMOVED':
-        const existingNickname = window.sessionStorage.getItem(`config.nick`);
-        if (existingNickname === data.payload.name) {
-          this.router.navigate(['/']);
+        if (isPlatformBrowser(this.platformId)) {
+          const existingNickname = window.sessionStorage.getItem(`config.nick`);
+          if (existingNickname === data.payload.name) {
+            this.router.navigate(['/']);
+          }
         }
         break;
       case 'LOBBY:CLOSED':

@@ -1,4 +1,5 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
 
 export class FooterbarElement {
   set onClickCallback(value: Function) {
@@ -139,7 +140,9 @@ export class FooterBarService {
     showIntro: false,
     linkTarget: null,
   }, function () {
-    document.getElementById('upload-session').click();
+    if (document) {
+      document.getElementById('upload-session').click();
+    }
   });
   public footerElemHashtagManagement: FooterbarElement = new FooterbarElement({
     id: 'sessionManagement',
@@ -160,22 +163,24 @@ export class FooterBarService {
     selectable: true,
     showIntro: false,
     linkTarget: null,
-    isActive: window.innerWidth === screen.width && window.innerHeight === screen.height
+    isActive: isPlatformBrowser(this.platformId) ? window.innerWidth === screen.width && window.innerHeight === screen.height : false
   }, function () {
     this.isActive = !this.isActive;
-    const elem = document.documentElement;
-    if (!document.fullscreenElement &&
-        !document.webkitFullscreenElement) {
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
+    if (document) {
+      const elem = document.documentElement;
+      if (!document.fullscreenElement &&
+          !document.webkitFullscreenElement) {
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        }
       }
     }
   });
@@ -241,10 +246,12 @@ export class FooterBarService {
     selectable: true,
     showIntro: false,
     linkTarget: null,
-    isActive: JSON.parse(localStorage.getItem('config.show-product-tour'))
+    isActive: isPlatformBrowser(this.platformId) ? JSON.parse(localStorage.getItem('config.show-product-tour')) : false
   }, function () {
     this.isActive = !this.isActive;
-    localStorage.setItem('config.show-product-tour', this.isActive);
+    if (localStorage) {
+      localStorage.setItem('config.show-product-tour', this.isActive);
+    }
   });
   public footerElemResponseProgress: FooterbarElement = new FooterbarElement({
     id: 'response-progress',
@@ -355,7 +362,9 @@ export class FooterBarService {
 
   private _footerElements: Array<FooterbarElement> = [];
 
-  constructor() {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {
   }
 
   public replaceFooterElements(elements: Array<FooterbarElement>) {

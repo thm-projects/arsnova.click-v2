@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
@@ -20,6 +20,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   private _routerSubscription: Subscription;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,

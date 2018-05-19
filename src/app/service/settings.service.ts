@@ -1,6 +1,7 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {ConnectionService} from './connection.service';
 import {IServerSettings} from 'arsnova-click-v2-types/src/common';
+import {isPlatformBrowser} from '@angular/common';
 
 @Injectable()
 export class SettingsService {
@@ -11,9 +12,12 @@ export class SettingsService {
   private _serverSettings: IServerSettings;
 
   constructor(
-    private connectionService: ConnectionService
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private connectionService: ConnectionService,
   ) {
-    this._serverSettings = <IServerSettings>(JSON.parse(window.localStorage.getItem('config.server_settings')));
+    if (isPlatformBrowser(this.platformId)) {
+      this._serverSettings = <IServerSettings>(JSON.parse(window.localStorage.getItem('config.server_settings')));
+    }
     if (!this._serverSettings) {
       this.initServerSettings();
     }
@@ -28,6 +32,8 @@ export class SettingsService {
       this._serverSettings.limitActiveQuizzes = Infinity;
     }
 
-    window.localStorage.setItem('config.server_settings', JSON.stringify(this._serverSettings));
+    if (isPlatformBrowser(this.platformId)) {
+      window.localStorage.setItem('config.server_settings', JSON.stringify(this._serverSettings));
+    }
   }
 }

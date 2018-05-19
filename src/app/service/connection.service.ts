@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {DefaultSettings} from '../../lib/default.settings';
 import {HttpClient} from '@angular/common/http';
 import {WebsocketService} from './websocket.service';
-import {Subject} from 'rxjs';
+import {of, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {SharedService} from './shared.service';
@@ -19,7 +19,10 @@ export class ConnectionService {
     this._websocketAvailable = value;
   }
 
-  get socket(): Subject<IMessage> {
+  get socket(): Subject<IMessage> | any {
+    if (!this._socket) {
+      return {subscribe: () => {}};
+    }
     return this._socket;
   }
 
@@ -48,6 +51,7 @@ export class ConnectionService {
   private _mediumSpeed = false;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private websocketService: WebsocketService,
     private http: HttpClient,
     private sharedService: SharedService
@@ -56,9 +60,10 @@ export class ConnectionService {
   }
 
   private initWebsocket() {
-    this._socket = <Subject<IMessage>>this.websocketService
-      .connect()
-      .pipe(map((response: MessageEvent): IMessage => {
+    const defaultSocket = <Subject<MessageEvent>>this.websocketService.connect();
+
+    if (defaultSocket) {
+      this._socket = <Subject<IMessage>>defaultSocket.pipe(map((response: MessageEvent): IMessage => {
         const parsedResponse = JSON.parse(response.data);
         this._websocketAvailable = true;
 
@@ -68,6 +73,7 @@ export class ConnectionService {
 
         return parsedResponse;
       }));
+    }
   }
 
   cleanUp(): void {
@@ -85,6 +91,10 @@ export class ConnectionService {
   }
 
   private sendAuthorizationMessage(hashtag: string, step: string, auth: string): void {
+    if (!this._socket) {
+      return;
+    }
+
     if (!this._websocketAvailable) {
       setTimeout(() => {
         this.sendAuthorizationMessage(hashtag, step, auth);

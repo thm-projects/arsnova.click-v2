@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
 import {IMusicSessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 import {DefaultSettings} from '../../../../lib/default.settings';
 import {ISong} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-sound-manager',
@@ -38,9 +39,11 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   private _currentlyPlayedMusic = null;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
-    private currentQuizService: CurrentQuizService) {
+    private currentQuizService: CurrentQuizService,
+  ) {
 
     this.footerBarService.TYPE_REFERENCE = SoundManagerComponent.TYPE;
     footerBarService.replaceFooterElements([
@@ -79,9 +82,11 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
 
   toggleMusicPreview(target: 'lobby' | 'countdownRunning' | 'countdownEnd') {
     this._currentlyPlayedMusic = `${DefaultSettings.httpApiEndpoint}/files/sound/${target}/${this.config.titleConfig[target]}.mp3`;
-    const audioElements = document.getElementsByTagName('audio');
-    for (let i = 0; i < audioElements.length; i++) {
-      (<HTMLAudioElement>audioElements.item(i)).volume = (this.config.volumeConfig[target] || 60) / 100;
+    if (isPlatformBrowser(this.platformId)) {
+      const audioElements = document.getElementsByTagName('audio');
+      for (let i = 0; i < audioElements.length; i++) {
+        (<HTMLAudioElement>audioElements.item(i)).volume = (this.config.volumeConfig[target] || 60) / 100;
+      }
     }
   }
 
@@ -91,11 +96,13 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
 
   openTab(id: string): void {
     // TODO: Workaround because Bootstrap v4 Beta carousel not working! (02.10.2017)
-    const tabs = document.getElementsByClassName('collapse');
-    for (let i = 0; i < tabs.length; i++) {
-      tabs.item(i).classList.remove('show');
+    if (isPlatformBrowser(this.platformId)) {
+      const tabs = document.getElementsByClassName('collapse');
+      for (let i = 0; i < tabs.length; i++) {
+        tabs.item(i).classList.remove('show');
+      }
+      document.getElementById(id).classList.add('show');
     }
-    document.getElementById(id).classList.add('show');
     this.toggleMusicPreview(<'lobby' | 'countdownRunning' | 'countdownEnd'>id.replace('panel-', ''));
   }
 

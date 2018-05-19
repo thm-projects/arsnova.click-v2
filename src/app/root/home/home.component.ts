@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
@@ -24,6 +24,7 @@ import {DefaultSettings} from '../../../lib/default.settings';
 import {SessionConfiguration} from 'arsnova-click-v2-types/src/session_configuration/session_config';
 import {ITrackClickEvent, TrackingService} from '../../service/tracking.service';
 import {SharedService} from '../../service/shared.service';
+import {isPlatformBrowser, isPlatformServer} from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -74,6 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private _isShowingQuiznameDatalist = false;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private modalService: NgbModal,
@@ -100,7 +102,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (!Object.keys(params).length) {
         return;
       }
-      window.localStorage.setItem('config.default_theme', params.themeId);
+      if (isPlatformBrowser(this.platformId)) {
+        window.localStorage.setItem('config.default_theme', params.themeId);
+      }
       this.themesService.updateCurrentlyUsedTheme();
       this.i18nService.setLanguage(<Languages>params.languageId.toUpperCase());
     });
@@ -114,14 +118,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemImport,
     ]);
     headerLabelService.headerLabel = 'default';
-    const ownedQuizzes = window.localStorage.getItem('config.owned_quizzes');
-    if (!ownedQuizzes) {
-      window.localStorage.setItem('config.owned_quizzes', '[]');
+    if (isPlatformBrowser(this.platformId)) {
+      const ownedQuizzes = window.localStorage.getItem('config.owned_quizzes');
+      if (!ownedQuizzes) {
+        window.localStorage.setItem('config.owned_quizzes', '[]');
+      }
+      if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
+        this.modalService.open(AvailableQuizzesComponent);
+      }
+      this._ownQuizzes = JSON.parse(ownedQuizzes || '[]');
     }
-    if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
-      this.modalService.open(AvailableQuizzesComponent);
-    }
-    this._ownQuizzes = JSON.parse(ownedQuizzes || '[]');
 
     this.cleanUpSessionStorage();
 
@@ -157,7 +163,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.activeQuestionGroupService.activeQuestionGroup) {
       this.activeQuestionGroupService.cleanUp();
     }
-    window.sessionStorage.removeItem('config.quiz_theme');
+    if (isPlatformBrowser(this.platformId)) {
+      window.sessionStorage.removeItem('config.quiz_theme');
+    }
     this.attendeeService.cleanUp();
     this.currentQuiz.cleanUp();
     this.connectionService.cleanUp();
@@ -190,25 +198,32 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   autoJoinToSession(option): void {
     this.selectQuizByList(option);
-    const interval = setInterval(() => {
-      if (document.getElementById('joinSession').hasAttribute('disabled')) {
-        return;
-      } else {
-        clearInterval(interval);
-      }
-      document.getElementById('joinSession').click();
-    }, 10);
+
+    if (isPlatformBrowser(this.platformId)) {
+      const interval = setInterval(() => {
+        if (document.getElementById('joinSession').hasAttribute('disabled')) {
+          return;
+        } else {
+          clearInterval(interval);
+        }
+        document.getElementById('joinSession').click();
+      }, 10);
+    }
   }
 
   showQuiznameDatalist(): void {
-    const elem = document.getElementById('hashtag-input-data-list');
-    elem.classList.remove('d-none');
+    if (isPlatformBrowser(this.platformId)) {
+      const elem = document.getElementById('hashtag-input-data-list');
+      elem.classList.remove('d-none');
+    }
     this.isShowingQuiznameDatalist = true;
   }
 
   hideQuiznameDatalist(): void {
-    const elem = document.getElementById('hashtag-input-data-list');
-    elem.classList.add('d-none');
+    if (isPlatformBrowser(this.platformId)) {
+      const elem = document.getElementById('hashtag-input-data-list');
+      elem.classList.add('d-none');
+    }
     this.isShowingQuiznameDatalist = false;
   }
 
@@ -222,57 +237,59 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isAddingDemoQuiz = false;
     this.isAddingABCDQuiz = false;
 
-    const currentQuizzes = JSON.parse(window.localStorage.getItem('config.owned_quizzes').toLowerCase()) || [];
+    if (isPlatformBrowser(this.platformId)) {
+      const currentQuizzes = JSON.parse(window.localStorage.getItem('config.owned_quizzes').toLowerCase()) || [];
 
-    if (currentQuizzes.find(quiz => quiz === quizname.toLowerCase())) {
-      const currentQuiz = JSON.parse(window.localStorage.getItem(quizname));
-      const questionGroupInstance = questionGroupReflection[currentQuiz.TYPE](currentQuiz);
-      this.canAddQuiz = false;
-      this.canEditQuiz = true;
-      this.canStartQuiz = questionGroupInstance.isValid();
-      this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
-    } else if (quizname.toLowerCase() === 'demo quiz') {
-      this.isAddingDemoQuiz = true;
-      this.canAddQuiz = false;
-      this.canEditQuiz = false;
-      this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
-    } else if (this.checkABCDOrdering(quizname.toLowerCase())) {
-      this.isAddingABCDQuiz = true;
-      this.canAddQuiz = false;
-      this.canEditQuiz = false;
-      this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
-    } else {
-      if (quizname.length > 3) {
-        this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
-          if (value.status === 'STATUS:SUCCESSFUL') {
-            switch (value.step) {
-              case 'QUIZ:EXISTS':
-                this.canAddQuiz = false;
-                this.canJoinQuiz = false;
-                this.passwordRequired = false;
-                break;
-              case 'QUIZ:AVAILABLE':
-                this.canAddQuiz = false;
-                this.canJoinQuiz = true;
-                this.passwordRequired = false;
-                this._provideNickSelection = value.payload.provideNickSelection;
-                this.casService.casLoginRequired = value.payload.authorizeViaCas;
-                if (this.casService.casLoginRequired) {
-                  this.casService.quizName = quizname;
-                }
-                break;
-              case 'QUIZ:UNDEFINED':
-                this.canAddQuiz = true;
-                this.canJoinQuiz = false;
-                this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
-                break;
-              default:
-                console.log(value);
+      if (currentQuizzes.find(quiz => quiz === quizname.toLowerCase())) {
+        const currentQuiz = JSON.parse(window.localStorage.getItem(quizname));
+        const questionGroupInstance = questionGroupReflection[currentQuiz.TYPE](currentQuiz);
+        this.canAddQuiz = false;
+        this.canEditQuiz = true;
+        this.canStartQuiz = questionGroupInstance.isValid();
+        this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
+      } else if (quizname.toLowerCase() === 'demo quiz') {
+        this.isAddingDemoQuiz = true;
+        this.canAddQuiz = false;
+        this.canEditQuiz = false;
+        this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+      } else if (this.checkABCDOrdering(quizname.toLowerCase())) {
+        this.isAddingABCDQuiz = true;
+        this.canAddQuiz = false;
+        this.canEditQuiz = false;
+        this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+      } else {
+        if (quizname.length > 3) {
+          this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe((value: IMessage) => {
+            if (value.status === 'STATUS:SUCCESSFUL') {
+              switch (value.step) {
+                case 'QUIZ:EXISTS':
+                  this.canAddQuiz = false;
+                  this.canJoinQuiz = false;
+                  this.passwordRequired = false;
+                  break;
+                case 'QUIZ:AVAILABLE':
+                  this.canAddQuiz = false;
+                  this.canJoinQuiz = true;
+                  this.passwordRequired = false;
+                  this._provideNickSelection = value.payload.provideNickSelection;
+                  this.casService.casLoginRequired = value.payload.authorizeViaCas;
+                  if (this.casService.casLoginRequired) {
+                    this.casService.quizName = quizname;
+                  }
+                  break;
+                case 'QUIZ:UNDEFINED':
+                  this.canAddQuiz = true;
+                  this.canJoinQuiz = false;
+                  this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+                  break;
+                default:
+                  console.log(value);
+              }
+            } else {
+              console.log(value);
             }
-          } else {
-            console.log(value);
-          }
-        });
+          });
+        }
       }
     }
   }
@@ -324,14 +341,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   setActiveQuestionGroup(routingTarget?: Array<string>): boolean {
-    const questionGroupSerialized = JSON.parse(
-      localStorage.getItem(
-        Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())
-      )
-    );
+    if (isPlatformBrowser(this.platformId)) {
+      const questionGroupSerialized = JSON.parse(
+        localStorage.getItem(
+          Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())
+        )
+      );
 
-    if (questionGroupSerialized) {
-      this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
+      if (questionGroupSerialized) {
+        this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
+      }
     }
 
     if (routingTarget) {
@@ -342,72 +361,74 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   async setAsCurrentQuiz(routingTarget: Array<string>) {
-    const questionGroupSerialized = JSON.parse(
-      localStorage.getItem(
-        Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())
-      )
-    );
+    if (isPlatformBrowser(this.platformId)) {
+      const questionGroupSerialized = JSON.parse(
+        localStorage.getItem(
+          Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())
+        )
+      );
 
-    if (this.passwordRequired && !(this._serverPassword && this._serverPassword.length)) {
-      return;
-    }
-
-    const questionGroup = await new Promise<IQuestionGroup>((resolve) => {
-      if (this.isAddingDemoQuiz) {
-        this.addDemoQuiz().then((value) => resolve(value));
-      } else if (this.isAddingABCDQuiz) {
-        this.addAbcdQuiz().then((value) => resolve(value));
-      } else if (questionGroupSerialized) {
-        resolve(questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized));
-      } else {
-        resolve(questionGroupReflection.DefaultQuestionGroup({
-          hashtag: this.enteredSessionName,
-          sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings)
-        }));
+      if (this.passwordRequired && !(this._serverPassword && this._serverPassword.length)) {
+        return;
       }
-    });
 
-    if (!window.localStorage.getItem('config.private_key')) {
-      window.localStorage.setItem('config.private_key', this.activeQuestionGroupService.generatePrivateKey());
-    }
-
-    this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/reserve`, {
-      quizName: this.enteredSessionName,
-      privateKey: window.localStorage.getItem('config.private_key'),
-      serverPassword: this._serverPassword
-    }).subscribe(async (value: IMessage) => {
-
-      if (value.status === 'STATUS:SUCCESSFUL') {
-        this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-        this.activeQuestionGroupService.persist();
-
-        this.currentQuizService.quiz = questionGroup;
-        this.currentQuizService.persistToSessionStorage();
-
-        if (this.isAddingABCDQuiz) {
-          this.trackingService.trackConversionEvent({action: HomeComponent.TYPE, label: 'ABCD Quiz created'});
-        } else if (this.isAddingDemoQuiz) {
-          this.trackingService.trackConversionEvent({action: HomeComponent.TYPE, label: 'Demo Quiz created'});
-        }
-
-        await this.activateQuiz(questionGroup);
-
-        this.router.navigate(routingTarget);
-
-      } else {
-
-        if (value.step === 'QUIZ:TOO_MUCH_ACTIVE_QUIZZES') {
-          this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
-        } else if (value.step === 'QUIZ:SERVER_PASSWORD_REQUIRED') {
-          this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
-        } else if (value.step === 'QUIZ:INSUFFICIENT_PERMISSIONS') {
-          this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
+      const questionGroup = await new Promise<IQuestionGroup>((resolve) => {
+        if (this.isAddingDemoQuiz) {
+          this.addDemoQuiz().then((value) => resolve(value));
+        } else if (this.isAddingABCDQuiz) {
+          this.addAbcdQuiz().then((value) => resolve(value));
+        } else if (questionGroupSerialized) {
+          resolve(questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized));
         } else {
-          console.log(value);
+          resolve(questionGroupReflection.DefaultQuestionGroup({
+            hashtag: this.enteredSessionName,
+            sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings)
+          }));
         }
+      });
 
+      if (!window.localStorage.getItem('config.private_key')) {
+        window.localStorage.setItem('config.private_key', this.activeQuestionGroupService.generatePrivateKey());
       }
-    });
+
+      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/reserve`, {
+        quizName: this.enteredSessionName,
+        privateKey: window.localStorage.getItem('config.private_key'),
+        serverPassword: this._serverPassword
+      }).subscribe(async (value: IMessage) => {
+
+        if (value.status === 'STATUS:SUCCESSFUL') {
+          this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
+          this.activeQuestionGroupService.persist();
+
+          this.currentQuizService.quiz = questionGroup;
+          this.currentQuizService.persistToSessionStorage();
+
+          if (this.isAddingABCDQuiz) {
+            this.trackingService.trackConversionEvent({action: HomeComponent.TYPE, label: 'ABCD Quiz created'});
+          } else if (this.isAddingDemoQuiz) {
+            this.trackingService.trackConversionEvent({action: HomeComponent.TYPE, label: 'Demo Quiz created'});
+          }
+
+          await this.activateQuiz(questionGroup);
+
+          this.router.navigate(routingTarget);
+
+        } else {
+
+          if (value.step === 'QUIZ:TOO_MUCH_ACTIVE_QUIZZES') {
+            this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
+          } else if (value.step === 'QUIZ:SERVER_PASSWORD_REQUIRED') {
+            this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
+          } else if (value.step === 'QUIZ:INSUFFICIENT_PERMISSIONS') {
+            this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
+          } else {
+            console.log(value);
+          }
+
+        }
+      });
+    }
   }
 
   private async activateQuiz(questionGroup: IQuestionGroup) {
@@ -444,6 +465,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     const answerList = this.enteredSessionName.split('');
 
     return new Promise<IQuestionGroup>((resolveABCDGeneration) => {
+      if (isPlatformServer(this.platformId)) {
+        resolveABCDGeneration();
+      }
+
       const hasMatchedABCDQuiz = JSON.parse(window.localStorage.getItem('config.owned_quizzes')).filter(quizName => {
         return quizName.split(' ')[0] === this.enteredSessionName;
       });

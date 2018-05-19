@@ -1,10 +1,11 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {FooterbarElement, FooterBarService} from '../../service/footer-bar.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {FileUploadService} from '../../service/file-upload.service';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {TrackingService} from '../../service/tracking.service';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-footer-bar',
@@ -44,6 +45,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
   private _hasRightScrollElement = false;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService,
@@ -54,12 +56,14 @@ export class FooterBarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._routerSubscription = this.router.events.subscribe((val) => {
-      const navbarFooter = document.getElementById('navbar-footer-container');
-      this.footerElemIndex = 1;
-      if (navbarFooter) {
-        navbarFooter.scrollLeft = 0;
-        this.hideElement('left');
+      if (isPlatformBrowser(this.platformId)) {
+        const navbarFooter = document.getElementById('navbar-footer-container');
+        if (navbarFooter) {
+          navbarFooter.scrollLeft = 0;
+          this.hideElement('left');
+        }
       }
+      this.footerElemIndex = 1;
       if (val.hasOwnProperty('url')) {
         this.footerBarService.footerElemTheme.linkTarget = val['url'].indexOf('lobby') > -1 ? '/quiz/flow/theme' : '/themes';
       }
@@ -124,32 +128,40 @@ export class FooterBarComponent implements OnInit, OnDestroy {
         break;
     }
 
-    return document.getElementsByClassName('footer-bar-wrapper').item(0).getElementsByClassName(className).item(0);
+    if (isPlatformBrowser(this.platformId)) {
+      return document.getElementsByClassName('footer-bar-wrapper').item(0).getElementsByClassName(className).item(0);
+    }
+
+    return null;
   }
 
   public moveLeft(): void {
-    const navbarFooter = document.getElementById('navbar-footer-container');
-    const right = navbarFooter.children.item(--this.footerElemIndex).getBoundingClientRect().right;
-    const firstChild = navbarFooter.children.item(1);
+    if (isPlatformBrowser(this.platformId)) {
+      const navbarFooter = document.getElementById('navbar-footer-container');
+      const right = navbarFooter.children.item(--this.footerElemIndex).getBoundingClientRect().right;
+      const firstChild = navbarFooter.children.item(1);
 
-    navbarFooter.scrollLeft += right;
-    this.hasRightScrollElement = true;
+      navbarFooter.scrollLeft += right;
+      this.hasRightScrollElement = true;
 
-    if (firstChild.getBoundingClientRect().right >= 0) {
-      this.hideElement('left');
+      if (firstChild.getBoundingClientRect().right >= 0) {
+        this.hideElement('left');
+      }
     }
   }
 
   public moveRight(): void {
-    const navbarFooter = document.getElementById('navbar-footer-container');
-    const right = navbarFooter.children.item(++this.footerElemIndex).getBoundingClientRect().right;
-    const lastChild = navbarFooter.children.item(navbarFooter.children.length - 1);
+    if (isPlatformBrowser(this.platformId)) {
+      const navbarFooter = document.getElementById('navbar-footer-container');
+      const right = navbarFooter.children.item(++this.footerElemIndex).getBoundingClientRect().right;
+      const lastChild = navbarFooter.children.item(navbarFooter.children.length - 1);
 
-    navbarFooter.scrollLeft += right;
-    this.showElement('left');
+      navbarFooter.scrollLeft += right;
+      this.showElement('left');
 
-    if (navbarFooter.scrollLeft >= lastChild.getBoundingClientRect().left) {
-      this.hasRightScrollElement = false;
+      if (navbarFooter.scrollLeft >= lastChild.getBoundingClientRect().left) {
+        this.hasRightScrollElement = false;
+      }
     }
   }
 }

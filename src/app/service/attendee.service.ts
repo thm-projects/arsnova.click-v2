@@ -1,7 +1,8 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {Inject, Injectable, OnDestroy, PLATFORM_ID} from '@angular/core';
 import {FooterBarService} from './footer-bar.service';
 import {INickname, INicknameSerialized, IQuizResponse} from 'arsnova-click-v2-types/src/common';
 import {CurrentQuizService} from './current-quiz.service';
+import {isPlatformBrowser} from '@angular/common';
 
 class Player implements INickname {
   get groupName(): string {
@@ -69,16 +70,19 @@ export class AttendeeService implements OnDestroy {
   private _attendees: Array<INickname> = [];
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService
   ) {
-    const restoreAttendees = window.sessionStorage.getItem('config.attendees');
-    if (restoreAttendees) {
-      this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
-        return new Player(attendee);
-      });
-      if (this._attendees.length) {
-        this.footerBarService.footerElemStartQuiz.isActive = true;
+    if (isPlatformBrowser(this.platformId)) {
+      const restoreAttendees = window.sessionStorage.getItem('config.attendees');
+      if (restoreAttendees) {
+        this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
+          return new Player(attendee);
+        });
+        if (this._attendees.length) {
+          this.footerBarService.footerElemStartQuiz.isActive = true;
+        }
       }
     }
   }
@@ -93,7 +97,9 @@ export class AttendeeService implements OnDestroy {
 
   cleanUp(): void {
     this.attendees = [];
-    window.sessionStorage.removeItem('config.attendees');
+    if (isPlatformBrowser(this.platformId)) {
+      window.sessionStorage.removeItem('config.attendees');
+    }
   }
 
   addMember(attendee: INickname): void {
@@ -119,11 +125,15 @@ export class AttendeeService implements OnDestroy {
   }
 
   isOwnNick(name: string): boolean {
-    return name === window.sessionStorage.getItem(`config.nick`);
+    if (isPlatformBrowser(this.platformId)) {
+      return name === window.sessionStorage.getItem(`config.nick`);
+    }
   }
 
   getOwnNick(): string {
-    return window.sessionStorage.getItem(`config.nick`);
+    if (isPlatformBrowser(this.platformId)) {
+      return window.sessionStorage.getItem(`config.nick`);
+    }
   }
 
   getMember(nickname: string): INickname {
@@ -140,7 +150,9 @@ export class AttendeeService implements OnDestroy {
   }
 
   persistToSessionStorage(): void {
-    window.sessionStorage.setItem('config.attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
+    if (isPlatformBrowser(this.platformId)) {
+      window.sessionStorage.setItem('config.attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
+    }
   }
 
   ngOnDestroy() {

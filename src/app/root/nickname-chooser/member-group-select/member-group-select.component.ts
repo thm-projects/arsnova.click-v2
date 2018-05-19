@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Inject, PLATFORM_ID} from '@angular/core';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {IMessage} from 'arsnova-click-v2-types/src/common';
 import {DefaultSettings} from '../../../../lib/default.settings';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-member-group-select',
@@ -21,6 +22,7 @@ export class MemberGroupSelectComponent implements OnInit {
   private _memberGroups: Array<string> = this.currentQuiz.quiz.sessionConfig.nicks.memberGroups;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private router: Router,
     private http: HttpClient,
@@ -49,11 +51,13 @@ export class MemberGroupSelectComponent implements OnInit {
   }
 
   public addToGroup(groupName) {
-    const provideNickSelection: boolean = window.sessionStorage.getItem('temp.provideNickSelection') === 'true';
-    window.sessionStorage.removeItem('temp.provideNickSelection');
+    if (isPlatformBrowser(this.platformId)) {
+      const provideNickSelection: boolean = window.sessionStorage.getItem('temp.provideNickSelection') === 'true';
+      window.sessionStorage.removeItem('temp.provideNickSelection');
 
-    window.sessionStorage.setItem('config.memberGroup', groupName);
-    this.router.navigate(['/nicks', (provideNickSelection ? 'select' : 'input')]);
+      window.sessionStorage.setItem('config.memberGroup', groupName);
+      this.router.navigate(['/nicks', (provideNickSelection ? 'select' : 'input')]);
+    }
   }
 
 }

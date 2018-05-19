@@ -1,5 +1,6 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
+import {isPlatformBrowser} from '@angular/common';
 
 export enum Languages {
   DE = <any>'DE',
@@ -37,7 +38,9 @@ export class I18nService {
     return this._currentLanguage;
   }
   set currentLanguage(value: Languages) {
-    window.localStorage.setItem('config.language', value.toString());
+    if (isPlatformBrowser(this.platformId)) {
+      window.localStorage.setItem('config.language', value.toString());
+    }
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     this.translate.use(value.toString().toLowerCase());
@@ -47,7 +50,10 @@ export class I18nService {
 
   private _currentLanguage: Languages;
 
-  constructor(private translate: TranslateService) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private translate: TranslateService,
+  ) {}
 
   public formatNumber(number: number, type: NumberTypes = NumberTypes.decimal): string {
     return number.toLocaleString(undefined, {
@@ -58,9 +64,9 @@ export class I18nService {
 
   initLanguage() {
     let selectedLanguage: Languages;
-    if (Languages[window.localStorage.getItem('config.language')]) {
+    if (isPlatformBrowser(this.platformId) && Languages[window.localStorage.getItem('config.language')]) {
       selectedLanguage = Languages[window.localStorage.getItem('config.language')];
-    } else if (Languages[this.translate.getBrowserLang().toUpperCase()]) {
+    } else if (isPlatformBrowser(this.platformId) && Languages[this.translate.getBrowserLang().toUpperCase()]) {
       selectedLanguage = Languages[this.translate.getBrowserLang().toUpperCase()];
     } else {
       selectedLanguage = Languages.EN;
@@ -72,9 +78,11 @@ export class I18nService {
   setLanguage(language: Languages) {
     this.currentLanguage = language;
     this.translate.use(language.toString().toLowerCase());
-    const typ = document.createAttribute('lang');
-    typ.value = language.toString().toLowerCase();
-    document.getElementsByTagName('html').item(0).attributes.setNamedItem(typ);
+    if (isPlatformBrowser(this.platformId)) {
+      const typ = document.createAttribute('lang');
+      typ.value = language.toString().toLowerCase();
+      document.getElementsByTagName('html').item(0).attributes.setNamedItem(typ);
+    }
   }
 
 }

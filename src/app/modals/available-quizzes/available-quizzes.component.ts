@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
@@ -38,6 +38,7 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
   }
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private activeModal: NgbActiveModal,
     private http: HttpClient,
     private router: Router,

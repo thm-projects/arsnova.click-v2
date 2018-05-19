@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {IQuestion, IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {ConnectionService} from './connection.service';
 import {IMessage, ICurrentQuiz, ICurrentQuizData} from 'arsnova-click-v2-types/src/common';
@@ -8,6 +8,7 @@ import {HttpClient} from '@angular/common/http';
 import {FooterbarElement, FooterBarService} from './footer-bar.service';
 import {SettingsService} from './settings.service';
 import {TranslateService} from '@ngx-translate/core';
+import {isPlatformBrowser} from '@angular/common';
 
 @Injectable()
 export class CurrentQuizService implements ICurrentQuiz {
@@ -41,11 +42,13 @@ export class CurrentQuizService implements ICurrentQuiz {
       if (this.quiz.sessionConfig.confidenceSliderEnabled) {
         this.footerBarService.footerElemConfidenceSlider.isActive = true;
       }
-      this.footerBarService.footerElemExport.onClickCallback = () => {
-        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this._quiz.hashtag}/${window.localStorage.getItem(
-          'config.private_key')}/${this._quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
-        window.open(link);
-      };
+      if (isPlatformBrowser(this.platformId)) {
+        this.footerBarService.footerElemExport.onClickCallback = () => {
+          const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this._quiz.hashtag}/${window.localStorage.getItem(
+            'config.private_key')}/${this._quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
+          window.open(link);
+        };
+      }
     }
   }
   get isOwner(): boolean {
@@ -58,7 +61,7 @@ export class CurrentQuizService implements ICurrentQuiz {
 
   set quiz(value: IQuestionGroup) {
     this._quiz = value;
-    if (value) {
+    if (isPlatformBrowser(this.platformId) && value) {
       this.isOwner = (JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || []).indexOf(value.hashtag) > -1;
     }
   }
@@ -70,23 +73,26 @@ export class CurrentQuizService implements ICurrentQuiz {
   private _cacheAssets = false;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private http: HttpClient,
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private settingsService: SettingsService,
     private connectionService: ConnectionService
   ) {
-    const instance = window.sessionStorage.getItem('config.current_quiz');
-    if (instance) {
-      const parsedInstance = JSON.parse(instance);
-      if (parsedInstance.questionIndex) {
-        this._questionIndex = parsedInstance.questionIndex;
-      }
-      if (parsedInstance.readingConfirmationRequested) {
-        this._readingConfirmationRequested = parsedInstance.readingConfirmationRequested;
-      }
-      if (parsedInstance.quiz) {
-        this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
+    if (isPlatformBrowser(this.platformId)) {
+      const instance = window.sessionStorage.getItem('config.current_quiz');
+      if (instance) {
+        const parsedInstance = JSON.parse(instance);
+        if (parsedInstance.questionIndex) {
+          this._questionIndex = parsedInstance.questionIndex;
+        }
+        if (parsedInstance.readingConfirmationRequested) {
+          this._readingConfirmationRequested = parsedInstance.readingConfirmationRequested;
+        }
+        if (parsedInstance.quiz) {
+          this.quiz = questionGroupReflection[parsedInstance.quiz.TYPE](parsedInstance.quiz);
+        }
       }
     }
     this.connectionService.initConnection().then(() => {
@@ -140,14 +146,16 @@ export class CurrentQuizService implements ICurrentQuiz {
   public cleanUp(): Promise<any> {
     return new Promise((async resolve => {
       await this.close();
-      const nickname = window.sessionStorage.getItem(`config.nick`);
-      if (nickname) {
-        const url = `${DefaultSettings.httpApiEndpoint}/member/${this._quiz.hashtag}/${nickname}`;
-        await this.http.request('delete', url).subscribe(() => {});
+      if (isPlatformBrowser(this.platformId)) {
+        const nickname = window.sessionStorage.getItem(`config.nick`);
+        if (nickname) {
+          const url = `${DefaultSettings.httpApiEndpoint}/member/${this._quiz.hashtag}/${nickname}`;
+          await this.http.request('delete', url).subscribe(() => {});
+        }
+        window.sessionStorage.removeItem(`config.memberGroup`);
+        window.sessionStorage.removeItem(`config.nick`);
+        window.sessionStorage.removeItem(`config.current_quiz`);
       }
-      window.sessionStorage.removeItem(`config.memberGroup`);
-      window.sessionStorage.removeItem(`config.nick`);
-      window.sessionStorage.removeItem(`config.current_quiz`);
       this._isOwner = false;
       this._quiz = null;
       this._questionIndex = 0;
@@ -158,7 +166,7 @@ export class CurrentQuizService implements ICurrentQuiz {
 
   public close(): Promise<any> {
     return new Promise((resolve => {
-      if (this._isOwner && this._quiz) {
+      if (isPlatformBrowser(this.platformId) && this._isOwner && this._quiz) {
         this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
           body: {
             quizName: this._quiz.hashtag,
@@ -230,7 +238,9 @@ export class CurrentQuizService implements ICurrentQuiz {
   }
 
   public persistToSessionStorage(): void {
-    window.sessionStorage.setItem('config.current_quiz', JSON.stringify(this.serialize()));
+    if (isPlatformBrowser(this.platformId)) {
+      window.sessionStorage.setItem('config.current_quiz', JSON.stringify(this.serialize()));
+    }
   }
 
 }

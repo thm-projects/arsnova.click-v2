@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {DefaultSettings} from '../../lib/default.settings';
@@ -20,9 +20,10 @@ export class FileUploadService {
   private _duplicateQuizzes: Array<IDuplicateQuiz>;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private http: HttpClient,
     private router: Router,
-    private activeQuestionGroupService: ActiveQuestionGroupService
+    private activeQuestionGroupService: ActiveQuestionGroupService,
   ) {
   }
 

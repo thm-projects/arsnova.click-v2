@@ -1,7 +1,8 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
 import {FooterBarService} from '../../../service/footer-bar.service';
 import {ThemesService} from '../../../service/themes.service';
 import {CurrentQuizService} from '../../../service/current-quiz.service';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-quiz-theme',
@@ -14,6 +15,7 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
   private previewThemeBackup: string;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService,
     private themesService: ThemesService
@@ -23,7 +25,9 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack
     ]);
-    this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
+    if (isPlatformBrowser(this.platformId)) {
+      this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
+    }
   }
 
   ngOnInit() {
@@ -35,25 +39,30 @@ export class QuizThemeComponent implements OnInit, OnDestroy {
   }
 
   updateTheme(id: string) {
-    document.getElementsByTagName('html').item(0).dataset['theme'] = id;
-    this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
+    if (isPlatformBrowser(this.platformId)) {
+      document.getElementsByTagName('html').item(0).dataset['theme'] = id;
+      this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
+    }
     this.currentQuizService.quiz.sessionConfig.theme = id;
     this.currentQuizService.toggleSettingByName('theme', id);
   }
 
   previewTheme(id) {
-    document.getElementsByTagName('html').item(0).dataset['theme'] = id;
+    if (isPlatformBrowser(this.platformId)) {
+      document.getElementsByTagName('html').item(0).dataset['theme'] = id;
+    }
   }
 
   restoreTheme() {
-    const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
+    if (isPlatformBrowser(this.platformId)) {
+      const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
-    document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
+      document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
 
-    if (themeDataset === this.previewThemeBackup) {
-      return;
+      if (themeDataset === this.previewThemeBackup) {
+        return;
+      }
     }
-
 
     this.themesService.reloadLinkNodes(this.previewThemeBackup);
   }

@@ -1,9 +1,10 @@
-import {Injectable} from '@angular/core';
+import {Inject, Injectable, PLATFORM_ID} from '@angular/core';
 import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
 import {SettingsService} from './settings.service';
 import {FooterBarService} from './footer-bar.service';
 import {TranslateService} from '@ngx-translate/core';
+import {isPlatformBrowser} from '@angular/common';
 
 @Injectable()
 export class ActiveQuestionGroupService {
@@ -23,15 +24,19 @@ export class ActiveQuestionGroupService {
   private _activeQuestionGroup: IQuestionGroup;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
   ) {
-    if (window.sessionStorage.getItem('config.active_question_group')) {
-      const serializedObject = window.sessionStorage.getItem('config.active_question_group');
-      const parsedObject = JSON.parse(serializedObject);
-      this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
+    if (isPlatformBrowser(this.platformId)) {
+      if (window.sessionStorage.getItem('config.active_question_group')) {
+        const serializedObject = window.sessionStorage.getItem('config.active_question_group');
+        const parsedObject = JSON.parse(serializedObject);
+        this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
+      }
     }
+
   }
 
   private dec2hex(dec) {
@@ -40,26 +45,36 @@ export class ActiveQuestionGroupService {
 
   public generatePrivateKey(length?: number) {
     const arr = new Uint8Array((length || 40) / 2);
-    window.crypto.getRandomValues(arr);
+
+    if (isPlatformBrowser(this.platformId)) {
+      window.crypto.getRandomValues(arr);
+    }
+
     return Array.from(arr, this.dec2hex).join('');
   }
 
   public cleanUp(): void {
     this.activeQuestionGroup = null;
-    window.sessionStorage.removeItem('config.active_question_group');
+    if (isPlatformBrowser(this.platformId)) {
+      window.sessionStorage.removeItem('config.active_question_group');
+    }
   }
 
   persistForSession() {
-    window.sessionStorage.setItem('config.active_question_group', JSON.stringify(this.activeQuestionGroup.serialize()));
+    if (isPlatformBrowser(this.platformId)) {
+      window.sessionStorage.setItem('config.active_question_group', JSON.stringify(this.activeQuestionGroup.serialize()));
+    }
   }
 
   persist() {
     this.persistForSession();
-    window.localStorage.setItem(this.activeQuestionGroup.hashtag, JSON.stringify(this.activeQuestionGroup.serialize()));
-    const questionList = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
-    if (questionList.indexOf(this.activeQuestionGroup.hashtag) === -1) {
-      questionList.push(this.activeQuestionGroup.hashtag);
-      window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
+    if (isPlatformBrowser(this.platformId)) {
+      window.localStorage.setItem(this.activeQuestionGroup.hashtag, JSON.stringify(this.activeQuestionGroup.serialize()));
+      const questionList = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
+      if (questionList.indexOf(this.activeQuestionGroup.hashtag) === -1) {
+        questionList.push(this.activeQuestionGroup.hashtag);
+        window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
+      }
     }
   }
 
@@ -91,7 +106,9 @@ export class ActiveQuestionGroupService {
         const newState = !this.footerBarService.footerElemSaveAssets.isActive;
         this.footerBarService.footerElemSaveAssets.isActive = newState;
         this.settingsService.serverSettings.cacheQuizAssets = newState;
-        window.localStorage.setItem('config.cache_assets', `${newState}`);
+        if (isPlatformBrowser(this.platformId)) {
+          window.localStorage.setItem('config.cache_assets', `${newState}`);
+        }
       };
     }
   }

@@ -1,5 +1,6 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID} from '@angular/core';
 import {DefaultSettings} from '../../../lib/default.settings';
+import {isPlatformBrowser} from '@angular/common';
 
 @Component({
   selector: 'app-audio-player',
@@ -65,11 +66,13 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit {
   private _audioElement: HTMLAudioElement;
   private _isPlaying = false;
 
-  constructor() {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {
   }
 
   private getAudioElement() {
-    if (!this._audioElement) {
+    if (isPlatformBrowser(this.platformId) && !this._audioElement) {
       this._audioElement = <HTMLAudioElement>document.getElementById(this._randomUUID);
     }
     return this._audioElement;
