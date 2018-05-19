@@ -31,6 +31,9 @@
               [id]="i + '_draggable'"
               [class]="'questionElementWrapper d-flex justify-content-center align-items-center px-2 py-2 mb-2 rounded questionType_' + i">
             <span [innerHTML]="elem.translationReferrer() | translate"></span>
+            <span *ngIf="!elem.isValid()" class="text-warning ml-2">
+              <i class="fas fa-exclamation-triangle"></i>
+            </span>
             <span class="questionButtonOptions text-right">
               <span class="pointer mr-2"
                     *ngIf="i"
