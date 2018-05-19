@@ -16,8 +16,6 @@ import {TrackingService} from '../../service/tracking.service';
 import {SharedService} from '../../service/shared.service';
 import {ConnectionService} from '../../service/connection.service';
 import {CurrentQuizService} from '../../service/current-quiz.service';
-import {ArsnovaClickAngulartics2Piwik} from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
-import {Angulartics2Module} from 'angulartics2';
 import {WebsocketMockService} from '../../service/websocket.mock.service';
 import {CurrentQuizMockService} from '../../service/current-quiz.mock.service';
 import {ConnectionMockService} from '../../service/connection.mock.service';

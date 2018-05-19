@@ -25,7 +25,6 @@ export class AdditionalDataComponent implements OnInit {
 
   constructor(
     @Inject(DOCUMENT) readonly document,
-    private translateService: TranslateService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private trackingService: TrackingService,
   ) {
