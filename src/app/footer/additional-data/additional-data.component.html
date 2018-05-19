@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div *ngIf="_isShowingMore"
+    <div *ngIf="isShowingMore"
          class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
       <div class="element-wrapper bg-white px-2 py-2 mb-2 h-100"
            [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
@@ -40,7 +40,7 @@
       </div>
     </div>
 
-    <div *ngIf="questionGroupItem.sessionConfig.nicks.selectedNicks.length === 0 && _isShowingMore"
+    <div *ngIf="questionGroupItem.sessionConfig.nicks.selectedNicks.length === 0 && isShowingMore"
          class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
       <div class="element-wrapper bg-white px-2 py-2 mb-2 h-100">
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingRudeNicks' | translate}}</h5>
@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div *ngIf="_isShowingMore"
+    <div *ngIf="isShowingMore"
          class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
       <div class="element-wrapper bg-white px-2 py-2 mb-2 h-100"
            [attr.data-intro]="'component.quiz_summary.description.restrict_to_cas' | translate"
@@ -62,7 +62,7 @@
       </div>
     </div>
 
-    <div *ngIf="_isShowingMore"
+    <div *ngIf="isShowingMore"
          [class.col-6]="questionGroupItem.sessionConfig.nicks.selectedNicks.length === 0"
          [class.col-md-12]="questionGroupItem.sessionConfig.nicks.selectedNicks.length === 0"
          [class.col-12]="questionGroupItem.sessionConfig.nicks.selectedNicks.length > 0"
