@@ -5,6 +5,7 @@ import 'reflect-metadata';
 import { enableProdMode } from '@angular/core';
 
 import * as express from 'express';
+import * as compress from 'compression';
 import { join } from 'path';
 
 // Express Engine
@@ -17,9 +18,10 @@ enableProdMode();
 
 // Express server
 const app = express();
-
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
+
+app.use(compress());
 
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 const { RootServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');

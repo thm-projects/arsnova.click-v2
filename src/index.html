@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="">
+<html lang="en" data-theme="theme-Material">
 <head>
 
   <title>arsnova.click</title>
@@ -20,14 +20,14 @@
 
   <base href="/">
 
-  <link rel="preload" as="style" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css">
-  <link rel="preload" as="script" type="text/javascript" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js">
+  <link rel="preload" as="style" type="text/css" href="assets/styles/loader.css" />
+  <link rel="prefetch" as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900"/>
 
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css">
-  <script async defer src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
 
   <noscript>
-    <div role="main">
+    <link rel="stylesheet" type="text/css" href="assets/styles/noscript.css" />
+    <main>
       <div>
         <h1>JavaScript nicht aktiviert</h1>
         <p>Um arsnova.click nutzen zu können, muss JavaScript aktiviert sein!</p>
@@ -48,29 +48,32 @@
         <p>JavaScript es necesario para ejecutar arsnova.click!</p>
         <hr/>
       </div>
-    </div>
+    </main>
   </noscript>
 </head>
 <body>
 
-<!-- Include FontAwesome via JS -->
+<div id="theme-wrapper">
+  <div id="content">
+    <app-root></app-root>
+
+    <div id="loader-wrapper">
+      <div id="loader"></div>
+      <div class="loader-section section-left"></div>
+      <div class="loader-section section-right"></div>
+    </div>
+  </div>
+</div>
+
 <script async defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+<script async defer src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
 
-<script>
-  const giftofspeed = document.createElement('link');
-  giftofspeed.rel = 'prefetch';
-  giftofspeed.href = 'https://fonts.googleapis.com/css?family=Roboto:400,500,700,900';
-  giftofspeed.type = 'text/css';
-  const godefer = document.getElementsByTagName('link')[0];
-  godefer.parentNode.insertBefore(giftofspeed, godefer);
-</script>
-
-<!-- Piwik -->
 <script type="text/javascript">
+  window.addEventListener('load', function () {
+    document.getElementById('loader-wrapper').remove();
+  });
+
   var _paq = _paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  //_paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-  // _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);
   (function() {
     const u="https://arsnova.thm.de/stats/";
@@ -80,22 +83,5 @@
     g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
   })();
 </script>
-<!-- End Piwik Code -->
-
-<div id="theme-wrapper">
-  <div id="content">
-    <app-root>
-      <div class="row">
-        <div class="col-md-12">
-          <div id="loader-wrapper">
-            <div id="loader"></div>
-            <div class="loader-section section-left"></div>
-            <div class="loader-section section-right"></div>
-          </div>
-        </div>
-      </div>
-    </app-root>
-  </div>
-</div>
 </body>
 </html>

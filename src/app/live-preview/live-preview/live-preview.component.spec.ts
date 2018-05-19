@@ -23,6 +23,7 @@ import {WebsocketMockService} from '../../service/websocket.mock.service';
 import {ConnectionMockService} from '../../service/connection.mock.service';
 import {ActiveQuestionGroupMockService} from '../../service/active-question-group.mock.service';
 import {TrackingMockService} from '../../service/tracking.mock.service';
+import {HeaderLabelService} from '../../service/header-label.service';
 
 describe('LivePreviewComponent', () => {
   let component: LivePreviewComponent;
@@ -55,6 +56,7 @@ describe('LivePreviewComponent', () => {
         FooterBarService,
         SharedService,
         SettingsService,
+        HeaderLabelService,
         {provide: TrackingService, useClass: TrackingMockService},
       ],
       declarations: [LivePreviewComponent]

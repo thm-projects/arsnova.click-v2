@@ -92,7 +92,9 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.router.events.subscribe((url: any) => {
-      this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
+      if (isPlatformBrowser(this.platformId)) {
+        this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
+      }
     });
   }
 

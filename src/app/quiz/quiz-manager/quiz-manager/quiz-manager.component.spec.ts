@@ -16,12 +16,11 @@ import {WebsocketService} from '../../../service/websocket.service';
 import {HeaderLabelService} from '../../../service/header-label.service';
 import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
 import {TrackingService} from '../../../service/tracking.service';
-import {Angulartics2Module} from 'angulartics2';
-import {ArsnovaClickAngulartics2Piwik} from '../../../shared/tracking/ArsnovaClickAngulartics2Piwik';
 import {WebsocketMockService} from '../../../service/websocket.mock.service';
 import {ConnectionMockService} from '../../../service/connection.mock.service';
 import {ActiveQuestionGroupMockService} from '../../../service/active-question-group.mock.service';
 import {TrackingMockService} from '../../../service/tracking.mock.service';
+import {FooterModule} from '../../../footer/footer.module';
 
 describe('QuizManagerComponent', () => {
   let component: QuizManagerComponent;
@@ -32,6 +31,7 @@ describe('QuizManagerComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientModule,
+        FooterModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,

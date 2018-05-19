@@ -17,8 +17,6 @@ import {ThemesService} from '../../service/themes.service';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {CurrentQuizMockService} from '../../service/current-quiz.mock.service';
 import {TrackingService} from '../../service/tracking.service';
-import {Angulartics2Module} from 'angulartics2';
-import {ArsnovaClickAngulartics2Piwik} from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
 import {WebsocketMockService} from '../../service/websocket.mock.service';
 import {ConnectionMockService} from '../../service/connection.mock.service';
 import {DefaultSettings} from '../../../lib/default.settings';
@@ -73,9 +71,14 @@ describe('ThemeSwitcherComponent', () => {
 
   it('should be created', async(inject([HttpClient, HttpTestingController],
     (http: HttpClient, backend: HttpTestingController) => {
+      backend.match(`${DefaultSettings.httpLibEndpoint}/linkImages/theme-Material`).forEach(match => match.flush([]));
       backend.expectOne(`${DefaultSettings.httpApiEndpoint}/themes`).flush({});
       backend.verify();
       expect(component).toBeTruthy();
     }))
   );
+
+  it('should contain a TYPE definition', async(() => {
+    expect(ThemeSwitcherComponent.TYPE).toEqual('ThemeSwitcherComponent');
+  }));
 });

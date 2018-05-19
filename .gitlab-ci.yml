@@ -15,7 +15,6 @@ install:
     - npm install
 
 test:
-  allow_failure: true
   stage: test
   only:
     - master
@@ -31,19 +30,10 @@ build:
   tags:
     - nodejs
   script:
-    - npm run build:PROD
+    - npm run build:SSR
   artifacts:
     paths:
       - dist
-
-compress:
-  stage: compress
-  only:
-    - master
-  tags:
-    - nodejs
-  script:
-    - npm run compress
 
 deploy:
   stage: deploy

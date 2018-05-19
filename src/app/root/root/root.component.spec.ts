@@ -1,7 +1,6 @@
 import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
 import {RootComponent} from './root.component';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {Angulartics2Module} from 'angulartics2';
 import {ConnectionService} from '../../service/connection.service';
 import {createTranslateLoader} from '../../../lib/translation.factory';
 import {CurrentQuizMockService} from '../../service/current-quiz.mock.service';
@@ -12,7 +11,6 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
 import {HeaderLabelService} from '../../service/header-label.service';
 import {ThemesService} from '../../service/themes.service';
-import {ArsnovaClickAngulartics2Piwik} from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
 import {FooterBarService} from '../../service/footer-bar.service';
 import {CurrentQuizService} from '../../service/current-quiz.service';
 import {SharedService} from '../../service/shared.service';
@@ -84,6 +82,7 @@ describe('RootComponent', () => {
   it('should be created', async(inject([HttpClient, HttpTestingController],
     (http: HttpClient, backend: HttpTestingController) => {
       const environmentData = require(`../../../assets/serverEndpoint.json`);
+      backend.match(`${DefaultSettings.httpLibEndpoint}/linkImages/theme-Material`).forEach(match => match.flush([]));
       backend.expectOne(`assets/serverEndpoint.json`).flush(environmentData);
       backend.expectOne(`./assets/i18n/en.json`).flush({});
       backend.expectOne(`${DefaultSettings.httpApiEndpoint}/themes`).flush({});
@@ -91,4 +90,8 @@ describe('RootComponent', () => {
       expect(component).toBeTruthy();
     }))
   );
+
+  it('should contain a TYPE reference', async(() => {
+    expect(RootComponent.TYPE).toEqual('RootComponent');
+  }));
 });

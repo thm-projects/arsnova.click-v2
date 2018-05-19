@@ -62,19 +62,21 @@ export class ThemesService {
         usedTheme = this.currentQuizService.quiz.sessionConfig.theme;
       }
       const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
-      if (themeDataset === usedTheme) {
+
+      if (!document.getElementById('link-manifest') && themeDataset === usedTheme) {
+        this.reloadLinkNodes(usedTheme);
         return;
       }
-      this._currentTheme = usedTheme;
-
-      document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
-
-      this.reloadLinkNodes();
+      if (themeDataset !== usedTheme) {
+        this._currentTheme = usedTheme;
+        document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
+        this.reloadLinkNodes();
+      }
     }
   }
 
   public reloadLinkNodes(target?): void {
-    if (isPlatformServer(this.platformId)) {
+    if (isPlatformServer(this.platformId) || (!document.getElementById('link-manifest') && !target)) {
       return;
     }
 

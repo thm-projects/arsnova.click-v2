@@ -27,6 +27,7 @@ module.exports = function (config) {
         flags:  [
           '--headless',
           '--disable-gpu',
+          '--no-sandbox',
           '--remote-debugging-port=9222',
         ],
       }
@@ -36,7 +37,7 @@ module.exports = function (config) {
     },
     reporters: config.angularCli && config.angularCli.codeCoverage
       ? ['progress', 'coverage-istanbul']
-      : ['progress', 'mocha'],
+      : ['mocha'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

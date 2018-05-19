@@ -1,0 +1,22 @@
+@import "./assets/themes/standard-style-definitions";
+@import "./assets/themes/theme-arsnova-dot-click-contrast";
+@import "./assets/themes/theme-blackbeauty";
+@import "./assets/themes/theme-elegant";
+@import "./assets/themes/theme-Material";
+@import "./assets/themes/theme-Material-hope";
+@import "./assets/themes/theme-decent-blue";
+@import "./assets/themes/theme-Material-blue";
+@import "./assets/themes/theme-spiritual-purple";
+@import "./assets/themes/theme-GreyBlue-Lime";
+
+$themes: (
+  theme-arsnova-dot-click-contrast: map-merge(standard-style-definitions(), theme-arsnova-dot-click-contrast()),
+  theme-blackbeauty: map-merge(standard-style-definitions(), theme-blackbeauty()),
+  theme-elegant: map-merge(standard-style-definitions(), theme-elegant()),
+  theme-Material: map-merge(standard-style-definitions(), theme-Material()),
+  theme-Material-hope: map-merge(standard-style-definitions(), theme-Material-hope()),
+  theme-Material-blue: map_merge(standard-style-definitions(), theme-Material-blue()),
+  theme-decent-blue: map-merge(standard-style-definitions(), theme-decent-blue()),
+  theme-spiritual-purple: map-merge(standard-style-definitions(), theme-spiritual-purple()),
+  theme-GreyBlue-Lime: map-merge(standard-style-definitions(), theme-GreyBlue-Lime())
+);

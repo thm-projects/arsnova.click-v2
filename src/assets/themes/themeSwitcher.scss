@@ -1,41 +1,4 @@
-/*
- * This file is part of ARSnova Click.
- * Copyright (C) 2016 The ARSnova Team
- *
- * ARSnova Click is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * ARSnova Click is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with ARSnova Click.  If not, see <http://www.gnu.org/licenses/>.*/
-@import "standard-style-definitions";
-@import "theme-arsnova-dot-click-contrast";
-@import "theme-blackbeauty";
-@import "theme-elegant";
-@import "theme-Material";
-@import "theme-Material-hope";
-@import "theme-decent-blue";
-@import "theme-Material-blue";
-@import "theme-spiritual-purple";
-@import "theme-GreyBlue-Lime";
-
-$themes: (
-  theme-arsnova-dot-click-contrast: map-merge(standard-style-definitions(), theme-arsnova-dot-click-contrast()),
-  theme-blackbeauty: map-merge(standard-style-definitions(), theme-blackbeauty()),
-  theme-elegant: map-merge(standard-style-definitions(), theme-elegant()),
-  theme-Material: map-merge(standard-style-definitions(), theme-Material()),
-  theme-Material-hope: map-merge(standard-style-definitions(), theme-Material-hope()),
-  theme-Material-blue: map_merge(standard-style-definitions(), theme-Material-blue()),
-  theme-decent-blue: map-merge(standard-style-definitions(), theme-decent-blue()),
-  theme-spiritual-purple: map-merge(standard-style-definitions(), theme-spiritual-purple()),
-  theme-GreyBlue-Lime: map-merge(standard-style-definitions(), theme-GreyBlue-Lime())
-);
+@import "../../variables";
 
 @each $theme, $map in $themes {
   html[data-theme=#{$theme}] {

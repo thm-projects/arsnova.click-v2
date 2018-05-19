@@ -30,9 +30,11 @@
               "src/assets/fonts",
               "src/assets/i18n",
               "src/assets/icons",
+              "src/assets/styles",
               "src/assets/serverEndpoint.json"
             ],
             "styles": [
+              "src/test.scss",
               "src/styles.scss",
               {
                 "input": "./node_modules/bootstrap/dist/css/bootstrap.css"
