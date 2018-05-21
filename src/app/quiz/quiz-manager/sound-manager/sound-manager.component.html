@@ -3,7 +3,8 @@
      role="group">
   <div class="btn-group active">
     <button type="button"
-            aria-expanded="false" aria-controls="collapseExample"
+            aria-expanded="false"
+            aria-controls="collapseExample"
             class="btn btn-info btn_panel-switcher pointer"
             (click)="openTab('panel-lobby')"
             data-target="#panel-lobby"
@@ -13,7 +14,8 @@
   </div>
   <div class="btn-group">
     <button type="button"
-            aria-expanded="false" aria-controls="collapseExample"
+            aria-expanded="false"
+            aria-controls="collapseExample"
             class="btn btn-info btn_panel-switcher pointer"
             (click)="openTab('panel-countdownRunning')"
             data-target="#panel-countdownRunning"
@@ -23,7 +25,8 @@
   </div>
   <div class="btn-group">
     <button type="button"
-            aria-expanded="false" aria-controls="collapseExample"
+            aria-expanded="false"
+            aria-controls="collapseExample"
             class="btn btn-info btn_panel-switcher pointer"
             (click)="openTab('panel-countdownEnd')"
             data-target="#panel-countdownEnd"
@@ -34,24 +37,27 @@
 </div>
 
 <datalist id="tickmarks">
-  <option value="0" label="0%">
+  <option value="0"
+          label="0%">
   <option value="10">
   <option value="20">
   <option value="30">
   <option value="40">
-  <option value="50" label="50%">
+  <option value="50"
+          label="50%">
   <option value="60">
   <option value="70">
   <option value="80">
   <option value="90">
-  <option value="100" label="100%">
+  <option value="100"
+          label="100%">
 </datalist>
 
 <div class="col-12 mt-5">
   <div class="row">
     <div class="col-12 col-sm-6">
       <p class="mb-0 mr-2 text-light align-self-center h-100 w-100 d-flex align-items-center justify-content-around"
-             style="line-height: 1.2;">
+         style="line-height: 1.2;">
         <span>
           <span>{{'plugins.sound.global_volume' | translate}}:&nbsp;</span>
           <span>{{config.volumeConfig.global}}&nbsp;&#37;</span>
@@ -83,7 +89,8 @@
     </div>
   </div>
 </div>
-<div class="collapse show" id="panel-lobby">
+<div class="collapse show"
+     id="panel-lobby">
   <div class="card card-body border-0 mt-5">
     <div class="row">
       <div class="col-12">
@@ -133,7 +140,9 @@
     </div>
   </div>
 </div>
-<div class="collapse" id="panel-countdownRunning" role="tabpanel">
+<div class="collapse"
+     id="panel-countdownRunning"
+     role="tabpanel">
   <div class="card card-body border-0 mt-5">
     <div class="row">
       <div class="col-12">
@@ -183,7 +192,9 @@
     </div>
   </div>
 </div>
-<div class="collapse" id="panel-countdownEnd" role="tabpanel">
+<div class="collapse"
+     id="panel-countdownEnd"
+     role="tabpanel">
   <div class="card card-body border-0 mt-5">
     <div class="row">
       <div class="col-12">

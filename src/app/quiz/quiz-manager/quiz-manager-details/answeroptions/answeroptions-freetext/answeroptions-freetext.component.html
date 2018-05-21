@@ -58,9 +58,9 @@
         <div *ngIf="hasTestInput()"
              class="center-block mt-4 mb-0">
           <h4 class="text-center"
-              [class.text-success]="testInputCorrect()"
-              [class.text-danger]="!testInputCorrect()"
-              [innerHTML]="'component.answeroptions.free_text_question.check_' + (!testInputCorrect() ? 'in' : '') + 'correct' | translate"></h4>
+              [class.text-success]="isTestInputCorrect()"
+              [class.text-danger]="!isTestInputCorrect()"
+              [innerHTML]="'component.answeroptions.free_text_question.check_' + (!isTestInputCorrect() ? 'in' : '') + 'correct' | translate"></h4>
         </div>
       </div>
     </div>

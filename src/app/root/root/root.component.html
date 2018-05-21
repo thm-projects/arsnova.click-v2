@@ -3,16 +3,19 @@
     <app-header></app-header>
   </div>
 
-  <div class="container-fluid" style="height: 90vh;">
+  <div class="container-fluid"
+       style="height: 90vh;">
     <div class="row flex-sm-nowrap h-100">
       <div class="footer-bar-wrapper p-0 relative">
         <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
         <div class="d-none d-md-block">
-          <router-outlet name="additionalData-md" class="d-none d-md-block"></router-outlet>
+          <router-outlet name="additionalData-md"
+                         class="d-none d-md-block"></router-outlet>
         </div>
       </div>
 
-      <main id="content-container" class="container">
+      <main id="content-container"
+            class="container">
         <router-outlet></router-outlet>
       </main>
     </div>

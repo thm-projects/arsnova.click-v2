@@ -1,6 +1,8 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
-import {AudioPlayerComponent} from './audio-player.component';
+import { AudioPlayerComponent } from './audio-player.component';
 
 describe('AudioPlayerComponent', () => {
   let component: AudioPlayerComponent;
@@ -8,9 +10,11 @@ describe('AudioPlayerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [AudioPlayerComponent]
-    })
-           .compileComponents();
+      providers: [
+        { provide: TrackingService, useClass: TrackingMockService },
+      ],
+      declarations: [AudioPlayerComponent],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {

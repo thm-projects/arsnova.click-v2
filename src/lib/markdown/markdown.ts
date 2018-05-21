@@ -1,6 +1,6 @@
-import * as marked from 'marked';
 import * as highlight from 'highlight.js';
-import {DefaultSettings} from '../default.settings';
+import * as marked from 'marked';
+import { DefaultSettings } from '../default.settings';
 
 export function parseGithubFlavoredMarkdown(value: string): string {
   const renderer = new marked.Renderer();
@@ -16,9 +16,9 @@ export function parseGithubFlavoredMarkdown(value: string): string {
     smartLists: false,
     smartypants: false,
     mathDelimiters: [['$', '$'], ['\\(', '\\)'], ['\\[', '\\]'], ['$$', '$$'], 'beginend'],
-    highlight: function (code) {
+    highlight: (code) => {
       return highlight.highlightAuto(code).value;
-    }
+    },
   };
   marked.setOptions(options);
   return postMarkdownRenderer(marked(preMarkdownRenderer(value)));
@@ -50,10 +50,11 @@ function postMarkdownRenderer(value: string): string {
         // Convert to embed uri. Direct youtube urls are restricted by the sameorigin policy and cannot be embedded in iframes
         token = token.replace('watch?v=', 'embed/');
       }
-      const videoTag = token.replace('<a', `<iframe`)
-                            .replace('</a>', `</iframe>`)
-                            .replace('<iframe', `<iframe ${iframeOptions}`)
-                            .replace('href', 'src');
+      const videoTag = token //
+      .replace('<a', `<iframe`) //
+      .replace('</a>', `</iframe>`) //
+      .replace('<iframe', `<iframe ${iframeOptions}`) //
+      .replace('href', 'src');
       value = value.replace(originalToken, videoTag);
     });
   }

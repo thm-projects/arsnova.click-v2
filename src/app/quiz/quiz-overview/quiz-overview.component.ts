@@ -1,22 +1,22 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {FooterBarService} from '../../service/footer-bar.service';
-import {HeaderLabelService} from '../../service/header-label.service';
-import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {questionGroupReflection} from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../../lib/default.settings';
-import {IMessage} from 'arsnova-click-v2-types/src/common';
-import {CurrentQuizService} from '../../service/current-quiz.service';
-import {TrackingService} from '../../service/tracking.service';
-import {isPlatformBrowser} from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Router } from '@angular/router';
+import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
   selector: 'app-quiz-overview',
   templateUrl: './quiz-overview.component.html',
-  styleUrls: ['./quiz-overview.component.scss']
+  styleUrls: ['./quiz-overview.component.scss'],
 })
-export class QuizOverviewComponent implements OnInit {
+export class QuizOverviewComponent {
   public static TYPE = 'QuizOverviewComponent';
 
   get sessions(): Array<string> {
@@ -51,17 +51,14 @@ export class QuizOverviewComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
-
-  isValid(session: string): boolean {
+  public isValid(session: string): boolean {
     if (isPlatformBrowser(this.platformId)) {
       const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
       return questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized).isValid();
     }
   }
 
-  startQuiz(sessionName: string): void {
+  public startQuiz(sessionName: string): void {
     if (isPlatformBrowser(this.platformId)) {
       const sessionSerialized = JSON.parse(window.localStorage.getItem(sessionName));
       const session = new questionGroupReflection[sessionSerialized.TYPE](sessionSerialized);
@@ -77,7 +74,7 @@ export class QuizOverviewComponent implements OnInit {
               if (data.step === 'QUIZ:UNDEFINED') {
                 this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/reserve/override`, {
                   quizName: session.hashtag,
-                  privateKey: window.localStorage.getItem('config.private_key')
+                  privateKey: window.localStorage.getItem('config.private_key'),
                 }).subscribe((reserveResponse: IMessage) => {
                   if (reserveResponse.status === 'STATUS:SUCCESSFUL') {
                     resolve();
@@ -97,15 +94,15 @@ export class QuizOverviewComponent implements OnInit {
         });
 
         this.currentQuizService.quiz = session;
-        await this.currentQuizService.cacheQuiz(session);
+        await this.currentQuizService.cacheQuiz();
         this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-          quiz: session.serialize()
+          quiz: session.serialize(),
         }).subscribe(
           (data: IMessage) => {
             if (data.status === 'STATUS:SUCCESSFUL') {
               this.router.navigate(['/quiz', 'flow']);
             }
-          }
+          },
         );
       };
 
@@ -113,7 +110,7 @@ export class QuizOverviewComponent implements OnInit {
     }
   }
 
-  editQuiz(session: string): void {
+  public editQuiz(session: string): void {
     if (isPlatformBrowser(this.platformId)) {
       const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
       this.trackingService.trackClickEvent({
@@ -125,7 +122,7 @@ export class QuizOverviewComponent implements OnInit {
     }
   }
 
-  exportQuiz(session: string): void {
+  public exportQuiz(session: string): void {
     if (isPlatformBrowser(this.platformId)) {
       const exportData = 'text/json;charset=utf-8,' + encodeURIComponent(window.localStorage.getItem(session));
       const a = document.createElement('a');
@@ -137,9 +134,9 @@ export class QuizOverviewComponent implements OnInit {
       });
       a.href = 'data:' + exportData;
       a.download = session + '-' + timestring + '.json';
-      a.addEventListener('click', function () {
+      a.addEventListener('click', () => {
         if (navigator.msSaveOrOpenBlob) {
-          navigator.msSaveOrOpenBlob(new Blob([exportData], {type: 'text/json'}), session + '-' + timestring + '.json');
+          navigator.msSaveOrOpenBlob(new Blob([exportData], { type: 'text/json' }), session + '-' + timestring + '.json');
         }
       });
       a.innerHTML = '';
@@ -147,7 +144,7 @@ export class QuizOverviewComponent implements OnInit {
     }
   }
 
-  deleteQuiz(session: string): void {
+  public deleteQuiz(session: string): void {
     this.trackingService.trackClickEvent({
       action: QuizOverviewComponent.TYPE,
       label: `delete-quiz`,
@@ -159,8 +156,8 @@ export class QuizOverviewComponent implements OnInit {
       this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz`, {
         body: {
           quizName: session,
-          privateKey: localStorage.getItem('config.private_key')
-        }
+          privateKey: localStorage.getItem('config.private_key'),
+        },
       }).subscribe((response: IMessage) => {
         if (response.status !== 'STATUS:SUCCESSFUL') {
           console.log(response);

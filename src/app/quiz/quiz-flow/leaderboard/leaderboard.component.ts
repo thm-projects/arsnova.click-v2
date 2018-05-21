@@ -1,55 +1,63 @@
-import {Component, OnDestroy, OnInit, SecurityContext} from '@angular/core';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {AttendeeService} from '../../../service/attendee.service';
-import {HeaderLabelService} from '../../../service/header-label.service';
-import {Subscription} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
-import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMessage, ILeaderBoardItem} from 'arsnova-click-v2-types/src/common';
-import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {ConnectionService} from '../../../service/connection.service';
-import {HttpClient} from '@angular/common/http';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
-import {I18nService} from '../../../service/i18n.service';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit, SecurityContext } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ILeaderBoardItem, IMessage } from 'arsnova-click-v2-types/src/common';
+import { Subscription } from 'rxjs';
+import { DefaultSettings } from '../../../../lib/default.settings';
+import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { I18nService } from '../../../service/i18n/i18n.service';
 
 @Component({
   selector: 'app-leaderboard',
   templateUrl: './leaderboard.component.html',
-  styleUrls: ['./leaderboard.component.scss']
+  styleUrls: ['./leaderboard.component.scss'],
 })
-export class LeaderboardComponent implements OnInit, OnDestroy {
-  get hasMultipleAnswersAvailable(): boolean {
-    return this._hasMultipleAnswersAvailable;
-  }
+export class LeaderboardComponent implements OnInit {
   public static TYPE = 'LeaderboardComponent';
 
-  get memberGroupResults(): Array<ILeaderBoardItem> {
-    return this._memberGroupResults;
-  }
+  private _questionIndex: number;
+
   get questionIndex(): number {
     return this._questionIndex;
   }
 
-  get isGlobalRanking(): boolean {
-    return this._isGlobalRanking;
-  }
-
-  get leaderBoardPartiallyCorrect(): Array<ILeaderBoardItem> {
-    return this._leaderBoardPartiallyCorrect;
-  }
+  private _leaderBoardCorrect: Array<ILeaderBoardItem>;
 
   get leaderBoardCorrect(): Array<ILeaderBoardItem> {
     return this._leaderBoardCorrect;
   }
 
-  private _routerSubscription: Subscription;
-  private _questionIndex: number;
-  private _leaderBoardCorrect: Array<ILeaderBoardItem>;
   private _leaderBoardPartiallyCorrect: Array<ILeaderBoardItem>;
+
+  get leaderBoardPartiallyCorrect(): Array<ILeaderBoardItem> {
+    return this._leaderBoardPartiallyCorrect;
+  }
+
   private _memberGroupResults: Array<ILeaderBoardItem>;
+
+  get memberGroupResults(): Array<ILeaderBoardItem> {
+    return this._memberGroupResults;
+  }
+
   private _isGlobalRanking: boolean;
+
+  get isGlobalRanking(): boolean {
+    return this._isGlobalRanking;
+  }
+
   private _hasMultipleAnswersAvailable: boolean;
+
+  get hasMultipleAnswersAvailable(): boolean {
+    return this._hasMultipleAnswersAvailable;
+  }
+
+  private _routerSubscription: Subscription;
   private readonly _hashtag: string;
 
   constructor(
@@ -62,7 +70,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     public currentQuizService: CurrentQuizService,
     public attendeeService: AttendeeService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
@@ -75,17 +83,98 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       this.footerBarService.replaceFooterElements([
         this.footerBarService.footerElemBack,
         this.footerBarService.footerElemFullscreen,
-        this.footerBarService.footerElemExport
+        this.footerBarService.footerElemExport,
       ]);
     } else {
       this.footerBarService.replaceFooterElements([
         this.footerBarService.footerElemBack,
-        this.footerBarService.footerElemFullscreen
+        this.footerBarService.footerElemFullscreen,
       ]);
     }
   }
 
-  private handleMessages() {
+  public sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  }
+
+  public parseNickname(value: string): SafeHtml {
+    if (value.match(/:[\w\+\-]+:/g)) {
+      return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
+    }
+    return value;
+  }
+
+  public roundResponseTime(value: number, digits?: number): number;
+  public roundResponseTime(value: Array<string>, digits?: number): number;
+  public roundResponseTime(value: number | Array<string>, digits?: number): number {
+    value = +value;
+
+    if (typeof digits === 'undefined' || +digits === 0) {
+      return Math.round(value);
+    }
+
+    if (isNaN(value) || !(digits % 1 === 0)) {
+      return NaN;
+    }
+
+    value = value.toString().split('e');
+    value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + digits) : digits)));
+
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? (+value[1] - digits) : -digits));
+  }
+
+  public async ngOnInit(): Promise<void> {
+    await this.connectionService.initConnection();
+    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+    this.handleMessages();
+
+    const params = await this.route.params.toPromise();
+    this._questionIndex = +params['questionIndex'];
+    this._isGlobalRanking = isNaN(this._questionIndex);
+    if (this._isGlobalRanking) {
+      this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
+      this._questionIndex = null;
+      if (params['questionIndex']) {
+        this.router.navigate(['/quiz', 'flow', 'leaderboard']);
+        return;
+      }
+    } else {
+      this.headerLabelService.headerLabel = 'component.leaderboard.header';
+
+      const questionType = this.currentQuizService.quiz.questionList[this.questionIndex].TYPE;
+      this._hasMultipleAnswersAvailable = questionType === 'MultipleChoiceQuestion';
+    }
+
+    const lederboardData = await this.getLeaderboardFromBackend();
+    this._leaderBoardCorrect = lederboardData.payload.correctResponses;
+    this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
+    this._memberGroupResults = lederboardData.payload.memberGroupResults;
+
+    this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
+      this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
+        if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
+          this._leaderBoardCorrect.splice(index, 1);
+        }
+      });
+    });
+
+    this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
+      return memberGroupResult.correctQuestions.length > 0;
+    });
+
+  }
+
+  public formatResponseTime(responseTime: number): string {
+    return this.i18nService.formatNumber(this.roundResponseTime(responseTime, 2));
+  }
+
+  private async getLeaderboardFromBackend(): Promise<IMessage> {
+    const url = `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex ? this._questionIndex : ''}`;
+    return this.http.get<IMessage>(url).toPromise();
+  }
+
+  private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'QUIZ:START':
@@ -105,90 +194,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
           break;
       }
     });
-  }
-
-  sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
-  }
-
-  parseNickname(value: string): SafeHtml {
-    if (value.match(/:[\w\+\-]+:/g)) {
-      return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
-    }
-    return value;
-  }
-
-  roundResponseTime(value: number | Array<string>, exp: number): number {
-    value = +value;
-
-    if (typeof exp === 'undefined' || +exp === 0) {
-      return Math.round(value);
-    }
-
-    if (isNaN(value) || !(exp % 1 === 0)) {
-      return NaN;
-    }
-
-    value = value.toString().split('e');
-    value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp)));
-
-    value = value.toString().split('e');
-    return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
-  }
-
-  ngOnInit() {
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-      this.handleMessages();
-    });
-    this._routerSubscription = this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
-      this._isGlobalRanking = isNaN(this._questionIndex);
-      if (this._isGlobalRanking) {
-        this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
-        this._questionIndex = null;
-        if (params['questionIndex']) {
-          this.router.navigate(['/quiz', 'flow', 'leaderboard']);
-          return;
-        }
-      } else {
-        this.headerLabelService.headerLabel = 'component.leaderboard.header';
-
-        const questionType = this.currentQuizService.quiz.questionList[this.questionIndex].TYPE;
-        this._hasMultipleAnswersAvailable = questionType === 'MultipleChoiceQuestion';
-      }
-
-
-      const url = `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex ? this._questionIndex : ''}`;
-      this.http.get(url)
-          .subscribe(
-            (data: IMessage) => {
-              this._leaderBoardCorrect = data.payload.correctResponses;
-              this._leaderBoardPartiallyCorrect = data.payload.partiallyCorrectResponses;
-              this._memberGroupResults = data.payload.memberGroupResults;
-
-              this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
-                this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
-                  if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
-                    this._leaderBoardCorrect.splice(index, 1);
-                  }
-                });
-              });
-
-              this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-                return memberGroupResult.correctQuestions.length > 0;
-              });
-            }
-          );
-    });
-  }
-
-  private formatResponseTime(responseTime: number): string {
-    return this.i18nService.formatNumber(parseFloat(responseTime.toFixed(2)));
-  }
-
-  ngOnDestroy() {
-    this._routerSubscription.unsubscribe();
   }
 
 }

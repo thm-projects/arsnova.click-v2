@@ -1,4 +1,5 @@
-<div id="markdownBarDiv" class="markdown-box">
+<div id="markdownBarDiv"
+     class="markdown-box">
   <ul>
     <li *ngFor="let elem of allDisplayedMarkdownBarElements"
         [id]="elem.id"
@@ -8,7 +9,8 @@
         [title]="elem.titleRef | translate"
         data-animation="false"
         (click)="connector(elem)">
-      <i [class]="elem.iconClass" aria-hidden="true"></i>
+      <i [class]="elem.iconClass"
+         aria-hidden="true"></i>
     </li>
   </ul>
 </div>

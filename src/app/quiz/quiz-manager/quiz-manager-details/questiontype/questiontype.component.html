@@ -8,8 +8,10 @@
       [attr.aria-selected]="isActiveQuestionType(elem.id)"
       (click)="morphToQuestionType(elem.id)">
     <div class="wrapper rounded pointer p-3 text-light">
-      <p class="title border-bottom mb-2" [innerHTML]="elem.translationName | translate"></p>
-      <p class="description" [innerHTML]="elem.descriptionType | translate"></p>
+      <p class="title border-bottom mb-2"
+         [innerHTML]="elem.translationName | translate"></p>
+      <p class="description"
+         [innerHTML]="elem.descriptionType | translate"></p>
     </div>
   </li>
 </ul>

@@ -1,26 +1,28 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
+import { createTranslateLoader } from '../../../lib/translation.factory';
+import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
+import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { ConnectionMockService } from '../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../service/connection/connection.service';
+import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
+import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { SettingsService } from '../../service/settings/settings.service';
+import { SharedService } from '../../service/shared/shared.service';
+import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
+import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../service/websocket/websocket.service';
 
-import {FooterBarComponent} from './footer-bar.component';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {createTranslateLoader} from '../../../lib/translation.factory';
-import {RouterTestingModule} from '@angular/router/testing';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {SettingsService} from '../../service/settings.service';
-import {FooterBarService} from '../../service/footer-bar.service';
-import {FileUploadService} from '../../service/file-upload.service';
-import {WebsocketService} from '../../service/websocket.service';
-import {TrackingService} from '../../service/tracking.service';
-import {SharedService} from '../../service/shared.service';
-import {ConnectionService} from '../../service/connection.service';
-import {CurrentQuizService} from '../../service/current-quiz.service';
-import {WebsocketMockService} from '../../service/websocket.mock.service';
-import {CurrentQuizMockService} from '../../service/current-quiz.mock.service';
-import {ConnectionMockService} from '../../service/connection.mock.service';
-import {ActiveQuestionGroupMockService} from '../../service/active-question-group.mock.service';
-import {TrackingMockService} from '../../service/tracking.mock.service';
+import { FooterBarComponent } from './footer-bar.component';
 
 describe('FooterBarComponent', () => {
   let component: FooterBarComponent;
@@ -31,33 +33,34 @@ describe('FooterBarComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientModule,
+        HttpClientTestingModule,
         NgbModule.forRoot(),
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
         FooterBarService,
         SharedService,
-        {provide: CurrentQuizService, useClass: CurrentQuizMockService},
+        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
         SettingsService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: WebsocketService, useClass: WebsocketMockService},
-        {provide: TrackingService, useClass: TrackingMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: WebsocketService, useClass: WebsocketMockService },
+        { provide: TrackingService, useClass: TrackingMockService },
         FileUploadService,
-        {provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService},
+        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
       ],
       declarations: [
-        FooterBarComponent
-      ]
+        FooterBarComponent,
+      ],
     }).compileComponents();
   }));
 
@@ -74,4 +77,52 @@ describe('FooterBarComponent', () => {
   it('should contain a TYPE definition', async(() => {
     expect(FooterBarComponent.TYPE).toEqual('FooterBarComponent');
   }));
+
+  it('#getLinkTarget', (inject([HttpClient, HttpTestingController, FooterBarService],
+    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService) => {
+      expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'about']));
+    })));
+
+  it('#toggleSetting', (inject([HttpClient, HttpTestingController, FooterBarService, TrackingService],
+    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService, trackingService: TrackingService) => {
+      const elem = footerBarService.footerElemAbout;
+      spyOn(elem, 'onClickCallback').and.callFake(() => {});
+      spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
+      component.toggleSetting(elem);
+      expect(elem.onClickCallback).toHaveBeenCalled();
+      expect(trackingService.trackClickEvent).toHaveBeenCalled();
+    })));
+
+  it('#fileChange', (inject([HttpClient, HttpTestingController, FileUploadService],
+    (http: HttpClient, backend: HttpTestingController, fileUploadService: FileUploadService) => {
+      spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
+      component.fileChange({ target: { files: [{ name: 'testFile' }] } });
+      expect(fileUploadService.uploadFile).toHaveBeenCalled();
+    })));
+
+  it('#moveLeft', (inject([HttpClient, HttpTestingController, FooterBarService],
+    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService) => {
+      component.footerElements = [
+        ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
+      ];
+      component.footerElemIndex = 2;
+      component.moveLeft();
+      expect(component.footerElemIndex).toEqual(1);
+      component.moveLeft();
+      expect(component.footerElemIndex).toEqual(1);
+    })));
+
+  it('#moveRight', (inject([HttpClient, HttpTestingController, FooterBarService],
+    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService) => {
+      component.footerElements = [
+        ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
+      ];
+      component.footerElemIndex = 1;
+      component.moveRight();
+      expect(component.footerElemIndex).toEqual(2);
+      for (let i = 0; i < component.footerElements.length; i++) {
+        component.moveRight();
+      }
+      expect(component.footerElemIndex).toEqual(component.footerElements.length - 1);
+    })));
 });

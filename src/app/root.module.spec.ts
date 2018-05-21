@@ -1,13 +1,13 @@
 import { RootModule } from './root.module';
 
 describe('RootModule', () => {
-  let RootModuleModule: RootModule;
+  let rootModule: RootModule;
 
   beforeEach(() => {
-    RootModuleModule = new RootModule();
+    rootModule = new RootModule();
   });
 
   it('should create an instance', () => {
-    expect(RootModuleModule).toBeTruthy();
+    expect(rootModule).toBeTruthy();
   });
 });

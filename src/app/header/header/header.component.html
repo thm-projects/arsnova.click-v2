@@ -1,4 +1,5 @@
-<nav class="navbar navbar-header flex-nowrap" id="header">
+<nav class="navbar navbar-header flex-nowrap"
+     id="header">
   <div class="arsnova-logo d-flex align-items-center pointer">
     <!--suppress HtmlUnknownAttribute -->
     <svg [routerLink]="['/']" version="1.1" id="arsnova-logo-image" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px" viewBox="0 0 1024 1024" xml:space="preserve">
@@ -13,10 +14,14 @@
   </div>
   <div class="header-title d-flex align-items-center">
     <div class="center-block">
-      <div class="text-center header-label" *ngIf="headerLabelService.headerLabel !== 'default'" [innerHTML]="headerLabelService.headerLabel | translate"></div>
+      <div class="text-center header-label"
+           *ngIf="headerLabelService.headerLabel !== 'default'"
+           [innerHTML]="headerLabelService.headerLabel | translate"></div>
     </div>
   </div>
-  <div class="text-right d-flex align-items-center pointer" id="connectionQualityHeader" role="dialog">
+  <div class="text-right d-flex align-items-center pointer"
+       id="connectionQualityHeader"
+       role="dialog">
     <svg id="connectionQualityImage"
            height="50px"
            width="50px"
@@ -40,10 +45,18 @@
   </div>
 </nav>
 
-<ng-template #connectionQualityModal let-c="close" let-d="dismiss">
+<ng-template #connectionQualityModal
+             let-c="close"
+             let-d="dismiss">
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel" [innerHTML]="'region.header.connection_status.title' | translate"></h5>
-    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" (click)="d()">
+    <h5 class="modal-title"
+        id="exampleModalLabel"
+        [innerHTML]="'region.header.connection_status.title' | translate"></h5>
+    <button type="button"
+            class="close pointer"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
@@ -117,6 +130,10 @@
     </ul>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-secondary pointer" data-dismiss="modal" (click)="d()" [innerHTML]="'global.close_window' | translate"></button>
+    <button type="button"
+            class="btn btn-secondary pointer"
+            data-dismiss="modal"
+            (click)="d()"
+            [innerHTML]="'global.close_window' | translate"></button>
   </div>
 </ng-template>

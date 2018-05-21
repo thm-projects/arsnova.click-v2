@@ -1,5 +1,5 @@
-
-<div id="quizSummaryHeader" class="quizSummary mt-md-3 px-md-0">
+<div id="quizSummaryHeader"
+     class="quizSummary mt-md-3 px-md-0">
 
   <div class="row no-gutters">
 
@@ -8,7 +8,8 @@
            [attr.data-intro]="'component.quiz_summary.description.header' | translate"
            [attr.aria-label]="'component.quiz_summary.description.header' | translate">
         <h5 class="text-center">{{'component.quiz_summary.quiz_name' | translate}}</h5>
-        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold" role="listitem">
+        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold"
+           role="listitem">
           <span>{{questionGroupItem.hashtag}}</span>
         </p>
       </div>
@@ -19,7 +20,8 @@
            [attr.data-intro]="'component.quiz_summary.description.question_group_validation' | translate"
            [attr.aria-label]="'component.quiz_summary.description.question_group_validation' | translate">
         <h5 class="text-center">{{'component.quiz_summary.validation_question_group' | translate}}</h5>
-        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold" role="listitem">
+        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold"
+           role="listitem">
         <span [class.text-success]="questionGroupItem.isValid()"
               [class.text-danger]="!questionGroupItem.isValid()">
           {{('component.quiz_summary.question_group_' + (questionGroupItem.isValid() ? 'successful' : 'failed')) | translate}}
@@ -34,7 +36,8 @@
            [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
            [attr.aria-label]="'component.quiz_summary.description.session_url' | translate">
         <h5 class="text-center">{{'component.quiz_summary.quiz_url' | translate}}</h5>
-        <p class="mb-0 text-wrap" role="listitem">
+        <p class="mb-0 text-wrap"
+           role="listitem">
           <span>{{document.location.origin + '/quiz/' + questionGroupItem.hashtag}}</span>
         </p>
       </div>
@@ -44,7 +47,8 @@
          class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
       <div class="element-wrapper bg-white px-2 py-2 mb-2 h-100">
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingRudeNicks' | translate}}</h5>
-        <p class="mb-0" role="listitem">
+        <p class="mb-0"
+           role="listitem">
           <span>{{('global.' + questionGroupItem.sessionConfig.nicks.blockIllegalNicks) | translate}}</span>
         </p>
       </div>
@@ -56,7 +60,8 @@
            [attr.data-intro]="'component.quiz_summary.description.restrict_to_cas' | translate"
            [attr.aria-label]="'component.quiz_summary.description.restrict_to_cas' | translate">
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingToCAS' | translate}}</h5>
-        <p class="mb-0" role="listitem">
+        <p class="mb-0"
+           role="listitem">
           <span>{{('global.' + questionGroupItem.sessionConfig.nicks.restrictToCasLogin) | translate}}</span>
         </p>
       </div>

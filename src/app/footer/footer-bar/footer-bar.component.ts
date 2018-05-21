@@ -1,30 +1,35 @@
-import {Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
-import {FooterbarElement, FooterBarService} from '../../service/footer-bar.service';
-import {Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {FileUploadService} from '../../service/file-upload.service';
-import {CurrentQuizService} from '../../service/current-quiz.service';
-import {TrackingService} from '../../service/tracking.service';
-import {isPlatformBrowser} from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
   selector: 'app-footer-bar',
   templateUrl: './footer-bar.component.html',
-  styleUrls: ['./footer-bar.component.scss']
+  styleUrls: ['./footer-bar.component.scss'],
 })
 export class FooterBarComponent implements OnInit, OnDestroy {
+  public static TYPE = 'FooterBarComponent';
+
+  private _footerElements: Array<IFooterBarElement> = [];
+
+  get footerElements(): Array<IFooterBarElement> {
+    return this._footerElements;
+  }
+
   @Input()
-  set footerElements(value: Array<FooterbarElement>) {
+  set footerElements(value: Array<IFooterBarElement>) {
     this.hasRightScrollElement = value.length > 1;
     this._footerElements = value;
   }
-  get hasRightScrollElement(): boolean {
-    return this._hasRightScrollElement;
-  }
 
-  set hasRightScrollElement(value: boolean) {
-    this._hasRightScrollElement = value;
-  }
+  private _footerElemIndex = 1;
+
   get footerElemIndex(): number {
     return this._footerElemIndex;
   }
@@ -32,17 +37,18 @@ export class FooterBarComponent implements OnInit, OnDestroy {
   set footerElemIndex(value: number) {
     this._footerElemIndex = value;
   }
-  public static TYPE = 'FooterBarComponent';
 
-  get footerElements(): Array<FooterbarElement> {
-    return this._footerElements;
+  private _hasRightScrollElement = false;
+
+  get hasRightScrollElement(): boolean {
+    return this._hasRightScrollElement;
   }
 
-  private _footerElements: Array<FooterbarElement> = [];
+  set hasRightScrollElement(value: boolean) {
+    this._hasRightScrollElement = value;
+  }
 
   private _routerSubscription: Subscription;
-  private _footerElemIndex = 1;
-  private _hasRightScrollElement = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -50,17 +56,16 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService,
     private trackingService: TrackingService,
-    private fileUploadService: FileUploadService
+    private fileUploadService: FileUploadService,
   ) {
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this._routerSubscription = this.router.events.subscribe((val) => {
       if (isPlatformBrowser(this.platformId)) {
         const navbarFooter = document.getElementById('navbar-footer-container');
         if (navbarFooter) {
           navbarFooter.scrollLeft = 0;
-          this.hideElement('left');
         }
       }
       this.footerElemIndex = 1;
@@ -70,15 +75,15 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this._routerSubscription.unsubscribe();
   }
 
-  getLinkTarget(elem: FooterbarElement): void {
+  public getLinkTarget(elem: IFooterBarElement): Function | string {
     return typeof elem.linkTarget === 'function' ? elem.linkTarget(elem) : elem.linkTarget;
   }
 
-  toggleSetting(elem: FooterbarElement): void {
+  public toggleSetting(elem: IFooterBarElement): void {
     this.currentQuizService.toggleSetting(elem);
     elem.onClickCallback(elem);
     this.trackingService.trackClickEvent({
@@ -86,8 +91,8 @@ export class FooterBarComponent implements OnInit, OnDestroy {
       label: `footer-${elem.id}`,
       customDimensions: {
         dimension1: elem.selectable,
-        dimension2: elem.isActive
-      }
+        dimension2: elem.isActive,
+      },
     });
   }
 
@@ -104,64 +109,63 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     this.fileUploadService.uploadFile(formData);
   }
 
-  private hideElement(elem: 'left'): void {
-    const element = this.getElement(elem);
-    element.classList.add('d-none');
-    element.classList.remove('d-flex');
-  }
-
-  private showElement(elem: 'left'): void {
-    const element = this.getElement(elem);
-    element.classList.remove('d-none');
-    element.classList.add('d-flex');
-  }
-
-  private getElement(elem: 'left' | 'right'): Element {
-    let className = '';
-
-    switch (elem) {
-      case 'left':
-        className = 'before';
-        break;
-      case 'right':
-        className = 'after';
-        break;
-    }
-
-    if (isPlatformBrowser(this.platformId)) {
-      return document.getElementsByClassName('footer-bar-wrapper').item(0).getElementsByClassName(className).item(0);
-    }
-
-    return null;
-  }
-
   public moveLeft(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const navbarFooter = document.getElementById('navbar-footer-container');
-      const right = navbarFooter.children.item(--this.footerElemIndex).getBoundingClientRect().right;
-      const firstChild = navbarFooter.children.item(1);
+    if (isPlatformServer(this.platformId) || this.footerElemIndex === 1) {
+      return;
+    }
 
-      navbarFooter.scrollLeft += right;
-      this.hasRightScrollElement = true;
+    const navbarFooter = document.getElementById('navbar-footer-container');
+    if (!navbarFooter) {
+      this.footerElemIndex--;
+      return;
+    }
 
-      if (firstChild.getBoundingClientRect().right >= 0) {
-        this.hideElement('left');
-      }
+    this.footerElemIndex--;
+    if (this.footerElemIndex === 1) {
+      navbarFooter.scrollLeft = 0;
+    } else {
+      const child = navbarFooter.children.item(this.footerElemIndex);
+      const childWidth = child.clientWidth;
+      navbarFooter.scrollLeft -= (childWidth);
     }
   }
 
   public moveRight(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const navbarFooter = document.getElementById('navbar-footer-container');
-      const right = navbarFooter.children.item(++this.footerElemIndex).getBoundingClientRect().right;
-      const lastChild = navbarFooter.children.item(navbarFooter.children.length - 1);
-
-      navbarFooter.scrollLeft += right;
-      this.showElement('left');
-
-      if (navbarFooter.scrollLeft >= lastChild.getBoundingClientRect().left) {
-        this.hasRightScrollElement = false;
-      }
+    if (isPlatformServer(this.platformId) || this.footerElemIndex === this.footerElements.length - 1) {
+      return;
     }
+
+    const navbarFooter = document.getElementById('navbar-footer-container');
+    if (!navbarFooter) {
+      this.footerElemIndex++;
+      return;
+    }
+
+    const child = navbarFooter.children.item(this.footerElemIndex);
+
+    if (this.footerElemIndex === 1) {
+      const childWidth = child.clientWidth;
+      const leftButtonWidth = document.getElementById('footer-move-left').clientWidth;
+      navbarFooter.scrollLeft += (childWidth - leftButtonWidth);
+    } else {
+      navbarFooter.scrollLeft += child.clientWidth;
+    }
+    this.footerElemIndex++;
+  }
+
+  public hideRight(): boolean {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
+    const navbarFooter = document.getElementById('navbar-footer-container');
+    if (!navbarFooter) {
+      return false;
+    }
+
+    const children = navbarFooter.children;
+    const lastChildRight = Math.round(children[children.length - 1].getBoundingClientRect().right);
+    const containerRight = Math.round(navbarFooter.getBoundingClientRect().right);
+    return lastChildRight === containerRight;
   }
 }

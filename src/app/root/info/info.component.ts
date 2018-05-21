@@ -1,29 +1,28 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FooterBarService} from '../../service/footer-bar.service';
-import {TranslateService} from '@ngx-translate/core';
-import {HeaderLabelService} from '../../service/header-label.service';
-import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {TrackingService} from '../../service/tracking.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
   selector: 'app-info',
   templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss']
+  styleUrls: ['./info.component.scss'],
 })
 export class InfoComponent implements OnInit, OnDestroy {
   public static TYPE = 'InfoComponent';
-
-  private _routerSubscription: Subscription;
   public currentData: string;
   public readonly infoButtons = ['about', 'tos', 'imprint', 'dataprivacy'];
+  private _routerSubscription: Subscription;
 
   constructor(
     private footerBarService: FooterBarService,
     private translateService: TranslateService,
     private trackingService: TrackingService,
     private route: ActivatedRoute,
-    private headerLabelService: HeaderLabelService
+    private headerLabelService: HeaderLabelService,
   ) {
 
     headerLabelService.headerLabel = 'region.footer.about.title';
@@ -39,17 +38,17 @@ export class InfoComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this._routerSubscription = this.route.data.subscribe(data => {
       this.currentData = data.content;
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this._routerSubscription.unsubscribe();
   }
 
-  public toInfoContent(target: string) {
+  public toInfoContent(target: string): void {
     this.trackingService.trackClickEvent({
       action: InfoComponent.TYPE,
       label: `info-${target}`,

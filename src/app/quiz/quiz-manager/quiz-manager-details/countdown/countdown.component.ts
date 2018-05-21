@@ -1,42 +1,57 @@
-import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs';
-import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
-import {FooterBarService} from '../../../../service/footer-bar.service';
-import {ActivatedRoute} from '@angular/router';
-import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
-import {HeaderLabelService} from '../../../../service/header-label.service';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { Subscription } from 'rxjs';
+import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
+import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 
 @Component({
   selector: 'app-countdown',
   templateUrl: './countdown.component.html',
-  styleUrls: ['./countdown.component.scss']
+  styleUrls: ['./countdown.component.scss'],
 })
 export class CountdownComponent implements OnInit, OnDestroy {
   public static TYPE = 'CountdownComponent';
+  public minCountdownValue = 10;
 
-  get plainHours(): number {
-    return this._plainHours;
+  private _parsedHours = '0';
+
+  get parsedHours(): string {
+    return this._parsedHours;
   }
 
-  get plainMinutes(): number {
-    return this._plainMinutes;
-  }
-
-  get plainSeconds(): number {
-    return this._plainSeconds;
-  }
-
-  get parsedSeconds(): string {
-    return this._parsedSeconds;
-  }
+  private _parsedMinutes = '0';
 
   get parsedMinutes(): string {
     return this._parsedMinutes;
   }
 
-  get parsedHours(): string {
-    return this._parsedHours;
+  private _parsedSeconds = '0';
+
+  get parsedSeconds(): string {
+    return this._parsedSeconds;
   }
+
+  private _plainHours = 0;
+
+  get plainHours(): number {
+    return this._plainHours;
+  }
+
+  private _plainMinutes = 0;
+
+  get plainMinutes(): number {
+    return this._plainMinutes;
+  }
+
+  private _plainSeconds = 0;
+
+  get plainSeconds(): number {
+    return this._plainSeconds;
+  }
+
+  private _countdown: number = this.minCountdownValue;
 
   get countdown(): number {
     return this._countdown;
@@ -45,21 +60,12 @@ export class CountdownComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _question: IQuestion;
   private _routerSubscription: Subscription;
-  private _parsedHours = '0';
-  private _parsedMinutes = '0';
-  private _parsedSeconds = '0';
-  private _plainHours = 0;
-  private _plainMinutes = 0;
-  private _plainSeconds = 0;
-
-  public minCountdownValue = 10;
-  private _countdown: number = this.minCountdownValue;
 
   constructor(
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
-    private footerBarService: FooterBarService
+    private footerBarService: FooterBarService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
@@ -68,11 +74,11 @@ export class CountdownComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,
       this.footerBarService.footerElemSaveAssets,
-      this.footerBarService.footerElemProductTour
+      this.footerBarService.footerElemProductTour,
     ]);
   }
 
-  updateCountdown(event: Event | number): void {
+  public updateCountdown(event: Event | number): void {
     if (typeof event === 'number') {
       this._countdown = event;
     } else {
@@ -93,7 +99,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].timer = this.countdown;
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
@@ -102,7 +108,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
   @HostListener('window:beforeunload', ['$event'])
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.activeQuestionGroupService.persist();
     if (this._routerSubscription) {
       this._routerSubscription.unsubscribe();

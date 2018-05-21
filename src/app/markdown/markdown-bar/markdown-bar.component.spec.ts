@@ -1,15 +1,13 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../lib/translation.factory';
+import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
-import {MarkdownBarComponent} from './markdown-bar.component';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../../lib/translation.factory';
-import {TrackingService} from '../../service/tracking.service';
-import {ArsnovaClickAngulartics2Piwik} from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
-import {Angulartics2Module} from 'angulartics2';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TrackingMockService} from '../../service/tracking.mock.service';
+import { MarkdownBarComponent } from './markdown-bar.component';
 
 describe('MarkdownBarComponent', () => {
   let component: MarkdownBarComponent;
@@ -24,16 +22,16 @@ describe('MarkdownBarComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
-        {provide: TrackingService, useClass: TrackingMockService},
+        { provide: TrackingService, useClass: TrackingMockService },
       ],
       declarations: [MarkdownBarComponent],
     }).compileComponents();
@@ -48,4 +46,26 @@ describe('MarkdownBarComponent', () => {
   it('should be created', async(() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should have a TYPE reference', async(() => {
+    expect(MarkdownBarComponent.TYPE).toEqual('MarkdownBarComponent');
+  }));
+
+  it('#connector', async(inject([TrackingService], (trackingService: TrackingService) => {
+    const element = component.markdownBarElements.find(el => el.id === 'showMoreMarkdownButton');
+
+    spyOn(component.connectorEmitter, 'emit').and.callFake(() => {});
+    spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
+
+    expect(component.showHiddenMarkdownButtons).toBeFalsy();
+
+    component.connector(element);
+
+    expect(component.showHiddenMarkdownButtons).toBeTruthy();
+    expect(component.allDisplayedMarkdownBarElements).toEqual(
+      jasmine.arrayContaining([].concat(component.markdownBarElements).concat(component.hiddenMarkdownBarElements)),
+    );
+    expect(trackingService.trackClickEvent).toHaveBeenCalled();
+    expect(component.connectorEmitter.emit).toHaveBeenCalled();
+  })));
 });

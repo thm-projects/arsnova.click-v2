@@ -16,7 +16,8 @@
            [class.col-sm-6]="!hasSelectedCategory()"
            (click)="toggleSelectedCategory(cat)">
         <div class="nickCategoryText">
-          <p class="mb-0" [innerHTML]="('component.nickname_categories.category.' + cat) | translate"></p>
+          <p class="mb-0"
+             [innerHTML]="('component.nickname_categories.category.' + cat) | translate"></p>
           <p class="mb-0">({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
         </div>
       </div>
@@ -33,7 +34,8 @@
          (click)="selectNick(nick)"
          class="nickStyle nickName pointer"
          [class.selectedNickName]="hasSelectedNick(nick)">
-      <span [innerHTML]="parseAvailableNick(nick)" class="nickName d-inline-block pb-1"></span>
+      <span [innerHTML]="parseAvailableNick(nick)"
+            class="nickName d-inline-block pb-1"></span>
     </div>
   </div>
 </div>

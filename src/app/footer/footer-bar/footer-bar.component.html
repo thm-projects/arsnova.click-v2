@@ -2,7 +2,12 @@
      id="navbar-footer-container"
      class="nav navbar-footer flex-nowrap flex-sm-column justify-content-sm-start p-1"
      role="navigation">
-  <input class="hidden" id="upload-session" type="file" (change)="fileChange($event)" accept="application/json" multiple="multiple"/>
+  <input class="hidden"
+         id="upload-session"
+         type="file"
+         (change)="fileChange($event)"
+         accept="application/json"
+         multiple="multiple"/>
   <div *ngFor="let elem of footerElements"
        class="footerElement px-2 py-2 px-sm-1 py-sm-2 pointer d-flex align-items-center justify-content-center justify-content-sm-start"
        [class.success]="elem.selectable && elem.isActive"
@@ -12,13 +17,18 @@
        [title]="elem.textName | translate"
        [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
        (click)="toggleSetting(elem)">
-    <p class="footerElemIcon mb-0"><i [class]="elem.iconClass" aria-hidden="true"></i></p>
-    <p class="footerElemText text-truncate text-left mb-0 ml-2 d-md-block"><span [class]="elem.textClass" [innerHTML]="elem.textName | translate"></span></p>
+    <p class="footerElemIcon mb-0"><i [class]="elem.iconClass"
+                                      aria-hidden="true"></i></p>
+    <p class="footerElemText text-truncate text-left mb-0 ml-2 d-md-block"><span [class]="elem.textClass"
+                                                                                 [innerHTML]="elem.textName | translate"></span></p>
   </div>
 </nav>
 
-<span class="before d-sm-none d-none position-absolute justify-content-center align-items-center h-100"
+<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center h-100"
+      id="footer-move-left"
+      [style.visibility]="footerElemIndex === 1 ? 'hidden' : 'visible'"
       (click)="moveLeft()">&#x21E6;</span>
-<span class="after d-sm-none d-flex position-absolute justify-content-center align-items-center h-100"
-      *ngIf="hasRightScrollElement"
+<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center h-100"
+      id="footer-move-right"
+      [style.visibility]="hideRight() ? 'hidden' : 'visible'"
       (click)="moveRight()">&#x21E8;</span>

@@ -1,21 +1,21 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../lib/translation.factory';
+import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
+import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { ConnectionMockService } from '../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../service/connection/connection.service';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { SettingsService } from '../../service/settings/settings.service';
+import { SharedService } from '../../service/shared/shared.service';
+import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../service/websocket/websocket.service';
 
-import {QuizRenameComponent} from './quiz-rename.component';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../../lib/translation.factory';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {FileUploadService} from '../../service/file-upload.service';
-import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {ConnectionService} from '../../service/connection.service';
-import {FooterBarService} from '../../service/footer-bar.service';
-import {SharedService} from '../../service/shared.service';
-import {SettingsService} from '../../service/settings.service';
-import {WebsocketService} from '../../service/websocket.service';
-import {WebsocketMockService} from '../../service/websocket.mock.service';
-import {ConnectionMockService} from '../../service/connection.mock.service';
-import {ActiveQuestionGroupMockService} from '../../service/active-question-group.mock.service';
+import { QuizRenameComponent } from './quiz-rename.component';
 
 describe('QuizRenameComponent', () => {
   let component: QuizRenameComponent;
@@ -30,24 +30,24 @@ describe('QuizRenameComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
         FileUploadService,
-        {provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService},
+        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
         FooterBarService,
         SettingsService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: WebsocketService, useClass: WebsocketMockService },
         SharedService,
       ],
-      declarations: [QuizRenameComponent]
+      declarations: [QuizRenameComponent],
     }).compileComponents();
   }));
 

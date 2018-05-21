@@ -1,19 +1,19 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { ActiveQuestionGroupMockService } from '../../../service/active-question-group/active-question-group.mock.service';
+import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
+import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { SettingsService } from '../../../service/settings/settings.service';
 
 import { MemberGroupManagerComponent } from './member-group-manager.component';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../../../lib/translation.factory';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {HeaderLabelService} from '../../../service/header-label.service';
-import {ActiveQuestionGroupService} from '../../../service/active-question-group.service';
-import {FormsModule} from '@angular/forms';
-import {SettingsService} from '../../../service/settings.service';
-import {ConnectionService} from '../../../service/connection.service';
-import {ConnectionMockService} from '../../../service/connection.mock.service';
-import {ActiveQuestionGroupMockService} from '../../../service/active-question-group.mock.service';
 
 describe('MemberGroupManagerComponent', () => {
   let component: MemberGroupManagerComponent;
@@ -28,23 +28,23 @@ describe('MemberGroupManagerComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
-        FormsModule
+        FormsModule,
       ],
       providers: [
         FooterBarService,
         HeaderLabelService,
-        {provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService},
+        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
         SettingsService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
       ],
-      declarations: [ MemberGroupManagerComponent ]
+      declarations: [MemberGroupManagerComponent],
     }).compileComponents();
   }));
 

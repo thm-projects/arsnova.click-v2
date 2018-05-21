@@ -1,10 +1,10 @@
-import {NgModule} from '@angular/core';
-import {QuizRenameComponent} from './quiz-rename/quiz-rename.component';
-import {QuizOverviewComponent} from './quiz-overview/quiz-overview.component';
-import {SharedModule} from '../shared/shared.module';
-import {QuizJoinComponent} from './quiz-join/quiz-join.component';
+import { NgModule } from '@angular/core';
 
-import {Routes, RouterModule} from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
+import { QuizJoinComponent } from './quiz-join/quiz-join.component';
+import { QuizOverviewComponent } from './quiz-overview/quiz-overview.component';
+import { QuizRenameComponent } from './quiz-rename/quiz-rename.component';
 
 const quizRoutes: Routes = [
   {
@@ -13,24 +13,24 @@ const quizRoutes: Routes = [
   },
   {
     path: 'rename',
-    component: QuizRenameComponent
+    component: QuizRenameComponent,
   },
   {
     path: ':quizName',
-    component: QuizJoinComponent
+    component: QuizJoinComponent,
   },
 ];
 
 @NgModule({
   imports: [
     SharedModule,
-    RouterModule.forChild(quizRoutes)
+    RouterModule.forChild(quizRoutes),
   ],
   declarations: [
     QuizOverviewComponent,
     QuizRenameComponent,
-    QuizJoinComponent
-  ]
+    QuizJoinComponent,
+  ],
 })
 export class QuizModule {
 }

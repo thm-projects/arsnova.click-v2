@@ -2,7 +2,8 @@
   <div class="col-12 col-md-6">
     <div class="row">
       <div class="col-12">
-        <div *ngIf="question.canAddAnsweroptions" class="row">
+        <div *ngIf="question.canAddAnsweroptions"
+             class="row">
           <div class="col-12">
             <div id="add-default-answer"
                  class="p-2 my-2 rounded text-center pointer"
@@ -23,7 +24,8 @@
                role="list">
             <div *ngFor="let elem of question.answerOptionList; let i = index"
                  class="btn-group mb-2 d-flex">
-              <span (click)="deleteAnswer(i)" class="delete-icon px-2 rounded-left">
+              <span (click)="deleteAnswer(i)"
+                    class="delete-icon px-2 rounded-left">
                 <i class="fas fa-trash pointer h-100 d-flex align-items-center"></i>
               </span>
               <input type="text"
@@ -115,7 +117,9 @@
         </div>
       </div>
       <div class="col-12">
-        <p class="text-light text-center" id="emojiInfo" [innerHTML]="'component.answeroptions.emoji_info' | translate"></p>
+        <p class="text-light text-center"
+           id="emojiInfo"
+           [innerHTML]="'component.answeroptions.emoji_info' | translate"></p>
       </div>
     </div>
   </div>

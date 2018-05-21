@@ -1,22 +1,19 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-
-import {HeaderComponent} from './header.component';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../../lib/translation.factory';
-import {RouterTestingModule} from '@angular/router/testing';
-import {ArsnovaClickAngulartics2Piwik} from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {Angulartics2Module} from 'angulartics2';
-import {WebsocketService} from '../../service/websocket.service';
-import {TrackingService} from '../../service/tracking.service';
-import {SharedService} from '../../service/shared.service';
-import {ConnectionService} from '../../service/connection.service';
-import {HeaderLabelService} from '../../service/header-label.service';
-import {WebsocketMockService} from '../../service/websocket.mock.service';
-import {ConnectionMockService} from '../../service/connection.mock.service';
-import {TrackingMockService} from '../../service/tracking.mock.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../lib/translation.factory';
+import { ConnectionMockService } from '../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../service/connection/connection.service';
+import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { SharedService } from '../../service/shared/shared.service';
+import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
+import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../service/websocket/websocket.service';
+import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -32,24 +29,24 @@ describe('HeaderComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
         HeaderLabelService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: TrackingService, useClass: TrackingMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: TrackingService, useClass: TrackingMockService },
         SharedService,
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: WebsocketService, useClass: WebsocketMockService },
       ],
       declarations: [
-        HeaderComponent
-      ]
+        HeaderComponent,
+      ],
     }).compileComponents();
   }));
 
@@ -66,4 +63,19 @@ describe('HeaderComponent', () => {
   it('should contain a TYPE definition', async(() => {
     expect(HeaderComponent.TYPE).toEqual('HeaderComponent');
   }));
+
+  it('#openConnectionQualityModal', (inject([TrackingService, NgbModal, ConnectionService],
+    (trackingService: TrackingService, modalService: NgbModal, connectionService: ConnectionService) => {
+      const modalContent = 'testcontent';
+
+      spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
+      spyOn(modalService, 'open').and.callFake(() => {});
+      spyOn(connectionService, 'calculateRTT').and.callFake(() => {});
+
+      component.openConnectionQualityModal(modalContent);
+
+      expect(trackingService.trackClickEvent).toHaveBeenCalled();
+      expect(modalService.open).toHaveBeenCalledWith(modalContent);
+      expect(connectionService.calculateRTT).toHaveBeenCalled();
+    })));
 });

@@ -1,22 +1,23 @@
-import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
-import {ConnectionService} from '../../../service/connection.service';
-import {IMessage} from 'arsnova-click-v2-types/src/common';
-import {DefaultSettings} from '../../../../lib/default.settings';
-import {Router} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {AttendeeService} from '../../../service/attendee.service';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {QuestionTextService} from '../../../service/question-text.service';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {HeaderLabelService} from '../../../service/header-label.service';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { Observable } from 'rxjs/index';
+import { DefaultSettings } from '../../../../lib/default.settings';
+import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { QuestionTextService } from '../../../service/question-text/question-text.service';
 
 @Component({
   selector: 'app-reading-confirmation',
   templateUrl: './reading-confirmation.component.html',
-  styleUrls: ['./reading-confirmation.component.scss']
+  styleUrls: ['./reading-confirmation.component.scss'],
 })
-export class ReadingConfirmationComponent implements OnInit, OnDestroy {
+export class ReadingConfirmationComponent implements OnInit {
   public static TYPE = 'ReadingConfirmationComponent';
 
   public questionIndex: number;
@@ -32,7 +33,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private sanitizer: DomSanitizer,
     private headerLabelService: HeaderLabelService,
-    private footerBarService: FooterBarService
+    private footerBarService: FooterBarService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
@@ -41,41 +42,37 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([]);
   }
 
-  public normalizeAnswerOptionIndex(index: number): string {
-    return String.fromCharCode(65 + index);
-  }
-
   public sanitizeHTML(value: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  ngOnInit() {
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-      this.handleMessages();
-    });
-    this.questionTextService.getEmitter().subscribe((value: string) => {
+  public async ngOnInit(): Promise<void> {
+    await this.connectionService.initConnection();
+    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+    this.handleMessages();
+    this.questionTextService.eventEmitter.subscribe((value: string) => {
       this.questionText = value;
     });
-    this.questionTextService.change(this.currentQuizService.currentQuestion().questionText);
+    await this.questionTextService.change(this.currentQuizService.currentQuestion().questionText);
   }
 
-  ngOnDestroy() {
+  public confirmReading(): Observable<void> {
+
+    return new Observable<void>(subscriber => {
+
+      (async () => {
+        this.http.put(`${DefaultSettings.httpApiEndpoint}/member/reading-confirmation`, {
+          quizName: this.currentQuizService.quiz.hashtag,
+          nickname: window.sessionStorage.getItem(`config.nick`),
+          questionIndex: this.questionIndex,
+        }).subscribe(() => {
+          this.router.navigate(['/quiz', 'flow', 'results']);
+        });
+      })().then(() => subscriber.next());
+    });
   }
 
-  confirmReading() {
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/member/reading-confirmation`, {
-      quizName: this.currentQuizService.quiz.hashtag,
-      nickname: window.sessionStorage.getItem(`config.nick`),
-      questionIndex: this.questionIndex
-    }).subscribe(
-      (data: IMessage) => {
-        this.router.navigate(['/quiz', 'flow', 'results']);
-      }
-    );
-  }
-
-  private handleMessages() {
+  private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
         case 'QUIZ:START':

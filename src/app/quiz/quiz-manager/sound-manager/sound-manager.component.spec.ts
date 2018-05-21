@@ -1,21 +1,21 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
+import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { SettingsService } from '../../../service/settings/settings.service';
+import { SharedService } from '../../../service/shared/shared.service';
+import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
 
-import {SoundManagerComponent} from './sound-manager.component';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../../../lib/translation.factory';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {ConnectionService} from '../../../service/connection.service';
-import {CurrentQuizMockService} from '../../../service/current-quiz.mock.service';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {SharedService} from '../../../service/shared.service';
-import {SettingsService} from '../../../service/settings.service';
-import {WebsocketService} from '../../../service/websocket.service';
-import {AudioPlayerComponent} from '../../../shared/audio-player/audio-player.component';
-import {WebsocketMockService} from '../../../service/websocket.mock.service';
-import {ConnectionMockService} from '../../../service/connection.mock.service';
+import { SoundManagerComponent } from './sound-manager.component';
 
 describe('SoundManagerComponent', () => {
   let component: SoundManagerComponent;
@@ -30,26 +30,26 @@ describe('SoundManagerComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
-        {provide: CurrentQuizService, useClass: CurrentQuizMockService},
+        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
         FooterBarService,
         SettingsService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: WebsocketService, useClass: WebsocketMockService },
         SharedService,
       ],
       declarations: [
         AudioPlayerComponent,
-        SoundManagerComponent
-      ]
+        SoundManagerComponent,
+      ],
     }).compileComponents();
   }));
 

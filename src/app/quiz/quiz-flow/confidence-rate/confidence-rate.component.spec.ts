@@ -1,27 +1,24 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
+import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
+import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { SettingsService } from '../../../service/settings/settings.service';
+import { SharedService } from '../../../service/shared/shared.service';
+import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { ConfidenceRateComponent } from './confidence-rate.component';
 
-import {ConfidenceRateComponent} from './confidence-rate.component';
-import {ArsnovaClickAngulartics2Piwik} from '../../../shared/tracking/ArsnovaClickAngulartics2Piwik';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {RouterTestingModule} from '@angular/router/testing';
-import {createTranslateLoader} from '../../../../lib/translation.factory';
-import {Angulartics2Module} from 'angulartics2';
-import {SettingsService} from '../../../service/settings.service';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {WebsocketService} from '../../../service/websocket.service';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {SharedService} from '../../../service/shared.service';
-import {ConnectionService} from '../../../service/connection.service';
-import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {AttendeeService} from '../../../service/attendee.service';
-import {HeaderLabelService} from '../../../service/header-label.service';
-import {WebsocketMockService} from '../../../service/websocket.mock.service';
-import {CurrentQuizMockService} from '../../../service/current-quiz.mock.service';
-import {ConnectionMockService} from '../../../service/connection.mock.service';
-import {AttendeeMockService} from '../../../service/attendee.mock.service';
-
-describe('ConfidenceRateComponent', () => {
+describe('QuizFlow: ConfidenceRateComponent', () => {
   let component: ConfidenceRateComponent;
   let fixture: ComponentFixture<ConfidenceRateComponent>;
 
@@ -34,25 +31,25 @@ describe('ConfidenceRateComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: AttendeeService, useClass: AttendeeMockService},
-        {provide: CurrentQuizService, useClass: CurrentQuizMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: AttendeeService, useClass: AttendeeMockService },
+        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
         HeaderLabelService,
         FooterBarService,
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: WebsocketService, useClass: WebsocketMockService },
         SharedService,
-        SettingsService
+        SettingsService,
       ],
-      declarations: [ ConfidenceRateComponent ]
+      declarations: [ConfidenceRateComponent],
     }).compileComponents();
   }));
 
@@ -65,4 +62,22 @@ describe('ConfidenceRateComponent', () => {
   it('should create', async(() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should have a TYPE reference', async(() => {
+    expect(ConfidenceRateComponent.TYPE).toEqual('ConfidenceRateComponent');
+  }));
+
+  it('#getConfidenceLevel', async(() => {
+    expect(component.getConfidenceLevel()).toEqual('very_sure');
+  }));
+
+  it('#updateConficence', async(() => {
+    const event = new Event('testEvent');
+    spyOnProperty(event, 'target').and.callFake(() => ({ value: '20' }));
+
+    component.updateConficence(event);
+
+    expect(component.getConfidenceLevel()).toEqual('no_idea');
+  }));
+
 });

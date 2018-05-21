@@ -1,7 +1,7 @@
-import {Injectable, Type} from '@angular/core';
-import {Angulartics2} from 'angulartics2';
-import {Angulartics2Piwik} from 'angulartics2/piwik';
-import {ActivatedRoute} from '@angular/router';
+import { Injectable, Type } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Angulartics2 } from 'angulartics2';
+import { Angulartics2Piwik } from 'angulartics2/piwik';
 
 declare var _paq: any;
 
@@ -12,14 +12,14 @@ interface INamedType extends Type<Function> {
 @Injectable()
 export class ArsnovaClickAngulartics2Piwik extends Angulartics2Piwik {
 
-  constructor (
+  constructor(
     private _angulartics2: Angulartics2,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     super(_angulartics2);
   }
 
-  pageTrack(path: string, location?: any) {
+  public pageTrack(path: string, location?: any): void {
     try {
       _paq.push(['setDocumentTitle', (<INamedType>this.getFirstRoutingChild(this.route).component).TYPE]);
       _paq.push(['setCustomUrl', path]);
@@ -31,7 +31,7 @@ export class ArsnovaClickAngulartics2Piwik extends Angulartics2Piwik {
     }
   }
 
-  getFirstRoutingChild(router: ActivatedRoute): ActivatedRoute {
+  private getFirstRoutingChild(router: ActivatedRoute): ActivatedRoute {
     return router.children.length ? this.getFirstRoutingChild(router.children[0]) : router;
   }
 }

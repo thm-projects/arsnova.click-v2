@@ -1,32 +1,31 @@
-import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
-import {RootComponent} from './root.component';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {ConnectionService} from '../../service/connection.service';
-import {createTranslateLoader} from '../../../lib/translation.factory';
-import {CurrentQuizMockService} from '../../service/current-quiz.mock.service';
-import {TrackingService} from '../../service/tracking.service';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {SettingsService} from '../../service/settings.service';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {HeaderLabelService} from '../../service/header-label.service';
-import {ThemesService} from '../../service/themes.service';
-import {FooterBarService} from '../../service/footer-bar.service';
-import {CurrentQuizService} from '../../service/current-quiz.service';
-import {SharedService} from '../../service/shared.service';
-import {WebsocketService} from '../../service/websocket.service';
-import {HeaderComponent} from '../../header/header/header.component';
-import {FooterBarComponent} from '../../footer/footer-bar/footer-bar.component';
-import {I18nService} from '../../service/i18n.service';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {FileUploadService} from '../../service/file-upload.service';
-import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {WebsocketMockService} from '../../service/websocket.mock.service';
-import {ConnectionMockService} from '../../service/connection.mock.service';
-import {ActiveQuestionGroupMockService} from '../../service/active-question-group.mock.service';
-import {DefaultSettings} from '../../../lib/default.settings';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {TrackingMockService} from '../../service/tracking.mock.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../lib/translation.factory';
+import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
+import { HeaderComponent } from '../../header/header/header.component';
+import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
+import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { ConnectionMockService } from '../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../service/connection/connection.service';
+import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
+import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { I18nService } from '../../service/i18n/i18n.service';
+import { SettingsService } from '../../service/settings/settings.service';
+import { SharedService } from '../../service/shared/shared.service';
+import { ThemesService } from '../../service/themes/themes.service';
+import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
+import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../service/websocket/websocket.service';
+import { RootComponent } from './root.component';
 
 describe('RootComponent', () => {
   let component: RootComponent;
@@ -42,56 +41,62 @@ describe('RootComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
         NgbModule.forRoot(),
       ],
       providers: [
         HeaderLabelService,
         ThemesService,
-        {provide: CurrentQuizService, useClass: CurrentQuizMockService},
-        {provide: TrackingService, useClass: TrackingMockService},
+        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
+        { provide: TrackingService, useClass: TrackingMockService },
         FooterBarService,
         SettingsService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: WebsocketService, useClass: WebsocketMockService },
         SharedService,
         I18nService,
         FileUploadService,
-        {provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService},
+        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
       ],
       declarations: [
         HeaderComponent,
         FooterBarComponent,
-        RootComponent
-      ]
+        RootComponent,
+      ],
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
-    fixture = TestBed.createComponent(RootComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
-
-  it('should be created', async(inject([HttpClient, HttpTestingController],
+  beforeEach((inject([HttpClient, HttpTestingController],
     (http: HttpClient, backend: HttpTestingController) => {
-      const environmentData = require(`../../../assets/serverEndpoint.json`);
-      backend.match(`${DefaultSettings.httpLibEndpoint}/linkImages/theme-Material`).forEach(match => match.flush([]));
-      backend.expectOne(`assets/serverEndpoint.json`).flush(environmentData);
-      backend.expectOne(`./assets/i18n/en.json`).flush({});
-      backend.expectOne(`${DefaultSettings.httpApiEndpoint}/themes`).flush({});
-      backend.verify();
-      expect(component).toBeTruthy();
-    }))
-  );
+      fixture = TestBed.createComponent(RootComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
 
-  it('should contain a TYPE reference', async(() => {
-    expect(RootComponent.TYPE).toEqual('RootComponent');
-  }));
+
+    })));
+
+  afterAll((inject([HttpClient, HttpTestingController],
+    (http: HttpClient, backend: HttpTestingController) => {
+    })));
+
+  it('should be created', (inject([HttpClient, HttpTestingController],
+    (http: HttpClient, backend: HttpTestingController) => {
+      expect(component).toBeTruthy();
+    })));
+
+  it('should contain a TYPE reference', (inject([HttpClient, HttpTestingController],
+    (http: HttpClient, backend: HttpTestingController) => {
+      expect(RootComponent.TYPE).toEqual('RootComponent');
+    })));
+
+  it('#getFooterBarElements', (inject([HttpClient, HttpTestingController],
+    (http: HttpClient, backend: HttpTestingController) => {
+      expect(component.getFooterBarElements().length).toBe(0);
+    })));
 });

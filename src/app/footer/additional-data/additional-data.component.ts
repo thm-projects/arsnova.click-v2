@@ -1,27 +1,27 @@
-import {Component, HostListener, Inject, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {IQuestionGroup} from 'arsnova-click-v2-types/src/questions/interfaces';
-import {TrackingService} from '../../service/tracking.service';
-import {DOCUMENT} from '@angular/common';
+import { DOCUMENT } from '@angular/common';
+import { Component, HostListener, Inject } from '@angular/core';
+import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
-  selector: 'additional-data',
+  selector: 'app-additional-data',
   templateUrl: './additional-data.component.html',
-  styleUrls: ['./additional-data.component.scss']
+  styleUrls: ['./additional-data.component.scss'],
 })
-export class AdditionalDataComponent implements OnInit {
+export class AdditionalDataComponent {
   public static TYPE = 'AdditionalDataComponent';
+  public readonly questionGroupItem: IQuestionGroup;
 
-  set isShowingMore(value: boolean) {
-    this._isShowingMore = value;
-  }
+  private _isShowingMore: boolean = window.innerWidth >= 768;
+
   get isShowingMore(): boolean {
     return this._isShowingMore;
   }
 
-  readonly questionGroupItem: IQuestionGroup;
-  private _isShowingMore: boolean = window.innerWidth >= 768;
+  set isShowingMore(value: boolean) {
+    this._isShowingMore = value;
+  }
 
   constructor(
     @Inject(DOCUMENT) readonly document,
@@ -31,10 +31,7 @@ export class AdditionalDataComponent implements OnInit {
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
   }
 
-  ngOnInit() {
-  }
-
-  switchShowMoreOrLess() {
+  public switchShowMoreOrLess(): void {
     if (this.isShowingMore) {
       this.trackingService.trackClickEvent({
         action: AdditionalDataComponent.TYPE,
@@ -50,7 +47,7 @@ export class AdditionalDataComponent implements OnInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize() {
+  private onResize(): void {
     this.isShowingMore = window.innerWidth >= 768;
   }
 

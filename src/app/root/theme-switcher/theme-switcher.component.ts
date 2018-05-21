@@ -1,15 +1,15 @@
-import {Component, Inject, OnInit, PLATFORM_ID} from '@angular/core';
-import {FooterBarService} from '../../service/footer-bar.service';
-import {HeaderLabelService} from '../../service/header-label.service';
-import {ThemesService} from '../../service/themes.service';
-import {isPlatformBrowser} from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { ThemesService } from '../../service/themes/themes.service';
 
 @Component({
   selector: 'app-theme-switcher',
   templateUrl: './theme-switcher.component.html',
-  styleUrls: ['./theme-switcher.component.scss']
+  styleUrls: ['./theme-switcher.component.scss'],
 })
-export class ThemeSwitcherComponent implements OnInit {
+export class ThemeSwitcherComponent {
   public static TYPE = 'ThemeSwitcherComponent';
 
   private previewThemeBackup: string;
@@ -36,10 +36,7 @@ export class ThemeSwitcherComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-  }
-
-  updateTheme(id: string) {
+  public updateTheme(id: string): void {
     if (isPlatformBrowser(this.platformId)) {
       document.getElementsByTagName('html').item(0).dataset['theme'] = id;
       this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
@@ -47,19 +44,18 @@ export class ThemeSwitcherComponent implements OnInit {
     }
   }
 
-  previewTheme(id) {
+  public previewTheme(id): void {
     if (isPlatformBrowser(this.platformId)) {
       document.getElementsByTagName('html').item(0).dataset['theme'] = id;
     }
   }
 
-  restoreTheme() {
+  public restoreTheme(): void {
     if (isPlatformBrowser(this.platformId)) {
       const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
-      document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
-
       if (themeDataset === this.previewThemeBackup) {
+        document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
         return;
       }
 

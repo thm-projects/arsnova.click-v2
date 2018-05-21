@@ -1,11 +1,14 @@
-<div class="row" id="quizManager">
+<div class="row"
+     id="quizManager">
   <div class="d-block d-md-none col-12">
-    <additional-data></additional-data>
+    <app-additional-data></app-additional-data>
   </div>
   <div class="col-12 col-lg-6">
-    <h2 class="text-light mt-4 mt-lg-0" [innerHTML]="'component.quiz_manager.available_questions_title' | translate"></h2>
+    <h2 class="text-light mt-4 mt-lg-0"
+        [innerHTML]="'component.quiz_manager.available_questions_title' | translate"></h2>
     <div class="overflow-auto available-questions-view-frame">
-      <div class="btn-group flex-lg-column d-lg-flex" id="available_questions_wrapper"
+      <div class="btn-group flex-lg-column d-lg-flex"
+           id="available_questions_wrapper"
            [attr.data-intro]="'component.quiz_manager.description.available_questions' | translate">
         <button *ngFor="let elem of selectableQuestionTypes"
                 (click)="addQuestion(elem.id)"
@@ -31,13 +34,14 @@
               [id]="i + '_draggable'"
               [class]="'questionElementWrapper d-flex justify-content-center align-items-center px-2 py-2 mb-2 rounded questionType_' + i">
             <span [innerHTML]="elem.translationReferrer() | translate"></span>
-            <span *ngIf="!elem.isValid()" class="text-warning ml-2">
+            <span *ngIf="!elem.isValid()"
+                  class="text-warning ml-2">
               <i class="fas fa-exclamation-triangle"></i>
             </span>
             <span class="questionButtonOptions text-right">
               <span class="pointer mr-2"
                     *ngIf="i"
-                    (click)="moveQuestionUp(i)" >
+                    (click)="moveQuestionUp(i)">
                 <i class="fas fa-arrow-up"></i>
               </span>
               <span class="pointer mr-2"

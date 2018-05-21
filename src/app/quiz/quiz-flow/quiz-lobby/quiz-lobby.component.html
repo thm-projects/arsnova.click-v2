@@ -37,7 +37,8 @@
 </ngx-qrcode>
 
 <ng-template #attendeesByGroup>
-  <div class="col-12 col-sm-6" *ngFor="let group of attendeeService.getMemberGroups()">
+  <div class="col-12 col-sm-6"
+       *ngFor="let group of attendeeService.getMemberGroups()">
     <div class="pb-4">
       <h4 class="text-light">Team {{group}}</h4>
       <ng-container *ngIf="!attendeeService.getMembersOfGroup(group).length">
@@ -53,22 +54,30 @@
            [style.background-color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
            [style.color]="'#' + sanitizeHTML(elem.colorCode)">
         </i>
-        <p class="ml-2 attendee-text text-light text-truncate" [innerHTML]="parseNickname(elem.name)"></p>
+        <p class="ml-2 attendee-text text-light text-truncate"
+           [innerHTML]="parseNickname(elem.name)"></p>
       </div>
     </div>
   </div>
 </ng-template>
 
-<ng-template #removeMemberModal let-c="close" let-d="dismiss">
+<ng-template #removeMemberModal
+             let-c="close"
+             let-d="dismiss">
   <div class="modal-header">
-    <button type="button" class="close pointer" data-dismiss="modal" aria-label="Close" (click)="d()">
+    <button type="button"
+            class="close pointer"
+            data-dismiss="modal"
+            aria-label="Close"
+            (click)="d()">
       <span aria-hidden="true">&times;</span>
     </button>
 
   </div>
 
   <div class="modal-body">
-    <p class="d-inline-flex" [innerHTML]="'component.lobby.kick_member_confirmation' | translate:{NAME: parseNickname(_nickToRemove)}"></p>
+    <p class="d-inline-flex"
+       [innerHTML]="'component.lobby.kick_member_confirmation' | translate:{NAME: parseNickname(_nickToRemove)}"></p>
   </div>
 
   <div class="modal-footer">

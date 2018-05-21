@@ -1,33 +1,35 @@
-import {Component, Inject, OnDestroy, OnInit, PLATFORM_ID} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMemberGroup, IMessage, INickname} from 'arsnova-click-v2-types/src/common';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {Router} from '@angular/router';
-import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {AttendeeService} from '../../../service/attendee.service';
-import {ConnectionService} from '../../../service/connection.service';
-import {UserService} from '../../../service/user.service';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {parseGithubFlavoredMarkdown} from '../../../../lib/markdown/markdown';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { IMemberGroup, IMessage, INickname } from 'arsnova-click-v2-types/src/common';
+import { DefaultSettings } from '../../../../lib/default.settings';
+import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { UserService } from '../../../service/user/user.service';
 
 @Component({
   selector: 'app-nickname-select',
   templateUrl: './nickname-select.component.html',
-  styleUrls: ['./nickname-select.component.scss']
+  styleUrls: ['./nickname-select.component.scss'],
 })
 export class NicknameSelectComponent implements OnInit, OnDestroy {
-  get isLoading(): boolean {
-    return this._isLoading;
-  }
   public static TYPE = 'NicknameSelectComponent';
+
+  private _nicks: Array<string> = [];
 
   get nicks(): Array<string> {
     return this._nicks;
   }
 
-  private _nicks: Array<string> = [];
   private _isLoading: boolean;
+
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -38,19 +40,19 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private connectionService: ConnectionService,
-    private currentQuiz: CurrentQuizService
+    private currentQuiz: CurrentQuizService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
     footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack
+      this.footerBarService.footerElemBack,
     ]);
     this.footerBarService.footerElemBack.onClickCallback = () => {
       this.router.navigate(['/']);
     };
   }
 
-  joinQuiz(name: any): void {
+  public joinQuiz(name: any): void {
     if (name.changingThisBreaksApplicationSecurity) {
       name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
@@ -60,7 +62,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         quizName: this.currentQuiz.quiz.hashtag,
         nickname: name,
         groupName: window.sessionStorage.getItem('config.memberGroup'),
-        ticket: this.userService.ticket
+        ticket: this.userService.ticket,
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
@@ -86,15 +88,15 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     });
   }
 
-  sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  parseAvailableNick(name: string): SafeHtml {
+  public parseAvailableNick(name: string): SafeHtml {
     return name.match(/:[\w\+\-]+:/g) ? this.sanitizeHTML(parseGithubFlavoredMarkdown(name)) : name;
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     if (this.attendeeService.getOwnNick()) {
       this.router.navigate(['/']);
       return;
@@ -106,11 +108,11 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {
           this._nicks = this._nicks.concat(data.payload.nicknames);
         }
-      }
+      },
     );
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.footerBarService.footerElemBack.restoreClickCallback();
   }
 

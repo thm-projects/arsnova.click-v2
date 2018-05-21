@@ -1,6 +1,7 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { DomSanitizer } from '@angular/platform-browser';
 
-import {ProgressBarSingleChoiceComponent} from './progress-bar-single-choice.component';
+import { ProgressBarSingleChoiceComponent } from './progress-bar-single-choice.component';
 
 describe('ProgressBarSingleChoiceComponent', () => {
   let component: ProgressBarSingleChoiceComponent;
@@ -8,9 +9,8 @@ describe('ProgressBarSingleChoiceComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProgressBarSingleChoiceComponent]
-    })
-           .compileComponents();
+      declarations: [ProgressBarSingleChoiceComponent],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -21,5 +21,20 @@ describe('ProgressBarSingleChoiceComponent', () => {
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
+  }));
+  it('should contain a TYPE reference', () => {
+    expect(ProgressBarSingleChoiceComponent.TYPE).toEqual('ProgressBarSingleChoiceComponent');
+  });
+
+  it('#sanitizeStyle', () => {
+    expect(component.sanitizeStyle('20%')).toBeTruthy();
+  });
+
+  it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
+    const markup = '<div><span>TestMarkup</span></div>';
+
+    spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(() => {});
+    component.sanitizeHTML(markup);
+    expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
   }));
 });

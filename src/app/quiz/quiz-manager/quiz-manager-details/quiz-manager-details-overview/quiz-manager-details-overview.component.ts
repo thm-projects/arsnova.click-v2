@@ -1,30 +1,32 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
-import {ActivatedRoute} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {FooterBarService} from '../../../../service/footer-bar.service';
-import {IQuestion} from 'arsnova-click-v2-types/src/questions/interfaces';
-import {HeaderLabelService} from '../../../../service/header-label.service';
-import {TrackingService} from '../../../../service/tracking.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { Subscription } from 'rxjs';
+import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
+import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { TrackingService } from '../../../../service/tracking/tracking.service';
 
 @Component({
   selector: 'app-quiz-manager-details-overview',
   templateUrl: './quiz-manager-details-overview.component.html',
-  styleUrls: ['./quiz-manager-details-overview.component.scss']
+  styleUrls: ['./quiz-manager-details-overview.component.scss'],
 })
 export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizManagerDetailsOverviewComponent';
 
-  get questionIndex(): number {
-    return this._questionIndex;
-  }
+  private _question: IQuestion;
 
   get question(): IQuestion {
     return this._question;
   }
 
-  private _question: IQuestion;
   private _questionIndex: number;
+
+  get questionIndex(): number {
+    return this._questionIndex;
+  }
+
   private _routerSubscription: Subscription;
 
   constructor(
@@ -32,7 +34,7 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService,
-    private trackingService: TrackingService
+    private trackingService: TrackingService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
@@ -41,24 +43,24 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,
       this.footerBarService.footerElemSaveAssets,
-      this.footerBarService.footerElemProductTour
+      this.footerBarService.footerElemProductTour,
     ]);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
     });
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this._routerSubscription) {
       this._routerSubscription.unsubscribe();
     }
   }
 
-  public trackDetailsTarget(target: string) {
+  public trackDetailsTarget(target: string): void {
     this.trackingService.trackClickEvent({
       action: QuizManagerDetailsOverviewComponent.TYPE,
       label: target,

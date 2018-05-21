@@ -17,7 +17,8 @@
             (click)="startQuiz()"
             class="btn btn-default pointer"
             [class.w-100]="currentQuizService.getVisibleQuestions().length">
-      <span [innerHTML]="('component.liveResults.' + (currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ? currentQuizService.readingConfirmationRequested ? 'start_round' : 'show_question' : 'start_round')) | translate"></span>
+      <span
+        [innerHTML]="('component.liveResults.' + (currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ? currentQuizService.readingConfirmationRequested ? 'start_round' : 'show_question' : 'start_round')) | translate"></span>
       <i class="fas fa-paper-plane"></i>
     </button>
     <button *ngIf="showStopCountdownButton()"
@@ -46,20 +47,23 @@
 
 <div class="question">
   <div *ngIf="currentQuizService.quiz.questionList.length">
-    <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} / {{currentQuizService.quiz.questionList.length}}</h2>
+    <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} /
+                               {{currentQuizService.quiz.questionList.length}}</h2>
   </div>
   <div class="btn-group w-100">
     <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
             [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
-      <i class="fas fa-trophy" aria-hidden="true"></i>
+      <i class="fas fa-trophy"
+         aria-hidden="true"></i>
       <span>{{'component.liveResults.ranking' | translate}}</span>
     </button>
     <button [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
-      <i class="fas fa-question" aria-hidden="true"></i>
+      <i class="fas fa-question"
+         aria-hidden="true"></i>
       <span>{{'component.liveResults.question' | translate}}</span>
     </button>
   </div>
@@ -81,13 +85,15 @@
                     [target]="'countdownRunning'"
                     [src]="currentQuizService.quiz.sessionConfig.music.titleConfig.countdownRunning"></app-audio-player>
 
-  <app-audio-player *ngIf="!countdown?.isRunning && !countdown?.remainingTime && !currentQuizService.readingConfirmationRequested && currentQuizService.quiz.sessionConfig?.music.enabled.countdownEnd"
-                    [original_volume]="currentQuizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? currentQuizService.quiz.sessionConfig.music.volumeConfig.global : currentQuizService.quiz.sessionConfig.music.volumeConfig.countdownEnd"
-                    [autostart]="true"
-                    [loop]="false"
-                    [target]="'countdownEnd'"
-                    [src]="currentQuizService.quiz.sessionConfig.music.titleConfig.countdownEnd"></app-audio-player>
+  <app-audio-player
+    *ngIf="!countdown?.isRunning && !countdown?.remainingTime && !currentQuizService.readingConfirmationRequested && currentQuizService.quiz.sessionConfig?.music.enabled.countdownEnd"
+    [original_volume]="currentQuizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? currentQuizService.quiz.sessionConfig.music.volumeConfig.global : currentQuizService.quiz.sessionConfig.music.volumeConfig.countdownEnd"
+    [autostart]="true"
+    [loop]="false"
+    [target]="'countdownEnd'"
+    [src]="currentQuizService.quiz.sessionConfig.music.titleConfig.countdownEnd"></app-audio-player>
 
-  <app-gamification-animation *ngIf="countdown && countdown.isRunning && countdown.remainingTime >= 0" [countdownValue]="countdown.remainingTime"></app-gamification-animation>
+  <app-gamification-animation *ngIf="countdown && countdown.isRunning && countdown.remainingTime >= 0"
+                              [countdownValue]="countdown.remainingTime"></app-gamification-animation>
 </div>
 

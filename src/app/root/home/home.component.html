@@ -1,5 +1,8 @@
-<div class="row flex-column" id="landingPageContent">
-  <div class="col-12 text-center my-5 my-sm-5" id="arsnova-click-description" *ngIf="!isShowingQuiznameDatalist">
+<div class="row flex-column"
+     id="landingPageContent">
+  <div class="col-12 text-center my-5 my-sm-5"
+       id="arsnova-click-description"
+       *ngIf="!isShowingQuiznameDatalist">
     <div class="text-center header-label text-bold">
       <span class="color-changing-ars logo-header-chars">a r s </span>
       <span class="color-changing-nova logo-header-chars">n o v a </span>
@@ -21,12 +24,14 @@
                (focus)="showQuiznameDatalist()"
                [title]="'component.hashtag_management.enter_quiz_name' | translate"
                [placeholder]="'component.hashtag_management.enter_quiz_name' | translate"/>
-        <span class="position-absolute text-light px-2 pb-1 rounded-right pointer" id="collapse-quiz-name-datalist"
+        <span class="position-absolute text-light px-2 pb-1 rounded-right pointer"
+              id="collapse-quiz-name-datalist"
               *ngIf="isShowingQuiznameDatalist"
               (click)="hideQuiznameDatalist()">
           &#x21E7;
         </span>
-        <div class="list-group text-default d-none list-group-flush" id="hashtag-input-data-list">
+        <div class="list-group text-default d-none list-group-flush"
+             id="hashtag-input-data-list">
           <span class="list-group-item list-group-item-action list-group-item-success text-capitalize pointer"
                 (click)="autoJoinToSession(option)"
                 *ngFor="let option of sharedService.activeQuizzes">Join {{option}}</span>
@@ -39,7 +44,8 @@
                 (click)="selectQuizByList('ABCD')">Create new ABCD Quiz</span>
         </div>
       </div>
-      <div *ngIf="passwordRequired" class="col-12 px-1">
+      <div *ngIf="passwordRequired"
+           class="col-12 px-1">
         <input type="password"
                class="text-center rounded w-100 mb-2 border-0 input-field"
                id="server-password-input-field"
@@ -110,13 +116,16 @@
       </div>
     </div>
   </div>
-  <div *ngIf="hasErrors" class="col-12 mt-5">
+  <div *ngIf="hasErrors"
+       class="col-12 mt-5">
     <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
   </div>
-  <div class="col-12 text-center mt-5" id="demo-quiz-description">
+  <div class="col-12 text-center mt-5"
+       id="demo-quiz-description">
     <p>{{'component.hashtag_home.demo_quiz.title.3' | translate}}</p>
   </div>
   <div class="col-12 px-1 mb-5 mt-2 justify-content-center d-flex mathjax-container">
-    <div class="mathjax-content-container" [innerHTML]="sanitizeHTML(mathjax)"></div>
+    <div class="mathjax-content-container"
+         [innerHTML]="sanitizeHTML(mathjax)"></div>
   </div>
 </div>

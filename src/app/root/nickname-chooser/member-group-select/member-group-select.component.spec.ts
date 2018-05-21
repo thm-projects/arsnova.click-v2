@@ -1,23 +1,23 @@
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
+import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
+import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { SettingsService } from '../../../service/settings/settings.service';
+import { SharedService } from '../../../service/shared/shared.service';
+import { UserService } from '../../../service/user/user.service';
+import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../../service/websocket/websocket.service';
 
 import { MemberGroupSelectComponent } from './member-group-select.component';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {ConnectionService} from '../../../service/connection.service';
-import {createTranslateLoader} from '../../../../lib/translation.factory';
-import {CurrentQuizMockService} from '../../../service/current-quiz.mock.service';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {SettingsService} from '../../../service/settings.service';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {AttendeeService} from '../../../service/attendee.service';
-import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {SharedService} from '../../../service/shared.service';
-import {UserService} from '../../../service/user.service';
-import {WebsocketService} from '../../../service/websocket.service';
-import {WebsocketMockService} from '../../../service/websocket.mock.service';
-import {ConnectionMockService} from '../../../service/connection.mock.service';
-import {AttendeeMockService} from '../../../service/attendee.mock.service';
 
 describe('MemberGroupSelectComponent', () => {
   let component: MemberGroupSelectComponent;
@@ -32,27 +32,26 @@ describe('MemberGroupSelectComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
-        {provide: CurrentQuizService, useClass: CurrentQuizMockService},
+        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
         FooterBarService,
         SettingsService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: WebsocketService, useClass: WebsocketMockService },
         SharedService,
-        {provide: AttendeeService, useClass: AttendeeMockService},
-        UserService
+        { provide: AttendeeService, useClass: AttendeeMockService },
+        UserService,
       ],
-      declarations: [ MemberGroupSelectComponent ]
-    })
-    .compileComponents();
+      declarations: [MemberGroupSelectComponent],
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {

@@ -1,15 +1,15 @@
-import {NgModule} from '@angular/core';
-import {SharedModule} from '../shared/shared.module';
-import {ThemesComponent} from './themes.component';
-import {ThemesService} from '../service/themes.service';
+import { NgModule } from '@angular/core';
+import { ThemesService } from '../service/themes/themes.service';
+import { SharedModule } from '../shared/shared.module';
+import { ThemesComponent } from './themes.component';
 
 @NgModule({
   imports: [
-    SharedModule
+    SharedModule,
   ],
   exports: [ThemesComponent],
   declarations: [ThemesComponent],
-  providers: [ThemesService]
+  providers: [ThemesService],
 })
 export class ThemesModule {
 }

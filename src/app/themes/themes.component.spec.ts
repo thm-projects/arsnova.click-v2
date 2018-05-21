@@ -1,27 +1,25 @@
-import {async, ComponentFixture, inject, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { DefaultSettings } from '../../lib/default.settings';
+import { createTranslateLoader } from '../../lib/translation.factory';
+import { ConnectionMockService } from '../service/connection/connection.mock.service';
+import { ConnectionService } from '../service/connection/connection.service';
+import { CurrentQuizMockService } from '../service/current-quiz/current-quiz.mock.service';
+import { CurrentQuizService } from '../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../service/footer-bar/footer-bar.service';
+import { SettingsService } from '../service/settings/settings.service';
+import { SharedService } from '../service/shared/shared.service';
+import { ThemesService } from '../service/themes/themes.service';
+import { TrackingMockService } from '../service/tracking/tracking.mock.service';
+import { TrackingService } from '../service/tracking/tracking.service';
+import { WebsocketMockService } from '../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../service/websocket/websocket.service';
 
-import {ThemesComponent} from './themes.component';
-import {TranslateCompiler, TranslateLoader, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../lib/translation.factory';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {ThemesService} from '../service/themes.service';
-import {CurrentQuizService} from '../service/current-quiz.service';
-import {ConnectionService} from '../service/connection.service';
-import {FooterBarService} from '../service/footer-bar.service';
-import {SharedService} from '../service/shared.service';
-import {SettingsService} from '../service/settings.service';
-import {WebsocketService} from '../service/websocket.service';
-import {TrackingService} from '../service/tracking.service';
-import {Angulartics2Module} from 'angulartics2';
-import {ArsnovaClickAngulartics2Piwik} from '../shared/tracking/ArsnovaClickAngulartics2Piwik';
-import {WebsocketMockService} from '../service/websocket.mock.service';
-import {CurrentQuizMockService} from '../service/current-quiz.mock.service';
-import {ConnectionMockService} from '../service/connection.mock.service';
-import {DefaultSettings} from '../../lib/default.settings';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {TrackingMockService} from '../service/tracking.mock.service';
+import { ThemesComponent } from './themes.component';
 
 describe('ThemesComponent', () => {
   let component: ThemesComponent;
@@ -37,28 +35,28 @@ describe('ThemesComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
         TranslateService,
         FooterBarService,
         SettingsService,
-        {provide: CurrentQuizService, useClass: CurrentQuizMockService},
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
+        { provide: WebsocketService, useClass: WebsocketMockService },
         SharedService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: TrackingService, useClass: TrackingMockService},
-        ThemesService
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: TrackingService, useClass: TrackingMockService },
+        ThemesService,
       ],
       declarations: [
-        ThemesComponent
-      ]
+        ThemesComponent,
+      ],
     }).compileComponents();
   }));
 
@@ -76,6 +74,6 @@ describe('ThemesComponent', () => {
       });
       await expect(component).toBeTruthy();
       backend.verify();
-    }))
+    })),
   );
 });

@@ -417,6 +417,10 @@
         -o-transition: background-color 800ms linear;
         transition: background-color 800ms linear;
       }
+      #footer-move-left,
+      #footer-move-right {
+        background: darken(map-get($map, "bg-footer"), 10);
+      }
       .footerElement {
         color: map-get($map, "fg-footer-info-bar");
         &:hover {

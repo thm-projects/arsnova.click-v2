@@ -9,11 +9,12 @@ import { RootComponent } from './root/root/root.component';
   imports: [
     RootModule,
     ServerModule,
-    ModuleMapLoaderModule
+    ModuleMapLoaderModule,
   ],
   providers: [
     // Add universal-only providers here
   ],
-  bootstrap: [ RootComponent ],
+  bootstrap: [RootComponent],
 })
-export class RootServerModule {}
+export class RootServerModule {
+}

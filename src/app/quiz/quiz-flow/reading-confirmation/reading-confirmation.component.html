@@ -3,4 +3,7 @@
 <p [innerHTML]="sanitizeHTML(questionText)"></p>
 
 <button class="btn btn-default w-100 mt-5 pointer"
-        (click)="confirmReading()"><i class="fas fa-paper-plane"></i>{{'component.liveResults.confirm_read' | translate}}</button>
+        (click)="confirmReading()">
+  <i class="fas fa-paper-plane"></i>
+  {{'component.liveResults.confirm_read' | translate}}
+</button>

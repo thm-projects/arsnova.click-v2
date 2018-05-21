@@ -9,8 +9,8 @@
   }
 }
 
-span.before,
-span.after {
+#footer-move-left,
+#footer-move-right {
   width: 50px;
   top: 0;
   color: #fff;
@@ -18,12 +18,12 @@ span.after {
   z-index: 1050;
 }
 
-span.before {
-  background: linear-gradient(to right, #000, rgba(0,0,0, 0.2));
+#footer-move-left {
+  border-right: 1px dashed;
 }
 
-span.after {
-  background: linear-gradient(to left, #000, rgba(0,0,0, 0.2));
+#footer-move-right {
+  border-left: 1px dashed;
   right: 0;
 }
 

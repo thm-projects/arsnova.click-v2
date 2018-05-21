@@ -1,39 +1,37 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../../../lib/translation.factory';
+import { HeaderComponent } from '../../../../header/header/header.component';
+import { LivePreviewComponent } from '../../../../live-preview/live-preview/live-preview.component';
+import { MarkdownBarComponent } from '../../../../markdown/markdown-bar/markdown-bar.component';
+import { ActiveQuestionGroupMockService } from '../../../../service/active-question-group/active-question-group.mock.service';
+import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
+import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
+import { ConnectionService } from '../../../../service/connection/connection.service';
+import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { QuestionTextService } from '../../../../service/question-text/question-text.service';
+import { SettingsService } from '../../../../service/settings/settings.service';
+import { SharedService } from '../../../../service/shared/shared.service';
+import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../../../service/tracking/tracking.service';
+import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../../../service/websocket/websocket.service';
 
-import {QuestiontextComponent} from './questiontext.component';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {ConnectionService} from '../../../../service/connection.service';
-import {createTranslateLoader} from '../../../../../lib/translation.factory';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {SettingsService} from '../../../../service/settings.service';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {HeaderLabelService} from '../../../../service/header-label.service';
-import {FooterBarService} from '../../../../service/footer-bar.service';
-import {ActiveQuestionGroupService} from '../../../../service/active-question-group.service';
-import {SharedService} from '../../../../service/shared.service';
-import {WebsocketService} from '../../../../service/websocket.service';
-import {QuestionTextService} from '../../../../service/question-text.service';
-import {MarkdownBarComponent} from '../../../../markdown/markdown-bar/markdown-bar.component';
-import {HeaderComponent} from '../../../../header/header/header.component';
-import {LivePreviewComponent} from '../../../../live-preview/live-preview/live-preview.component';
-import {TrackingService} from '../../../../service/tracking.service';
-import {Angulartics2Module} from 'angulartics2';
-import {ArsnovaClickAngulartics2Piwik} from '../../../../shared/tracking/ArsnovaClickAngulartics2Piwik';
-import {WebsocketMockService} from '../../../../service/websocket.mock.service';
-import {ConnectionMockService} from '../../../../service/connection.mock.service';
-import {ActiveQuestionGroupMockService} from '../../../../service/active-question-group.mock.service';
-import {ActivatedRoute} from '@angular/router';
-import {NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
-import {TrackingMockService} from '../../../../service/tracking.mock.service';
+import { QuestiontextComponent } from './questiontext.component';
 
 class MockRouter {
-  params = {
+  public params = {
     subscribe: (cb) => {
       cb({
-        questionIndex: 0
+        questionIndex: 0,
       });
-    }
+    },
   };
 }
 
@@ -50,33 +48,33 @@ describe('QuestiontextComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
         NgbModalModule.forRoot(),
       ],
       providers: [
-        {provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService},
+        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
         HeaderLabelService,
         FooterBarService,
         SettingsService,
-        {provide: ConnectionService, useClass: ConnectionMockService},
-        {provide: WebsocketService, useClass: WebsocketMockService},
-        {provide: ActivatedRoute, useClass: MockRouter},
+        { provide: ConnectionService, useClass: ConnectionMockService },
+        { provide: WebsocketService, useClass: WebsocketMockService },
+        { provide: ActivatedRoute, useClass: MockRouter },
         SharedService,
         QuestionTextService,
-        {provide: TrackingService, useClass: TrackingMockService},
+        { provide: TrackingService, useClass: TrackingMockService },
       ],
       declarations: [
         HeaderComponent,
         LivePreviewComponent,
         MarkdownBarComponent,
-        QuestiontextComponent
-      ]
+        QuestiontextComponent,
+      ],
     }).compileComponents();
   }));
 

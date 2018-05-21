@@ -2,6 +2,6 @@
   <h4>{{'component.quiz_rename.rename' | translate:{NAME: duplicateQuiz.quizName} }}</h4>
   <div *ngFor="let renameRecommendation of duplicateQuiz.renameRecommendation"
        (click)="sendRecommendation(duplicateQuiz, renameRecommendation, i)"
-       class='rounded pointer p-2 my-2 rename-recommendation'>{{renameRecommendation}}
+       class="rounded pointer p-2 my-2 rename-recommendation">{{renameRecommendation}}
   </div>
 </div>

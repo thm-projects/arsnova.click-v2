@@ -1,14 +1,14 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe} from '@ngx-translate/core';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {FormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
-import {AudioPlayerComponent} from './audio-player/audio-player.component';
-import {GamificationAnimationComponent} from './gamification-animation/gamification-animation.component';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {createTranslateLoader} from '../../lib/translation.factory';
+import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../lib/translation.factory';
+import { AudioPlayerComponent } from './audio-player/audio-player.component';
+import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 
 @NgModule({
   imports: [
@@ -19,15 +19,15 @@ import {createTranslateLoader} from '../../lib/translation.factory';
       loader: {
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
-        deps: [HttpClient]
+        deps: [HttpClient],
       },
       compiler: {
         provide: TranslateCompiler,
-        useClass: TranslateMessageFormatCompiler
-      }
+        useClass: TranslateMessageFormatCompiler,
+      },
     }),
     NgbModule,
-    RouterModule
+    RouterModule,
   ],
   exports: [
     CommonModule,
@@ -37,11 +37,11 @@ import {createTranslateLoader} from '../../lib/translation.factory';
     NgbModule,
     RouterModule,
     AudioPlayerComponent,
-    GamificationAnimationComponent
+    GamificationAnimationComponent,
   ],
   providers: [TranslateModule],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent],
-  bootstrap: []
+  bootstrap: [],
 })
 export class SharedModule {
   constructor() {}

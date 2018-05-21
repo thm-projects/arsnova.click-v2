@@ -5,7 +5,9 @@
          [src]="apiUrl + target + '/' + src + '.mp3'"></audio>
   <div *ngIf="!autostart"
        class="input-group mr-5">
-    <input type="range" [value]="volume" (input)="emitVolumeChange($event)">
+    <input type="range"
+           [value]="volume"
+           (input)="emitVolumeChange($event)">
   </div>
   <div *ngIf="!autostart"
        class="btn-group">

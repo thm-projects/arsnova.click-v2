@@ -1,21 +1,19 @@
-import {NgModule} from '@angular/core';
-import {QuizLobbyComponent} from './quiz-lobby/quiz-lobby.component';
-import {VotingComponent} from './voting/voting.component';
-import {LeaderboardComponent} from './leaderboard/leaderboard.component';
-import {QuizResultsComponent} from './quiz-results/quiz-results.component';
-import {SharedModule} from '../../shared/shared.module';
-import {QuizThemeComponent} from './quiz-theme/quiz-theme.component';
-import {ThemesModule} from '../../themes/themes.module';
-import {QuizResultsModule} from './quiz-results/quiz-results.module';
-import {AttendeeService} from '../../service/attendee.service';
-import {QuestionDetailsComponent} from './quiz-results/question-details/question-details.component';
-import {ReadingConfirmationComponent} from './reading-confirmation/reading-confirmation.component';
-import {ConfidenceRateComponent} from './confidence-rate/confidence-rate.component';
-import {NgxQRCodeModule} from '@techiediaries/ngx-qrcode';
-
-import {Routes, RouterModule} from '@angular/router';
-import {CasService} from '../../service/cas.service';
-import {HeaderLabelService} from '../../service/header-label.service';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { MarkdownModule } from '../../markdown/markdown.module';
+import { CasService } from '../../service/cas/cas.service';
+import { SharedModule } from '../../shared/shared.module';
+import { ThemesModule } from '../../themes/themes.module';
+import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
+import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { QuizLobbyComponent } from './quiz-lobby/quiz-lobby.component';
+import { QuestionDetailsComponent } from './quiz-results/question-details/question-details.component';
+import { QuizResultsComponent } from './quiz-results/quiz-results.component';
+import { QuizResultsModule } from './quiz-results/quiz-results.module';
+import { QuizThemeComponent } from './quiz-theme/quiz-theme.component';
+import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
+import { VotingComponent } from './voting/voting.component';
 
 export const quizFlowRoutes: Routes = [
   {
@@ -27,7 +25,7 @@ export const quizFlowRoutes: Routes = [
     path: 'lobby',
     canLoad: [CasService],
     component: QuizLobbyComponent,
-    data: {}
+    data: {},
   },
   {
     path: 'results',
@@ -37,47 +35,48 @@ export const quizFlowRoutes: Routes = [
   {
     path: 'results/:questionIndex',
     component: QuestionDetailsComponent,
-    data: {}
+    data: {},
   },
   {
     path: 'theme',
     component: QuizThemeComponent,
-    data: {}
+    data: {},
   },
   {
     path: 'leaderboard',
     component: LeaderboardComponent,
-    data: {}
+    data: {},
   },
   {
     path: 'leaderboard/:questionIndex',
     component: LeaderboardComponent,
-    data: {}
+    data: {},
   },
   {
     path: 'voting',
     component: VotingComponent,
-    data: {}
+    data: {},
   },
   {
     path: 'reading-confirmation',
     component: ReadingConfirmationComponent,
-    data: {}
+    data: {},
   },
   {
     path: 'confidence-rate',
     component: ConfidenceRateComponent,
-    data: {}
+    data: {},
   },
 ];
 
 @NgModule({
   imports: [
+    MarkdownModule,
     SharedModule,
     ThemesModule,
     RouterModule.forChild(quizFlowRoutes),
     QuizResultsModule,
-    NgxQRCodeModule
+    NgxQRCodeModule,
   ],
   declarations: [
     QuizLobbyComponent,
@@ -85,8 +84,8 @@ export const quizFlowRoutes: Routes = [
     LeaderboardComponent,
     QuizThemeComponent,
     ReadingConfirmationComponent,
-    ConfidenceRateComponent
-  ]
+    ConfidenceRateComponent,
+  ],
 })
 export class QuizFlowModule {
 }

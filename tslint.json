@@ -21,17 +21,27 @@
       true,
       "spaces"
     ],
-    "interface-over-type-literal": true,
     "label-position": true,
     "max-line-length": [
       true,
-      140
+      150
     ],
-    "member-access": false,
+    "member-access": true,
     "member-ordering": [
       true,
-      "static-before-instance",
-      "variables-before-functions"
+      {
+        "order": [
+          "public-static-field",
+          "private-static-field",
+          "public-instance-field",
+          "private-instance-field",
+          "public-constructor",
+          "private-constructor",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
+        ]
+      }
     ],
     "no-arg": true,
     "no-bitwise": false,
@@ -53,6 +63,8 @@
       true,
       "ignore-params"
     ],
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
     "no-misused-new": true,
     "no-non-null-assertion": true,
     "no-shadowed-variable": true,
@@ -62,7 +74,7 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unused-expression": true,
-    "no-use-before-declare": true,
+    "no-use-before-declare": false,
     "no-var-keyword": true,
     "object-literal-sort-keys": false,
     "one-line": [
@@ -83,6 +95,18 @@
       true,
       "allow-null-check"
     ],
+    "jsdoc-format": true,
+    "adjacent-overload-signatures": true,
+    "typedef": [
+      true,
+      "call-signature",
+      "property-declaration"
+    ],
+    "interface-name": [
+      true,
+      "always-prefix"
+    ],
+    "interface-over-type-literal": true,
     "typedef-whitespace": [
       true,
       {
@@ -93,8 +117,7 @@
         "variable-declaration": "nospace"
       }
     ],
-    "typeof-compare": true,
-    "unified-signatures": true,
+    "unified-signatures": false,
     "variable-name": false,
     "whitespace": [
       true,
@@ -124,9 +147,6 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true,
-    "no-access-missing-member": true,
-    "templates-use-public": true,
-    "invoke-injectable": true
+    "directive-class-suffix": true
   }
 }

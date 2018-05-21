@@ -1,4 +1,5 @@
-<div class="progress my-2 relative" style="height: 2rem;">
+<div class="progress my-2 relative"
+     style="height: 2rem;">
   <div *ngIf="base && percent"
        class="progress-bar bg-info overflow-hidden"
        role="progressbar"
@@ -14,5 +15,7 @@
        class="align-self-center"
        style="position: absolute; right: 10px;">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}
   </div>
-  <div *ngIf="!base" class="w-100 d-flex align-items-center justify-content-center"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></div>
+  <div *ngIf="!base"
+       class="w-100 d-flex align-items-center justify-content-center"><i class="fas fa-spinner fa-spin"
+                                                                         aria-hidden="true"></i></div>
 </div>

@@ -1,50 +1,56 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CurrentQuizService} from '../../../service/current-quiz.service';
-import {HttpClient} from '@angular/common/http';
-import {DefaultSettings} from '../../../../lib/default.settings';
-import {IMessage} from 'arsnova-click-v2-types/src/common';
-import {Countdown} from '../quiz-results/quiz-results.component';
-import {Router} from '@angular/router';
-import {AttendeeService} from '../../../service/attendee.service';
-import {FooterBarService} from '../../../service/footer-bar.service';
-import {ConnectionService} from '../../../service/connection.service';
-import {SingleChoiceQuestion} from 'arsnova-click-v2-types/src/questions/question_choice_single';
-import {SurveyQuestion} from 'arsnova-click-v2-types/src/questions/question_survey';
-import {QuestionTextService} from '../../../service/question-text.service';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {HeaderLabelService} from '../../../service/header-label.service';
-import {MultipleChoiceQuestion} from 'arsnova-click-v2-types/src/questions/question_choice_multiple';
-import {RangedQuestion} from 'arsnova-click-v2-types/src/questions/question_ranged';
-import {FreeTextQuestion} from 'arsnova-click-v2-types/src/questions/question_freetext';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { MultipleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_multiple';
+import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single';
+import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_freetext';
+import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
+import { SurveyQuestion } from 'arsnova-click-v2-types/src/questions/question_survey';
+import { Countdown } from '../../../../lib/countdown/countdown';
+import { DefaultSettings } from '../../../../lib/default.settings';
+import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
+import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { QuestionTextService } from '../../../service/question-text/question-text.service';
 
 @Component({
   selector: 'app-voting',
   templateUrl: './voting.component.html',
-  styleUrls: ['./voting.component.scss']
+  styleUrls: ['./voting.component.scss'],
 })
 export class VotingComponent implements OnInit, OnDestroy {
-  set countdownValue(value: number) {
-    this._countdownValue = value;
-  }
-  set countdown(value: Countdown) {
-    this._countdown = value;
-  }
   public static TYPE = 'VotingComponent';
+  public answers: Array<string> = [];
+
+  private _countdown: Countdown;
 
   get countdown(): Countdown {
     return this._countdown;
   }
-  get selectedAnswers(): Array<number> | string | number {
-    return this._selectedAnswers;
+
+  set countdown(value: Countdown) {
+    this._countdown = value;
   }
+
+  private _countdownValue: number;
+
   get countdownValue(): number {
     return this._countdownValue;
   }
 
-  private _countdown: Countdown;
-  private _countdownValue: number;
+  set countdownValue(value: number) {
+    this._countdownValue = value;
+  }
+
   private _selectedAnswers: Array<number> | string | number = [];
-  public answers: Array<string> = [];
+
+  get selectedAnswers(): Array<number> | string | number {
+    return this._selectedAnswers;
+  }
 
   constructor(
     public currentQuizService: CurrentQuizService,
@@ -55,7 +61,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private headerLabelService: HeaderLabelService,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
@@ -64,71 +70,48 @@ export class VotingComponent implements OnInit, OnDestroy {
 
     this.footerBarService.replaceFooterElements([]);
 
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${currentQuizService.quiz.hashtag}`)
-        .subscribe((data: IMessage) => {
-          if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${currentQuizService.quiz.hashtag}`).subscribe((data: IMessage) => {
+      if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
 
-            if (currentQuizService.currentQuestion().timer) {
-              this.countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
-              this.countdown.onChange.subscribe((value) => {
-                this.countdownValue = value;
-                if (!value) {
-                  this.sendResponses();
-                }
-              });
+        if (currentQuizService.currentQuestion().timer) {
+          this.countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
+          this.countdown.onChange.subscribe((value) => {
+            this.countdownValue = value;
+            if (!value) {
+              this.sendResponses();
             }
+          });
+        }
 
-          } else {
+      } else {
 
-            this.router.navigate([
-              '/quiz',
-              'flow',
-              'results'
-            ]);
+        this.router.navigate([
+          '/quiz',
+          'flow',
+          'results',
+        ]);
 
-          }
-        });
+      }
+    });
   }
 
   public sanitizeHTML(value: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  displayAnswerButtons(): boolean {
+  public displayAnswerButtons(): boolean {
     const question = this.currentQuizService.currentQuestion();
     return question instanceof SingleChoiceQuestion ||
-           question instanceof SurveyQuestion ||
-           question instanceof MultipleChoiceQuestion;
+      question instanceof SurveyQuestion ||
+      question instanceof MultipleChoiceQuestion;
   }
 
-  displayRangedButtons(): boolean {
+  public displayRangedButtons(): boolean {
     return this.currentQuizService.currentQuestion() instanceof RangedQuestion;
   }
 
-  displayFreetextInput(): boolean {
+  public displayFreetextInput(): boolean {
     return this.currentQuizService.currentQuestion() instanceof FreeTextQuestion;
-  }
-
-  handleMessages(): void {
-    this.connectionService.socket.subscribe((data: IMessage) => {
-      switch (data.step) {
-        case 'MEMBER:UPDATED_RESPONSE':
-          this.attendeeService.modifyResponse(data.payload.nickname);
-          break;
-        case 'QUIZ:RESET':
-          this.attendeeService.clearResponses();
-          this.currentQuizService.questionIndex = 0;
-          this.router.navigate(['/quiz', 'flow', 'lobby']);
-          break;
-        case 'LOBBY:CLOSED':
-          this.router.navigate(['/']);
-          break;
-        case 'QUIZ:STOP':
-          this._selectedAnswers = [];
-          this.router.navigate(['/quiz', 'flow', 'results']);
-          break;
-      }
-    });
   }
 
   public normalizeAnswerOptionIndex(index: number): string {
@@ -153,8 +136,8 @@ export class VotingComponent implements OnInit, OnDestroy {
 
   public showSendResponseButton(): boolean {
     return this.isNumber(this.selectedAnswers) ||
-           (this.selectedAnswers instanceof Array && !!this.selectedAnswers.length) ||
-           (typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length);
+      (this.selectedAnswers instanceof Array && !!this.selectedAnswers.length) ||
+      (typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length);
   }
 
   public toggleSelectAnswer(index: number): void {
@@ -168,13 +151,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     }
   }
 
-  toggleSelectedAnswers(): boolean {
-    return this.currentQuizService.currentQuestion() instanceof SingleChoiceQuestion ||
-           (this.currentQuizService.currentQuestion() instanceof SurveyQuestion &&
-            !(<SurveyQuestion>this.currentQuizService.currentQuestion()).multipleSelectionEnabled);
-  }
-
-  sendResponses(): void {
+  public sendResponses(): void {
     if (this.countdown) {
       this.countdown.onChange.unsubscribe();
       this.countdown.stop();
@@ -182,31 +159,59 @@ export class VotingComponent implements OnInit, OnDestroy {
     this.router.navigate([
       '/quiz',
       'flow',
-      this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results'
+      this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
     ]);
   }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.connectionService.initConnection().then(() => {
       this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
       this.handleMessages();
     });
-    this.questionTextService.getEmitter().subscribe((value: Array<string>) => this.answers = value);
+    this.questionTextService.eventEmitter.subscribe((value: Array<string>) => this.answers = value);
     this.questionTextService.changeMultiple(this.currentQuizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.http.put(`${DefaultSettings.httpApiEndpoint}/member/response`, {
       quizName: this.currentQuizService.quiz.hashtag,
       nickname: this.attendeeService.getOwnNick(),
-      value: this._selectedAnswers
+      value: this._selectedAnswers,
     }).subscribe(
       (data: IMessage) => {
         if (data.status !== 'STATUS:SUCCESSFUL') {
           console.log(data);
         }
-      }
+      },
     );
+  }
+
+  private handleMessages(): void {
+    this.connectionService.socket.subscribe((data: IMessage) => {
+      switch (data.step) {
+        case 'MEMBER:UPDATED_RESPONSE':
+          this.attendeeService.modifyResponse(data.payload.nickname);
+          break;
+        case 'QUIZ:RESET':
+          this.attendeeService.clearResponses();
+          this.currentQuizService.questionIndex = 0;
+          this.router.navigate(['/quiz', 'flow', 'lobby']);
+          break;
+        case 'LOBBY:CLOSED':
+          this.router.navigate(['/']);
+          break;
+        case 'QUIZ:STOP':
+          this._selectedAnswers = [];
+          this.router.navigate(['/quiz', 'flow', 'results']);
+          break;
+      }
+    });
+  }
+
+  private toggleSelectedAnswers(): boolean {
+    return this.currentQuizService.currentQuestion() instanceof SingleChoiceQuestion ||
+      (this.currentQuizService.currentQuestion() instanceof SurveyQuestion &&
+        !(<SurveyQuestion>this.currentQuizService.currentQuestion()).multipleSelectionEnabled);
   }
 
 }

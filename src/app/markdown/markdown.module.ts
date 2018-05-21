@@ -1,13 +1,13 @@
-import {NgModule} from '@angular/core';
-import {MarkdownBarComponent} from './markdown-bar/markdown-bar.component';
-import {SharedModule} from '../shared/shared.module';
+import { NgModule } from '@angular/core';
+import { SharedModule } from '../shared/shared.module';
+import { MarkdownBarComponent } from './markdown-bar/markdown-bar.component';
 
 @NgModule({
   imports: [
-    SharedModule
+    SharedModule,
   ],
   declarations: [MarkdownBarComponent],
-  exports: [MarkdownBarComponent]
+  exports: [MarkdownBarComponent],
 })
 export class MarkdownModule {
 }

@@ -1,36 +1,27 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {QuestionTextService} from '../../service/question-text.service';
-import {Subscription} from 'rxjs';
-import {DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT} from '../../../environments/environment';
-import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {ActivatedRoute} from '@angular/router';
-import {IQuestionChoice} from 'arsnova-click-v2-types/src/questions/interfaces';
-import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
-import {ConnectionService} from '../../service/connection.service';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { ActivatedRoute } from '@angular/router';
+import { IQuestionChoice } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { Subscription } from 'rxjs';
+import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
+import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { ConnectionService } from '../../service/connection/connection.service';
+import { QuestionTextService } from '../../service/question-text/question-text.service';
 
 @Component({
   selector: 'app-live-preview',
   templateUrl: './live-preview.component.html',
-  styleUrls: ['./live-preview.component.scss']
+  styleUrls: ['./live-preview.component.scss'],
 })
 export class LivePreviewComponent implements OnInit, OnDestroy {
   public static TYPE = 'LivePreviewComponent';
+  public readonly DEVICE_TYPE = DEVICE_TYPES;
+  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
 
-  get targetDevice(): DEVICE_TYPES {
-    return this._targetDevice;
-  }
+  private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
 
   get targetEnvironment(): LIVE_PREVIEW_ENVIRONMENT {
     return this._targetEnvironment;
-  }
-
-  get question(): IQuestionChoice {
-    return this._question;
-  }
-
-  @Input()
-  set targetDevice(value: DEVICE_TYPES) {
-    this._targetDevice = value;
   }
 
   @Input()
@@ -38,14 +29,24 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     this._targetEnvironment = value;
   }
 
-  public readonly DEVICE_TYPE = DEVICE_TYPES;
-  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
-
   private _targetDevice: DEVICE_TYPES;
-  private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
-  private dataSource: string | Array<string>;
+
+  get targetDevice(): DEVICE_TYPES {
+    return this._targetDevice;
+  }
+
+  @Input()
+  set targetDevice(value: DEVICE_TYPES) {
+    this._targetDevice = value;
+  }
 
   private _question: IQuestionChoice;
+
+  get question(): IQuestionChoice {
+    return this._question;
+  }
+
+  private dataSource: string | Array<string>;
   private _questionIndex: number;
   private _subscription: Subscription;
   private _routerSubscription: Subscription;
@@ -55,11 +56,11 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     public connectionService: ConnectionService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private sanitizer: DomSanitizer,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
   }
 
-  public deviceClass() {
+  public deviceClass(): string {
     switch (this.targetDevice) {
       case 0:
         return 'device_xs';
@@ -93,15 +94,20 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return String.fromCharCode(65 + index);
   }
 
-  sanitizeHTML(value: string | Array<string>): SafeHtml {
+  public sanitizeHTML(value: string): SafeHtml;
+  public sanitizeHTML<T>(value: Array<string>): SafeHtml;
+  public sanitizeHTML(value: string | Array<string>): SafeHtml {
+    if (value instanceof Array) {
+      value = value.join('');
+    }
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  ngOnInit() {
-    this._subscription = this.questionTextService.getEmitter().subscribe(
+  public ngOnInit(): void {
+    this._subscription = this.questionTextService.eventEmitter.subscribe(
       value => {
         this.dataSource = value;
-      }
+      },
     );
     switch (this.targetEnvironment) {
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
@@ -118,7 +124,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
+  public ngOnDestroy(): void {
     if (this._subscription) {
       this._subscription.unsubscribe();
     }

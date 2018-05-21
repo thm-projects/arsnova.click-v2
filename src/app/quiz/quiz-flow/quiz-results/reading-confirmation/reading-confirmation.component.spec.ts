@@ -1,14 +1,14 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../../../lib/translation.factory';
+import { I18nService } from '../../../../service/i18n/i18n.service';
+import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
+import { WebsocketService } from '../../../../service/websocket/websocket.service';
 
-import {ReadingConfirmationComponent} from './reading-confirmation.component';
-import {I18nService} from '../../../../service/i18n.service';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../../../../lib/translation.factory';
-import {RouterTestingModule} from '@angular/router/testing';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {WebsocketService} from '../../../../service/websocket.service';
-import {WebsocketMockService} from '../../../../service/websocket.mock.service';
+import { ReadingConfirmationComponent } from './reading-confirmation.component';
 
 describe('Quiz-Results: ReadingConfirmationComponent', () => {
   let component: ReadingConfirmationComponent;
@@ -23,19 +23,19 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
         I18nService,
-        {provide: WebsocketService, useClass: WebsocketMockService},
+        { provide: WebsocketService, useClass: WebsocketMockService },
       ],
-      declarations: [ReadingConfirmationComponent]
+      declarations: [ReadingConfirmationComponent],
     }).compileComponents();
   }));
 
@@ -48,4 +48,11 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
   it('should be created', async(() => {
     expect(component).toBeTruthy();
   }));
+  it('should contain a TYPE reference', () => {
+    expect(ReadingConfirmationComponent.TYPE).toEqual('ReadingConfirmationComponent');
+  });
+
+  it('#sanitizeStyle', () => {
+    expect(component.sanitizeStyle('20%')).toBeTruthy();
+  });
 });

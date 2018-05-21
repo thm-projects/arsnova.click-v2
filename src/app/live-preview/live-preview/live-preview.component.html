@@ -1,9 +1,10 @@
-
 <div id="mathjaxStyle"></div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.ANSWEROPTIONS"
      id="answer-option-preview"
      [class]="'preview-frame overflow-auto relative ' + deviceClass()">
-  <img src="/assets/icons/phone_empty.png" class="w-100 position-absolute" draggable="false"/>
+  <img src="/assets/icons/phone_empty.png"
+       class="w-100 position-absolute"
+       draggable="false"/>
   <div class="px-4 preview-content relative overflow-auto">
     <app-header></app-header>
 
@@ -27,16 +28,20 @@
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.QUESTION"
      id="question-preview"
      [class]="'preview-frame overflow-auto relative ' + deviceClass()">
-  <img src="/assets/icons/phone_empty.png" class="w-100 position-absolute" draggable="false"/>
+  <img src="/assets/icons/phone_empty.png"
+       class="w-100 position-absolute"
+       draggable="false"/>
   <div class="px-4 preview-content relative overflow-auto">
     <app-header></app-header>
     <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-      <p class="mb-0" [innerHTML]="sanitizeHTML(dataSource)"></p>
+      <p class="mb-0"
+         [innerHTML]="sanitizeHTML(dataSource)"></p>
     </ng-container>
   </div>
 </div>
 
 
 <ng-template #notAvailableTmpl>
-  <h3 class="text-light text-center d-flex align-items-center server-not-available-label">{{'plugins.splashscreen.error.error_messages.no_preview_available' | translate}}</h3>
+  <h3 class="text-light text-center d-flex align-items-center server-not-available-label">{{'plugins.splashscreen.error.error_messages.no_preview_available' |
+                                                                                          translate}}</h3>
 </ng-template>

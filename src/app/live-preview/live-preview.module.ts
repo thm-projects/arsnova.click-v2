@@ -1,15 +1,15 @@
-import {NgModule} from '@angular/core';
-import {LivePreviewComponent} from './live-preview/live-preview.component';
-import {SharedModule} from '../shared/shared.module';
-import {HeaderModule} from '../header/header.module';
+import { NgModule } from '@angular/core';
+import { HeaderModule } from '../header/header.module';
+import { SharedModule } from '../shared/shared.module';
+import { LivePreviewComponent } from './live-preview/live-preview.component';
 
 @NgModule({
   imports: [
     SharedModule,
-    HeaderModule
+    HeaderModule,
   ],
   declarations: [LivePreviewComponent],
-  exports: [LivePreviewComponent]
+  exports: [LivePreviewComponent],
 })
 export class LivePreviewModule {
 }

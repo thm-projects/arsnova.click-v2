@@ -1,15 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { createTranslateLoader } from '../../../lib/translation.factory';
+import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
+import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
 import { AdditionalDataComponent } from './additional-data.component';
-import {TrackingMockService} from '../../service/tracking.mock.service';
-import {ActiveQuestionGroupMockService} from '../../service/active-question-group.mock.service';
-import {TranslateCompiler, TranslateLoader, TranslateModule} from '@ngx-translate/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {createTranslateLoader} from '../../../lib/translation.factory';
-import {TranslateMessageFormatCompiler} from 'ngx-translate-messageformat-compiler';
-import {RouterTestingModule} from '@angular/router/testing';
-import {ActiveQuestionGroupService} from '../../service/active-question-group.service';
-import {TrackingService} from '../../service/tracking.service';
 
 describe('AdditionalDataComponent', () => {
   let component: AdditionalDataComponent;
@@ -20,25 +21,25 @@ describe('AdditionalDataComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientModule,
+        HttpClientTestingModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
-            deps: [HttpClient]
+            deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler
-          }
+            useClass: TranslateMessageFormatCompiler,
+          },
         }),
       ],
       providers: [
-        {provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService},
-        {provide: TrackingService, useClass: TrackingMockService}
+        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
+        { provide: TrackingService, useClass: TrackingMockService },
       ],
-      declarations: [ AdditionalDataComponent ]
-    })
-    .compileComponents();
+      declarations: [AdditionalDataComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -54,4 +55,12 @@ describe('AdditionalDataComponent', () => {
   it('should contain a TYPE definition', async(() => {
     expect(AdditionalDataComponent.TYPE).toEqual('AdditionalDataComponent');
   }));
+
+  it('#switchShowMoreOrLess', (inject([HttpClient, HttpTestingController],
+    (http: HttpClient, backend: HttpTestingController) => {
+      const baseState = window.innerWidth >= 768;
+      expect(component.isShowingMore).toEqual(baseState);
+      component.switchShowMoreOrLess();
+      expect(component.isShowingMore).toEqual(!baseState);
+    })));
 });
