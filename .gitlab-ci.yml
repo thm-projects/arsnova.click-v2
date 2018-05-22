@@ -20,6 +20,7 @@ test:
   tags:
     - nodejs
   script:
+    - npm install tslint
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
     - npm test
 
