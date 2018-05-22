@@ -1,36 +1,39 @@
 stages:
-  - install
   - test
   - build
   - deploy
 
-install:
-  stage: install
-  only:
-    - master
-  tags:
-    - nodejs
-  script:
-    - npm install
-
-test:
+tslint:
   stage: test
   only:
     - master
+    - fixPipeline
   tags:
     - nodejs
   script:
     - npm install tslint
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
+
+npmtest:
+  stage: test
+  only:
+    - master
+    - fixPipeline
+  tags:
+    - nodejs
+  script:
+    - npm install
     - npm test
 
 build:
   stage: build
   only:
     - master
+    - fixPipeline
   tags:
     - nodejs
   script:
+    - npm install
     - npm run build:SSR
   artifacts:
     paths:
@@ -40,6 +43,7 @@ deploy:
   stage: deploy
   only:
     - master
+    - fixPipeline
   tags:
     - ssh
   dependencies:
