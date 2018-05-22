@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -19,7 +19,7 @@ describe('MemberGroupManagerComponent', () => {
   let component: MemberGroupManagerComponent;
   let fixture: ComponentFixture<MemberGroupManagerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -48,13 +48,54 @@ describe('MemberGroupManagerComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     fixture = TestBed.createComponent(MemberGroupManagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should create', async(() => {
+  beforeEach(() => {
+    component.memberGroups.splice(0, component.memberGroups.length);
+    component.memberGroups.push('Default');
+  });
+
+  it('should create', (() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should contain a TYPE reference', (() => {
+    expect(MemberGroupManagerComponent.TYPE).toEqual('MemberGroupManagerComponent');
+  }));
+
+  describe('#addMemberGroup', () => {
+
+    it('should add a member group on valid input', (() => {
+      component.memberGroupName = 'testgroup';
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(2);
+    }));
+    it('should not add a member group on invalid input', (() => {
+      component.memberGroupName = '';
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(1);
+    }));
+    it('should not add an existing member group', (() => {
+      component.memberGroupName = 'testgroup';
+      component.addMemberGroup();
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(2);
+    }));
+  });
+
+  describe('#removeMemberGroup', () => {
+
+    it('should remove an existing member group', (() => {
+      component.removeMemberGroup('Default');
+      expect(component.memberGroups.length).toEqual(0);
+    }));
+    it('should not remove a not existing member group', (() => {
+      component.removeMemberGroup('notexisting');
+      expect(component.memberGroups.length).toEqual(1);
+    }));
+  });
 });

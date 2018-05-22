@@ -45,11 +45,15 @@ export class QuestiontypeComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  public isActiveQuestionType(type): boolean {
+  public isActiveQuestionType(type: string): boolean {
     return type === this._questionType;
   }
 
-  public morphToQuestionType(type): void {
+  public morphToQuestionType(type: string): void {
+    if (!questionReflection[type]) {
+      return;
+    }
+
     this._question = questionReflection[type](this._question.serialize());
     this._questionType = type;
     this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(this._questionIndex);

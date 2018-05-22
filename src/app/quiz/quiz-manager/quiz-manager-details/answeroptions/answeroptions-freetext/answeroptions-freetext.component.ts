@@ -33,9 +33,14 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
     return this._answer;
   }
 
+  private _testInput = '';
+
+  get testInput(): string {
+    return this._testInput;
+  }
+
   private _questionIndex: number;
   private _routerSubscription: Subscription;
-  private _testInput = '';
 
   constructor(
     private headerLabelService: HeaderLabelService,

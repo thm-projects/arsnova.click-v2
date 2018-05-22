@@ -77,7 +77,12 @@ export class QuizManagerComponent implements OnDestroy {
   }
 
   public addQuestion(id: string): void {
+    if (!questionReflection[id]) {
+      return;
+    }
+
     const question: IQuestion = questionReflection[id](DefaultSettings.defaultQuizSettings.question);
+
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
       label: `add-question`,
@@ -101,6 +106,10 @@ export class QuizManagerComponent implements OnDestroy {
   }
 
   public moveQuestionUp(id: number): void {
+    if (!id) {
+      return;
+    }
+
     const question = this.activeQuestionGroupService.activeQuestionGroup.questionList[id];
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
@@ -112,6 +121,10 @@ export class QuizManagerComponent implements OnDestroy {
   }
 
   public moveQuestionDown(id: number): void {
+    if (id === this.activeQuestionGroupService.activeQuestionGroup.questionList.length - 1) {
+      return;
+    }
+
     const question = this.activeQuestionGroupService.activeQuestionGroup.questionList[id];
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,

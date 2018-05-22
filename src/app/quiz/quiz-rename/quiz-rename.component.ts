@@ -15,9 +15,10 @@ export class QuizRenameComponent implements OnInit {
   public static TYPE = 'QuizRenameComponent';
 
   constructor(
-    public fileUploadService: FileUploadService,
-    private footerBarService: FooterBarService,
-    private router: Router) {
+    public readonly fileUploadService: FileUploadService,
+    private readonly footerBarService: FooterBarService,
+    private readonly router: Router,
+  ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizRenameComponent.TYPE;
     this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
@@ -25,10 +26,10 @@ export class QuizRenameComponent implements OnInit {
 
   public sendRecommendation(duplicateQuiz: IDuplicateQuiz, renameRecommendation: string): void {
     const reader = new FileReader();
-    const file: File = <File>this.fileUploadService.renameFilesQueue.getAll('uploadFiles[]').filter((uploadedFile) => {
+    const file: File = <File>this.fileUploadService.renameFilesQueue.getAll('uploadFiles[]').find((uploadedFile) => {
       return (<File>uploadedFile).name === duplicateQuiz.fileName;
-    })[0];
-    reader.addEventListener('load', () => {
+    });
+    reader.addEventListener<'load'>('load', () => {
       const jsonData = JSON.parse(reader.result);
       const quizData: IQuestionGroup = questionGroupReflection[jsonData.TYPE](jsonData);
       quizData.hashtag = renameRecommendation;

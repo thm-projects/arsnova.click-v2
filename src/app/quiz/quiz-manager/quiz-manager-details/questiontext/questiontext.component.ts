@@ -40,8 +40,8 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  public connector(event): void {
-    switch (event) {
+  public connector(markdownFeature: string): void {
+    switch (markdownFeature) {
       case 'boldMarkdownButton':
         this.wrapMarkdownSymbol('**');
         break;
@@ -73,11 +73,9 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
 
   }
 
-  public fireEvent(event): void {
+  public fireEvent(event: Event): void {
     this.computeQuestionTextInputHeight();
-    this.questionTextService.change(event.target.value);
-    this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText = event.target.value;
-    this.activeQuestionGroupService.persist();
+    this.questionTextService.change((<HTMLTextAreaElement>event.target).value);
   }
 
   public ngOnInit(): void {

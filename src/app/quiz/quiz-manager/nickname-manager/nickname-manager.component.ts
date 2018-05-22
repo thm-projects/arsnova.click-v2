@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IAvailableNicks } from 'arsnova-click-v2-types/src/common';
@@ -23,7 +23,9 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
 
   set availableNicks(value: IAvailableNicks) {
     this._availableNicks = value;
-    this._availableNicks.emojis = this._availableNicks.emojis.map(nick => this.sanitizeHTML(parseGithubFlavoredMarkdown(nick)));
+    if (this._availableNicks.emojis) {
+      this._availableNicks.emojis = this._availableNicks.emojis.map(nick => this.sanitizeHTML(parseGithubFlavoredMarkdown(nick)));
+    }
     this._availableNicksBackup = Object.assign({}, value);
   }
 
@@ -52,7 +54,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public filterForKeyword(event: Event): void {
-    const searchValue = (<HTMLInputElement>event.target).value;
+    const searchValue = (<HTMLInputElement>event.target).value.toString().toLowerCase();
 
     if (searchValue.length < this._previousSearchValue.length) {
       this._availableNicks = Object.assign({}, this._availableNicksBackup);
@@ -64,8 +66,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    Object.keys(this._availableNicks).forEach(category => {
-      this._availableNicks[category] = this._availableNicks[category].filter(baseNick => {
+    Object.keys(this.availableNicks).forEach(category => {
+      this.availableNicks[category] = this.availableNicks[category].filter(baseNick => {
         return baseNick.toString().toLowerCase().indexOf(searchValue) > -1;
       });
     });
@@ -75,12 +77,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  public parseAvailableNick(name: string): SafeHtml {
-    return name;
-  }
-
   public availableNickCategories(): Array<string> {
-    return Object.keys(this._availableNicks || {});
+    return Object.keys(this.availableNicks || {});
   }
 
   public toggleSelectedCategory(name: string): void {
@@ -88,62 +86,70 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._selectedCategory = this._selectedCategory === name ? '' : name;
+    this._selectedCategory = this.selectedCategory === name ? '' : name;
   }
 
   public selectNick(name: any): void {
-    if (this._selectedCategory === 'emojis') {
+    if (this.selectedCategory === 'emojis') {
       name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
     this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick(name.toString());
   }
 
   public hasSelectedNick(name: any): boolean {
-    if (this._selectedCategory === 'emojis') {
+    if (this.selectedCategory === 'emojis') {
       name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
     return this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.hasSelectedNick(name.toString());
   }
 
   public hasSelectedCategory(category?: string): boolean {
-    return category ? category === this._selectedCategory : !!this._selectedCategory;
+    return category ? category === this.selectedCategory : !!this.selectedCategory;
   }
 
   public hasSelectedAllNicks(): boolean {
     const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
-    const filteredNicksLength = this._availableNicks[this._selectedCategory].filter(elem => {
-      if (this._selectedCategory === 'emojis') {
+    const filteredNicksLength = this.availableNicks[this.selectedCategory].filter(elem => {
+      if (this.selectedCategory === 'emojis') {
         const emojiMatch = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g);
         return selectedNicks.indexOf(emojiMatch ? emojiMatch[0] : null) > -1;
       } else {
         return selectedNicks.indexOf(elem) > -1;
       }
     }).length;
-    return filteredNicksLength === this._availableNicks[this._selectedCategory].length;
+    return filteredNicksLength === this.availableNicks[this.selectedCategory].length;
   }
 
   public getNumberOfSelectedNicksOfCategory(category: string): number {
+    if (!this.availableNicks[category]) {
+      return 0;
+    }
+
     const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
-    return this._availableNicks[category].filter(elem => {
+    return this.availableNicks[category].filter(elem => {
       return selectedNicks.indexOf(elem) > -1;
     }).length;
   }
 
   public getNumberOfAvailableNicksForCategory(category: string): number {
-    return this._availableNicks[category].length;
+    if (!this.availableNicks[category]) {
+      return 0;
+    }
+
+    return this.availableNicks[category].length;
   }
 
   public toggleAllNicks(): void {
     if (this.hasSelectedAllNicks()) {
-      this._availableNicks[this._selectedCategory].forEach(elem => {
-        if (this._selectedCategory === 'emojis') {
+      this.availableNicks[this.selectedCategory].forEach(elem => {
+        if (this.selectedCategory === 'emojis') {
           elem = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
         }
         this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.removeSelectedNickByName(elem.toString());
       });
     } else {
-      this._availableNicks[this._selectedCategory].forEach(elem => {
-        if (this._selectedCategory === 'emojis') {
+      this.availableNicks[this.selectedCategory].forEach(elem => {
+        if (this.selectedCategory === 'emojis') {
           elem = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
         }
         this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.addSelectedNick(elem.toString());
@@ -152,11 +158,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-    headers.append('Accept', 'application/json');
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/nicks/predefined`, { headers }).subscribe(
-      (data: IAvailableNicks) => {
+    this.http.get<IAvailableNicks>(`${DefaultSettings.httpApiEndpoint}/nicks/predefined`).subscribe(
+      data => {
         this.availableNicks = data;
       },
       error => {

@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -34,7 +34,7 @@ describe('QuizManagerDetailsOverviewComponent', () => {
   let component: QuizManagerDetailsOverviewComponent;
   let fixture: ComponentFixture<QuizManagerDetailsOverviewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -66,13 +66,25 @@ describe('QuizManagerDetailsOverviewComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     fixture = TestBed.createComponent(QuizManagerDetailsOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', (() => {
     expect(component).toBeTruthy();
   }));
+  it('should contain a TYPE reference', (() => {
+    expect(QuizManagerDetailsOverviewComponent.TYPE).toEqual('QuizManagerDetailsOverviewComponent');
+  }));
+
+  describe('#trackDetailsTarget', () => {
+    it('should track the details destination on click', inject(
+      [TrackingService], (trackingService: TrackingService) => {
+        spyOn(trackingService, 'trackClickEvent').and.callThrough();
+        component.trackDetailsTarget('question-text');
+        expect(trackingService.trackClickEvent).toHaveBeenCalled();
+      }));
+  });
 });

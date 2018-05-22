@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -39,7 +39,7 @@ describe('QuestiontextComponent', () => {
   let component: QuestiontextComponent;
   let fixture: ComponentFixture<QuestiontextComponent>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -78,13 +78,29 @@ describe('QuestiontextComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     fixture = TestBed.createComponent(QuestiontextComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', (() => {
     expect(component).toBeTruthy();
   }));
+  it('should contain a TYPE reference', (() => {
+    expect(QuestiontextComponent.TYPE).toEqual('QuestiontextComponent');
+  }));
+
+  describe('#connector', () => {
+    it('should call the markdown interpreter if a markdown button is pressed', () => {
+      expect(() => component.connector('boldMarkdownButton')).not.toThrowError();
+    });
+  });
+
+  describe('#fireEvent', () => {
+    it('should update the height of the textarea and parse the input on keypress', () => {
+      const event = <any>{ target: { value: 'testValue' } };
+      expect(() => component.fireEvent(event)).not.toThrowError();
+    });
+  });
 });

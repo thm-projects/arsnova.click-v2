@@ -61,7 +61,7 @@ export class MemberGroupManagerComponent implements OnDestroy {
   }
 
   public addMemberGroup(): void {
-    if (this.memberGroups.indexOf(this.memberGroupName) > -1 || !this.memberGroupName.length) {
+    if (!this.memberGroupName.length || this.memberGroups.find(group => group === this.memberGroupName)) {
       return;
     }
 
@@ -70,7 +70,11 @@ export class MemberGroupManagerComponent implements OnDestroy {
   }
 
   public removeMemberGroup(groupName: string): void {
-    this.memberGroups.splice(this.memberGroups.indexOf(groupName), 1);
+    if (!this.memberGroups.find(group => group === groupName)) {
+      return;
+    }
+
+    this.memberGroups.splice(this.memberGroups.findIndex(group => group === groupName), 1);
   }
 
 }

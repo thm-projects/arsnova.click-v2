@@ -40,7 +40,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private connectionService: ConnectionService,
-    private currentQuiz: CurrentQuizService,
+    private currentQuizService: CurrentQuizService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
@@ -59,7 +59,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     name = name.toString();
     const promise = new Promise((resolve, reject) => {
       this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
-        quizName: this.currentQuiz.quiz.hashtag,
+        quizName: this.currentQuizService.quiz.hashtag,
         nickname: name,
         groupName: window.sessionStorage.getItem('config.memberGroup'),
         ticket: this.userService.ticket,
@@ -71,7 +71,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
             });
           });
           window.sessionStorage.setItem('config.websocket_authorization', data.payload.webSocketAuthorization);
-          this.connectionService.authorizeWebSocket(this.currentQuiz.quiz.hashtag);
+          this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
           resolve();
         } else {
           reject();
@@ -102,7 +102,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       return;
     }
     this._isLoading = true;
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/member/${this.currentQuiz.quiz.hashtag}/available`).subscribe(
+    this.http.get(`${DefaultSettings.httpApiEndpoint}/member/${this.currentQuizService.quiz.hashtag}/available`).subscribe(
       (data: IMessage) => {
         this._isLoading = false;
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {

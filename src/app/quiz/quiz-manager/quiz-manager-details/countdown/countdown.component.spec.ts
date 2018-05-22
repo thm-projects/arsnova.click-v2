@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -32,7 +32,7 @@ describe('CountdownComponent', () => {
   let component: CountdownComponent;
   let fixture: ComponentFixture<CountdownComponent>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -63,13 +63,29 @@ describe('CountdownComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     fixture = TestBed.createComponent(CountdownComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', (() => {
     expect(component).toBeTruthy();
   }));
+  it('should contain a TYPE reference', (() => {
+    expect(CountdownComponent.TYPE).toEqual('CountdownComponent');
+  }));
+
+  describe('#updateCountdown', () => {
+    it('should update the countdown',
+      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+        const initValue = activeQuestionGroupService.activeQuestionGroup.questionList[0].timer;
+        const newValue = initValue + 10;
+
+        component.updateCountdown(newValue);
+
+        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].timer).toEqual(newValue);
+        expect(component.countdown).toEqual(newValue);
+      }));
+  });
 });

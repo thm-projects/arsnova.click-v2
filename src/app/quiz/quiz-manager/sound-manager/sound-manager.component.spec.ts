@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -21,7 +21,7 @@ describe('SoundManagerComponent', () => {
   let component: SoundManagerComponent;
   let fixture: ComponentFixture<SoundManagerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -53,13 +53,45 @@ describe('SoundManagerComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     fixture = TestBed.createComponent(SoundManagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', (() => {
     expect(component).toBeTruthy();
   }));
+  it('should contain a TYPE reference', (() => {
+    expect(SoundManagerComponent.TYPE).toEqual('SoundManagerComponent');
+  }));
+
+  describe('#selectSound', () => {
+    it('should select a given sound title', inject(
+      [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+        const value = 'Song1';
+        const event = <any>{ target: { value } };
+        component.selectSound('lobby', event);
+        expect(currentQuizService.quiz.sessionConfig.music.titleConfig.lobby).toEqual(value);
+      }));
+  });
+
+  describe('#setGlobalVolume', () => {
+    it('should set the global volume', inject(
+      [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+        const value = 10;
+        const event = <any>{ target: { value } };
+        component.setGlobalVolume(event);
+        expect(currentQuizService.quiz.sessionConfig.music.volumeConfig.global).toEqual(value);
+      }));
+  });
+
+  describe('#openTab', () => {
+    it('should open a config tab', inject(
+      [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+        const id = 'panel-lobby';
+        component.openTab(id);
+        expect(document.getElementById(id).classList).toContain('show');
+      }));
+  });
 });

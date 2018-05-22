@@ -92,4 +92,8 @@ describe('AnsweroptionsComponent', () => {
   it('should be created', async(() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should contain a TYPE reference', async(() => {
+    expect(AnsweroptionsComponent.TYPE).toEqual('AnsweroptionsComponent');
+  }));
 });

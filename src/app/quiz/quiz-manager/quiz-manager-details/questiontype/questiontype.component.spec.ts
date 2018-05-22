@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -72,4 +72,33 @@ describe('QuestiontypeComponent', () => {
   it('should be created', async(() => {
     expect(component).toBeTruthy();
   }));
+  it('should contain a TYPE reference', async(() => {
+    expect(QuestiontypeComponent.TYPE).toEqual('QuestiontypeComponent');
+  }));
+
+  describe('#isActiveQuestionType', () => {
+    it('should return true if the current question type matches the input', () => {
+      expect(component.isActiveQuestionType('SingleChoiceQuestion')).toBeTruthy();
+    });
+    it('should return false if the current question type does not match the input', () => {
+      expect(component.isActiveQuestionType('SurveyQuestion')).toBeFalsy();
+    });
+  });
+
+  describe('#morphToQuestionType', () => {
+    it('should convert the current question type to a new one', inject(
+      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+        const targetType = 'MultipleChoiceQuestion';
+        component.morphToQuestionType(targetType);
+        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).toEqual(targetType);
+      }));
+    it('should not convert the current question type if the passed type does not exist', inject(
+      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+        const targetType = 'NotExistingType';
+        const initType = activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE;
+        component.morphToQuestionType(targetType);
+        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).not.toEqual(targetType);
+        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).toEqual(initType);
+      }));
+  });
 });

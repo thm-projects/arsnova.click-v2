@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -22,7 +22,7 @@ class MockRouter {
   public params = {
     subscribe: (cb) => {
       cb({
-        questionIndex: 0,
+        questionIndex: 2,
       });
     },
   };
@@ -32,7 +32,7 @@ describe('AnsweroptionsRangedComponent', () => {
   let component: AnsweroptionsRangedComponent;
   let fixture: ComponentFixture<AnsweroptionsRangedComponent>;
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
@@ -63,13 +63,62 @@ describe('AnsweroptionsRangedComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach((() => {
     fixture = TestBed.createComponent(AnsweroptionsRangedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', (() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should contain a TYPE reference', (() => {
+    expect(AnsweroptionsRangedComponent.TYPE).toEqual('AnsweroptionsRangedComponent');
+  }));
+
+  describe('#updateMinRange', () => {
+    it('should replace the min range value with a given number', () => {
+      const value = 10;
+      const event = <any>{ target: { value } };
+      component.updateMinRange(event);
+      expect(component.minRange).toEqual(value);
+    });
+    it('should replace the min range value with a given string as number', () => {
+      const value = '10';
+      const event = <any>{ target: { value } };
+      component.updateMinRange(event);
+      expect(component.minRange).toEqual(parseInt(value, 10));
+    });
+  });
+
+  describe('#updateMaxRange', () => {
+    it('should replace the max range value with a given number', () => {
+      const value = 10;
+      const event = <any>{ target: { value } };
+      component.updateMaxRange(event);
+      expect(component.maxRange).toEqual(value);
+    });
+    it('should replace the max range value with a given string as number', () => {
+      const value = '10';
+      const event = <any>{ target: { value } };
+      component.updateMaxRange(event);
+      expect(component.maxRange).toEqual(parseInt(value, 10));
+    });
+  });
+
+  describe('#updateCorrectValue', () => {
+    it('should replace the correct value with a given number', () => {
+      const value = 10;
+      const event = <any>{ target: { value } };
+      component.updateCorrectValue(event);
+      expect(component.correctValue).toEqual(value);
+    });
+    it('should replace the correct value with a given string as number', () => {
+      const value = '10';
+      const event = <any>{ target: { value } };
+      component.updateCorrectValue(event);
+      expect(component.correctValue).toEqual(parseInt(value, 10));
+    });
+  });
 });

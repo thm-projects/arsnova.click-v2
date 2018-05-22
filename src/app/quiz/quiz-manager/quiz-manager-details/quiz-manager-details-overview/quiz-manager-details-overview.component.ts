@@ -60,10 +60,10 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public trackDetailsTarget(target: string): void {
+  public trackDetailsTarget(link: string): void {
     this.trackingService.trackClickEvent({
       action: QuizManagerDetailsOverviewComponent.TYPE,
-      label: target,
+      label: link,
     });
   }
 

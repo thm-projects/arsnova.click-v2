@@ -15,7 +15,7 @@ import { FooterBarService } from '../../../service/footer-bar/footer-bar.service
 export class MemberGroupSelectComponent implements OnInit {
   public static TYPE = 'MemberGroupSelectComponent';
 
-  private _memberGroups: Array<string> = this.currentQuiz.quiz.sessionConfig.nicks.memberGroups;
+  private _memberGroups: Array<string> = this.currentQuizService.quiz.sessionConfig.nicks.memberGroups;
 
   get memberGroups(): Array<string> {
     return this._memberGroups;
@@ -26,7 +26,7 @@ export class MemberGroupSelectComponent implements OnInit {
     private footerBarService: FooterBarService,
     private router: Router,
     private http: HttpClient,
-    private currentQuiz: CurrentQuizService,
+    private currentQuizService: CurrentQuizService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = MemberGroupSelectComponent.TYPE;
@@ -40,8 +40,8 @@ export class MemberGroupSelectComponent implements OnInit {
 
   public ngOnInit(): void {
 
-    if (this.currentQuiz.quiz.sessionConfig.nicks.autoJoinToGroup) {
-      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/${this.currentQuiz.quiz.hashtag}/freeGroup`).subscribe((data: IMessage) => {
+    if (this.currentQuizService.quiz.sessionConfig.nicks.autoJoinToGroup) {
+      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/${this.currentQuizService.quiz.hashtag}/freeGroup`).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_UPDATED') {
           this.addToGroup(data.payload.groupName);
         }

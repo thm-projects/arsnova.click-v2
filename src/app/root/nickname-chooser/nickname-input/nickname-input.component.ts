@@ -32,7 +32,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private userService: UserService,
-    private currentQuiz: CurrentQuizService,
+    private currentQuizService: CurrentQuizService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -52,7 +52,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
     const promise = new Promise((resolve, reject) => {
       this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
-        quizName: this.currentQuiz.quiz.hashtag,
+        quizName: this.currentQuizService.quiz.hashtag,
         nickname: nickname,
         groupName: window.sessionStorage.getItem('config.memberGroup'),
         ticket: this.userService.ticket,
@@ -62,7 +62,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
             memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
           });
           window.sessionStorage.setItem('config.websocket_authorization', data.payload.webSocketAuthorization);
-          this.connectionService.authorizeWebSocket(this.currentQuiz.quiz.hashtag);
+          this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
           resolve();
         } else {
           reject(data);

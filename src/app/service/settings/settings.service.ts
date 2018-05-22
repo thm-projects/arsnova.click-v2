@@ -16,7 +16,7 @@ export class SettingsService {
     private connectionService: ConnectionService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      this._serverSettings = <IServerSettings>(JSON.parse(window.localStorage.getItem('config.server_settings')));
+      this._serverSettings = <IServerSettings>(JSON.parse(window.sessionStorage.getItem('config.server_settings')));
     }
     if (!this._serverSettings) {
       this.initServerSettings();
@@ -33,7 +33,7 @@ export class SettingsService {
     }
 
     if (isPlatformBrowser(this.platformId)) {
-      window.localStorage.setItem('config.server_settings', JSON.stringify(this._serverSettings));
+      window.sessionStorage.setItem('config.server_settings', JSON.stringify(this._serverSettings));
     }
   }
 }

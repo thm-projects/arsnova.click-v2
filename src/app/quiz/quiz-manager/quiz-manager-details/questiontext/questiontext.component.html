@@ -5,6 +5,7 @@
        [attr.aria-label]="'plugins.markdown_bar.info_content' | translate">
     <app-markdown-bar (connectorEmitter)="connector($event)"></app-markdown-bar>
     <textarea class="question-text-box textarea center-vertical"
+              [title]="'component.questions.enter_question_here' | translate"
               [attr.aria-label]="'component.questions.enter_question_here' | translate"
               id="questionText"
               [placeholder]="'component.questions.enter_question_here' | translate"
