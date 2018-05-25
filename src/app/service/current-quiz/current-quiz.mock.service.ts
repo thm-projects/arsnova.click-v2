@@ -11,7 +11,7 @@ import { DefaultSettings } from '../../../lib/default.settings';
 export class CurrentQuizMockService {
 
   public quiz: IQuestionGroup;
-  public questionIndex: number = 0;
+  public questionIndex = 0;
 
   constructor(
     @Inject(PLATFORM_ID) private _platformId: Object,
