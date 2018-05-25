@@ -4,7 +4,6 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { DefaultSettings } from '../../../../lib/default.settings';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -81,12 +80,10 @@ describe('QuizThemeComponent', () => {
   it('#updateTheme', async(inject(
     [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
       const theme = 'theme-Material';
-      const updateQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/settings/update`;
 
       spyOn(currentQuizService, 'toggleSettingByName').and.callThrough();
 
       component.updateTheme(theme).subscribe(() => {
-        backend.expectOne(updateQuizUrl).flush({});
         expect(currentQuizService.quiz.sessionConfig.theme).toEqual(theme);
         expect(currentQuizService.toggleSettingByName).toHaveBeenCalled();
       });
