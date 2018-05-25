@@ -34,7 +34,7 @@ import { WebsocketService } from '../../service/websocket/websocket.service';
 
 import { HomeComponent } from './home.component';
 
-fdescribe('HomeComponent', () => {
+xdescribe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
   let backend: HttpTestingController;
@@ -123,7 +123,7 @@ fdescribe('HomeComponent', () => {
     }));
   });
 
-  fdescribe('#autoJoinToSession', () => {
+  describe('#autoJoinToSession', () => {
 
     it('should join the session by click', async(() => {
       spyOn(document.getElementById('joinSession'), 'click').and.callFake(() => {});
