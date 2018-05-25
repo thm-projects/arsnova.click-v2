@@ -73,9 +73,6 @@ export class ActiveQuestionGroupService {
       this.footerBarService.footerElemEnableCasLogin.isActive = this.activeQuestionGroup.sessionConfig.nicks.restrictToCasLogin;
       this.footerBarService.footerElemBlockRudeNicknames.isActive = this.activeQuestionGroup.sessionConfig.nicks.blockIllegalNicks;
 
-      if (window.localStorage.getItem('config.cache_assets') === 'true') {
-        this.footerBarService.footerElemSaveAssets.isActive = true;
-      }
       this.footerBarService.footerElemEnableCasLogin.onClickCallback = () => {
         const newState = !this.footerBarService.footerElemEnableCasLogin.isActive;
         this.footerBarService.footerElemEnableCasLogin.isActive = newState;
@@ -87,14 +84,6 @@ export class ActiveQuestionGroupService {
         this.footerBarService.footerElemBlockRudeNicknames.isActive = newState;
         this.activeQuestionGroup.sessionConfig.nicks.blockIllegalNicks = newState;
         this.persist();
-      };
-      this.footerBarService.footerElemSaveAssets.onClickCallback = () => {
-        const newState = !this.footerBarService.footerElemSaveAssets.isActive;
-        this.footerBarService.footerElemSaveAssets.isActive = newState;
-        this.settingsService.serverSettings.cacheQuizAssets = newState;
-        if (isPlatformBrowser(this.platformId)) {
-          window.localStorage.setItem('config.cache_assets', `${newState}`);
-        }
       };
     }
   }

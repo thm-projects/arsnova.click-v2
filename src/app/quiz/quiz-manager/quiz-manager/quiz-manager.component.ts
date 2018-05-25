@@ -51,7 +51,6 @@ export class QuizManagerComponent implements OnDestroy {
       this.footerBarService.footerElemStartQuiz,
       this.footerBarService.footerElemProductTour,
       this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemSaveAssets,
       this.footerBarService.footerElemMemberGroup,
     ]);
 

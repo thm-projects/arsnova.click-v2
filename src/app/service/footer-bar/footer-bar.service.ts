@@ -225,6 +225,10 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
   });
+
+  /*
+   * Currently unused since the server decides if it will cache the quiz contents
+   */
   public footerElemSaveAssets: IFooterBarElement = new FooterbarElement({
     id: 'saveAssets',
     iconClass: 'fas fa-cloud',
@@ -235,6 +239,7 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
   });
+
   public footerElemBlockRudeNicknames: IFooterBarElement = new FooterbarElement({
     id: 'blockRudeNicknames',
     iconClass: 'fas fa-lock',

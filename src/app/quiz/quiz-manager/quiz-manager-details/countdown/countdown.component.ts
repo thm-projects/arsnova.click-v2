@@ -73,7 +73,6 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
       this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemSaveAssets,
       this.footerBarService.footerElemProductTour,
     ]);
   }
