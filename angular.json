@@ -31,6 +31,7 @@
               "src/assets/i18n",
               "src/assets/icons",
               "src/assets/styles",
+              "src/assets/mathjax",
               "src/assets/serverEndpoint.json"
             ],
             "styles": [
@@ -96,6 +97,8 @@
               "src/assets/fonts",
               "src/assets/i18n",
               "src/assets/icons",
+              "src/assets/styles",
+              "src/assets/mathjax",
               "src/assets/serverEndpoint.json"
             ]
           }

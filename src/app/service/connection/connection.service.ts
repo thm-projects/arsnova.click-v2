@@ -56,6 +56,16 @@ export class ConnectionService {
     return this._mediumSpeed;
   }
 
+  private _pending = false;
+
+  get pending(): boolean {
+    return this._pending;
+  }
+
+  set pending(value: boolean) {
+    this._pending = value;
+  }
+
   private _isWebSocketAuthorized = false;
 
   constructor(
@@ -98,20 +108,24 @@ export class ConnectionService {
   }
 
   public initConnection(overrideCurrentState?: boolean): Promise<any> {
+    console.log('init connection');
     return new Promise(async (resolve) => {
-      if (this.serverAvailable && !overrideCurrentState) {
+      if ((this.pending || this.serverAvailable) && !overrideCurrentState) {
         resolve();
         return;
       }
+      this.pending = true;
       const data = await new Promise(resolve2 => {
         this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
           (httpData) => {
+            this.pending = false;
             this.serverAvailable = true;
             this._websocketAvailable = true;
-            setTimeout(this.calculateRTT.bind(this), 500);
+            setTimeout(this.calculateRTT.apply(this, [new Date().getTime()]), 500);
             resolve2(httpData);
           },
           () => {
+            this.pending = false;
             this.serverAvailable = false;
             this._websocketAvailable = false;
             resolve2();
@@ -122,12 +136,12 @@ export class ConnectionService {
     });
   }
 
-  public calculateRTT(): void {
-    const start_time = new Date().getTime();
-    this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
+  public calculateRTT(startTime = new Date().getTime()): void {
+    console.log('calculateRTT');
+    this.http.options(`${DefaultSettings.httpApiEndpoint}`).subscribe(
       () => {
         this.serverAvailable = true;
-        this._rtt = new Date().getTime() - start_time;
+        this._rtt = new Date().getTime() - startTime;
         this.calculateConnectionSpeedIndicator();
       },
       () => {

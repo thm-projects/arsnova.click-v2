@@ -11,12 +11,15 @@
     </button>
   </div>
   <div class="modal-body">
-    <ul>
-      <li *ngFor="let elem of sessions"
-          (click)="elem.isValid() ? startQuiz(elem) : editQuiz(elem)"
-          [class]="elem.isValid() ? 'success' : 'failed'"
-          [innerHTML]="elem.hashtag"></li>
-    </ul>
+    <div class="d-flex">
+      <div *ngFor="let elem of sessions"
+           class="text-light d-inline mr-2 px-4 py-2 rounded pointer available-quiz"
+           [class.bg-success]="elem.isValid()"
+           [class.bg-danger]="!elem.isValid()"
+           (click)="elem.isValid() ? startQuiz(elem) : editQuiz(elem)">
+        {{elem.hashtag}}
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button type="button"

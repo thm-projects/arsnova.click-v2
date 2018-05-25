@@ -88,7 +88,7 @@
     "bg-splashscreen-question-and-answer_answer-content-even-row": $light_primary_color,
     "border-splashscreen-question-and-answer_answer-content-even-row": white,
     "fg-splashscreen-question-and-answer_answer-content-even-row": white,
-    "splashscreen-show-hashtags-background-color": map-get($stdStyle, "splashscreen-background-color"),
+    "bg-modal-available-quizzes": map-get($stdStyle, "splashscreen-background-color"),
     "splashscreen-sound-config-background-color": map-get($stdStyle, "splashscreen-background-color"),
     "splashscreen-sound-config-button-background-color": map-get($stdStyle, "success"),
     "splashscreen-sound-config-select-foreground-color": $primary_text_color,

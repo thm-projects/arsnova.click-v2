@@ -22,13 +22,13 @@ import { TrackingService } from '../../../service/tracking/tracking.service';
 export class QuizManagerComponent implements OnDestroy {
   public static TYPE = 'QuizManagerComponent';
 
+  public readonly questionGroupItem: IQuestionGroup;
+
   private _selectableQuestionTypes = availableQuestionTypes;
 
   get selectableQuestionTypes(): Array<IAvailableQuestionType> {
     return this._selectableQuestionTypes;
   }
-
-  private readonly questionGroupItem: IQuestionGroup;
 
   constructor(
     private footerBarService: FooterBarService,

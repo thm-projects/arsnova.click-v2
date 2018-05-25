@@ -1,163 +1,162 @@
 @import "../../variables";
 
+@mixin transitionEffect($transition-color) {
+  background-color: $transition-color;
+  transition: background-color 800ms linear;
+}
+
+@mixin introjs($map) {
+  .introjs-helperLayer {
+    background-color: map-get($map, "bg-introjs-helper_layer");
+  }
+  .introjs-tooltip {
+    background-color: map-get($map, "bg-introjs-tooltip");
+    .introjs-tooltiptext {
+      background-color: map-get($map, "bg-introjs-tooltiptext");
+      color: map-get($map, "fg-introjs-tooltiptext");
+      border: map-get($map, "border-introjs-tooltiptext");
+    }
+    .introjs-bullets {
+      a {
+        background-color: map-get($map, "bg-introjs-bullets");
+        &.active {
+          background-color: map-get($map, "bg-introjs-bullets-active");
+        }
+      }
+    }
+    .introjs-progress {
+      background-color: map-get($map, "bg-introjs-progress-empty");
+      .introjs-progressbar {
+        background-color: map-get($map, "bg-introjs-progress-full");
+      }
+    }
+    .introjs-arrow {
+      &.top {
+        border-bottom-color: map-get($map, "bg-introjs-arrow-top");
+      }
+      &.left {
+        border-right-color: map-get($map, "bg-introjs-arrow-left");
+      }
+      &.right {
+        border-left-color: map-get($map, "bg-introjs-arrow-right");
+      }
+      &.bottom {
+        border-top-color: map-get($map, "bg-introjs-arrow-bottom");
+      }
+    }
+    .introjs-tooltipbuttons {
+      .introjs-button {
+        background-color: map-get($map, "bg-introjs-button");
+        color: map-get($map, "fg-introjs-button");
+        box-shadow: map-get($map, "boxshadow-introjs-button");
+        border: map-get($map, "border-introjs-button");
+        &:hover {
+          background-color: map-get($map, "bg-introjs-button-hovered");
+          color: map-get($map, "fg-introjs-button-hovered");
+          box-shadow: map-get($map, "boxshadow-introjs-button-hovered");
+          border: map-get($map, "border-introjs-button-hovered");
+        }
+        &:focus,
+        &:active {
+          background-color: map-get($map, "bg-introjs-button-focus");
+          color: map-get($map, "fg-introjs-button-focus");
+          box-shadow: map-get($map, "boxshadow-introjs-button-focus");
+          border: map-get($map, "border-introjs-button-focus");
+        }
+        &.introjs-skipbutton {
+          background-color: map-get($map, "bg-introjs-button-skip");
+          color: map-get($map, "fg-introjs-button-skip");
+          box-shadow: map-get($map, "boxshadow-introjs-button-skip");
+          border: map-get($map, "border-introjs-button-skip");
+          &:hover {
+            background-color: map-get($map, "bg-introjs-button-skip-hovered");
+            color: map-get($map, "fg-introjs-button-skip-hovered");
+            box-shadow: map-get($map, "boxshadow-introjs-button-skip-hovered");
+            border: map-get($map, "border-introjs-button-skip-hovered");
+          }
+          &:focus,
+          &:active {
+            background-color: map-get($map, "bg-introjs-button-skip-focus");
+            color: map-get($map, "fg-introjs-button-skip-focus");
+            box-shadow: map-get($map, "boxshadow-introjs-button-skip-focus");
+            border: map-get($map, "border-introjs-button-skip-focus");
+          }
+        }
+        &.introjs-prevbutton {
+          background-color: map-get($map, "bg-introjs-button-prev");
+          color: map-get($map, "fg-introjs-button-prev");
+          box-shadow: map-get($map, "boxshadow-introjs-button-prev");
+          border: map-get($map, "border-introjs-button-prev");
+          &:hover {
+            background-color: map-get($map, "bg-introjs-button-prev-hovered");
+            color: map-get($map, "fg-introjs-button-prev-hovered");
+            box-shadow: map-get($map, "boxshadow-introjs-button-prev-hovered");
+            border: map-get($map, "border-introjs-button-prev-hovered");
+          }
+          &:focus,
+          &:active {
+            background-color: map-get($map, "bg-introjs-button-prev-focus");
+            color: map-get($map, "fg-introjs-button-prev-focus");
+            box-shadow: map-get($map, "boxshadow-introjs-button-prev-focus");
+            border: map-get($map, "border-introjs-button-prev-focus");
+          }
+        }
+        &.introjs-nextbutton {
+          background-color: map-get($map, "bg-introjs-button-next");
+          color: map-get($map, "fg-introjs-button-next");
+          box-shadow: map-get($map, "boxshadow-introjs-button-next");
+          border: map-get($map, "border-introjs-button-next");
+          &:hover {
+            background-color: map-get($map, "bg-introjs-button-next-hovered");
+            color: map-get($map, "fg-introjs-button-next-hovered");
+            box-shadow: map-get($map, "boxshadow-introjs-button-next-hovered");
+            border: map-get($map, "border-introjs-button-next-hovered");
+          }
+          &:focus,
+          &:active {
+            background-color: map-get($map, "bg-introjs-button-next-focus");
+            color: map-get($map, "fg-introjs-button-next-focus");
+            box-shadow: map-get($map, "boxshadow-introjs-button-next-focus");
+            border: map-get($map, "border-introjs-button-next-focus");
+          }
+        }
+      }
+    }
+  }
+}
+
 @each $theme, $map in $themes {
   html[data-theme=#{$theme}] {
-    background-color: map-get($map, "background-color");
-    -webkit-transition: background-color 800ms linear;
-    -moz-transition: background-color 800ms linear;
-    -o-transition: background-color 800ms linear;
-    transition: background-color 800ms linear;
+    @include transitionEffect(map-get($map, "background-color"));
+
     *:fullscreen,
     :-webkit-full-screen,
     *:-webkit-full-screen,
     *:-moz-full-screen,
     body {
-      background-color: map-get($map, "background-color");
-      -webkit-transition: background-color 800ms linear;
-      -moz-transition: background-color 800ms linear;
-      -o-transition: background-color 800ms linear;
-      transition: background-color 800ms linear;
+      @include transitionEffect(map-get($map, "background-color"));
     }
-    .introjs-helperLayer {
-      background-color: map-get($map, "bg-introjs-helper_layer");
-    }
-    .introjs-tooltip {
-      background-color: map-get($map, "bg-introjs-tooltip");
-      .introjs-tooltiptext {
-        background-color: map-get($map, "bg-introjs-tooltiptext");
-        color: map-get($map, "fg-introjs-tooltiptext");
-        border: map-get($map, "border-introjs-tooltiptext");
-      }
-      .introjs-bullets {
-        a {
-          background-color: map-get($map, "bg-introjs-bullets");
-          &.active {
-            background-color: map-get($map, "bg-introjs-bullets-active");
-          }
-        }
-      }
-      .introjs-progress {
-        background-color: map-get($map, "bg-introjs-progress-empty");
-        .introjs-progressbar {
-          background-color: map-get($map, "bg-introjs-progress-full");
-        }
-      }
-      .introjs-arrow {
-        &.top {
-          border-bottom-color: map-get($map, "bg-introjs-arrow-top");
-        }
-        &.left {
-          border-right-color: map-get($map, "bg-introjs-arrow-left");
-        }
-        &.right {
-          border-left-color: map-get($map, "bg-introjs-arrow-right");
-        }
-        &.bottom {
-          border-top-color: map-get($map, "bg-introjs-arrow-bottom");
-        }
-      }
-      .introjs-tooltipbuttons {
-        .introjs-button {
-          background-color: map-get($map, "bg-introjs-button");
-          color: map-get($map, "fg-introjs-button");
-          box-shadow: map-get($map, "boxshadow-introjs-button");
-          border: map-get($map, "border-introjs-button");
-          &:hover {
-            background-color: map-get($map, "bg-introjs-button-hovered");
-            color: map-get($map, "fg-introjs-button-hovered");
-            box-shadow: map-get($map, "boxshadow-introjs-button-hovered");
-            border: map-get($map, "border-introjs-button-hovered");
-          }
-          &:focus,
-          &:active {
-            background-color: map-get($map, "bg-introjs-button-focus");
-            color: map-get($map, "fg-introjs-button-focus");
-            box-shadow: map-get($map, "boxshadow-introjs-button-focus");
-            border: map-get($map, "border-introjs-button-focus");
-          }
-          &.introjs-skipbutton {
-            background-color: map-get($map, "bg-introjs-button-skip");
-            color: map-get($map, "fg-introjs-button-skip");
-            box-shadow: map-get($map, "boxshadow-introjs-button-skip");
-            border: map-get($map, "border-introjs-button-skip");
-            &:hover {
-              background-color: map-get($map, "bg-introjs-button-skip-hovered");
-              color: map-get($map, "fg-introjs-button-skip-hovered");
-              box-shadow: map-get($map, "boxshadow-introjs-button-skip-hovered");
-              border: map-get($map, "border-introjs-button-skip-hovered");
-            }
-            &:focus,
-            &:active {
-              background-color: map-get($map, "bg-introjs-button-skip-focus");
-              color: map-get($map, "fg-introjs-button-skip-focus");
-              box-shadow: map-get($map, "boxshadow-introjs-button-skip-focus");
-              border: map-get($map, "border-introjs-button-skip-focus");
-            }
-          }
-          &.introjs-prevbutton {
-            background-color: map-get($map, "bg-introjs-button-prev");
-            color: map-get($map, "fg-introjs-button-prev");
-            box-shadow: map-get($map, "boxshadow-introjs-button-prev");
-            border: map-get($map, "border-introjs-button-prev");
-            &:hover {
-              background-color: map-get($map, "bg-introjs-button-prev-hovered");
-              color: map-get($map, "fg-introjs-button-prev-hovered");
-              box-shadow: map-get($map, "boxshadow-introjs-button-prev-hovered");
-              border: map-get($map, "border-introjs-button-prev-hovered");
-            }
-            &:focus,
-            &:active {
-              background-color: map-get($map, "bg-introjs-button-prev-focus");
-              color: map-get($map, "fg-introjs-button-prev-focus");
-              box-shadow: map-get($map, "boxshadow-introjs-button-prev-focus");
-              border: map-get($map, "border-introjs-button-prev-focus");
-            }
-          }
-          &.introjs-nextbutton {
-            background-color: map-get($map, "bg-introjs-button-next");
-            color: map-get($map, "fg-introjs-button-next");
-            box-shadow: map-get($map, "boxshadow-introjs-button-next");
-            border: map-get($map, "border-introjs-button-next");
-            &:hover {
-              background-color: map-get($map, "bg-introjs-button-next-hovered");
-              color: map-get($map, "fg-introjs-button-next-hovered");
-              box-shadow: map-get($map, "boxshadow-introjs-button-next-hovered");
-              border: map-get($map, "border-introjs-button-next-hovered");
-            }
-            &:focus,
-            &:active {
-              background-color: map-get($map, "bg-introjs-button-next-focus");
-              color: map-get($map, "fg-introjs-button-next-focus");
-              box-shadow: map-get($map, "boxshadow-introjs-button-next-focus");
-              border: map-get($map, "border-introjs-button-next-focus");
-            }
-          }
-        }
-      }
-    }
+
+    @include introjs($map);
+
     .available-quizzes-modal {
-      background: map-get($map, "splashscreen-show-hashtags-background-color");
-      li {
-        background-color: map-get($map, "bg-js-my-hash");
-        color: map-get($map, "fg-js-my-hash");
+      background: map-get($map, "bg-modal-available-quizzes");
+
+      .available-quiz {
         &:hover {
-          background-color: map-get($map, "bg-js-my-hash-hovered");
+          &.bg-danger {
+            background-color: map-get($map, "bg-available-quiz-invalid-hovered") !important;
+          }
+          &.bg-success {
+            background-color: map-get($map, "bg-available-quiz-valid-hovered") !important;
+          }
         }
         &:active {
-          background-color: map-get($map, "bg-js-my-hash-active");
-        }
-        &.success {
-          color: map-get($map, "fg-js-my-hash-validQuestion");
-          background-color: map-get($map, "bg-js-my-hash-validQuestion");
-          &:hover {
-            background-color: map-get($map, "bg-js-my-hash-validQuestion-hovered");
+          &.bg-danger {
+            background-color: map-get($map, "bg-available-quiz-invalid-active") !important;
           }
-        }
-        &.failed {
-          color: map-get($map, "fg-js-my-hash-invalidQuestion");
-          background-color: map-get($map, "bg-js-my-hash-invalidQuestion");
-          &:hover {
-            background-color: map-get($map, "bg-js-my-hash-invalidQuestion-hovered");
+          &.bg-success {
+            background-color: map-get($map, "bg-available-quiz-valid-active") !important;
           }
         }
       }
@@ -206,17 +205,10 @@
       }
       .plain_view #topNav,
       .navbar-fixed-top {
-        background-color: map-get($map, "bg-nav-row");
-        -webkit-transition: background-color 800ms linear;
-        -moz-transition: background-color 800ms linear;
-        -o-transition: background-color 800ms linear;
-        transition: background-color 800ms linear;
+        @include transitionEffect(map-get($map, "bg-nav-row"));
         .nav-row {
+          @include transitionEffect(map-get($map, "bg-nav-row"));
           background-color: map-get($map, "bg-nav-row");
-          -webkit-transition: background-color 800ms linear;
-          -moz-transition: background-color 800ms linear;
-          -o-transition: background-color 800ms linear;
-          transition: background-color 800ms linear;
         }
       }
       *::-webkit-input-placeholder {
@@ -411,11 +403,7 @@
         }
       }
       .navbar-footer {
-        background-color: map-get($map, "bg-footer");
-        -webkit-transition: background-color 800ms linear;
-        -moz-transition: background-color 800ms linear;
-        -o-transition: background-color 800ms linear;
-        transition: background-color 800ms linear;
+        @include transitionEffect(map-get($map, "bg-footer"));
       }
       #footer-move-left,
       #footer-move-right {
@@ -479,7 +467,7 @@
         color: springgreen;
       }
       p.failed, span.failed {
-        color: red;
+        color: #7d000c;
       }
       .popover-title, .popover {
         background-color: map-get($map, "warning");
@@ -1196,6 +1184,7 @@
     }
     /* End of #theme-wrapper */
   }
+
   /* End of <body/> */
 }
 

@@ -7,25 +7,25 @@
     <h2 class="text-light mt-4 mt-lg-0"
         [innerHTML]="'component.quiz_manager.available_questions_title' | translate"></h2>
     <div class="overflow-auto available-questions-view-frame">
+
       <div class="btn-group flex-lg-column d-lg-flex"
            id="available_questions_wrapper"
            [attr.data-intro]="'component.quiz_manager.description.available_questions' | translate">
+
         <button *ngFor="let elem of selectableQuestionTypes"
                 (click)="addQuestion(elem.id)"
                 [id]="elem.id + '_draggable'"
                 [class]="'btn btn-info mr-2 mr-lg-0 px-lg-2 py-lg-2 mb-lg-2 rounded pointer questionElementWrapper d-flex justify-content-center justify-content-lg-start align-items-center questionType_' + elem.id"
-                [attr.data-intro]="elem.descriptionType | translate"
-                [innerHTML]="elem.translationName | translate">
+                [attr.data-intro]="elem.descriptionType | translate">
+          {{elem.translationName | translate}}
         </button>
       </div>
     </div>
   </div>
   <div class="col-12 col-lg-6">
-    <h2 class="text-light mt-4 mt-lg-0"
-        [innerHTML]="'component.quiz_manager.added_questions_title' | translate"></h2>
+    <h2 class="text-light mt-4 mt-lg-0">{{'component.quiz_manager.added_questions_title' | translate}}</h2>
     <h4 class="text-light"
-        *ngIf="!questionGroupItem.questionList.length"
-        [innerHTML]="'component.quiz_manager.no_added_questions' | translate"></h4>
+        *ngIf="!questionGroupItem.questionList.length">{{'component.quiz_manager.no_added_questions' | translate}}</h4>
     <div class="row">
       <div class="col-12">
         <ul id="added_questions_wrapper"
@@ -35,7 +35,8 @@
               [class]="'questionElementWrapper d-flex justify-content-center align-items-center px-2 py-2 mb-2 rounded questionType_' + i">
             <span [innerHTML]="elem.translationReferrer() | translate"></span>
             <span *ngIf="!elem.isValid()"
-                  class="text-warning ml-2">
+                  class="text-warning ml-2"
+                  [title]="'component.quiz_summary.question_failed' | translate">
               <i class="fas fa-exclamation-triangle"></i>
             </span>
             <span class="questionButtonOptions text-right">

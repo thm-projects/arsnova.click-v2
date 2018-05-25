@@ -70,7 +70,7 @@
            [class.text-danger]="!connectionService.serverAvailable"
            data-fa-transform="shrink-5"
            data-fa-mask="fas fa-square"></i>
-        <p class="mb-0 d-inline">
+        <p class="ml-2 mb-0 d-inline">
           <span>Server: </span>
           <span>{{'region.header.connection_status.server_status.' + (connectionService.serverAvailable ? 'available' : 'not_available') | translate}}</span>
         </p>
@@ -83,7 +83,7 @@
            [class.text-danger]="!connectionService.websocketAvailable"
            data-fa-transform="shrink-5"
            data-fa-mask="fas fa-square"></i>
-        <p class="mb-0 d-inline">
+        <p class="ml-2 mb-0 d-inline">
           <span>Websocket: </span>
           <span>{{'region.header.connection_status.websocket_status.' + (connectionService.websocketAvailable ? 'connected' : 'not_connected') | translate}}</span>
         </p>
@@ -96,7 +96,7 @@
            [class.text-danger]="!localStorageAvailable"
            data-fa-transform="shrink-5"
            data-fa-mask="fas fa-square"></i>
-        <p class="mb-0 d-inline">
+        <p class="ml-2 mb-0 d-inline">
           <span>LocalStorage: </span>
           <span>{{'region.header.connection_status.localStorage_status.' + (localStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
@@ -109,7 +109,7 @@
            [class.text-danger]="!sessionStorageAvailable"
            data-fa-transform="shrink-5"
            data-fa-mask="fas fa-square"></i>
-        <p class="mb-0 d-inline">
+        <p class="ml-2 mb-0 d-inline">
           <span>SessionStorage: </span>
           <span>{{'region.header.connection_status.sessionStorage_status.' + (sessionStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
         </p>
@@ -122,7 +122,7 @@
            [class.text-danger]="connectionService.rtt > 300 || !connectionService.serverAvailable"
            data-fa-transform="shrink-5"
            data-fa-mask="fas fa-square"></i>
-        <p class="mb-0 d-inline">
+        <p class="ml-2 mb-0 d-inline">
           <span>Round-Trip-Time: </span>
           <span>{{connectionService.serverAvailable ? (connectionService.rtt + 'ms') : ('region.header.connection_status.server_status.not_available' | translate)}}</span>
         </p>
