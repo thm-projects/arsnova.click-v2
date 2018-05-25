@@ -11,7 +11,7 @@ tslint:
   tags:
     - nodejs
   script:
-    - npm install tslint
+    - npm install tslint typescript
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
 npmtest:
