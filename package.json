@@ -9,7 +9,7 @@
   "description": "Version 2 of arsnova.click (Frontend WebApp)",
   "scripts": {
     "ng": "ng",
-    "start:SSR": "node dist/server",
+    "start:SSR": "cd dist && node server",
     "start:DEV": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check --aot",
     "build:DEV": "ng serve --host 0.0.0.0 --port 4200 --disable-host-check --aot --prod",
     "build:SSR": "npm run build:PROD && npm run purify && npm run build:SERVER && npm run webpack:SERVER",
@@ -59,7 +59,8 @@
     "ngx-translate-messageformat-compiler": "^4.1.1",
     "rxjs": "^6.1.0",
     "ts-loader": "^4.3.0",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "cors": "^2.8.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.6.3",
