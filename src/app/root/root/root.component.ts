@@ -4,7 +4,6 @@ import { AfterViewInit, Component, Inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as IntroJs from 'intro.js';
-import { DefaultSettings } from '../../../lib/default.settings';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -50,13 +49,6 @@ export class RootComponent implements AfterViewInit {
     private http: HttpClient,
   ) {
     (async () => {
-      const serverEndpointData: IServerTarget = await this.http.get<IServerTarget>('./assets/serverEndpoint.json').toPromise();
-
-      DefaultSettings.httpApiEndpoint = serverEndpointData.httpApiEndpoint;
-      DefaultSettings.httpLibEndpoint = serverEndpointData.httpLibEndpoint;
-      DefaultSettings.serverEndpoint = serverEndpointData.serverEndpoint;
-      DefaultSettings.wsApiEndpoint = serverEndpointData.wsApiEndpoint;
-
       this.themesService.updateCurrentlyUsedTheme();
     })();
   }
