@@ -46,7 +46,7 @@
   }
   @include media-breakpoint-up(md) {
     opacity: 0.95;
-    width: 20vw;
+    max-width: 20vw;
   }
 
   @include media-breakpoint-down(xs) {
