@@ -37,6 +37,7 @@ build:
   tags:
     - nodejs
   script:
+    - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
     - npm run build:SSR
   artifacts:
