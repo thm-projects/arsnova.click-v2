@@ -55,7 +55,8 @@ deploy:
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
-    - mkdir ~/.ssh && echo "$STAGING_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - mkdir ~/.ssh
+    - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
-    - scp -r dist/* "$STAGING_FRONTEND_SSH_URL"
+    - scp -r dist/* "$STAGING_FRONTEND_SCP_URL"
 
