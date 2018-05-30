@@ -5,9 +5,6 @@ stages:
 
 tslint:
   stage: test
-  only:
-    - master
-    - fixPipeline
   tags:
     - nodejs
   script:
@@ -16,9 +13,6 @@ tslint:
 
 npmtest:
   stage: test
-  only:
-    - master
-    - fixPipeline
   tags:
     - nodejs
   script:
@@ -33,7 +27,6 @@ build:
   stage: build
   only:
     - master
-    - fixPipeline
   tags:
     - nodejs
   script:
@@ -48,7 +41,6 @@ deploy:
   stage: deploy
   only:
     - master
-    - fixPipeline
   tags:
     - ssh
   dependencies:
