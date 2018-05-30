@@ -1,26 +1,26 @@
 stages:
-  - install
   - test
   - build
   - deploy
 
-install:
-  stage: install
-  only:
-    - master
-  tags:
-    - nodejs
-  script:
-    - npm install
-
-test:
+tslint:
   stage: test
-  only:
-    - master
   tags:
     - nodejs
   script:
+    - npm install tslint typescript
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
+
+npmtest:
+  stage: test
+  tags:
+    - nodejs
+  script:
+    - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+    - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+    - apt-get -y update
+    - apt-get -y install google-chrome-stable
+    - npm install
     - npm test
 
 build:
@@ -30,6 +30,8 @@ build:
   tags:
     - nodejs
   script:
+    - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
+    - npm install
     - npm run build:SSR
   artifacts:
     paths:
@@ -46,7 +48,8 @@ deploy:
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
-    - mkdir ~/.ssh && echo "$STAGING_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - mkdir ~/.ssh
+    - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
-    - scp -r dist/* "$STAGING_FRONTEND_SSH_URL"
+    - scp -r dist "$STAGING_FRONTEND_SCP_URL"
 
