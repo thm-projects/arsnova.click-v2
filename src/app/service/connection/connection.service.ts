@@ -108,7 +108,6 @@ export class ConnectionService {
   }
 
   public initConnection(overrideCurrentState?: boolean): Promise<any> {
-    console.log('init connection');
     return new Promise(async (resolve) => {
       if ((this.pending || this.serverAvailable) && !overrideCurrentState) {
         resolve();

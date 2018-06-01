@@ -72,7 +72,8 @@
            data-fa-mask="fas fa-square"></i>
         <p class="ml-2 mb-0 d-inline">
           <span>Server: </span>
-          <span>{{'region.header.connection_status.server_status.' + (connectionService.serverAvailable ? 'available' : 'not_available') | translate}}</span>
+          <span *ngIf="connectionService.serverAvailable">{{'region.header.connection_status.server_status.available' | translate}}</span>
+          <span *ngIf="!connectionService.serverAvailable">{{'region.header.connection_status.server_status.not_available' | translate}}</span>
         </p>
       </li>
       <li>
@@ -85,7 +86,8 @@
            data-fa-mask="fas fa-square"></i>
         <p class="ml-2 mb-0 d-inline">
           <span>Websocket: </span>
-          <span>{{'region.header.connection_status.websocket_status.' + (connectionService.websocketAvailable ? 'connected' : 'not_connected') | translate}}</span>
+          <span *ngIf="connectionService.websocketAvailable">{{'region.header.connection_status.websocket_status.connected' | translate}}</span>
+          <span *ngIf="!connectionService.websocketAvailable">{{'region.header.connection_status.websocket_status.not_connected' | translate}}</span>
         </p>
       </li>
       <li>
@@ -98,7 +100,8 @@
            data-fa-mask="fas fa-square"></i>
         <p class="ml-2 mb-0 d-inline">
           <span>LocalStorage: </span>
-          <span>{{'region.header.connection_status.localStorage_status.' + (localStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
+          <span *ngIf="localStorageAvailable">{{'region.header.connection_status.localStorage_status.writable' | translate}}</span>
+          <span *ngIf="!localStorageAvailable">{{'region.header.connection_status.localStorage_status.non_writable' | translate}}</span>
         </p>
       </li>
       <li>
@@ -111,7 +114,8 @@
            data-fa-mask="fas fa-square"></i>
         <p class="ml-2 mb-0 d-inline">
           <span>SessionStorage: </span>
-          <span>{{'region.header.connection_status.sessionStorage_status.' + (sessionStorageAvailable ? 'writable' : 'non_writable') | translate}}</span>
+          <span *ngIf="sessionStorageAvailable">{{'region.header.connection_status.sessionStorage_status.writable' | translate}}</span>
+          <span *ngIf="!sessionStorageAvailable">{{'region.header.connection_status.sessionStorage_status.non_writable' | translate}}</span>
         </p>
       </li>
       <li>
@@ -124,7 +128,8 @@
            data-fa-mask="fas fa-square"></i>
         <p class="ml-2 mb-0 d-inline">
           <span>Round-Trip-Time: </span>
-          <span>{{connectionService.serverAvailable ? (connectionService.rtt + 'ms') : ('region.header.connection_status.server_status.not_available' | translate)}}</span>
+          <span *ngIf="connectionService.serverAvailable">{{connectionService.rtt}} ms</span>
+          <span *ngIf="!connectionService.serverAvailable">{{'region.header.connection_status.server_status.not_available' | translate}}</span>
         </p>
       </li>
     </ul>

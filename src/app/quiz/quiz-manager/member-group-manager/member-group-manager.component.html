@@ -30,7 +30,8 @@
                  role="switch"
                  [(ngModel)]="autoJoinToGroup"
                  [title]="'component.answeroptions.is_correct' | translate">
-          {{('global.' + (autoJoinToGroup ? 'yes' : 'no')) | translate}}
+          <span *ngIf="autoJoinToGroup">{{'global.yes' | translate}}</span>
+          <span *ngIf="!autoJoinToGroup">{{'global.no' | translate}}</span>
         </label>
       </div>
     </div>

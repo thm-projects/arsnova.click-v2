@@ -17,8 +17,15 @@
             (click)="startQuiz()"
             class="btn btn-default pointer"
             [class.w-100]="currentQuizService.getVisibleQuestions().length">
-      <span
-        [innerHTML]="('component.liveResults.' + (currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ? currentQuizService.readingConfirmationRequested ? 'start_round' : 'show_question' : 'start_round')) | translate"></span>
+      <span *ngIf="currentQuizService.quiz.sessionConfig.readingConfirmationEnabled && currentQuizService.readingConfirmationRequested">
+        {{'component.liveResults.start_round' | translate}}
+      </span>
+      <span *ngIf="currentQuizService.quiz.sessionConfig.readingConfirmationEnabled && !currentQuizService.readingConfirmationRequested">
+        {{'component.liveResults.show_question' | translate}}
+      </span>
+      <span *ngIf="!currentQuizService.quiz.sessionConfig.readingConfirmationEnabled">
+        {{'component.liveResults.start_round' | translate}}
+      </span>
       <i class="fas fa-paper-plane"></i>
     </button>
     <button *ngIf="showStopCountdownButton()"

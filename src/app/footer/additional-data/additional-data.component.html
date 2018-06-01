@@ -22,10 +22,14 @@
         <h5 class="text-center">{{'component.quiz_summary.validation_question_group' | translate}}</h5>
         <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold"
            role="listitem">
-        <span [class.text-success]="questionGroupItem.isValid()"
-              [class.text-danger]="!questionGroupItem.isValid()">
-          {{('component.quiz_summary.question_group_' + (questionGroupItem.isValid() ? 'successful' : 'failed')) | translate}}
-        </span>
+          <span *ngIf="questionGroupItem.isValid()"
+                class="text-success">
+            {{'component.quiz_summary.question_group_successful' | translate}}
+          </span>
+          <span *ngIf="!questionGroupItem.isValid()"
+                class="text-danger">
+            {{'component.quiz_summary.question_group_failed' | translate}}
+          </span>
         </p>
       </div>
     </div>
@@ -49,7 +53,12 @@
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingRudeNicks' | translate}}</h5>
         <p class="mb-0"
            role="listitem">
-          <span>{{('global.' + questionGroupItem.sessionConfig.nicks.blockIllegalNicks) | translate}}</span>
+          <span *ngIf="questionGroupItem.sessionConfig.nicks.blockIllegalNicks">
+            {{'global.true' | translate}}
+          </span>
+          <span *ngIf="!questionGroupItem.sessionConfig.nicks.blockIllegalNicks">
+            {{'global.false' | translate}}
+          </span>
         </p>
       </div>
     </div>
@@ -62,7 +71,12 @@
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingToCAS' | translate}}</h5>
         <p class="mb-0"
            role="listitem">
-          <span>{{('global.' + questionGroupItem.sessionConfig.nicks.restrictToCasLogin) | translate}}</span>
+          <span *ngIf="questionGroupItem.sessionConfig.nicks.restrictToCasLogin">
+            {{'global.true' | translate}}
+          </span>
+          <span *ngIf="!questionGroupItem.sessionConfig.nicks.restrictToCasLogin">
+            {{'global.false' | translate}}
+          </span>
         </p>
       </div>
     </div>

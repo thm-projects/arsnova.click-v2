@@ -45,7 +45,8 @@
                        [checked]="elem.isCorrect"
                        (change)="elem.isCorrect = !elem.isCorrect"
                        [title]="'component.answeroptions.is_correct' | translate">
-                {{('component.answeroptions.' + (elem.isCorrect ? 'correct' : 'wrong')) | translate}}
+                <span *ngIf="elem.isCorrect">{{'component.answeroptions.correct'}}</span>
+                <span *ngIf="!elem.isCorrect">{{'component.answeroptions.wrong'}}</span>
               </label>
             </div>
           </div>
@@ -70,7 +71,8 @@
                      [checked]="question.displayAnswerText"
                      (change)="toggleShowAnswerContentOnButtons()"
                      [title]="'component.answeroptions.show_answer_content_on_buttons' | translate">
-              {{('component.answeroptions.free_text_question.' + (question.displayAnswerText ? 'onText' : 'offText')) | translate}}
+              <span *ngIf="question.displayAnswerText">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!question.displayAnswerText">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
           <div class="col-12 mb-2 d-flex answerOptionConfig"
@@ -90,7 +92,8 @@
                      [checked]="question.showOneAnswerPerRow"
                      (change)="toggleShowOneAnswerPerRow()"
                      [title]="'component.answeroptions.show_one_answer_per_row' | translate">
-              {{('component.answeroptions.free_text_question.' + (question.showOneAnswerPerRow ? 'onText' : 'offText')) | translate}}
+              <span *ngIf="question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
           <div *ngIf="question.TYPE === 'SurveyQuestion'"
@@ -111,7 +114,8 @@
                      [checked]="question.multipleSelectionEnabled"
                      (change)="toggleMultipleSelectionSurvey()"
                      [title]="'component.answeroptions.multiple_selection_survey' | translate">
-              {{('component.answeroptions.free_text_question.' + (question.multipleSelectionEnabled ? 'onText' : 'offText')) | translate}}
+              <span *ngIf="question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
         </div>

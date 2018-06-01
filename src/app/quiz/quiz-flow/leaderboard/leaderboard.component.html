@@ -1,11 +1,18 @@
 <div class="row">
   <h4 *ngIf="!leaderBoardCorrect.length"
-      class="col-12 mt-5 text-center text-light"
-      [innerHTML]="'component.leaderboard.no_attendee_correct' + (isGlobalRanking ? '_global' : '') | translate"></h4>
+      class="col-12 mt-5 text-center text-light">
+    <span *ngIf="isGlobalRanking">{{'component.leaderboard.no_attendee_correct_global' | translate}}</span>
+    <span *ngIf="!isGlobalRanking">{{'component.leaderboard.no_attendee_correct' | translate}}</span>
+  </h4>
 
   <h4 *ngIf="leaderBoardCorrect.length"
       class="col-12 text-light">
-    {{'component.leaderboard.title.' + (isGlobalRanking ? 'all_questions' : 'single_question') | translate:{QUESTION_ID: (questionIndex + 1)} }}
+    <span *ngIf="isGlobalRanking">
+      {{'component.leaderboard.title.all_questions' | translate }}
+    </span>
+    <span *ngIf="!isGlobalRanking">
+      {{'component.leaderboard.title.single_question' | translate:{QUESTION_ID: (questionIndex + 1)} }}
+    </span>
   </h4>
 
   <ng-container *ngIf="currentQuizService.quiz.sessionConfig.nicks.memberGroups.length > 1;else attendeeView">
@@ -28,7 +35,10 @@
 
   <div class="row">
     <h4 class="col-12 text-light">
-      {{'component.leaderboard.title.' + (isGlobalRanking ? 'all_questions_partially' : 'single_question_partially') | translate:{QUESTION_ID: (questionIndex + 1)} }}
+      <span *ngIf="isGlobalRanking">{{'component.leaderboard.title.all_questions_partially' | translate }}</span>
+      <span *ngIf="!isGlobalRanking">
+        {{'component.leaderboard.title.single_question_partially' | translate:{QUESTION_ID: (questionIndex + 1)} }}
+      </span>
     </h4>
 
     <div *ngFor="let attendee of leaderBoardPartiallyCorrect"

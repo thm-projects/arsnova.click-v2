@@ -140,9 +140,11 @@
       <div class="col-12">
         <div class="validation">
           <h4>
-            <span [innerHTML]="'component.quiz_summary.validation' | translate"></span>:&nbsp;
-            <span [class]="question.isValid() ? 'success' : 'failed'"
-                  [innerHTML]="('component.quiz_summary.question_' + (question.isValid() ? 'successful' : 'failed')) | translate"></span>
+            <span>{{'component.quiz_summary.validation' | translate}}:&nbsp;</span>
+            <span class="success"
+                  *ngIf="question.isValid()">{{'component.quiz_summary.question_successful' | translate}}</span>
+            <span class="failed"
+                  *ngIf="!question.isValid()">{{'component.quiz_summary.question_failed' | translate}}</span>
           </h4>
           <ul *ngIf="!question.isValid()"
               id="quizSummaryValidationErrors"
