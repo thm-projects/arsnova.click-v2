@@ -13,6 +13,10 @@ export class AdditionalDataComponent {
   public static TYPE = 'AdditionalDataComponent';
   public readonly questionGroupItem: IQuestionGroup;
 
+  get quizUrl(): string {
+    return this._quizUrl;
+  }
+
   private _isShowingMore: boolean = window.innerWidth >= 768;
 
   get isShowingMore(): boolean {
@@ -23,12 +27,15 @@ export class AdditionalDataComponent {
     this._isShowingMore = value;
   }
 
+  private readonly _quizUrl: string;
+
   constructor(
     @Inject(DOCUMENT) readonly document,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private trackingService: TrackingService,
   ) {
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
+    this._quizUrl = encodeURI(`${document.location.origin}/quiz/${this.questionGroupItem.hashtag}`);
   }
 
   public switchShowMoreOrLess(): void {

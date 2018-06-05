@@ -20,8 +20,19 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly'],
       fixWebpackSourcePaths: true
     },
+    customLaunchers: {
+      ChromeHeadless: {
+        base: 'Chrome',
+        flags: [
+          '--headless',
+          '--disable-gpu',
+          '--no-sandbox',
+          '--remote-debugging-port=9222',
+        ],
+      }
+    },
     mime: {
-      'text/x-typescript': ['ts','tsx']
+      'text/x-typescript': ['ts', 'tsx']
     },
     reporters: config.angularCli && config.angularCli.codeCoverage
       ? ['progress', 'coverage-istanbul']
@@ -30,7 +41,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers: ['ChromeHeadless'],
     singleRun: false
   });
 };
