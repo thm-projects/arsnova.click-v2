@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -85,12 +86,23 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
+    private sanitizer: DomSanitizer,
     private router: Router,
     private modalService: NgbModal,
     public headerLabelService: HeaderLabelService,
     public connectionService: ConnectionService,
     private trackingService: TrackingService,
   ) {
+  }
+
+  public generateConnectionQualityColor(): SafeStyle {
+    const colorCode = this.connectionService.lowSpeed ||
+                      !this.localStorageAvailable ||
+                      !this.sessionStorageAvailable ? 'var(--danger)' :
+                      this.connectionService.mediumSpeed ? 'var(--danger)' :
+                      !this.connectionService.serverAvailable ? 'var(--grey)' :
+                      'var(--success)';
+    return this.sanitizeStyle(colorCode);
   }
 
   public ngOnInit(): void {
@@ -118,5 +130,10 @@ export class HeaderComponent implements OnInit {
 
     this.modalService.open(content);
     this.connectionService.calculateRTT();
+  }
+
+  private sanitizeStyle(value: string): SafeStyle {
+    value = value.replace(/\s/g, '');
+    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
   }
 }

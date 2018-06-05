@@ -136,7 +136,6 @@ export class ConnectionService {
   }
 
   public calculateRTT(startTime = new Date().getTime()): void {
-    console.log('calculateRTT');
     this.http.options(`${DefaultSettings.httpApiEndpoint}`).subscribe(
       () => {
         this.serverAvailable = true;

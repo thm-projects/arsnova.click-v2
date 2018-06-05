@@ -25,13 +25,12 @@
     <svg id="connectionQualityImage"
            height="50px"
            width="50px"
-           [style.fill]="connectionService.lowSpeed || !localStorageAvailable || !sessionStorageAvailable ? 'red' : connectionService.mediumSpeed ? 'orange' : !connectionService.serverAvailable ? '#9e9e9e' : 'green'"
+           [style.fill]="generateConnectionQualityColor()"
            (click)="openConnectionQualityModal(connectionQualityModal)"
            viewBox="0 0 128 128"
            version="1.1"
            xml:space="preserve"
-           xmlns="http://www.w3.org/2000/svg"
-           >
+           xmlns="http://www.w3.org/2000/svg">
           <g>
               <g>
                   <path id="firstRow"     d="M73.143,79.904c-2.585-1.189-5.692-2.014-9.139-2.01c-3.446-0.004-6.553,0.82-9.137,2.01            c-2.609,1.201-4.702,2.736-6.365,4.236l8.505,8.506c0.894-0.744,1.919-1.426,3.031-1.912c1.199-0.52,2.473-0.836,3.965-0.84      c1.564,0.004,2.891,0.352,4.139,0.918c1.047,0.475,2.007,1.137,2.855,1.842l8.515-8.514c-0.008-0.008-0.016-0.016-0.023-0.021       C77.832,82.629,75.736,81.096,73.143,79.904z"></path>
