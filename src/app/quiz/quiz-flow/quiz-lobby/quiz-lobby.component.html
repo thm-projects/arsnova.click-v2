@@ -47,7 +47,7 @@
       <div *ngFor="let elem of attendeeService.getMembersOfGroup(group)"
            (click)="currentQuizService.isOwner ? openKickMemberModal(removeMemberModal, elem.name) : return"
            [class.pointer]="currentQuizService.isOwner"
-           class="d-inline-flex mw-100">
+           class="d-inline-flex mw-100 mr-3">
         <i [id]="elem.id"
            class="member-wrapper px-1 py-1 fas fa-user fa-2x"
            [class.own-nick]="attendeeService.isOwnNick(elem.name)"
