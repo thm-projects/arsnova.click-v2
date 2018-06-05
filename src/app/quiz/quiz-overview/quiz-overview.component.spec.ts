@@ -142,7 +142,7 @@ describe('QuizOverviewComponent', () => {
       window.localStorage.removeItem('validtestquiz');
     });
 
-    it('should start the quiz', async(inject(
+    xit('should start the quiz', async(inject(
       [CurrentQuizService, Router], (currentQuizService: CurrentQuizService, router: Router) => {
 
         const quizName = 'validtestquiz';

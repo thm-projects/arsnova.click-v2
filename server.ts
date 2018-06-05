@@ -26,8 +26,7 @@ const DIST_FOLDER = path.join(process.cwd());
 const JOBS_FOLDER = path.join(DIST_FOLDER, 'browser', 'assets', 'jobs');
 const corsOptions = require('./cors.config.ts');
 
-//const cache = { 'arsnova-click-v2-frontend': {} };
-const cache = {};
+const cache = { 'arsnova-click-v2-frontend': {} };
 const availableLangs = ['en', 'de', 'fr', 'es', 'it'];
 const projectGitLocation = {
   'arsnova-click-v2-frontend': path.join(DIST_FOLDER, 'browser'),
@@ -326,9 +325,11 @@ const buildImages = () => {
   instance.stdout.on('data', (data) => {
     console.log(`GenerateImages::all (stdout): ${data.toString().replace('\n', '')}`);
   });
-  instance.stderr.on('data', (data) => {
-    console.log(`GenerateImages::all (stderr): ${data.toString().replace('\n', '')}`);
-  });
+  /* Prevent error output -> 6.0.2 throws Node not found (Caused because SSR cannot access DOM nodes)
+   instance.stderr.on('data', (data) => {
+   console.log(`GenerateImages::all (stderr): ${data.toString().replace('\n', '')}`);
+   });
+   */
   instance.on('exit', () => {
     console.log(``);
     console.log(`GenerateImages::all (exit): Preview screenshots and logo derivates built successfully`);
