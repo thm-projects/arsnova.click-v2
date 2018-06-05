@@ -120,7 +120,9 @@ export class ConnectionService {
             this.pending = false;
             this.serverAvailable = true;
             this._websocketAvailable = true;
-            setTimeout(this.calculateRTT.apply(this, [new Date().getTime()]), 500);
+            setTimeout(() => {
+              this.calculateRTT(new Date().getTime());
+            }, 500);
             resolve2(httpData);
           },
           () => {

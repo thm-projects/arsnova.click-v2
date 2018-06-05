@@ -160,7 +160,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.themesService.updateCurrentlyUsedTheme();
+    this.themesService.updateCurrentlyUsedTheme().subscribe();
   }
 
   public ngOnDestroy(): void {
@@ -216,7 +216,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public parseQuiznameInput(event: any): void {
-    this.selectQuizByName(event.target.value.trim());
+    this.selectQuizByName(event.target.value.trim()).subscribe();
   }
 
   public setPassword(event: Event): void {
@@ -312,7 +312,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       window.localStorage.setItem('config.private_key', this.activeQuestionGroupService.generatePrivateKey());
     }
 
-    this.reserveQuiz(questionGroup, routingTarget);
+    this.reserveQuiz(questionGroup, routingTarget).subscribe();
   }
 
   private reserveQuiz(questionGroup, routingTarget): Observable<IMessage> {
@@ -522,7 +522,19 @@ export class HomeComponent implements OnInit, OnDestroy {
         return quizName.split(' ')[0] === this.enteredSessionName;
       });
       if (hasMatchedABCDQuiz.length) {
-        subscriber.complete();
+        const rawQuiz = JSON.parse(window.localStorage.getItem(hasMatchedABCDQuiz[0]));
+        const questionGroup = questionGroupReflection.DefaultQuestionGroup(rawQuiz);
+        const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+
+        answerList.forEach((character, index) => {
+          answerOptionList.push(new DefaultAnswerOption({ answerText: (String.fromCharCode(index + 65)) }));
+        });
+        this.enteredSessionName = questionGroup.hashtag;
+        const abcdQuestion = new ABCDSingleChoiceQuestion({
+          questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false,
+        });
+        questionGroup.questionList = [abcdQuestion];
+        subscriber.next(questionGroup);
         return;
       }
       const url = `${DefaultSettings.httpApiEndpoint}/quiz/generate/abcd/${language}/${answerList.length}`;

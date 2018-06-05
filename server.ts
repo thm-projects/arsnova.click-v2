@@ -4,14 +4,14 @@ import { ngExpressEngine } from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as bodyParser from 'body-parser';
-import { spawnSync } from 'child_process';
+import * as child_process from 'child_process';
 import * as compress from 'compression';
 import * as cors from 'cors';
 
 import * as express from 'express';
 import * as fs from 'fs';
 import * as path from 'path';
-import { join } from 'path';
+
 import 'reflect-metadata';
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
@@ -22,13 +22,15 @@ enableProdMode();
 // Express server
 const app = express();
 const PORT = process.env.PORT || 4000;
-const DIST_FOLDER = join(process.cwd(), 'dist');
+const DIST_FOLDER = path.join(process.cwd());
+const JOBS_FOLDER = path.join(DIST_FOLDER, 'browser', 'assets', 'jobs');
 const corsOptions = require('./cors.config.ts');
 
-const cache = { 'arsnova-click-v2-frontend': {} };
+//const cache = { 'arsnova-click-v2-frontend': {} };
+const cache = {};
 const availableLangs = ['en', 'de', 'fr', 'es', 'it'];
 const projectGitLocation = {
-  'arsnova-click-v2-frontend': path.join(__dirname, 'browser'),
+  'arsnova-click-v2-frontend': path.join(DIST_FOLDER, 'browser'),
 };
 const projectBaseLocation = {
   'arsnova-click-v2-frontend': path.join(projectGitLocation['arsnova-click-v2-frontend']),
@@ -186,7 +188,7 @@ const getUnusedKeys = (req) => {
 
 const getBranch = (req) => {
   const command = `git branch 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \\(.*\\)/\\1/"`;
-  const child = spawnSync('/bin/sh', [`-c`, command], { cwd: req.projectGitLocation });
+  const child = child_process.spawnSync('/bin/sh', [`-c`, command], { cwd: req.projectGitLocation });
   return child.stdout.toString().replace('\n', '');
 };
 
@@ -198,7 +200,7 @@ app.engine('html', ngExpressEngine({
 }));
 
 app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, 'browser'));
+app.set('views', path.join(DIST_FOLDER, 'browser'));
 
 // TODO: implement data requests securely
 app.get('/api/v1/plugin/i18nator/:project/langFile', async (req, res) => {
@@ -261,17 +263,14 @@ app.get('/api/*', (req, res) => {
 });
 
 // Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
+app.get('*.*', express.static(path.join(DIST_FOLDER, 'browser')));
 
 // All regular routes use the Universal engine
 app.get('*', (req, res) => {
   res.render('index', { req });
 });
 
-// Start up the Node server
-app.listen(PORT, () => {
-  console.log(`Node server listening on http://localhost:${PORT}`);
-
+const buildCache = () => {
   Object.keys(cache).forEach(projectName => {
     console.log(``);
     console.log(`------- Building cache for '${projectName}' -------`);
@@ -312,4 +311,34 @@ app.listen(PORT, () => {
   });
   console.log(``);
   console.log(`Cache built successfully`);
+};
+
+const buildImages = () => {
+  console.log(``);
+  console.log(`------- Building preview screenshots and logo derivates -------`);
+  const params = [
+    '--experimental-modules',
+    'GenerateImages.mjs',
+    '--command=all',
+    `--host=http://localhost:${PORT}`,
+  ];
+  const instance = child_process.spawn(`node`, params, { cwd: JOBS_FOLDER });
+  instance.stdout.on('data', (data) => {
+    console.log(`GenerateImages::all (stdout): ${data.toString().replace('\n', '')}`);
+  });
+  instance.stderr.on('data', (data) => {
+    console.log(`GenerateImages::all (stderr): ${data.toString().replace('\n', '')}`);
+  });
+  instance.on('exit', () => {
+    console.log(``);
+    console.log(`GenerateImages::all (exit): Preview screenshots and logo derivates built successfully`);
+  });
+};
+
+// Start up the Node server
+app.listen(PORT, () => {
+  console.log(`Node server listening on http://localhost:${PORT}`);
+
+  buildCache();
+  buildImages();
 });

@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { Observable, of } from 'rxjs/index';
+import { Observable, of, Subscription } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
@@ -64,7 +64,7 @@ export class QuizOverviewComponent {
     return questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized).isValid();
   }
 
-  public startQuiz(sessionName: string): Observable<any> {
+  public startQuiz(sessionName: string): Subscription {
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -91,7 +91,7 @@ export class QuizOverviewComponent {
 
         }, (data) => subscriber.error(data)),
       );
-    });
+    }).subscribe();
   }
 
   public editQuiz(session: string): void {

@@ -9,6 +9,7 @@ import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/quest
 import { DefaultQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_default';
 import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
@@ -149,7 +150,7 @@ describe('QuizOverviewComponent', () => {
         spyOn(currentQuizService, 'cacheQuiz').and.callThrough();
         spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.startQuiz(quizName).subscribe(() => {}, (data) => {throw new Error(data); }, () => {
+        of(component.startQuiz(quizName)).subscribe(() => {}, (data) => {throw new Error(data); }, () => {
 
           backend.expectOne(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizName}`).flush({
             status: 'STATUS:SUCCESSFUL',

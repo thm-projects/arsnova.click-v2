@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -133,6 +133,10 @@ export class HeaderComponent implements OnInit {
   }
 
   private sanitizeStyle(value: string): SafeStyle {
+    if (isPlatformServer(this.platformId)) {
+      return value;
+    }
+
     value = value.replace(/\s/g, '');
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
   }

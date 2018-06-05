@@ -17,7 +17,7 @@ export class GamificationAnimationComponent {
     if (value < this._gamification.length) {
       this._background = this._gamification[value].background;
       if (this._gamification[value].image) {
-        this._image = '/assets/icons/gamification/' + this._gamification[value].image;
+        this._image = '/assets/images/gamification/' + this._gamification[value].image;
       }
       if (!value) {
         setTimeout(() => {

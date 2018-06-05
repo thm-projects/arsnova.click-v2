@@ -29,10 +29,12 @@
             "assets": [
               "src/assets/fonts",
               "src/assets/i18n",
-              "src/assets/icons",
+              "src/assets/images",
               "src/assets/styles",
-              "src/assets/mathjax",
-              "src/assets/serverEndpoint.json"
+              "src/assets/jobs",
+              "src/assets/serverEndpoint.json",
+              "src/assets/imageDerivates.json",
+              "src/assets/themeData.json"
             ],
             "styles": [
               "src/test.scss",
@@ -96,10 +98,12 @@
             "assets": [
               "src/assets/fonts",
               "src/assets/i18n",
-              "src/assets/icons",
+              "src/assets/images",
               "src/assets/styles",
-              "src/assets/mathjax",
-              "src/assets/serverEndpoint.json"
+              "src/assets/jobs",
+              "src/assets/serverEndpoint.json",
+              "src/assets/imageDerivates.json",
+              "src/assets/themeData.json"
             ]
           }
         },

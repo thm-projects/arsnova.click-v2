@@ -89,18 +89,19 @@ export class ThemesService {
     }
 
     return new Observable<void>((subscriber) => {
-      (async () => {
-        this.http.get(`${DefaultSettings.httpLibEndpoint}/linkImages/${target}`).subscribe((data: Array<any>) => {
-          data.forEach(elem => {
-            const previousElement = document.getElementById(elem.id);
-            if (previousElement) {
-              this.replaceExistingNode(previousElement, elem);
-            } else {
-              this.addNewNode(elem);
-            }
-          });
+      this.http.get(`${DefaultSettings.httpLibEndpoint}/linkImages/${target}`).subscribe((data: Array<any>) => {
+        data.forEach((elem, index) => {
+          const previousElement = document.getElementById(elem.id);
+          if (previousElement) {
+            this.replaceExistingNode(previousElement, elem);
+          } else {
+            this.addNewNode(elem);
+          }
+          if (index === data.length) {
+            subscriber.next();
+          }
         });
-      })().then(() => subscriber.next());
+      });
     });
   }
 

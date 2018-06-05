@@ -1,6 +1,5 @@
 import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { DefaultSettings } from '../../lib/default.settings';
 import { ThemesService } from '../service/themes/themes.service';
 import { CategoryType, TrackingService } from '../service/tracking/tracking.service';
 
@@ -33,7 +32,7 @@ export class ThemesComponent implements OnDestroy {
   }
 
   public getThemePreviewUrl(id: string): string {
-    return `${DefaultSettings.httpApiEndpoint}/themes/${id}/${this.translateService.currentLang}`;
+    return `/assets/images/theme/${id}/preview_${this.translateService.currentLang}.jpeg`;
   }
 
   public change(id: string): void {
