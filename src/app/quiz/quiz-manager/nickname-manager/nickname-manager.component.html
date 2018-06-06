@@ -3,9 +3,10 @@
     <input type="text"
            class="rounded p-1 w-100 mb-3"
            [placeholder]="'component.nickname_categories.filter' | translate"
+           [title]="'component.nickname_categories.filter' | translate"
            (input)="filterForKeyword($event)"/>
   </div>
-  <div class="col-12 nickCategoryWrapper"
+  <div class="col-12 col-md-6 nickCategoryWrapper"
        [class.col-sm-4]="hasSelectedCategory()">
     <div class="row">
       <div *ngFor="let cat of availableNickCategories()"
@@ -24,18 +25,22 @@
     </div>
   </div>
   <div *ngIf="hasSelectedCategory()"
-       class="col-12 col-sm-8 nickNameWrapper pt-2 mt-2 mt-sm-0">
-    <button [innerHTML]="('component.nickname_categories.' + (hasSelectedAllNicks() ? 'remove' : 'choose') + '_all') | translate"
-            class="btn btn-block pointer"
-            [class.btn-warning]="hasSelectedAllNicks()"
-            [class.btn-success]="!hasSelectedAllNicks()"
-            (click)="toggleAllNicks()"></button>
-    <div *ngFor="let nick of availableNicks[selectedCategory]"
-         (click)="selectNick(nick)"
-         class="nickStyle nickName pointer"
-         [class.selectedNickName]="hasSelectedNick(nick)">
+       class="col-12 col-md-8">
+    <div class="nickNameWrapper pt-2 mt-2 mt-sm-0">
+      <button class="btn btn-block pointer"
+              [class.btn-warning]="hasSelectedAllNicks()"
+              [class.btn-success]="!hasSelectedAllNicks()"
+              (click)="toggleAllNicks()">
+        <span *ngIf="hasSelectedAllNicks()">{{'component.nickname_categories.remove_all' | translate}}</span>
+        <span *ngIf="!hasSelectedAllNicks()">{{'component.nickname_categories.choose_all' | translate}}</span>
+      </button>
+      <div *ngFor="let nick of availableNicks[selectedCategory]"
+           (click)="selectNick(nick)"
+           class="nickStyle nickName pointer"
+           [class.selectedNickName]="hasSelectedNick(nick)">
       <span [innerHTML]="parseAvailableNick(nick)"
             class="nickName d-inline-block pb-1"></span>
+      </div>
     </div>
   </div>
 </div>
