@@ -8,7 +8,7 @@
            [attr.data-intro]="'component.quiz_summary.description.header' | translate"
            [attr.aria-label]="'component.quiz_summary.description.header' | translate">
         <h5 class="text-center">{{'component.quiz_summary.quiz_name' | translate}}</h5>
-        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold"
+        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold text-center"
            role="listitem">
           <span>{{questionGroupItem.hashtag}}</span>
         </p>
@@ -20,7 +20,7 @@
            [attr.data-intro]="'component.quiz_summary.description.question_group_validation' | translate"
            [attr.aria-label]="'component.quiz_summary.description.question_group_validation' | translate">
         <h5 class="text-center">{{'component.quiz_summary.validation_question_group' | translate}}</h5>
-        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold"
+        <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold text-center"
            role="listitem">
           <span *ngIf="questionGroupItem.isValid()"
                 class="text-success">
@@ -50,14 +50,14 @@
     <div *ngIf="questionGroupItem.sessionConfig.nicks.selectedNicks.length === 0 && isShowingMore"
          class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
       <div class="element-wrapper bg-white px-2 py-2 mb-2 h-100">
-        <h5 class="text-center">{{'component.quiz_summary.isRestrictingRudeNicks' | translate}}</h5>
-        <p class="mb-0"
+        <h5 class="text-center text-hyphen">{{'component.quiz_summary.isRestrictingRudeNicks' | translate}}</h5>
+        <p class="mb-0 text-center"
            role="listitem">
           <span *ngIf="questionGroupItem.sessionConfig.nicks.blockIllegalNicks">
-            {{'global.true' | translate}}
+            {{'global.yes' | translate}}
           </span>
           <span *ngIf="!questionGroupItem.sessionConfig.nicks.blockIllegalNicks">
-            {{'global.false' | translate}}
+            {{'global.no' | translate}}
           </span>
         </p>
       </div>
@@ -69,13 +69,13 @@
            [attr.data-intro]="'component.quiz_summary.description.restrict_to_cas' | translate"
            [attr.aria-label]="'component.quiz_summary.description.restrict_to_cas' | translate">
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingToCAS' | translate}}</h5>
-        <p class="mb-0"
+        <p class="mb-0 text-center text-hyphen"
            role="listitem">
           <span *ngIf="questionGroupItem.sessionConfig.nicks.restrictToCasLogin">
-            {{'global.true' | translate}}
+            {{'global.yes' | translate}}
           </span>
           <span *ngIf="!questionGroupItem.sessionConfig.nicks.restrictToCasLogin">
-            {{'global.false' | translate}}
+            {{'global.no' | translate}}
           </span>
         </p>
       </div>
@@ -90,13 +90,12 @@
         <h5 class="text-center">{{'component.quiz_summary.selected_nicks' | translate}}</h5>
 
         <p class="mb-0">
-          <span>{{'component.quiz_summary.selected_nicks' | translate}}&#58;&nbsp;</span>
-
           <span *ngIf="!questionGroupItem.sessionConfig.nicks.selectedNicks.length">
             {{'component.quiz_summary.no_selected_nicks' | translate}}
           </span>
 
           <span *ngIf="questionGroupItem.sessionConfig.nicks.selectedNicks.length">
+            {{'component.quiz_summary.selected_nicks' | translate}}&#58;&nbsp;
             {{questionGroupItem.sessionConfig.nicks.selectedNicks.length}}
           </span>
         </p>
