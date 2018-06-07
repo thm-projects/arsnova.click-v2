@@ -118,8 +118,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     });
     const hasConfidenceSet = typeof this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled !== 'undefined';
     const isConfidenceEnabled = typeof hasConfidenceSet ?
-      this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled :
-      false;
+                                this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled :
+                                false;
     return hasConfidenceSet ? matches.length > 0 || isConfidenceEnabled : matches.length > 0;
   }
 
@@ -154,7 +154,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
     }).length;
     const isReadingConfirmationEnabled = typeof this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled === 'undefined' ?
-      false : this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled;
+                                         false : this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled;
     return matchCount > 0 || isReadingConfirmationEnabled;
   }
 
@@ -232,7 +232,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.footerBarService.footerElemConfidenceSlider,
           this.footerBarService.footerElemResponseProgress,
           this.footerBarService.footerElemFullscreen,
-          this.footerBarService.footerElemSound,
         ];
       }
       this.footerBarService.footerElemBack.onClickCallback = async () => {
@@ -275,8 +274,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.attendeeService.modifyResponse(data.payload.nickname);
           if (this.attendeeService.attendees.filter(attendee => {
             return attendee.responses[this.currentQuizService.questionIndex] ?
-              attendee.responses[this.currentQuizService.questionIndex].value :
-              false;
+                   attendee.responses[this.currentQuizService.questionIndex].value :
+                   false;
           }).length === this.attendeeService.attendees.length && this.countdown) {
             this.countdown.stop();
           }
@@ -321,8 +320,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private async startQuiz(): Promise<void> {
     const target = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled &&
-    !this.currentQuizService.readingConfirmationRequested ?
-      'reading-confirmation' : 'start';
+                   !this.currentQuizService.readingConfirmationRequested ?
+                   'reading-confirmation' : 'start';
 
     const startQuizData = await this.http.post<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
       quizName: this.currentQuizService.quiz.hashtag,

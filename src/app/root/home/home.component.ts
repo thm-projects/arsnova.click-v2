@@ -169,7 +169,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  public autoJoinToSession(quizname): Observable<any> {
+  public autoJoinToSession(quizname): Subscription {
     return new Observable<void>(subscriber => {
       of(this.selectQuizByList(quizname)).subscribe(() => subscriber.complete());
 
@@ -185,7 +185,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
         document.getElementById('joinSession').click();
       }, 10);
-    });
+    }).subscribe();
   }
 
   public showQuiznameDatalist(): void {

@@ -30,24 +30,15 @@ export class QuizJoinComponent implements OnInit {
   ) {
   }
 
-  public ngOnInit(): Observable<void> {
-    return new Observable(subscriber => {
-        (async () => {
+  public ngOnInit(): void {
+    this.route.queryParams.subscribe(queryParams => {
+      this.casService.ticket = queryParams.ticket;
+    });
 
-          const queryParams = await this.route.queryParams.toPromise();
-          if (queryParams && queryParams.ticket) {
-            this.casService.ticket = queryParams.ticket;
-          }
-
-          const params = await this.route.params.toPromise();
-          const quizname = params.quizName;
-
-          this.queryQuizStatus(quizname).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData, quizname));
-
-          return;
-        })().then(() => subscriber.next());
-      },
-    );
+    this.route.params.subscribe(params => {
+      const quizname = params.quizName;
+      this.queryQuizStatus(quizname).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData, quizname));
+    });
   }
 
   private queryQuizStatus(quizname): Observable<IMessage> {

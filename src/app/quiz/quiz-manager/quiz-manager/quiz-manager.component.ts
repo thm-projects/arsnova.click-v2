@@ -52,6 +52,7 @@ export class QuizManagerComponent implements OnDestroy {
       this.footerBarService.footerElemProductTour,
       this.footerBarService.footerElemNicknames,
       this.footerBarService.footerElemMemberGroup,
+      this.footerBarService.footerElemSound,
     ]);
 
     this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();

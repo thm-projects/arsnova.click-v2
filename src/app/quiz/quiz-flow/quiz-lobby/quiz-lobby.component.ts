@@ -136,7 +136,6 @@ export class QuizLobbyComponent implements OnDestroy {
       this.footerBarService.footerElemEditQuiz,
       this.footerBarService.footerElemStartQuiz,
       this.footerBarService.footerElemProductTour,
-      this.footerBarService.footerElemSound,
       this.footerBarService.footerElemReadingConfirmation,
       this.footerBarService.footerElemTheme,
       this.footerBarService.footerElemFullscreen,
@@ -156,7 +155,7 @@ export class QuizLobbyComponent implements OnDestroy {
         return;
       }
       const target = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ?
-        'reading-confirmation' : 'start';
+                     'reading-confirmation' : 'start';
       this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
         quizName: this.currentQuizService.quiz.hashtag,
       }).subscribe((data: IMessage) => {

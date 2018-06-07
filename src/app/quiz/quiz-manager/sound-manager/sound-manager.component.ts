@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ISong } from 'arsnova-click-v2-types/src/common';
 import { IMusicSessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 import { DefaultSettings } from '../../../../lib/default.settings';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 
 @Component({
@@ -44,7 +44,7 @@ export class SoundManagerComponent implements OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
-    private currentQuizService: CurrentQuizService,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = SoundManagerComponent.TYPE;
@@ -52,7 +52,7 @@ export class SoundManagerComponent implements OnDestroy {
       this.footerBarService.footerElemBack,
     ]);
 
-    this._config = this.currentQuizService.quiz.sessionConfig.music;
+    this._config = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.music;
 
     this.setRandomKey();
     this.setLobbySongs();
@@ -82,8 +82,8 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.currentQuizService.quiz.sessionConfig.music = this._config;
-    this.currentQuizService.persistToSessionStorage();
+    this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.music = this._config;
+    this.activeQuestionGroupService.persist();
   }
 
   private initConfig(): void {

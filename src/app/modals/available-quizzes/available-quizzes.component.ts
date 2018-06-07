@@ -9,6 +9,7 @@ import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/qu
 import { DefaultSettings } from '../../../lib/default.settings';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
@@ -33,6 +34,7 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
     private currentQuizService: CurrentQuizService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private trackingService: TrackingService,
+    private fileUploadService: FileUploadService,
   ) {
     const sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
     sessions.sort((a, b) => a > b);
@@ -69,6 +71,15 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
           quizName: session.hashtag,
           privateKey: window.localStorage.getItem('config.private_key'),
         }).toPromise();
+      } else if (quizStatusData.step === 'QUIZ:AVAILABLE') {
+
+        const blob = new Blob([JSON.stringify(session.serialize())], { type: 'application/json' });
+        this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, session.hashtag);
+        this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
+
+        this.next();
+        resolve();
+        return;
       }
 
       if (!session.isValid()) {

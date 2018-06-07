@@ -36,6 +36,10 @@ export class AttendeeService implements OnDestroy {
   }
 
   public getMemberGroups(): Array<string> {
+    if (!this.currentQuizService.quiz) {
+      return [];
+    }
+
     return this.currentQuizService.quiz.sessionConfig.nicks.memberGroups;
   }
 

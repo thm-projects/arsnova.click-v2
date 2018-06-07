@@ -35,7 +35,9 @@ export class AdditionalDataComponent {
     private trackingService: TrackingService,
   ) {
     this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
-    this._quizUrl = encodeURI(`${document.location.origin}/quiz/${this.questionGroupItem.hashtag}`);
+    if (this.questionGroupItem) {
+      this._quizUrl = encodeURI(`${document.location.origin}/quiz/${this.questionGroupItem.hashtag}`);
+    }
   }
 
   public switchShowMoreOrLess(): void {

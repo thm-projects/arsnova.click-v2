@@ -19,7 +19,6 @@ export class QuizRenameComponent implements OnInit {
     private readonly footerBarService: FooterBarService,
     private readonly router: Router,
   ) {
-
     this.footerBarService.TYPE_REFERENCE = QuizRenameComponent.TYPE;
     this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
   }

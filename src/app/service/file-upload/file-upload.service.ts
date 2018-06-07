@@ -26,6 +26,7 @@ export class FileUploadService {
     private router: Router,
     private activeQuestionGroupService: ActiveQuestionGroupService,
   ) {
+    this._renameFilesQueue = new FormData();
   }
 
   public uploadFile(formData: FormData): void {
@@ -51,9 +52,16 @@ export class FileUploadService {
             }
             const reader = new FileReader();
             reader.onload = () => {
+
               const parsedFile = JSON.parse(reader.result);
               this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[parsedFile.TYPE](parsedFile);
               this.activeQuestionGroupService.persist();
+
+              window.localStorage.removeItem(file.name);
+              const questionList = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
+              questionList.splice(questionList.indexOf(file.name), 1);
+              window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
+
               this.router.navigate(['/']);
             };
             reader.readAsText(file);

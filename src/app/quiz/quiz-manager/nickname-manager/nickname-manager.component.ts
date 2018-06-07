@@ -96,7 +96,10 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick(name.toString());
   }
 
-  public parseAvailableNick(name: string): SafeHtml {
+  public parseAvailableNick(name: any): SafeHtml {
+    if (this.selectedCategory === 'emojis') {
+      name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+    }
     return name.match(/:[\w\+\-]+:/g) ? this.sanitizeHTML(parseGithubFlavoredMarkdown(name)) : name;
   }
 
