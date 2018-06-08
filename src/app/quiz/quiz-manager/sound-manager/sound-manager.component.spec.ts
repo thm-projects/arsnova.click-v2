@@ -1,13 +1,14 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { ActiveQuestionGroupMockService } from '../../../service/active-question-group/active-question-group.mock.service';
+import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
@@ -26,6 +27,7 @@ describe('SoundManagerComponent', () => {
       imports: [
         RouterTestingModule,
         HttpClientModule,
+        HttpClientTestingModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
@@ -39,7 +41,7 @@ describe('SoundManagerComponent', () => {
         }),
       ],
       providers: [
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
+        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
         FooterBarService,
         SettingsService,
         { provide: ConnectionService, useClass: ConnectionMockService },
@@ -68,27 +70,27 @@ describe('SoundManagerComponent', () => {
 
   describe('#selectSound', () => {
     it('should select a given sound title', inject(
-      [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
         const value = 'Song1';
         const event = <any>{ target: { value } };
         component.selectSound('lobby', event);
-        expect(currentQuizService.quiz.sessionConfig.music.titleConfig.lobby).toEqual(value);
+        expect(activeQuestionGroupService.activeQuestionGroup.sessionConfig.music.titleConfig.lobby).toEqual(value);
       }));
   });
 
   describe('#setGlobalVolume', () => {
     it('should set the global volume', inject(
-      [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
         const value = 10;
         const event = <any>{ target: { value } };
         component.setGlobalVolume(event);
-        expect(currentQuizService.quiz.sessionConfig.music.volumeConfig.global).toEqual(value);
+        expect(activeQuestionGroupService.activeQuestionGroup.sessionConfig.music.volumeConfig.global).toEqual(value);
       }));
   });
 
   describe('#openTab', () => {
     it('should open a config tab', inject(
-      [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
         const id = 'panel-lobby';
         component.openTab(id);
         expect(document.getElementById(id).classList).toContain('show');

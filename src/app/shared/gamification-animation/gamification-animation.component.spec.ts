@@ -9,8 +9,7 @@ describe('GamificationAnimationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [GamificationAnimationComponent],
-    })
-           .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -21,5 +20,9 @@ describe('GamificationAnimationComponent', () => {
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
+  }));
+
+  it('should contain a TYPE reference', async(() => {
+    expect(GamificationAnimationComponent.TYPE).toEqual('GamificationAnimationComponent');
   }));
 });

@@ -1,14 +1,14 @@
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnDestroy, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { DefaultSettings } from '../../../../lib/default.settings';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
+import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -56,12 +56,13 @@ export class QuizLobbyComponent implements OnDestroy {
     private headerLabelService: HeaderLabelService,
     private themesService: ThemesService,
     private router: Router,
-    private http: HttpClient,
     private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private modalService: NgbModal,
     private trackingService: TrackingService,
+    private memberApiService: MemberApiService,
+    private quizApiService: QuizApiService,
   ) {
 
     this.headerLabelService.headerLabel = this.currentQuizService.quiz.hashtag;
@@ -90,7 +91,7 @@ export class QuizLobbyComponent implements OnDestroy {
   public async kickMember(name: string): Promise<void> {
     this._kickMemberModalRef.close();
     const quizName = this.currentQuizService.quiz.hashtag;
-    const data = await this.http.delete<IMessage>(`${DefaultSettings.httpApiEndpoint}/member/${quizName}/${name}`).toPromise();
+    const data = await this.memberApiService.deleteMember(quizName, name).toPromise();
     if (data.status !== 'STATUS:SUCCESSFUL') {
       console.log(data);
     }
@@ -156,7 +157,7 @@ export class QuizLobbyComponent implements OnDestroy {
       }
       const target = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ?
                      'reading-confirmation' : 'start';
-      this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
+      this.quizApiService.postQuizData(target, {
         quizName: this.currentQuizService.quiz.hashtag,
       }).subscribe((data: IMessage) => {
         this.currentQuizService.readingConfirmationRequested = data.step === 'QUIZ:READING_CONFIRMATION_REQUESTED';

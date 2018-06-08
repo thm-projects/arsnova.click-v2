@@ -1,9 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 
@@ -25,8 +24,8 @@ export class MemberGroupSelectComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private router: Router,
-    private http: HttpClient,
     private currentQuizService: CurrentQuizService,
+    private quizApiService: QuizApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = MemberGroupSelectComponent.TYPE;
@@ -41,7 +40,7 @@ export class MemberGroupSelectComponent implements OnInit {
   public ngOnInit(): void {
 
     if (this.currentQuizService.quiz.sessionConfig.nicks.autoJoinToGroup) {
-      this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/${this.currentQuizService.quiz.hashtag}/freeGroup`).subscribe((data: IMessage) => {
+      this.quizApiService.getFreeMemberGroup(this.currentQuizService.quiz.hashtag).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_UPDATED') {
           this.addToGroup(data.payload.groupName);
         }

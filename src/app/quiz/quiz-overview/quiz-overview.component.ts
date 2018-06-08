@@ -1,13 +1,12 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { Observable, of, Subscription } from 'rxjs/index';
-import { DefaultSettings } from '../../../lib/default.settings';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -30,12 +29,13 @@ export class QuizOverviewComponent {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
-    private http: HttpClient,
     private headerLabelService: HeaderLabelService,
     private currentQuizService: CurrentQuizService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private router: Router,
     private trackingService: TrackingService,
+    private quizApiService: QuizApiService,
+    private lobbyApiService: LobbyApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizOverviewComponent.TYPE;
@@ -64,34 +64,33 @@ export class QuizOverviewComponent {
     return questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized).isValid();
   }
 
-  public startQuiz(sessionName: string): Subscription {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
+  public async startQuiz(sessionName: string): Promise<any> {
+    return new Promise(async resolve => {
+      if (isPlatformServer(this.platformId)) {
+        resolve();
+        return;
+      }
 
-    const sessionSerialized = JSON.parse(window.localStorage.getItem(sessionName));
-    const session = new questionGroupReflection[sessionSerialized.TYPE](sessionSerialized);
+      const sessionSerialized = JSON.parse(window.localStorage.getItem(sessionName));
+      const session = new questionGroupReflection[sessionSerialized.TYPE](sessionSerialized);
 
-    this.trackingService.trackClickEvent({
-      action: QuizOverviewComponent.TYPE,
-      label: `start-quiz`,
+      this.trackingService.trackClickEvent({
+        action: QuizOverviewComponent.TYPE,
+        label: `start-quiz`,
+      });
+
+      const quizAvailable = await this.requestQuizStatus(session);
+      if (!quizAvailable) {
+        resolve();
+        return;
+      }
+
+      this.currentQuizService.quiz = session;
+      await this.currentQuizService.cacheQuiz();
+      await this.openLobby(session);
+
+      resolve();
     });
-
-    return new Observable<any>(subscriber => {
-
-      of(this.requestQuizStatus(session).subscribe(() => {
-          this.currentQuizService.quiz = session;
-          this.currentQuizService.cacheQuiz().then(() => {
-
-            this.openLobby(session).subscribe(() => {
-              subscriber.complete();
-
-            }, (data) => subscriber.error(data));
-          });
-
-        }, (data) => subscriber.error(data)),
-      );
-    }).subscribe();
   }
 
   public editQuiz(session: string): void {
@@ -155,7 +154,7 @@ export class QuizOverviewComponent {
 
     window.localStorage.removeItem(session);
     window.localStorage.setItem('config.owned_quizzes', JSON.stringify(this.sessions));
-    this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz`, {
+    this.quizApiService.deleteQuiz({
       body: {
         quizName: session,
         privateKey: localStorage.getItem('config.private_key'),
@@ -167,52 +166,27 @@ export class QuizOverviewComponent {
     });
   }
 
-  private requestQuizStatus(session: IQuestionGroup): Observable<any> {
-    return new Observable<any>(subscriber => {
-      subscriber.next(this.http.get<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/status/${session.hashtag}`).subscribe(data => {
-          if (data.status !== 'STATUS:SUCCESSFUL') {
-            subscriber.error(data);
-            return;
-          }
+  private async requestQuizStatus(session: IQuestionGroup): Promise<boolean> {
+    const quizStatusResponse = await this.quizApiService.getQuizStatus(session.hashtag).toPromise();
+    if (quizStatusResponse.status !== 'STATUS:SUCCESSFUL' || quizStatusResponse.step !== 'QUIZ:UNDEFINED') {
+      return false;
+    }
 
-          if (data.step !== 'QUIZ:UNDEFINED') {
-            subscriber.complete();
-            return;
-          }
+    await this.quizApiService.postQuizReservationOverride({
+      quizName: session.hashtag,
+      privateKey: window.localStorage.getItem('config.private_key'),
+    }).toPromise();
 
-          this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/reserve/override`, {
-            quizName: session.hashtag,
-            privateKey: window.localStorage.getItem('config.private_key'),
-          }).subscribe((reserveResponse: IMessage) => {
-
-            if (reserveResponse.status === 'STATUS:SUCCESSFUL') {
-              subscriber.complete();
-              return;
-            }
-
-            subscriber.error([data, reserveResponse]);
-          });
-        }, error => subscriber.error(error)),
-      );
-    });
+    return true;
   }
 
-  private openLobby(session: IQuestionGroup): Observable<any> {
-    return new Observable<any>(subscriber => {
-      subscriber.next(
-        this.http.put<IMessage>(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-          quiz: session.serialize(),
-        }).subscribe(
-          data => {
-            if (data.status === 'STATUS:SUCCESSFUL') {
-              this.router.navigate(['/quiz', 'flow']);
-              subscriber.complete();
-              return;
-            }
-            subscriber.error(data);
-          },
-        ),
-      );
-    });
+  private async openLobby(session: IQuestionGroup): Promise<any> {
+    const lobbyResponse = await this.lobbyApiService.putLobby({
+      quiz: session.serialize(),
+    }).toPromise();
+
+    if (lobbyResponse.status === 'STATUS:SUCCESSFUL') {
+      this.router.navigate(['/quiz', 'flow']);
+    }
   }
 }

@@ -1,9 +1,8 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IMessage, ITheme } from 'arsnova-click-v2-types/src/common';
-import { Observable, of } from 'rxjs/index';
+import { ITheme } from 'arsnova-click-v2-types/src/common';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizService } from '../current-quiz/current-quiz.service';
 
@@ -29,13 +28,13 @@ export class ThemesService {
     @Inject(PLATFORM_ID) private platformId: Object,
     private currentQuizService: CurrentQuizService,
     private connectionService: ConnectionService,
-    private http: HttpClient,
+    private themesApiService: ThemesApiService,
   ) {
     if (isPlatformBrowser(this.platformId) && !window.localStorage.getItem('config.default_theme')) {
       window.localStorage.setItem('config.default_theme', DefaultSettings.defaultQuizSettings.theme);
     }
-    http.get(`${DefaultSettings.httpApiEndpoint}/themes`).subscribe(
-      (data: IMessage) => {
+    this.themesApiService.getThemes().subscribe(
+      data => {
         this.themes = data.payload;
       },
       error => {
@@ -44,7 +43,7 @@ export class ThemesService {
     );
 
     this.connectionService.initConnection().then(() => {
-      connectionService.socket.subscribe((data: IMessage) => {
+      connectionService.socket.subscribe(data => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATED_SETTINGS') {
           this.currentQuizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
           this.currentQuizService.persistToSessionStorage();
@@ -56,9 +55,9 @@ export class ThemesService {
     });
   }
 
-  public updateCurrentlyUsedTheme(): Observable<void> {
+  public updateCurrentlyUsedTheme(): void {
     if (isPlatformServer(this.platformId)) {
-      return of(null);
+      return;
     }
 
     let usedTheme = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme'));
@@ -68,39 +67,32 @@ export class ThemesService {
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
     if (!document.getElementById('link-manifest') && themeDataset === usedTheme) {
-      return this.reloadLinkNodes(usedTheme);
+      this.reloadLinkNodes(usedTheme);
     }
     if (themeDataset !== usedTheme) {
       this._currentTheme = usedTheme;
       document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
-      return this.reloadLinkNodes();
+      this.reloadLinkNodes();
     }
-
-    return of(null);
   }
 
-  public reloadLinkNodes(target?): Observable<void> {
-    if (isPlatformServer(this.platformId) || (!document.getElementById('link-manifest') && !target)) {
-      return of(null);
+  public reloadLinkNodes(theme?): void {
+    if (isPlatformServer(this.platformId) || (!document.getElementById('link-manifest') && !theme)) {
+      return;
     }
 
-    if (!target) {
-      target = this._currentTheme;
+    if (!theme) {
+      theme = this._currentTheme;
     }
 
-    return new Observable<void>((subscriber) => {
-      this.http.get(`${DefaultSettings.httpLibEndpoint}/linkImages/${target}`).subscribe((data: Array<any>) => {
-        data.forEach((elem, index) => {
-          const previousElement = document.getElementById(elem.id);
-          if (previousElement) {
-            this.replaceExistingNode(previousElement, elem);
-          } else {
-            this.addNewNode(elem);
-          }
-          if (index === data.length) {
-            subscriber.next();
-          }
-        });
+    this.themesApiService.getLinkImages(theme).subscribe(data => {
+      data.forEach((elem) => {
+        const previousElement = document.getElementById(elem.id);
+        if (previousElement) {
+          this.replaceExistingNode(previousElement, elem);
+        } else {
+          this.addNewNode(elem);
+        }
       });
     });
   }

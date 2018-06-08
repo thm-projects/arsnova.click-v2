@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IDuplicateQuiz, IMessage } from 'arsnova-click-v2-types/src/common';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { DefaultSettings } from '../../../lib/default.settings';
 import { ActiveQuestionGroupService } from '../active-question-group/active-question-group.service';
+import { QuizApiService } from '../api/quiz/quiz-api.service';
 
 @Injectable()
 export class FileUploadService {
@@ -22,9 +21,9 @@ export class FileUploadService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private http: HttpClient,
     private router: Router,
     private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizApiService: QuizApiService,
   ) {
     this._renameFilesQueue = new FormData();
   }
@@ -33,7 +32,8 @@ export class FileUploadService {
     this._renameFilesQueue = new FormData();
     this._duplicateQuizzes = [];
     formData.append('privateKey', window.localStorage.getItem('config.private_key'));
-    this.http.post(`${DefaultSettings.httpApiEndpoint}/quiz/upload`, formData).subscribe(
+
+    this.quizApiService.postQuizUpload(formData).subscribe(
       (data: IMessage) => {
         if (data.payload.duplicateQuizzes.length) {
           this._duplicateQuizzes = data.payload.duplicateQuizzes;

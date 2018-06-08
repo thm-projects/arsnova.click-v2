@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -72,31 +72,21 @@ describe('RootComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach((inject([HttpClient, HttpTestingController],
-    (http: HttpClient, backend: HttpTestingController) => {
-      fixture = TestBed.createComponent(RootComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+  beforeEach(() => {
+    fixture = TestBed.createComponent(RootComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
+  it('should be created', () => {
+    expect(component).toBeTruthy();
+  });
 
-    })));
+  it('should contain a TYPE reference', () => {
+    expect(RootComponent.TYPE).toEqual('RootComponent');
+  });
 
-  afterAll((inject([HttpClient, HttpTestingController],
-    (http: HttpClient, backend: HttpTestingController) => {
-    })));
-
-  it('should be created', (inject([HttpClient, HttpTestingController],
-    (http: HttpClient, backend: HttpTestingController) => {
-      expect(component).toBeTruthy();
-    })));
-
-  it('should contain a TYPE reference', (inject([HttpClient, HttpTestingController],
-    (http: HttpClient, backend: HttpTestingController) => {
-      expect(RootComponent.TYPE).toEqual('RootComponent');
-    })));
-
-  it('#getFooterBarElements', (inject([HttpClient, HttpTestingController],
-    (http: HttpClient, backend: HttpTestingController) => {
-      expect(component.getFooterBarElements().length).toBe(0);
-    })));
+  it('#getFooterBarElements', () => {
+    expect(component.getFooterBarElements().length).toBe(0);
+  });
 });

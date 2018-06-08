@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -48,6 +49,7 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
         { provide: WebsocketService, useClass: WebsocketMockService },
         SharedService,
         SettingsService,
+        MemberApiService,
       ],
       declarations: [ConfidenceRateComponent],
     }).compileComponents();
@@ -79,5 +81,14 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
 
     expect(component.getConfidenceLevel()).toEqual('no_idea');
   }));
+
+  it('#sendConfidence', async(() => {
+      spyOn(component, 'sendConfidence').and.callFake(() => {});
+
+      component.sendConfidence();
+
+      expect(component.sendConfidence).not.toThrowError();
+    }),
+  );
 
 });

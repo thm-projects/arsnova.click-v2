@@ -1,5 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -63,4 +64,24 @@ describe('MemberGroupSelectComponent', () => {
   it('should create', async(() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should contain a TYPE reference', async(() => {
+    expect(MemberGroupSelectComponent.TYPE).toEqual('MemberGroupSelectComponent');
+  }));
+
+  describe('#addToGroup', () => {
+
+    it('should add an attendee to a free member group', async(inject(
+      [Router], (router: Router) => {
+        spyOn(component, 'addToGroup').and.callThrough();
+        spyOn(router, 'navigate').and.callFake(() => {});
+
+        component.addToGroup('testGroup');
+
+        expect(component.addToGroup).not.toThrowError();
+        expect(window.sessionStorage.getItem('config.memberGroup')).toEqual('testGroup');
+        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
+      }),
+    ));
+  });
 });

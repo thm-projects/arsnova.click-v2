@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IMessage } from 'arsnova-click-v2-types/src/common';
-import { DefaultSettings } from '../../../lib/default.settings';
+import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
 
 @Injectable()
 export class UserService {
@@ -22,13 +20,13 @@ export class UserService {
   }
 
   constructor(
-    private http: HttpClient,
+    private authorizeApiService: AuthorizeApiService,
   ) {
   }
 
   public authenticate(token: string): Promise<boolean> {
     return new Promise(resolve => {
-      this.http.get(`${DefaultSettings.httpLibEndpoint}/authorize/${token}`).subscribe((data: IMessage) => {
+      this.authorizeApiService.getAuthorizationForToken(token).subscribe(data => {
         if (data.status === 'STATUS:SUCCESSFUL') {
           this._isLoggedIn = true;
           this._ticket = data.payload.ticket;

@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IAvailableNicks } from 'arsnova-click-v2-types/src/common';
-import { DefaultSettings } from '../../../../lib/default.settings';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
+import { NickApiService } from '../../../service/api/nick/nick-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 
 @Component({
@@ -42,7 +41,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private footerBarService: FooterBarService,
-    private http: HttpClient,
+    private nickApiService: NickApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameManagerComponent.TYPE;
@@ -165,7 +164,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.http.get<IAvailableNicks>(`${DefaultSettings.httpApiEndpoint}/nicks/predefined`).subscribe(
+    this.nickApiService.getPredefinedNicks().subscribe(
       data => {
         this.availableNicks = data;
       },

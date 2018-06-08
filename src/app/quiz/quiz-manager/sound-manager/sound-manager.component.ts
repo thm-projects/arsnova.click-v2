@@ -3,8 +3,8 @@ import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ISong } from 'arsnova-click-v2-types/src/common';
 import { IMusicSessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/interfaces';
-import { DefaultSettings } from '../../../../lib/default.settings';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
+import { FilesApiService } from '../../../service/api/files/files-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 
 @Component({
@@ -38,13 +38,13 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   private readonly _config: IMusicSessionConfiguration;
-  private _currentlyPlayedMusic = null;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
+    private filesApiService: FilesApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = SoundManagerComponent.TYPE;
@@ -118,7 +118,6 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   private toggleMusicPreview(target: 'lobby' | 'countdownRunning' | 'countdownEnd'): void {
-    this._currentlyPlayedMusic = `${DefaultSettings.httpApiEndpoint}/files/sound/${target}/${this.config.titleConfig[target]}.mp3`;
     if (isPlatformBrowser(this.platformId)) {
       const audioElements = document.getElementsByTagName('audio');
       for (let i = 0; i < audioElements.length; i++) {

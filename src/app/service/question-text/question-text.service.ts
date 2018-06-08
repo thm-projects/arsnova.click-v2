@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import { IMathjaxResponse } from 'arsnova-click-v2-types/src/common';
-import { DefaultSettings } from '../../../lib/default.settings';
 import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
+import { MathjaxApiService } from '../api/mathjax/mathjax-api.service';
 
 @Injectable()
 export class QuestionTextService {
@@ -16,7 +15,7 @@ export class QuestionTextService {
   private _inputCache = {};
 
   constructor(
-    private http: HttpClient,
+    private mathjaxApiService: MathjaxApiService,
   ) {
   }
 
@@ -34,7 +33,7 @@ export class QuestionTextService {
   }
 
   private parseMathjax(value: Array<string>): Promise<Array<IMathjaxResponse>> {
-    return this.http.post<Array<IMathjaxResponse>>(`${DefaultSettings.httpLibEndpoint}/mathjax`, {
+    return this.mathjaxApiService.postMathjax({
       mathjax: JSON.stringify(value),
       format: 'TeX',
       output: 'svg',

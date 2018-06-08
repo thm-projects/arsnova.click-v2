@@ -1,11 +1,10 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILeaderBoardItem, IMessage } from 'arsnova-click-v2-types/src/common';
 import { Subscription } from 'rxjs';
-import { DefaultSettings } from '../../../../lib/default.settings';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -65,12 +64,12 @@ export class LeaderboardComponent implements OnInit {
     private footerBarService: FooterBarService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
-    private http: HttpClient,
     private router: Router,
     private connectionService: ConnectionService,
     public currentQuizService: CurrentQuizService,
     public attendeeService: AttendeeService,
     private i18nService: I18nService,
+    private leaderboardApiService: LeaderboardApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
@@ -170,8 +169,7 @@ export class LeaderboardComponent implements OnInit {
   }
 
   private async getLeaderboardFromBackend(): Promise<IMessage> {
-    const url = `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${this._hashtag}/${this._questionIndex ? this._questionIndex : ''}`;
-    return this.http.get<IMessage>(url).toPromise();
+    return this.leaderboardApiService.getLeaderboardData(this._hashtag, this.questionIndex).toPromise();
   }
 
   private handleMessages(): void {

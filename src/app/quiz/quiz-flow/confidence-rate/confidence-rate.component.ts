@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { Subscription } from 'rxjs/index';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -28,10 +28,10 @@ export class ConfidenceRateComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
-    private http: HttpClient,
     private router: Router,
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
+    private memberApiService: MemberApiService,
   ) {
 
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
@@ -63,8 +63,8 @@ export class ConfidenceRateComponent implements OnInit {
     this._confidenceValue = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
-  public sendConfidence(): void {
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/member/confidence-value`, {
+  public sendConfidence(): Subscription {
+    return this.memberApiService.putConfidenceValue({
       quizName: this.currentQuizService.quiz.hashtag,
       nickname: window.sessionStorage.getItem(`config.nick`),
       confidenceValue: this._confidenceValue,

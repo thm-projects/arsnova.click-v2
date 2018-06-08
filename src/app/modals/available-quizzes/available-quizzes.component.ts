@@ -1,13 +1,12 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { IModal } from 'arsnova-click-v2-types/src/modals/interfaces';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { DefaultSettings } from '../../../lib/default.settings';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
@@ -17,7 +16,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   templateUrl: './available-quizzes.component.html',
   styleUrls: ['./available-quizzes.component.scss'],
 })
-export class AvailableQuizzesComponent implements OnInit, IModal {
+export class AvailableQuizzesComponent implements IModal {
   public static TYPE = 'AvailableQuizzesComponent';
 
   private _sessions: Array<IQuestionGroup> = [];
@@ -29,12 +28,13 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private activeModal: NgbActiveModal,
-    private http: HttpClient,
     private router: Router,
     private currentQuizService: CurrentQuizService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private trackingService: TrackingService,
     private fileUploadService: FileUploadService,
+    private quizApiService: QuizApiService,
+    private lobbyApiService: LobbyApiService,
   ) {
     const sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
     sessions.sort((a, b) => a > b);
@@ -61,16 +61,17 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
     return new Promise(async resolve => {
       this.trackingService.trackClickEvent({ action: AvailableQuizzesComponent.TYPE, label: 'start-quiz' });
 
-      const quizStatusData = await this.http.get<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/status/${session.hashtag}`).toPromise();
+      const quizStatusData = await this.quizApiService.getQuizStatus(session.hashtag).toPromise();
       if (quizStatusData.status !== 'STATUS:SUCCESSFUL') {
         resolve();
         return;
       }
       if (quizStatusData.step === 'QUIZ:UNDEFINED') {
-        await this.http.post<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/reserve/override`, {
+        const quizReservationOverrideResult = await this.quizApiService.postQuizReservationOverride({
           quizName: session.hashtag,
           privateKey: window.localStorage.getItem('config.private_key'),
         }).toPromise();
+
       } else if (quizStatusData.step === 'QUIZ:AVAILABLE') {
 
         const blob = new Blob([JSON.stringify(session.serialize())], { type: 'application/json' });
@@ -92,7 +93,7 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
       this.currentQuizService.quiz = session;
       await this.currentQuizService.cacheQuiz();
 
-      const openQuizRequestData = await this.http.put<IMessage>(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+      const openQuizRequestData = await this.lobbyApiService.putLobby({
         quiz: this.currentQuizService.quiz.serialize(),
       }).toPromise();
 
@@ -112,9 +113,6 @@ export class AvailableQuizzesComponent implements OnInit, IModal {
     this.activeQuestionGroupService.activeQuestionGroup = session;
     this.router.navigate(['/quiz', 'manager']);
     this.next();
-  }
-
-  public ngOnInit(): void {
   }
 
 }

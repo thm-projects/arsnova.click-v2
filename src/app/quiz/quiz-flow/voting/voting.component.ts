@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -9,7 +8,8 @@ import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_
 import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
 import { SurveyQuestion } from 'arsnova-click-v2-types/src/questions/question_survey';
 import { Countdown } from '../../../../lib/countdown/countdown';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
+import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -54,7 +54,6 @@ export class VotingComponent implements OnInit, OnDestroy {
 
   constructor(
     public currentQuizService: CurrentQuizService,
-    private http: HttpClient,
     private attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
     private connectionService: ConnectionService,
@@ -62,6 +61,8 @@ export class VotingComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private sanitizer: DomSanitizer,
     private router: Router,
+    private quizApiService: QuizApiService,
+    private memberApiService: MemberApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
@@ -69,30 +70,6 @@ export class VotingComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'component.voting.title';
 
     this.footerBarService.replaceFooterElements([]);
-
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/startTime/${currentQuizService.quiz.hashtag}`).subscribe((data: IMessage) => {
-      if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
-
-        if (currentQuizService.currentQuestion().timer) {
-          this.countdown = new Countdown(currentQuizService.currentQuestion(), data.payload.startTimestamp);
-          this.countdown.onChange.subscribe((value) => {
-            this.countdownValue = value;
-            if (!value) {
-              this.sendResponses();
-            }
-          });
-        }
-
-      } else {
-
-        this.router.navigate([
-          '/quiz',
-          'flow',
-          'results',
-        ]);
-
-      }
-    });
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -170,10 +147,34 @@ export class VotingComponent implements OnInit, OnDestroy {
     });
     this.questionTextService.eventEmitter.subscribe((value: Array<string>) => this.answers = value);
     this.questionTextService.changeMultiple(this.currentQuizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
+
+    this.quizApiService.getQuizStartTime(this.currentQuizService.quiz.hashtag).subscribe((data) => {
+      if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
+
+        if (this.currentQuizService.currentQuestion().timer) {
+          this.countdown = new Countdown(this.currentQuizService.currentQuestion(), data.payload.startTimestamp);
+          this.countdown.onChange.subscribe((value) => {
+            this.countdownValue = value;
+            if (!value) {
+              this.sendResponses();
+            }
+          });
+        }
+
+      } else {
+
+        this.router.navigate([
+          '/quiz',
+          'flow',
+          'results',
+        ]);
+
+      }
+    });
   }
 
   public ngOnDestroy(): void {
-    this.http.put(`${DefaultSettings.httpApiEndpoint}/member/response`, {
+    this.memberApiService.putResponse({
       quizName: this.currentQuizService.quiz.hashtag,
       nickname: this.attendeeService.getOwnNick(),
       value: this._selectedAnswers,

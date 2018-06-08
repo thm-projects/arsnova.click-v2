@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -9,7 +9,6 @@ import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/quest
 import { DefaultQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_default';
 import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
@@ -32,7 +31,6 @@ import { QuizOverviewComponent } from './quiz-overview.component';
 describe('QuizOverviewComponent', () => {
   let component: QuizOverviewComponent;
   let fixture: ComponentFixture<QuizOverviewComponent>;
-  let backend: HttpTestingController;
 
   const validQuiz = new DefaultQuestionGroup({
     hashtag: 'validtestquiz',
@@ -100,12 +98,7 @@ describe('QuizOverviewComponent', () => {
     fixture = TestBed.createComponent(QuizOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    backend = TestBed.get(HttpTestingController);
   }));
-
-  afterEach(() => {
-    backend.verify();
-  });
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -142,7 +135,7 @@ describe('QuizOverviewComponent', () => {
       window.localStorage.removeItem('validtestquiz');
     });
 
-    xit('should start the quiz', async(inject(
+    it('should start the quiz', inject(
       [CurrentQuizService, Router], (currentQuizService: CurrentQuizService, router: Router) => {
 
         const quizName = 'validtestquiz';
@@ -150,25 +143,13 @@ describe('QuizOverviewComponent', () => {
         spyOn(currentQuizService, 'cacheQuiz').and.callThrough();
         spyOn(router, 'navigate').and.callFake(() => {});
 
-        of(component.startQuiz(quizName)).subscribe(() => {}, (data) => {throw new Error(data); }, () => {
-
-          backend.expectOne(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizName}`).flush({
-            status: 'STATUS:SUCCESSFUL',
-            step: 'QUIZ:UNDEFINED',
-          });
-          backend.expectOne(`${DefaultSettings.httpApiEndpoint}/quiz/reserve/override`).flush({
-            status: 'STATUS:SUCCESSFUL',
-          });
-          backend.expectOne(`${DefaultSettings.httpApiEndpoint}/lobby`).flush({
-            status: 'STATUS:SUCCESSFUL',
-          });
-
+        component.startQuiz(quizName).then(() => {
           expect(currentQuizService.quiz.serialize()).toEqual(jasmine.objectContaining(validQuiz.serialize()));
           expect(currentQuizService.cacheQuiz).toHaveBeenCalled();
           expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'flow']));
         });
       }),
-    ));
+    );
   });
 
   describe('#editQuiz', () => {
@@ -221,7 +202,6 @@ describe('QuizOverviewComponent', () => {
       const quizName = 'validtestquiz';
 
       component.deleteQuiz(quizName);
-      backend.expectOne(`${DefaultSettings.httpApiEndpoint}/quiz`).flush({ status: 'STATUS:SUCCESSFUL' });
       expect(window.localStorage.getItem(quizName)).toBe(null);
     });
   });

@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -20,8 +20,6 @@ import { WebsocketService } from '../websocket/websocket.service';
 import { ThemesService } from './themes.service';
 
 describe('ThemesService', () => {
-  let backend: HttpTestingController;
-
   const themeUrl = `${DefaultSettings.httpApiEndpoint}/themes`;
   const themeData = {
     'status': 'STATUS:SUCCESSFUL',
@@ -68,12 +66,7 @@ describe('ThemesService', () => {
     });
   }));
 
-  beforeEach(async(() => {
-    backend = TestBed.get(HttpTestingController);
-  }));
-
   afterEach(() => {
-    backend.verify();
     const linkNodes = document.getElementsByClassName('theme-meta-data');
     while (linkNodes.length) {
       linkNodes.item(0).remove();
@@ -81,10 +74,6 @@ describe('ThemesService', () => {
   });
 
   it('should be created', (inject([ThemesService], (service: ThemesService) => {
-
-    const themeDataReq = backend.expectOne(themeUrl);
-    themeDataReq.flush(themeData);
-
     expect(service).toBeTruthy();
   })));
 
@@ -94,45 +83,19 @@ describe('ThemesService', () => {
       spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
       spyOn(connectionService.socket, 'subscribe').and.callFake(() => ({ status: 'STATUS:FAILED' }));
 
-      const themeDataReq = backend.expectOne(themeUrl);
-      themeDataReq.flush(themeData);
-
       expect(document.getElementById('link-manifest')).toBe(null);
       expect(service.currentTheme).toEqual('theme-Material');
-      service.updateCurrentlyUsedTheme().subscribe(() => {
-        expect(service.reloadLinkNodes).toHaveBeenCalled();
-      });
+      service.updateCurrentlyUsedTheme();
+      expect(service.reloadLinkNodes).toHaveBeenCalled();
     })));
 
-  xit('#reloadLinkNodes', async(inject([ThemesService],
+  it('#reloadLinkNodes', async(inject([ThemesService],
     (service: ThemesService) => {
-
-      const linkNodesUrl = `${DefaultSettings.httpLibEndpoint}/linkImages/theme-Material`;
-      const linkNodes = [
-        {
-          'tagName': 'link',
-          'className': 'theme-meta-data',
-          'rel': 'manifest',
-          'id': 'link-manifest',
-          'href': `${DefaultSettings.httpLibEndpoint}/manifest/theme-Material`,
-          'type': 'image/png',
-        }, {
-          'tagName': 'link',
-          'className': 'theme-meta-data',
-          'rel': 'apple-touch-icon',
-          'id': 'link-apple-touch-default',
-          'href': `${DefaultSettings.httpApiEndpoint}/files/images/theme/theme-Material/logo_s32x32.png`,
-          'type': 'image/png',
-        },
-      ];
 
       spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
       spyOn(service, 'reloadLinkNodes').and.callThrough();
 
-      service.reloadLinkNodes('theme-Material').subscribe((result) => {
-        backend.expectOne(linkNodesUrl).flush(linkNodes);
-        backend.expectOne(themeUrl).flush(themeData);
-        expect(service.reloadLinkNodes).toHaveBeenCalled();
-      });
+      service.reloadLinkNodes('theme-Material');
+      expect(service.reloadLinkNodes).toHaveBeenCalled();
     })));
 });

@@ -1,6 +1,8 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -62,10 +64,45 @@ describe('NicknameSelectComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', async(inject([HttpClient, HttpTestingController],
-    (http: HttpClient, backend: HttpTestingController) => {
-      backend.verify();
+  it('should be created', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should contain a TYPE reference', () => {
+    expect(NicknameSelectComponent.TYPE).toEqual('NicknameSelectComponent');
+  });
+
+  describe('#joinQuiz', () => {
+    it('should join a quiz', inject([Router], (router: Router) => {
+      const nickName = 'testNick';
+
+      spyOn(router, 'navigate').and.callFake(() => {});
+
+      component.joinQuiz(nickName);
+
       expect(component).toBeTruthy();
-    })),
-  );
+    }));
+  });
+
+  describe('#sanitizeHTML', () => {
+    it('should sanitize a given html string', async(inject(
+      [DomSanitizer], (sanitizer: DomSanitizer) => {
+        const markup = '<div><span>TestMarkup</span></div>';
+
+        spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(() => {});
+        component.sanitizeHTML(markup);
+        expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
+      })),
+    );
+  });
+
+  describe('#parseAvailableNick', () => {
+    it('should sanitize and validate a given available nickname', () => {
+      const nickName = 'testNick';
+
+      const parsedNickname = component.parseAvailableNick(nickName);
+
+      expect(parsedNickname).toEqual(nickName);
+    });
+  });
 });

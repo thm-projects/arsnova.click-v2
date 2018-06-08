@@ -1,6 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
-import { Observable } from 'rxjs/index';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { ThemesService } from '../../../service/themes/themes.service';
@@ -36,7 +35,7 @@ export class QuizThemeComponent implements OnDestroy {
     this.themesService.updateCurrentlyUsedTheme();
   }
 
-  public updateTheme(id: string): Observable<void> {
+  public updateTheme(id: string): void {
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -45,7 +44,7 @@ export class QuizThemeComponent implements OnDestroy {
     this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
     this.currentQuizService.quiz.sessionConfig.theme = id;
 
-    return this.currentQuizService.toggleSettingByName('theme', id);
+    this.currentQuizService.toggleSettingByName('theme', id);
   }
 
   public previewTheme(id): void {

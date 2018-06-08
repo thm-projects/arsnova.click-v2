@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad } from '@angular/router';
-import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { ISessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { UserService } from '../user/user.service';
 
 @Injectable()
@@ -15,7 +14,7 @@ export class CasService implements CanLoad, CanActivate {
 
   constructor(
     private userService: UserService,
-    private http: HttpClient,
+    private quizApiService: QuizApiService,
   ) {
   }
 
@@ -30,16 +29,19 @@ export class CasService implements CanLoad, CanActivate {
       if (this.ticket) {
         return await this.userService.authenticate(this.ticket);
       } else {
-        await this.http.get(`${DefaultSettings.httpApiEndpoint}/quiz/settings/${this.quizName}`).subscribe((data: IMessage) => {
+        return new Promise<boolean>(async resolve => {
+          const data = await this.quizApiService.getQuizSettings(this.quizName).toPromise();
           if (data.status === 'STATUS:SUCCESSFUL') {
             const settings = <ISessionConfiguration>data.payload.settings;
             if (settings.nicks.restrictToCasLogin) {
               location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
-              return false;
-            } else {
-              return true;
+              resolve(false);
+              return;
             }
           }
+
+          resolve(true);
+          return;
         });
       }
     }

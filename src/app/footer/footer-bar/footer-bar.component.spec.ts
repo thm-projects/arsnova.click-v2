@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -78,13 +78,13 @@ describe('FooterBarComponent', () => {
     expect(FooterBarComponent.TYPE).toEqual('FooterBarComponent');
   }));
 
-  it('#getLinkTarget', (inject([HttpClient, HttpTestingController, FooterBarService],
-    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService) => {
+  it('#getLinkTarget', (inject([FooterBarService],
+    (footerBarService: FooterBarService) => {
       expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'about']));
     })));
 
-  it('#toggleSetting', (inject([HttpClient, HttpTestingController, FooterBarService, TrackingService],
-    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService, trackingService: TrackingService) => {
+  it('#toggleSetting', (inject([FooterBarService, TrackingService],
+    (footerBarService: FooterBarService, trackingService: TrackingService) => {
       const elem = footerBarService.footerElemAbout;
       spyOn(elem, 'onClickCallback').and.callFake(() => {});
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
@@ -93,15 +93,15 @@ describe('FooterBarComponent', () => {
       expect(trackingService.trackClickEvent).toHaveBeenCalled();
     })));
 
-  it('#fileChange', (inject([HttpClient, HttpTestingController, FileUploadService],
-    (http: HttpClient, backend: HttpTestingController, fileUploadService: FileUploadService) => {
+  it('#fileChange', (inject([FileUploadService],
+    (fileUploadService: FileUploadService) => {
       spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
       component.fileChange({ target: { files: [{ name: 'testFile' }] } });
       expect(fileUploadService.uploadFile).toHaveBeenCalled();
     })));
 
-  it('#moveLeft', (inject([HttpClient, HttpTestingController, FooterBarService],
-    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService) => {
+  it('#moveLeft', (inject([FooterBarService],
+    (footerBarService: FooterBarService) => {
       component.footerElements = [
         ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
       ];
@@ -112,8 +112,8 @@ describe('FooterBarComponent', () => {
       expect(component.footerElemIndex).toEqual(1);
     })));
 
-  it('#moveRight', (inject([HttpClient, HttpTestingController, FooterBarService],
-    (http: HttpClient, backend: HttpTestingController, footerBarService: FooterBarService) => {
+  it('#moveRight', (inject([FooterBarService],
+    (footerBarService: FooterBarService) => {
       component.footerElements = [
         ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
       ];

@@ -1,9 +1,8 @@
 import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { IMemberGroup, IMessage } from 'arsnova-click-v2-types/src/common';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { IMemberGroup } from 'arsnova-click-v2-types/src/common';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -26,13 +25,13 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private http: HttpClient,
     private footerBarService: FooterBarService,
     private router: Router,
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private userService: UserService,
     private currentQuizService: CurrentQuizService,
+    private memberApiService: MemberApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -51,12 +50,12 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
 
     const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
     const promise = new Promise((resolve, reject) => {
-      this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
+      this.memberApiService.putMember({
         quizName: this.currentQuizService.quiz.hashtag,
         nickname: nickname,
         groupName: window.sessionStorage.getItem('config.memberGroup'),
         ticket: this.userService.ticket,
-      }).subscribe((data: IMessage) => {
+      }).subscribe(data => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
             memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
@@ -67,14 +66,14 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
         } else {
           reject(data);
         }
-      }, () => {
-        reject();
+      }, (error) => {
+        reject({ step: 'HTTP_ERROR', payload: error });
       });
     });
     promise.then(() => {
       window.sessionStorage.setItem(`config.nick`, nickname);
       this.router.navigate(['/quiz', 'flow', 'lobby']);
-    }, (data: IMessage) => {
+    }, data => {
       switch (data.step) {
         case 'LOBBY:DUPLICATE_LOGIN':
           this._failedLoginReason = 'plugins.splashscreen.error.error_messages.duplicate_user';

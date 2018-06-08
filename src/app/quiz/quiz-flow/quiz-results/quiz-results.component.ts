@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
@@ -7,7 +6,7 @@ import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_
 import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
 import { SurveyQuestion } from 'arsnova-click-v2-types/src/questions/question_survey';
 import { Countdown } from '../../../../lib/countdown/countdown';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -36,12 +35,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     public currentQuizService: CurrentQuizService,
     public attendeeService: AttendeeService,
     private i18nService: I18nService,
-    private http: HttpClient,
     private router: Router,
     private headerLabelService: HeaderLabelService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
+    private quizApiService: QuizApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
@@ -191,8 +190,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     }
     this.handleMessages();
 
-    const url = `${DefaultSettings.httpApiEndpoint}/quiz/currentState/${this.currentQuizService.quiz.hashtag}`;
-    const currentStateData = await this.http.get<IMessage>(url).toPromise();
+    const currentStateData = await this.quizApiService.getCurrentQuizState(this.currentQuizService.quiz.hashtag).toPromise();
     if (currentStateData.status === 'STATUS:SUCCESSFUL') {
       const question = this.currentQuizService.currentQuestion();
 
@@ -235,8 +233,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         ];
       }
       this.footerBarService.footerElemBack.onClickCallback = async () => {
-        await this.http.patch<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/reset/${this.currentQuizService.quiz.hashtag}`,
-          {}).toPromise();
+        await this.quizApiService.patchQuizReset(this.currentQuizService.quiz.hashtag).toPromise();
         this.currentQuizService.questionIndex = 0;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       };
@@ -323,7 +320,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
                    !this.currentQuizService.readingConfirmationRequested ?
                    'reading-confirmation' : 'start';
 
-    const startQuizData = await this.http.post<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/${target}`, {
+    const startQuizData = await this.quizApiService.postQuizData(target, {
       quizName: this.currentQuizService.quiz.hashtag,
     }).toPromise();
     if (startQuizData.status !== 'STATUS:SUCCESSFUL') {
@@ -354,7 +351,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   private async stopQuiz(): Promise<void> {
-    const data = await this.http.post<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/stop`, {
+    const data = await this.quizApiService.postQuizStop({
       quizName: this.currentQuizService.quiz.hashtag,
     }).toPromise();
     if (data.status !== 'STATUS:SUCCESSFUL') {

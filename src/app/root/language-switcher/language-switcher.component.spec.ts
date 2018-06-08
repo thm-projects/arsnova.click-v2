@@ -62,4 +62,8 @@ describe('LanguageSwitcherComponent', () => {
   it('should be created', async(() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should contain a TYPE reference', async(() => {
+    expect(LanguageSwitcherComponent.TYPE).toEqual('LanguageSwitcherComponent');
+  }));
 });

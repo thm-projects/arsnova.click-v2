@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -25,7 +25,6 @@ import { QuizThemeComponent } from './quiz-theme.component';
 describe('QuizThemeComponent', () => {
   let component: QuizThemeComponent;
   let fixture: ComponentFixture<QuizThemeComponent>;
-  let backend: HttpTestingController;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -61,14 +60,9 @@ describe('QuizThemeComponent', () => {
 
   beforeEach(async(() => {
     fixture = TestBed.createComponent(QuizThemeComponent);
-    backend = TestBed.get(HttpTestingController);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
-
-  afterEach(() => {
-    backend.verify();
-  });
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -83,10 +77,9 @@ describe('QuizThemeComponent', () => {
 
       spyOn(currentQuizService, 'toggleSettingByName').and.callThrough();
 
-      component.updateTheme(theme).subscribe(() => {
-        expect(currentQuizService.quiz.sessionConfig.theme).toEqual(theme);
-        expect(currentQuizService.toggleSettingByName).toHaveBeenCalled();
-      });
+      component.updateTheme(theme);
+      expect(currentQuizService.quiz.sessionConfig.theme).toEqual(theme);
+      expect(currentQuizService.toggleSettingByName).toHaveBeenCalled();
     }),
   ));
 

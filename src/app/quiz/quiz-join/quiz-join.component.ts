@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { Observable, Subscription } from 'rxjs';
-import { DefaultSettings } from '../../../lib/default.settings';
+import { Subscription } from 'rxjs';
+import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasService } from '../../service/cas/cas.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { ThemesService } from '../../service/themes/themes.service';
@@ -21,12 +20,13 @@ export class QuizJoinComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
     private casService: CasService,
     public currentQuizService: CurrentQuizService,
     private themesService: ThemesService,
+    private lobbyApiService: LobbyApiService,
+    private quizApiService: QuizApiService,
   ) {
   }
 
@@ -37,16 +37,8 @@ export class QuizJoinComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       const quizname = params.quizName;
-      this.queryQuizStatus(quizname).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData, quizname));
+      this.quizApiService.getQuizStatus(quizname).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData, quizname));
     });
-  }
-
-  private queryQuizStatus(quizname): Observable<IMessage> {
-    return this.http.get<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`);
-  }
-
-  private queryLobbyStatus(quizname): Observable<IMessage> {
-    return this.http.get<IMessage>(`${DefaultSettings.httpApiEndpoint}/lobby/${quizname}`);
   }
 
   private resolveQuizStatusData(quizStatusData, quizname): void {
@@ -60,7 +52,7 @@ export class QuizJoinComponent implements OnInit {
       this.casService.quizName = quizname;
     }
 
-    this.queryLobbyStatus(quizname).subscribe(lobbyStatusData => this.resolveLobbyStatusData(quizStatusData, lobbyStatusData));
+    this.lobbyApiService.getLobbyStatus(quizname).subscribe(lobbyStatusData => this.resolveLobbyStatusData(quizStatusData, lobbyStatusData));
   }
 
   private resolveLobbyStatusData(quizStatusData, lobbyStatusData): void {

@@ -1,12 +1,14 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { DefaultSettings } from '../../../lib/default.settings';
+import { of } from 'rxjs/index';
 import { createTranslateLoader } from '../../../lib/translation.factory';
+import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasService } from '../../service/cas/cas.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -37,7 +39,6 @@ class MockRouter {
 describe('QuizJoinComponent', () => {
   let component: QuizJoinComponent;
   let fixture: ComponentFixture<QuizJoinComponent>;
-  let backend: HttpTestingController;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -59,6 +60,8 @@ describe('QuizJoinComponent', () => {
       ],
       providers: [
         CasService,
+        LobbyApiService,
+        QuizApiService,
         { provide: CurrentQuizService, useClass: CurrentQuizMockService },
         { provide: ThemesService, useClass: ThemesMockService },
         UserService,
@@ -75,26 +78,20 @@ describe('QuizJoinComponent', () => {
 
   beforeEach(async(() => {
     fixture = TestBed.createComponent(QuizJoinComponent);
-    backend = TestBed.get(HttpTestingController);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  afterEach(() => {
-    backend.verify();
-  });
-
-  it('should be created', () => {
+  it('should be created', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 
-  it('should contain a TYPE reference', () => {
+  it('should contain a TYPE reference', async(() => {
     expect(QuizJoinComponent.TYPE).toEqual('QuizJoinComponent');
-  });
+  }));
 
   it('should redirect the user to / on failure',
-    async(inject([Router], (router: Router) => {
-        const quizStatusUrl = `${DefaultSettings.httpApiEndpoint}/quiz/status/test`;
+    async(inject([Router, QuizApiService], (router: Router, quizApiService: QuizApiService) => {
         const quizStatusData = {
           status: 'STATUS:FAILED',
           step: 'QUIZ:UNAVAILABLE',
@@ -104,21 +101,23 @@ describe('QuizJoinComponent', () => {
           },
         };
 
-        spyOn(router, 'navigate').and.callThrough();
+        spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+        spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.ngOnInit().subscribe(value => {
-          backend.expectOne(quizStatusUrl).flush(quizStatusData);
-          expect(router.navigate).toHaveBeenCalledWith(['/']);
-        });
+        component.ngOnInit();
+        expect(router.navigate).toHaveBeenCalledWith(['/']);
       }),
     ),
   );
 
   it('should add a cas ticket to the casService if a ticket is supplied', async(inject(
-    [Router, CurrentQuizService, CasService],
-    (router: Router, currentQuizService: CurrentQuizService, casService: CasService) => {
-
-      const quizStatusUrl = `${DefaultSettings.httpApiEndpoint}/quiz/status/test`;
+    [Router, CurrentQuizService, CasService, QuizApiService, LobbyApiService],
+    (router: Router,
+     currentQuizService: CurrentQuizService,
+     casService: CasService,
+     quizApiService: QuizApiService,
+     lobbyApiService: LobbyApiService,
+    ) => {
       const quizStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
@@ -127,9 +126,7 @@ describe('QuizJoinComponent', () => {
           provideNickSelection: false,
         },
       };
-
-      const quizDataUrl = `${DefaultSettings.httpApiEndpoint}/lobby/test`;
-      const quizData = {
+      const lobbyStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
         payload: {
@@ -139,20 +136,24 @@ describe('QuizJoinComponent', () => {
         },
       };
 
+      spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+      spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
       spyOn(router, 'navigate').and.callFake(() => {});
 
-      component.ngOnInit().subscribe(value => {
-        backend.expectOne(quizStatusUrl).flush(quizStatusData);
-        backend.expectOne(quizDataUrl).flush(quizData);
-        expect(casService.casLoginRequired).toBeTruthy();
-        expect(casService.quizName).toEqual('test');
-      });
+      component.ngOnInit();
+      expect(casService.casLoginRequired).toBeTruthy();
+      expect(casService.quizName).toEqual('test');
     })));
 
   it('should redirect the user to the membergroup selection if there are multiple groups available', async(inject(
-    [Router, CurrentQuizService],
-    (router: Router, currentQuizService: CurrentQuizService) => {
-      const quizStatusUrl = `${DefaultSettings.httpApiEndpoint}/quiz/status/test`;
+    [Router, CurrentQuizService, QuizApiService, LobbyApiService],
+    (router: Router,
+     currentQuizService: CurrentQuizService,
+     quizApiService: QuizApiService,
+     lobbyApiService: LobbyApiService,
+    ) => {
+      const customQuiz = currentQuizService.quiz;
+      customQuiz.sessionConfig.nicks.memberGroups = ['Group1', 'Group2'];
       const quizStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
@@ -161,11 +162,7 @@ describe('QuizJoinComponent', () => {
           provideNickSelection: false,
         },
       };
-
-      const quizDataUrl = `${DefaultSettings.httpApiEndpoint}/lobby/test`;
-      const customQuiz = currentQuizService.quiz;
-      customQuiz.sessionConfig.nicks.memberGroups = ['Group1', 'Group2'];
-      const quizData = {
+      const lobbyStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
         payload: {
@@ -175,19 +172,21 @@ describe('QuizJoinComponent', () => {
         },
       };
 
+      spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+      spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
       spyOn(router, 'navigate').and.callFake(() => {});
 
-      component.ngOnInit().subscribe(value => {
-        backend.expectOne(quizStatusUrl).flush(quizStatusData);
-        backend.expectOne(quizDataUrl).flush(quizData);
-        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'memberGroup']);
-      });
+      component.ngOnInit();
+      expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'memberGroup']);
     })));
 
   it('should redirect the user to input the nickname if no predefined nicks are available', async(inject(
-    [CurrentQuizService, Router],
-    (currentQuizService: CurrentQuizService, router: Router) => {
-      const quizStatusUrl = `${DefaultSettings.httpApiEndpoint}/quiz/status/test`;
+    [CurrentQuizService, Router, QuizApiService, LobbyApiService],
+    (currentQuizService: CurrentQuizService,
+     router: Router,
+     quizApiService: QuizApiService,
+     lobbyApiService: LobbyApiService,
+    ) => {
       const quizStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
@@ -196,9 +195,7 @@ describe('QuizJoinComponent', () => {
           provideNickSelection: false,
         },
       };
-
-      const quizDataUrl = `${DefaultSettings.httpApiEndpoint}/lobby/test`;
-      const quizData = {
+      const lobbyStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
         payload: {
@@ -208,19 +205,25 @@ describe('QuizJoinComponent', () => {
         },
       };
 
+      spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+      spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
       spyOn(router, 'navigate').and.callFake(() => {});
 
-      component.ngOnInit().subscribe(value => {
-        backend.expectOne(quizStatusUrl).flush(quizStatusData);
-        backend.expectOne(quizDataUrl).flush(quizData);
-        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
-      });
+      component.ngOnInit();
+      expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
     })));
 
   it('should redirect the user to the nickname selection if predefined nicks are available', async(inject(
-    [CurrentQuizService, Router],
-    (currentQuizService: CurrentQuizService, router: Router) => {
-      const quizStatusUrl = `${DefaultSettings.httpApiEndpoint}/quiz/status/test`;
+    [CurrentQuizService, Router, QuizApiService, LobbyApiService],
+    (currentQuizService: CurrentQuizService,
+     router: Router,
+     quizApiService: QuizApiService,
+     lobbyApiService: LobbyApiService,
+    ) => {
+
+      const customQuiz = currentQuizService.quiz;
+      customQuiz.sessionConfig.nicks.addSelectedNick('Predefined1');
+      customQuiz.sessionConfig.nicks.addSelectedNick('Predefined2');
       const quizStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
@@ -229,12 +232,7 @@ describe('QuizJoinComponent', () => {
           provideNickSelection: true,
         },
       };
-
-      const quizDataUrl = `${DefaultSettings.httpApiEndpoint}/lobby/test`;
-      const customQuiz = currentQuizService.quiz;
-      customQuiz.sessionConfig.nicks.addSelectedNick('Predefined1');
-      customQuiz.sessionConfig.nicks.addSelectedNick('Predefined2');
-      const quizData = {
+      const lobbyStatusData = {
         status: 'STATUS:SUCCESSFUL',
         step: 'QUIZ:AVAILABLE',
         payload: {
@@ -244,12 +242,11 @@ describe('QuizJoinComponent', () => {
         },
       };
 
+      spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+      spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
       spyOn(router, 'navigate').and.callFake(() => {});
 
-      component.ngOnInit().subscribe(() => {
-        backend.expectOne(quizStatusUrl).flush(quizStatusData);
-        backend.expectOne(quizDataUrl).flush(quizData);
-        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'select']);
-      });
+      component.ngOnInit();
+      expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'select']);
     })));
 });

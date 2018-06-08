@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DefaultSettings } from '../../../lib/default.settings';
+import { StatisticsApiService } from '../api/statistics/statistics-api.service';
 import { SharedService } from '../shared/shared.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
@@ -12,9 +11,6 @@ export class ConnectionService {
   private _socket: Subject<IMessage>;
 
   get socket(): Subject<IMessage> | any {
-    if (!this._socket) {
-      return { subscribe: () => {} };
-    }
     return this._socket;
   }
 
@@ -71,8 +67,8 @@ export class ConnectionService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private websocketService: WebsocketService,
-    private http: HttpClient,
     private sharedService: SharedService,
+    private statisticsApiService: StatisticsApiService,
   ) {
     this.initWebsocket();
   }
@@ -115,8 +111,8 @@ export class ConnectionService {
       }
       this.pending = true;
       const data = await new Promise(resolve2 => {
-        this.http.get(`${DefaultSettings.httpApiEndpoint}`).subscribe(
-          (httpData) => {
+        this.statisticsApiService.getBaseStatistics().subscribe(
+          httpData => {
             this.pending = false;
             this.serverAvailable = true;
             this._websocketAvailable = true;
@@ -138,7 +134,7 @@ export class ConnectionService {
   }
 
   public calculateRTT(startTime = new Date().getTime()): void {
-    this.http.options(`${DefaultSettings.httpApiEndpoint}`).subscribe(
+    this.statisticsApiService.optionsBaseStatistics().subscribe(
       () => {
         this.serverAvailable = true;
         this._rtt = new Date().getTime() - startTime;

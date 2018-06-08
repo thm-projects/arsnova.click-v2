@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -9,6 +8,7 @@ import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/
 import { DefaultSettings } from '../../../../lib/default.settings';
 import { FooterbarElement } from '../../../../lib/footerbar-element/footerbar-element';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
+import { LobbyApiService } from '../../../service/api/lobby/lobby-api.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
@@ -33,12 +33,12 @@ export class QuizManagerComponent implements OnDestroy {
   constructor(
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
-    private http: HttpClient,
     private router: Router,
     private currentQuizService: CurrentQuizService,
     private translateService: TranslateService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private trackingService: TrackingService,
+    private lobbyApiService: LobbyApiService,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
@@ -62,13 +62,10 @@ export class QuizManagerComponent implements OnDestroy {
       }
       this.currentQuizService.quiz = this.questionGroupItem;
       await this.currentQuizService.cacheQuiz();
-      await this.http.put(`${DefaultSettings.httpApiEndpoint}/lobby`, {
+      await this.lobbyApiService.putLobby({
         quiz: this.currentQuizService.quiz.serialize(),
-      }).subscribe(
-        () => {
-          this.router.navigate(['/quiz', 'flow', 'lobby']);
-        },
-      );
+      }).toPromise();
+      this.router.navigate(['/quiz', 'flow', 'lobby']);
     };
   }
 

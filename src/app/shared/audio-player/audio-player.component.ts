@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Inject, Input, Output, PLATFORM_ID } from '@angular/core';
-import { DefaultSettings } from '../../../lib/default.settings';
+import { FilesApiService } from '../../service/api/files/files-api.service';
 
 @Component({
   selector: 'app-audio-player',
@@ -9,12 +9,18 @@ import { DefaultSettings } from '../../../lib/default.settings';
 })
 export class AudioPlayerComponent implements AfterViewInit {
   public static TYPE = 'AudioPlayerComponent';
-  @Input() public target: string;
-  @Input() public autostart: boolean;
+
   @Output() public volumeChange = new EventEmitter();
 
-  @Input() private _original_volume: number;
+  @Input() public autostart: boolean;
 
+  private _target: 'lobby' | 'countdownRunning' | 'countdownEnd';
+  @Input()
+  set target(value: 'lobby' | 'countdownRunning' | 'countdownEnd') {
+    this._target = value;
+  }
+
+  private _original_volume: number;
   @Input()
   set original_volume(value: number) {
     this._original_volume = value;
@@ -25,10 +31,6 @@ export class AudioPlayerComponent implements AfterViewInit {
   }
 
   private _src: string;
-
-  get src(): string {
-    return this._src;
-  }
 
   @Input()
   set src(value: string) {
@@ -49,12 +51,6 @@ export class AudioPlayerComponent implements AfterViewInit {
     this._loop = value ? true : null;
   }
 
-  private _apiUrl = `${DefaultSettings.httpApiEndpoint}/files/sound/`;
-
-  get apiUrl(): string {
-    return this._apiUrl;
-  }
-
   private _volume = 1;
 
   get volume(): number {
@@ -72,7 +68,12 @@ export class AudioPlayerComponent implements AfterViewInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
+    private filesApiService: FilesApiService,
   ) {
+  }
+
+  public getUrl(): string {
+    return this.filesApiService.SOUND_FILE_GET_URL(this._target, this._src);
   }
 
   public playMusic(): void {

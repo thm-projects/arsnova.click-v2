@@ -185,7 +185,7 @@
           <div class="col-12 col-sm-6">
             <!--suppress JSValidateTypes -->
             <app-audio-player [src]="config.titleConfig.countdownRunning"
-                              target="countdownRunning"
+                              [target]="'countdownRunning'"
                               id="player-countdown-running"
                               [original_volume]="config.volumeConfig.useGlobalVolume ? config.volumeConfig.global : config.volumeConfig.countdownRunning"
                               (volumeChange)="config.volumeConfig.countdownRunning = $event"></app-audio-player>
@@ -238,7 +238,7 @@
           <div class="col-12 col-sm-6">
             <!--suppress JSValidateTypes -->
             <app-audio-player [src]="config.titleConfig.countdownEnd"
-                              target="countdownEnd"
+                              [target]="'countdownEnd'"
                               id="player-countdown-end"
                               [original_volume]="config.volumeConfig.useGlobalVolume ? config.volumeConfig.global : config.volumeConfig.countdownEnd"
                               (volumeChange)="config.volumeConfig.countdownEnd = $event"></app-audio-player>

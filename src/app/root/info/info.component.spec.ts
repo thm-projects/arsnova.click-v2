@@ -60,4 +60,8 @@ describe('InfoComponent', () => {
   it('should be created', async(() => {
     expect(component).toBeTruthy();
   }));
+
+  it('should contain a TYPE reference', async(() => {
+    expect(InfoComponent.TYPE).toEqual('InfoComponent');
+  }));
 });

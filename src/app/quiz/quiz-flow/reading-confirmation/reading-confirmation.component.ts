@@ -1,10 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
-import { Observable } from 'rxjs/index';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -28,12 +26,12 @@ export class ReadingConfirmationComponent implements OnInit {
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
     private router: Router,
-    private http: HttpClient,
     private currentQuizService: CurrentQuizService,
     private questionTextService: QuestionTextService,
     private sanitizer: DomSanitizer,
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
+    private memberApiService: MemberApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
@@ -56,19 +54,13 @@ export class ReadingConfirmationComponent implements OnInit {
     await this.questionTextService.change(this.currentQuizService.currentQuestion().questionText);
   }
 
-  public confirmReading(): Observable<void> {
-
-    return new Observable<void>(subscriber => {
-
-      (async () => {
-        this.http.put(`${DefaultSettings.httpApiEndpoint}/member/reading-confirmation`, {
-          quizName: this.currentQuizService.quiz.hashtag,
-          nickname: window.sessionStorage.getItem(`config.nick`),
-          questionIndex: this.questionIndex,
-        }).subscribe(() => {
-          this.router.navigate(['/quiz', 'flow', 'results']);
-        });
-      })().then(() => subscriber.next());
+  public confirmReading(): void {
+    this.memberApiService.putReadingConfirmationValue({
+      quizName: this.currentQuizService.quiz.hashtag,
+      nickname: window.sessionStorage.getItem(`config.nick`),
+      questionIndex: this.questionIndex,
+    }).subscribe(() => {
+      this.router.navigate(['/quiz', 'flow', 'results']);
     });
   }
 

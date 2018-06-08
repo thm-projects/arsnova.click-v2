@@ -1,5 +1,4 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,10 +9,12 @@ import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces'
 import { ABCDSingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single_abcd';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
 import { CasService } from '../../service/cas/cas.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -84,7 +85,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private modalService: NgbModal,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private currentQuizService: CurrentQuizService,
-    private http: HttpClient,
     private router: Router,
     private themesService: ThemesService,
     private route: ActivatedRoute,
@@ -95,6 +95,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private casService: CasService,
     private settingsService: SettingsService,
     private trackingService: TrackingService,
+    private quizApiService: QuizApiService,
+    private lobbyApiService: LobbyApiService,
     public sharedService: SharedService,
   ) {
 
@@ -137,8 +139,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.connectionService.initConnection().then(() => {
 
-      this.connectionService.socket.subscribe(
-        (data: IMessage) => {
+      this.connectionService.socket.subscribe(data => {
+          console.log(data);
           this.connectionService.websocketAvailable = true;
 
           switch (data.step) {
@@ -160,7 +162,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.themesService.updateCurrentlyUsedTheme().subscribe();
+    this.themesService.updateCurrentlyUsedTheme();
   }
 
   public ngOnDestroy(): void {
@@ -169,23 +171,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  public autoJoinToSession(quizname): Subscription {
-    return new Observable<void>(subscriber => {
-      of(this.selectQuizByList(quizname)).subscribe(() => subscriber.complete());
+  public autoJoinToSession(quizname): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
-      if (isPlatformServer(this.platformId)) {
-        return;
-      }
+    this.selectQuizByList(quizname);
 
-      const interval = setInterval(() => {
-        if (document.getElementById('joinSession').hasAttribute('disabled')) {
-          return;
-        } else {
-          clearInterval(interval);
-        }
-        document.getElementById('joinSession').click();
-      }, 10);
-    }).subscribe();
+    this.router.navigate(['/quiz', this.enteredSessionName]);
   }
 
   public showQuiznameDatalist(): void {
@@ -204,19 +197,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isShowingQuiznameDatalist = false;
   }
 
-  public selectQuizByList(quizname: string): Subscription {
-    return new Observable<void>(subscriber => {
-      this.hideQuiznameDatalist();
-      console.log('selectquizbyname call');
-      this.selectQuizByName(quizname).subscribe(() => {
-        console.log('selectquizbyname returns');
-        subscriber.complete();
-      });
-    }).subscribe();
+  public selectQuizByList(quizName: string): void {
+    this.hideQuiznameDatalist();
+    console.log('selectquizbyname call');
+    this.selectQuizByName(quizName);
   }
 
   public parseQuiznameInput(event: any): void {
-    this.selectQuizByName(event.target.value.trim()).subscribe();
+    this.selectQuizByName(event.target.value.trim());
   }
 
   public setPassword(event: Event): void {
@@ -295,9 +283,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     const questionGroup = await new Promise<IQuestionGroup>((resolve) => {
       if (this.isAddingDemoQuiz) {
-        this.addDemoQuiz().subscribe((value) => resolve(value));
+        this.addDemoQuiz().then(value => resolve(value));
       } else if (this.isAddingABCDQuiz) {
-        this.addAbcdQuiz().subscribe((value) => resolve(value));
+        this.addAbcdQuiz().then(value => resolve(value));
       } else if (questionGroupSerialized) {
         resolve(questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized));
       } else {
@@ -312,54 +300,50 @@ export class HomeComponent implements OnInit, OnDestroy {
       window.localStorage.setItem('config.private_key', this.activeQuestionGroupService.generatePrivateKey());
     }
 
-    this.reserveQuiz(questionGroup, routingTarget).subscribe();
+    this.reserveQuiz(questionGroup, routingTarget);
   }
 
-  private reserveQuiz(questionGroup, routingTarget): Observable<IMessage> {
-    return new Observable<IMessage>(subscriber => {
-      this.http.post<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/reserve`, {
-        quizName: this.enteredSessionName,
-        privateKey: window.localStorage.getItem('config.private_key'),
-        serverPassword: this._serverPassword,
-      }).subscribe(async value => {
+  private reserveQuiz(questionGroup: IQuestionGroup, routingTarget: Array<string>): void {
+    this.quizApiService.postQuizReservation({
+      quizName: this.enteredSessionName,
+      privateKey: window.localStorage.getItem('config.private_key'),
+      serverPassword: this._serverPassword,
+    }).subscribe(async value => {
 
-        if (value.status === 'STATUS:SUCCESSFUL') {
-          this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-          this.activeQuestionGroupService.persist();
+      if (value.status === 'STATUS:SUCCESSFUL') {
+        this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
+        this.activeQuestionGroupService.persist();
 
-          this.currentQuizService.quiz = questionGroup;
-          this.currentQuizService.persistToSessionStorage();
+        this.currentQuizService.quiz = questionGroup;
+        this.currentQuizService.persistToSessionStorage();
 
-          if (this.isAddingABCDQuiz) {
-            this.trackingService.trackConversionEvent({ action: HomeComponent.TYPE, label: 'ABCD Quiz created' });
-          } else if (this.isAddingDemoQuiz) {
-            this.trackingService.trackConversionEvent({ action: HomeComponent.TYPE, label: 'Demo Quiz created' });
-          }
-
-          await this.activateQuiz(questionGroup);
-
-          this.router.navigate(routingTarget);
-
-        } else {
-
-          if (value.step === 'QUIZ:TOO_MUCH_ACTIVE_QUIZZES') {
-            this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
-          } else if (value.step === 'QUIZ:SERVER_PASSWORD_REQUIRED') {
-            this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
-          } else if (value.step === 'QUIZ:INSUFFICIENT_PERMISSIONS') {
-            this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
-          } else {
-            console.log(value);
-          }
+        if (this.isAddingABCDQuiz) {
+          this.trackingService.trackConversionEvent({ action: HomeComponent.TYPE, label: 'ABCD Quiz created' });
+        } else if (this.isAddingDemoQuiz) {
+          this.trackingService.trackConversionEvent({ action: HomeComponent.TYPE, label: 'Demo Quiz created' });
         }
 
-        subscriber.next(value);
-      });
+        await this.activateQuiz(questionGroup);
+
+        this.router.navigate(routingTarget);
+
+      } else {
+
+        if (value.step === 'QUIZ:TOO_MUCH_ACTIVE_QUIZZES') {
+          this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
+        } else if (value.step === 'QUIZ:SERVER_PASSWORD_REQUIRED') {
+          this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
+        } else if (value.step === 'QUIZ:INSUFFICIENT_PERMISSIONS') {
+          this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
+        } else {
+          console.log(value);
+        }
+      }
     });
   }
 
-  private selectQuizByName(quizname: string): Observable<void> {
-    this.enteredSessionName = quizname;
+  private selectQuizByName(quizName: string): void {
+    this.enteredSessionName = quizName;
     this.canJoinQuiz = false;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
@@ -374,17 +358,16 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     const currentQuizzes = JSON.parse(window.localStorage.getItem('config.owned_quizzes').toLowerCase()) || [];
 
-    if (currentQuizzes.find(quiz => quiz === quizname.toLowerCase())) {
-      return of(this.selectQuizAsExisting(quizname));
-    } else if (quizname.toLowerCase() === 'demo quiz') {
-      return of(this.selectQuizAsDemoQuiz());
-    } else if (this.checkABCDOrdering(quizname.toLowerCase())) {
-      return of(this.selectQuizAsAbcdQuiz());
+    if (currentQuizzes.find(quiz => quiz === quizName.toLowerCase())) {
+      this.selectQuizAsExisting(quizName);
+    } else if (quizName.toLowerCase() === 'demo quiz') {
+      this.selectQuizAsDemoQuiz();
+    } else if (this.checkABCDOrdering(quizName.toLowerCase())) {
+      this.selectQuizAsAbcdQuiz();
     } else {
-      if (quizname.length > 3) {
-        return this.selectQuizAsDefaultQuiz(quizname);
+      if (quizName.length > 3) {
+        this.selectQuizAsDefaultQuiz(quizName);
       }
-      return of(null);
     }
   }
 
@@ -411,42 +394,35 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
-  private selectQuizAsDefaultQuiz(quizname): Observable<any> {
-    return new Observable<any>(subscriber => {
-      console.log('http start');
-      subscriber.next(of(
-        this.http.get<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/status/${quizname}`).subscribe(value => {
-          console.log('http returned', value);
-          if (value.status === 'STATUS:SUCCESSFUL') {
-            switch (value.step) {
-              case 'QUIZ:EXISTS':
-                this.canAddQuiz = false;
-                this.canJoinQuiz = false;
-                this.passwordRequired = false;
-                break;
-              case 'QUIZ:AVAILABLE':
-                this.canAddQuiz = false;
-                this.canJoinQuiz = true;
-                this.passwordRequired = false;
-                this._provideNickSelection = value.payload.provideNickSelection;
-                this.casService.casLoginRequired = value.payload.authorizeViaCas;
-                if (this.casService.casLoginRequired) {
-                  this.casService.quizName = quizname;
-                }
-                break;
-              case 'QUIZ:UNDEFINED':
-                this.canAddQuiz = true;
-                this.canJoinQuiz = false;
-                this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
-                break;
-              default:
-                subscriber.error(value);
+  private selectQuizAsDefaultQuiz(quizName: string): void {
+    this.quizApiService.getQuizStatus(quizName).subscribe(value => {
+      console.log('http returned', value);
+      if (value.status === 'STATUS:SUCCESSFUL') {
+        switch (value.step) {
+          case 'QUIZ:EXISTS':
+            this.canAddQuiz = false;
+            this.canJoinQuiz = false;
+            this.passwordRequired = false;
+            break;
+          case 'QUIZ:AVAILABLE':
+            this.canAddQuiz = false;
+            this.canJoinQuiz = true;
+            this.passwordRequired = false;
+            this._provideNickSelection = value.payload.provideNickSelection;
+            this.casService.casLoginRequired = value.payload.authorizeViaCas;
+            if (this.casService.casLoginRequired) {
+              this.casService.quizName = quizName;
             }
-          } else {
-            subscriber.error(value);
-          }
-        }),
-      ));
+            break;
+          case 'QUIZ:UNDEFINED':
+            this.canAddQuiz = true;
+            this.canJoinQuiz = false;
+            this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+            break;
+          default:
+            console.log(value);
+        }
+      }
     });
   }
 
@@ -477,84 +453,63 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private activateQuiz(questionGroup: IQuestionGroup): Observable<IMessage> {
-
-    return new Observable<IMessage>(subscriber => {
-      (async () => {
-        this.currentQuizService.quiz = questionGroup;
-        if (this.isAddingABCDQuiz || this.isAddingDemoQuiz) {
-          this.currentQuizService.cacheQuiz();
-        }
-
-        this.http.put<IMessage>(`${DefaultSettings.httpApiEndpoint}/lobby`, {
-          quiz: this.currentQuizService.quiz.serialize(),
-        }).subscribe(
-          (data) => {
-            subscriber.next(data);
-          },
-        );
-      })();
+    return this.lobbyApiService.putLobby({
+      quiz: questionGroup.serialize(),
     });
   }
 
-  private addDemoQuiz(): Observable<IQuestionGroup> {
-    const url = `${DefaultSettings.httpApiEndpoint}/quiz/generate/demo/${this.i18nService.currentLanguage.toString()}`;
-    return new Observable<IQuestionGroup>(subscriber => {
-      this.http.get(url).subscribe((value: any) => {
-        Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
-        const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
-        this.enteredSessionName = questionGroup.hashtag;
-        subscriber.next(questionGroup);
-      });
-    });
+  private async addDemoQuiz(): Promise<IQuestionGroup> {
+    const value = await this.quizApiService.generateDemoQuiz(this.i18nService.currentLanguage.toString()).toPromise();
+    Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
+    const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
+    this.enteredSessionName = questionGroup.hashtag;
+
+    return questionGroup;
   }
 
-  private addAbcdQuiz(): Observable<IQuestionGroup> {
+  private async addAbcdQuiz(): Promise<IQuestionGroup> {
     const language = this.i18nService.currentLanguage.toString();
     const answerList = this.enteredSessionName.split('');
 
-    return new Observable<IQuestionGroup>(subscriber => {
-      if (isPlatformServer(this.platformId)) {
-        subscriber.complete();
-        return;
-      }
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
-      const hasMatchedABCDQuiz = JSON.parse(window.localStorage.getItem('config.owned_quizzes')).filter(quizName => {
-        return quizName.split(' ')[0] === this.enteredSessionName;
-      });
-      if (hasMatchedABCDQuiz.length) {
-        const rawQuiz = JSON.parse(window.localStorage.getItem(hasMatchedABCDQuiz[0]));
-        const questionGroup = questionGroupReflection.DefaultQuestionGroup(rawQuiz);
-        const answerOptionList = (<Array<DefaultAnswerOption>>[]);
-
-        answerList.forEach((character, index) => {
-          answerOptionList.push(new DefaultAnswerOption({ answerText: (String.fromCharCode(index + 65)) }));
-        });
-        this.enteredSessionName = questionGroup.hashtag;
-        const abcdQuestion = new ABCDSingleChoiceQuestion({
-          questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false,
-        });
-        questionGroup.questionList = [abcdQuestion];
-        subscriber.next(questionGroup);
-        return;
-      }
-      const url = `${DefaultSettings.httpApiEndpoint}/quiz/generate/abcd/${language}/${answerList.length}`;
-      this.http.get(url).subscribe((value: any) => {
-
-        Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
-
-        const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
-        const answerOptionList = (<Array<DefaultAnswerOption>>[]);
-
-        answerList.forEach((character, index) => {
-          answerOptionList.push(new DefaultAnswerOption({ answerText: (String.fromCharCode(index + 65)) }));
-        });
-        this.enteredSessionName = questionGroup.hashtag;
-        const abcdQuestion = new ABCDSingleChoiceQuestion({
-          questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false,
-        });
-        questionGroup.questionList = [abcdQuestion];
-        subscriber.next(questionGroup);
-      });
+    const hasMatchedABCDQuiz = JSON.parse(window.localStorage.getItem('config.owned_quizzes')).filter(quizName => {
+      return quizName.split(' ')[0] === this.enteredSessionName;
     });
+    if (hasMatchedABCDQuiz.length) {
+      const rawQuiz = JSON.parse(window.localStorage.getItem(hasMatchedABCDQuiz[0]));
+      const questionGroup = questionGroupReflection.DefaultQuestionGroup(rawQuiz);
+      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+
+      answerList.forEach((character, index) => {
+        answerOptionList.push(new DefaultAnswerOption({ answerText: (String.fromCharCode(index + 65)) }));
+      });
+      this.enteredSessionName = questionGroup.hashtag;
+      const abcdQuestion = new ABCDSingleChoiceQuestion({
+        questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false,
+      });
+      questionGroup.questionList = [abcdQuestion];
+      return questionGroup;
+
+    } else {
+
+      const value = await this.quizApiService.generateABCDQuiz(language, answerList.length).toPromise();
+      Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
+
+      const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
+      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+
+      answerList.forEach((character, index) => {
+        answerOptionList.push(new DefaultAnswerOption({ answerText: (String.fromCharCode(index + 65)) }));
+      });
+      this.enteredSessionName = questionGroup.hashtag;
+      const abcdQuestion = new ABCDSingleChoiceQuestion({
+        questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false,
+      });
+      questionGroup.questionList = [abcdQuestion];
+      return questionGroup;
+    }
   }
 }

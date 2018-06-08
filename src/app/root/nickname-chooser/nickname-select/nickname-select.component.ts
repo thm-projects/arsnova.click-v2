@@ -1,10 +1,9 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IMemberGroup, IMessage, INickname } from 'arsnova-click-v2-types/src/common';
-import { DefaultSettings } from '../../../../lib/default.settings';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
@@ -34,13 +33,13 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private sanitizer: DomSanitizer,
-    private http: HttpClient,
     private footerBarService: FooterBarService,
     private router: Router,
     private attendeeService: AttendeeService,
     private userService: UserService,
     private connectionService: ConnectionService,
     private currentQuizService: CurrentQuizService,
+    private memberApiService: MemberApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
@@ -52,15 +51,15 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     };
   }
 
-  public joinQuiz(name: any): void {
-    if (name.changingThisBreaksApplicationSecurity) {
-      name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+  public joinQuiz(nickName: any): void {
+    if (nickName.changingThisBreaksApplicationSecurity) {
+      nickName = nickName.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
-    name = name.toString();
+    nickName = nickName.toString();
     const promise = new Promise((resolve, reject) => {
-      this.http.put(`${DefaultSettings.httpApiEndpoint}/member/`, {
+      this.memberApiService.putMember({
         quizName: this.currentQuizService.quiz.hashtag,
-        nickname: name,
+        nickname: nickName,
         groupName: window.sessionStorage.getItem('config.memberGroup'),
         ticket: this.userService.ticket,
       }).subscribe((data: IMessage) => {
@@ -81,7 +80,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       });
     });
     promise.then(() => {
-      window.sessionStorage.setItem(`config.nick`, name);
+      window.sessionStorage.setItem(`config.nick`, nickName);
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
       console.log(err);
@@ -102,14 +101,12 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       return;
     }
     this._isLoading = true;
-    this.http.get(`${DefaultSettings.httpApiEndpoint}/member/${this.currentQuizService.quiz.hashtag}/available`).subscribe(
-      (data: IMessage) => {
-        this._isLoading = false;
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {
-          this._nicks = this._nicks.concat(data.payload.nicknames);
-        }
-      },
-    );
+    this.memberApiService.getAvailableMemberNames(this.currentQuizService.quiz.hashtag).subscribe(data => {
+      this._isLoading = false;
+      if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {
+        this._nicks = this._nicks.concat(data.payload.nicknames);
+      }
+    });
   }
 
   public ngOnDestroy(): void {

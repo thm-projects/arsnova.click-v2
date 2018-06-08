@@ -10,6 +10,8 @@ import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-comp
 import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { ActiveQuestionGroupMockService } from '../../../service/active-question-group/active-question-group.mock.service';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
+import { MemberApiService } from '../../../service/api/member/member-api.service';
+import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -21,6 +23,7 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { I18nService } from '../../../service/i18n/i18n.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
@@ -68,7 +71,9 @@ describe('QuizLobbyComponent', () => {
         I18nService,
         HeaderLabelService,
         { provide: AttendeeService, useClass: AttendeeMockService },
-        ThemesService,
+        { provide: ThemesService, useClass: ThemesMockService },
+        MemberApiService,
+        QuizApiService,
       ],
       declarations: [QuizLobbyComponent],
     }).compileComponents();

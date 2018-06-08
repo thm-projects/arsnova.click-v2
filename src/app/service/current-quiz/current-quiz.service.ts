@@ -1,13 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ICurrentQuiz, ICurrentQuizData, IMessage } from 'arsnova-click-v2-types/src/common';
 import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { MemberApiService } from '../api/member/member-api.service';
+import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SettingsService } from '../settings/settings.service';
@@ -80,11 +80,12 @@ export class CurrentQuizService implements ICurrentQuiz {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private http: HttpClient,
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
     private settingsService: SettingsService,
     private connectionService: ConnectionService,
+    private quizApiService: QuizApiService,
+    private memberApiService: MemberApiService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       const instance = window.sessionStorage.getItem('config.current_quiz');
@@ -117,7 +118,7 @@ export class CurrentQuizService implements ICurrentQuiz {
         if (this._isOwner) {
           if (this.settingsService.serverSettings.cacheQuizAssets) {
 
-            this.http.post(`${DefaultSettings.httpLibEndpoint}/cache/quiz/assets`, {
+            this.quizApiService.postCacheQuizAssets({
               quiz: this._quiz.serialize(),
             }).subscribe((response: IMessage) => {
 
@@ -155,8 +156,7 @@ export class CurrentQuizService implements ICurrentQuiz {
       if (isPlatformBrowser(this.platformId)) {
         const nickname = window.sessionStorage.getItem(`config.nick`);
         if (nickname) {
-          const url = `${DefaultSettings.httpApiEndpoint}/member/${this._quiz.hashtag}/${nickname}`;
-          await this.http.request('delete', url).subscribe(() => {});
+          await this.memberApiService.deleteMember(this._quiz.hashtag, nickname);
         }
         window.sessionStorage.removeItem(`config.memberGroup`);
         window.sessionStorage.removeItem(`config.nick`);
@@ -173,12 +173,12 @@ export class CurrentQuizService implements ICurrentQuiz {
   public close(): Promise<any> {
     return new Promise((resolve => {
       if (isPlatformBrowser(this.platformId) && this._isOwner && this._quiz) {
-        this.http.request('delete', `${DefaultSettings.httpApiEndpoint}/quiz/active`, {
+        this.quizApiService.deleteQuiz({
           body: {
             quizName: this._quiz.hashtag,
             privateKey: window.localStorage.getItem('config.private_key'),
           },
-        }).subscribe((response: IMessage) => {
+        }).subscribe(response => {
           if (response.status !== 'STATUS:SUCCESSFUL') {
             console.log(response);
           }
@@ -190,7 +190,7 @@ export class CurrentQuizService implements ICurrentQuiz {
     }));
   }
 
-  public toggleSetting(elem: IFooterBarElement): Observable<void> {
+  public toggleSetting(elem: IFooterBarElement): void {
     let target: string = null;
     switch (elem) {
       case this.footerBarService.footerElemResponseProgress:
@@ -210,29 +210,24 @@ export class CurrentQuizService implements ICurrentQuiz {
       this._quiz.sessionConfig[target] = !elem.isActive;
       elem.isActive = !elem.isActive;
       this.persistToSessionStorage();
-      return this.toggleSettingByName(target, elem.isActive);
+      this.toggleSettingByName(target, elem.isActive);
     }
   }
 
-  public toggleSettingByName(target: string, state: boolean | string): Observable<void> {
-    return new Observable<void>(subscriber => {
-      (async () => {
-        this.http.post<IMessage>(`${DefaultSettings.httpApiEndpoint}/quiz/settings/update`, {
-          quizName: this._quiz.hashtag,
-          target: target,
-          state: state,
-        }).subscribe(
-          (data) => {
-            if (data.status !== 'STATUS:SUCCESSFUL') {
-              console.log(data);
-            }
-          },
-          error => {
-            console.log(error);
-          },
-        );
-      })().then(() => subscriber.next());
-    });
+  public toggleSettingByName(target: string, state: boolean | string): void {
+    this.quizApiService.postQuizSettingsUpdate({
+      quizName: this._quiz.hashtag,
+      target: target,
+      state: state,
+    }).subscribe(data => {
+        if (data.status !== 'STATUS:SUCCESSFUL') {
+          console.log(data);
+        }
+      },
+      error => {
+        console.log(error);
+      },
+    );
   }
 
   public serialize(): ICurrentQuizData {

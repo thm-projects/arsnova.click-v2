@@ -94,10 +94,10 @@ describe('ProgressBarComponent', () => {
 
   it('#attendeeDataForAnswer', async(inject(
     [CurrentQuizService, AttendeeService, QuestionTextService],
-    async (currentQuizService: CurrentQuizService, attendeeService: AttendeeService, questionTextService: QuestionTextService) => {
+    (currentQuizService: CurrentQuizService, attendeeService: AttendeeService, questionTextService: QuestionTextService) => {
       component.questionIndex = 0;
       const question = <IQuestionChoice>currentQuizService.quiz.questionList[component.questionIndex];
-      await questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+      questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
       questionTextService.eventEmitter.subscribe((value) => {
         if (value instanceof Array) {
           component.data = value;

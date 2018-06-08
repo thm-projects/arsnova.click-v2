@@ -1,5 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -22,7 +22,6 @@ import { QuizRenameComponent } from './quiz-rename.component';
 describe('QuizRenameComponent', () => {
   let component: QuizRenameComponent;
   let fixture: ComponentFixture<QuizRenameComponent>;
-  let backend: HttpTestingController;
 
   beforeEach((() => {
     TestBed.configureTestingModule({
@@ -59,7 +58,6 @@ describe('QuizRenameComponent', () => {
     fixture = TestBed.createComponent(QuizRenameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    backend = TestBed.get(HttpTestingController);
   }));
 
   it('should be created', (() => {

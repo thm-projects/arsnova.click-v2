@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -56,11 +56,10 @@ describe('AdditionalDataComponent', () => {
     expect(AdditionalDataComponent.TYPE).toEqual('AdditionalDataComponent');
   }));
 
-  it('#switchShowMoreOrLess', (inject([HttpClient, HttpTestingController],
-    (http: HttpClient, backend: HttpTestingController) => {
-      const baseState = window.innerWidth >= 768;
-      expect(component.isShowingMore).toEqual(baseState);
-      component.switchShowMoreOrLess();
-      expect(component.isShowingMore).toEqual(!baseState);
-    })));
+  it('#switchShowMoreOrLess', () => {
+    const baseState = window.innerWidth >= 768;
+    expect(component.isShowingMore).toEqual(baseState);
+    component.switchShowMoreOrLess();
+    expect(component.isShowingMore).toEqual(!baseState);
+  });
 });

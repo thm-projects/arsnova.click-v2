@@ -1,10 +1,9 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { DefaultSettings } from '../../lib/default.settings';
 import { createTranslateLoader } from '../../lib/translation.factory';
 import { ConnectionMockService } from '../service/connection/connection.mock.service';
 import { ConnectionService } from '../service/connection/connection.service';
@@ -66,14 +65,7 @@ describe('ThemesComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', async(inject([HttpClient, HttpTestingController],
-    async (http: HttpClient, backend: HttpTestingController) => {
-      backend.expectOne(`${DefaultSettings.httpApiEndpoint}/themes`).flush({});
-      backend.match(`${DefaultSettings.httpLibEndpoint}/linkImages/theme-Material`).forEach(match => {
-        match.flush([]);
-      });
-      await expect(component).toBeTruthy();
-      backend.verify();
-    })),
-  );
+  it('should be created', () => {
+    expect(component).toBeTruthy();
+  });
 });
