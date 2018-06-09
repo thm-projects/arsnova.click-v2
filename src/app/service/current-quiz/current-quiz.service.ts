@@ -173,7 +173,7 @@ export class CurrentQuizService implements ICurrentQuiz {
   public close(): Promise<any> {
     return new Promise((resolve => {
       if (isPlatformBrowser(this.platformId) && this._isOwner && this._quiz) {
-        this.quizApiService.deleteQuiz({
+        this.quizApiService.deactivateQuizAsOwner({
           body: {
             quizName: this._quiz.hashtag,
             privateKey: window.localStorage.getItem('config.private_key'),

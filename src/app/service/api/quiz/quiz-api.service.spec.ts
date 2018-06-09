@@ -144,6 +144,22 @@ describe('QuizApiService', () => {
     expect(service).toBeTruthy();
   }));
 
+  it('should deactivate an active quiz', inject([QuizApiService], (service: QuizApiService) => {
+
+    const quizName = 'test';
+    const quizDeactivateData = {
+      body: {
+        quizName,
+        privateKey: '123456789',
+      },
+    };
+
+    service.deactivateQuizAsOwner(quizDeactivateData).subscribe();
+    backend.expectOne(service.QUIZ_DEACTIVATE_DELETE_URL()).flush({});
+
+    expect(service).toBeTruthy();
+  }));
+
   it('should generate a Demo Quiz', inject([QuizApiService], (service: QuizApiService) => {
 
     const langKey = 'en';

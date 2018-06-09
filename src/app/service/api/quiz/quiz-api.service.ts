@@ -54,6 +54,10 @@ export class QuizApiService {
     return `${DefaultSettings.httpApiEndpoint}/quiz`;
   }
 
+  public QUIZ_DEACTIVATE_DELETE_URL(): string {
+    return `${DefaultSettings.httpApiEndpoint}/quiz/active`;
+  }
+
   public QUIZ_GENERATE_DEMO_QUIZ_URL(languageKey: string): string {
     return `${DefaultSettings.httpApiEndpoint}/quiz/generate/demo/${languageKey}`;
   }
@@ -116,6 +120,10 @@ export class QuizApiService {
 
   public deleteQuiz(data: object): Observable<IMessage> {
     return this.http.request<IMessage>('delete', this.QUIZ_DELETE_URL(), data);
+  }
+
+  public deactivateQuizAsOwner(data: object): Observable<IMessage> {
+    return this.http.request<IMessage>('delete', this.QUIZ_DEACTIVATE_DELETE_URL(), data);
   }
 
   public generateDemoQuiz(languageKey: string): Observable<IQuestionGroup> {
