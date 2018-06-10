@@ -75,7 +75,7 @@
                [class.btn-success]="config.volumeConfig.useGlobalVolume"
                [class.btn-danger]="!config.volumeConfig.useGlobalVolume">
           <input type="checkbox"
-                 class="hidden"
+                 class="d-none"
                  id="toggle-global-volume"
                  [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
                  autocomplete="off"
@@ -104,7 +104,7 @@
                [class.btn-danger]="!config.enabled.lobby">
           <input id="toggle-lobby-music"
                  type="checkbox"
-                 class="hidden"
+                 class="d-none"
                  [attr.aria-label]="'Activate/Deactivate Lobby Music Button'"
                  autocomplete="off"
                  role="switch"
@@ -156,7 +156,7 @@
                [class.btn-success]="config.enabled.countdownRunning"
                [class.btn-danger]="!config.enabled.countdownRunning">
           <input type="checkbox"
-                 class="hidden"
+                 class="d-none"
                  id="toggle-countdown-running-music"
                  [attr.aria-label]="'Activate/Deactivate Countdown Running Button'"
                  autocomplete="off"
@@ -209,7 +209,7 @@
                [class.btn-success]="config.enabled.countdownEnd"
                [class.btn-danger]="!config.enabled.countdownEnd">
           <input type="checkbox"
-                 class="hidden"
+                 class="d-none"
                  id="toggle-countdown-end-music"
                  [attr.aria-label]="'Activate/Deactivate Countdown End Button'"
                  autocomplete="off"

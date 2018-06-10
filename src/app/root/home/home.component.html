@@ -30,7 +30,7 @@
               id="collapse-quiz-name-datalist"
               *ngIf="isShowingQuiznameDatalist"
               (click)="hideQuiznameDatalist()">
-          &#x21E7;
+          <i class="fas fa-caret-up"></i>
         </span>
         <div class="list-group text-default d-none list-group-flush"
              id="hashtag-input-data-list">
@@ -123,10 +123,12 @@
     <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
   </div>
   <div class="col-12 text-center mt-5"
+       *ngIf="!isShowingQuiznameDatalist"
        id="demo-quiz-description">
     <p>{{'component.hashtag_home.demo_quiz.title.3' | translate}}</p>
   </div>
-  <div class="col-12 px-1 mb-5 mt-2 justify-content-center d-flex mathjax-container">
+  <div class="col-12 px-1 mb-5 mt-2 justify-content-center d-flex mathjax-container"
+       *ngIf="!isShowingQuiznameDatalist">
     <ng-container *ngTemplateOutlet="mathjaxExample3"></ng-container>
   </div>
 </div>

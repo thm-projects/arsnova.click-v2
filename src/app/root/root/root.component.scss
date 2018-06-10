@@ -3,18 +3,13 @@
 #content-container {
   @include media-breakpoint-down(xs) {
     height: 80vh;
-    top: 20vh;
+    top: calc(10vh + 60px);
     position: absolute;
+    z-index: 1050;
   }
   @include media-breakpoint-up(sm) {
     height: 90vh;
-
-    &.is-phantom {
-      /* These are required for phantomjs to render the screenshot correctly */
-      margin: 0;
-      display: flex;
-      max-width: -webkit-calc(100% - 20%);
-    }
+    top: 20vh;
   }
   @include media-breakpoint-only(md) {
     max-width: calc(#{map_get($container-max-widths, md)} - 20vw);
@@ -28,17 +23,10 @@
 }
 
 .footer-bar-wrapper {
-  flex-shrink: 0;
-  flex-grow: 0;
-
   @include media-breakpoint-only(xs) {
     width: 100%;
     height: 50px;
   }
-}
-
-.hidden {
-  display: none !important;
 }
 
 .qr-code-element {
