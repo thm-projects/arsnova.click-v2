@@ -1,0 +1,17 @@
+body {
+  background-color: #009688;
+}
+
+h1 {
+  color: #fff;
+}
+
+hr {
+  border-color: #FF9800;
+}
+
+img {
+  display: block;
+  height: 40px;
+  width: 40px;
+}

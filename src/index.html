@@ -1,33 +1,53 @@
 <!doctype html>
-<html lang="en" data-theme="theme-Material">
+<html lang="en"
+      data-theme="theme-Material">
 <head>
 
   <title>arsnova.click</title>
 
   <meta charset="utf-8"/>
 
-  <meta name="application-name" content="arsnova.click">
-  <meta name="description" content="Spielerische Alternative zum Audience Response System arsnova.eu">
-  <meta name="keywords" content="quiz app, clicker, classroom response system, ARSnova, gamification, arsnova.click">
-  <meta name="author" content="The arsnova Team">
-  <meta name="copyright" content="MIT">
+  <meta name="application-name"
+        content="arsnova.click">
+  <meta name="description"
+        content="Spielerische Alternative zum Audience Response System arsnova.eu">
+  <meta name="keywords"
+        content="quiz app, clicker, classroom response system, ARSnova, gamification, arsnova.click">
+  <meta name="author"
+        content="The arsnova Team">
+  <meta name="copyright"
+        content="MIT">
 
   <!-- all metas from https://github.com/h5bp/mobile-boilerplate -->
-  <meta name="apple-mobile-web-app-title" content="arsnova.click">
-  <meta name="HandheldFriendly" content="true">
-  <meta name="MobileOptimized" content="320">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, minimal-ui">
+  <meta name="apple-mobile-web-app-title"
+        content="arsnova.click">
+  <meta name="HandheldFriendly"
+        content="true">
+  <meta name="MobileOptimized"
+        content="320">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=yes, minimal-ui">
 
   <base href="/">
 
-  <link rel="preload" as="style" type="text/css" href="assets/styles/loader.css" />
-  <link rel="prefetch" as="style" href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900"/>
+  <link rel="preload"
+        as="style"
+        type="text/css"
+        href="assets/styles/loader.css"/>
+  <link rel="prefetch"
+        as="style"
+        href="https://fonts.googleapis.com/css?family=Roboto:400,500,700,900"/>
 
-  <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+  <link rel="stylesheet"
+        type="text/css"
+        href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css"/>
 
   <noscript>
-    <link rel="stylesheet" type="text/css" href="assets/styles/noscript.css" />
+    <link rel="stylesheet"
+          type="text/css"
+          href="assets/styles/noscript.css"/>
     <main>
+      <img src="assets/images/logo_transparent.png"/>
       <div>
         <h1>JavaScript nicht aktiviert</h1>
         <p>Um arsnova.click nutzen zu können, muss JavaScript aktiviert sein!</p>
@@ -55,18 +75,22 @@
 
 <div id="theme-wrapper">
   <div id="content">
-    <app-root></app-root>
-
-    <div id="loader-wrapper">
-      <div id="loader"></div>
-      <div class="loader-section section-left"></div>
-      <div class="loader-section section-right"></div>
-    </div>
+    <app-root>
+      <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+      </div>
+    </app-root>
   </div>
 </div>
 
-<script async defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-<script async defer src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+<script async
+        defer
+        src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+<script async
+        defer
+        src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
 
 <script type="text/javascript">
   window.addEventListener('load', function () {
@@ -75,12 +99,16 @@
 
   var _paq = _paq || [];
   _paq.push(['enableLinkTracking']);
-  (function() {
-    const u="https://arsnova.thm.de/stats/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
+  (function () {
+    const u = "https://arsnova.thm.de/stats/";
+    _paq.push(['setTrackerUrl', u + 'piwik.php']);
     _paq.push(['setSiteId', '4']);
-    const d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    const d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+    g.type = 'text/javascript';
+    g.async = true;
+    g.defer = true;
+    g.src = u + 'piwik.js';
+    s.parentNode.insertBefore(g, s);
   })();
 </script>
 </body>
