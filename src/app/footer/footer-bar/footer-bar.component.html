@@ -17,18 +17,24 @@
        [title]="elem.textName | translate"
        [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
        (click)="toggleSetting(elem)">
-    <p class="footerElemIcon mb-0"><i [class]="elem.iconClass"
-                                      aria-hidden="true"></i></p>
+    <p class="footerElemIcon mb-0">
+      <i [class]="elem.iconClass"
+         aria-hidden="true"></i>
+    </p>
     <p class="footerElemText text-truncate text-left mb-0 ml-2 d-md-block"><span [class]="elem.textClass"
                                                                                  [innerHTML]="elem.textName | translate"></span></p>
   </div>
 </nav>
 
-<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center h-100"
+<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center"
       id="footer-move-left"
       [style.visibility]="footerElemIndex === 1 ? 'hidden' : 'visible'"
-      (click)="moveLeft()">&#x21E6;</span>
-<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center h-100"
+      (click)="moveLeft()">
+  <i class="fas fa-caret-left"></i>
+</span>
+<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center"
       id="footer-move-right"
       [style.visibility]="hideRight() ? 'hidden' : 'visible'"
-      (click)="moveRight()">&#x21E8;</span>
+      (click)="moveRight()">
+  <i class="fas fa-caret-right"></i>
+</span>
