@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -34,6 +34,7 @@ import { SharedService } from './service/shared/shared.service';
 import { TrackingService } from './service/tracking/tracking.service';
 import { UserService } from './service/user/user.service';
 import { WebsocketService } from './service/websocket/websocket.service';
+import { GlobalErrorHandler } from './shared/error-handler';
 import { SharedModule } from './shared/shared.module';
 import { ArsnovaClickAngulartics2Piwik } from './shared/tracking/ArsnovaClickAngulartics2Piwik';
 import { ThemesModule } from './themes/themes.module';
@@ -131,6 +132,10 @@ export const appRoutes: Routes = [
     Angulartics2Module.forRoot([ArsnovaClickAngulartics2Piwik]),
   ],
   providers: [
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler,
+    },
     RoutePreloader,
     I18nService,
     FooterBarService,

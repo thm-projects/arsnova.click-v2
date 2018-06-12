@@ -51,6 +51,7 @@ export class RootComponent implements AfterViewInit {
     (async () => {
       this.themesService.updateCurrentlyUsedTheme();
     })();
+
   }
 
   public getFooterBarElements(): Array<IFooterBarElement> {

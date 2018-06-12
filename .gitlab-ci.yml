@@ -37,7 +37,6 @@ build:
   stage: build
   only:
     - master
-    - pipeline-caching
   tags:
     - nodejs
   script:

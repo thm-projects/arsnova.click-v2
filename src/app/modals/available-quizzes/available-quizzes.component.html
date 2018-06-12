@@ -11,7 +11,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <div class="d-flex flex-wrap flex-column flex-sm-row justify-content-between">
+    <div class="d-flex flex-wrap flex-column flex-sm-row justify-content-between justify-content-sm-start">
       <span *ngFor="let elem of sessions"
             class="text-light text-nowrap d-inline mr-sm-2 my-1 px-4 py-2 rounded pointer available-quiz"
             [class.bg-success]="elem.isValid()"
