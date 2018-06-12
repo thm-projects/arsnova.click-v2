@@ -1,17 +1,28 @@
 stages:
+  - install
   - test
   - build
   - deploy
 
-tslint:
+cache:
+  paths:
+    - node_modules
+
+npm_install:
+  stage: install
+  tags:
+    - nodejs
+  script:
+    - npm install
+
+ts_lint:
   stage: test
   tags:
     - nodejs
   script:
-    - npm install tslint typescript
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
-npmtest:
+npm_test:
   stage: test
   tags:
     - nodejs
@@ -20,18 +31,17 @@ npmtest:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install google-chrome-stable
-    - npm install
     - npm test
 
 build:
   stage: build
   only:
     - master
+    - pipeline-caching
   tags:
     - nodejs
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
-    - npm install
     - npm run build:SSR
   artifacts:
     paths:
@@ -52,4 +62,3 @@ deploy:
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
     - scp -r dist/* "$STAGING_FRONTEND_SCP_URL"
-
