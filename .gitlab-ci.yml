@@ -12,8 +12,7 @@ npm_install:
   tags:
     - nodejs
   cache:
-    key: npm-cache
-    policy: push
+    key: "$CI_COMMIT_REF_SLUG"
     paths:
       - ./node_modules/
   script:
@@ -24,7 +23,7 @@ ts_lint:
   tags:
     - nodejs
   cache:
-    key: npm-cache
+    key: "$CI_COMMIT_REF_SLUG"
     policy: pull
     paths:
       - ./node_modules/
@@ -36,7 +35,7 @@ npm_test:
   tags:
     - nodejs
   cache:
-    key: npm-cache
+    key: "$CI_COMMIT_REF_SLUG"
     policy: pull
     paths:
       - ./node_modules/
@@ -55,7 +54,7 @@ build:
   tags:
     - nodejs
   cache:
-    key: npm-cache
+    key: "$CI_COMMIT_REF_SLUG"
     policy: pull
     paths:
       - ./node_modules/
