@@ -42,7 +42,9 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install google-chrome-stable
-    - ./node_modules/@angular/cli/bin/ng test --browsers=ChromeHeadless --watch=false --source-map=false
+    - npm install -g @angular/cli@6.0.3
+    - npm install -g @angular-devkit/build-angular@0.6.3
+    - npm test
 
 build:
   stage: build
