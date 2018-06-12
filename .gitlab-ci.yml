@@ -10,7 +10,6 @@ cache:
 
 before_script:
   - export PATH=$PATH:./node_modules/.bin/
-  - npm install
 
 npm_install:
   stage: install
