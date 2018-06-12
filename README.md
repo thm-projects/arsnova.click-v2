@@ -1,28 +1,31 @@
-# Frontend
+#### arsnova.click v2 Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.2.0.
+###### Environment Variables
+- `CHROME_BIN`: Points to the binary of the Google Chrome Browser
 
-## Development server
+###### Jobs
+The frontend node server requires a local installation of `imagemagick` and `graphicsmagick`.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Use `npm run job:images` or directly `node --experimental-modules jobs/GenerateImages.mjs` to generate the logo and preview images. Note, that the frontend must be running for the preview screenshots.
+Available commands (via running the nodejs module or by passing the command with the --command= switch) are:
+- `all - Will call all methods below synchronously`
+- `generateFrontendPreview - Adds the preview screenshots for the frontend. The frontend must be running!`
+- `generateLogoImages - Generates the logo images (used for favicon and manifest files)`
 
-## Code scaffolding
+###### Test
+Enter `npm test` in the root directory to run the unit tests.
+It is required to define the location of a local Google Chrome installation to use the headless mode
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|module`.
+###### Run (DEV)
+Go to the root directory and enter `npm start:DEV`.
 
-## Build
+###### Build (PROD)
+Go to the root directory and enter `npm run build:PROD`.
+To test the live build enter `npm run prod-test`. 
+This will build the regular production bundle and startup a simple http-server which will serve the files.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+###### Build (SSR)
+Go to the root directory and enter `npm run build:SSR`.
+This will trigger the serverside rendering build. 
+It will build the production app and a node server which will prerender the angular app before it is sent to the client.
+You can also enter `npm run prod-test:SSR` to build and startup the serverside rendering feature.
