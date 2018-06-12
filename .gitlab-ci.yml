@@ -8,13 +8,13 @@ npm_install:
   stage: install
   tags:
     - nodejs
-  script:
-    - npm install
   cache:
     key: npm-cache
     policy: push
     paths:
       - node_modules/
+  script:
+    - npm install
 
 ts_lint:
   stage: test
@@ -26,7 +26,6 @@ ts_lint:
     paths:
       - node_modules/
   script:
-    - npm install tslint typescript
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
 npm_test:
@@ -43,7 +42,6 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install google-chrome-stable
-    - npm install
     - npm test
 
 build:
@@ -60,7 +58,6 @@ build:
       - node_modules/
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
-    - npm install
     - npm run build:SSR
   artifacts:
     paths:
