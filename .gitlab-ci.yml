@@ -42,8 +42,9 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install google-chrome-stable
-    - npm install -g @angular/cli@6.0.3
-    - npm install -g @angular-devkit/build-angular@0.6.3
+    - npm link @angular/cli
+    - npm link @angular-devkit/build-angular
+    - npm link @angular/compiler-cli
     - npm test
 
 build:
