@@ -5,6 +5,7 @@ stages:
   - deploy
 
 cache:
+  key: npm-cache
   paths:
     - ./node_modules/
 
@@ -15,6 +16,9 @@ npm_install:
   stage: install
   tags:
     - nodejs
+  cache:
+    key: npm-cache
+    policy: push
   script:
     - npm install
 
@@ -22,6 +26,9 @@ ts_lint:
   stage: test
   tags:
     - nodejs
+  cache:
+    key: npm-cache
+    policy: pull
   script:
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
@@ -29,6 +36,9 @@ npm_test:
   stage: test
   tags:
     - nodejs
+  cache:
+    key: npm-cache
+    policy: pull
   script:
     - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
@@ -43,6 +53,9 @@ build:
     - pipeline-caching
   tags:
     - nodejs
+  cache:
+    key: npm-cache
+    policy: pull
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm run build:SSR
@@ -59,8 +72,6 @@ deploy:
   cache:
     key: npm-cache
     policy: pull
-    paths:
-      - node_modules/
   dependencies:
     - build
   script:
