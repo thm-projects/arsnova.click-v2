@@ -11,6 +11,7 @@ npm_install:
   script:
     - npm install
   cache:
+    key: npm-cache
     policy: push
     paths:
       - node_modules/
@@ -20,6 +21,7 @@ ts_lint:
   tags:
     - nodejs
   cache:
+    key: npm-cache
     policy: pull
     paths:
       - node_modules/
@@ -32,6 +34,7 @@ npm_test:
   tags:
     - nodejs
   cache:
+    key: npm-cache
     policy: pull
     paths:
       - node_modules/
@@ -51,6 +54,7 @@ build:
   tags:
     - nodejs
   cache:
+    key: npm-cache
     policy: pull
     paths:
       - node_modules/
@@ -69,6 +73,7 @@ deploy:
   tags:
     - ssh
   cache:
+    key: npm-cache
     policy: pull
     paths:
       - node_modules/
