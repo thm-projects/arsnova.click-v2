@@ -1,20 +1,40 @@
 stages:
+  - install
   - test
   - build
   - deploy
 
-tslint:
+npm_install:
+  stage: install
+  tags:
+    - nodejs
+  script:
+    - npm install
+  cache:
+    policy: push
+    paths:
+      - node_modules/
+
+ts_lint:
   stage: test
   tags:
     - nodejs
+  cache:
+    policy: pull
+    paths:
+      - node_modules/
   script:
     - npm install tslint typescript
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
-npmtest:
+npm_test:
   stage: test
   tags:
     - nodejs
+  cache:
+    policy: pull
+    paths:
+      - node_modules/
   script:
     - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
@@ -27,8 +47,13 @@ build:
   stage: build
   only:
     - master
+    - pipeline-caching
   tags:
     - nodejs
+  cache:
+    policy: pull
+    paths:
+      - node_modules/
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
@@ -43,6 +68,10 @@ deploy:
     - master
   tags:
     - ssh
+  cache:
+    policy: pull
+    paths:
+      - node_modules/
   dependencies:
     - build
   script:
