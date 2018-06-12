@@ -13,8 +13,7 @@ npm_install:
   tags:
     - nodejs
   script:
-    - npm uninstall -g angular-cli
-    - npm install -g angular-cli
+    - npm cache clean --force
     - npm install
 
 ts_lint:
