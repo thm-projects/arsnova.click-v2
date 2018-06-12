@@ -8,7 +8,7 @@
   },
   "description": "Version 2 of arsnova.click (Frontend WebApp)",
   "scripts": {
-    "ng": "ng",
+    "ng": "./node_modules/.bin/ng",
     "start:SSR": "cd dist && node server",
     "start:DEV": "./node_modules/.bin/ng serve --host 0.0.0.0 --port 4200 --disable-host-check --aot",
     "build:DEV": "./node_modules/.bin/ng serve --host 0.0.0.0 --port 4200 --disable-host-check --aot --prod",
