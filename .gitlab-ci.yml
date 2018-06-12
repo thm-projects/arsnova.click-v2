@@ -1,5 +1,5 @@
 before_script:
-  - npm install -g @angular-cli@6.0.3
+  - npm install -g @angular/cli@6.0.3
 
 stages:
   - install
