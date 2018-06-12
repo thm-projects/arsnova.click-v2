@@ -15,8 +15,6 @@ npm_install:
       - node_modules/
   script:
     - npm install
-    - npm link @angular/cli
-    - npm link @angular-devkit/build-angular
 
 ts_lint:
   stage: test
@@ -44,7 +42,7 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install google-chrome-stable
-    - npm test
+    - ./node_modules/@angular/cli/bin/ng test --browsers=ChromeHeadless --watch=false --source-map=false
 
 build:
   stage: build
