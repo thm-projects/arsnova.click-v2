@@ -21,9 +21,6 @@ ts_lint:
   stage: test
   tags:
     - nodejs
-  artifacts:
-    paths:
-      - node_modules
   script:
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
@@ -31,9 +28,6 @@ npm_test:
   stage: test
   tags:
     - nodejs
-  artifacts:
-    paths:
-      - node_modules
   script:
     - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
