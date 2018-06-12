@@ -5,7 +5,6 @@ stages:
   - deploy
 
 cache:
-  key: "$CI_PROJECT_NAME/$CI_BUILD_REF_NAME"
   paths:
     - ./node_modules/
 
