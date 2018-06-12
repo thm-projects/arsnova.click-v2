@@ -1,3 +1,6 @@
+before_script:
+  - npm install -g @angular-cli@6.0.3
+
 stages:
   - install
   - test
@@ -83,4 +86,3 @@ deploy:
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
     - scp -r dist/* "$STAGING_FRONTEND_SCP_URL"
-
