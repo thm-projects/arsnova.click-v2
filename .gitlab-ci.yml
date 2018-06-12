@@ -42,7 +42,6 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install google-chrome-stable
-    - npm i -g @angular/cli@6.0.3
     - npm test
 
 build:
@@ -59,7 +58,6 @@ build:
       - node_modules/
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
-    - npm i -g @angular/cli@6.0.3
     - npm run build:SSR
   artifacts:
     paths:
