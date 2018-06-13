@@ -3,18 +3,6 @@ stages:
   - build
   - deploy
 
-cache:
-  paths:
-    - node_modules
-
-npm_install:
-  stage: install
-  tags:
-    - nodejs
-  script:
-    - npm cache clean --force
-    - npm install
-
 ts_lint:
   stage: test
   tags:
