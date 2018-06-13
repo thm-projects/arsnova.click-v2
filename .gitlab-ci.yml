@@ -1,5 +1,4 @@
 stages:
-  - install
   - test
   - build
   - deploy
@@ -21,6 +20,7 @@ ts_lint:
   tags:
     - nodejs
   script:
+    - npm install
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
 npm_test:
@@ -32,6 +32,7 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install google-chrome-stable
+    - npm install
     - npm test
 
 build:
@@ -42,6 +43,7 @@ build:
     - nodejs
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
+    - npm install
     - npm run build:SSR
   artifacts:
     paths:
