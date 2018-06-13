@@ -38,15 +38,15 @@
                      [class.btn-success]="elem.isCorrect"
                      [class.btn-danger]="!elem.isCorrect">
                 <input type="checkbox"
-                       class="hidden"
+                       class="d-none"
                        [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
                        autocomplete="off"
                        role="switch"
                        [checked]="elem.isCorrect"
                        (change)="elem.isCorrect = !elem.isCorrect"
                        [title]="'component.answeroptions.is_correct' | translate">
-                <span *ngIf="elem.isCorrect">{{'component.answeroptions.correct'}}</span>
-                <span *ngIf="!elem.isCorrect">{{'component.answeroptions.wrong'}}</span>
+                <span *ngIf="elem.isCorrect">{{'component.answeroptions.correct' | translate}}</span>
+                <span *ngIf="!elem.isCorrect">{{'component.answeroptions.wrong' | translate}}</span>
               </label>
             </div>
           </div>
@@ -63,7 +63,7 @@
                    [class.btn-success]="question.displayAnswerText"
                    [class.btn-danger]="!question.displayAnswerText">
               <input type="checkbox"
-                     class="hidden"
+                     class="d-none"
                      id="config_showAnswerContentOnButtons_switch"
                      [attr.aria-label]="'component.answeroptions.description.show_answer_content_on_buttons' | translate"
                      autocomplete="off"
@@ -84,7 +84,7 @@
                    [class.btn-success]="question.showOneAnswerPerRow"
                    [class.btn-danger]="!question.showOneAnswerPerRow">
               <input type="checkbox"
-                     class="hidden"
+                     class="d-none"
                      id="config_showOneAnswerPerRow_switch"
                      [attr.aria-label]="'component.answeroptions.description.show_one_answer_per_row' | translate"
                      autocomplete="off"
@@ -106,7 +106,7 @@
                    [class.btn-success]="question.multipleSelectionEnabled"
                    [class.btn-danger]="!question.multipleSelectionEnabled">
               <input type="checkbox"
-                     class="hidden"
+                     class="d-none"
                      id="config_multipleSelectionSurvey_switch"
                      [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
                      autocomplete="off"

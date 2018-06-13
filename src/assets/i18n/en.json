@@ -56,6 +56,7 @@
         "block_rude_nicknames": "Block rude nicknames",
         "enable_cas_login": "Enable CAS Login",
         "global_leaderboard": "Global Leaderboard",
+        "member_group": "Member Groups",
         "description": {
           "qr-code": "Attendees can scan the QR code via their mobile devices to join the quiz.",
           "sound": "Set the sound for the background music or the countdown here.",
@@ -419,7 +420,8 @@
         "mythology": "Mythology",
         "actor": "Actors",
         "politics": "Politicians",
-        "turing_award": "Turing-Award"
+        "turing_award": "Turing-Award",
+        "emojis": "Emojis"
       }
     },
     "question_type": {

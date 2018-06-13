@@ -167,19 +167,21 @@ const getUnusedKeys = (req) => {
     const i18nFileContent = JSON.parse(fs.readFileSync(path.join(req.i18nFileBaseLocation, `${langRefs[i]}.json`)).toString('UTF-8'));
     const objectPaths = objectPath(i18nFileContent);
 
-    objectPaths.forEach((i18nPath => {
-      let matched = false;
-      fileNames.forEach(filename => {
-        if (matched) {
-          return;
+    objectPaths.forEach((
+      i18nPath => {
+        let matched = false;
+        fileNames.forEach(filename => {
+          if (matched) {
+            return;
+          }
+          const fileContent = fs.readFileSync(filename).toString('UTF-8');
+          matched = fileContent.indexOf(i18nPath) > -1;
+        });
+        if (!matched) {
+          result[langRefs[i]].push(i18nPath);
         }
-        const fileContent = fs.readFileSync(filename).toString('UTF-8');
-        matched = fileContent.indexOf(i18nPath) > -1;
-      });
-      if (!matched) {
-        result[langRefs[i]].push(i18nPath);
       }
-    }));
+    ));
   }
 
   return result;
@@ -192,8 +194,7 @@ const getBranch = (req) => {
 };
 
 app.engine('html', ngExpressEngine({
-  bootstrap: RootServerModuleNgFactory,
-  providers: [
+  bootstrap: RootServerModuleNgFactory, providers: [
     provideModuleMap(LAZY_MODULE_MAP),
   ],
 }));
@@ -209,10 +210,7 @@ app.get('/api/v1/plugin/i18nator/:project/langFile', async (req, res) => {
     const langData = [];
     availableLangs.forEach((langRef, index) => {
       buildKeys({
-        root: '',
-        dataNode: JSON.parse(fs.readFileSync(path.join(req.i18nFileBaseLocation, `${langRef}.json`)).toString('UTF-8')),
-        langRef,
-        langData,
+        root: '', dataNode: JSON.parse(fs.readFileSync(path.join(req.i18nFileBaseLocation, `${langRef}.json`)).toString('UTF-8')), langRef, langData,
       });
     });
     cache[req.projectCache].langData = langData;
@@ -292,9 +290,7 @@ const buildCache = () => {
     console.log(`* Fetching unused keys`);
     const unusedKeysStart = new Date().getTime();
     cache[projectName].unused = getUnusedKeys({
-      params: {},
-      projectAppLocation: projectAppLocation[projectName],
-      i18nFileBaseLocation: i18nFileBaseLocation[projectName],
+      params: {}, projectAppLocation: projectAppLocation[projectName], i18nFileBaseLocation: i18nFileBaseLocation[projectName],
     });
     const unusedKeysEnd = new Date().getTime();
     console.log(`-- Done. Took ${unusedKeysEnd - unusedKeysStart}ms`);
@@ -316,10 +312,7 @@ const buildImages = () => {
   console.log(``);
   console.log(`------- Building preview screenshots and logo derivates -------`);
   const params = [
-    '--experimental-modules',
-    'GenerateImages.mjs',
-    '--command=all',
-    `--host=http://localhost:${PORT}`,
+    '--experimental-modules', 'GenerateImages.mjs', '--command=all', `--host=http://localhost:${PORT}`,
   ];
   const instance = child_process.spawn(`node`, params, { cwd: JOBS_FOLDER });
   instance.stdout.on('data', (data) => {

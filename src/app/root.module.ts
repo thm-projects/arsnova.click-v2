@@ -15,6 +15,7 @@ import { RoutePreloader } from '../lib/route-preloader';
 import { createTranslateLoader } from '../lib/translation.factory';
 import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
+import { I18nManagerModule } from './i18n-manager/i18n-manager.module';
 import { ModalsModule } from './modals/modals.module';
 import { HomeComponent } from './root/home/home.component';
 import { LanguageSwitcherComponent } from './root/language-switcher/language-switcher.component';
@@ -43,47 +44,41 @@ export const appRoutes: Routes = [
   {
     path: 'info',
     loadChildren: 'app/root/info/info.module#InfoModule',
-  },
-  {
+  }, {
+    path: 'i18n-manager',
+    loadChildren: 'app/i18n-manager/i18n-manager.module#I18nManagerModule',
+  }, {
     path: 'quiz/manager',
     loadChildren: 'app/quiz/quiz-manager/quiz-manager.module#QuizManagerModule',
-  },
-  {
+  }, {
+    path: 'quiz',
+    loadChildren: 'app/quiz/quiz.module#QuizModule',
+  }, {
     path: 'quiz/flow',
     loadChildren: 'app/quiz/quiz-flow/quiz-flow.module#QuizFlowModule',
     data: {
       preload: true,
     },
-  },
-  {
+  }, {
     path: 'nicks',
     loadChildren: 'app/root/nickname-chooser/nickname-chooser.module#NicknameChooserModule',
     data: {
       preload: true,
     },
-  },
-  {
-    path: 'quiz',
-    loadChildren: 'app/quiz/quiz.module#QuizModule',
-  },
-  {
+  }, {
     path: 'themes',
     component: ThemeSwitcherComponent,
-  },
-  {
+  }, {
     path: 'preview/:themeId/:languageId',
     component: HomeComponent,
-  },
-  {
+  }, {
     path: 'languages',
     component: LanguageSwitcherComponent,
-  },
-  {
+  }, {
     path: '',
     component: HomeComponent,
     pathMatch: 'full',
-  },
-  /*
+  }, /*
    { path: '',
    redirectTo: '/home',
    pathMatch: 'full'
@@ -94,10 +89,7 @@ export const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    HomeComponent,
-    RootComponent,
-    LanguageSwitcherComponent,
-    ThemeSwitcherComponent,
+    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'frontend' }),
@@ -108,7 +100,9 @@ export const appRoutes: Routes = [
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useFactory: (
+          createTranslateLoader
+        ),
         deps: [HttpClient],
       },
       compiler: {
@@ -116,13 +110,10 @@ export const appRoutes: Routes = [
         useClass: TranslateMessageFormatCompiler,
       },
     }),
-    RouterModule.forRoot(
-      appRoutes,
-      {
-        preloadingStrategy: RoutePreloader,
-        enableTracing: false, // <-- debugging purposes only
-      },
-    ),
+    RouterModule.forRoot(appRoutes, {
+      preloadingStrategy: RoutePreloader,
+      enableTracing: false, // <-- debugging purposes only
+    }),
     SharedModule,
     ThemesModule,
     HeaderModule,
@@ -130,6 +121,7 @@ export const appRoutes: Routes = [
     ModalsModule,
     NgbModule.forRoot(),
     Angulartics2Module.forRoot([ArsnovaClickAngulartics2Piwik]),
+    I18nManagerModule,
   ],
   providers: [
     {

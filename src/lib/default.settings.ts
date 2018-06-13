@@ -4,10 +4,10 @@ const environmentData = require(`../assets/serverEndpoint.json`);
 
 export const DefaultSettings = {
   siteId: 'arsnova.click-v2',
-  httpApiEndpoint: environmentData.httpApiEndpoint.replace('localhost', location.hostname),
-  httpLibEndpoint: environmentData.httpLibEndpoint.replace('localhost', location.hostname),
-  serverEndpoint: environmentData.serverEndpoint.replace('localhost', location.hostname),
-  wsApiEndpoint: environmentData.wsApiEndpoint.replace('localhost', location.hostname),
+  httpApiEndpoint: environmentData.httpApiEndpoint,
+  httpLibEndpoint: environmentData.httpLibEndpoint,
+  serverEndpoint: environmentData.serverEndpoint,
+  wsApiEndpoint: environmentData.wsApiEndpoint,
   defaultQuizSettings: {
     answers: {
       answerText: '',
@@ -16,8 +16,7 @@ export const DefaultSettings = {
       configTrimWhitespaces: false,
       configUseKeywords: false,
       configUsePunctuation: false,
-    },
-    question: {
+    }, question: {
       dispayAnswerText: true,
       showOneAnswerPerRow: false,
       questionText: '',
@@ -27,38 +26,21 @@ export const DefaultSettings = {
       rangeMax: 60,
       correctValue: 30,
       answerOptionList: [],
-    },
-    music: {
+    }, music: {
       enabled: {
-        lobby: true,
-        countdownRunning: true,
-        countdownEnd: true,
+        lobby: true, countdownRunning: true, countdownEnd: true,
+      }, volumeConfig: {
+        global: 60, lobby: 60, countdownRunning: 60, countdownEnd: 60, useGlobalVolume: true,
+      }, titleConfig: {
+        lobby: 'Song0', countdownRunning: 'Song0', countdownEnd: 'Song0',
       },
-      volumeConfig: {
-        global: 60,
-        lobby: 60,
-        countdownRunning: 60,
-        countdownEnd: 60,
-        useGlobalVolume: true,
-      },
-      titleConfig: {
-        lobby: 'Song0',
-        countdownRunning: 'Song0',
-        countdownEnd: 'Song0',
-      },
-    },
-    nicks: {
+    }, nicks: {
       memberGroups: ['Default'],
       maxMembersPerGroup: 10,
       autoJoinToGroup: false,
       blockIllegalNicks: true,
       restrictToCasLogin: false,
       selectedNicks: [],
-    },
-    theme: 'theme-Material',
-    readingConfirmationEnabled: true,
-    showResponseProgress: true,
-    confidenceSliderEnabled: true,
-    cacheQuizAssets: false,
+    }, theme: 'theme-Material', readingConfirmationEnabled: true, showResponseProgress: true, confidenceSliderEnabled: true, cacheQuizAssets: false,
   },
 };

@@ -1,0 +1,35 @@
+<div>
+
+  <div (scroll)="scrollHandler($event)"
+       class="overflow-auto"
+       style="height: calc(100vh - 200px);">
+    <div [style.height.px]="Math.max(0, Math.max(0, scrollPos - 10) * 40)"></div>
+    <div #langDataElement
+         style="height: calc(100vh - 200px);">
+      <div *ngFor="let elem of (languageLoaderService.parsedLangData | filterKeys:filter | searchFilter:searchFilter | sort) | justafew:scrollPos; let i of index"
+           class="px-2 py-2 pointer d-flex"
+           [class.bg-warning]="selectedIndex === i"
+           (keydown.ArrowUp)="selectKey(i - 1)"
+           (keydown.ArrowDown)="selectKey(i + 1)"
+           (click)="selectKey(i)">
+      <span class="text-danger mr-2"
+            *ngIf="hasEmptyKeys(elem)">
+        <i class="fas fa-exclamation-triangle"></i>
+      </span>
+        <span class="text-truncate"
+              [title]="elem.key">{{elem.key}}</span>
+        <span class="ml-auto pointer"
+              *ngIf="selectedIndex === i"
+              (click)="removeKey(i)">
+            <i class="fas fa-trash"></i>
+      </span>
+      </div>
+    </div>
+
+    <h5 class="mt-5 text-danger text-center w-100 position-absolute"
+        style="top: 0;"
+        *ngIf="langDataElement.children.length === 0">
+      No data could be mapped to the specified filter.
+    </h5>
+  </div>
+</div>
