@@ -9,12 +9,12 @@ import { of } from 'rxjs/index';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
-import { CasService } from '../../service/cas/cas.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { CasLoginService } from '../../service/login/cas-login.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { ThemesMockService } from '../../service/themes/themes.mock.service';
@@ -27,12 +27,20 @@ import { QuizJoinComponent } from './quiz-join.component';
 
 class MockRouter {
   public queryParams = {
-    subscribe: (next) => (next({ ticket: 'testCasTicket' })),
-    toPromise: () => (new Promise(resolve => resolve({ ticket: 'testCasTicket' }))),
+    subscribe: (next) => (
+      next({ ticket: 'testCasTicket' })
+    ),
+    toPromise: () => (
+      new Promise(resolve => resolve({ ticket: 'testCasTicket' }))
+    ),
   };
   public params = {
-    subscribe: (next) => (next({ quizName: 'test' })),
-    toPromise: () => (new Promise(resolve => resolve({ quizName: 'test' }))),
+    subscribe: (next) => (
+      next({ quizName: 'test' })
+    ),
+    toPromise: () => (
+      new Promise(resolve => resolve({ quizName: 'test' }))
+    ),
   };
 }
 
@@ -43,13 +51,12 @@ describe('QuizJoinComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -59,17 +66,32 @@ describe('QuizJoinComponent', () => {
         }),
       ],
       providers: [
-        CasService,
+        CasLoginService,
         LobbyApiService,
         QuizApiService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: ThemesService, useClass: ThemesMockService },
+        {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        },
+        {
+          provide: ThemesService,
+          useClass: ThemesMockService,
+        },
         UserService,
         FooterBarService,
         SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ActivatedRoute, useClass: MockRouter },
+        {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        },
+        {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        },
+        {
+          provide: ActivatedRoute,
+          useClass: MockRouter,
+        },
         SharedService,
       ],
       declarations: [QuizJoinComponent],
@@ -90,33 +112,29 @@ describe('QuizJoinComponent', () => {
     expect(QuizJoinComponent.TYPE).toEqual('QuizJoinComponent');
   }));
 
-  it('should redirect the user to / on failure',
-    async(inject([Router, QuizApiService], (router: Router, quizApiService: QuizApiService) => {
-        const quizStatusData = {
-          status: 'STATUS:FAILED',
-          step: 'QUIZ:UNAVAILABLE',
-          payload: {
-            authorizeViaCas: true,
-            provideNickSelection: false,
-          },
-        };
+  it('should redirect the user to / on failure', async(inject([Router, QuizApiService], (router: Router, quizApiService: QuizApiService) => {
+    const quizStatusData = {
+      status: 'STATUS:FAILED',
+      step: 'QUIZ:UNAVAILABLE',
+      payload: {
+        authorizeViaCas: true,
+        provideNickSelection: false,
+      },
+    };
 
-        spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-        spyOn(router, 'navigate').and.callFake(() => {});
+    spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+    spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.ngOnInit();
-        expect(router.navigate).toHaveBeenCalledWith(['/']);
-      }),
-    ),
-  );
+    component.ngOnInit();
+    expect(router.navigate).toHaveBeenCalledWith(['/']);
+  })));
 
-  it('should add a cas ticket to the casService if a ticket is supplied', async(inject(
-    [Router, CurrentQuizService, CasService, QuizApiService, LobbyApiService],
-    (router: Router,
-     currentQuizService: CurrentQuizService,
-     casService: CasService,
-     quizApiService: QuizApiService,
-     lobbyApiService: LobbyApiService,
+  it('should add a cas casTicket to the casService if a casTicket is supplied',
+    async(inject([Router, CurrentQuizService, CasLoginService, QuizApiService, LobbyApiService], (router: Router,
+                                                                                                  currentQuizService: CurrentQuizService,
+                                                                                                  casService: CasLoginService,
+                                                                                                  quizApiService: QuizApiService,
+                                                                                                  lobbyApiService: LobbyApiService,
     ) => {
       const quizStatusData = {
         status: 'STATUS:SUCCESSFUL',
@@ -145,108 +163,96 @@ describe('QuizJoinComponent', () => {
       expect(casService.quizName).toEqual('test');
     })));
 
-  it('should redirect the user to the membergroup selection if there are multiple groups available', async(inject(
-    [Router, CurrentQuizService, QuizApiService, LobbyApiService],
-    (router: Router,
-     currentQuizService: CurrentQuizService,
-     quizApiService: QuizApiService,
-     lobbyApiService: LobbyApiService,
-    ) => {
-      const customQuiz = currentQuizService.quiz;
-      customQuiz.sessionConfig.nicks.memberGroups = ['Group1', 'Group2'];
-      const quizStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
-        payload: {
-          authorizeViaCas: true,
-          provideNickSelection: false,
-        },
-      };
-      const lobbyStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
-        payload: {
-          quiz: {
-            originalObject: customQuiz.serialize(),
+  it('should redirect the user to the membergroup selection if there are multiple groups available', async(
+    inject([Router, CurrentQuizService, QuizApiService, LobbyApiService],
+      (router: Router, currentQuizService: CurrentQuizService, quizApiService: QuizApiService, lobbyApiService: LobbyApiService) => {
+        const customQuiz = currentQuizService.quiz;
+        customQuiz.sessionConfig.nicks.memberGroups = ['Group1', 'Group2'];
+        const quizStatusData = {
+          status: 'STATUS:SUCCESSFUL',
+          step: 'QUIZ:AVAILABLE',
+          payload: {
+            authorizeViaCas: true,
+            provideNickSelection: false,
           },
-        },
-      };
-
-      spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-      spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
-      spyOn(router, 'navigate').and.callFake(() => {});
-
-      component.ngOnInit();
-      expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'memberGroup']);
-    })));
-
-  it('should redirect the user to input the nickname if no predefined nicks are available', async(inject(
-    [CurrentQuizService, Router, QuizApiService, LobbyApiService],
-    (currentQuizService: CurrentQuizService,
-     router: Router,
-     quizApiService: QuizApiService,
-     lobbyApiService: LobbyApiService,
-    ) => {
-      const quizStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
-        payload: {
-          authorizeViaCas: true,
-          provideNickSelection: false,
-        },
-      };
-      const lobbyStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
-        payload: {
-          quiz: {
-            originalObject: currentQuizService.quiz.serialize(),
+        };
+        const lobbyStatusData = {
+          status: 'STATUS:SUCCESSFUL',
+          step: 'QUIZ:AVAILABLE',
+          payload: {
+            quiz: {
+              originalObject: customQuiz.serialize(),
+            },
           },
-        },
-      };
+        };
 
-      spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-      spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
-      spyOn(router, 'navigate').and.callFake(() => {});
+        spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+        spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
+        spyOn(router, 'navigate').and.callFake(() => {});
 
-      component.ngOnInit();
-      expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
-    })));
+        component.ngOnInit();
+        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'memberGroup']);
+      })));
 
-  it('should redirect the user to the nickname selection if predefined nicks are available', async(inject(
-    [CurrentQuizService, Router, QuizApiService, LobbyApiService],
-    (currentQuizService: CurrentQuizService,
-     router: Router,
-     quizApiService: QuizApiService,
-     lobbyApiService: LobbyApiService,
-    ) => {
-
-      const customQuiz = currentQuizService.quiz;
-      customQuiz.sessionConfig.nicks.addSelectedNick('Predefined1');
-      customQuiz.sessionConfig.nicks.addSelectedNick('Predefined2');
-      const quizStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
-        payload: {
-          authorizeViaCas: true,
-          provideNickSelection: true,
-        },
-      };
-      const lobbyStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
-        payload: {
-          quiz: {
-            originalObject: customQuiz.serialize(),
+  it('should redirect the user to input the nickname if no predefined nicks are available', async(
+    inject([CurrentQuizService, Router, QuizApiService, LobbyApiService],
+      (currentQuizService: CurrentQuizService, router: Router, quizApiService: QuizApiService, lobbyApiService: LobbyApiService) => {
+        const quizStatusData = {
+          status: 'STATUS:SUCCESSFUL',
+          step: 'QUIZ:AVAILABLE',
+          payload: {
+            authorizeViaCas: true,
+            provideNickSelection: false,
           },
-        },
-      };
+        };
+        const lobbyStatusData = {
+          status: 'STATUS:SUCCESSFUL',
+          step: 'QUIZ:AVAILABLE',
+          payload: {
+            quiz: {
+              originalObject: currentQuizService.quiz.serialize(),
+            },
+          },
+        };
 
-      spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-      spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
-      spyOn(router, 'navigate').and.callFake(() => {});
+        spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+        spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
+        spyOn(router, 'navigate').and.callFake(() => {});
 
-      component.ngOnInit();
-      expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'select']);
-    })));
+        component.ngOnInit();
+        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
+      })));
+
+  it('should redirect the user to the nickname selection if predefined nicks are available', async(
+    inject([CurrentQuizService, Router, QuizApiService, LobbyApiService],
+      (currentQuizService: CurrentQuizService, router: Router, quizApiService: QuizApiService, lobbyApiService: LobbyApiService) => {
+
+        const customQuiz = currentQuizService.quiz;
+        customQuiz.sessionConfig.nicks.addSelectedNick('Predefined1');
+        customQuiz.sessionConfig.nicks.addSelectedNick('Predefined2');
+        const quizStatusData = {
+          status: 'STATUS:SUCCESSFUL',
+          step: 'QUIZ:AVAILABLE',
+          payload: {
+            authorizeViaCas: true,
+            provideNickSelection: true,
+          },
+        };
+        const lobbyStatusData = {
+          status: 'STATUS:SUCCESSFUL',
+          step: 'QUIZ:AVAILABLE',
+          payload: {
+            quiz: {
+              originalObject: customQuiz.serialize(),
+            },
+          },
+        };
+
+        spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
+        spyOn(lobbyApiService, 'getLobbyStatus').and.returnValue(of(lobbyStatusData));
+        spyOn(router, 'navigate').and.callFake(() => {});
+
+        component.ngOnInit();
+        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'select']);
+      })));
 });

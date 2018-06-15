@@ -43,7 +43,8 @@ export class I18nService {
 
   public formatNumber(number: number, type: NumberTypes = NumberTypes.decimal, locale?: string): string {
     return number.toLocaleString(locale, {
-      style: type.toString(), currency: CurrencyTypes[this.currentLanguage.toString()],
+      style: type.toString(),
+      currency: CurrencyTypes[this.currentLanguage.toString()],
     });
   }
 
@@ -68,7 +69,6 @@ export class I18nService {
         'font-weight: bold',
       ].join(';');
       this.translateService.get('global.console-log-warning').subscribe(value => {
-        console.clear();
         console.log(`%c${value}`, consoleLogStyle);
       });
     }

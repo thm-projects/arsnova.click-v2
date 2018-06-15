@@ -4,8 +4,8 @@ import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/qu
 import { Subscription } from 'rxjs';
 import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
-import { CasService } from '../../service/cas/cas.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
+import { CasLoginService } from '../../service/login/cas-login.service';
 import { ThemesService } from '../../service/themes/themes.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class QuizJoinComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
-    private casService: CasService,
+    private casService: CasLoginService,
     public currentQuizService: CurrentQuizService,
     private themesService: ThemesService,
     private lobbyApiService: LobbyApiService,
@@ -68,7 +68,12 @@ export class QuizJoinComponent implements OnInit {
       this.router.navigate(['/nicks', 'memberGroup']);
 
     } else {
-      this.router.navigate(['/nicks', (quizStatusData.payload.provideNickSelection ? 'select' : 'input')]);
+      this.router.navigate([
+        '/nicks',
+        (
+          quizStatusData.payload.provideNickSelection ? 'select' : 'input'
+        ),
+      ]);
 
     }
   }

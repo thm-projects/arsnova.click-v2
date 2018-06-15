@@ -19,17 +19,18 @@ import { I18nManagerModule } from './i18n-manager/i18n-manager.module';
 import { ModalsModule } from './modals/modals.module';
 import { HomeComponent } from './root/home/home.component';
 import { LanguageSwitcherComponent } from './root/language-switcher/language-switcher.component';
+import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import { ActiveQuestionGroupService } from './service/active-question-group/active-question-group.service';
 import { AttendeeService } from './service/attendee/attendee.service';
-import { CasService } from './service/cas/cas.service';
 import { ConnectionService } from './service/connection/connection.service';
 import { CurrentQuizService } from './service/current-quiz/current-quiz.service';
 import { FileUploadService } from './service/file-upload/file-upload.service';
 import { FooterBarService } from './service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from './service/header-label/header-label.service';
 import { I18nService } from './service/i18n/i18n.service';
+import { CasLoginService } from './service/login/cas-login.service';
 import { SettingsService } from './service/settings/settings.service';
 import { SharedService } from './service/shared/shared.service';
 import { TrackingService } from './service/tracking/tracking.service';
@@ -75,6 +76,9 @@ export const appRoutes: Routes = [
     path: 'languages',
     component: LanguageSwitcherComponent,
   }, {
+    path: 'login',
+    component: LoginComponent,
+  }, {
     path: '',
     component: HomeComponent,
     pathMatch: 'full',
@@ -89,7 +93,7 @@ export const appRoutes: Routes = [
 
 @NgModule({
   declarations: [
-    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent,
+    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'frontend' }),
@@ -137,7 +141,7 @@ export const appRoutes: Routes = [
     CurrentQuizService,
     TranslateModule,
     UserService,
-    CasService,
+    CasLoginService,
     FileUploadService,
     SettingsService,
     NgbActiveModal,

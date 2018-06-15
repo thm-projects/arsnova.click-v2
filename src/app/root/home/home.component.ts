@@ -16,12 +16,12 @@ import { ActiveQuestionGroupService } from '../../service/active-question-group/
 import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
-import { CasService } from '../../service/cas/cas.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService, Languages } from '../../service/i18n/i18n.service';
+import { CasLoginService } from '../../service/login/cas-login.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { ThemesService } from '../../service/themes/themes.service';
@@ -78,26 +78,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   private readonly _routerSubscription: Subscription;
   private readonly _ownQuizzes: Array<string> = [];
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private footerBarService: FooterBarService,
-    private headerLabelService: HeaderLabelService,
-    private modalService: NgbModal,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
-    private currentQuizService: CurrentQuizService,
-    private router: Router,
-    private themesService: ThemesService,
-    private route: ActivatedRoute,
-    private i18nService: I18nService,
-    private attendeeService: AttendeeService,
-    private connectionService: ConnectionService,
-    private sanitizer: DomSanitizer,
-    private casService: CasService,
-    private settingsService: SettingsService,
-    private trackingService: TrackingService,
-    private quizApiService: QuizApiService,
-    private lobbyApiService: LobbyApiService,
-    public sharedService: SharedService,
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              private footerBarService: FooterBarService,
+              private headerLabelService: HeaderLabelService,
+              private modalService: NgbModal,
+              private activeQuestionGroupService: ActiveQuestionGroupService,
+              private currentQuizService: CurrentQuizService,
+              private router: Router,
+              private themesService: ThemesService,
+              private route: ActivatedRoute,
+              private i18nService: I18nService,
+              private attendeeService: AttendeeService,
+              private connectionService: ConnectionService,
+              private sanitizer: DomSanitizer,
+              private casService: CasLoginService,
+              private settingsService: SettingsService,
+              private trackingService: TrackingService,
+              private quizApiService: QuizApiService,
+              private lobbyApiService: LobbyApiService,
+              public sharedService: SharedService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
@@ -140,20 +139,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.connectionService.initConnection().then(() => {
 
       this.connectionService.socket.subscribe(data => {
-          console.log(data);
-          this.connectionService.websocketAvailable = true;
+        console.log(data);
+        this.connectionService.websocketAvailable = true;
 
-          switch (data.step) {
-            case 'QUIZ:SET_ACTIVE':
-              this.sharedService.activeQuizzes.push(data.payload.quizName);
-              break;
-            case 'QUIZ:SET_INACTIVE':
-              const index = this.sharedService.activeQuizzes.findIndex(name => name === data.payload.quizName);
-              this.sharedService.activeQuizzes.splice(index, 1);
-          }
-        },
-        () => this.connectionService.websocketAvailable = false,
-      );
+        switch (data.step) {
+          case 'QUIZ:SET_ACTIVE':
+            this.sharedService.activeQuizzes.push(data.payload.quizName);
+            break;
+          case 'QUIZ:SET_INACTIVE':
+            const index = this.sharedService.activeQuizzes.findIndex(name => name === data.payload.quizName);
+            this.sharedService.activeQuizzes.splice(index, 1);
+        }
+      }, () => this.connectionService.websocketAvailable = false);
     });
   }
 
@@ -208,7 +205,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public setPassword(event: Event): void {
-    this._serverPassword = (<HTMLInputElement>event.target).value;
+    this._serverPassword = (
+      <HTMLInputElement>event.target
+    ).value;
   }
 
   public handleClick(id: string): boolean {
@@ -247,15 +246,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   public setActiveQuestionGroup(routingTarget?: Array<string>): boolean {
     if (isPlatformBrowser(this.platformId)) {
       const questionGroupSerialized = JSON.parse(
-        localStorage.getItem(
-          Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase()),
-        ),
-      );
+        localStorage.getItem(Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())));
 
       if (questionGroupSerialized) {
-        this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](
-          questionGroupSerialized,
-        );
+        this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
       }
     }
 
@@ -272,12 +266,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     const questionGroupSerialized = JSON.parse(
-      localStorage.getItem(
-        Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase()),
-      ),
-    );
+      localStorage.getItem(Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())));
 
-    if (this.passwordRequired && !(this._serverPassword && this._serverPassword.length)) {
+    if (this.passwordRequired && !(
+        this._serverPassword && this._serverPassword.length
+    )) {
       return;
     }
 
@@ -318,9 +311,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.currentQuizService.persistToSessionStorage();
 
         if (this.isAddingABCDQuiz) {
-          this.trackingService.trackConversionEvent({ action: HomeComponent.TYPE, label: 'ABCD Quiz created' });
+          this.trackingService.trackConversionEvent({
+            action: HomeComponent.TYPE,
+            label: 'ABCD Quiz created',
+          });
         } else if (this.isAddingDemoQuiz) {
-          this.trackingService.trackConversionEvent({ action: HomeComponent.TYPE, label: 'Demo Quiz created' });
+          this.trackingService.trackConversionEvent({
+            action: HomeComponent.TYPE,
+            label: 'Demo Quiz created',
+          });
         }
 
         await this.activateQuiz(questionGroup);
@@ -481,14 +480,24 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (hasMatchedABCDQuiz.length) {
       const rawQuiz = JSON.parse(window.localStorage.getItem(hasMatchedABCDQuiz[0]));
       const questionGroup = questionGroupReflection.DefaultQuestionGroup(rawQuiz);
-      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+      const answerOptionList = (
+        <Array<DefaultAnswerOption>>[]
+      );
 
       answerList.forEach((character, index) => {
-        answerOptionList.push(new DefaultAnswerOption({ answerText: (String.fromCharCode(index + 65)) }));
+        answerOptionList.push(new DefaultAnswerOption({
+          answerText: (
+            String.fromCharCode(index + 65)
+          ),
+        }));
       });
       this.enteredSessionName = questionGroup.hashtag;
       const abcdQuestion = new ABCDSingleChoiceQuestion({
-        questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false,
+        questionText: '',
+        timer: 60,
+        displayAnswerText: false,
+        answerOptionList,
+        showOneAnswerPerRow: false,
       });
       questionGroup.questionList = [abcdQuestion];
       return questionGroup;
@@ -499,14 +508,24 @@ export class HomeComponent implements OnInit, OnDestroy {
       Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
 
       const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
-      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+      const answerOptionList = (
+        <Array<DefaultAnswerOption>>[]
+      );
 
       answerList.forEach((character, index) => {
-        answerOptionList.push(new DefaultAnswerOption({ answerText: (String.fromCharCode(index + 65)) }));
+        answerOptionList.push(new DefaultAnswerOption({
+          answerText: (
+            String.fromCharCode(index + 65)
+          ),
+        }));
       });
       this.enteredSessionName = questionGroup.hashtag;
       const abcdQuestion = new ABCDSingleChoiceQuestion({
-        questionText: '', timer: 60, displayAnswerText: false, answerOptionList, showOneAnswerPerRow: false,
+        questionText: '',
+        timer: 60,
+        displayAnswerText: false,
+        answerOptionList,
+        showOneAnswerPerRow: false,
       });
       questionGroup.questionList = [abcdQuestion];
       return questionGroup;

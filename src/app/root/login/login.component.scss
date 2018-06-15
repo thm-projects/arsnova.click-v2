@@ -1,0 +1,24 @@
+@import "../../../styles_vendor";
+
+.input-group {
+  .form-control {
+    border: none;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  @include media-breakpoint-only(xs) {
+    .input-group-append {
+      width: 100%;
+    }
+
+    .btn-info,
+    input[type="text"],
+    input[type="password"] {
+      border-radius: 0.25rem;
+      width: 100%;
+    }
+  }
+}

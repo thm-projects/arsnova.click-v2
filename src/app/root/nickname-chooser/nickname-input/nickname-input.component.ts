@@ -48,13 +48,15 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
+    const nickname = (
+      <HTMLInputElement>document.getElementById('input-nickname')
+    ).value;
     const promise = new Promise((resolve, reject) => {
       this.memberApiService.putMember({
         quizName: this.currentQuizService.quiz.hashtag,
         nickname: nickname,
         groupName: window.sessionStorage.getItem('config.memberGroup'),
-        ticket: this.userService.ticket,
+        ticket: this.userService.casTicket,
       }).subscribe(data => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
@@ -67,7 +69,10 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
           reject(data);
         }
       }, (error) => {
-        reject({ step: 'HTTP_ERROR', payload: error });
+        reject({
+          step: 'HTTP_ERROR',
+          payload: error,
+        });
       });
     });
     promise.then(() => {

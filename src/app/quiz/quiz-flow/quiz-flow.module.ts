@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { MarkdownModule } from '../../markdown/markdown.module';
-import { CasService } from '../../service/cas/cas.service';
+import { CasLoginService } from '../../service/login/cas-login.service';
 import { SharedModule } from '../../shared/shared.module';
 import { ThemesModule } from '../../themes/themes.module';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
@@ -20,49 +20,40 @@ export const quizFlowRoutes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: 'lobby',
-  },
-  {
+  }, {
     path: 'lobby',
-    canLoad: [CasService],
+    canLoad: [CasLoginService],
     component: QuizLobbyComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'results',
     component: QuizResultsComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'results/:questionIndex',
     component: QuestionDetailsComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'theme',
     component: QuizThemeComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'leaderboard',
     component: LeaderboardComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'leaderboard/:questionIndex',
     component: LeaderboardComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'voting',
     component: VotingComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'reading-confirmation',
     component: ReadingConfirmationComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'confidence-rate',
     component: ConfidenceRateComponent,
     data: {},
@@ -71,20 +62,10 @@ export const quizFlowRoutes: Routes = [
 
 @NgModule({
   imports: [
-    MarkdownModule,
-    SharedModule,
-    ThemesModule,
-    RouterModule.forChild(quizFlowRoutes),
-    QuizResultsModule,
-    NgxQRCodeModule,
+    MarkdownModule, SharedModule, ThemesModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, NgxQRCodeModule,
   ],
   declarations: [
-    QuizLobbyComponent,
-    VotingComponent,
-    LeaderboardComponent,
-    QuizThemeComponent,
-    ReadingConfirmationComponent,
-    ConfidenceRateComponent,
+    QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent, ReadingConfirmationComponent, ConfidenceRateComponent,
   ],
 })
 export class QuizFlowModule {

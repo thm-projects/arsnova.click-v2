@@ -22,8 +22,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     return this._footerElements;
   }
 
-  @Input()
-  set footerElements(value: Array<IFooterBarElement>) {
+  @Input() set footerElements(value: Array<IFooterBarElement>) {
     this.hasRightScrollElement = value.length > 1;
     this._footerElements = value;
   }
@@ -126,7 +125,9 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     } else {
       const child = navbarFooter.children.item(this.footerElemIndex);
       const childWidth = child.clientWidth;
-      navbarFooter.scrollLeft -= (childWidth);
+      navbarFooter.scrollLeft -= (
+        childWidth
+      );
     }
   }
 
@@ -146,7 +147,9 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     if (this.footerElemIndex === 1) {
       const childWidth = child.clientWidth;
       const leftButtonWidth = document.getElementById('footer-move-left').clientWidth;
-      navbarFooter.scrollLeft += (childWidth - leftButtonWidth);
+      navbarFooter.scrollLeft += (
+        childWidth - leftButtonWidth
+      );
     } else {
       navbarFooter.scrollLeft += child.clientWidth;
     }
@@ -156,6 +159,10 @@ export class FooterBarComponent implements OnInit, OnDestroy {
   public hideRight(): boolean {
     if (isPlatformServer(this.platformId)) {
       return;
+    }
+
+    if (!this.footerElements.length) {
+      return true;
     }
 
     const navbarFooter = document.getElementById('navbar-footer-container');

@@ -3,18 +3,19 @@ import { Observable, of } from 'rxjs/index';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
+import { CasLoginService } from '../../service/login/cas-login.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
 import { FILTER, PROJECT } from '../../shared/enums';
 
 @Component({
-  selector: 'app-fe-translation',
-  templateUrl: './i18n-manager.component.html',
-  styleUrls: ['./i18n-manager.component.scss'],
+  selector: 'app-i18n-manager-overview',
+  templateUrl: './i18n-manager-overview.component.html',
+  styleUrls: ['./i18n-manager-overview.component.scss'],
 })
-export class I18nManagerComponent implements OnInit, OnDestroy {
+export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
-  public static readonly TYPE = 'I18nManagerComponent';
+  public static readonly TYPE = 'I18nManagerOverviewComponent';
   public readonly filters = FILTER;
 
   private _langRef = ['en', 'de', 'fr', 'it', 'es'];
@@ -93,10 +94,15 @@ export class I18nManagerComponent implements OnInit, OnDestroy {
     this._hasAnyMatches = value;
   }
 
-  constructor(private footerBarService: FooterBarService, private headerLabelService: HeaderLabelService,
-              public modalOrganizerService: ModalOrganizerService, public projectLoaderService: ProjectLoaderService,
-              private languageLoaderService: LanguageLoaderService,
+  constructor(
+    private footerBarService: FooterBarService,
+    private headerLabelService: HeaderLabelService,
+    public modalOrganizerService: ModalOrganizerService,
+    public projectLoaderService: ProjectLoaderService,
+    private languageLoaderService: LanguageLoaderService,
+    private casService: CasLoginService,
   ) {
+    this.casService.casLoginRequired = true;
     this.headerLabelService.headerLabel = 'I18Nator';
     this.footerBarService.replaceFooterElements([]);
   }

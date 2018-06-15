@@ -13,7 +13,6 @@ import { ActiveQuestionGroupMockService } from '../../service/active-question-gr
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
-import { CasService } from '../../service/cas/cas.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
@@ -23,6 +22,7 @@ import { FileUploadService } from '../../service/file-upload/file-upload.service
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { CasLoginService } from '../../service/login/cas-login.service';
 import { SettingsMockService } from '../../service/settings/settings.mock.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
@@ -43,57 +43,85 @@ describe('HomeComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
             useClass: TranslateMessageFormatCompiler,
           },
-        }),
-        ModalsModule,
-        NgbModule.forRoot(),
+        }), ModalsModule, NgbModule.forRoot(),
       ],
       providers: [
         FooterBarService,
-        { provide: SettingsService, useClass: SettingsMockService },
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
+        {
+          provide: SettingsService,
+          useClass: SettingsMockService,
+        },
+        {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        },
+        {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        },
         SharedService,
         HeaderLabelService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        { provide: ThemesService, useClass: ThemesMockService },
+        {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        },
+        {
+          provide: ThemesService,
+          useClass: ThemesMockService,
+        },
         I18nService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        CasService,
+        {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        },
+        CasLoginService,
         UserService,
-        { provide: TrackingService, useClass: TrackingMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: FileUploadService, useClass: FileUploadMockService },
+        {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
+        {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        },
+        {
+          provide: FileUploadService,
+          useClass: FileUploadMockService,
+        },
       ],
       declarations: [HomeComponent],
     }).compileComponents();
   });
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(HomeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(HomeComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain a TYPE reference', (() => {
-    expect(HomeComponent.TYPE).toEqual('HomeComponent');
-  }));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(HomeComponent.TYPE).toEqual('HomeComponent');
+    }
+  ));
 
   it('should render \'arsnova.click\' in the main view', () => {
     const compiled = fixture.debugElement.nativeElement;
@@ -116,14 +144,12 @@ describe('HomeComponent', () => {
 
   describe('#autoJoinToSession', () => {
 
-    it('should join the session by click', async(inject(
-      [Router], (router: Router) => {
-        spyOn(component, 'selectQuizByList').and.callThrough();
-        spyOn(router, 'navigate').and.callFake(() => {});
+    it('should join the session by click', async(inject([Router], (router: Router) => {
+      spyOn(component, 'selectQuizByList').and.callThrough();
+      spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.autoJoinToSession('testquiz');
-        expect(component.selectQuizByList).toHaveBeenCalled();
-      }),
-    ));
+      component.autoJoinToSession('testquiz');
+      expect(component.selectQuizByList).toHaveBeenCalled();
+    })));
   });
 });

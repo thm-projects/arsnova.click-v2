@@ -61,7 +61,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         quizName: this.currentQuizService.quiz.hashtag,
         nickname: nickName,
         groupName: window.sessionStorage.getItem('config.memberGroup'),
-        ticket: this.userService.ticket,
+        ticket: this.userService.casTicket,
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
