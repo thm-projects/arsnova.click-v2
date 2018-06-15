@@ -51,14 +51,14 @@ export const appRoutes: Routes = [
     path: 'quiz/manager',
     loadChildren: 'app/quiz/quiz-manager/quiz-manager.module#QuizManagerModule',
   }, {
-    path: 'quiz',
-    loadChildren: 'app/quiz/quiz.module#QuizModule',
-  }, {
     path: 'quiz/flow',
     loadChildren: 'app/quiz/quiz-flow/quiz-flow.module#QuizFlowModule',
     data: {
       preload: true,
     },
+  }, {
+    path: 'quiz',
+    loadChildren: 'app/quiz/quiz.module#QuizModule',
   }, {
     path: 'nicks',
     loadChildren: 'app/root/nickname-chooser/nickname-chooser.module#NicknameChooserModule',
