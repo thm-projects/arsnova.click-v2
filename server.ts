@@ -279,7 +279,7 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
 
   const request = https.get(`${DefaultSettings.httpLibEndpoint}/authorize/validate/${username}/${token}`, (response) => {
 
-    let data = '';
+    let data: any = '';
 
     response.on('data', (chunk) => {
       data += chunk;
