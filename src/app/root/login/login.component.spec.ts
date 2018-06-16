@@ -111,7 +111,7 @@ describe('LoginComponent', () => {
         spyOn(router, 'navigateByUrl').and.callFake(() => {});
 
         await component.login();
-        expect(component['authorizationFailed']).toBeFalsy();
+        expect(component['_authorizationFailed']).toBeFalsy();
 
       }));
 
@@ -127,7 +127,7 @@ describe('LoginComponent', () => {
         spyOn(router, 'navigateByUrl').and.callFake(() => {});
 
         await component.login();
-        expect(component['authorizationFailed']).toBeTruthy();
+        expect(component['_authorizationFailed']).toBeTruthy();
       }));
   });
 });

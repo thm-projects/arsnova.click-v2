@@ -7,14 +7,15 @@ import * as bodyParser from 'body-parser';
 import * as child_process from 'child_process';
 import * as compress from 'compression';
 import * as cors from 'cors';
-
 import * as express from 'express';
 import * as fs from 'fs';
+import * as https from 'https';
 import * as path from 'path';
 
 import 'reflect-metadata';
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
+import { DefaultSettings } from './src/lib/default.settings';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -42,12 +43,19 @@ const i18nFileBaseLocation = {
 };
 
 app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.urlencoded({
+  limit: '50mb',
+  extended: true,
+}));
 app.use(cors(corsOptions));
 app.use(compress());
 app.param('project', (req, res, next, project) => {
   if (!project || !i18nFileBaseLocation[project]) {
-    res.status(500).send({ status: 'STATUS:FAILED', data: 'Invalid Project specified', payload: { project } });
+    res.status(500).send({
+      status: 'STATUS:FAILED',
+      data: 'Invalid Project specified',
+      payload: { project },
+    });
   } else {
     req.i18nFileBaseLocation = i18nFileBaseLocation[project];
     req.projectBaseLocation = projectBaseLocation[project];
@@ -121,13 +129,21 @@ const buildKeys = ({ root, dataNode, langRef, langData }) => {
     } else {
       const value = {};
       value[langRef] = dataNode;
-      langData.push({ key: root, value });
+      langData.push({
+        key: root,
+        value,
+      });
     }
 
   } else {
     Object.keys(dataNode).forEach(key => {
       const rootKey = root ? `${root}.` : '';
-      buildKeys({ root: `${rootKey}${key}`, dataNode: dataNode[key], langRef, langData });
+      buildKeys({
+        root: `${rootKey}${key}`,
+        dataNode: dataNode[key],
+        langRef,
+        langData,
+      });
     });
   }
 };
@@ -194,7 +210,8 @@ const getBranch = (req) => {
 };
 
 app.engine('html', ngExpressEngine({
-  bootstrap: RootServerModuleNgFactory, providers: [
+  bootstrap: RootServerModuleNgFactory,
+  providers: [
     provideModuleMap(LAZY_MODULE_MAP),
   ],
 }));
@@ -204,13 +221,20 @@ app.set('views', path.join(DIST_FOLDER, 'browser'));
 
 // TODO: implement data requests securely
 app.get('/api/v1/plugin/i18nator/:project/langFile', async (req, res) => {
-  const payload = { langData: {}, unused: {}, branch: {} };
+  const payload = {
+    langData: {},
+    unused: {},
+    branch: {},
+  };
 
   if (!cache[req.projectCache].langData) {
     const langData = [];
     availableLangs.forEach((langRef, index) => {
       buildKeys({
-        root: '', dataNode: JSON.parse(fs.readFileSync(path.join(req.i18nFileBaseLocation, `${langRef}.json`)).toString('UTF-8')), langRef, langData,
+        root: '',
+        dataNode: JSON.parse(fs.readFileSync(path.join(req.i18nFileBaseLocation, `${langRef}.json`)).toString('UTF-8')),
+        langRef,
+        langData,
       });
     });
     cache[req.projectCache].langData = langData;
@@ -227,32 +251,90 @@ app.get('/api/v1/plugin/i18nator/:project/langFile', async (req, res) => {
   }
   payload.branch = cache[req.projectCache].branch;
 
-  res.send({ status: 'STATUS:SUCCESSFUL', payload });
+  res.send({
+    status: 'STATUS:SUCCESSFUL',
+    payload,
+  });
 });
 app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
+  const username = req.body.username;
+  const token = req.body.token;
+
+  if (!username || !token) {
+    res.send({
+      status: 'STATUS:FAILED',
+      step: 'AUTHENTICATE_STATIC',
+      payload: { reason: 'UNKOWN_LOGIN' },
+    });
+    return;
+  }
   if (!req.body.data) {
-    res.status(500).send({ status: 'STATUS:FAILED', data: 'Invalid Data', payload: { body: req.body } });
+    res.status(500).send({
+      status: 'STATUS:FAILED',
+      data: 'Invalid Data',
+      payload: { body: req.body },
+    });
     return;
   }
 
-  const result = { en: {}, de: {}, es: {}, fr: {}, it: {} };
-  const langKeys = Object.keys(result);
-  createObjectFromKeys({ data: req.body.data, result });
+  const request = https.get(`${DefaultSettings.httpLibEndpoint}/authorize/validate/${username}/${token}`, (response) => {
 
-  cache[req.projectCache].langData = req.body.data;
+    let data = '';
 
-  langKeys.forEach((langRef, index) => {
-    const fileContent = result[langRef];
-    const fileLocation = path.join(req.i18nFileBaseLocation, `${langRef}.json`);
-    const exists = fs.existsSync(fileLocation);
-    if (!exists) {
-      res.status(404).send({ status: 'STATUS:FAILED', data: 'File not found', payload: { fileLocation } });
-      return;
-    }
-    fs.writeFileSync(fileLocation, JSON.stringify(fileContent));
-    if (index === langKeys.length - 1) {
-      res.send({ status: 'STATUS:SUCCESSFUL' });
-    }
+    response.on('data', (chunk) => {
+      data += chunk;
+    });
+
+    response.on('end', () => {
+      data = JSON.parse(data);
+      if (!data && data.status !== 'STATUS:SUCCESSFUL') {
+        return;
+      }
+
+      const result = {
+        en: {},
+        de: {},
+        es: {},
+        fr: {},
+        it: {},
+      };
+      const langKeys = Object.keys(result);
+      createObjectFromKeys({
+        data: req.body.data,
+        result,
+      });
+
+      cache[req.projectCache].langData = req.body.data;
+
+      langKeys.forEach((langRef, index) => {
+        const fileContent = result[langRef];
+        const fileLocation = path.join(req.i18nFileBaseLocation, `${langRef}.json`);
+        const exists = fs.existsSync(fileLocation);
+        if (!exists) {
+          res.status(404).send({
+            status: 'STATUS:FAILED',
+            data: 'File not found',
+            payload: { fileLocation },
+          });
+          return;
+        }
+        fs.writeFileSync(fileLocation, JSON.stringify(fileContent));
+        if (index === langKeys.length - 1) {
+          res.send({ status: 'STATUS:SUCCESSFUL' });
+        }
+      });
+    });
+  });
+
+  request.on('error', (error) => {
+    console.log('error at validating login token', error);
+    request.abort();
+    res.send({
+      status: 'STATUS:FAILED',
+      step: 'UPDATE_LANG',
+      payload: { error },
+    });
+    return;
   });
 });
 app.get('/api/*', (req, res) => {
@@ -290,7 +372,9 @@ const buildCache = () => {
     console.log(`* Fetching unused keys`);
     const unusedKeysStart = new Date().getTime();
     cache[projectName].unused = getUnusedKeys({
-      params: {}, projectAppLocation: projectAppLocation[projectName], i18nFileBaseLocation: i18nFileBaseLocation[projectName],
+      params: {},
+      projectAppLocation: projectAppLocation[projectName],
+      i18nFileBaseLocation: i18nFileBaseLocation[projectName],
     });
     const unusedKeysEnd = new Date().getTime();
     console.log(`-- Done. Took ${unusedKeysEnd - unusedKeysStart}ms`);

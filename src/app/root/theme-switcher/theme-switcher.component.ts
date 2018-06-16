@@ -54,12 +54,11 @@ export class ThemeSwitcherComponent {
     if (isPlatformBrowser(this.platformId)) {
       const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
-      if (themeDataset === this.previewThemeBackup) {
+      if (themeDataset !== this.previewThemeBackup) {
         document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
+        this.themesService.reloadLinkNodes(this.previewThemeBackup);
         return;
       }
-
-      this.themesService.reloadLinkNodes(this.previewThemeBackup);
     }
   }
 

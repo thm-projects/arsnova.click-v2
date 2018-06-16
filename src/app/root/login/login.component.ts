@@ -11,11 +11,16 @@ import { UserService } from '../../service/user/user.service';
 })
 export class LoginComponent implements OnInit {
   public static readonly TYPE = 'LoginComponent';
+  public username = '';
+  public password = '';
 
-  private username = '';
-  private password = '';
+  private _authorizationFailed = false;
+
+  get authorizationFailed(): boolean {
+    return this._authorizationFailed;
+  }
+
   private return = '';
-  private authorizationFailed = false;
 
   constructor(
     private userService: UserService,
@@ -34,7 +39,7 @@ export class LoginComponent implements OnInit {
   }
 
   public async login(): Promise<void> {
-    this.authorizationFailed = false;
+    this._authorizationFailed = false;
     if (this.username && this.password) {
       const passwordHash = this.userService.hashPassword(this.username, this.password);
 
@@ -43,7 +48,7 @@ export class LoginComponent implements OnInit {
       if (isAuthenticated) {
         this.router.navigateByUrl(this.return);
       } else {
-        this.authorizationFailed = true;
+        this._authorizationFailed = true;
       }
     }
   }

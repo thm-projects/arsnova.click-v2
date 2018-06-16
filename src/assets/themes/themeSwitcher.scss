@@ -127,14 +127,12 @@
 
 @each $theme, $map in $themes {
   html[data-theme=#{$theme}] {
-    @include transitionEffect(map-get($map, "background-color"));
 
     *:fullscreen,
     :-webkit-full-screen,
     *:-webkit-full-screen,
     *:-moz-full-screen,
     body {
-      @include transitionEffect(map-get($map, "background-color"));
     }
 
     @include introjs($map);
@@ -162,7 +160,12 @@
       }
     }
     #theme-wrapper {
-      background-color: map-get($map, "background-color");
+      @include transitionEffect(map-get($map, "background-color"));
+
+      #content-container {
+        @include transitionEffect(map-get($map, "background-color"));
+      }
+
       .text-light, a.text-light, a:hover.text-light, a:active.text-light, a:visited.text-light, a:focus.text-light {
         color: map-get($map, "fg-text-light");
       }
@@ -208,7 +211,6 @@
         @include transitionEffect(map-get($map, "bg-nav-row"));
         .nav-row {
           @include transitionEffect(map-get($map, "bg-nav-row"));
-          background-color: map-get($map, "bg-nav-row");
         }
       }
       *::-webkit-input-placeholder {

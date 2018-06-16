@@ -9,9 +9,11 @@ import { DefaultSettings } from '../../../../lib/default.settings';
 })
 export class ThemesApiService {
 
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) { }
+
+  public THEMES_PREVIEW_GET_URL(id: string, langRef: string): string {
+    return `/assets/images/theme/${id}/preview_${langRef}.jpeg`;
+  }
 
   public THEMES_GET_URL(): string {
     return `${DefaultSettings.httpApiEndpoint}/themes`;
