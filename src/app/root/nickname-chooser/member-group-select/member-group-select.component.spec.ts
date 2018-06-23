@@ -14,9 +14,12 @@ import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.s
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
+import { StorageService } from '../../../service/storage/storage.service';
 import { UserService } from '../../../service/user/user.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { MemberGroupSelectComponent } from './member-group-select.component';
 
@@ -27,12 +30,12 @@ describe('MemberGroupSelectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -42,14 +45,19 @@ describe('MemberGroupSelectComponent', () => {
         }),
       ],
       providers: [
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        UserService,
+        {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, UserService,
       ],
       declarations: [MemberGroupSelectComponent],
     }).compileComponents();
@@ -71,17 +79,17 @@ describe('MemberGroupSelectComponent', () => {
 
   describe('#addToGroup', () => {
 
-    it('should add an attendee to a free member group', async(inject(
-      [Router], (router: Router) => {
-        spyOn(component, 'addToGroup').and.callThrough();
-        spyOn(router, 'navigate').and.callFake(() => {});
+    it('should add an attendee to a free member group', async(inject([Router, StorageService], (router: Router, storageService: StorageService) => {
+      spyOn(component, 'addToGroup').and.callThrough();
+      spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.addToGroup('testGroup');
-
+      component.addToGroup('testGroup').then(() => {
         expect(component.addToGroup).not.toThrowError();
-        expect(window.sessionStorage.getItem('config.memberGroup')).toEqual('testGroup');
-        expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
-      }),
-    ));
+        storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).subscribe(val => {
+          expect(val).toEqual('testGroup');
+          expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
+        });
+      });
+    })));
   });
 });

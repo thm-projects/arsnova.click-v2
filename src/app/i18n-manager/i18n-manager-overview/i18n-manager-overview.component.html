@@ -77,7 +77,7 @@
   </div>
   <div class="col-12 col-sm-6"
        *ngIf="!!selectedKey">
-    <div *ngFor="let langKey of getKeys(languageLoaderService.languages)">
+    <div *ngFor="let langKey of getKeys(languageLoaderService.LANGUAGE)">
       <p class="mb-0">{{langKey.toUpperCase()}}</p>
       <textarea class="w-100 key-textarea"
                 (keyup)="updateKey($event, langKey, selectedKey)"

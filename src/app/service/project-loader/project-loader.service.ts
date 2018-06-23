@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PROJECT } from '../../../../../../arsnova-click-v2-manager/src/app/shared/enums';
+import { PROJECT } from '../../shared/enums';
 
 @Injectable({
   providedIn: 'root',

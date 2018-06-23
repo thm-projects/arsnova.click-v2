@@ -7,6 +7,7 @@ import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-comp
 import { of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { createTranslateLoader } from '../../../lib/translation.factory';
+import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
@@ -24,26 +25,24 @@ describe('ThemesService', () => {
   const themeData = {
     'status': 'STATUS:SUCCESSFUL',
     'step': 'GET_THEMES',
-    'payload':
-      [
-        {
-          'name': 'component.theme_switcher.themes.material.name',
-          'description': 'component.theme_switcher.themes.material.description',
-          'id': 'theme-Material',
-        },
-      ],
+    'payload': [
+      {
+        'name': 'component.theme_switcher.themes.material.name',
+        'description': 'component.theme_switcher.themes.material.description',
+        'id': 'theme-Material',
+      },
+    ],
   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -53,15 +52,19 @@ describe('ThemesService', () => {
         }),
       ],
       providers: [
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        TranslateService,
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        ThemesService,
+        {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, TranslateService, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, ThemesService,
       ],
     });
   }));
@@ -73,29 +76,31 @@ describe('ThemesService', () => {
     }
   });
 
-  it('should be created', (inject([ThemesService], (service: ThemesService) => {
-    expect(service).toBeTruthy();
+  it('should be created', (
+    inject([ThemesService], (service: ThemesService) => {
+      expect(service).toBeTruthy();
+    })
+  ));
+
+  it('#updateCurrentlyUsedTheme', async(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
+    spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
+    spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
+    spyOn(connectionService.socket, 'subscribe').and.callFake(() => (
+      { status: 'STATUS:FAILED' }
+    ));
+
+    expect(document.getElementById('link-manifest')).toBe(null);
+    expect(service.currentTheme).toEqual('theme-Material');
+    service.updateCurrentlyUsedTheme();
+    expect(service.reloadLinkNodes).toHaveBeenCalled();
   })));
 
-  it('#updateCurrentlyUsedTheme', async(inject(
-    [ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
-      spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
-      spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
-      spyOn(connectionService.socket, 'subscribe').and.callFake(() => ({ status: 'STATUS:FAILED' }));
+  it('#reloadLinkNodes', async(inject([ThemesService], (service: ThemesService) => {
 
-      expect(document.getElementById('link-manifest')).toBe(null);
-      expect(service.currentTheme).toEqual('theme-Material');
-      service.updateCurrentlyUsedTheme();
-      expect(service.reloadLinkNodes).toHaveBeenCalled();
-    })));
+    spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
+    spyOn(service, 'reloadLinkNodes').and.callThrough();
 
-  it('#reloadLinkNodes', async(inject([ThemesService],
-    (service: ThemesService) => {
-
-      spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
-      spyOn(service, 'reloadLinkNodes').and.callThrough();
-
-      service.reloadLinkNodes('theme-Material');
-      expect(service.reloadLinkNodes).toHaveBeenCalled();
-    })));
+    service.reloadLinkNodes('theme-Material');
+    expect(service.reloadLinkNodes).toHaveBeenCalled();
+  })));
 });

@@ -1,16 +1,17 @@
 import { isPlatformServer } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, Inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import * as IntroJs from 'intro.js';
+import * as introJs from 'intro.js';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 // Update global window.* object interface (https://stackoverflow.com/a/12709880/7992104)
 declare global {
@@ -46,11 +47,13 @@ export class RootComponent implements AfterViewInit {
     private themesService: ThemesService,
     private translateService: TranslateService,
     private router: Router,
-    private http: HttpClient,
+    private storageService: StorageService,
   ) {
-    (async () => {
-      this.themesService.updateCurrentlyUsedTheme();
-    })();
+    (
+      async () => {
+        this.themesService.updateCurrentlyUsedTheme();
+      }
+    )();
 
   }
 
@@ -73,10 +76,14 @@ export class RootComponent implements AfterViewInit {
 
   private initializeCookieConsent(currentUrl): void {
     window.addEventListener('load', () => {
-      if (!(<IWindow>window).cookieconsent) {
+      if (!(
+        <IWindow>window
+      ).cookieconsent) {
         return;
       }
-      (<IWindow>window).cookieconsent.initialise({
+      (
+        <IWindow>window
+      ).cookieconsent.initialise({
         palette: {
           popup: {
             background: '#1d8a8a',
@@ -100,20 +107,24 @@ export class RootComponent implements AfterViewInit {
     });
   }
 
-  private getTooltipForRoute(route: string): void {
+  private async getTooltipForRoute(route: string): Promise<void> {
     let hasStartedIntroJs = false;
-    const introState = JSON.parse(localStorage.getItem('config.intro-state')) || {};
+    const introState = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE).toPromise();
     if (window.innerWidth <= 768) {
       return;
     }
     if (!introState[route]) {
-      introState[route] = { completed: false, elements: {} };
-      localStorage.setItem('config.intro-state', JSON.stringify(introState));
+      introState[route] = {
+        completed: false,
+        elements: {},
+      };
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
     }
-    if (hasStartedIntroJs || !JSON.parse(localStorage.getItem('config.show-product-tour')) || introState[route].completed) {
+    if (hasStartedIntroJs || !await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR).toPromise()
+        || introState[route].completed) {
       return;
     }
-    const customIntroJs = IntroJs.introJs();
+    const customIntroJs = introJs();
     const introJsOptions = {
       'overlayOpacity': 0,
       'tooltipPosition': 'auto',
@@ -145,11 +156,11 @@ export class RootComponent implements AfterViewInit {
     hasStartedIntroJs = true;
     customIntroJs.onafterchange((targetElement) => {
       introState[route].elements[targetElement.id] = true;
-      localStorage.setItem('config.intro-state', JSON.stringify(introState));
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
     }).oncomplete(() => {
       introState[route].completed = true;
       hasStartedIntroJs = false;
-      localStorage.setItem('config.intro-state', JSON.stringify(introState));
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
     });
   }
 

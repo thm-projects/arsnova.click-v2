@@ -8,6 +8,7 @@ import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configu
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { createTranslateLoader } from '../../../lib/translation.factory';
+import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
@@ -24,12 +25,12 @@ describe('ActiveQuestionGroupService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -39,14 +40,16 @@ describe('ActiveQuestionGroupService', () => {
         }),
       ],
       providers: [
-        SharedService,
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        SettingsService,
-        TranslateService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        ActiveQuestionGroupService,
+        SharedService, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, SettingsService, TranslateService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, ActiveQuestionGroupService,
       ],
     });
   }));
@@ -82,8 +85,8 @@ describe('ActiveQuestionGroupService', () => {
     expect(JSON.parse(window.localStorage.getItem('config.owned_quizzes'))).toContain('test');
   })));
 
-  it('#updateFooterElementsState', async(inject([ActiveQuestionGroupService, FooterBarService],
-    (service: ActiveQuestionGroupService, footerBarService: FooterBarService) => {
+  it('#updateFooterElementsState',
+    async(inject([ActiveQuestionGroupService, FooterBarService], (service: ActiveQuestionGroupService, footerBarService: FooterBarService) => {
       const defaultNickConfig = DefaultSettings.defaultQuizSettings.nicks;
       service.updateFooterElementsState();
 

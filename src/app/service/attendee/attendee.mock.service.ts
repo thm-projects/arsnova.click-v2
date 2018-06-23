@@ -1,19 +1,22 @@
 import { INickname } from 'arsnova-click-v2-types/src/common';
-import { AttendeeService } from './attendee.service';
 
-export class AttendeeMockService extends AttendeeService {
+export class AttendeeMockService {
   public attendees = [];
 
   public getMemberGroups(): Array<string> {
     return ['Default'];
   }
 
-  public getOwnNick(): string {
-    return 'testNickname';
+  public getOwnNick(): Promise<string> {
+    return new Promise(resolve => resolve('testNickname'));
   }
 
   public addMember(attendee: INickname): void {
     attendee.name = 'testNickname';
-    super.addMember(attendee);
+    this.attendees.push(attendee);
+  }
+
+  public cleanUp(): void {
+    this.attendees = [];
   }
 }

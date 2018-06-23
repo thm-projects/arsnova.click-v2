@@ -7,7 +7,9 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { StorageService } from '../../../service/storage/storage.service';
 import { UserService } from '../../../service/user/user.service';
+import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-nickname-input',
@@ -32,6 +34,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private currentQuizService: CurrentQuizService,
     private memberApiService: MemberApiService,
+    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -51,18 +54,18 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     const nickname = (
       <HTMLInputElement>document.getElementById('input-nickname')
     ).value;
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
       this.memberApiService.putMember({
         quizName: this.currentQuizService.quiz.hashtag,
         nickname: nickname,
-        groupName: window.sessionStorage.getItem('config.memberGroup'),
+        groupName: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).toPromise(),
         ticket: this.userService.casTicket,
       }).subscribe(data => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
             memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
           });
-          window.sessionStorage.setItem('config.websocket_authorization', data.payload.webSocketAuthorization);
+          this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION, data.payload.webSocketAuthorization).subscribe();
           this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
           resolve();
         } else {
@@ -76,7 +79,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       });
     });
     promise.then(() => {
-      window.sessionStorage.setItem(`config.nick`, nickname);
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.NICK, nickname).subscribe();
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
       switch (data.step) {

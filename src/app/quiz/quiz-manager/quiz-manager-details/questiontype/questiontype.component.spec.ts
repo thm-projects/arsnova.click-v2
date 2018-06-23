@@ -15,6 +15,7 @@ import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 
 import { QuestiontypeComponent } from './questiontype.component';
 
@@ -35,12 +36,12 @@ describe('QuestiontypeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -50,14 +51,19 @@ describe('QuestiontypeComponent', () => {
         }),
       ],
       providers: [
-        HeaderLabelService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ActivatedRoute, useClass: MockRouter },
-        SharedService,
+        HeaderLabelService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, {
+          provide: ActivatedRoute,
+          useClass: MockRouter,
+        }, SharedService,
       ],
       declarations: [QuestiontypeComponent],
     }).compileComponents();
@@ -86,14 +92,14 @@ describe('QuestiontypeComponent', () => {
   });
 
   describe('#morphToQuestionType', () => {
-    it('should convert the current question type to a new one', inject(
-      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    it('should convert the current question type to a new one',
+      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
         const targetType = 'MultipleChoiceQuestion';
         component.morphToQuestionType(targetType);
         expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).toEqual(targetType);
       }));
-    it('should not convert the current question type if the passed type does not exist', inject(
-      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    it('should not convert the current question type if the passed type does not exist',
+      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
         const targetType = 'NotExistingType';
         const initType = activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE;
         component.morphToQuestionType(targetType);

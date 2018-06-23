@@ -3,8 +3,9 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
-import { SettingsService } from '../settings/settings.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class ActiveQuestionGroupService {
@@ -27,20 +28,17 @@ export class ActiveQuestionGroupService {
     @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
     private footerBarService: FooterBarService,
-    private settingsService: SettingsService,
+    private storageService: StorageService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      if (window.sessionStorage.getItem('config.active_question_group')) {
-        const serializedObject = window.sessionStorage.getItem('config.active_question_group');
-        const parsedObject = JSON.parse(serializedObject);
-        this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
-      }
+      this.loadData();
     }
-
   }
 
   public generatePrivateKey(length?: number): string {
-    const arr = new Uint8Array((length || 40) / 2);
+    const arr = new Uint8Array((
+                                 length || 40
+                               ) / 2);
 
     if (isPlatformBrowser(this.platformId)) {
       window.crypto.getRandomValues(arr);
@@ -52,19 +50,14 @@ export class ActiveQuestionGroupService {
   public cleanUp(): void {
     this.activeQuestionGroup = null;
     if (isPlatformBrowser(this.platformId)) {
-      window.sessionStorage.removeItem('config.active_question_group');
+      this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).subscribe();
     }
   }
 
-  public persist(): void {
+  public async persist(): Promise<void> {
     this.persistForSession();
     if (isPlatformBrowser(this.platformId)) {
-      window.localStorage.setItem(this.activeQuestionGroup.hashtag, JSON.stringify(this.activeQuestionGroup.serialize()));
-      const questionList = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
-      if (questionList.indexOf(this.activeQuestionGroup.hashtag) === -1) {
-        questionList.push(this.activeQuestionGroup.hashtag);
-        window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
-      }
+      this.storageService.create(DB_TABLE.QUIZ, this.activeQuestionGroup.hashtag, this.activeQuestionGroup.serialize()).subscribe();
     }
   }
 
@@ -88,13 +81,22 @@ export class ActiveQuestionGroupService {
     }
   }
 
+  private async loadData(): Promise<void> {
+    const parsedObject = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).toPromise();
+    if (parsedObject) {
+      this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
+    }
+  }
+
   private dec2hex(dec): string {
-    return ('0' + dec.toString(16)).substr(-2);
+    return (
+      '0' + dec.toString(16)
+    ).substr(-2);
   }
 
   private persistForSession(): void {
     if (isPlatformBrowser(this.platformId)) {
-      window.sessionStorage.setItem('config.active_question_group', JSON.stringify(this.activeQuestionGroup.serialize()));
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP, this.activeQuestionGroup.serialize()).subscribe();
     }
   }
 }

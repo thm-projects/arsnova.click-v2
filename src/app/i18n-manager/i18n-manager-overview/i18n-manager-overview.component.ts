@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Observable, of } from 'rxjs/index';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -18,7 +19,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'I18nManagerOverviewComponent';
   public readonly filters = FILTER;
 
-  private _langRef = ['en', 'de', 'fr', 'it', 'es'];
+  private _langRef = ['en', 'DE', 'FR', 'it', 'ES'];
 
   get langRef(): Array<string> {
     return this._langRef;
@@ -95,6 +96,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     public modalOrganizerService: ModalOrganizerService,
@@ -109,13 +111,26 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.setProject(PROJECT.FRONTEND);
-    document.getElementById('content-container').classList.remove('container');
-    document.getElementById('content-container').classList.add('container-fluid');
+
+    if (isPlatformBrowser(this.platformId)) {
+      const contentContainer = document.getElementById('content-container');
+
+      if (contentContainer) {
+        contentContainer.classList.remove('container');
+        contentContainer.classList.add('container-fluid');
+      }
+    }
   }
 
   public ngOnDestroy(): void {
-    document.getElementById('content-container').classList.add('container');
-    document.getElementById('content-container').classList.remove('container-fluid');
+    if (isPlatformBrowser(this.platformId)) {
+      const contentContainer = document.getElementById('content-container');
+
+      if (contentContainer) {
+        contentContainer.classList.add('container');
+        contentContainer.classList.remove('container-fluid');
+      }
+    }
   }
 
   public updateData(): void {

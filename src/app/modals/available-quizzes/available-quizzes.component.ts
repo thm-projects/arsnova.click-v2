@@ -9,7 +9,9 @@ import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 @Component({
   selector: 'app-available-quizzes',
@@ -35,14 +37,9 @@ export class AvailableQuizzesComponent implements IModal {
     private fileUploadService: FileUploadService,
     private quizApiService: QuizApiService,
     private lobbyApiService: LobbyApiService,
+    private storageService: StorageService,
   ) {
-    const sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
-    sessions.sort((a, b) => a > b);
-    const self = this;
-    sessions.forEach((elem) => {
-      elem = JSON.parse(window.localStorage.getItem(elem));
-      self.sessions.push(questionGroupReflection[elem.TYPE](elem));
-    });
+    this.loadData();
   }
 
   public dismiss(): void {
@@ -59,7 +56,10 @@ export class AvailableQuizzesComponent implements IModal {
 
   public async startQuiz(session: IQuestionGroup): Promise<any> {
     return new Promise(async resolve => {
-      this.trackingService.trackClickEvent({ action: AvailableQuizzesComponent.TYPE, label: 'start-quiz' });
+      this.trackingService.trackClickEvent({
+        action: AvailableQuizzesComponent.TYPE,
+        label: 'start-quiz',
+      });
 
       const quizStatusData = await this.quizApiService.getQuizStatus(session.hashtag).toPromise();
       if (quizStatusData.status !== 'STATUS:SUCCESSFUL') {
@@ -67,9 +67,9 @@ export class AvailableQuizzesComponent implements IModal {
         return;
       }
       if (quizStatusData.step === 'QUIZ:UNDEFINED') {
-        const quizReservationOverrideResult = await this.quizApiService.postQuizReservationOverride({
+        await this.quizApiService.postQuizReservationOverride({
           quizName: session.hashtag,
-          privateKey: window.localStorage.getItem('config.private_key'),
+          privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
         }).toPromise();
 
       } else if (quizStatusData.step === 'QUIZ:AVAILABLE') {
@@ -108,11 +108,25 @@ export class AvailableQuizzesComponent implements IModal {
   }
 
   public editQuiz(session: IQuestionGroup): void {
-    this.trackingService.trackClickEvent({ action: AvailableQuizzesComponent.TYPE, label: 'edit-quiz' });
+    this.trackingService.trackClickEvent({
+      action: AvailableQuizzesComponent.TYPE,
+      label: 'edit-quiz',
+    });
 
     this.activeQuestionGroupService.activeQuestionGroup = session;
     this.router.navigate(['/quiz', 'manager']);
     this.next();
+  }
+
+  private async loadData(): Promise<void> {
+    const sessions = await this.storageService.getAllQuiznames();
+    sessions.sort((a: string, b: string) => 0 - (
+      a > b ? 1 : -1
+    ));
+    sessions.forEach(async (elem) => {
+      const quizData = await this.storageService.read(DB_TABLE.QUIZ, elem).toPromise();
+      this.sessions.push(questionGroupReflection[quizData.TYPE](quizData));
+    });
   }
 
 }

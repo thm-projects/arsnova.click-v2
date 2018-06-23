@@ -19,6 +19,7 @@ import { QuestionTextService } from '../../../service/question-text/question-tex
 import { SettingsService } from '../../../service/settings/settings.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { VotingComponent } from './voting.component';
 
@@ -29,13 +30,12 @@ describe('VotingComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -45,16 +45,19 @@ describe('VotingComponent', () => {
         }),
       ],
       providers: [
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        FooterBarService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        QuestionTextService,
-        HeaderLabelService,
-        SettingsService,
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        MemberApiService,
-        QuizApiService,
+        {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, FooterBarService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, QuestionTextService, HeaderLabelService, SettingsService, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, MemberApiService, QuizApiService,
       ],
       declarations: [VotingComponent],
     }).compileComponents();

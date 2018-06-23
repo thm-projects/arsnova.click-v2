@@ -22,6 +22,7 @@ import { TrackingMockService } from '../../../../service/tracking/tracking.mock.
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 
 import { QuestiontextComponent } from './questiontext.component';
 
@@ -39,57 +40,67 @@ describe('QuestiontextComponent', () => {
   let component: QuestiontextComponent;
   let fixture: ComponentFixture<QuestiontextComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (
+                createTranslateLoader
+              ),
+              deps: [HttpClient],
+            },
+            compiler: {
+              provide: TranslateCompiler,
+              useClass: TranslateMessageFormatCompiler,
+            },
+          }), NgbModalModule.forRoot(),
+        ],
+        providers: [
+          {
+            provide: ActiveQuestionGroupService,
+            useClass: ActiveQuestionGroupMockService,
+          }, HeaderLabelService, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, {
+            provide: WebsocketService,
+            useClass: WebsocketMockService,
+          }, {
+            provide: ActivatedRoute,
+            useClass: MockRouter,
+          }, SharedService, QuestionTextService, {
+            provide: TrackingService,
+            useClass: TrackingMockService,
           },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
-        NgbModalModule.forRoot(),
-      ],
-      providers: [
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        HeaderLabelService,
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ActivatedRoute, useClass: MockRouter },
-        SharedService,
-        QuestionTextService,
-        { provide: TrackingService, useClass: TrackingMockService },
-      ],
-      declarations: [
-        HeaderComponent,
-        LivePreviewComponent,
-        MarkdownBarComponent,
-        QuestiontextComponent,
-      ],
-    }).compileComponents();
-  }));
+        ],
+        declarations: [
+          HeaderComponent, LivePreviewComponent, MarkdownBarComponent, QuestiontextComponent,
+        ],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(QuestiontextComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(QuestiontextComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
-  it('should contain a TYPE reference', (() => {
-    expect(QuestiontextComponent.TYPE).toEqual('QuestiontextComponent');
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(QuestiontextComponent.TYPE).toEqual('QuestiontextComponent');
+    }
+  ));
 
   describe('#connector', () => {
     it('should call the markdown interpreter if a markdown button is pressed', () => {

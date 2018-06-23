@@ -15,6 +15,7 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { LanguageSwitcherComponent } from './language-switcher.component';
 
@@ -25,12 +26,12 @@ describe('LanguageSwitcherComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -40,14 +41,16 @@ describe('LanguageSwitcherComponent', () => {
         }),
       ],
       providers: [
-        I18nService,
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        HeaderLabelService,
-        { provide: TrackingService, useClass: TrackingMockService },
+        I18nService, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, HeaderLabelService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
       ],
       declarations: [LanguageSwitcherComponent],
     }).compileComponents();

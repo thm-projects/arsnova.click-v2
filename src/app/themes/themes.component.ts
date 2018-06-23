@@ -2,7 +2,8 @@ import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ThemesApiService } from '../service/api/themes/themes-api.service';
 import { ThemesService } from '../service/themes/themes.service';
-import { CategoryType, TrackingService } from '../service/tracking/tracking.service';
+import { TrackingService } from '../service/tracking/tracking.service';
+import { TRACKING_CATEGORY_TYPE } from '../shared/enums';
 
 @Component({
   selector: 'app-themes',
@@ -49,7 +50,7 @@ export class ThemesComponent implements OnDestroy {
 
     this.trackingService.trackEvent({
       action: ThemesComponent.TYPE,
-      category: CategoryType.THEME_CHANGE,
+      category: TRACKING_CATEGORY_TYPE.THEME_CHANGE,
       label: id,
     });
   }
@@ -65,7 +66,7 @@ export class ThemesComponent implements OnDestroy {
 
     this.trackingService.trackEvent({
       action: ThemesComponent.TYPE,
-      category: CategoryType.THEME_PREVIEW,
+      category: TRACKING_CATEGORY_TYPE.THEME_PREVIEW,
       label: id,
     });
   }

@@ -23,6 +23,7 @@ import { TrackingMockService } from '../../../../service/tracking/tracking.mock.
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 
 import { ConfidenceRateComponent } from './confidence-rate.component';
 
@@ -33,12 +34,12 @@ describe('QuizResults: ConfidenceRateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -48,18 +49,25 @@ describe('QuizResults: ConfidenceRateComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal,
-        { provide: TrackingService, useClass: TrackingMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        I18nService,
-        HeaderLabelService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
+        NgbActiveModal, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, I18nService, HeaderLabelService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        },
       ],
       declarations: [ConfidenceRateComponent],
     }).compileComponents();

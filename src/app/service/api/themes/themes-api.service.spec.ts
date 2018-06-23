@@ -22,14 +22,6 @@ describe('ThemesApiService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should get the available themes', inject([ThemesApiService], (service: ThemesApiService) => {
-
-    service.getThemes().subscribe();
-    backend.expectOne(service.THEMES_GET_URL()).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
   it('should get the meta link tags of the current theme', inject([ThemesApiService], (service: ThemesApiService) => {
 
     const theme = 'theme-Material';

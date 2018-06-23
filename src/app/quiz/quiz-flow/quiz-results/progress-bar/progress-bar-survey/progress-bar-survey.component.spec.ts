@@ -1,5 +1,6 @@
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SharedModule } from '../../../../../shared/shared.module';
 
 import { ProgressBarSurveyComponent } from './progress-bar-survey.component';
 
@@ -9,6 +10,9 @@ describe('ProgressBarSurveyComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        SharedModule,
+      ],
       declarations: [ProgressBarSurveyComponent],
     }).compileComponents();
   }));

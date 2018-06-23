@@ -16,14 +16,14 @@ import { CurrentQuizMockService } from '../../../service/current-quiz/current-qu
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
-import { I18nService, Languages } from '../../../service/i18n/i18n.service';
+import { I18nService } from '../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
-import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
-import { GamificationAnimationComponent } from '../../../shared/gamification-animation/gamification-animation.component';
+import { LANGUAGE } from '../../../shared/enums';
+import { SharedModule } from '../../../shared/shared.module';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { ProgressBarFreetextComponent } from './progress-bar/progress-bar-freetext/progress-bar-freetext.component';
 import { ProgressBarMultipleChoiceComponent } from './progress-bar/progress-bar-multiple-choice/progress-bar-multiple-choice.component';
@@ -42,13 +42,12 @@ describe('QuizResultsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -58,17 +57,19 @@ describe('QuizResultsComponent', () => {
         }),
       ],
       providers: [
-        TranslateService,
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        HeaderLabelService,
-        I18nService,
-        QuestionTextService,
+        TranslateService, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, HeaderLabelService, I18nService, QuestionTextService,
       ],
       declarations: [
         ConfidenceRateComponent,
@@ -79,8 +80,6 @@ describe('QuizResultsComponent', () => {
         ProgressBarRangedComponent,
         ProgressBarFreetextComponent,
         ReadingConfirmationComponent,
-        AudioPlayerComponent,
-        GamificationAnimationComponent,
         QuizResultsComponent,
       ],
     }).compileComponents();
@@ -107,25 +106,31 @@ describe('QuizResultsComponent', () => {
     expect(component.showLeaderBoardButton(currentQuizService.questionIndex)).toBeTruthy();
   }));
 
-  it(`#showStopQuizButton`, inject(
-    [CurrentQuizService, AttendeeService],
-    (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
-      currentQuizService.isOwner = true;
+  it(`#showStopQuizButton`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+      currentQuizService['_isOwner'] = true;
       currentQuizService.currentQuestion().timer = 0;
       attendeeService.addMember(new Attendee({
-        id: 0, name: 'testNickname', groupName: 'Default', colorCode: '#00000', responses: [],
+        id: 0,
+        name: 'testNickname',
+        groupName: 'Default',
+        colorCode: '#00000',
+        responses: [],
       }));
 
       expect(component.showStopQuizButton()).toBeTruthy();
     }));
 
-  it(`#showStopCountdownButton`, inject(
-    [CurrentQuizService, AttendeeService],
-    (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+  it(`#showStopCountdownButton`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
       currentQuizService.currentQuestion().timer = 10;
-      currentQuizService.isOwner = true;
+      currentQuizService['_isOwner'] = true;
       attendeeService.addMember(new Attendee({
-        id: 0, name: 'testNickname', groupName: 'Default', colorCode: '#00000', responses: [],
+        id: 0,
+        name: 'testNickname',
+        groupName: 'Default',
+        colorCode: '#00000',
+        responses: [],
       }));
       component.countdown = new Countdown(currentQuizService.currentQuestion(), new Date().getTime());
 
@@ -133,116 +138,129 @@ describe('QuizResultsComponent', () => {
       expect(component.showStopCountdownButton()).toBeTruthy();
     }));
 
-  it(`#showStartQuizButton`, inject(
-    [CurrentQuizService, AttendeeService],
-    (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
-      currentQuizService.isOwner = true;
+  it(`#showStartQuizButton`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+      currentQuizService['_isOwner'] = true;
       currentQuizService.readingConfirmationRequested = true;
 
       expect(component.showStartQuizButton()).toBeTruthy();
     }));
 
-  it(`#hideProgressbarCssStyle`, inject(
-    [CurrentQuizService],
-    (currentQuizService: CurrentQuizService) => {
-      currentQuizService.readingConfirmationRequested = false;
-      currentQuizService.questionIndex = 0;
-      expect(component.hideProgressbarCssStyle()).toBeTruthy();
-    }));
+  it(`#hideProgressbarCssStyle`, inject([CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+    currentQuizService.readingConfirmationRequested = false;
+    currentQuizService.questionIndex = 0;
+    expect(component.hideProgressbarCssStyle()).toBeTruthy();
+  }));
 
-  it(`#showConfidenceRate`, inject(
-    [CurrentQuizService, AttendeeService],
-    (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+  it(`#showConfidenceRate`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
       attendeeService.addMember(new Attendee({
         id: 0,
         name: 'testNickname',
         groupName: 'Default',
         colorCode: '#00000',
-        responses: [{ value: 0, confidence: 20, readingConfirmation: true, responseTime: 10 }],
+        responses: [
+          {
+            value: 0,
+            confidence: 20,
+            readingConfirmation: true,
+            responseTime: 10,
+          },
+        ],
       }));
       currentQuizService.quiz.sessionConfig.confidenceSliderEnabled = true;
 
       expect(component.showConfidenceRate(component.selectedQuestionIndex)).toBeTruthy();
     }));
 
-  it(`#modifyVisibleQuestion`, inject(
-    [QuestionTextService],
-    async (questionTextService: QuestionTextService) => {
-      spyOn(questionTextService, 'changeMultiple').and.callFake(() => {});
+  it(`#modifyVisibleQuestion`, inject([QuestionTextService], async (questionTextService: QuestionTextService) => {
+    spyOn(questionTextService, 'changeMultiple').and.callFake(() => {});
 
-      await component.modifyVisibleQuestion(component.selectedQuestionIndex);
-      expect(questionTextService.changeMultiple).toHaveBeenCalled();
+    await component.modifyVisibleQuestion(component.selectedQuestionIndex);
+    expect(questionTextService.changeMultiple).toHaveBeenCalled();
+  }));
+
+  it(`#getConfidenceData`, inject([AttendeeService, I18nService], (attendeeService: AttendeeService, i18nService: I18nService) => {
+    attendeeService.addMember(new Attendee({
+      id: 0,
+      name: 'testNickname',
+      groupName: 'Default',
+      colorCode: '#00000',
+      responses: [
+        {
+          value: 0,
+          confidence: 20,
+          readingConfirmation: true,
+          responseTime: 10,
+        },
+      ],
     }));
 
-  it(`#getConfidenceData`, inject(
-    [AttendeeService, I18nService],
-    (attendeeService: AttendeeService, i18nService: I18nService) => {
-      attendeeService.addMember(new Attendee({
-        id: 0,
-        name: 'testNickname',
-        groupName: 'Default',
-        colorCode: '#00000',
-        responses: [{ value: 0, confidence: 20, readingConfirmation: true, responseTime: 10 }],
-      }));
-
-      const result: { base: number, absolute: number, percent: string } = component.getConfidenceData(component.selectedQuestionIndex);
-
+    component.getConfidenceData(component.selectedQuestionIndex).then(result => {
       expect(result.base).toEqual(1);
       expect(result.absolute).toEqual(1);
       switch (i18nService.currentLanguage) {
-        case Languages.DE:
+        case LANGUAGE.DE:
           expect(result.percent).toEqual('20\xa0%'); // \xa0: Non breaking space
           break;
         default:
           expect(result.percent).toEqual('20%');
       }
-    }));
+    });
+  }));
 
-  it(`#showReadingConfirmation`, inject(
-    [CurrentQuizService, AttendeeService],
-    (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+  it(`#showReadingConfirmation`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
       attendeeService.addMember(new Attendee({
         id: 0,
         name: 'testNickname',
         groupName: 'Default',
         colorCode: '#00000',
-        responses: [{ value: 0, confidence: 20, readingConfirmation: true, responseTime: 10 }],
+        responses: [
+          {
+            value: 0,
+            confidence: 20,
+            readingConfirmation: true,
+            responseTime: 10,
+          },
+        ],
       }));
       currentQuizService.quiz.sessionConfig.readingConfirmationEnabled = true;
 
       expect(component.showReadingConfirmation(component.selectedQuestionIndex)).toBeTruthy();
     }));
 
-  it(`#showResponseProgress`, inject(
-    [CurrentQuizService],
-    (currentQuizService: CurrentQuizService) => {
+  it(`#showResponseProgress`, inject([CurrentQuizService], (currentQuizService: CurrentQuizService) => {
 
-      expect(component.showResponseProgress()).toEqual(currentQuizService.quiz.sessionConfig.showResponseProgress);
+    expect(component.showResponseProgress()).toEqual(currentQuizService.quiz.sessionConfig.showResponseProgress);
+  }));
+
+  it(`#getReadingConfirmationData`, inject([AttendeeService, I18nService], (attendeeService: AttendeeService, i18nService: I18nService) => {
+    attendeeService.addMember(new Attendee({
+      id: 0,
+      name: 'testNickname',
+      groupName: 'Default',
+      colorCode: '#00000',
+      responses: [
+        {
+          value: 0,
+          confidence: 20,
+          readingConfirmation: true,
+          responseTime: 10,
+        },
+      ],
     }));
 
-  it(`#getReadingConfirmationData`, inject(
-    [AttendeeService, I18nService],
-    (attendeeService: AttendeeService, i18nService: I18nService) => {
-      attendeeService.addMember(new Attendee({
-        id: 0,
-        name: 'testNickname',
-        groupName: 'Default',
-        colorCode: '#00000',
-        responses: [{ value: 0, confidence: 20, readingConfirmation: true, responseTime: 10 }],
-      }));
-
-      const result: {
-        base: number, absolute: number, percent: string
-      } = component.getReadingConfirmationData(component.selectedQuestionIndex);
-
+    component.getReadingConfirmationData(component.selectedQuestionIndex).then(result => {
       expect(result.base).toEqual(1);
       expect(result.absolute).toEqual(1);
       switch (i18nService.currentLanguage) {
-        case Languages.DE:
+        case LANGUAGE.DE:
           expect(result.percent).toEqual('100\xa0%'); // \xa0: Non breaking space
           break;
         default:
           expect(result.percent).toEqual('100%');
       }
-    }));
+    });
+  }));
 });

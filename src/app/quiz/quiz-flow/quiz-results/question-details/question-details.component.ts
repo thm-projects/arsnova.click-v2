@@ -53,12 +53,12 @@ export class QuestionDetailsComponent implements OnInit {
     private questionTextService: QuestionTextService,
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
-    private footerBarService: FooterBarService) {
+    private footerBarService: FooterBarService,
+  ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
     footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
     ]);
   }
 
@@ -101,7 +101,7 @@ export class QuestionDetailsComponent implements OnInit {
         payload: { quizName: this.currentQuizService.quiz.hashtag },
       });
     }
-    this.connectionService.socket.subscribe((data: IMessage) => {
+    this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case 'LOBBY:ALL_PLAYERS':
           data.payload.members.forEach((elem: INickname) => {
@@ -120,7 +120,7 @@ export class QuestionDetailsComponent implements OnInit {
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
       }
-      this.currentQuizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
+      await this.currentQuizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
   }
 

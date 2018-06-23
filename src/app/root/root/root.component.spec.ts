@@ -25,52 +25,55 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 import { RootComponent } from './root.component';
 
 describe('RootComponent', () => {
   let component: RootComponent;
   let fixture: ComponentFixture<RootComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (
+                createTranslateLoader
+              ),
+              deps: [HttpClient],
+            },
+            compiler: {
+              provide: TranslateCompiler,
+              useClass: TranslateMessageFormatCompiler,
+            },
+          }), NgbModule.forRoot(),
+        ],
+        providers: [
+          HeaderLabelService, ThemesService, {
+            provide: CurrentQuizService,
+            useClass: CurrentQuizMockService,
+          }, {
+            provide: TrackingService,
+            useClass: TrackingMockService,
+          }, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, {
+            provide: WebsocketService,
+            useClass: WebsocketMockService,
+          }, SharedService, I18nService, FileUploadService, {
+            provide: ActiveQuestionGroupService,
+            useClass: ActiveQuestionGroupMockService,
           },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
-        NgbModule.forRoot(),
-      ],
-      providers: [
-        HeaderLabelService,
-        ThemesService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: TrackingService, useClass: TrackingMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        I18nService,
-        FileUploadService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-      ],
-      declarations: [
-        HeaderComponent,
-        FooterBarComponent,
-        RootComponent,
-      ],
-    }).compileComponents();
-  }));
+        ],
+        declarations: [
+          HeaderComponent, FooterBarComponent, RootComponent,
+        ],
+      }).compileComponents();
+    }
+  ));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RootComponent);

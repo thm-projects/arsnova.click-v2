@@ -21,6 +21,7 @@ import { TrackingMockService } from '../../../../service/tracking/tracking.mock.
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 import { AnsweroptionsDefaultComponent } from './answeroptions-default/answeroptions-default.component';
 import { AnsweroptionsFreetextComponent } from './answeroptions-freetext/answeroptions-freetext.component';
 import { AnsweroptionsRangedComponent } from './answeroptions-ranged/answeroptions-ranged.component';
@@ -45,32 +46,37 @@ describe('AnsweroptionsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
             useClass: TranslateMessageFormatCompiler,
           },
-        }),
-        NgbModalModule.forRoot(),
+        }), NgbModalModule.forRoot(),
       ],
       providers: [
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        HeaderLabelService,
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ActivatedRoute, useClass: MockRouter },
-        SharedService,
-        QuestionTextService,
-        { provide: TrackingService, useClass: TrackingMockService },
+        {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, HeaderLabelService, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, {
+          provide: ActivatedRoute,
+          useClass: MockRouter,
+        }, SharedService, QuestionTextService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
       ],
       declarations: [
         HeaderComponent,

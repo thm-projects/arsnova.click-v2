@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '../../shared/shared.module';
 
 import { AddModeComponent } from './add-mode.component';
 
@@ -8,6 +10,12 @@ describe('AddModeComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        SharedModule, NgbModalModule.forRoot(),
+      ],
+      providers: [
+        NgbActiveModal,
+      ],
       declarations: [AddModeComponent],
     })
     .compileComponents();

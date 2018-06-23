@@ -10,7 +10,9 @@ import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 @Component({
   selector: 'app-quiz-overview',
@@ -20,11 +22,11 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class QuizOverviewComponent {
   public static TYPE = 'QuizOverviewComponent';
 
-  get sessions(): Array<string> {
+  private _sessions: Array<IQuestionGroup> = [];
+
+  get sessions(): Array<IQuestionGroup> {
     return this._sessions;
   }
-
-  private readonly _sessions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -36,6 +38,7 @@ export class QuizOverviewComponent {
     private trackingService: TrackingService,
     private quizApiService: QuizApiService,
     private lobbyApiService: LobbyApiService,
+    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizOverviewComponent.TYPE;
@@ -50,66 +53,50 @@ export class QuizOverviewComponent {
 
     headerLabelService.headerLabel = 'component.hashtag_management.session_management';
 
-    if (isPlatformBrowser(this.platformId)) {
-      this._sessions = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
-    }
+    this.loadData();
   }
 
-  public isValid(session: string): boolean {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-
-    const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
-    return questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized).isValid();
-  }
-
-  public async startQuiz(sessionName: string): Promise<any> {
+  public startQuiz(index: number): Promise<void> {
     return new Promise(async resolve => {
       if (isPlatformServer(this.platformId)) {
         resolve();
         return;
       }
 
-      const sessionSerialized = JSON.parse(window.localStorage.getItem(sessionName));
-      const session = new questionGroupReflection[sessionSerialized.TYPE](sessionSerialized);
-
       this.trackingService.trackClickEvent({
         action: QuizOverviewComponent.TYPE,
         label: `start-quiz`,
       });
 
-      const quizAvailable = await this.requestQuizStatus(session);
+      const quizAvailable = await this.requestQuizStatus(this.sessions[index]);
       if (!quizAvailable) {
         resolve();
         return;
       }
 
-      this.currentQuizService.quiz = session;
+      this.currentQuizService.quiz = this.sessions[index];
       await this.currentQuizService.cacheQuiz();
-      await this.openLobby(session);
+      await this.openLobby(this.sessions[index]);
 
       resolve();
     });
   }
 
-  public editQuiz(session: string): void {
+  public editQuiz(index: number): void {
     if (isPlatformServer(this.platformId)) {
       return;
     }
-
-    const questionGroupSerialized = JSON.parse(window.localStorage.getItem(session));
 
     this.trackingService.trackClickEvent({
       action: QuizOverviewComponent.TYPE,
       label: `edit-quiz`,
     });
 
-    this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
+    this.activeQuestionGroupService.activeQuestionGroup = this.sessions[index];
     this.router.navigate(['/quiz', 'manager']);
   }
 
-  public exportQuiz(session: string, onClick?: (self: HTMLAnchorElement, event: MouseEvent) => void): void {
+  public async exportQuiz(index: number, onClick?: (self: HTMLAnchorElement, event: MouseEvent) => void): Promise<void> {
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -117,9 +104,12 @@ export class QuizOverviewComponent {
     const a = document.createElement('a');
     const time = new Date();
     const type = 'text/json';
-    const exportData = `${type};charset=utf-8,${encodeURIComponent(window.localStorage.getItem(session))}`;
-    const timestring = time.getDate() + '_' + (time.getMonth() + 1) + '_' + time.getFullYear();
-    const fileName = `${session}-${timestring}.json`;
+    const sessionName = this.sessions[index].hashtag;
+    const exportData = `${type};charset=utf-8,${encodeURIComponent(sessionName)}`;
+    const timestring = time.getDate() + '_' + (
+                       time.getMonth() + 1
+    ) + '_' + time.getFullYear();
+    const fileName = `${sessionName}-${timestring}.json`;
 
     a.href = 'data:' + exportData;
     a.download = fileName;
@@ -140,24 +130,24 @@ export class QuizOverviewComponent {
     });
   }
 
-  public deleteQuiz(session: string): void {
+  public async deleteQuiz(index: number): Promise<void> {
     this.trackingService.trackClickEvent({
       action: QuizOverviewComponent.TYPE,
       label: `delete-quiz`,
     });
 
-    this.sessions.splice(this.sessions.indexOf(session), 1);
-
     if (isPlatformServer(this.platformId)) {
       return;
     }
 
-    window.localStorage.removeItem(session);
-    window.localStorage.setItem('config.owned_quizzes', JSON.stringify(this.sessions));
+    const sessionName = this.sessions[index].hashtag;
+
+    this.sessions.splice(index, 1);
+    this.storageService.delete(DB_TABLE.QUIZ, sessionName).subscribe();
     this.quizApiService.deleteQuiz({
       body: {
-        quizName: session,
-        privateKey: localStorage.getItem('config.private_key'),
+        quizName: sessionName,
+        privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
       },
     }).subscribe((response: IMessage) => {
       if (response.status !== 'STATUS:SUCCESSFUL') {
@@ -166,15 +156,31 @@ export class QuizOverviewComponent {
     });
   }
 
+  private loadData(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.storageService.getAll(DB_TABLE.QUIZ).subscribe((rawSessions) => {
+        rawSessions.forEach(session => {
+          this._sessions.push(questionGroupReflection[session.value.TYPE](session.value));
+        });
+      });
+    }
+  }
+
   private async requestQuizStatus(session: IQuestionGroup): Promise<boolean> {
     const quizStatusResponse = await this.quizApiService.getQuizStatus(session.hashtag).toPromise();
-    if (quizStatusResponse.status !== 'STATUS:SUCCESSFUL' || quizStatusResponse.step !== 'QUIZ:UNDEFINED') {
+    if (quizStatusResponse.status !== 'STATUS:SUCCESSFUL') {
+      return false;
+    }
+    if (quizStatusResponse.step === 'QUIZ:EXISTS') {
+      return true;
+    }
+    if (quizStatusResponse.step !== 'QUIZ:UNDEFINED') {
       return false;
     }
 
     await this.quizApiService.postQuizReservationOverride({
       quizName: session.hashtag,
-      privateKey: window.localStorage.getItem('config.private_key'),
+      privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
     }).toPromise();
 
     return true;

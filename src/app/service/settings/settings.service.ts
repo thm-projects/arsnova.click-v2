@@ -1,7 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { IServerSettings } from 'arsnova-click-v2-types/src/common';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { ConnectionService } from '../connection/connection.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class SettingsService {
@@ -11,15 +13,18 @@ export class SettingsService {
     return this._serverSettings;
   }
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private connectionService: ConnectionService,
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              private connectionService: ConnectionService,
+              private storageService: StorageService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      this._serverSettings = <IServerSettings>(JSON.parse(window.sessionStorage.getItem('config.server_settings')));
-    }
-    if (!this._serverSettings) {
-      this.initServerSettings();
+      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SERVER_SETTINGS).subscribe(val => {
+        if (val) {
+          this._serverSettings = val;
+        } else {
+          this.initServerSettings();
+        }
+      });
     }
   }
 
@@ -33,7 +38,7 @@ export class SettingsService {
     }
 
     if (isPlatformBrowser(this.platformId)) {
-      window.sessionStorage.setItem('config.server_settings', JSON.stringify(this._serverSettings));
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.SERVER_SETTINGS, this._serverSettings).subscribe();
     }
   }
 }

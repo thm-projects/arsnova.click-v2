@@ -2,8 +2,10 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IDuplicateQuiz, IMessage } from 'arsnova-click-v2-types/src/common';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { ActiveQuestionGroupService } from '../active-question-group/active-question-group.service';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class FileUploadService {
@@ -24,12 +26,13 @@ export class FileUploadService {
     private router: Router,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private quizApiService: QuizApiService,
+    private storageService: StorageService,
   ) {}
 
-  public uploadFile(formData: FormData): void {
+  public async uploadFile(formData: FormData): Promise<void> {
     this._renameFilesQueue = new FormData();
     this._duplicateQuizzes = [];
-    formData.append('privateKey', window.localStorage.getItem('config.private_key'));
+    formData.append('privateKey', await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise());
 
     this.quizApiService.postQuizUpload(formData).subscribe((data: IMessage) => {
       if (data.payload.duplicateQuizzes.length) {
@@ -44,22 +47,19 @@ export class FileUploadService {
         this.router.navigate(['/quiz', 'rename']);
       } else {
         const allUploadedFiles = formData.getAll('uploadFiles[]');
-        allUploadedFiles.forEach((formDataValue, index) => {
+        allUploadedFiles.forEach(formDataValue => {
           const file = <File>formDataValue;
           if (file.type !== 'application/json') {
             return;
           }
           const reader = new FileReader();
-          reader.onload = () => {
+          reader.onload = async () => {
 
             const parsedFile = JSON.parse(reader.result);
             this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[parsedFile.TYPE](parsedFile);
             this.activeQuestionGroupService.persist();
 
-            window.localStorage.removeItem(file.name);
-            const questionList = JSON.parse(window.localStorage.getItem('config.owned_quizzes')) || [];
-            questionList.splice(questionList.indexOf(file.name), 1);
-            window.localStorage.setItem('config.owned_quizzes', JSON.stringify(questionList));
+            this.storageService.delete(DB_TABLE.QUIZ, file.name).subscribe();
 
             this.router.navigate(['/']);
           };

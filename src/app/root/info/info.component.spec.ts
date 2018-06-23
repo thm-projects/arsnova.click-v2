@@ -14,6 +14,7 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { InfoComponent } from './info.component';
 
@@ -24,12 +25,12 @@ describe('InfoComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -39,13 +40,16 @@ describe('InfoComponent', () => {
         }),
       ],
       providers: [
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: TrackingService, useClass: TrackingMockService },
-        HeaderLabelService,
+        FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, HeaderLabelService,
       ],
       declarations: [InfoComponent],
     }).compileComponents();

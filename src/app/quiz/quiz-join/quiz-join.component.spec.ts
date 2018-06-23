@@ -22,6 +22,7 @@ import { ThemesService } from '../../service/themes/themes.service';
 import { UserService } from '../../service/user/user.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { QuizJoinComponent } from './quiz-join.component';
 
@@ -51,7 +52,7 @@ describe('QuizJoinComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (
@@ -66,33 +67,22 @@ describe('QuizJoinComponent', () => {
         }),
       ],
       providers: [
-        CasLoginService,
-        LobbyApiService,
-        QuizApiService,
-        {
+        CasLoginService, LobbyApiService, QuizApiService, {
           provide: CurrentQuizService,
           useClass: CurrentQuizMockService,
-        },
-        {
+        }, {
           provide: ThemesService,
           useClass: ThemesMockService,
-        },
-        UserService,
-        FooterBarService,
-        SettingsService,
-        {
+        }, UserService, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        },
-        {
+        }, {
           provide: WebsocketService,
           useClass: WebsocketMockService,
-        },
-        {
+        }, {
           provide: ActivatedRoute,
           useClass: MockRouter,
-        },
-        SharedService,
+        }, SharedService,
       ],
       declarations: [QuizJoinComponent],
     }).compileComponents();
@@ -130,11 +120,12 @@ describe('QuizJoinComponent', () => {
   })));
 
   it('should add a cas casTicket to the casService if a casTicket is supplied',
-    async(inject([Router, CurrentQuizService, CasLoginService, QuizApiService, LobbyApiService], (router: Router,
-                                                                                                  currentQuizService: CurrentQuizService,
-                                                                                                  casService: CasLoginService,
-                                                                                                  quizApiService: QuizApiService,
-                                                                                                  lobbyApiService: LobbyApiService,
+    async(inject([Router, CurrentQuizService, CasLoginService, QuizApiService, LobbyApiService], (
+      router: Router,
+      currentQuizService: CurrentQuizService,
+      casService: CasLoginService,
+      quizApiService: QuizApiService,
+      lobbyApiService: LobbyApiService,
     ) => {
       const quizStatusData = {
         status: 'STATUS:SUCCESSFUL',

@@ -78,18 +78,17 @@ export class LeaderboardComponent implements OnInit {
     this._leaderBoardCorrect = [];
     this._leaderBoardPartiallyCorrect = [];
 
-    if (this.currentQuizService.isOwner) {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack,
-        this.footerBarService.footerElemFullscreen,
-        this.footerBarService.footerElemExport,
-      ]);
-    } else {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack,
-        this.footerBarService.footerElemFullscreen,
-      ]);
-    }
+    this.currentQuizService.isOwner.then(value => {
+      if (value) {
+        this.footerBarService.replaceFooterElements([
+          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
+        ]);
+      } else {
+        this.footerBarService.replaceFooterElements([
+          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
+        ]);
+      }
+    });
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -112,15 +111,29 @@ export class LeaderboardComponent implements OnInit {
       return Math.round(value);
     }
 
-    if (isNaN(value) || !(digits % 1 === 0)) {
+    if (isNaN(value) || !(
+      digits % 1 === 0
+    )) {
       return NaN;
     }
 
     value = value.toString().split('e');
-    value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + digits) : digits)));
+    value = Math.round(+(
+      value[0] + 'e' + (
+        value[1] ? (
+      +value[1] + digits
+        ) : digits
+      )
+    ));
 
     value = value.toString().split('e');
-    return +(value[0] + 'e' + (value[1] ? (+value[1] - digits) : -digits));
+    return +(
+      value[0] + 'e' + (
+        value[1] ? (
+          +value[1] - digits
+        ) : -digits
+      )
+    );
   }
 
   public async ngOnInit(): Promise<void> {
@@ -164,8 +177,8 @@ export class LeaderboardComponent implements OnInit {
 
   }
 
-  public formatResponseTime(responseTime: number): string {
-    return this.i18nService.formatNumber(this.roundResponseTime(responseTime, 2));
+  public async formatResponseTime(responseTime: number): Promise<string> {
+    return await this.i18nService.formatNumber(this.roundResponseTime(responseTime, 2)).toPromise();
   }
 
   private async getLeaderboardFromBackend(): Promise<IMessage> {

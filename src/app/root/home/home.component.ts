@@ -20,12 +20,14 @@ import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
-import { I18nService, Languages } from '../../service/i18n/i18n.service';
+import { I18nService } from '../../service/i18n/i18n.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { ITrackClickEvent, TrackingService } from '../../service/tracking/tracking.service';
+import { DB_TABLE, LANGUAGE, STORAGE_KEY } from '../../shared/enums';
 
 @Component({
   selector: 'app-home',
@@ -42,10 +44,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public isAddingDemoQuiz = false;
   public isAddingABCDQuiz = false;
   public enteredSessionName = '';
-
-  get ownQuizzes(): Array<string> {
-    return this._ownQuizzes;
-  }
 
   private _provideNickSelection = false;
 
@@ -75,28 +73,35 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._isShowingQuiznameDatalist = value;
   }
 
-  private readonly _routerSubscription: Subscription;
-  private readonly _ownQuizzes: Array<string> = [];
+  private _ownQuizzes: Array<string> = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              private footerBarService: FooterBarService,
-              private headerLabelService: HeaderLabelService,
-              private modalService: NgbModal,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private currentQuizService: CurrentQuizService,
-              private router: Router,
-              private themesService: ThemesService,
-              private route: ActivatedRoute,
-              private i18nService: I18nService,
-              private attendeeService: AttendeeService,
-              private connectionService: ConnectionService,
-              private sanitizer: DomSanitizer,
-              private casService: CasLoginService,
-              private settingsService: SettingsService,
-              private trackingService: TrackingService,
-              private quizApiService: QuizApiService,
-              private lobbyApiService: LobbyApiService,
-              public sharedService: SharedService,
+  get ownQuizzes(): Array<string> {
+    return this._ownQuizzes;
+  }
+
+  private readonly _routerSubscription: Subscription;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private footerBarService: FooterBarService,
+    private headerLabelService: HeaderLabelService,
+    private modalService: NgbModal,
+    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private currentQuizService: CurrentQuizService,
+    private router: Router,
+    private themesService: ThemesService,
+    private route: ActivatedRoute,
+    private i18nService: I18nService,
+    private attendeeService: AttendeeService,
+    private connectionService: ConnectionService,
+    private sanitizer: DomSanitizer,
+    private casService: CasLoginService,
+    private settingsService: SettingsService,
+    private trackingService: TrackingService,
+    private quizApiService: QuizApiService,
+    private lobbyApiService: LobbyApiService,
+    private storageService: StorageService,
+    public sharedService: SharedService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
@@ -106,10 +111,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         return;
       }
       if (isPlatformBrowser(this.platformId)) {
-        window.localStorage.setItem('config.default_theme', params.themeId);
+        this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).subscribe();
       }
       this.themesService.updateCurrentlyUsedTheme();
-      this.i18nService.setLanguage(<Languages>params.languageId.toUpperCase());
+      this.i18nService.setLanguage(<LANGUAGE>params.languageId.toUpperCase());
     });
 
     footerBarService.replaceFooterElements([
@@ -124,14 +129,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'default';
 
     if (isPlatformBrowser(this.platformId)) {
-      const ownedQuizzes = window.localStorage.getItem('config.owned_quizzes');
-      if (!ownedQuizzes) {
-        window.localStorage.setItem('config.owned_quizzes', '[]');
-      }
-      if (ownedQuizzes && JSON.parse(ownedQuizzes).length > 0) {
-        this.modalService.open(AvailableQuizzesComponent);
-      }
-      this._ownQuizzes = JSON.parse(ownedQuizzes || '[]');
+      this.storageService.getAllQuiznames().then(val => {
+        this._ownQuizzes = val;
+        if (this._ownQuizzes.length) {
+          this.modalService.open(AvailableQuizzesComponent);
+        }
+      });
 
       this.cleanUpSessionStorage();
     }
@@ -139,7 +142,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.connectionService.initConnection().then(() => {
 
       this.connectionService.socket.subscribe(data => {
-        console.log(data);
         this.connectionService.websocketAvailable = true;
 
         switch (data.step) {
@@ -196,7 +198,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public selectQuizByList(quizName: string): void {
     this.hideQuiznameDatalist();
-    console.log('selectquizbyname call');
     this.selectQuizByName(quizName);
   }
 
@@ -243,11 +244,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  public setActiveQuestionGroup(routingTarget?: Array<string>): boolean {
+  public async setActiveQuestionGroup(routingTarget?: Array<string>): Promise<boolean> {
     if (isPlatformBrowser(this.platformId)) {
-      const questionGroupSerialized = JSON.parse(
-        localStorage.getItem(Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())));
-
+      const questionGroupSerialized = await this.storageService.read(DB_TABLE.QUIZ, this.enteredSessionName).toPromise();
       if (questionGroupSerialized) {
         this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
       }
@@ -265,15 +264,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    const questionGroupSerialized = JSON.parse(
-      localStorage.getItem(Object.keys(localStorage).find(name => name.toLowerCase() === this.enteredSessionName.toLowerCase())));
-
     if (this.passwordRequired && !(
         this._serverPassword && this._serverPassword.length
     )) {
       return;
     }
 
+    const questionGroupSerialized = await this.storageService.read(DB_TABLE.QUIZ, this.enteredSessionName).toPromise();
     const questionGroup = await new Promise<IQuestionGroup>((resolve) => {
       if (this.isAddingDemoQuiz) {
         this.addDemoQuiz().then(value => resolve(value));
@@ -289,17 +286,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (!window.localStorage.getItem('config.private_key')) {
-      window.localStorage.setItem('config.private_key', this.activeQuestionGroupService.generatePrivateKey());
+    if (!await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise()) {
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY, this.activeQuestionGroupService.generatePrivateKey()).subscribe();
     }
 
     this.reserveQuiz(questionGroup, routingTarget);
   }
 
-  private reserveQuiz(questionGroup: IQuestionGroup, routingTarget: Array<string>): void {
+  private async reserveQuiz(questionGroup: IQuestionGroup, routingTarget: Array<string>): Promise<void> {
     this.quizApiService.postQuizReservation({
       quizName: this.enteredSessionName,
-      privateKey: window.localStorage.getItem('config.private_key'),
+      privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
       serverPassword: this._serverPassword,
     }).subscribe(async value => {
 
@@ -355,9 +352,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const currentQuizzes = JSON.parse(window.localStorage.getItem('config.owned_quizzes').toLowerCase()) || [];
-
-    if (currentQuizzes.find(quiz => quiz === quizName.toLowerCase())) {
+    if (this.ownQuizzes.find(quiz => quiz === quizName.toLowerCase())) {
       this.selectQuizAsExisting(quizName);
     } else if (quizName.toLowerCase() === 'demo quiz') {
       this.selectQuizAsDemoQuiz();
@@ -370,8 +365,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private selectQuizAsExisting(quizname): void {
-    const currentQuiz = JSON.parse(window.localStorage.getItem(quizname));
+  private async selectQuizAsExisting(quizname): Promise<void> {
+    const currentQuiz = await this.storageService.read(DB_TABLE.QUIZ, quizname).toPromise();
     const questionGroupInstance = questionGroupReflection[currentQuiz.TYPE](currentQuiz);
     this.canAddQuiz = false;
     this.canEditQuiz = true;
@@ -430,7 +425,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.activeQuestionGroupService.cleanUp();
     }
     if (isPlatformBrowser(this.platformId)) {
-      window.sessionStorage.removeItem('config.quiz_theme');
+      this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.QUIZ_THEME).subscribe();
     }
     this.attendeeService.cleanUp();
     this.currentQuizService.cleanUp();
@@ -474,11 +469,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const hasMatchedABCDQuiz = JSON.parse(window.localStorage.getItem('config.owned_quizzes')).filter(quizName => {
+    const hasMatchedABCDQuiz = this.ownQuizzes.filter(quizName => {
       return quizName.split(' ')[0] === this.enteredSessionName;
     });
     if (hasMatchedABCDQuiz.length) {
-      const rawQuiz = JSON.parse(window.localStorage.getItem(hasMatchedABCDQuiz[0]));
+      const rawQuiz = await this.storageService.read(DB_TABLE.QUIZ, hasMatchedABCDQuiz[0]).toPromise();
       const questionGroup = questionGroupReflection.DefaultQuestionGroup(rawQuiz);
       const answerOptionList = (
         <Array<DefaultAnswerOption>>[]

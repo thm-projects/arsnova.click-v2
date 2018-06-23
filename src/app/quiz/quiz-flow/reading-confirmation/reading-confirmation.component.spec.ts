@@ -16,6 +16,7 @@ import { FooterBarService } from '../../../service/footer-bar/footer-bar.service
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { SettingsService } from '../../../service/settings/settings.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { ReadingConfirmationComponent } from './reading-confirmation.component';
 
@@ -26,12 +27,12 @@ describe('QuizFow: ReadingConfirmationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -41,13 +42,16 @@ describe('QuizFow: ReadingConfirmationComponent', () => {
         }),
       ],
       providers: [
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        QuestionTextService,
-        HeaderLabelService,
-        FooterBarService,
-        SettingsService,
+        {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, QuestionTextService, HeaderLabelService, FooterBarService, SettingsService,
       ],
       declarations: [ReadingConfirmationComponent],
     }).compileComponents();
@@ -74,13 +78,11 @@ describe('QuizFow: ReadingConfirmationComponent', () => {
     expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
   }));
 
-  it('#confirmReading', async(inject(
-    [Router],
-    (router: Router) => {
+  it('#confirmReading', async(inject([Router], (router: Router) => {
 
-      spyOn(component, 'confirmReading').and.callFake(() => {});
+    spyOn(component, 'confirmReading').and.callFake(() => {});
 
-      component.confirmReading();
-      expect(component.confirmReading).not.toThrowError();
-    })));
+    component.confirmReading();
+    expect(component.confirmReading).not.toThrowError();
+  })));
 });

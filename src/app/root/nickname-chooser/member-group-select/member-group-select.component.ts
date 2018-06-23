@@ -5,6 +5,8 @@ import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { StorageService } from '../../../service/storage/storage.service';
+import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-member-group-select',
@@ -26,6 +28,7 @@ export class MemberGroupSelectComponent implements OnInit {
     private router: Router,
     private currentQuizService: CurrentQuizService,
     private quizApiService: QuizApiService,
+    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = MemberGroupSelectComponent.TYPE;
@@ -48,13 +51,19 @@ export class MemberGroupSelectComponent implements OnInit {
     }
   }
 
-  public addToGroup(groupName): void {
+  public async addToGroup(groupName): Promise<void> {
     if (isPlatformBrowser(this.platformId)) {
-      const provideNickSelection: boolean = window.sessionStorage.getItem('temp.provideNickSelection') === 'true';
-      window.sessionStorage.removeItem('temp.provideNickSelection');
+      const provideNickSelection: boolean = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PROVIDE_NICK_SELECTION).toPromise()
+                                            === 'true';
+      this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.PROVIDE_NICK_SELECTION).subscribe();
 
-      window.sessionStorage.setItem('config.memberGroup', groupName);
-      this.router.navigate(['/nicks', (provideNickSelection ? 'select' : 'input')]);
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP, groupName).subscribe();
+      this.router.navigate([
+        '/nicks',
+        (
+          provideNickSelection ? 'select' : 'input'
+        ),
+      ]);
     }
   }
 

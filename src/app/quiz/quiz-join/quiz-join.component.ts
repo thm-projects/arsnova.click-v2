@@ -6,7 +6,9 @@ import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 @Component({
   selector: 'app-quiz-join',
@@ -27,6 +29,7 @@ export class QuizJoinComponent implements OnInit {
     private themesService: ThemesService,
     private lobbyApiService: LobbyApiService,
     private quizApiService: QuizApiService,
+    private storageService: StorageService,
   ) {
   }
 
@@ -64,7 +67,7 @@ export class QuizJoinComponent implements OnInit {
     this.themesService.updateCurrentlyUsedTheme();
 
     if (this.currentQuizService.quiz.sessionConfig.nicks.memberGroups.length > 1) {
-      window.sessionStorage.setItem('temp.provideNickSelection', quizStatusData.payload.provideNickSelection);
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.PROVIDE_NICK_SELECTION, quizStatusData.payload.provideNickSelection).subscribe();
       this.router.navigate(['/nicks', 'memberGroup']);
 
     } else {

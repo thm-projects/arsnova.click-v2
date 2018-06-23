@@ -33,6 +33,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { HomeComponent } from './home.component';
 
@@ -43,7 +44,7 @@ describe('HomeComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (
@@ -58,45 +59,31 @@ describe('HomeComponent', () => {
         }), ModalsModule, NgbModule.forRoot(),
       ],
       providers: [
-        FooterBarService,
-        {
+        FooterBarService, {
           provide: SettingsService,
           useClass: SettingsMockService,
-        },
-        {
+        }, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        },
-        {
+        }, {
           provide: WebsocketService,
           useClass: WebsocketMockService,
-        },
-        SharedService,
-        HeaderLabelService,
-        {
+        }, SharedService, HeaderLabelService, {
           provide: ActiveQuestionGroupService,
           useClass: ActiveQuestionGroupMockService,
-        },
-        {
+        }, {
           provide: ThemesService,
           useClass: ThemesMockService,
-        },
-        I18nService,
-        {
+        }, I18nService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        },
-        CasLoginService,
-        UserService,
-        {
+        }, CasLoginService, UserService, {
           provide: TrackingService,
           useClass: TrackingMockService,
-        },
-        {
+        }, {
           provide: CurrentQuizService,
           useClass: CurrentQuizMockService,
-        },
-        {
+        }, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
         },
@@ -144,7 +131,7 @@ describe('HomeComponent', () => {
 
   describe('#autoJoinToSession', () => {
 
-    it('should join the session by click', async(inject([Router], (router: Router) => {
+    it('should join the SESSION by click', async(inject([Router], (router: Router) => {
       spyOn(component, 'selectQuizByList').and.callThrough();
       spyOn(router, 'navigate').and.callFake(() => {});
 

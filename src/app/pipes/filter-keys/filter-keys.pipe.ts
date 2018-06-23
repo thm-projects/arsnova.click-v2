@@ -18,13 +18,13 @@ export class FilterKeysPipe implements PipeTransform {
       case FILTER.INVALID_KEYS:
         return value.filter(elem => this.hasEmptyKeys(elem));
       case FILTER.INVALID_DE:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'de'));
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'DE'));
       case FILTER.INVALID_EN:
         return value.filter(elem => this.hasEmptyKeysForLang(elem, 'en'));
       case FILTER.INVALID_ES:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'es'));
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'ES'));
       case FILTER.INVALID_FR:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'fr'));
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'FR'));
       case FILTER.INVALID_IT:
         return value.filter(elem => this.hasEmptyKeysForLang(elem, 'it'));
     }
@@ -38,7 +38,7 @@ export class FilterKeysPipe implements PipeTransform {
   }
 
   private hasEmptyKeys(elem): boolean {
-    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.languages).length;
+    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.LANGUAGE).length;
   }
 
   private hasEmptyKeysForLang(elem, lang): boolean {

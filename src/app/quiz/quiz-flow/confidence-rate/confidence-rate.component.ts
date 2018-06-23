@@ -8,6 +8,8 @@ import { ConnectionService } from '../../../service/connection/connection.servic
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { StorageService } from '../../../service/storage/storage.service';
+import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-confidence-rate',
@@ -32,6 +34,7 @@ export class ConfidenceRateComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
+    private storageService: StorageService,
   ) {
 
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
@@ -60,19 +63,19 @@ export class ConfidenceRateComponent implements OnInit {
   }
 
   public updateConficence(event: Event): void {
-    this._confidenceValue = parseInt((<HTMLInputElement>event.target).value, 10);
+    this._confidenceValue = parseInt((
+      <HTMLInputElement>event.target
+    ).value, 10);
   }
 
-  public sendConfidence(): Subscription {
+  public async sendConfidence(): Promise<Subscription> {
     return this.memberApiService.putConfidenceValue({
       quizName: this.currentQuizService.quiz.hashtag,
-      nickname: window.sessionStorage.getItem(`config.nick`),
+      nickname: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise(),
       confidenceValue: this._confidenceValue,
-    }).subscribe(
-      (data: IMessage) => {
-        this.router.navigate(['/quiz', 'flow', 'results']);
-      },
-    );
+    }).subscribe((data: IMessage) => {
+      this.router.navigate(['/quiz', 'flow', 'results']);
+    });
   }
 
   private handleMessages(): void {

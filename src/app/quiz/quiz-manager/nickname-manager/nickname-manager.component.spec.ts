@@ -15,6 +15,7 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { NicknameManagerComponent } from './nickname-manager.component';
 
@@ -58,13 +59,12 @@ describe('NicknameManagerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -74,12 +74,16 @@ describe('NicknameManagerComponent', () => {
         }),
       ],
       providers: [
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
+        {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService,
       ],
       declarations: [NicknameManagerComponent],
     }).compileComponents();
@@ -92,13 +96,10 @@ describe('NicknameManagerComponent', () => {
     fixture.detectChanges();
   }));
 
-  beforeEach(inject(
-    [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-      activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.splice(
-        0, activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.length,
-      );
-    }),
-  );
+  beforeEach(inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.splice(0,
+      activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.length);
+  }));
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -128,23 +129,21 @@ describe('NicknameManagerComponent', () => {
 
   describe('#sanitizeHTML', () => {
 
-    it('should sanitize the html input',
-      inject([DomSanitizer], (sanitizer: DomSanitizer) => {
-        const markup = '<div><span>TestMarkup</span></div>';
+    it('should sanitize the html input', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
+      const markup = '<div><span>TestMarkup</span></div>';
 
-        spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(() => {});
-        component.sanitizeHTML(markup);
-        expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
-      }));
+      spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(() => {});
+      component.sanitizeHTML(markup);
+      expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
+    }));
   });
 
   describe('#availableNickCategories', () => {
 
     it('should list all available categories', () => {
       const categories = component.availableNickCategories();
-      expect(categories).toEqual(jasmine.arrayWithExactContents(
-        ['disney', 'science', 'fantasy', 'literature', 'mythology', 'actor', 'politics', 'turing_award', 'emojis']),
-      );
+      expect(categories).toEqual(
+        jasmine.arrayWithExactContents(['disney', 'science', 'fantasy', 'literature', 'mythology', 'actor', 'politics', 'turing_award', 'emojis']));
     });
   });
 
@@ -163,14 +162,13 @@ describe('NicknameManagerComponent', () => {
 
   describe('#selectNick', () => {
 
-    it('should select a given nickname', inject(
-      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        const nick = 'Tarzan';
-        spyOn(activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks, 'toggleSelectedNick').and.callThrough();
+    it('should select a given nickname', inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+      const nick = 'Tarzan';
+      spyOn(activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks, 'toggleSelectedNick').and.callThrough();
 
-        component.selectNick(nick);
-        expect(activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick).toHaveBeenCalled();
-      }));
+      component.selectNick(nick);
+      expect(activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick).toHaveBeenCalled();
+    }));
   });
 
   describe('#hasSelectedNick', () => {
@@ -248,8 +246,8 @@ describe('NicknameManagerComponent', () => {
 
   describe('#toggleAllNicks', () => {
 
-    it('should select all nicks of a given category if not all nicks are selected', inject(
-      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    it('should select all nicks of a given category if not all nicks are selected',
+      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
         spyOn(component, 'hasSelectedAllNicks').and.callFake(() => false);
         spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
 
@@ -259,8 +257,8 @@ describe('NicknameManagerComponent', () => {
         expect(selectedNicksLength).toEqual(nicknames.disney.length);
       }));
 
-    it('should deselect all nicks of a given category if all nicks have been selected', inject(
-      [ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    it('should deselect all nicks of a given category if all nicks have been selected',
+      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
         spyOn(component, 'hasSelectedAllNicks').and.callFake(() => true);
         spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
 

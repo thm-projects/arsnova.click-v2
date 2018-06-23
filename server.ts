@@ -28,7 +28,7 @@ const JOBS_FOLDER = path.join(DIST_FOLDER, 'browser', 'assets', 'jobs');
 const corsOptions = require('./cors.config.ts');
 
 const cache = { 'arsnova-click-v2-frontend': {} };
-const availableLangs = ['en', 'de', 'fr', 'es', 'it'];
+const availableLangs = ['en', 'DE', 'FR', 'ES', 'it'];
 const projectGitLocation = {
   'arsnova-click-v2-frontend': path.join(DIST_FOLDER, 'browser'),
 };

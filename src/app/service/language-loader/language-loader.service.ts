@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LANGUAGE } from '../../../../../../arsnova-click-v2-manager/src/app/shared/enums';
+import { LANGUAGE } from '../../shared/enums';
 import { I18nManagerService } from '../api/i18n-manager/i18n-manager.service';
 import { ProjectLoaderService } from '../project-loader/project-loader.service';
 
@@ -7,7 +7,7 @@ import { ProjectLoaderService } from '../project-loader/project-loader.service';
   providedIn: 'root',
 })
 export class LanguageLoaderService {
-  public readonly languages = LANGUAGE;
+  public readonly LANGUAGE = LANGUAGE;
 
   private _parsedLangData = [];
 
