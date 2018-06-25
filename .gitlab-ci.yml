@@ -3,6 +3,15 @@ stages:
   - build
   - deploy
 
+# Cache modules in between jobs
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - node_modules/
+
+before_script:
+  - npm install
+
 ts_lint:
   stage: test
   tags:
