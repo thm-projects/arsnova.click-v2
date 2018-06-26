@@ -66,4 +66,4 @@ deploy:
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
     - rsync -rltgoDqv --delete -e dist/* "$STAGING_FRONTEND_SCP_URL"
-    - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2/backend/deploy.touch'
+    - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2/frontend/deploy.touch'
