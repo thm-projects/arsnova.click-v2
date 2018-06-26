@@ -51,5 +51,5 @@ Use as location the corresponding cloned git submodule. Repeat the step for all 
 
 ###### Installation & Building instructions
 Further instructions how to install and build the frontend and backend apps can be found in the README files of the respective repositories.
-- [Backend](https://git.thm.de/arsnova/arsnova.click-v2-backend/README.md)
-- [Frontend](https://git.thm.de/arsnova/arsnova.click-v2-frontend/README.md)
+- [Backend](https://git.thm.de/arsnova/arsnova-click-v2-backend/README.md)
+- [Frontend](https://git.thm.de/arsnova/arsnova-click-v2-frontend/README.md)
