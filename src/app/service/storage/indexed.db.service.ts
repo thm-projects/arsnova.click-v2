@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
@@ -13,8 +14,11 @@ export class IndexedDbService {
   private _indexedDB: any;
   private _dbName: string;
 
-  constructor() {
-    this._indexedDB = indexedDB;
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this._indexedDB = indexedDB;
+    }
+
     this._dbName = 'db'; // by default
   }
 
