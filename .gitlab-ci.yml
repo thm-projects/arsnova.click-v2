@@ -1,4 +1,5 @@
 stages:
+  - install
   - test
   - build
   - deploy
@@ -9,7 +10,11 @@ cache:
   paths:
   - node_modules/
 
-before_script:
+install_node_modules
+  stage: install
+  tags:
+    - nodejs
+  script:
   - npm install
 
 ts_lint:
