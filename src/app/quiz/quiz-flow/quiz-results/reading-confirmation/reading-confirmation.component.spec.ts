@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -7,6 +8,7 @@ import { createTranslateLoader } from '../../../../../lib/translation.factory';
 import { I18nService } from '../../../../service/i18n/i18n.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 
 import { ReadingConfirmationComponent } from './reading-confirmation.component';
 
@@ -17,12 +19,12 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -32,8 +34,10 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
         }),
       ],
       providers: [
-        I18nService,
-        { provide: WebsocketService, useClass: WebsocketMockService },
+        I18nService, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        },
       ],
       declarations: [ReadingConfirmationComponent],
     }).compileComponents();

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { createTranslateLoader } from '../../../lib/translation.factory';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { UserService } from '../../service/user/user.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { LoginComponent } from './login.component';
 
@@ -20,7 +21,7 @@ describe('LoginComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FormsModule, RouterTestingModule, HttpClientTestingModule, TranslateModule.forRoot({
+        SharedModule, FormsModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class UserService {
@@ -31,17 +33,17 @@ export class UserService {
 
   private _staticLoginToken: string;
 
-  constructor(private authorizeApiService: AuthorizeApiService) {
+  constructor(private authorizeApiService: AuthorizeApiService, private storageService: StorageService) {
   }
 
   public loadConfig(): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      if (!sessionStorage.getItem('config.token')) {
+    return new Promise<boolean>(async resolve => {
+      if (!await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise()) {
         resolve(true);
         return;
       }
 
-      const tokens = JSON.parse(sessionStorage.getItem('config.token'));
+      const tokens = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise();
       this._casTicket = tokens.casTicket;
       this._staticLoginToken = tokens.staticLoginToken;
       this._username = tokens.username;
@@ -101,11 +103,11 @@ export class UserService {
   }
 
   private persistTokensToSessionStorage(): void {
-    sessionStorage.setItem('config.token', JSON.stringify({
+    this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN, {
       casTicket: this._casTicket,
       staticLoginToken: this._staticLoginToken,
       username: this._username,
-    }));
+    }).subscribe();
   }
 
   private sha1(msg): string {

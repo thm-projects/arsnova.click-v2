@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs';
+
 export declare interface IFooterBarElement {
   id: string;
   iconClass: string;
@@ -8,5 +10,5 @@ export declare interface IFooterBarElement {
   linkTarget?: Function | Array<string> | string;
   onClickCallback?: Function;
   restoreClickCallback?: Function;
-  isActive?: boolean;
+  isActive?: Observable<boolean> | boolean;
 }

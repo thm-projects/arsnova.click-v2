@@ -16,6 +16,7 @@ import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { QuizRenameComponent } from './quiz-rename.component';
 
@@ -23,49 +24,62 @@ describe('QuizRenameComponent', () => {
   let component: QuizRenameComponent;
   let fixture: ComponentFixture<QuizRenameComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
-      ],
-      providers: [
-        { provide: FileUploadService, useClass: FileUploadMockService },
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-      ],
-      declarations: [QuizRenameComponent],
-    }).compileComponents();
-  }));
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (
+                createTranslateLoader
+              ),
+              deps: [HttpClient],
+            },
+            compiler: {
+              provide: TranslateCompiler,
+              useClass: TranslateMessageFormatCompiler,
+            },
+          }),
+        ],
+        providers: [
+          {
+            provide: FileUploadService,
+            useClass: FileUploadMockService,
+          }, {
+            provide: ActiveQuestionGroupService,
+            useClass: ActiveQuestionGroupMockService,
+          }, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, {
+            provide: WebsocketService,
+            useClass: WebsocketMockService,
+          }, SharedService,
+        ],
+        declarations: [QuizRenameComponent],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(QuizRenameComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(QuizRenameComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
-  it('should contain a TYPE reference', (() => {
-    expect(QuizRenameComponent.TYPE).toEqual('QuizRenameComponent');
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(QuizRenameComponent.TYPE).toEqual('QuizRenameComponent');
+    }
+  ));
 
   describe('#sendRecommendation', () => {
     it('should parse and send the recommendation for a duplicate quiz', () => {
@@ -73,7 +87,9 @@ describe('QuizRenameComponent', () => {
       spyOn(component, 'sendRecommendation').and.callThrough();
 
       component.sendRecommendation({
-        quizName: 'test', fileName: 'test.json', renameRecommendation: ['newQuizName'],
+        quizName: 'test',
+        fileName: 'test.json',
+        renameRecommendation: ['newQuizName'],
       }, 'newQuizName');
 
       expect(component.sendRecommendation).toHaveBeenCalled();

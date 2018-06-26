@@ -1,11 +1,15 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { inject, TestBed } from '@angular/core/testing';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ModalOrganizerService } from './modal-organizer.service';
 
 describe('ModalOrganizerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ModalOrganizerService]
+      imports: [
+        NgbModalModule.forRoot(),
+      ],
+      providers: [ModalOrganizerService],
     });
   });
 

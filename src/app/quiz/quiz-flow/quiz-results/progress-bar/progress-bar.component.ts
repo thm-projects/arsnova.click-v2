@@ -6,7 +6,8 @@ import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_
 import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { CurrentQuizService } from '../../../../service/current-quiz/current-quiz.service';
-import { I18nService, NumberTypes } from '../../../../service/i18n/i18n.service';
+import { I18nService } from '../../../../service/i18n/i18n.service';
+import { NUMBER_TYPE } from '../../../../shared/enums';
 
 @Component({
   selector: 'app-progress-bar',
@@ -55,14 +56,17 @@ export class ProgressBarComponent {
     return result;
   }
 
-  private updateResultSetForQuestions(result, question, answerIndex): void {
+  private async updateResultSetForQuestions(result, question, answerIndex): Promise<void> {
     const matches = this.attendeeService.attendees.filter(value => {
       if (typeof value.responses[this.questionIndex] === 'undefined') {
         return false;
       }
       const responseValue = value.responses[this.questionIndex].value;
-      return responseValue === answerIndex ||
-        (responseValue instanceof Array && (<Array<number>>responseValue).indexOf(answerIndex) > -1);
+      return responseValue === answerIndex || (
+        responseValue instanceof Array && (
+          <Array<number>>responseValue
+        ).indexOf(answerIndex) > -1
+      );
     });
     if (answerIndex > question.answerOptionList.length - 1) {
       // Race condition with the Mathjax / Markdown parsing in the quiz results component
@@ -71,10 +75,10 @@ export class ProgressBarComponent {
       result.isCorrect = question.answerOptionList[answerIndex].isCorrect ? 1 : -1;
     }
     result.absolute = matches.length;
-    result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberTypes.percent);
+    result.percent = await this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NUMBER_TYPE.PERCENT).toPromise();
   }
 
-  private updateResultSetForRangedQuestions(result, question): void {
+  private async updateResultSetForRangedQuestions(result, question): Promise<void> {
     const matches = this.attendeeService.attendees.filter(value => {
       if (typeof value.responses[this.questionIndex] === 'undefined') {
         return false;
@@ -94,10 +98,10 @@ export class ProgressBarComponent {
     result.isCorrect = result.label === 'guessed_correct' ? 1 : result.label === 'guessed_in_range' ? 0 : -1;
     result.label = this.translate.instant(`component.liveResults.${result.label}`);
     result.absolute = matches.length;
-    result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberTypes.percent);
+    result.percent = await this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NUMBER_TYPE.PERCENT).toPromise();
   }
 
-  private updateResultSetForFreetextQuestions(result, question): void {
+  private async updateResultSetForFreetextQuestions(result, question): Promise<void> {
     const matches = this.attendeeService.attendees.filter(value => {
       if (typeof value.responses[this.questionIndex] === 'undefined') {
         return false;
@@ -116,6 +120,6 @@ export class ProgressBarComponent {
     result.isCorrect = result.label === 'correct_answer' ? 1 : -1;
     result.label = this.translate.instant(`component.liveResults.${result.label}`);
     result.absolute = matches.length;
-    result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberTypes.percent);
+    result.percent = await this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NUMBER_TYPE.PERCENT).toPromise();
   }
 }

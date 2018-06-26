@@ -21,10 +21,14 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { DB_TABLE } from '../../shared/enums';
+import { SharedModule } from '../../shared/shared.module';
 
 import { QuizOverviewComponent } from './quiz-overview.component';
 
@@ -42,8 +46,13 @@ describe('QuizOverviewComponent', () => {
         displayAnswerText: true,
         showOneAnswerPerRow: false,
         answerOptionList: [
-          new DefaultAnswerOption({ answerText: 'answer1', isCorrect: true }),
-          new DefaultAnswerOption({ answerText: 'answer2', isCorrect: false }),
+          new DefaultAnswerOption({
+            answerText: 'answer1',
+            isCorrect: true,
+          }), new DefaultAnswerOption({
+            answerText: 'answer2',
+            isCorrect: false,
+          }),
         ],
       }),
     ],
@@ -54,8 +63,13 @@ describe('QuizOverviewComponent', () => {
     questionList: [
       new SingleChoiceQuestion({
         answerOptionList: [
-          new DefaultAnswerOption({ answerText: 'answer1', isCorrect: true }),
-          new DefaultAnswerOption({ answerText: 'answer2', isCorrect: true }),
+          new DefaultAnswerOption({
+            answerText: 'answer1',
+            isCorrect: true,
+          }), new DefaultAnswerOption({
+            answerText: 'answer2',
+            isCorrect: true,
+          }),
         ],
       }),
     ],
@@ -64,13 +78,12 @@ describe('QuizOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -80,25 +93,40 @@ describe('QuizOverviewComponent', () => {
         }),
       ],
       providers: [
-        HeaderLabelService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        { provide: TrackingService, useClass: TrackingMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
+        {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, HeaderLabelService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService,
       ],
       declarations: [QuizOverviewComponent],
     }).compileComponents();
   }));
 
   beforeEach(async(() => {
+    TestBed.get(StorageService).create(DB_TABLE.QUIZ, 'validtestquiz', JSON.stringify(validQuiz.serialize())).subscribe();
     fixture = TestBed.createComponent(QuizOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
+
+  afterEach(() => {
+    TestBed.get(StorageService).delete(DB_TABLE.QUIZ, 'validtestquiz').subscribe();
+  });
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -107,65 +135,30 @@ describe('QuizOverviewComponent', () => {
     expect(QuizOverviewComponent.TYPE).toEqual('QuizOverviewComponent');
   }));
 
-  describe('#isValid', () => {
-    beforeAll(() => {
-      window.localStorage.setItem('validtestquiz', JSON.stringify(validQuiz.serialize()));
-      window.localStorage.setItem('invalidtestquiz', JSON.stringify(invalidQuiz.serialize()));
-    });
-
-    afterAll(() => {
-      window.localStorage.removeItem('validtestquiz');
-      window.localStorage.removeItem('invalidtestquiz');
-    });
-
-    it('should return true if the quiz is valid', () => {
-      expect(component.isValid('validtestquiz')).toBeTruthy();
-    });
-    it('should return true if the quiz is invalid', () => {
-      expect(component.isValid('invalidtestquiz')).toBeFalsy();
-    });
-  });
-
   describe('#startQuiz', () => {
-    beforeAll(() => {
-      window.localStorage.setItem('validtestquiz', JSON.stringify(validQuiz.serialize()));
-    });
 
-    afterAll(() => {
-      window.localStorage.removeItem('validtestquiz');
-    });
+    it('should start the quiz', inject([CurrentQuizService, Router], (currentQuizService: CurrentQuizService, router: Router) => {
 
-    it('should start the quiz', inject(
-      [CurrentQuizService, Router], (currentQuizService: CurrentQuizService, router: Router) => {
+      const quizName = 'validtestquiz';
 
-        const quizName = 'validtestquiz';
+      spyOn(currentQuizService, 'cacheQuiz').and.callThrough();
+      spyOn(router, 'navigate').and.callFake(() => {});
 
-        spyOn(currentQuizService, 'cacheQuiz').and.callThrough();
-        spyOn(router, 'navigate').and.callFake(() => {});
-
-        component.startQuiz(quizName).then(() => {
-          expect(currentQuizService.quiz.serialize()).toEqual(jasmine.objectContaining(validQuiz.serialize()));
-          expect(currentQuizService.cacheQuiz).toHaveBeenCalled();
-          expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'flow']));
-        });
-      }),
-    );
+      component.startQuiz(0).then(() => {
+        expect(currentQuizService.quiz.serialize()).toEqual(jasmine.objectContaining(validQuiz.serialize()));
+        expect(currentQuizService.cacheQuiz).toHaveBeenCalled();
+        expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'flow']));
+      });
+    }));
   });
 
   describe('#editQuiz', () => {
-    beforeAll(() => {
-      window.localStorage.setItem('validtestquiz', JSON.stringify(validQuiz.serialize()));
-    });
 
-    afterAll(() => {
-      window.localStorage.removeItem('validtestquiz');
-    });
-
-    it('should redirect to the quiz manager', inject(
-      [ActiveQuestionGroupService, Router], (activeQuestionGroupService: ActiveQuestionGroupService, router: Router) => {
+    it('should redirect to the quiz manager',
+      inject([ActiveQuestionGroupService, Router], (activeQuestionGroupService: ActiveQuestionGroupService, router: Router) => {
         spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.editQuiz('validtestquiz');
+        component.editQuiz(0);
 
         expect(activeQuestionGroupService.activeQuestionGroup.serialize()).toEqual(jasmine.objectContaining(validQuiz.serialize()));
         expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager']));
@@ -174,18 +167,11 @@ describe('QuizOverviewComponent', () => {
   });
 
   describe('#exportQuiz', () => {
-    beforeAll(() => {
-      window.localStorage.setItem('validtestquiz', JSON.stringify(validQuiz.serialize()));
-    });
 
-    afterAll(() => {
-      window.localStorage.removeItem('validtestquiz');
-    });
-
-    it('should generate an export file containing the quiz data', () => {
+    it('should generate an export file containing the quiz data', async () => {
       const exportData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(validQuiz.serialize()));
 
-      component.exportQuiz('validtestquiz', (self, event) => {
+      await component.exportQuiz(0, (self, event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         expect(self.href).toEqual(exportData);
@@ -194,16 +180,15 @@ describe('QuizOverviewComponent', () => {
   });
 
   describe('#deleteQuiz', () => {
-    beforeAll(() => {
-      window.localStorage.setItem('validtestquiz', JSON.stringify(validQuiz.serialize()));
-    });
 
-    it('should return true if the quiz is valid', () => {
+    it('should return null if the quiz does not exist', inject([StorageService], async (storageService: StorageService) => {
       const quizName = 'validtestquiz';
 
-      component.deleteQuiz(quizName);
-      expect(window.localStorage.getItem(quizName)).toBe(null);
-    });
+      await component.deleteQuiz(0);
+      storageService.read(DB_TABLE.QUIZ, quizName).subscribe(quiz => {
+        expect(quiz).toBe(null);
+      });
+    }));
   });
 
 });

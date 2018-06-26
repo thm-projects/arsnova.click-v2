@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -25,6 +26,7 @@ import { TrackingMockService } from '../../../../service/tracking/tracking.mock.
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 
 import { QuestionDetailsComponent } from './question-details.component';
 
@@ -45,12 +47,12 @@ describe('QuestionDetailsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -60,20 +62,28 @@ describe('QuestionDetailsComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal,
-        { provide: TrackingService, useClass: TrackingMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        I18nService,
-        HeaderLabelService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        QuestionTextService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: ActivatedRoute, useClass: MockRouter },
+        NgbActiveModal, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, I18nService, HeaderLabelService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, QuestionTextService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: ActivatedRoute,
+          useClass: MockRouter,
+        },
       ],
       declarations: [QuestionDetailsComponent],
     }).compileComponents();

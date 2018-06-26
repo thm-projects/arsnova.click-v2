@@ -1,11 +1,13 @@
-import { TestBed, inject } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { inject, TestBed } from '@angular/core/testing';
 
 import { LanguageLoaderService } from './language-loader.service';
 
 describe('LanguageLoaderService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [LanguageLoaderService]
+      imports: [HttpClientTestingModule],
+      providers: [LanguageLoaderService],
     });
   });
 

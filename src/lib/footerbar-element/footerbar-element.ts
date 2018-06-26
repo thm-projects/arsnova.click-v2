@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { IFooterBarElement } from './interfaces';
 
 export class FooterbarElement implements IFooterBarElement {
@@ -64,15 +65,21 @@ export class FooterbarElement implements IFooterBarElement {
   private readonly _selectable: boolean;
   private readonly _showIntro: boolean;
 
-  constructor({ id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget }: IFooterBarElement,
-              onClickCallback?: Function) {
+  constructor({ id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget }: IFooterBarElement, onClickCallback?: Function) {
     this._id = id;
     this._iconClass = iconClass;
     this._textClass = textClass;
     this._textName = textName;
     this._selectable = selectable;
     this._showIntro = showIntro;
-    this._isActive = isActive;
+    if (isActive instanceof Observable) {
+      (
+        <Observable<boolean>>isActive
+      ).subscribe(val => this._isActive = val);
+    } else {
+      this._isActive = !!isActive;
+    }
+
     this._linkTarget = linkTarget;
     this._onClickCallback = onClickCallback;
   }

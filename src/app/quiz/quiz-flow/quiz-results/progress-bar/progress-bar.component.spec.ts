@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -24,6 +25,7 @@ import { TrackingMockService } from '../../../../service/tracking/tracking.mock.
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 import { ProgressBarFreetextComponent } from './progress-bar-freetext/progress-bar-freetext.component';
 import { ProgressBarMultipleChoiceComponent } from './progress-bar-multiple-choice/progress-bar-multiple-choice.component';
 import { ProgressBarRangedComponent } from './progress-bar-ranged/progress-bar-ranged.component';
@@ -39,12 +41,12 @@ describe('ProgressBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -54,19 +56,25 @@ describe('ProgressBarComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal,
-        { provide: TrackingService, useClass: TrackingMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        I18nService,
-        HeaderLabelService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        QuestionTextService,
+        NgbActiveModal, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, I18nService, HeaderLabelService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, QuestionTextService,
       ],
       declarations: [
         ProgressBarSingleChoiceComponent,
@@ -85,15 +93,18 @@ describe('ProgressBarComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
-  it('should contain a TYPE reference', (() => {
-    expect(ProgressBarComponent.TYPE).toEqual('ProgressBarComponent');
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(ProgressBarComponent.TYPE).toEqual('ProgressBarComponent');
+    }
+  ));
 
-  it('#attendeeDataForAnswer', async(inject(
-    [CurrentQuizService, AttendeeService, QuestionTextService],
+  it('#attendeeDataForAnswer', async(inject([CurrentQuizService, AttendeeService, QuestionTextService],
     (currentQuizService: CurrentQuizService, attendeeService: AttendeeService, questionTextService: QuestionTextService) => {
       component.questionIndex = 0;
       const question = <IQuestionChoice>currentQuizService.quiz.questionList[component.questionIndex];
@@ -104,6 +115,5 @@ describe('ProgressBarComponent', () => {
           expect(component.attendeeDataForAnswer(0)).toBeTruthy();
         }
       });
-    }),
-  ));
+    })));
 });

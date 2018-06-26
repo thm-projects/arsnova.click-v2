@@ -2,8 +2,10 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
 import { SharedService } from '../shared/shared.service';
+import { StorageService } from '../storage/storage.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable()
@@ -69,6 +71,7 @@ export class ConnectionService {
     private websocketService: WebsocketService,
     private sharedService: SharedService,
     private statisticsApiService: StatisticsApiService,
+    private storageService: StorageService,
   ) {
     this.initWebsocket();
   }
@@ -87,65 +90,63 @@ export class ConnectionService {
     this._socket.next(message);
   }
 
-  public authorizeWebSocket(hashtag: string): void {
+  public async authorizeWebSocket(hashtag: string): Promise<void> {
     if (this._isWebSocketAuthorized) {
       return;
     }
     this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE', window.sessionStorage.getItem('config.websocket_authorization'));
+    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE',
+      await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION).toPromise());
   }
 
-  public authorizeWebSocketAsOwner(hashtag: string): void {
+  public async authorizeWebSocketAsOwner(hashtag: string): Promise<void> {
     if (this._isWebSocketAuthorized) {
       return;
     }
     this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER', window.localStorage.getItem('config.private_key'));
+    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER',
+      await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise());
   }
 
   public initConnection(overrideCurrentState?: boolean): Promise<any> {
     return new Promise(async (resolve) => {
-      if ((this.pending || this.serverAvailable) && !overrideCurrentState) {
+      if ((
+            this.pending || this.serverAvailable
+          ) && !overrideCurrentState) {
         resolve();
         return;
       }
       this.pending = true;
       const data = await new Promise(resolve2 => {
-        this.statisticsApiService.getBaseStatistics().subscribe(
-          httpData => {
-            this.pending = false;
-            this.serverAvailable = true;
-            this._websocketAvailable = true;
-            setTimeout(() => {
-              this.calculateRTT(new Date().getTime());
-            }, 500);
-            resolve2(httpData);
-          },
-          () => {
-            this.pending = false;
-            this.serverAvailable = false;
-            this._websocketAvailable = false;
-            resolve2();
-          },
-        );
+        this.statisticsApiService.getBaseStatistics().subscribe(httpData => {
+          this.pending = false;
+          this.serverAvailable = true;
+          this._websocketAvailable = true;
+          setTimeout(() => {
+            this.calculateRTT(new Date().getTime());
+          }, 500);
+          resolve2(httpData);
+        }, () => {
+          this.pending = false;
+          this.serverAvailable = false;
+          this._websocketAvailable = false;
+          resolve2();
+        });
       });
       resolve(data);
     });
   }
 
   public calculateRTT(startTime = new Date().getTime()): void {
-    this.statisticsApiService.optionsBaseStatistics().subscribe(
-      () => {
-        this.serverAvailable = true;
-        this._rtt = new Date().getTime() - startTime;
-        this.calculateConnectionSpeedIndicator();
-      },
-      () => {
-        this.serverAvailable = false;
-        this._websocketAvailable = false;
-        this._socket = null;
-      },
-    );
+    this.statisticsApiService.optionsBaseStatistics().subscribe(() => {
+      this.serverAvailable = true;
+      this._rtt = new Date().getTime() - startTime;
+      this.calculateConnectionSpeedIndicator();
+    }, () => {
+      this.serverAvailable = false;
+      this._websocketAvailable = false;
+      this._socket = null;
+    });
   }
 
   private calculateConnectionSpeedIndicator(): void {
@@ -190,7 +191,8 @@ export class ConnectionService {
       return;
     }
     this._socket.next({
-      step: step, payload: {
+      step: step,
+      payload: {
         quizName: hashtag,
         webSocketAuthorization: auth,
       },

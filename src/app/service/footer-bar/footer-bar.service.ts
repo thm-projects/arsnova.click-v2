@@ -2,6 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class FooterBarService {
@@ -61,7 +63,7 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
     if (document) {
-      document.getElementById('upload-session').click();
+      document.getElementById('upload-SESSION').click();
     }
   });
   public footerElemHashtagManagement: IFooterBarElement = new FooterbarElement({
@@ -88,8 +90,7 @@ export class FooterBarService {
     this.isActive = !this.isActive;
     if (document) {
       const elem = document.documentElement;
-      if (!document.fullscreenElement &&
-        !document.webkitFullscreenElement) {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
         if (elem.requestFullscreen) {
           elem.requestFullscreen();
         } else if (elem.webkitRequestFullscreen) {
@@ -166,11 +167,11 @@ export class FooterBarService {
     selectable: true,
     showIntro: false,
     linkTarget: null,
-    isActive: isPlatformBrowser(this.platformId) ? JSON.parse(localStorage.getItem('config.show-product-tour')) : false,
-  }, function (): void {
-    this.isActive = !this.isActive;
-    if (localStorage) {
-      localStorage.setItem('config.show-product-tour', this.isActive);
+    isActive: isPlatformBrowser(this.platformId) ? this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR) : false,
+  }, (self: IFooterBarElement) => {
+    self.isActive = !self.isActive;
+    if (isPlatformBrowser(this.platformId)) {
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR, self.isActive).subscribe();
     }
   });
   public footerElemResponseProgress: IFooterBarElement = new FooterbarElement({
@@ -287,9 +288,7 @@ export class FooterBarService {
     return this._footerElements;
   }
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storageService: StorageService) {
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {

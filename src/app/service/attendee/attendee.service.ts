@@ -2,8 +2,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { INickname } from 'arsnova-click-v2-types/src/common';
 import { Attendee } from '../../../lib/attendee/attendee';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { CurrentQuizService } from '../current-quiz/current-quiz.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class AttendeeService implements OnDestroy {
@@ -21,17 +23,10 @@ export class AttendeeService implements OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService,
+    private storageService: StorageService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
-      const restoreAttendees = window.sessionStorage.getItem('config.attendees');
-      if (restoreAttendees) {
-        this._attendees = JSON.parse(restoreAttendees).map((attendee) => {
-          return new Attendee(attendee);
-        });
-        if (this._attendees.length) {
-          this.footerBarService.footerElemStartQuiz.isActive = true;
-        }
-      }
+      this.loadData();
     }
   }
 
@@ -50,7 +45,7 @@ export class AttendeeService implements OnDestroy {
   public cleanUp(): void {
     this.attendees = [];
     if (isPlatformBrowser(this.platformId)) {
-      window.sessionStorage.removeItem('config.attendees');
+      this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.ATTENDEES).subscribe();
     }
   }
 
@@ -76,15 +71,15 @@ export class AttendeeService implements OnDestroy {
     this.persistToSessionStorage();
   }
 
-  public isOwnNick(name: string): boolean {
+  public async isOwnNick(name: string): Promise<boolean> {
     if (isPlatformBrowser(this.platformId)) {
-      return name === window.sessionStorage.getItem(`config.nick`);
+      return name === await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise();
     }
   }
 
-  public getOwnNick(): string {
+  public async getOwnNick(): Promise<string> {
     if (isPlatformBrowser(this.platformId)) {
-      return window.sessionStorage.getItem(`config.nick`);
+      return this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise();
     }
   }
 
@@ -101,13 +96,25 @@ export class AttendeeService implements OnDestroy {
     this.persistToSessionStorage();
   }
 
+  private async loadData(): Promise<void> {
+    const restoreAttendees = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ATTENDEES).toPromise();
+    if (restoreAttendees && restoreAttendees.length) {
+      this._attendees = restoreAttendees.map((attendee) => {
+        return new Attendee(attendee);
+      });
+      if (this._attendees.length) {
+        this.footerBarService.footerElemStartQuiz.isActive = true;
+      }
+    }
+  }
+
   private getMember(nickname: string): INickname {
     return this._attendees.filter(value => value.name === nickname)[0];
   }
 
   private persistToSessionStorage(): void {
     if (isPlatformBrowser(this.platformId)) {
-      window.sessionStorage.setItem('config.attendees', JSON.stringify(this._attendees.map(value => value.serialize())));
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.ATTENDEES, this._attendees.map(value => value.serialize())).subscribe();
     }
   }
 

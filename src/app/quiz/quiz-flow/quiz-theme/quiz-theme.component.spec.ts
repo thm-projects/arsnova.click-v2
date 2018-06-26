@@ -18,6 +18,7 @@ import { TrackingMockService } from '../../../service/tracking/tracking.mock.ser
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../shared/shared.module';
 import { ThemesComponent } from '../../../themes/themes.component';
 
 import { QuizThemeComponent } from './quiz-theme.component';
@@ -29,13 +30,12 @@ describe('QuizThemeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -45,14 +45,22 @@ describe('QuizThemeComponent', () => {
         }),
       ],
       providers: [
-        FooterBarService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: ThemesService, useClass: ThemesMockService },
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: TrackingService, useClass: TrackingMockService },
+        FooterBarService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: ThemesService,
+          useClass: ThemesMockService,
+        }, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
       ],
       declarations: [ThemesComponent, QuizThemeComponent],
     }).compileComponents();
@@ -71,17 +79,15 @@ describe('QuizThemeComponent', () => {
     expect(QuizThemeComponent.TYPE).toEqual('QuizThemeComponent');
   }));
 
-  it('#updateTheme', async(inject(
-    [CurrentQuizService], (currentQuizService: CurrentQuizService) => {
-      const theme = 'theme-Material';
+  it('#updateTheme', async(inject([CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+    const theme = 'theme-Material';
 
-      spyOn(currentQuizService, 'toggleSettingByName').and.callThrough();
+    spyOn(currentQuizService, 'toggleSettingByName').and.callThrough();
 
-      component.updateTheme(theme);
-      expect(currentQuizService.quiz.sessionConfig.theme).toEqual(theme);
-      expect(currentQuizService.toggleSettingByName).toHaveBeenCalled();
-    }),
-  ));
+    component.updateTheme(theme);
+    expect(currentQuizService.quiz.sessionConfig.theme).toEqual(theme);
+    expect(currentQuizService.toggleSettingByName).toHaveBeenCalled();
+  })));
 
   it('#previewTheme', () => {
     const theme = 'theme-Material';

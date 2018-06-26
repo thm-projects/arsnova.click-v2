@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -17,6 +18,7 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../shared/shared.module';
 import { ConfidenceRateComponent } from './confidence-rate.component';
 
 describe('QuizFlow: ConfidenceRateComponent', () => {
@@ -26,12 +28,12 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -41,15 +43,19 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
         }),
       ],
       providers: [
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        HeaderLabelService,
-        FooterBarService,
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        SettingsService,
-        MemberApiService,
+        {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, HeaderLabelService, FooterBarService, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, SettingsService, MemberApiService,
       ],
       declarations: [ConfidenceRateComponent],
     }).compileComponents();
@@ -75,7 +81,9 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
 
   it('#updateConficence', async(() => {
     const event = new Event('testEvent');
-    spyOnProperty(event, 'target').and.callFake(() => ({ value: '20' }));
+    spyOnProperty(event, 'target').and.callFake(() => (
+      { value: '20' }
+    ));
 
     component.updateConficence(event);
 
@@ -83,12 +91,11 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
   }));
 
   it('#sendConfidence', async(() => {
-      spyOn(component, 'sendConfidence').and.callFake(() => {});
+    spyOn(component, 'sendConfidence').and.callFake(() => {});
 
-      component.sendConfidence();
+    component.sendConfidence();
 
-      expect(component.sendConfidence).not.toThrowError();
-    }),
-  );
+    expect(component.sendConfidence).not.toThrowError();
+  }));
 
 });

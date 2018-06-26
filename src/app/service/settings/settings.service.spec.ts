@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { SharedService } from '../shared/shared.service';
@@ -13,14 +14,16 @@ describe('SettingsService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
+        SharedModule, RouterTestingModule, HttpClientModule,
       ],
       providers: [
-        SharedService,
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        SettingsService,
+        SharedService, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, SettingsService,
       ],
     });
   }));

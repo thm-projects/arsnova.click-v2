@@ -18,6 +18,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { UserService } from '../../../service/user/user.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { NicknameInputComponent } from './nickname-input.component';
 
@@ -28,13 +29,12 @@ describe('NicknameInputComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -44,14 +44,19 @@ describe('NicknameInputComponent', () => {
         }),
       ],
       providers: [
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        UserService,
+        {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, UserService,
       ],
       declarations: [NicknameInputComponent],
     }).compileComponents();
@@ -73,14 +78,12 @@ describe('NicknameInputComponent', () => {
 
   describe('#joinQuiz', () => {
 
-    it('should join the quiz', async(inject(
-      [Router], (router: Router) => {
-        spyOn(router, 'navigate').and.callFake(() => {});
+    it('should join the quiz', async(inject([Router], (router: Router) => {
+      spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.joinQuiz();
+      component.joinQuiz();
 
-        expect(component.failedLoginReason).toEqual('');
-      }),
-    ));
+      expect(component.failedLoginReason).toEqual('');
+    })));
   });
 });

@@ -8,7 +8,9 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { StorageService } from '../../../service/storage/storage.service';
 import { UserService } from '../../../service/user/user.service';
+import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-nickname-select',
@@ -40,6 +42,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private currentQuizService: CurrentQuizService,
     private memberApiService: MemberApiService,
+    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
@@ -56,11 +59,11 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       nickName = nickName.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
     nickName = nickName.toString();
-    const promise = new Promise((resolve, reject) => {
+    const promise = new Promise(async (resolve, reject) => {
       this.memberApiService.putMember({
         quizName: this.currentQuizService.quiz.hashtag,
         nickname: nickName,
-        groupName: window.sessionStorage.getItem('config.memberGroup'),
+        groupName: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).toPromise(),
         ticket: this.userService.casTicket,
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
@@ -69,7 +72,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
               this.attendeeService.addMember(nickname);
             });
           });
-          window.sessionStorage.setItem('config.websocket_authorization', data.payload.webSocketAuthorization);
+          this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION, data.payload.webSocketAuthorization).subscribe();
           this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
           resolve();
         } else {
@@ -80,7 +83,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       });
     });
     promise.then(() => {
-      window.sessionStorage.setItem(`config.nick`, nickName);
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.NICK, nickName).subscribe();
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
       console.log(err);

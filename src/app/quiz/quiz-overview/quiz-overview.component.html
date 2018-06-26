@@ -7,18 +7,18 @@
   </div>
   <div class="col-12">
     <div *ngFor="let elem of sessions; let i = index"
-         [id]="elem"
+         [id]="elem.hashtag"
          class="row">
       <div class="col-12">
-        <p class="hashtag-name">{{elem}}</p>
+        <p class="hashtag-name">{{elem.hashtag}}</p>
       </div>
       <div class="col-3">
         <button type="button"
                 class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.start_session' | translate"
-                [disabled]="!isValid(elem)"
-                (click)="startQuiz(elem)"
+                [disabled]="!elem.isValid()"
+                (click)="startQuiz(i)"
                 data-animation="false">
           <span class="fas fa-paper-plane"
                 aria-hidden="true"></span>
@@ -29,7 +29,7 @@
                 class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.edit_session' | translate"
-                (click)="editQuiz(elem)"
+                (click)="editQuiz(i)"
                 data-animation="false">
           <span class="fas fa-edit"
                 aria-hidden="true"></span>
@@ -39,7 +39,7 @@
         <button class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.export' | translate"
-                (click)="exportQuiz(elem)"
+                (click)="exportQuiz(i)"
                 data-animation="false">
           <span class="fas fa-download"
                 aria-hidden="true"></span>
@@ -50,7 +50,7 @@
                 class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
                 [title]="'component.hashtag_management.delete_session' | translate"
-                (click)="deleteQuiz(elem)"
+                (click)="deleteQuiz(i)"
                 data-animation="false">
           <span class="fas fa-trash"
                 aria-hidden="true"></span>

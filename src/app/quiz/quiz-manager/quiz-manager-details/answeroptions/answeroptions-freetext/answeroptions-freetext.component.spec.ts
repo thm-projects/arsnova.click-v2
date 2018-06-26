@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -33,50 +34,63 @@ describe('AnsweroptionsFreetextComponent', () => {
   let component: AnsweroptionsFreetextComponent;
   let fixture: ComponentFixture<AnsweroptionsFreetextComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (
+                createTranslateLoader
+              ),
+              deps: [HttpClient],
+            },
+            compiler: {
+              provide: TranslateCompiler,
+              useClass: TranslateMessageFormatCompiler,
+            },
+          }),
+        ],
+        providers: [
+          {
+            provide: ActiveQuestionGroupService,
+            useClass: ActiveQuestionGroupMockService,
+          }, HeaderLabelService, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, {
+            provide: WebsocketService,
+            useClass: WebsocketMockService,
+          }, SharedService, {
+            provide: ActivatedRoute,
+            useClass: MockRouter,
           },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
-      ],
-      providers: [
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        HeaderLabelService,
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ActivatedRoute, useClass: MockRouter },
-      ],
-      declarations: [AnsweroptionsFreetextComponent],
-    }).compileComponents();
-  }));
+        ],
+        declarations: [AnsweroptionsFreetextComponent],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(AnsweroptionsFreetextComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(AnsweroptionsFreetextComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
 
-  it('should contain a TYPE reference', (() => {
-    expect(AnsweroptionsFreetextComponent.TYPE).toEqual('AnsweroptionsFreetextComponent');
-  }));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(AnsweroptionsFreetextComponent.TYPE).toEqual('AnsweroptionsFreetextComponent');
+    }
+  ));
 
   describe('#setTestInput', () => {
     it('should add a test input', () => {
@@ -130,9 +144,13 @@ describe('AnsweroptionsFreetextComponent', () => {
 
   describe('#setConfig', () => {
     it('should set a validation configuration of the question', () => {
-      const initValue = (<IFreetextAnswerOption>component.question.answerOptionList[0]).getConfig()[0];
+      const initValue = (
+        <IFreetextAnswerOption>component.question.answerOptionList[0]
+      ).getConfig()[0];
       component.setConfig(initValue.id, !initValue.enabled);
-      const newValue = (<IFreetextAnswerOption>component.question.answerOptionList[0]).getConfig()[0];
+      const newValue = (
+        <IFreetextAnswerOption>component.question.answerOptionList[0]
+      ).getConfig()[0];
       expect(newValue.id).toEqual(initValue.id);
       expect(newValue.enabled).not.toEqual(initValue.enabled);
     });

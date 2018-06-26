@@ -34,11 +34,11 @@ export class FilterKeysPipe implements PipeTransform {
     if (!dataNode) {
       return [];
     }
-    return Object.keys(dataNode).sort();
+    return Object.keys(dataNode);
   }
 
   private hasEmptyKeys(elem): boolean {
-    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.languages).length;
+    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.LANGUAGE).length;
   }
 
   private hasEmptyKeysForLang(elem, lang): boolean {

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
-import { I18nService, Languages, LanguageTranslations } from '../../service/i18n/i18n.service';
+import { I18nService } from '../../service/i18n/i18n.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { LANGUAGE, LANGUAGE_TRANSLATION } from '../../shared/enums';
 
 @Component({
   selector: 'app-language-switcher',
@@ -12,10 +13,10 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class LanguageSwitcherComponent {
   public static TYPE = 'LanguageSwitcherComponent';
 
-  private _availableLanguages: Array<Object> = [];
+  private _availableLanguage: Array<Object> = [];
 
-  get availableLanguages(): Array<Object> {
-    return this._availableLanguages;
+  get availableLanguage(): Array<Object> {
+    return this._availableLanguage;
   }
 
   constructor(
@@ -35,16 +36,16 @@ export class LanguageSwitcherComponent {
       this.footerBarService.footerElemImport,
     ]);
     headerLabelService.headerLabel = 'component.translation.translations';
-    Object.keys(Languages).forEach((lang) => {
-      this._availableLanguages.push({
-        text: LanguageTranslations[lang],
+    Object.keys(LANGUAGE).forEach((lang) => {
+      this._availableLanguage.push({
+        text: LANGUAGE_TRANSLATION[lang],
         tag: lang,
       });
     });
   }
 
   public changeLanguage(tag: string): void {
-    this.i18nService.setLanguage(Languages[tag]);
+    this.i18nService.setLanguage(LANGUAGE[tag]);
     this.trackingService.trackClickEvent({
       action: LanguageSwitcherComponent.TYPE,
       label: `language-${tag}`,

@@ -19,6 +19,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { UserService } from '../../../service/user/user.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { NicknameSelectComponent } from './nickname-select.component';
 
@@ -29,13 +30,12 @@ describe('NicknameSelectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -45,14 +45,19 @@ describe('NicknameSelectComponent', () => {
         }),
       ],
       providers: [
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        UserService,
+        {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, UserService,
       ],
       declarations: [NicknameSelectComponent],
     }).compileComponents();
@@ -85,15 +90,13 @@ describe('NicknameSelectComponent', () => {
   });
 
   describe('#sanitizeHTML', () => {
-    it('should sanitize a given html string', async(inject(
-      [DomSanitizer], (sanitizer: DomSanitizer) => {
-        const markup = '<div><span>TestMarkup</span></div>';
+    it('should sanitize a given html string', async(inject([DomSanitizer], (sanitizer: DomSanitizer) => {
+      const markup = '<div><span>TestMarkup</span></div>';
 
-        spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(() => {});
-        component.sanitizeHTML(markup);
-        expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
-      })),
-    );
+      spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(() => {});
+      component.sanitizeHTML(markup);
+      expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
+    })));
   });
 
   describe('#parseAvailableNick', () => {

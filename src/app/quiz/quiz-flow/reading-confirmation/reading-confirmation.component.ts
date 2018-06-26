@@ -9,6 +9,8 @@ import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.s
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
+import { StorageService } from '../../../service/storage/storage.service';
+import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-reading-confirmation',
@@ -32,6 +34,7 @@ export class ReadingConfirmationComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
+    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
@@ -54,10 +57,10 @@ export class ReadingConfirmationComponent implements OnInit {
     await this.questionTextService.change(this.currentQuizService.currentQuestion().questionText);
   }
 
-  public confirmReading(): void {
+  public async confirmReading(): Promise<void> {
     this.memberApiService.putReadingConfirmationValue({
       quizName: this.currentQuizService.quiz.hashtag,
-      nickname: window.sessionStorage.getItem(`config.nick`),
+      nickname: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise(),
       questionIndex: this.questionIndex,
     }).subscribe(() => {
       this.router.navigate(['/quiz', 'flow', 'results']);

@@ -13,17 +13,22 @@ export class CurrentQuizMockService {
   public quiz: IQuestionGroup;
   public questionIndex = 0;
 
-  constructor(
-    @Inject(PLATFORM_ID) private _platformId: Object,
-  ) {
+  public isOwner = new Promise<boolean>(resolve => resolve(true));
+
+  constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
     this.quiz = new DefaultQuestionGroup({
       hashtag: 'test',
       sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),
       questionList: [
         new SingleChoiceQuestion({
           answerOptionList: [
-            new DefaultAnswerOption({ answerText: 'answer1', isCorrect: true }),
-            new DefaultAnswerOption({ answerText: 'answer2', isCorrect: false }),
+            new DefaultAnswerOption({
+              answerText: 'answer1',
+              isCorrect: true,
+            }), new DefaultAnswerOption({
+              answerText: 'answer2',
+              isCorrect: false,
+            }),
           ],
         }),
       ],
@@ -35,7 +40,9 @@ export class CurrentQuizMockService {
   }
 
   public cacheQuiz(): Promise<any> {
-    return new Promise(resolve => (resolve()));
+    return new Promise(resolve => (
+      resolve()
+    ));
   }
 
   public close(): Promise<any> {

@@ -18,6 +18,7 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 import { ThemesComponent } from '../../themes/themes.component';
 
 import { ThemeSwitcherComponent } from './theme-switcher.component';
@@ -29,13 +30,12 @@ describe('ThemeSwitcherComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -45,19 +45,22 @@ describe('ThemeSwitcherComponent', () => {
         }),
       ],
       providers: [
-        HeaderLabelService,
-        ThemesService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: TrackingService, useClass: TrackingMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
+        HeaderLabelService, ThemesService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService,
       ],
       declarations: [
-        ThemesComponent,
-        ThemeSwitcherComponent,
+        ThemesComponent, ThemeSwitcherComponent,
       ],
     }).compileComponents();
   }));

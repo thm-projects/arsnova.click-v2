@@ -2,20 +2,19 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ITheme } from 'arsnova-click-v2-types/src/common';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { themes } from '../../shared/availableThemes';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizService } from '../current-quiz/current-quiz.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class ThemesService {
-  private _themes: Array<ITheme> = [];
+  private _themes: Array<ITheme> = themes;
 
-  get themes(): Array<{ id: string, name: string, description: string }> {
+  get themes(): Array<ITheme> {
     return this._themes;
-  }
-
-  set themes(value: Array<ITheme>) {
-    this._themes = value;
   }
 
   private _currentTheme: string;
@@ -29,18 +28,15 @@ export class ThemesService {
     private currentQuizService: CurrentQuizService,
     private connectionService: ConnectionService,
     private themesApiService: ThemesApiService,
+    private storageService: StorageService,
   ) {
-    if (isPlatformBrowser(this.platformId) && !window.localStorage.getItem('config.default_theme')) {
-      window.localStorage.setItem('config.default_theme', DefaultSettings.defaultQuizSettings.theme);
+    if (isPlatformBrowser(this.platformId)) {
+      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).subscribe(val => {
+        if (val) {
+          this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, DefaultSettings.defaultQuizSettings.theme).subscribe();
+        }
+      });
     }
-    this.themesApiService.getThemes().subscribe(
-      data => {
-        this.themes = data.payload;
-      },
-      error => {
-        console.log(error);
-      },
-    );
 
     this.connectionService.initConnection().then(() => {
       connectionService.socket.subscribe(data => {
@@ -55,15 +51,21 @@ export class ThemesService {
     });
   }
 
-  public updateCurrentlyUsedTheme(): void {
+  public async updateCurrentlyUsedTheme(): Promise<void> {
     if (isPlatformServer(this.platformId)) {
       return;
     }
 
-    let usedTheme = (window.sessionStorage.getItem('config.quiz_theme') || window.localStorage.getItem('config.default_theme'));
-    if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
-      usedTheme = this.currentQuizService.quiz.sessionConfig.theme;
-    }
+    const themeConfig = await Promise.all([
+      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise(),
+      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.QUIZ_THEME).toPromise(),
+      new Promise(resolve => {
+        if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
+          resolve(this.currentQuizService.quiz.sessionConfig.theme);
+        }
+      }),
+    ]);
+    const usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
     if (!document.getElementById('link-manifest') && themeDataset === usedTheme) {
@@ -77,7 +79,9 @@ export class ThemesService {
   }
 
   public reloadLinkNodes(theme?): void {
-    if (isPlatformServer(this.platformId) || (!document.getElementById('link-manifest') && !theme)) {
+    if (isPlatformServer(this.platformId) || (
+      !document.getElementById('link-manifest') && !theme
+    )) {
       return;
     }
 

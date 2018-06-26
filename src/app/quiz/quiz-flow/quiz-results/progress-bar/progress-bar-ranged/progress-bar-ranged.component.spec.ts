@@ -1,5 +1,6 @@
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
+import { SharedModule } from '../../../../../shared/shared.module';
 
 import { ProgressBarRangedComponent } from './progress-bar-ranged.component';
 
@@ -9,6 +10,9 @@ describe('ProgressBarRangedComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        SharedModule,
+      ],
       declarations: [ProgressBarRangedComponent],
     }).compileComponents();
   }));

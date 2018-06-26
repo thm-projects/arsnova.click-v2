@@ -56,7 +56,7 @@ export class KeyOutputComponent {
   }
 
   public hasEmptyKeys(elem): boolean {
-    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.languages).length;
+    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.LANGUAGE).length;
   }
 
   public removeKey(target: any): void {

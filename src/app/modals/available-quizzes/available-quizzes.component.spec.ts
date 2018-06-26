@@ -24,6 +24,7 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { AvailableQuizzesComponent } from './available-quizzes.component';
 
@@ -34,14 +35,12 @@ describe('AvailableQuizzesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        NgbModule.forRoot(),
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule.forRoot(), TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -51,18 +50,25 @@ describe('AvailableQuizzesComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal,
-        LobbyApiService,
-        QuizApiService,
-        { provide: TrackingService, useClass: TrackingMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        { provide: FileUploadService, useClass: FileUploadMockService },
+        NgbActiveModal, LobbyApiService, QuizApiService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, {
+          provide: FileUploadService,
+          useClass: FileUploadMockService,
+        },
       ],
       declarations: [AvailableQuizzesComponent],
     }).compileComponents();
@@ -112,10 +118,8 @@ describe('AvailableQuizzesComponent', () => {
     expect(activeModal.close).toHaveBeenCalled();
   })));
 
-  it('#startQuiz', (inject(
-    [CurrentQuizService, TrackingService],
-    (currentQuizService: CurrentQuizService, trackingService: TrackingService,
-    ) => {
+  it('#startQuiz', (
+    inject([CurrentQuizService, TrackingService], (currentQuizService: CurrentQuizService, trackingService: TrackingService) => {
       const quiz = currentQuizService.quiz;
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
@@ -123,11 +127,11 @@ describe('AvailableQuizzesComponent', () => {
       component.startQuiz(quiz);
 
       expect(trackingService.trackClickEvent).toHaveBeenCalled();
-    })));
+    })
+  ));
 
-  it('#editQuiz', (inject(
-    [CurrentQuizService, TrackingService, ActiveQuestionGroupService, Router],
-    (
+  it('#editQuiz', (
+    inject([CurrentQuizService, TrackingService, ActiveQuestionGroupService, Router], (
       currentQuizService: CurrentQuizService,
       trackingService: TrackingService,
       activeQuestionGroupService: ActiveQuestionGroupService,
@@ -145,5 +149,6 @@ describe('AvailableQuizzesComponent', () => {
       expect(activeQuestionGroupService.activeQuestionGroup).toEqual(quiz);
       expect(router.navigate).toHaveBeenCalled();
       expect(component.next).toHaveBeenCalled();
-    })));
+    })
+  ));
 });

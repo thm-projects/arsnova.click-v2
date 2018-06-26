@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -32,50 +33,63 @@ describe('AnsweroptionsRangedComponent', () => {
   let component: AnsweroptionsRangedComponent;
   let fixture: ComponentFixture<AnsweroptionsRangedComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
-      ],
-      providers: [
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        HeaderLabelService,
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ActivatedRoute, useClass: MockRouter },
-        SharedService,
-      ],
-      declarations: [AnsweroptionsRangedComponent],
-    }).compileComponents();
-  }));
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (
+                createTranslateLoader
+              ),
+              deps: [HttpClient],
+            },
+            compiler: {
+              provide: TranslateCompiler,
+              useClass: TranslateMessageFormatCompiler,
+            },
+          }),
+        ],
+        providers: [
+          {
+            provide: ActiveQuestionGroupService,
+            useClass: ActiveQuestionGroupMockService,
+          }, HeaderLabelService, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, {
+            provide: WebsocketService,
+            useClass: WebsocketMockService,
+          }, {
+            provide: ActivatedRoute,
+            useClass: MockRouter,
+          }, SharedService,
+        ],
+        declarations: [AnsweroptionsRangedComponent],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(AnsweroptionsRangedComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(AnsweroptionsRangedComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
 
-  it('should contain a TYPE reference', (() => {
-    expect(AnsweroptionsRangedComponent.TYPE).toEqual('AnsweroptionsRangedComponent');
-  }));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(AnsweroptionsRangedComponent.TYPE).toEqual('AnsweroptionsRangedComponent');
+    }
+  ));
 
   describe('#updateMinRange', () => {
     it('should replace the min range value with a given number', () => {

@@ -1,34 +1,21 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-
-export enum Languages {
-  DE = <any>'DE', EN = <any>'EN', FR = <any>'FR', IT = <any>'IT', ES = <any>'ES'
-}
-
-export enum LanguageTranslations {
-  DE = <any>'Deutsch', EN = <any>'English', FR = <any>'Français', IT = <any>'Italiano', ES = <any>'Español'
-}
-
-export enum NumberTypes {
-  decimal = <any>'decimal', currency = <any>'currency', percent = <any>'percent'
-}
-
-export enum CurrencyTypes {
-  DE = <any>'EUR', EN = <any>'EUR', FR = <any>'EUR', IT = <any>'EUR', ES = <any>'EUR'
-}
+import { Observable } from 'rxjs';
+import { CURRENCY_TYPE, DB_TABLE, LANGUAGE, NUMBER_TYPE, STORAGE_KEY } from '../../shared/enums';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class I18nService {
-  private _currentLanguage: Languages;
+  private _currentLanguage: LANGUAGE = LANGUAGE.EN;
 
-  get currentLanguage(): Languages {
+  get currentLanguage(): LANGUAGE {
     return this._currentLanguage;
   }
 
-  set currentLanguage(value: Languages) {
+  set currentLanguage(value: LANGUAGE) {
     if (isPlatformBrowser(this.platformId)) {
-      window.localStorage.setItem('config.language', value.toString());
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.LANGUAGE, value).subscribe();
     }
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
@@ -37,20 +24,32 @@ export class I18nService {
     this._currentLanguage = value;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService, private storageService: StorageService) {
     this.initLanguage();
   }
 
-  public formatNumber(number: number, type: NumberTypes = NumberTypes.decimal, locale?: string): string {
-    return number.toLocaleString(locale, {
-      style: type.toString(),
-      currency: CurrencyTypes[this.currentLanguage.toString()],
+  public formatNumber(number: number, type: NUMBER_TYPE = NUMBER_TYPE.DECIMAL, locale?: string): Observable<string> {
+    // console.log('formatnumber', JSON.stringify(arguments), this.currentLanguage);
+
+    return new Observable<string>(subscriber => {
+      if (!this.currentLanguage) {
+        this.initLanguage().then(() => {
+          subscriber.next(parseFloat(String(number)).toLocaleString(locale, {
+            style: type.toString(),
+            currency: CURRENCY_TYPE[this.currentLanguage.toString()],
+          }));
+        });
+      } else {
+        subscriber.next(parseFloat(String(number)).toLocaleString(locale, {
+          style: type.toString(),
+          currency: CURRENCY_TYPE[this.currentLanguage.toString()],
+        }));
+      }
     });
   }
 
-  public setLanguage(language: Languages): void {
-    this.currentLanguage = language;
-    this.translateService.use(language.toString().toLowerCase());
+  public setLanguage(language: LANGUAGE | string): void {
+    this.currentLanguage = LANGUAGE[language.toString().toUpperCase()];
     if (isPlatformBrowser(this.platformId)) {
       const typ = document.createAttribute('lang');
       typ.value = language.toString().toLowerCase();
@@ -74,17 +73,22 @@ export class I18nService {
     }
   }
 
-  private initLanguage(): void {
-    let selectedLanguage: Languages;
-    if (isPlatformBrowser(this.platformId) && Languages[window.localStorage.getItem('config.language')]) {
-      selectedLanguage = Languages[window.localStorage.getItem('config.language')];
-    } else if (isPlatformBrowser(this.platformId) && Languages[this.translateService.getBrowserLang().toUpperCase()]) {
-      selectedLanguage = Languages[this.translateService.getBrowserLang().toUpperCase()];
-    } else {
-      selectedLanguage = Languages.EN;
+  private async initLanguage(): Promise<void> {
+    if (isPlatformServer(this.platformId)) {
+      this.setLanguage(LANGUAGE.EN);
+      return;
     }
 
-    this.setLanguage(selectedLanguage);
+
+    const storedLanguage = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.LANGUAGE).toPromise();
+    if (LANGUAGE[storedLanguage]) {
+      this.setLanguage(LANGUAGE[storedLanguage]);
+    } else if (LANGUAGE[this.translateService.getBrowserLang().toUpperCase()]) {
+      this.setLanguage(LANGUAGE[this.translateService.getBrowserLang().toUpperCase()]);
+    } else {
+      this.setLanguage(LANGUAGE.EN);
+    }
+
   }
 
 }

@@ -1,9 +1,11 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
+import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
@@ -20,12 +22,12 @@ describe('AttendeeService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -35,14 +37,16 @@ describe('AttendeeService', () => {
         }),
       ],
       providers: [
-        SharedService,
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        SettingsService,
-        TranslateService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        AttendeeService,
+        SharedService, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, SettingsService, TranslateService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, AttendeeService,
       ],
     });
   }));

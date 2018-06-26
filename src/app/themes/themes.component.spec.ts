@@ -17,6 +17,7 @@ import { TrackingMockService } from '../service/tracking/tracking.mock.service';
 import { TrackingService } from '../service/tracking/tracking.service';
 import { WebsocketMockService } from '../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../service/websocket/websocket.service';
+import { SharedModule } from '../shared/shared.module';
 
 import { ThemesComponent } from './themes.component';
 
@@ -27,13 +28,12 @@ describe('ThemesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -43,15 +43,19 @@ describe('ThemesComponent', () => {
         }),
       ],
       providers: [
-        TranslateService,
-        FooterBarService,
-        SettingsService,
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: TrackingService, useClass: TrackingMockService },
-        ThemesService,
+        TranslateService, FooterBarService, SettingsService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, ThemesService,
       ],
       declarations: [
         ThemesComponent,

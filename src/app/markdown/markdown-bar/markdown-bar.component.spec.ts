@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -16,12 +17,12 @@ describe('MarkdownBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -31,7 +32,10 @@ describe('MarkdownBarComponent', () => {
         }),
       ],
       providers: [
-        { provide: TrackingService, useClass: TrackingMockService },
+        {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
       ],
       declarations: [MarkdownBarComponent],
     }).compileComponents();
@@ -62,9 +66,8 @@ describe('MarkdownBarComponent', () => {
     component.connector(element);
 
     expect(component.showHiddenMarkdownButtons).toBeTruthy();
-    expect(component.allDisplayedMarkdownBarElements).toEqual(
-      jasmine.arrayContaining([].concat(component.markdownBarElements).concat(component.hiddenMarkdownBarElements)),
-    );
+    expect(component.allDisplayedMarkdownBarElements)
+    .toEqual(jasmine.arrayContaining([].concat(component.markdownBarElements).concat(component.hiddenMarkdownBarElements)));
     expect(trackingService.trackClickEvent).toHaveBeenCalled();
     expect(component.connectorEmitter.emit).toHaveBeenCalled();
   })));

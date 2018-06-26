@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -17,6 +18,7 @@ import { TrackingMockService } from '../../../../service/tracking/tracking.mock.
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../../shared/shared.module';
 
 import { QuizManagerDetailsOverviewComponent } from './quiz-manager-details-overview.component';
 
@@ -34,57 +36,71 @@ describe('QuizManagerDetailsOverviewComponent', () => {
   let component: QuizManagerDetailsOverviewComponent;
   let fixture: ComponentFixture<QuizManagerDetailsOverviewComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (
+                createTranslateLoader
+              ),
+              deps: [HttpClient],
+            },
+            compiler: {
+              provide: TranslateCompiler,
+              useClass: TranslateMessageFormatCompiler,
+            },
+          }),
+        ],
+        providers: [
+          HeaderLabelService, {
+            provide: ActiveQuestionGroupService,
+            useClass: ActiveQuestionGroupMockService,
+          }, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, {
+            provide: WebsocketService,
+            useClass: WebsocketMockService,
+          }, {
+            provide: ActivatedRoute,
+            useClass: MockRouter,
+          }, SharedService, {
+            provide: TrackingService,
+            useClass: TrackingMockService,
           },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
-      ],
-      providers: [
-        HeaderLabelService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        { provide: ActivatedRoute, useClass: MockRouter },
-        SharedService,
-        { provide: TrackingService, useClass: TrackingMockService },
-      ],
-      declarations: [QuizManagerDetailsOverviewComponent],
-    }).compileComponents();
-  }));
+        ],
+        declarations: [QuizManagerDetailsOverviewComponent],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(QuizManagerDetailsOverviewComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(QuizManagerDetailsOverviewComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
-  it('should contain a TYPE reference', (() => {
-    expect(QuizManagerDetailsOverviewComponent.TYPE).toEqual('QuizManagerDetailsOverviewComponent');
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(QuizManagerDetailsOverviewComponent.TYPE).toEqual('QuizManagerDetailsOverviewComponent');
+    }
+  ));
 
   describe('#trackDetailsTarget', () => {
-    it('should track the details destination on click', inject(
-      [TrackingService], (trackingService: TrackingService) => {
-        spyOn(trackingService, 'trackClickEvent').and.callThrough();
-        component.trackDetailsTarget('question-text');
-        expect(trackingService.trackClickEvent).toHaveBeenCalled();
-      }));
+    it('should track the details destination on click', inject([TrackingService], (trackingService: TrackingService) => {
+      spyOn(trackingService, 'trackClickEvent').and.callThrough();
+      component.trackDetailsTarget('question-text');
+      expect(trackingService.trackClickEvent).toHaveBeenCalled();
+    }));
   });
 });

@@ -14,8 +14,10 @@ import { ConnectionService } from '../../../service/connection/connection.servic
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { StorageService } from '../../../service/storage/storage.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
+import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-quiz-lobby',
@@ -24,6 +26,12 @@ import { TrackingService } from '../../../service/tracking/tracking.service';
 })
 export class QuizLobbyComponent implements OnDestroy {
   public static TYPE = 'QuizLobbyComponent';
+
+  private _ownsQuiz: boolean;
+
+  get ownsQuiz(): boolean {
+    return this._ownsQuiz;
+  }
 
   private _showQrCode = false;
 
@@ -63,27 +71,35 @@ export class QuizLobbyComponent implements OnDestroy {
     private trackingService: TrackingService,
     private memberApiService: MemberApiService,
     private quizApiService: QuizApiService,
+    private storageService: StorageService,
   ) {
 
     this.headerLabelService.headerLabel = this.currentQuizService.quiz.hashtag;
 
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
 
-    (async () => {
-      await this.connectionService.initConnection();
-      if (this.currentQuizService.isOwner) {
-        this.trackingService.trackConversionEvent({ action: QuizLobbyComponent.TYPE });
-        this.addFooterElementsAsOwner();
-        this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
-      } else {
-        this.addFooterElementsAsAttendee();
-        this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+    (
+      async () => {
+        this._ownsQuiz = await this.currentQuizService.isOwner;
+        await this.connectionService.initConnection();
+        if (this._ownsQuiz) {
+          this.trackingService.trackConversionEvent({ action: QuizLobbyComponent.TYPE });
+          this.addFooterElementsAsOwner();
+          this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
+        } else {
+          this.addFooterElementsAsAttendee();
+          this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+        }
+        this.handleMessages();
       }
-      this.handleMessages();
-    })();
+    )();
   }
 
   public openKickMemberModal(content: string, name: string): void {
+    if (!this.ownsQuiz) {
+      return;
+    }
+
     this._kickMemberModalRef = this.modalService.open(content);
     this._nickToRemove = name;
   }
@@ -107,7 +123,15 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   public transformForegroundColor(rgbObj: { r: number, g: number, b: number }): string {
-    const o = Math.round(((rgbObj.r * 299) + (rgbObj.g * 587) + (rgbObj.b * 114)) / 1000);
+    const o = Math.round((
+                           (
+                             rgbObj.r * 299
+                           ) + (
+                             rgbObj.g * 587
+                           ) + (
+                             rgbObj.b * 114
+                           )
+                         ) / 1000);
     return o < 125 ? 'ffffff' : '000000';
   }
 
@@ -155,8 +179,7 @@ export class QuizLobbyComponent implements OnDestroy {
       if (!this.attendeeService.attendees.length) {
         return;
       }
-      const target = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ?
-                     'reading-confirmation' : 'start';
+      const target = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled ? 'reading-confirmation' : 'start';
       this.quizApiService.postQuizData(target, {
         quizName: this.currentQuizService.quiz.hashtag,
       }).subscribe((data: IMessage) => {
@@ -171,12 +194,11 @@ export class QuizLobbyComponent implements OnDestroy {
         classList.toggle('d-flex');
       }
     };
-    this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
+    this.footerBarService.footerElemEditQuiz.onClickCallback = async () => {
       if (this.currentQuizService.quiz) {
         if (isPlatformBrowser(this.platformId)) {
-          const questionGroupSerialized = JSON.parse(window.localStorage.getItem(this.currentQuizService.quiz.hashtag));
-          this.activeQuestionGroupService.activeQuestionGroup =
-            questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
+          const questionGroupSerialized = await this.storageService.read(DB_TABLE.QUIZ, this.currentQuizService.quiz.hashtag).toPromise();
+          this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
         }
         this.currentQuizService.cleanUp();
         this.attendeeService.cleanUp();
@@ -189,12 +211,14 @@ export class QuizLobbyComponent implements OnDestroy {
   private handleMessages(): void {
     if (!this.attendeeService.attendees.length) {
       this.connectionService.sendMessage({
-        status: 'STATUS:SUCCESSFUL', step: 'LOBBY:GET_PLAYERS', payload: {
+        status: 'STATUS:SUCCESSFUL',
+        step: 'LOBBY:GET_PLAYERS',
+        payload: {
           quizName: this.currentQuizService.quiz.hashtag,
         },
       });
     }
-    this.connectionService.socket.subscribe((data: IMessage) => {
+    this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case 'LOBBY:INACTIVE':
           setTimeout(this.handleMessages.bind(this), 500);
@@ -211,7 +235,7 @@ export class QuizLobbyComponent implements OnDestroy {
           this.attendeeService.removeMember(data.payload.name);
           break;
       }
-      this.currentQuizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
+      await this._ownsQuiz ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
   }
 
@@ -231,7 +255,7 @@ export class QuizLobbyComponent implements OnDestroy {
     }
   }
 
-  private handleMessagesForAttendee(data: IMessage): void {
+  private async handleMessagesForAttendee(data: IMessage): Promise<void> {
     switch (data.step) {
       case 'QUIZ:NEXT_QUESTION':
         this.currentQuizService.questionIndex = data.payload.questionIndex;
@@ -244,7 +268,7 @@ export class QuizLobbyComponent implements OnDestroy {
         break;
       case 'MEMBER:REMOVED':
         if (isPlatformBrowser(this.platformId)) {
-          const existingNickname = window.sessionStorage.getItem(`config.nick`);
+          const existingNickname = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise();
           if (existingNickname === data.payload.name) {
             this.router.navigate(['/']);
           }

@@ -85,7 +85,7 @@
                     [question]="currentQuizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
 </div>
 
-<div *ngIf="currentQuizService.isOwner">
+<div *ngIf="ownsQuiz">
   <app-audio-player *ngIf="countdown?.isRunning && countdown?.remainingTime && currentQuizService.quiz.sessionConfig?.music.enabled.countdownRunning"
                     [original_volume]="currentQuizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? currentQuizService.quiz.sessionConfig.music.volumeConfig.global : currentQuizService.quiz.sessionConfig.music.volumeConfig.countdownRunning"
                     [autostart]="true"

@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { Subscription } from 'rxjs';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -12,7 +11,7 @@ import { TrackingService } from '../../../../service/tracking/tracking.service';
   templateUrl: './quiz-manager-details-overview.component.html',
   styleUrls: ['./quiz-manager-details-overview.component.scss'],
 })
-export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
+export class QuizManagerDetailsOverviewComponent implements OnInit {
   public static TYPE = 'QuizManagerDetailsOverviewComponent';
 
   private _question: IQuestion;
@@ -27,8 +26,6 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
     return this._questionIndex;
   }
 
-  private _routerSubscription: Subscription;
-
   constructor(
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
@@ -40,23 +37,15 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
     ]);
   }
 
   public ngOnInit(): void {
-    this._routerSubscription = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
     });
-  }
-
-  public ngOnDestroy(): void {
-    if (this._routerSubscription) {
-      this._routerSubscription.unsubscribe();
-    }
   }
 
   public trackDetailsTarget(link: string): void {

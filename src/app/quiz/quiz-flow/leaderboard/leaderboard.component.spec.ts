@@ -24,6 +24,7 @@ import { TrackingMockService } from '../../../service/tracking/tracking.mock.ser
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { LeaderboardComponent } from './leaderboard.component';
 
@@ -34,13 +35,12 @@ describe('LeaderboardComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -50,18 +50,25 @@ describe('LeaderboardComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal,
-        { provide: TrackingService, useClass: TrackingMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        I18nService,
-        HeaderLabelService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
+        NgbActiveModal, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, I18nService, HeaderLabelService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        },
       ],
       declarations: [LeaderboardComponent],
     }).compileComponents();
@@ -74,54 +81,48 @@ describe('LeaderboardComponent', () => {
   }));
 
   it('should be created', async(() => {
-      expect(component).toBeTruthy();
-    }),
-  );
+    expect(component).toBeTruthy();
+  }));
 
   it('should contain a TYPE reference', async(() => {
-      expect(LeaderboardComponent.TYPE).toEqual('LeaderboardComponent');
-    }),
-  );
+    expect(LeaderboardComponent.TYPE).toEqual('LeaderboardComponent');
+  }));
 
   it('#sanitizeHTML', async(inject([DomSanitizer], (sanitizer: DomSanitizer) => {
-      const markup = '<div><span>TestMarkup</span></div>';
+    const markup = '<div><span>TestMarkup</span></div>';
 
-      spyOn(sanitizer, 'sanitize').and.callFake(() => {});
-      component.sanitizeHTML(markup);
-      expect(sanitizer.sanitize).toHaveBeenCalled();
-    })),
-  );
+    spyOn(sanitizer, 'sanitize').and.callFake(() => {});
+    component.sanitizeHTML(markup);
+    expect(sanitizer.sanitize).toHaveBeenCalled();
+  })));
 
   it('#parseNickname', async(inject([DomSanitizer], (sanitizer: DomSanitizer) => {
-      const nicknameDefault = 'TestNickname';
-      const nicknameEmoji = ':+1:';
+    const nicknameDefault = 'TestNickname';
+    const nicknameEmoji = ':+1:';
 
-      spyOn(component, 'sanitizeHTML').and.callFake(() => {});
+    spyOn(component, 'sanitizeHTML').and.callFake(() => {});
 
-      component.parseNickname(nicknameDefault);
-      expect(component.sanitizeHTML).toHaveBeenCalledTimes(0);
+    component.parseNickname(nicknameDefault);
+    expect(component.sanitizeHTML).toHaveBeenCalledTimes(0);
 
-      component.parseNickname(nicknameEmoji);
+    component.parseNickname(nicknameEmoji);
 
-      expect(component.sanitizeHTML).toHaveBeenCalled();
-    })),
-  );
+    expect(component.sanitizeHTML).toHaveBeenCalled();
+  })));
 
   it('#roundResponseTime', async(() => {
-      expect(component.roundResponseTime(10.52123123, 2)).toEqual(10.52);
-      expect(component.roundResponseTime(10.2)).toEqual(10);
-      expect(component.roundResponseTime(10.5)).toEqual(11);
-      expect(component.roundResponseTime(<any>'asdf')).toEqual(NaN);
-      expect(component.roundResponseTime(5, 5.5)).toEqual(NaN);
-    }),
-  );
+    expect(component.roundResponseTime(10.52123123, 2)).toEqual(10.52);
+    expect(component.roundResponseTime(10.2)).toEqual(10);
+    expect(component.roundResponseTime(10.5)).toEqual(11);
+    expect(component.roundResponseTime(<any>'asdf')).toEqual(NaN);
+    expect(component.roundResponseTime(5, 5.5)).toEqual(NaN);
+  }));
 
-  it('#formatResponseTime', async(inject([I18nService], (i18nService: I18nService) => {
-      spyOn(i18nService, 'formatNumber').and.callThrough();
-      expect(component.formatResponseTime(10.52123123)).toEqual(component.roundResponseTime(10.52123123, 2).toLocaleString());
-      expect(component.formatResponseTime(10.2)).toEqual(10.2.toLocaleString());
-      expect(component.formatResponseTime(10.5)).toEqual(10.5.toLocaleString());
-      expect(i18nService.formatNumber).toHaveBeenCalled();
-    })),
-  );
+  it('#formatResponseTime', async(inject([I18nService], async (i18nService: I18nService) => {
+    spyOn(i18nService, 'formatNumber').and.callThrough();
+    expect(await component.formatResponseTime(10.52123123)).toEqual(component.roundResponseTime(10.52123123, 2).toLocaleString());
+    expect(await component.formatResponseTime(10.2)).toEqual(10.2.toLocaleString());
+    expect(await component.formatResponseTime(10.5)).toEqual(10.5.toLocaleString());
+    expect(i18nService.formatNumber).toHaveBeenCalled();
+  })));
 });
