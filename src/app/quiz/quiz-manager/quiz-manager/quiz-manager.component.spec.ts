@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -31,7 +32,7 @@ describe('QuizManagerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, FooterModule, TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, FooterModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (

@@ -21,8 +21,8 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
@@ -32,7 +32,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { QuizOverviewComponent } from './quiz-overview.component';
 
-fdescribe('QuizOverviewComponent', () => {
+describe('QuizOverviewComponent', () => {
   let component: QuizOverviewComponent;
   let fixture: ComponentFixture<QuizOverviewComponent>;
 
@@ -93,7 +93,10 @@ fdescribe('QuizOverviewComponent', () => {
         }),
       ],
       providers: [
-        StorageService, IndexedDbService, HeaderLabelService, {
+        {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, HeaderLabelService, {
           provide: CurrentQuizService,
           useClass: CurrentQuizMockService,
         }, {
@@ -115,18 +118,15 @@ fdescribe('QuizOverviewComponent', () => {
   }));
 
   beforeEach(async(() => {
+    TestBed.get(StorageService).create(DB_TABLE.QUIZ, 'validtestquiz', JSON.stringify(validQuiz.serialize())).subscribe();
     fixture = TestBed.createComponent(QuizOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  beforeEach(inject([StorageService], (storageService: StorageService) => {
-    storageService.create(DB_TABLE.QUIZ, 'validtestquiz', JSON.stringify(validQuiz.serialize())).subscribe();
-  }));
-
-  afterEach(inject([StorageService], (storageService: StorageService) => {
-    storageService.delete(DB_TABLE.QUIZ, 'validtestquiz').subscribe();
-  }));
+  afterEach(() => {
+    TestBed.get(StorageService).delete(DB_TABLE.QUIZ, 'validtestquiz').subscribe();
+  });
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -159,7 +159,6 @@ fdescribe('QuizOverviewComponent', () => {
         spyOn(router, 'navigate').and.callFake(() => {});
 
         component.editQuiz(0);
-        console.log(activeQuestionGroupService.activeQuestionGroup.serialize(), validQuiz.serialize());
 
         expect(activeQuestionGroupService.activeQuestionGroup.serialize()).toEqual(jasmine.objectContaining(validQuiz.serialize()));
         expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager']));

@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -8,6 +9,7 @@ import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configu
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { createTranslateLoader } from '../../../lib/translation.factory';
+import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
@@ -16,6 +18,8 @@ import { CurrentQuizService } from '../current-quiz/current-quiz.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
+import { StorageService } from '../storage/storage.service';
+import { StorageServiceMock } from '../storage/storage.service.mock';
 import { WebsocketMockService } from '../websocket/websocket.mock.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
@@ -25,7 +29,7 @@ describe('ActiveQuestionGroupService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (
@@ -40,7 +44,10 @@ describe('ActiveQuestionGroupService', () => {
         }),
       ],
       providers: [
-        SharedService, {
+        {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, SharedService, {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, {
@@ -73,16 +80,20 @@ describe('ActiveQuestionGroupService', () => {
     expect(typeof privateKey).toEqual('string');
   })));
 
-  it('#cleanUp', async(inject([ActiveQuestionGroupService], (service: ActiveQuestionGroupService) => {
-    window.sessionStorage.setItem('config.active_question_group', 'test');
+  it('#cleanUp', async(inject([ActiveQuestionGroupService, StorageService], (service: ActiveQuestionGroupService, storageService: StorageService) => {
+    storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP, JSON.stringify(service.activeQuestionGroup.serialize())).subscribe();
     service.cleanUp();
-    expect(window.sessionStorage.getItem('config.active_question_group')).toBe(null);
+    storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).toPromise().then(result => {
+      expect(result).toBe(null);
+    });
   })));
 
-  it('#persist', async(inject([ActiveQuestionGroupService], (service: ActiveQuestionGroupService) => {
-    service.persist();
-    expect(window.localStorage.getItem('test')).toEqual(JSON.stringify(service.activeQuestionGroup.serialize()));
-    expect(JSON.parse(window.localStorage.getItem('config.owned_quizzes'))).toContain('test');
+  it('#persist', async(inject([ActiveQuestionGroupService, StorageService], (service: ActiveQuestionGroupService, storageService: StorageService) => {
+    service.persist().then(() => {
+      storageService.getAllQuiznames().then(quiznames => {
+        expect(quiznames).toContain('test');
+      });
+    });
   })));
 
   it('#updateFooterElementsState',

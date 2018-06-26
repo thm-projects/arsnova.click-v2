@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions';
@@ -19,7 +19,7 @@ import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
   templateUrl: './quiz-overview.component.html',
   styleUrls: ['./quiz-overview.component.scss'],
 })
-export class QuizOverviewComponent {
+export class QuizOverviewComponent implements OnInit {
   public static TYPE = 'QuizOverviewComponent';
 
   private _sessions: Array<IQuestionGroup> = [];
@@ -52,8 +52,6 @@ export class QuizOverviewComponent {
     ]);
 
     headerLabelService.headerLabel = 'component.hashtag_management.session_management';
-
-    this.loadData();
   }
 
   public startQuiz(index: number): Promise<void> {
@@ -105,7 +103,7 @@ export class QuizOverviewComponent {
     const time = new Date();
     const type = 'text/json';
     const sessionName = this.sessions[index].hashtag;
-    const exportData = `${type};charset=utf-8,${encodeURIComponent(sessionName)}`;
+    const exportData = `${type};charset=utf-8,${encodeURIComponent(JSON.stringify(this.sessions[index].serialize()))}`;
     const timestring = time.getDate() + '_' + (
                        time.getMonth() + 1
     ) + '_' + time.getFullYear();
@@ -154,6 +152,10 @@ export class QuizOverviewComponent {
         console.log(response);
       }
     });
+  }
+
+  public ngOnInit(): void {
+    this.loadData();
   }
 
   private loadData(): void {

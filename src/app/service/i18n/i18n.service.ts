@@ -21,7 +21,6 @@ export class I18nService {
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     this.translateService.use(value.toString().toLowerCase());
 
-    console.log('language set to', value);
     this._currentLanguage = value;
   }
 

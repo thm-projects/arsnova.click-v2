@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -31,14 +32,12 @@ describe('LivePreviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HeaderModule,
-        NgbModule.forRoot(),
-        TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, HeaderModule, NgbModule.forRoot(), TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -48,15 +47,19 @@ describe('LivePreviewComponent', () => {
         }),
       ],
       providers: [
-        QuestionTextService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        FooterBarService,
-        SharedService,
-        SettingsService,
-        HeaderLabelService,
-        { provide: TrackingService, useClass: TrackingMockService },
+        QuestionTextService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, FooterBarService, SharedService, SettingsService, HeaderLabelService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
       ],
       declarations: [LivePreviewComponent],
     }).compileComponents();

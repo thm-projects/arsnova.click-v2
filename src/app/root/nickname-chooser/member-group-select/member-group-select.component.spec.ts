@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -15,6 +16,7 @@ import { FooterBarService } from '../../../service/footer-bar/footer-bar.service
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
@@ -30,7 +32,7 @@ describe('MemberGroupSelectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (
@@ -46,6 +48,9 @@ describe('MemberGroupSelectComponent', () => {
       ],
       providers: [
         {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, {
           provide: CurrentQuizService,
           useClass: CurrentQuizMockService,
         }, FooterBarService, SettingsService, {

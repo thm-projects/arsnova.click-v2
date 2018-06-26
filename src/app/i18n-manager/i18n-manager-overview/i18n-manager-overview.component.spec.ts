@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
@@ -23,7 +24,7 @@ describe('I18nManagerOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        NgbModalModule.forRoot(), SharedModule, PipesModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+        HttpClientTestingModule, NgbModalModule.forRoot(), SharedModule, PipesModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (

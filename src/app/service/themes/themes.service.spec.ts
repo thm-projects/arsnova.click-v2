@@ -91,8 +91,9 @@ describe('ThemesService', () => {
 
     expect(document.getElementById('link-manifest')).toBe(null);
     expect(service.currentTheme).toEqual('theme-Material');
-    service.updateCurrentlyUsedTheme();
-    expect(service.reloadLinkNodes).toHaveBeenCalled();
+    service.updateCurrentlyUsedTheme().then(() => {
+      expect(service.reloadLinkNodes).toHaveBeenCalled();
+    });
   })));
 
   it('#reloadLinkNodes', async(inject([ThemesService], (service: ThemesService) => {

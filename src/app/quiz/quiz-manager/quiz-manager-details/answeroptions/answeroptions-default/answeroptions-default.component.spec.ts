@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -47,38 +48,39 @@ class MockRouterSurvey {
 }
 
 const imports = [
-  RouterTestingModule,
-  HttpClientModule,
-  TranslateModule.forRoot({
+  RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
     loader: {
       provide: TranslateLoader,
-      useFactory: (createTranslateLoader),
+      useFactory: (
+        createTranslateLoader
+      ),
       deps: [HttpClient],
     },
     compiler: {
       provide: TranslateCompiler,
       useClass: TranslateMessageFormatCompiler,
     },
-  }),
-  NgbModalModule.forRoot(),
+  }), NgbModalModule.forRoot(),
 ];
 
 const providers: Array<any> = [
-  { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-  FooterBarService,
-  SettingsService,
-  { provide: ConnectionService, useClass: ConnectionMockService },
-  { provide: WebsocketService, useClass: WebsocketMockService },
-  SharedService,
-  HeaderLabelService,
-  QuestionTextService,
-  { provide: TrackingService, useClass: TrackingMockService },
+  {
+    provide: ActiveQuestionGroupService,
+    useClass: ActiveQuestionGroupMockService,
+  }, FooterBarService, SettingsService, {
+    provide: ConnectionService,
+    useClass: ConnectionMockService,
+  }, {
+    provide: WebsocketService,
+    useClass: WebsocketMockService,
+  }, SharedService, HeaderLabelService, QuestionTextService, {
+    provide: TrackingService,
+    useClass: TrackingMockService,
+  },
 ];
 
 const declarations = [
-  HeaderComponent,
-  LivePreviewComponent,
-  AnsweroptionsDefaultComponent,
+  HeaderComponent, LivePreviewComponent, AnsweroptionsDefaultComponent,
 ];
 
 describe('AnsweroptionsDefaultComponent', () => {
@@ -87,24 +89,39 @@ describe('AnsweroptionsDefaultComponent', () => {
     let component: AnsweroptionsDefaultComponent;
     let fixture: ComponentFixture<AnsweroptionsDefaultComponent>;
 
-    beforeEach((() => {
-      providers.push({ provide: ActivatedRoute, useClass: MockRouterSC });
+    beforeEach((
+      () => {
+        providers.push({
+          provide: ActivatedRoute,
+          useClass: MockRouterSC,
+        });
 
-      TestBed.configureTestingModule({ imports, providers, declarations }).compileComponents();
-    }));
+        TestBed.configureTestingModule({
+          imports,
+          providers,
+          declarations,
+        }).compileComponents();
+      }
+    ));
 
-    beforeEach((() => {
-      fixture = TestBed.createComponent(AnsweroptionsDefaultComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }));
+    beforeEach((
+      () => {
+        fixture = TestBed.createComponent(AnsweroptionsDefaultComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      }
+    ));
 
-    it('should be created', (() => {
-      expect(component).toBeTruthy();
-    }));
-    it('should contain a TYPE reference', (() => {
-      expect(AnsweroptionsDefaultComponent.TYPE).toEqual('AnsweroptionsDefaultComponent');
-    }));
+    it('should be created', (
+      () => {
+        expect(component).toBeTruthy();
+      }
+    ));
+    it('should contain a TYPE reference', (
+      () => {
+        expect(AnsweroptionsDefaultComponent.TYPE).toEqual('AnsweroptionsDefaultComponent');
+      }
+    ));
 
     describe('#addAnswer', () => {
       it('should add an answer', () => {
@@ -152,24 +169,39 @@ describe('AnsweroptionsDefaultComponent', () => {
     let component: AnsweroptionsDefaultComponent;
     let fixture: ComponentFixture<AnsweroptionsDefaultComponent>;
 
-    beforeEach((() => {
-      providers.push({ provide: ActivatedRoute, useClass: MockRouterSurvey });
+    beforeEach((
+      () => {
+        providers.push({
+          provide: ActivatedRoute,
+          useClass: MockRouterSurvey,
+        });
 
-      TestBed.configureTestingModule({ imports, providers, declarations }).compileComponents();
-    }));
+        TestBed.configureTestingModule({
+          imports,
+          providers,
+          declarations,
+        }).compileComponents();
+      }
+    ));
 
-    beforeEach((() => {
-      fixture = TestBed.createComponent(AnsweroptionsDefaultComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }));
+    beforeEach((
+      () => {
+        fixture = TestBed.createComponent(AnsweroptionsDefaultComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+      }
+    ));
 
     describe('#toggleMultipleSelectionSurvey', () => {
 
       it('should toggle the multipleSelectionEnabled option of a survey question', () => {
-        const initValue = (<IQuestionSurvey>component.question).multipleSelectionEnabled;
+        const initValue = (
+          <IQuestionSurvey>component.question
+        ).multipleSelectionEnabled;
         component.toggleMultipleSelectionSurvey();
-        expect((<IQuestionSurvey>component.question).multipleSelectionEnabled).not.toEqual(initValue);
+        expect((
+          <IQuestionSurvey>component.question
+        ).multipleSelectionEnabled).not.toEqual(initValue);
       });
     });
   });

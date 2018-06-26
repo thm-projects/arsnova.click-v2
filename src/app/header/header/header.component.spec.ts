@@ -1,4 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -22,13 +23,12 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        NgbModule.forRoot(),
-        TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule.forRoot(), TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -38,11 +38,16 @@ describe('HeaderComponent', () => {
         }),
       ],
       providers: [
-        HeaderLabelService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: TrackingService, useClass: TrackingMockService },
-        SharedService,
-        { provide: WebsocketService, useClass: WebsocketMockService },
+        HeaderLabelService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, SharedService, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        },
       ],
       declarations: [
         HeaderComponent,
@@ -64,8 +69,8 @@ describe('HeaderComponent', () => {
     expect(HeaderComponent.TYPE).toEqual('HeaderComponent');
   }));
 
-  it('#openConnectionQualityModal', (inject([TrackingService, NgbModal, ConnectionService],
-    (trackingService: TrackingService, modalService: NgbModal, connectionService: ConnectionService) => {
+  it('#openConnectionQualityModal', (
+    inject([TrackingService, NgbModal, ConnectionService], (trackingService: TrackingService, modalService: NgbModal, connectionService: ConnectionService) => {
       const modalContent = 'testcontent';
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
@@ -77,5 +82,6 @@ describe('HeaderComponent', () => {
       expect(trackingService.trackClickEvent).toHaveBeenCalled();
       expect(modalService.open).toHaveBeenCalledWith(modalContent);
       expect(connectionService.calculateRTT).toHaveBeenCalled();
-    })));
+    })
+  ));
 });

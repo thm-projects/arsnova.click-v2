@@ -19,7 +19,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'I18nManagerOverviewComponent';
   public readonly filters = FILTER;
 
-  private _langRef = ['en', 'DE', 'FR', 'it', 'ES'];
+  private _langRef = ['en', 'de', 'fr', 'it', 'es'];
 
   get langRef(): Array<string> {
     return this._langRef;
