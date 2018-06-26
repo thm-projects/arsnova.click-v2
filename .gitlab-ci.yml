@@ -56,7 +56,7 @@ deploy:
   only:
     - master
   tags:
-    - ssh
+    - rsync
   dependencies:
     - build
   script:
