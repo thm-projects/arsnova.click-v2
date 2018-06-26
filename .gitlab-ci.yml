@@ -10,7 +10,7 @@ cache:
   paths:
   - node_modules/
 
-install_node_modules
+install_node_modules:
   stage: install
   tags:
     - nodejs
