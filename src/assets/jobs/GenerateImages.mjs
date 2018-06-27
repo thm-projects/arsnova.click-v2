@@ -88,7 +88,7 @@ class GenerateImages {
 
   generateFrontendPreview(host) {
     const CHROME_BIN = process.env.CHROME_BIN;
-    const flags = ['--headless', '--hide-scrollbars', '--remote-debugging-port=9222', '--disable-gpu'];
+    const flags = ['--headless', '--hide-scrollbars', '--remote-debugging-port=9222', '--disable-gpu', '--user-data-dir=remote-profile'];
     const params = [];
     const themePreviewEndpoint = `${host}/preview`;
     themes.forEach((theme) => {
