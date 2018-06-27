@@ -98,7 +98,7 @@ class GenerateImages {
     });
 
     console.log('chrome stuff', CHROME_BIN, themePreviewEndpoint, params, path.join('ChromeDriver.js'), `--urls=${JSON.stringify(params)}`);
-    const chromeInstance = child_process.spawn(CHROME_BIN, flags);
+    const chromeInstance = child_process.spawnSync(CHROME_BIN, flags);
     const chromeDriver = child_process.spawn(`node`, [
       path.join('ChromeDriver.js'), `--urls=${JSON.stringify(params)}`
     ]);
