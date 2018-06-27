@@ -1,6 +1,6 @@
 import { isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, Inject, PLATFORM_ID } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
+import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as introJs from 'intro.js';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
@@ -34,8 +34,13 @@ declare interface IServerTarget {
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss'],
 })
-export class RootComponent implements AfterViewInit {
+export class RootComponent implements OnInit, AfterViewInit {
   public static TYPE = 'RootComponent';
+  private _isLoading = true;
+
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -49,16 +54,21 @@ export class RootComponent implements AfterViewInit {
     private router: Router,
     private storageService: StorageService,
   ) {
-    (
-      async () => {
-        this.themesService.updateCurrentlyUsedTheme();
-      }
-    )();
-
+    this.themesService.updateCurrentlyUsedTheme();
   }
 
   public getFooterBarElements(): Array<IFooterBarElement> {
     return this.footerBarService.footerElements;
+  }
+
+  public ngOnInit(): void {
+    this.router.events.subscribe((event: any) => {
+      if (event instanceof RouteConfigLoadStart) {
+        this._isLoading = true;
+      } else if (event instanceof RouteConfigLoadEnd) {
+        this._isLoading = false;
+      }
+    });
   }
 
   public ngAfterViewInit(): void {
@@ -120,8 +130,7 @@ export class RootComponent implements AfterViewInit {
       };
       this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
     }
-    if (hasStartedIntroJs || !await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR).toPromise()
-        || introState[route].completed) {
+    if (hasStartedIntroJs || !await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR).toPromise() || introState[route].completed) {
       return;
     }
     const customIntroJs = introJs();

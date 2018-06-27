@@ -37,7 +37,7 @@
               "src/assets/themeData.json"
             ],
             "styles": [
-              "src/test.scss",
+              "src/loader.scss",
               "src/styles.scss",
               {
                 "input": "./node_modules/bootstrap/dist/css/bootstrap.css"

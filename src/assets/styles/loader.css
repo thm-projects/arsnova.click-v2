@@ -1,1 +1,76 @@
-html[data-theme=theme-arsnova-dot-click-contrast] #loader-wrapper #loader,html[data-theme=theme-blackbeauty] #loader-wrapper #loader,html[data-theme=theme-elegant] #loader-wrapper #loader{border:3px solid transparent;border-top-color:#3498db}html[data-theme=theme-arsnova-dot-click-contrast] #loader-wrapper #loader:before,html[data-theme=theme-blackbeauty] #loader-wrapper #loader:before,html[data-theme=theme-elegant] #loader-wrapper #loader:before{content:' ';border:3px solid transparent;border-top-color:#f9c922}html[data-theme=theme-arsnova-dot-click-contrast] #loader-wrapper #loader:after,html[data-theme=theme-blackbeauty] #loader-wrapper #loader:after,html[data-theme=theme-elegant] #loader-wrapper #loader:after{content:' ';border:3px solid transparent;border-top-color:#e74c3c}html[data-theme=theme-GreyBlue-Lime] #loader-wrapper #loader,html[data-theme=theme-Material-blue] #loader-wrapper #loader,html[data-theme=theme-Material-hope] #loader-wrapper #loader,html[data-theme=theme-Material] #loader-wrapper #loader,html[data-theme=theme-decent-blue] #loader-wrapper #loader,html[data-theme=theme-spiritual-purple] #loader-wrapper #loader{border:3px solid transparent;border-top-color:#fff}html[data-theme=theme-GreyBlue-Lime] #loader-wrapper #loader:before,html[data-theme=theme-Material-blue] #loader-wrapper #loader:before,html[data-theme=theme-Material] #loader-wrapper #loader:before,html[data-theme=theme-spiritual-purple] #loader-wrapper #loader:before{content:' ';border:3px solid transparent;border-top-color:#4db6ac}html[data-theme=theme-Material] #loader-wrapper #loader:after{content:' ';border:3px solid transparent;border-top-color:#ff9800}html[data-theme=theme-Material-hope] #loader-wrapper #loader:before{content:' ';border:3px solid transparent;border-top-color:#ffa000}html[data-theme=theme-Material-hope] #loader-wrapper #loader:after{content:' ';border:3px solid transparent;border-top-color:#ffc400}html[data-theme=theme-Material-blue] #loader-wrapper #loader:after{content:' ';border:3px solid transparent;border-top-color:#4caf50}html[data-theme=theme-decent-blue] #loader-wrapper #loader:before{content:' ';border:3px solid transparent;border-top-color:#455a64}html[data-theme=theme-decent-blue] #loader-wrapper #loader:after{content:' ';border:3px solid transparent;border-top-color:#00c853}html[data-theme=theme-spiritual-purple] #loader-wrapper #loader:after{content:' ';border:3px solid transparent;border-top-color:#00bcd4}html[data-theme=theme-GreyBlue-Lime] #loader-wrapper #loader:after{content:' ';border:3px solid transparent;border-top-color:#c0ca33}
+
+html[data-theme=theme-arsnova-dot-click-contrast] #loader-wrapper #loader, html[data-theme=theme-blackbeauty] #loader-wrapper #loader, html[data-theme=theme-elegant] #loader-wrapper #loader {
+  border: 3px solid transparent;
+  border-top-color: #3498db
+}
+
+html[data-theme=theme-arsnova-dot-click-contrast] #loader-wrapper #loader:before, html[data-theme=theme-blackbeauty] #loader-wrapper #loader:before, html[data-theme=theme-elegant] #loader-wrapper #loader:before {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #f9c922
+}
+
+html[data-theme=theme-arsnova-dot-click-contrast] #loader-wrapper #loader:after, html[data-theme=theme-blackbeauty] #loader-wrapper #loader:after, html[data-theme=theme-elegant] #loader-wrapper #loader:after {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #e74c3c
+}
+
+html[data-theme=theme-GreyBlue-Lime] #loader-wrapper #loader, html[data-theme=theme-Material-blue] #loader-wrapper #loader, html[data-theme=theme-Material-hope] #loader-wrapper #loader, html[data-theme=theme-Material] #loader-wrapper #loader, html[data-theme=theme-decent-blue] #loader-wrapper #loader, html[data-theme=theme-spiritual-purple] #loader-wrapper #loader {
+  border: 3px solid transparent;
+  border-top-color: #fff
+}
+
+html[data-theme=theme-GreyBlue-Lime] #loader-wrapper #loader:before, html[data-theme=theme-Material-blue] #loader-wrapper #loader:before, html[data-theme=theme-Material] #loader-wrapper #loader:before, html[data-theme=theme-spiritual-purple] #loader-wrapper #loader:before {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #4db6ac
+}
+
+html[data-theme=theme-Material] #loader-wrapper #loader:after {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #ff9800
+}
+
+html[data-theme=theme-Material-hope] #loader-wrapper #loader:before {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #ffa000
+}
+
+html[data-theme=theme-Material-hope] #loader-wrapper #loader:after {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #ffc400
+}
+
+html[data-theme=theme-Material-blue] #loader-wrapper #loader:after {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #4caf50
+}
+
+html[data-theme=theme-decent-blue] #loader-wrapper #loader:before {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #455a64
+}
+
+html[data-theme=theme-decent-blue] #loader-wrapper #loader:after {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #00c853
+}
+
+html[data-theme=theme-spiritual-purple] #loader-wrapper #loader:after {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #00bcd4
+}
+
+html[data-theme=theme-GreyBlue-Lime] #loader-wrapper #loader:after {
+  content: ' ';
+  border: 3px solid transparent;
+  border-top-color: #c0ca33
+}

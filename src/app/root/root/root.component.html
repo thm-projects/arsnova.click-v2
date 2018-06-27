@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isLoading;else loadingSpinner">
   <div class="px-1 px-sm-4">
     <app-header></app-header>
   </div>
@@ -21,3 +21,11 @@
     </div>
   </div>
 </div>
+
+<ng-template #loadingSpinner>
+  <div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+  </div>
+</ng-template>

@@ -1153,20 +1153,6 @@
       .button-result {
         background-color: map-get($map, "bg-button_result");
       }
-      #loader-wrapper {
-        #loader {
-          border: 3px solid transparent;
-          border-top-color: map-get($map, "border-loader_wrapper-outer_spin");
-          &:before {
-            border: 3px solid transparent;
-            border-top-color: map-get($map, "border-loader_wrapper-inner_spin");
-          }
-          &:after {
-            border: 3px solid transparent;
-            border-top-color: map-get($map, "border-loader_wrapper-middle_spin");
-          }
-        }
-      }
       .soundConfig {
         .modal-content {
           #soundTab {
