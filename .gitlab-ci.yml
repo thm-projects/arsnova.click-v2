@@ -65,10 +65,10 @@ generate_previews:
     - apt-get -y install google-chrome-stable
     - CHROME_BIN=`whereis google-chrome | cut -d " " -f 2`
     - npm install
-    - cd dist/browser
+    - cd dist
     - node server &
     - sleep 15s
-    - cd assets/jobs
+    - cd browser/assets/jobs
     - node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000
 
 deploy:
