@@ -2,6 +2,7 @@ stages:
   - install
   - test
   - build
+  - assets
   - deploy
 
 # Cache modules in between jobs
@@ -50,6 +51,25 @@ build:
   artifacts:
     paths:
       - dist
+
+generate_previews:
+  stage: assets
+  only:
+    - master
+  tags:
+    - nodejs
+  script:
+    - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+    - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+    - apt-get -y update
+    - apt-get -y install google-chrome-stable
+    - CHROME_BIN=`whereis google-chrome`
+    - npm install
+    - cd dist/browser
+    - node server &
+    - sleep 15s
+    - cd assets/jobs
+    - node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000
 
 deploy:
   stage: deploy
