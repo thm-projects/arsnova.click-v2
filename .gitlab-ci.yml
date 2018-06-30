@@ -62,14 +62,10 @@ generate_previews:
     - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
-    - apt-get -y install google-chrome-stable
-    - google-chrome --headless --hide-scrollbars --remote-debugging-port=9222 --disable-gpu --user-data-dir=remote-profile &
+    - apt-get -y install google-chrome-stable imagemagick
     - export CHROME_BIN=`whereis google-chrome | cut -d " " -f 2`
     - npm install
-    - cd dist
-    - node server &
-    - sleep 15s
-    - cd browser/assets/jobs
+    - cd dist/browser/assets/jobs
     - node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000
 
 deploy:
