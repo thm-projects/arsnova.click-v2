@@ -86,8 +86,13 @@ class GenerateImages {
   }
 
   all(host) {
+    console.log('----------------------');
+    console.log(`generateLogoImages: Started with host: ${host}`);
     this.generateFrontendPreview(host);
+    console.log('----------------------');
+    console.log(`generateLogoImages: Started`);
     this.generateLogoImages();
+    console.log('----------------------');
   }
 
   async generateFrontendPreview(host) {

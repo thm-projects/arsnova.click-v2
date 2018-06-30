@@ -48,9 +48,23 @@ build:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
     - npm run build:SSR
+    - cd dist
+    - node server &
+    - sleep 15s
   artifacts:
     paths:
       - dist
+
+generate_logos:
+  stage: assets
+  only:
+    - master
+  tags:
+    - nodejs
+  script:
+    - npm install
+    - cd dist/browser/assets/jobs
+    - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
 
 generate_previews:
   stage: assets
@@ -65,11 +79,8 @@ generate_previews:
     - apt-get -y install google-chrome-stable imagemagick libpng-dev zlib1g-dev
     - export CHROME_BIN=`whereis google-chrome | cut -d " " -f 2`
     - npm install
-    - cd dist
-    - node server &
-    - sleep 15s
-    - cd browser/assets/jobs
-    - node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000
+    - cd dist/browser/assets/jobs
+    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4000
 
 deploy:
   stage: deploy
