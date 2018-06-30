@@ -106,6 +106,10 @@ class GenerateImages {
       });
     });
 
+    if (this.isRunning(CHROME_BIN, CHROME_BIN, CHROME_BIN)) {
+      throw new Error('Chrome instance already running');
+    }
+
     const chromeInstance = await chromeLauncher.launch({
       startingUrl: 'https://google.com',
       chromeFlags: flags,
