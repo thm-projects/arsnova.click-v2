@@ -10,6 +10,9 @@ import minimist from 'minimist';
 
 import imagemin from 'imagemin';
 import imageminPngquant from 'imagemin-pngquant';
+import {default as chromeLauncher} from 'chrome-launcher';
+
+console.log(chromeLauncher);
 
 const gmIM = gm.subClass({imageMagick: true});
 
@@ -56,8 +59,10 @@ const gmToBuffer = (data) => {
 class GenerateImages {
 
   constructor() {
-
     this.pathToAssets = path.join(__dirname, '..');
+  }
+
+  generateDirectories() {
     this.pathToDestination = path.join(this.pathToAssets, 'images', 'theme');
 
     if (!fs.existsSync(this.pathToDestination)) {
@@ -69,6 +74,7 @@ class GenerateImages {
         fs.mkdirSync(pathToThemeDestination);
       }
     });
+
   }
 
   help() {
@@ -86,7 +92,7 @@ class GenerateImages {
     this.generateLogoImages();
   }
 
-  generateFrontendPreview(host) {
+  async generateFrontendPreview(host) {
     const CHROME_BIN = process.env.CHROME_BIN;
     const flags = ['--headless', '--hide-scrollbars', '--remote-debugging-port=9222', '--disable-gpu', '--user-data-dir=remote-profile'];
     const params = [];
@@ -97,22 +103,31 @@ class GenerateImages {
       });
     });
 
-    console.log('chrome stuff', CHROME_BIN, themePreviewEndpoint, params, path.join('ChromeDriver.js'), `--urls=${JSON.stringify(params)}`);
+    const chromeInstance = await chromeLauncher.launch({
+      startingUrl: 'https://google.com',
+      chromeFlags: flags,
+      chromePath: CHROME_BIN,
+      port: 9222
+    });
+    console.log(`Chrome debugging port running on ${chromeInstance.port}`);
+
+    console.log('chrome stuff', CHROME_BIN, themePreviewEndpoint, params);
     // const chromeInstance = child_process.spawnSync(CHROME_BIN, flags);
     const chromeDriver = child_process.spawn(`node`, [
       path.join('ChromeDriver.js'), `--urls=${JSON.stringify(params)}`
     ]);
 
     chromeDriver.stdout.on('data', (data) => {
-      console.log(`ChromeDriver (stdout): ${data.toString().replace('\n', '')}`);
+      console.log(`ChromeDriver: ${data.toString().replace('\n', '')}`);
     });
     chromeDriver.stderr.on('data', (data) => {
       console.log(`ChromeDriver (stderr): ${data.toString().replace('\n', '')}`);
     });
-    chromeDriver.on('exit', () => {
-      console.log(`ChromeDriver (exit): All preview images have been generated`);
-      // chromeInstance.kill();
+    chromeDriver.on('exit', (code, signal) => {
+      console.log(`ChromeDriver: Done. Exit ${!!code ? 'code' : 'signal'} was: ${!!code ? code : signal}`);
+      chromeInstance.kill();
     });
+
   }
 
   generateLogoImages() {
@@ -158,9 +173,24 @@ class GenerateImages {
             plugins: [imageminPngquant({quality: '65-80'})]
           });
           fs.writeFileSync(targetLogo, minifiedBuffer, 'binary');
+          console.log(`Writing file '${targetLogo}'`);
           console.log(`Icon with deriavate ${derivate} generated for theme ${themeName}`);
           resolveLogoImageGeneration();
         });
+      });
+    });
+  }
+
+  isRunning(win, mac, linux) {
+    return new Promise(resolve => {
+      const plat = process.platform;
+      const cmd = plat === 'win32' ? 'tasklist' : (plat === 'darwin' ? 'ps -ax | grep ' + mac : (plat === 'linux' ? 'ps -A' : ''));
+      const proc = plat === 'win32' ? win : (plat === 'darwin' ? mac : (plat === 'linux' ? linux : ''));
+      if (cmd === '' || proc === '') {
+        resolve(false);
+      }
+      child_process.exec(cmd, (err, stdout) => {
+        resolve(stdout.toLowerCase().indexOf(proc.toLowerCase()) > -1);
       });
     });
   }
@@ -172,6 +202,12 @@ const init = () => {
   if (process.argv.length < 2) {
     generateImages.help();
   } else {
+    if (argv.baseDir) {
+      generateImages.pathToAssets = argv.baseDir;
+    }
+
+    generateImages.generateDirectories();
+
     if (!argv.command) {
       console.log(`> No command specified: ${JSON.stringify(argv)}`);
       generateImages.help();

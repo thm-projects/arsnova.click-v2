@@ -36,6 +36,8 @@ package-lock.json
 npm-debug.log
 testem.log
 /typings
+/src/assets/images/theme
+/src/assets/jobs/remote-profile
 
 # e2e
 /e2e/*.js

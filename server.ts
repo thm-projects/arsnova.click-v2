@@ -418,5 +418,4 @@ app.listen(PORT, () => {
   console.log(`Node server listening on http://localhost:${PORT}`);
 
   buildCache();
-  buildImages();
 });
