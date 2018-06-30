@@ -12,8 +12,6 @@ import imagemin from 'imagemin';
 import imageminPngquant from 'imagemin-pngquant';
 import {default as chromeLauncher} from 'chrome-launcher';
 
-console.log(chromeLauncher);
-
 const gmIM = gm.subClass({imageMagick: true});
 
 const argv = minimist(process.argv.slice(2));
