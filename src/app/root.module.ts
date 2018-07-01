@@ -82,13 +82,10 @@ export const appRoutes: Routes = [
     path: '',
     component: HomeComponent,
     pathMatch: 'full',
-  }, /*
-   { path: '',
-   redirectTo: '/home',
-   pathMatch: 'full'
-   },
-   */
-  // { path: '**', component: PageNotFoundComponent }
+  }, {
+    path: '**',
+    redirectTo: '/',
+  },
 ];
 
 @NgModule({

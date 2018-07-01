@@ -154,7 +154,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this._selectedKey = key;
   }
 
-  public getKeys(dataNode: Array<string>): Array<string> {
+  public getKeys(dataNode: object): Array<string> {
     if (!dataNode) {
       return [];
     }
