@@ -16,8 +16,7 @@ export class I18nManagerService {
   constructor(private http: HttpClient) { }
 
   public GET_FE_PROJECT_URL(): string {
-    return `http://localhost:4000/api/v1/plugin/i18nator/${this.FE_BASE_URL}`;
-    // return `${location.origin}/api/v1/plugin/i18nator/${this.FE_BASE_URL}`;
+    return `${DefaultSettings.ssrEndpoint}/api/v1/plugin/i18nator/${this.FE_BASE_URL}`;
   }
 
   public GET_BE_PROJECT_URL(): string {
