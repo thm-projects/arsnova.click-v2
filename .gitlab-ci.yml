@@ -61,6 +61,8 @@ generate_assets:
     - master
   tags:
     - nodejs
+  dependencies:
+    - build
   script:
     - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
@@ -82,7 +84,7 @@ deploy:
   tags:
     - rsync
   dependencies:
-    - build
+    - generate_Assets
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
