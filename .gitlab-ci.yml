@@ -55,18 +55,7 @@ build:
     paths:
       - dist
 
-generate_logos:
-  stage: assets
-  only:
-    - master
-  tags:
-    - nodejs
-  script:
-    - npm install
-    - cd dist/browser/assets/jobs
-    - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
-
-generate_previews:
+generate_assets:
   stage: assets
   only:
     - master
@@ -80,7 +69,11 @@ generate_previews:
     - export CHROME_BIN=`whereis google-chrome | cut -d " " -f 2`
     - npm install
     - cd dist/browser/assets/jobs
+    - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4000
+  artifacts:
+    paths:
+      - dist
 
 deploy:
   stage: deploy
