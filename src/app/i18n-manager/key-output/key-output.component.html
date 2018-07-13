@@ -1,7 +1,7 @@
 <div>
 
   <div (scroll)="scrollHandler($event)"
-       class="overflow-auto"
+       class="overflow-auto position-relative"
        style="height: calc(100vh - 200px);">
     <div [style.height.px]="Math.max(0, Math.max(0, scrollPos - 10) * 40)"></div>
     <div #langDataElement
