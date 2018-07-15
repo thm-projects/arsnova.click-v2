@@ -97,8 +97,10 @@ describe('QuizThemeComponent', () => {
 
   it('#restoreTheme', () => {
     const theme = 'theme-Material';
+    const previewedTheme = 'theme-arsnova-click';
+    component['previewThemeBackup'] = theme;
 
-    component.previewTheme(theme);
+    component.previewTheme(previewedTheme);
     component.restoreTheme();
     expect(document.getElementsByTagName('html').item(0).dataset['theme']).toEqual(theme);
   });

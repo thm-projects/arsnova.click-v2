@@ -1,5 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PipesModule } from '../../pipes/pipes.module';
+import { CasLoginService } from '../../service/login/cas-login.service';
+import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 
 import { KeyOutputComponent } from './key-output.component';
@@ -12,6 +14,9 @@ describe('KeyOutputComponent', () => {
     TestBed.configureTestingModule({
       imports: [SharedModule, PipesModule],
       declarations: [KeyOutputComponent],
+      providers: [
+        CasLoginService, UserService,
+      ],
     })
     .compileComponents();
   }));

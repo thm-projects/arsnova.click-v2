@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 
 import { AddModeComponent } from './add-mode.component';
@@ -14,7 +15,7 @@ describe('AddModeComponent', () => {
         SharedModule, NgbModalModule.forRoot(),
       ],
       providers: [
-        NgbActiveModal,
+        NgbActiveModal, UserService,
       ],
       declarations: [AddModeComponent],
     })
