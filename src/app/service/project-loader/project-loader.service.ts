@@ -48,7 +48,7 @@ export class ProjectLoaderService {
 
   constructor(private i18nManagerApiService: I18nManagerApiService, private userService: UserService) { }
 
-  public async isAuthorizedForProject(project: PROJECT): boolean {
+  public async isAuthorizedForProject(project: PROJECT): Promise<boolean> {
     if (!this.userService.isLoggedIn) {
       this._isAuthorized = false;
       return false;
