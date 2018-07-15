@@ -140,7 +140,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this._selectedKey = null;
   }
 
-  public async setProject(value: PROJECT): void {
+  public async setProject(value: PROJECT): Promise<void> {
     this._selectedKey = undefined;
     this.languageLoaderService.reset();
     this.projectLoaderService.currentProject = value;
