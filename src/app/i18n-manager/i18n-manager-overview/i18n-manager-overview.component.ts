@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs/index';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
 import { FILTER, PROJECT } from '../../shared/enums';
@@ -99,12 +98,10 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
+    private languageLoaderService: LanguageLoaderService,
     public modalOrganizerService: ModalOrganizerService,
     public projectLoaderService: ProjectLoaderService,
-    private languageLoaderService: LanguageLoaderService,
-    private casService: CasLoginService,
   ) {
-    this.casService.casLoginRequired = true;
     this.headerLabelService.headerLabel = 'I18Nator';
     this.footerBarService.replaceFooterElements([]);
   }
@@ -143,11 +140,14 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this._selectedKey = null;
   }
 
-  public setProject(value: PROJECT): void {
+  public async setProject(value: PROJECT): void {
     this._selectedKey = undefined;
     this.languageLoaderService.reset();
     this.projectLoaderService.currentProject = value;
-    this.reloadLanguageData();
+
+    if (await this.projectLoaderService.isAuthorizedForProject(value)) {
+      this.reloadLanguageData();
+    }
   }
 
   public dataChanged(key): void {
@@ -179,5 +179,4 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   private reloadLanguageData(): void {
     this.languageLoaderService.getLangData();
   }
-
 }

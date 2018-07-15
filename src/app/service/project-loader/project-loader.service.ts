@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PROJECT } from '../../shared/enums';
+import { I18nManagerApiService } from '../api/i18n-manager/i18n-manager-api.service';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +17,12 @@ export class ProjectLoaderService {
 
   set connected(value: boolean) {
     this._connected = value;
+  }
+
+  private _isAuthorized = false;
+
+  get isAuthorized(): boolean {
+    return this._isAuthorized;
   }
 
   private _currentProject = PROJECT.FRONTEND;
@@ -38,5 +46,28 @@ export class ProjectLoaderService {
     this._currentBranch = value;
   }
 
-  constructor() { }
+  constructor(private i18nManagerApiService: I18nManagerApiService, private userService: UserService) { }
+
+  public async isAuthorizedForProject(project: PROJECT): boolean {
+    if (!this.userService.isLoggedIn) {
+      this._isAuthorized = false;
+      return false;
+    }
+
+    try {
+      const isAuthorized = (
+                             await this.i18nManagerApiService.isAuthorizedForProject(project, {
+                               username: this.userService.username,
+                               token: this.userService.staticLoginToken,
+                             }).toPromise()
+                           ).status === 'STATUS_SUCCESSFUL';
+
+      this._isAuthorized = isAuthorized;
+
+      return isAuthorized;
+    } catch (e) {
+      this._isAuthorized = false;
+      return false;
+    }
+  }
 }

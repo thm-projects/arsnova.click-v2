@@ -15,7 +15,7 @@ export class UserService {
     this._casTicket = null;
     this._staticLoginToken = null;
     this._username = null;
-    this.persistTokensToSessionStorage();
+    this.persistTokens();
     this._isLoggedIn = value;
   }
 
@@ -32,6 +32,10 @@ export class UserService {
   }
 
   private _staticLoginToken: string;
+
+  get staticLoginToken(): string {
+    return this._staticLoginToken;
+  }
 
   constructor(private authorizeApiService: AuthorizeApiService, private storageService: StorageService) {
   }
@@ -67,7 +71,7 @@ export class UserService {
       if (data.status === 'STATUS:SUCCESSFUL') {
         this._isLoggedIn = true;
         this._casTicket = data.payload.casTicket;
-        this.persistTokensToSessionStorage();
+        this.persistTokens();
         resolve(true);
       } else {
         this._isLoggedIn = false;
@@ -89,7 +93,7 @@ export class UserService {
         this._isLoggedIn = true;
         this._staticLoginToken = data.payload.token;
         this._username = username;
-        this.persistTokensToSessionStorage();
+        this.persistTokens();
         resolve(true);
       } else {
         this._isLoggedIn = false;
@@ -102,7 +106,7 @@ export class UserService {
     return this.sha1(`${username}|${password}`);
   }
 
-  private persistTokensToSessionStorage(): void {
+  private persistTokens(): void {
     this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN, {
       casTicket: this._casTicket,
       staticLoginToken: this._staticLoginToken,
@@ -110,20 +114,22 @@ export class UserService {
     }).subscribe();
   }
 
-  private sha1(msg): string {
-    function rotl(n, s): number { return n << s | n >>> 32 - s; }
+  private rotl(n, s): number {
+    return n << s | n >>> 32 - s;
+  }
 
-    function tohex(i2: number): string {
-      for (let h = '', s = 28; ; s -= 4) {
-        h += (
-          i2 >>> s & 0xf
-        ).toString(16);
-        if (!s) {
-          return h;
-        }
+  private tohex(i2: number): string {
+    for (let h = '', s = 28; ; s -= 4) {
+      h += (
+        i2 >>> s & 0xf
+      ).toString(16);
+      if (!s) {
+        return h;
       }
     }
+  }
 
+  private sha1(msg): string {
     let H0 = 0x67452301, H1 = 0xEFCDAB89, H2 = 0x98BADCFE, H3 = 0x10325476, H4 = 0xC3D2E1F0;
     let i, t;
     const M = 0x0ffffffff, W = new Array(80), ml = msg.length, wa = [];
@@ -146,36 +152,36 @@ export class UserService {
         W[i] = wa[bo + i];
       }
       for (i = 16; i <= 79; i++) {
-        W[i] = rotl(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
+        W[i] = this.rotl(W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16], 1);
       }
       let A = H0, B = H1, C = H2, D = H3, E = H4;
       for (i = 0; i <= 19; i++) {
         t = (
-              rotl(A, 5) + (
+              this.rotl(A, 5) + (
                 B & C | ~B & D
               ) + E + W[i] + 0x5A827999
-            ) & M, E = D, D = C, C = rotl(B, 30), B = A, A = t;
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 20; i <= 39; i++) {
         t = (
-              rotl(A, 5) + (
+              this.rotl(A, 5) + (
                 B ^ C ^ D
               ) + E + W[i] + 0x6ED9EBA1
-            ) & M, E = D, D = C, C = rotl(B, 30), B = A, A = t;
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 40; i <= 59; i++) {
         t = (
-              rotl(A, 5) + (
+              this.rotl(A, 5) + (
                 B & C | B & D | C & D
               ) + E + W[i] + 0x8F1BBCDC
-            ) & M, E = D, D = C, C = rotl(B, 30), B = A, A = t;
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 60; i <= 79; i++) {
         t = (
-              rotl(A, 5) + (
+              this.rotl(A, 5) + (
                 B ^ C ^ D
               ) + E + W[i] + 0xCA62C1D6
-            ) & M, E = D, D = C, C = rotl(B, 30), B = A, A = t;
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       H0 = H0 + A & M;
       H1 = H1 + B & M;
@@ -183,6 +189,6 @@ export class UserService {
       H3 = H3 + D & M;
       H4 = H4 + E & M;
     }
-    return tohex(H0) + tohex(H1) + tohex(H2) + tohex(H3) + tohex(H4);
+    return this.tohex(H0) + this.tohex(H1) + this.tohex(H2) + this.tohex(H3) + this.tohex(H4);
   }
 }

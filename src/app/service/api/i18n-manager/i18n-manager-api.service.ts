@@ -8,7 +8,7 @@ import { PROJECT } from '../../../shared/enums';
 @Injectable({
   providedIn: 'root',
 })
-export class I18nManagerService {
+export class I18nManagerApiService {
 
   private readonly BE_BASE_URL = 'arsnova-click-v2-backend';
   private readonly FE_BASE_URL = 'arsnova-click-v2-frontend';
@@ -33,6 +33,10 @@ export class I18nManagerService {
 
   public POST_UPDATE_PROJECT_URL(baseUrl): string {
     return `${baseUrl}/updateLang`;
+  }
+
+  public IS_AUTHORIZED_PROJECT_URL(baseUrl: string): string {
+    return `${baseUrl}/authorized`;
   }
 
   public getLangFileForFE(): Observable<IMessage> {
@@ -67,5 +71,22 @@ export class I18nManagerService {
       case PROJECT.BACKEND:
         return this.postUpdateLangForBE(data);
     }
+  }
+
+  public isAuthorizedForProject(currentProject: PROJECT, data: object): Observable<IMessage> {
+    switch (currentProject) {
+      case PROJECT.FRONTEND:
+        return this.isAuthorizedForFE(data);
+      case PROJECT.BACKEND:
+        return this.isAuthorizedForBE(data);
+    }
+  }
+
+  private isAuthorizedForFE(data: object): Observable<IMessage> {
+    return this.http.post<IMessage>(this.IS_AUTHORIZED_PROJECT_URL(this.GET_FE_PROJECT_URL()), data);
+  }
+
+  private isAuthorizedForBE(data: object): Observable<IMessage> {
+    return this.http.post<IMessage>(this.IS_AUTHORIZED_PROJECT_URL(this.GET_BE_PROJECT_URL()), data);
   }
 }

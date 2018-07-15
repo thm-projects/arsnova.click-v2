@@ -4,8 +4,10 @@
     <span class="d-inline-flex mx-2 align-items-center">Current Project:</span>
     <select class="border-0 bg-transparent text-light"
             (change)="setProject($event.target.value)">
-      <option [value]="projectLoaderService.projects.FRONTEND">Frontend</option>
-      <option [value]="projectLoaderService.projects.BACKEND">Backend</option>
+      <option [value]="projectLoaderService.projects.FRONTEND">Frontend
+      </option>
+      <option [value]="projectLoaderService.projects.BACKEND">Backend
+      </option>
     </select>
 
     <span class="d-inline-flex mx-2 align-items-center"
@@ -28,62 +30,65 @@
   </div>
 </div>
 
-<div *ngIf="this.projectLoaderService.connected;else loading"
-     class="row mh-100 text-light">
-  <div class="d-flex sticky-top col-12 mb-2">
-    <div class="bg-white d-flex w-100 py-1">
-      <select class="border-0 bg-transparent mr-2"
-              (change)="changeFilter($event.target.value)">
-        <option [value]="filters.NONE"
-                [selected]="filter === filters.NONE">No Filter
-        </option>
-        <option [value]="filters.UNUSED"
-                [selected]="filter === filters.UNUSED">Unused Keys
-        </option>
-        <option [value]="filters.INVALID_KEYS"
-                [selected]="filter === filters.INVALID_KEYS">Empty Keys
-        </option>
-        <option [value]="filters.INVALID_DE"
-                [selected]="filter === filters.INVALID_DE">Empty DE Keys
-        </option>
-        <option [value]="filters.INVALID_EN"
-                [selected]="filter === filters.INVALID_EN">Empty EN Keys
-        </option>
-        <option [value]="filters.INVALID_ES"
-                [selected]="filter === filters.INVALID_ES">Empty ES Keys
-        </option>
-        <option [value]="filters.INVALID_FR"
-                [selected]="filter === filters.INVALID_FR">Empty FR Keys
-        </option>
-        <option [value]="filters.INVALID_IT"
-                [selected]="filter === filters.INVALID_IT">Empty IT Keys
-        </option>
-      </select>
-      <input type="text"
-             class="d-flex flex-grow-1 border-0"
-             #searchBox
-             [value]="searchFilter"
-             (keyup)="searchFilter = (searchBox.value)"
-             placeholder="Search..."/>
+<ng-container *ngIf="this.projectLoaderService.isAuthorized;else unauthorized">
+  <div *ngIf="this.projectLoaderService.connected;else loading"
+       class="row mh-100 text-light">
+    <div class="d-flex sticky-top col-12 mb-2">
+      <div class="bg-white d-flex w-100 py-1">
+        <select class="border-0 bg-transparent mr-2"
+                (change)="changeFilter($event.target.value)">
+          <option [value]="filters.NONE"
+                  [selected]="filter === filters.NONE">No Filter
+          </option>
+          <option [value]="filters.UNUSED"
+                  [selected]="filter === filters.UNUSED">Unused Keys
+          </option>
+          <option [value]="filters.INVALID_KEYS"
+                  [selected]="filter === filters.INVALID_KEYS">Empty Keys
+          </option>
+          <option [value]="filters.INVALID_DE"
+                  [selected]="filter === filters.INVALID_DE">Empty DE Keys
+          </option>
+          <option [value]="filters.INVALID_EN"
+                  [selected]="filter === filters.INVALID_EN">Empty EN Keys
+          </option>
+          <option [value]="filters.INVALID_ES"
+                  [selected]="filter === filters.INVALID_ES">Empty ES Keys
+          </option>
+          <option [value]="filters.INVALID_FR"
+                  [selected]="filter === filters.INVALID_FR">Empty FR Keys
+          </option>
+          <option [value]="filters.INVALID_IT"
+                  [selected]="filter === filters.INVALID_IT">Empty IT Keys
+          </option>
+        </select>
+        <input type="text"
+               class="d-flex flex-grow-1 border-0"
+               #searchBox
+               [value]="searchFilter"
+               (keyup)="searchFilter = (searchBox.value)"
+               placeholder="Search..."/>
+      </div>
+    </div>
+
+    <div class="col-12 key-list overflow-auto"
+         [class.col-sm-6]="!!selectedKey">
+      <app-key-output [filter]="filter"
+                      [searchFilter]="searchFilter"
+                      [changedData]="changedData"
+                      (changeEmitter)="dataChanged($event)"></app-key-output>
+    </div>
+    <div class="col-12 col-sm-6"
+         *ngIf="!!selectedKey">
+      <div *ngFor="let langKey of getKeys(languageLoaderService.LANGUAGE)">
+        <p class="mb-0">{{langKey.toUpperCase()}}</p>
+        <textarea class="w-100 key-textarea"
+                  (keyup)="updateKey($event, langKey, selectedKey)"
+                  [value]="selectedKey?.value[langKey] || ''"></textarea>
+      </div>
     </div>
   </div>
+</ng-container>
 
-  <div class="col-12 key-list overflow-auto"
-       [class.col-sm-6]="!!selectedKey">
-    <app-key-output [filter]="filter"
-                    [searchFilter]="searchFilter"
-                    [changedData]="changedData"
-                    (changeEmitter)="dataChanged($event)"></app-key-output>
-  </div>
-  <div class="col-12 col-sm-6"
-       *ngIf="!!selectedKey">
-    <div *ngFor="let langKey of getKeys(languageLoaderService.LANGUAGE)">
-      <p class="mb-0">{{langKey.toUpperCase()}}</p>
-      <textarea class="w-100 key-textarea"
-                (keyup)="updateKey($event, langKey, selectedKey)"
-                [value]="selectedKey?.value[langKey] || ''"></textarea>
-    </div>
-  </div>
-</div>
-
+<ng-template #unauthorized><h4 class="text-danger text-center mt-5">Not authorized to view this project</h4></ng-template>
 <ng-template #loading><h4 class="text-light text-center mt-5">Loading...</h4></ng-template>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LANGUAGE } from '../../shared/enums';
-import { I18nManagerService } from '../api/i18n-manager/i18n-manager.service';
+import { I18nManagerApiService } from '../api/i18n-manager/i18n-manager-api.service';
 import { ProjectLoaderService } from '../project-loader/project-loader.service';
 
 @Injectable({
@@ -21,7 +21,7 @@ export class LanguageLoaderService {
     return this._unusedKeys;
   }
 
-  constructor(private i18nManagerService: I18nManagerService, private projectLoaderService: ProjectLoaderService) {
+  constructor(private i18nManagerService: I18nManagerApiService, private projectLoaderService: ProjectLoaderService) {
   }
 
   public reset(): void {
