@@ -319,7 +319,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
         }
 
-        await this.activateQuiz(questionGroup);
+        await this.activateQuiz(questionGroup).toPromise();
 
         this.router.navigate(routingTarget);
 
