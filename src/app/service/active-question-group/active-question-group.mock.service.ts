@@ -18,7 +18,9 @@ export class ActiveQuestionGroupMockService {
       questionList: [
         new SingleChoiceQuestion({}),
         new FreeTextQuestion({
-          questionText: '', timer: 0, answerOptionList: [
+          questionText: '',
+          timer: 0,
+          answerOptionList: [
             new FreeTextAnswerOption({
               answerText: '',
               configCaseSensitive: true,
@@ -28,7 +30,13 @@ export class ActiveQuestionGroupMockService {
             }),
           ],
         }),
-        new RangedQuestion({ questionText: '', timer: 0, correctValue: 20, rangeMin: 10, rangeMax: 30 }),
+        new RangedQuestion({
+          questionText: '',
+          timer: 0,
+          correctValue: 20,
+          rangeMin: 10,
+          rangeMax: 30,
+        }),
         new SurveyQuestion({
           questionText: '',
           timer: 0,
@@ -44,4 +52,6 @@ export class ActiveQuestionGroupMockService {
   public cleanUp(): void {}
 
   public persist(): void {}
+
+  public loadData(): void {}
 }
