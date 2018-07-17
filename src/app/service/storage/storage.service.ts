@@ -35,9 +35,7 @@ export class StorageService {
   public async getAllQuiznames(): Promise<Array<string>> {
     return (
       await this.indexedDbService.all(DB_TABLE.QUIZ).toPromise()
-    ).map(value => {
-      return value.id;
-    });
+    ).map(value => value.id);
   }
 
   public getAll(table: DB_TABLE): Observable<any> {

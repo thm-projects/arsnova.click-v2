@@ -48,7 +48,7 @@ export class ActiveQuestionGroupService {
   }
 
   public cleanUp(): void {
-    this.activeQuestionGroup = null;
+    this._activeQuestionGroup = null;
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).subscribe();
     }
@@ -81,11 +81,14 @@ export class ActiveQuestionGroupService {
     }
   }
 
-  private async loadData(): Promise<void> {
-    const parsedObject = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).toPromise();
-    if (parsedObject) {
-      this.activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
-    }
+  public loadData(): Promise<void> {
+    return new Promise(async resolve => {
+      const parsedObject = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).toPromise();
+      if (parsedObject) {
+        this._activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
+      }
+      resolve();
+    });
   }
 
   private dec2hex(dec): string {

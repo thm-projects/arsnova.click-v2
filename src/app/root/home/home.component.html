@@ -68,7 +68,7 @@
                 [routerLink]="['/quiz', enteredSessionName]"
                 [disabled]="!canJoinQuiz">
           <i class="fas fa-thumbs-up"></i>
-          <span [innerHTML]="'component.hashtag_management.join_session' | translate"></span>
+          <span class="ml-1">{{'component.hashtag_management.join_session' | translate}}</span>
         </button>
         <button *ngIf="canStartQuiz"
                 id="startSession"
@@ -77,7 +77,7 @@
                 [class.disabled]="!canStartQuiz || !serverPassword.length"
                 [disabled]="!canStartQuiz || !serverPassword.length">
           <i class="fas fa-thumbs-up"></i>
-          <span [innerHTML]="'component.hashtag_management.start_session' | translate"></span>
+          <span class="ml-1">{{'component.hashtag_management.start_session' | translate}}</span>
         </button>
       </div>
       <div class="col-6 col-create-session px-1">
@@ -87,14 +87,14 @@
                 [class.disabled]="!serverPassword.length"
                 (click)="handleClick('addSession') && setAsCurrentQuiz(['/quiz', 'manager', 'overview'])"
                 [disabled]="!serverPassword.length">
-          <span [innerHTML]="'component.hashtag_management.create_session' | translate"></span>
+          <span class="mr-1">{{'component.hashtag_management.create_session' | translate}}</span>
           <i class="fas fa-edit"></i>
         </button>
         <button *ngIf="canEditQuiz"
                 id="editSession"
                 class="btn btn-success btn-block pointer"
                 (click)="handleClick('editSession') && setActiveQuestionGroup(['/quiz', 'manager', 'overview'])">
-          <span [innerHTML]="'component.hashtag_management.edit_session' | translate"></span>
+          <span class="mr-1">{{'component.hashtag_management.edit_session' | translate}}</span>
           <i class="fas fa-edit"></i>
         </button>
         <button *ngIf="isAddingDemoQuiz"
@@ -103,7 +103,7 @@
                 [class.disabled]="!serverPassword.length"
                 (click)="handleClick('add-demo-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
                 [disabled]="!serverPassword.length">
-          <span [innerHTML]="'component.hashtag_management.create_demo_session' | translate"></span>
+          <span class="mr-1">{{'component.hashtag_management.create_demo_session' | translate}}</span>
           <i class="fas fa-paper-plane"></i>
         </button>
         <button *ngIf="isAddingABCDQuiz"
@@ -112,7 +112,7 @@
                 [class.disabled]="!serverPassword.length"
                 (click)="handleClick('add-abcd-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
                 [disabled]="!serverPassword.length">
-          <span [innerHTML]="'component.hashtag_management.create_abcd_session' | translate"></span>
+          <span class="mr-1">{{'component.hashtag_management.create_abcd_session' | translate}}</span>
           <i class="fas fa-paper-plane"></i>
         </button>
       </div>

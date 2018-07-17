@@ -22,7 +22,7 @@ import { TrackingService } from '../../../service/tracking/tracking.service';
 export class QuizManagerComponent implements OnDestroy {
   public static TYPE = 'QuizManagerComponent';
 
-  public readonly questionGroupItem: IQuestionGroup;
+  public questionGroupItem: IQuestionGroup;
 
   private _selectableQuestionTypes = availableQuestionTypes;
 
@@ -42,8 +42,6 @@ export class QuizManagerComponent implements OnDestroy {
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
-    this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
-
     this.footerBarService.TYPE_REFERENCE = QuizManagerComponent.TYPE;
 
     footerBarService.replaceFooterElements([
@@ -55,18 +53,22 @@ export class QuizManagerComponent implements OnDestroy {
       this.footerBarService.footerElemSound,
     ]);
 
-    this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
-    this.footerBarService.footerElemStartQuiz.onClickCallback = async (self: FooterbarElement) => {
-      if (!self.isActive) {
-        return;
-      }
-      this.currentQuizService.quiz = this.questionGroupItem;
-      await this.currentQuizService.cacheQuiz();
-      await this.lobbyApiService.putLobby({
-        quiz: this.currentQuizService.quiz.serialize(),
-      }).toPromise();
-      this.router.navigate(['/quiz', 'flow', 'lobby']);
-    };
+    this.activeQuestionGroupService.loadData().then(() => {
+      this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
+      this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
+
+      this.footerBarService.footerElemStartQuiz.onClickCallback = async (self: FooterbarElement) => {
+        if (!self.isActive) {
+          return;
+        }
+        this.currentQuizService.quiz = this.questionGroupItem;
+        await this.currentQuizService.cacheQuiz();
+        await this.lobbyApiService.putLobby({
+          quiz: this.currentQuizService.quiz.serialize(),
+        }).toPromise();
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      };
+    });
   }
 
   public ngOnDestroy(): void {
@@ -87,14 +89,24 @@ export class QuizManagerComponent implements OnDestroy {
     switch (id) {
       case 'TrueFalseSingleChoiceQuestion':
         question.answerOptionList = [
-          new DefaultAnswerOption({ answerText: this.translateService.instant('global.true'), isCorrect: false }),
-          new DefaultAnswerOption({ answerText: this.translateService.instant('global.false'), isCorrect: false }),
+          new DefaultAnswerOption({
+            answerText: this.translateService.instant('global.true'),
+            isCorrect: false,
+          }), new DefaultAnswerOption({
+            answerText: this.translateService.instant('global.false'),
+            isCorrect: false,
+          }),
         ];
         break;
       case 'YesNoSingleChoiceQuestion':
         question.answerOptionList = [
-          new DefaultAnswerOption({ answerText: this.translateService.instant('global.yes'), isCorrect: false }),
-          new DefaultAnswerOption({ answerText: this.translateService.instant('global.no'), isCorrect: false }),
+          new DefaultAnswerOption({
+            answerText: this.translateService.instant('global.yes'),
+            isCorrect: false,
+          }), new DefaultAnswerOption({
+            answerText: this.translateService.instant('global.no'),
+            isCorrect: false,
+          }),
         ];
     }
     this.activeQuestionGroupService.activeQuestionGroup.addQuestion(question);

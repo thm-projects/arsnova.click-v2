@@ -7,38 +7,6 @@ import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
-function isLocalStorageSupported(): boolean {
-  try {
-    const itemBackup = localStorage.getItem('');
-    localStorage.removeItem('');
-    localStorage.setItem('', itemBackup);
-    if (itemBackup === null) {
-      localStorage.removeItem('');
-    } else {
-      localStorage.setItem('', itemBackup);
-    }
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function isSessionStorageSupported(): boolean {
-  try {
-    const itemBackup = sessionStorage.getItem('');
-    sessionStorage.removeItem('');
-    sessionStorage.setItem('', itemBackup);
-    if (itemBackup === null) {
-      sessionStorage.removeItem('');
-    } else {
-      sessionStorage.setItem('', itemBackup);
-    }
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -72,17 +40,11 @@ export class HeaderComponent implements OnInit {
     this._inHomeRoute = value;
   }
 
-  private _localStorageAvailable: boolean = isLocalStorageSupported();
-
-  get localStorageAvailable(): boolean {
-    return this._localStorageAvailable;
+  get indexedDbAvailable(): boolean {
+    return this._indexedDbAvailable;
   }
 
-  private _sessionStorageAvailable: boolean = isSessionStorageSupported();
-
-  get sessionStorageAvailable(): boolean {
-    return this._sessionStorageAvailable;
-  }
+  private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -96,19 +58,20 @@ export class HeaderComponent implements OnInit {
   }
 
   public generateConnectionQualityColor(): SafeStyle {
-    const colorCode = this.connectionService.lowSpeed ||
-                      !this.localStorageAvailable ||
-                      !this.sessionStorageAvailable ? 'var(--danger)' :
-                      this.connectionService.mediumSpeed ? 'var(--danger)' :
-                      !this.connectionService.serverAvailable ? 'var(--grey)' :
-                      'var(--success)';
+    const colorCode = this.connectionService.lowSpeed || //
+                      !this.indexedDbAvailable ? 'var(--danger)' : //
+                      this.connectionService.mediumSpeed ? 'var(--danger)' : //
+                      !this.connectionService.serverAvailable ? 'var(--grey)' : 'var(--success)';
+
     return this.sanitizeStyle(colorCode);
   }
 
   public ngOnInit(): void {
     this.router.events.subscribe((url: any) => {
       if (isPlatformBrowser(this.platformId)) {
-        this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
+        this.inHomeRoute = (
+          location.pathname === '/home' || location.pathname === '/'
+        );
       }
     });
   }
@@ -123,8 +86,7 @@ export class HeaderComponent implements OnInit {
         dimension3: this.connectionService.rtt,
         dimension4: this.connectionService.serverAvailable,
         dimension5: this.connectionService.websocketAvailable,
-        dimension6: this.localStorageAvailable,
-        dimension7: this.sessionStorageAvailable,
+        dimension6: this.indexedDbAvailable,
       },
     });
 
@@ -139,5 +101,12 @@ export class HeaderComponent implements OnInit {
 
     value = value.replace(/\s/g, '');
     return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+  }
+
+  private indexedDbSupported(): boolean {
+    return (
+      isPlatformBrowser(this.platformId) && //
+      'indexedDB' in window //
+    );
   }
 }
