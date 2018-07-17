@@ -16,8 +16,7 @@ export class ActiveQuestionGroupMockService {
       hashtag: 'test',
       sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),
       questionList: [
-        new SingleChoiceQuestion({}),
-        new FreeTextQuestion({
+        new SingleChoiceQuestion({}), new FreeTextQuestion({
           questionText: '',
           timer: 0,
           answerOptionList: [
@@ -29,15 +28,13 @@ export class ActiveQuestionGroupMockService {
               configUsePunctuation: true,
             }),
           ],
-        }),
-        new RangedQuestion({
+        }), new RangedQuestion({
           questionText: '',
           timer: 0,
           correctValue: 20,
           rangeMin: 10,
           rangeMax: 30,
-        }),
-        new SurveyQuestion({
+        }), new SurveyQuestion({
           questionText: '',
           timer: 0,
           displayAnswerText: true,
@@ -53,5 +50,7 @@ export class ActiveQuestionGroupMockService {
 
   public persist(): void {}
 
-  public loadData(): void {}
+  public loadData(): Promise<void> {
+    return new Promise(resolve => resolve());
+  }
 }
