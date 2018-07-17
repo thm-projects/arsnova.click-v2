@@ -96,9 +96,11 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    if (this.attendeeService.getOwnNick()) {
-      this.router.navigate(['/']);
-    }
+    this.attendeeService.getOwnNick().then(nick => {
+      if (nick) {
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   public ngOnDestroy(): void {

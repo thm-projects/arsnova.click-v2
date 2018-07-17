@@ -177,7 +177,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.selectQuizByList(quizname);
 
-    this.router.navigate(['/quiz', this.enteredSessionName]);
+    this.router.navigate(['/quiz', quizname]);
   }
 
   public showQuiznameDatalist(): void {
@@ -390,7 +390,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private selectQuizAsDefaultQuiz(quizName: string): void {
     this.quizApiService.getQuizStatus(quizName).subscribe(value => {
-      console.log('http returned', value);
       if (value.status === 'STATUS:SUCCESSFUL') {
         switch (value.step) {
           case 'QUIZ:EXISTS':

@@ -99,10 +99,11 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    if (this.attendeeService.getOwnNick()) {
-      this.router.navigate(['/']);
-      return;
-    }
+    this.attendeeService.getOwnNick().then(nick => {
+      if (nick) {
+        this.router.navigate(['/']);
+      }
+    });
     this._isLoading = true;
     this.memberApiService.getAvailableMemberNames(this.currentQuizService.quiz.hashtag).subscribe(data => {
       this._isLoading = false;
