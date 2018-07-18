@@ -106,7 +106,11 @@ export class CurrentQuizService implements ICurrentQuiz {
       });
     }
     this.connectionService.initConnection().then(() => {
-      connectionService.socket.subscribe((data: IMessage) => {
+      if (!this.connectionService.socket) {
+        return;
+      }
+
+      this.connectionService.socket.subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATED_SETTINGS') {
           this._quiz.sessionConfig[data.payload.target] = data.payload.state;
           this.persistToSessionStorage();

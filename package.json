@@ -25,7 +25,7 @@
     "e2e": "ng e2e --port 4201",
     "purify": "node purifycss.js",
     "compress": "gzip dist/browser/** -r",
-    "http-startup": "http-server dist/browser/ -p 4711 --gzip",
+    "http-startup": "http-server dist/browser/ -p 4711",
     "prod-test": "npm run build:PROD && npm run purify && npm run compress && npm run http-startup",
     "prod-test:SSR": "npm run build:SSR && npm run start:SSR",
     "job:images:logo": "cd dist/jobs/; node --experimental-modules GenerateImages.mjs --command=generateLogoImages",

@@ -39,7 +39,11 @@ export class ThemesService {
     }
 
     this.connectionService.initConnection().then(() => {
-      connectionService.socket.subscribe(data => {
+      if (!this.connectionService.socket) {
+        return;
+      }
+
+      this.connectionService.socket.subscribe(data => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATED_SETTINGS') {
           this.currentQuizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
           this.currentQuizService.persistToSessionStorage();
