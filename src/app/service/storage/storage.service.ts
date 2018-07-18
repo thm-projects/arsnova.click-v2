@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DB_NAME, DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { IndexedDbService } from './indexed.db.service';
@@ -8,7 +9,12 @@ import { IndexedDbService } from './indexed.db.service';
 })
 export class StorageService {
 
-  constructor(private indexedDbService: IndexedDbService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private indexedDbService: IndexedDbService) {
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.indexedDbService.setName(DB_NAME.DEFAULT);
     this.indexedDbService.create([
       { name: DB_TABLE.CONFIG }, {
