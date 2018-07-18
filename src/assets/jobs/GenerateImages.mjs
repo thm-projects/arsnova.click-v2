@@ -97,7 +97,7 @@ class GenerateImages {
 
   async generateFrontendPreview(host) {
     const CHROME_BIN = process.env.CHROME_BIN;
-    const flags = ['--headless', '--hide-scrollbars', '--remote-debugging-port=9222', '--disable-gpu', '--user-data-dir=remote-profile'];
+    const flags = ['--headless', '--hide-scrollbars', '--no-sandbox', '--remote-debugging-port=9222', '--disable-gpu', '--user-data-dir=remote-profile'];
     const params = [];
     const themePreviewEndpoint = `${host}/preview`;
     themes.forEach((theme) => {
@@ -106,7 +106,7 @@ class GenerateImages {
       });
     });
 
-    if (this.isRunning(CHROME_BIN, CHROME_BIN, CHROME_BIN)) {
+    if (await this.isRunning(CHROME_BIN, CHROME_BIN, CHROME_BIN)) {
       throw new Error('Chrome instance already running');
     }
 
@@ -191,13 +191,20 @@ class GenerateImages {
   isRunning(win, mac, linux) {
     return new Promise(resolve => {
       const plat = process.platform;
-      const cmd = plat === 'win32' ? 'tasklist' : (plat === 'darwin' ? 'ps -ax | grep ' + mac : (plat === 'linux' ? 'ps -A' : ''));
+      const cmd = plat === 'win32' ? 'tasklist' : (plat === 'darwin' ? 'ps -ax | grep ' + mac : (plat === 'linux' ? 'ps -A | grep ' + linux : ''));
       const proc = plat === 'win32' ? win : (plat === 'darwin' ? mac : (plat === 'linux' ? linux : ''));
       if (cmd === '' || proc === '') {
         resolve(false);
+        return;
       }
       child_process.exec(cmd, (err, stdout) => {
-        resolve(stdout.toLowerCase().indexOf(proc.toLowerCase()) > -1);
+        if (err && err.code === 1) {
+          resolve(false);
+        } else if (!stdout || !stdout.length || stdout.toLowerCase().indexOf(proc.toLowerCase()) === -1) {
+          resolve(false);
+        } else {
+          resolve(true);
+        }
       });
     });
   }
