@@ -6,6 +6,9 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';
 import { I18nService } from '../../../../service/i18n/i18n.service';
+import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
+import { StorageService } from '../../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../../shared/shared.module';
@@ -34,7 +37,10 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
         }),
       ],
       providers: [
-        I18nService, {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, I18nService, {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         },

@@ -12,6 +12,9 @@ import { CurrentQuizService } from '../service/current-quiz/current-quiz.service
 import { FooterBarService } from '../service/footer-bar/footer-bar.service';
 import { SettingsService } from '../service/settings/settings.service';
 import { SharedService } from '../service/shared/shared.service';
+import { IndexedDbService } from '../service/storage/indexed.db.service';
+import { StorageService } from '../service/storage/storage.service';
+import { StorageServiceMock } from '../service/storage/storage.service.mock';
 import { ThemesService } from '../service/themes/themes.service';
 import { TrackingMockService } from '../service/tracking/tracking.mock.service';
 import { TrackingService } from '../service/tracking/tracking.service';
@@ -43,7 +46,10 @@ describe('ThemesComponent', () => {
         }),
       ],
       providers: [
-        TranslateService, FooterBarService, SettingsService, {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, TranslateService, FooterBarService, SettingsService, {
           provide: CurrentQuizService,
           useClass: CurrentQuizMockService,
         }, {

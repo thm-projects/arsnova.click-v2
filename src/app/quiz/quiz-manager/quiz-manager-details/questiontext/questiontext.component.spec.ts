@@ -19,6 +19,9 @@ import { HeaderLabelService } from '../../../../service/header-label/header-labe
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
+import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
+import { StorageService } from '../../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
@@ -60,7 +63,10 @@ describe('QuestiontextComponent', () => {
           }), NgbModalModule.forRoot(),
         ],
         providers: [
-          {
+          IndexedDbService, {
+            provide: StorageService,
+            useClass: StorageServiceMock,
+          }, {
             provide: ActiveQuestionGroupService,
             useClass: ActiveQuestionGroupMockService,
           }, HeaderLabelService, FooterBarService, SettingsService, {

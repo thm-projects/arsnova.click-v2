@@ -13,6 +13,9 @@ import { ConnectionService } from '../../../service/connection/connection.servic
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
+import { IndexedDbService } from '../../../service/storage/indexed.db.service';
+import { StorageService } from '../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../shared/shared.module';
@@ -74,7 +77,10 @@ describe('NicknameManagerComponent', () => {
         }),
       ],
       providers: [
-        {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, {
           provide: ActiveQuestionGroupService,
           useClass: ActiveQuestionGroupMockService,
         }, FooterBarService, SettingsService, {
@@ -142,8 +148,8 @@ describe('NicknameManagerComponent', () => {
 
     it('should list all available categories', () => {
       const categories = component.availableNickCategories();
-      expect(categories).toEqual(
-        jasmine.arrayWithExactContents(['disney', 'science', 'fantasy', 'literature', 'mythology', 'actor', 'politics', 'turing_award', 'emojis']));
+      expect(categories)
+      .toEqual(jasmine.arrayWithExactContents(['disney', 'science', 'fantasy', 'literature', 'mythology', 'actor', 'politics', 'turing_award', 'emojis']));
     });
   });
 

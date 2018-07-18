@@ -3,6 +3,9 @@ import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '../../shared/shared.module';
 import { SharedService } from '../shared/shared.service';
+import { IndexedDbService } from '../storage/indexed.db.service';
+import { StorageService } from '../storage/storage.service';
+import { StorageServiceMock } from '../storage/storage.service.mock';
 import { WebsocketMockService } from '../websocket/websocket.mock.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
@@ -15,7 +18,10 @@ describe('ConnectionService', () => {
         SharedModule, RouterTestingModule, HttpClientModule,
       ],
       providers: [
-        {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, SharedService, ConnectionService,

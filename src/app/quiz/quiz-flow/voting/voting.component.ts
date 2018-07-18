@@ -78,9 +78,7 @@ export class VotingComponent implements OnInit, OnDestroy {
 
   public displayAnswerButtons(): boolean {
     const question = this.currentQuizService.currentQuestion();
-    return question instanceof SingleChoiceQuestion ||
-      question instanceof SurveyQuestion ||
-      question instanceof MultipleChoiceQuestion;
+    return question instanceof SingleChoiceQuestion || question instanceof SurveyQuestion || question instanceof MultipleChoiceQuestion;
   }
 
   public displayRangedButtons(): boolean {
@@ -100,11 +98,15 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public parseTextInput(event: Event): void {
-    this._selectedAnswers = (<HTMLInputElement>event.target).value;
+    this._selectedAnswers = (
+      <HTMLInputElement>event.target
+    ).value;
   }
 
   public parseNumberInput(event: Event): void {
-    this._selectedAnswers = parseInt((<HTMLInputElement>event.target).value, 10);
+    this._selectedAnswers = parseInt((
+      <HTMLInputElement>event.target
+    ).value, 10);
   }
 
   public isNumber(value: any): boolean {
@@ -112,17 +114,22 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public showSendResponseButton(): boolean {
-    return this.isNumber(this.selectedAnswers) ||
-      (this.selectedAnswers instanceof Array && !!this.selectedAnswers.length) ||
-      (typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length);
+    return this.isNumber(this.selectedAnswers) || (
+      this.selectedAnswers instanceof Array && !!this.selectedAnswers.length
+    ) || (
+             typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length
+           );
   }
 
   public toggleSelectAnswer(index: number): void {
-    if (!(this._selectedAnswers instanceof Array)) {
+    if (!(
+      this._selectedAnswers instanceof Array
+    )) {
       return;
     }
-    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) :
-    this.toggleSelectedAnswers() ? this._selectedAnswers = [index] : this._selectedAnswers.push(index);
+    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) : this.toggleSelectedAnswers() ? this._selectedAnswers = [index]
+                                                                                                                               : this._selectedAnswers.push(
+        index);
     if (this.toggleSelectedAnswers()) {
       this.sendResponses();
     }
@@ -134,9 +141,7 @@ export class VotingComponent implements OnInit, OnDestroy {
       this.countdown.stop();
     }
     this.router.navigate([
-      '/quiz',
-      'flow',
-      this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
+      '/quiz', 'flow', this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
     ]);
   }
 
@@ -164,9 +169,7 @@ export class VotingComponent implements OnInit, OnDestroy {
       } else {
 
         this.router.navigate([
-          '/quiz',
-          'flow',
-          'results',
+          '/quiz', 'flow', 'results',
         ]);
 
       }
@@ -174,17 +177,21 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    console.log({
+      quizName: this.currentQuizService.quiz.hashtag,
+      nickname: this.attendeeService.getOwnNick(),
+      value: this._selectedAnswers,
+    });
+
     this.memberApiService.putResponse({
       quizName: this.currentQuizService.quiz.hashtag,
       nickname: this.attendeeService.getOwnNick(),
       value: this._selectedAnswers,
-    }).subscribe(
-      (data: IMessage) => {
-        if (data.status !== 'STATUS:SUCCESSFUL') {
-          console.log(data);
-        }
-      },
-    );
+    }).subscribe((data: IMessage) => {
+      if (data.status !== 'STATUS:SUCCESSFUL') {
+        console.log(data);
+      }
+    });
   }
 
   private handleMessages(): void {
@@ -210,9 +217,11 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   private toggleSelectedAnswers(): boolean {
-    return this.currentQuizService.currentQuestion() instanceof SingleChoiceQuestion ||
-      (this.currentQuizService.currentQuestion() instanceof SurveyQuestion &&
-        !(<SurveyQuestion>this.currentQuizService.currentQuestion()).multipleSelectionEnabled);
+    return this.currentQuizService.currentQuestion() instanceof SingleChoiceQuestion || (
+      this.currentQuizService.currentQuestion() instanceof SurveyQuestion && !(
+        <SurveyQuestion>this.currentQuizService.currentQuestion()
+      ).multipleSelectionEnabled
+    );
   }
 
 }

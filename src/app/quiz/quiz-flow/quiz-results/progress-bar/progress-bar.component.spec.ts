@@ -6,6 +6,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { IQuestionChoice } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { Attendee } from '../../../../../lib/attendee/attendee';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';
 import { ActiveQuestionGroupMockService } from '../../../../service/active-question-group/active-question-group.mock.service';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
@@ -21,6 +22,9 @@ import { I18nService } from '../../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
+import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
+import { StorageService } from '../../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
@@ -56,7 +60,10 @@ describe('ProgressBarComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal, {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, NgbActiveModal, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, {
@@ -108,6 +115,15 @@ describe('ProgressBarComponent', () => {
     (currentQuizService: CurrentQuizService, attendeeService: AttendeeService, questionTextService: QuestionTextService) => {
       component.questionIndex = 0;
       const question = <IQuestionChoice>currentQuizService.quiz.questionList[component.questionIndex];
+
+      attendeeService.addMember(new Attendee({
+        id: 0,
+        name: 'testNickname',
+        groupName: 'Default',
+        colorCode: '#00000',
+        responses: [],
+      }));
+
       questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
       questionTextService.eventEmitter.subscribe((value) => {
         if (value instanceof Array) {

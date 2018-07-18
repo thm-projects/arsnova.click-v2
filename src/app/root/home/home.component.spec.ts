@@ -26,6 +26,9 @@ import { CasLoginService } from '../../service/login/cas-login.service';
 import { SettingsMockService } from '../../service/settings/settings.mock.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesMockService } from '../../service/themes/themes.mock.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -59,7 +62,10 @@ describe('HomeComponent', () => {
         }), ModalsModule, NgbModule.forRoot(),
       ],
       providers: [
-        FooterBarService, {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, FooterBarService, {
           provide: SettingsService,
           useClass: SettingsMockService,
         }, {

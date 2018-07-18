@@ -5,6 +5,9 @@ import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { SharedService } from '../shared/shared.service';
+import { IndexedDbService } from '../storage/indexed.db.service';
+import { StorageService } from '../storage/storage.service';
+import { StorageServiceMock } from '../storage/storage.service.mock';
 import { WebsocketMockService } from '../websocket/websocket.mock.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
@@ -17,7 +20,10 @@ describe('SettingsService', () => {
         SharedModule, RouterTestingModule, HttpClientModule,
       ],
       providers: [
-        SharedService, {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, SharedService, {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, {

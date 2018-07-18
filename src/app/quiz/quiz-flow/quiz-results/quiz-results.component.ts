@@ -56,7 +56,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     this._selectedQuestionIndex = currentQuizService.questionIndex;
 
-    this.currentQuizService.isOwner.then(val => this._ownsQuiz = val);
+    this.currentQuizService.isOwner.subscribe(val => {
+      this._ownsQuiz = !!val;
+      this.addFooterElements();
+    });
   }
 
   public showLeaderBoardButton(index: number): boolean {
@@ -65,7 +68,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     );
   }
 
-  public async showStopQuizButton(): Promise<boolean> {
+  public showStopQuizButton(): boolean {
     return this.ownsQuiz && !this.currentQuizService.currentQuestion().timer && (
       this.attendeeService.attendees.length > this.attendeeService.attendees.filter(nick => {
         return nick.responses[this.currentQuizService.questionIndex];
@@ -73,7 +76,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     );
   }
 
-  public async showStopCountdownButton(): Promise<boolean> {
+  public showStopCountdownButton(): boolean {
     return this.ownsQuiz && (
       this.attendeeService.attendees.length > this.attendeeService.attendees.filter(nick => {
         return nick.responses[this.currentQuizService.questionIndex];
@@ -83,7 +86,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
            );
   }
 
-  public async showStartQuizButton(): Promise<boolean> {
+  public showStartQuizButton(): boolean {
     return this.ownsQuiz && !this.showStopCountdownButton() && !this.showStopQuizButton() && this.currentQuizService.questionIndex
            === this._selectedQuestionIndex && (
              this.currentQuizService.questionIndex < this.currentQuizService.quiz.questionList.length - 1
@@ -122,7 +125,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     await this.generateAnswers(this.currentQuizService.quiz.questionList[index]);
   }
 
-  public async getConfidenceData(questionIndex: number): Promise<{ base: number, absolute: number, percent: string }> {
+  public getConfidenceData(questionIndex: number): { base: number, absolute: number, percent: string } {
     const result = {
       base: this.attendeeService.attendees.length,
       absolute: 0,
@@ -138,9 +141,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return currentValue + nextValue;
       }) : 0;
       result.absolute = matches.length;
-      result.percent = await this.i18nService.formatNumber(absoluteValues / (
+      result.percent = this.i18nService.formatNumber(absoluteValues / (
         matches.length || 1
-      ) / 100, NUMBER_TYPE.PERCENT).toPromise();
+      ) / 100, NUMBER_TYPE.PERCENT);
     }
     return result;
   }
@@ -158,7 +161,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return this.currentQuizService.quiz.sessionConfig.showResponseProgress;
   }
 
-  public async getReadingConfirmationData(questionIndex: number): Promise<{ base: number, absolute: number, percent: string }> {
+  public getReadingConfirmationData(questionIndex: number): { base: number, absolute: number, percent: string } {
     const result = {
       base: this.attendeeService.attendees.length,
       absolute: 0,
@@ -169,9 +172,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
       }).length;
       result.absolute = matchCount;
-      result.percent = await this.i18nService.formatNumber(matchCount / (
+      result.percent = this.i18nService.formatNumber(matchCount / (
         this.attendeeService.attendees.length || 1
-      ), NUMBER_TYPE.PERCENT).toPromise();
+      ), NUMBER_TYPE.PERCENT);
     }
     return result;
   }
@@ -213,7 +216,18 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     this.footerBarService.footerElemBack.restoreClickCallback();
   }
 
-  private async addFooterElements(): Promise<void> {
+  public stopQuiz(): void {
+    this.quizApiService.postQuizStop({
+      quizName: this.currentQuizService.quiz.hashtag,
+    }).subscribe(data => {
+      if (data.status !== 'STATUS:SUCCESSFUL') {
+        console.log(data);
+      }
+    });
+    this.countdown.stop();
+  }
+
+  private addFooterElements(): void {
 
     let footerElems;
 
@@ -269,8 +283,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         case 'MEMBER:UPDATED_RESPONSE':
           this.attendeeService.modifyResponse(data.payload.nickname);
           if (this.attendeeService.attendees.filter(attendee => {
-            return attendee.responses[this.currentQuizService.questionIndex] ? attendee.responses[this.currentQuizService.questionIndex].value
-                                                                             : false;
+            return attendee.responses[this.currentQuizService.questionIndex] ? attendee.responses[this.currentQuizService.questionIndex].value : false;
           }).length === this.attendeeService.attendees.length && this.countdown) {
             this.countdown.stop();
           }
@@ -321,6 +334,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       quizName: this.currentQuizService.quiz.hashtag,
     }).toPromise();
     if (startQuizData.status !== 'STATUS:SUCCESSFUL') {
+      console.log(startQuizData);
       return;
     }
 
@@ -343,16 +357,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
       ]);
     }
-  }
-
-  private async stopQuiz(): Promise<void> {
-    const data = await this.quizApiService.postQuizStop({
-      quizName: this.currentQuizService.quiz.hashtag,
-    }).toPromise();
-    if (data.status !== 'STATUS:SUCCESSFUL') {
-      console.log(data);
-    }
-    this.countdown.stop();
   }
 
   private async generateAnswers(question: IQuestion): Promise<void> {

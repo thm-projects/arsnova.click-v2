@@ -80,7 +80,9 @@ export class QuizLobbyComponent implements OnDestroy {
 
     (
       async () => {
-        this._ownsQuiz = await this.currentQuizService.isOwner;
+        this._ownsQuiz = !!(
+          await this.currentQuizService.isOwner.toPromise()
+        );
         await this.connectionService.initConnection();
         if (this._ownsQuiz) {
           this.trackingService.trackConversionEvent({ action: QuizLobbyComponent.TYPE });

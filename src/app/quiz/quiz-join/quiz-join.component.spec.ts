@@ -17,6 +17,9 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesMockService } from '../../service/themes/themes.mock.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { UserService } from '../../service/user/user.service';
@@ -67,7 +70,10 @@ describe('QuizJoinComponent', () => {
         }),
       ],
       providers: [
-        CasLoginService, LobbyApiService, QuizApiService, {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, CasLoginService, LobbyApiService, QuizApiService, {
           provide: CurrentQuizService,
           useClass: CurrentQuizMockService,
         }, {

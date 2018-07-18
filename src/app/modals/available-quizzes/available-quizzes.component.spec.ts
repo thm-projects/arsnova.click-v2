@@ -20,6 +20,9 @@ import { FileUploadService } from '../../service/file-upload/file-upload.service
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
@@ -50,7 +53,10 @@ describe('AvailableQuizzesComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal, LobbyApiService, QuizApiService, {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, NgbActiveModal, LobbyApiService, QuizApiService, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, {
@@ -131,24 +137,20 @@ describe('AvailableQuizzesComponent', () => {
   ));
 
   it('#editQuiz', (
-    inject([CurrentQuizService, TrackingService, ActiveQuestionGroupService, Router], (
-      currentQuizService: CurrentQuizService,
-      trackingService: TrackingService,
-      activeQuestionGroupService: ActiveQuestionGroupService,
-      router: Router,
-    ) => {
-      const quiz = currentQuizService.quiz;
+    inject([CurrentQuizService, TrackingService, ActiveQuestionGroupService, Router],
+      (currentQuizService: CurrentQuizService, trackingService: TrackingService, activeQuestionGroupService: ActiveQuestionGroupService, router: Router) => {
+        const quiz = currentQuizService.quiz;
 
-      spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
-      spyOn(component, 'next').and.callThrough();
-      spyOn(router, 'navigate').and.callFake(() => {});
+        spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
+        spyOn(component, 'next').and.callThrough();
+        spyOn(router, 'navigate').and.callFake(() => {});
 
-      component.editQuiz(quiz);
+        component.editQuiz(quiz);
 
-      expect(trackingService.trackClickEvent).toHaveBeenCalled();
-      expect(activeQuestionGroupService.activeQuestionGroup).toEqual(quiz);
-      expect(router.navigate).toHaveBeenCalled();
-      expect(component.next).toHaveBeenCalled();
-    })
+        expect(trackingService.trackClickEvent).toHaveBeenCalled();
+        expect(activeQuestionGroupService.activeQuestionGroup).toEqual(quiz);
+        expect(router.navigate).toHaveBeenCalled();
+        expect(component.next).toHaveBeenCalled();
+      })
   ));
 });

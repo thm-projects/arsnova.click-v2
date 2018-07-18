@@ -54,22 +54,22 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     };
   }
 
-  public joinQuiz(nickName: any): void {
-    if (nickName.changingThisBreaksApplicationSecurity) {
-      nickName = nickName.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
+  public joinQuiz(nickname: any): void {
+    if (nickname.changingThisBreaksApplicationSecurity) {
+      nickname = nickname.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
-    nickName = nickName.toString();
+    nickname = nickname.toString();
     const promise = new Promise(async (resolve, reject) => {
       this.memberApiService.putMember({
         quizName: this.currentQuizService.quiz.hashtag,
-        nickname: nickName,
+        nickname: nickname,
         groupName: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).toPromise(),
         ticket: this.userService.casTicket,
       }).subscribe((data: IMessage) => {
         if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
-            memberGroup.members.forEach((nickname: INickname) => {
-              this.attendeeService.addMember(nickname);
+            memberGroup.members.forEach((nicksInMemberGroup: INickname) => {
+              this.attendeeService.addMember(nicksInMemberGroup);
             });
           });
           this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION, data.payload.webSocketAuthorization).subscribe();
@@ -83,7 +83,8 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       });
     });
     promise.then(() => {
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.NICK, nickName).subscribe();
+      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.NICK, nickname).subscribe();
+      this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
       console.log(err);
@@ -99,11 +100,9 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.attendeeService.getOwnNick().then(nick => {
-      if (nick) {
-        this.router.navigate(['/']);
-      }
-    });
+    if (this.attendeeService.getOwnNick()) {
+      this.router.navigate(['/']);
+    }
     this._isLoading = true;
     this.memberApiService.getAvailableMemberNames(this.currentQuizService.quiz.hashtag).subscribe(data => {
       this._isLoading = false;

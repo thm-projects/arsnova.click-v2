@@ -78,7 +78,7 @@ export class LeaderboardComponent implements OnInit {
     this._leaderBoardCorrect = [];
     this._leaderBoardPartiallyCorrect = [];
 
-    this.currentQuizService.isOwner.then(value => {
+    this.currentQuizService.isOwner.subscribe(value => {
       if (value) {
         this.footerBarService.replaceFooterElements([
           this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
@@ -136,53 +136,51 @@ export class LeaderboardComponent implements OnInit {
     );
   }
 
-  public async ngOnInit(): Promise<void> {
-    await this.connectionService.initConnection();
-    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-    this.handleMessages();
+  public ngOnInit(): void {
+    this.connectionService.initConnection().then(() => {
+      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+      this.handleMessages();
+    });
 
-    const params = await this.route.params.toPromise();
-    this._questionIndex = +params['questionIndex'];
-    this._isGlobalRanking = isNaN(this._questionIndex);
-    if (this._isGlobalRanking) {
-      this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
-      this._questionIndex = null;
-      if (params['questionIndex']) {
-        this.router.navigate(['/quiz', 'flow', 'leaderboard']);
-        return;
-      }
-    } else {
-      this.headerLabelService.headerLabel = 'component.leaderboard.header';
-
-      const questionType = this.currentQuizService.quiz.questionList[this.questionIndex].TYPE;
-      this._hasMultipleAnswersAvailable = questionType === 'MultipleChoiceQuestion';
-    }
-
-    const lederboardData = await this.getLeaderboardFromBackend();
-    this._leaderBoardCorrect = lederboardData.payload.correctResponses;
-    this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
-    this._memberGroupResults = lederboardData.payload.memberGroupResults;
-
-    this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
-      this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
-        if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
-          this._leaderBoardCorrect.splice(index, 1);
+    this.route.params.subscribe(params => {
+      this._questionIndex = +params['questionIndex'];
+      this._isGlobalRanking = isNaN(this._questionIndex);
+      if (this._isGlobalRanking) {
+        this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
+        this._questionIndex = null;
+        if (params['questionIndex']) {
+          this.router.navigate(['/quiz', 'flow', 'leaderboard']);
+          return;
         }
+      } else {
+        this.headerLabelService.headerLabel = 'component.leaderboard.header';
+
+        const questionType = this.currentQuizService.quiz.questionList[this.questionIndex].TYPE;
+        this._hasMultipleAnswersAvailable = questionType === 'MultipleChoiceQuestion';
+      }
+
+    });
+
+    this.leaderboardApiService.getLeaderboardData(this._hashtag, this.questionIndex).subscribe(lederboardData => {
+      this._leaderBoardCorrect = lederboardData.payload.correctResponses;
+      this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
+      this._memberGroupResults = lederboardData.payload.memberGroupResults;
+      this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
+        this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
+          if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
+            this._leaderBoardCorrect.splice(index, 1);
+          }
+        });
+      });
+
+      this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
+        return memberGroupResult.correctQuestions.length > 0;
       });
     });
-
-    this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-      return memberGroupResult.correctQuestions.length > 0;
-    });
-
   }
 
-  public async formatResponseTime(responseTime: number): Promise<string> {
-    return await this.i18nService.formatNumber(this.roundResponseTime(responseTime, 2)).toPromise();
-  }
-
-  private async getLeaderboardFromBackend(): Promise<IMessage> {
-    return this.leaderboardApiService.getLeaderboardData(this._hashtag, this.questionIndex).toPromise();
+  public formatResponseTime(responseTime: number): string {
+    return this.i18nService.formatNumber(this.roundResponseTime(responseTime, 2));
   }
 
   private handleMessages(): void {

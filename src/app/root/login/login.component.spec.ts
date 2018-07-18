@@ -9,6 +9,9 @@ import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-comp
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 
@@ -35,7 +38,12 @@ describe('LoginComponent', () => {
           },
         }),
       ],
-      providers: [HeaderLabelService, FooterBarService, UserService],
+      providers: [
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, HeaderLabelService, FooterBarService, UserService,
+      ],
       declarations: [LoginComponent],
     })
     .compileComponents();

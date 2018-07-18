@@ -13,7 +13,7 @@ export class CurrentQuizMockService {
   public quiz: IQuestionGroup;
   public questionIndex = 0;
 
-  public isOwner = new Promise<boolean>(resolve => resolve(true));
+  public isOwner = new Observable<boolean>(subscriber => subscriber.next(true));
 
   constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
     this.quiz = new DefaultQuestionGroup({

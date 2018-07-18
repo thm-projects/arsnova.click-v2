@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { ErrorHandler, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -31,12 +31,15 @@ import { FooterBarService } from './service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from './service/header-label/header-label.service';
 import { I18nService } from './service/i18n/i18n.service';
 import { CasLoginService } from './service/login/cas-login.service';
+import { QuestionTextService } from './service/question-text/question-text.service';
 import { SettingsService } from './service/settings/settings.service';
 import { SharedService } from './service/shared/shared.service';
+import { IndexedDbService } from './service/storage/indexed.db.service';
+import { StorageService } from './service/storage/storage.service';
+import { ThemesService } from './service/themes/themes.service';
 import { TrackingService } from './service/tracking/tracking.service';
 import { UserService } from './service/user/user.service';
 import { WebsocketService } from './service/websocket/websocket.service';
-import { GlobalErrorHandler } from './shared/error-handler';
 import { SharedModule } from './shared/shared.module';
 import { ArsnovaClickAngulartics2Piwik } from './shared/tracking/ArsnovaClickAngulartics2Piwik';
 import { ThemesModule } from './themes/themes.module';
@@ -125,27 +128,31 @@ export const appRoutes: Routes = [
     I18nManagerModule,
   ],
   providers: [
-    {
-      provide: ErrorHandler,
-      useClass: GlobalErrorHandler,
-    },
+    /* {
+     provide: ErrorHandler,
+     useClass: GlobalErrorHandler,
+     }, */
     RoutePreloader,
+    IndexedDbService,
+    StorageService,
     I18nService,
     FooterBarService,
     ActiveQuestionGroupService,
     ConnectionService,
-    WebsocketService,
     CurrentQuizService,
     TranslateModule,
-    UserService,
     CasLoginService,
     FileUploadService,
     SettingsService,
     NgbActiveModal,
-    TrackingService,
     SharedService,
     AttendeeService,
     HeaderLabelService,
+    QuestionTextService,
+    ThemesService,
+    TrackingService,
+    UserService,
+    WebsocketService,
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

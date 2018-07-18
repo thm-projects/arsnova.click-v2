@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbActiveModal, NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -23,6 +23,9 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { I18nService } from '../../../service/i18n/i18n.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
+import { IndexedDbService } from '../../../service/storage/indexed.db.service';
+import { StorageService } from '../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { ThemesMockService } from '../../../service/themes/themes.mock.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
@@ -40,16 +43,12 @@ describe('QuizLobbyComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        SharedModule,
-        NgxQRCodeModule,
-        NgbModule.forRoot(),
-        TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, SharedModule, NgxQRCodeModule, NgbModule.forRoot(), TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
+            useFactory: (
+              createTranslateLoader
+            ),
             deps: [HttpClient],
           },
           compiler: {
@@ -59,21 +58,31 @@ describe('QuizLobbyComponent', () => {
         }),
       ],
       providers: [
-        NgbActiveModal,
-        { provide: TrackingService, useClass: TrackingMockService },
-        { provide: CurrentQuizService, useClass: CurrentQuizMockService },
-        FooterBarService,
-        SettingsService,
-        { provide: ConnectionService, useClass: ConnectionMockService },
-        { provide: WebsocketService, useClass: WebsocketMockService },
-        SharedService,
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        I18nService,
-        HeaderLabelService,
-        { provide: AttendeeService, useClass: AttendeeMockService },
-        { provide: ThemesService, useClass: ThemesMockService },
-        MemberApiService,
-        QuizApiService,
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, NgbModal, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, I18nService, HeaderLabelService, {
+          provide: AttendeeService,
+          useClass: AttendeeMockService,
+        }, {
+          provide: ThemesService,
+          useClass: ThemesMockService,
+        }, MemberApiService, QuizApiService,
       ],
       declarations: [QuizLobbyComponent],
     }).compileComponents();
@@ -101,29 +110,50 @@ describe('QuizLobbyComponent', () => {
 
     component.openKickMemberModal(modalContent, nickToRemove);
 
-    expect(modalService.open).toHaveBeenCalled();
+    expect(component['_kickMemberModalRef']).not.toBeNull();
   }));
 
-  it('#kickMember', inject([CurrentQuizService], (currentQuizService: CurrentQuizService) => {
+  it('#kickMember', inject([NgbModal], (modalService: NgbModal) => {
     const modalContent = '<div></div>';
     const nickToRemove = 'TestNick';
 
+    spyOn(modalService, 'open').and.callFake(() => {});
     spyOn(component, 'kickMember').and.callThrough();
 
     component.openKickMemberModal(modalContent, nickToRemove);
-    ((async () => await component.kickMember(nickToRemove))());
+    (
+      (
+        async () => await component.kickMember(nickToRemove)
+      )()
+    );
 
     expect(component.kickMember).toHaveBeenCalled();
   }));
 
   it('#hexToRgb', () => {
-    expect(component.hexToRgb('#ffffff')).toEqual({ r: 255, g: 255, b: 255 });
-    expect(component.hexToRgb('#000000')).toEqual({ r: 0, g: 0, b: 0 });
+    expect(component.hexToRgb('#ffffff')).toEqual({
+      r: 255,
+      g: 255,
+      b: 255,
+    });
+    expect(component.hexToRgb('#000000')).toEqual({
+      r: 0,
+      g: 0,
+      b: 0,
+    });
   });
 
   it('#transformForegroundColor', () => {
-    expect(component.transformForegroundColor({ r: 0, g: 0, b: 0 })).toEqual('ffffff');
-    expect(component.transformForegroundColor({ r: 255, g: 255, b: 255 })).toEqual('000000');
+    expect(component.transformForegroundColor({
+      r: 0,
+      g: 0,
+      b: 0,
+    })).toEqual('ffffff');
+    expect(component.transformForegroundColor({
+      r: 255,
+      g: 255,
+      b: 255,
+    })).toEqual('000000');
   });
 
   it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {

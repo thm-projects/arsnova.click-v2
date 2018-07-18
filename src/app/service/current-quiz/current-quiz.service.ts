@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ICurrentQuiz, ICurrentQuizData, IMessage } from 'arsnova-click-v2-types/src/common';
 import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
@@ -19,10 +20,12 @@ export class CurrentQuizService implements ICurrentQuiz {
 
   private _isOwner = false;
 
-  get isOwner(): Promise<boolean> {
-    return new Promise<boolean>(async resolve => {
-      resolve(!!await this.storageService.read(DB_TABLE.QUIZ, this._quiz.hashtag).toPromise());
-    });
+  get isOwner(): Observable<boolean> {
+    if (!this._quiz) {
+      return new Observable<boolean>(subscriber => subscriber.next(false));
+    }
+
+    return this.storageService.read(DB_TABLE.QUIZ, this._quiz.hashtag);
   }
 
   private _quiz: IQuestionGroup;
@@ -33,7 +36,7 @@ export class CurrentQuizService implements ICurrentQuiz {
 
   set quiz(value: IQuestionGroup) {
     this._quiz = value;
-    this.isOwner.then(val => {
+    this.isOwner.subscribe(val => {
       if (val) {
         if (this.quiz.sessionConfig.readingConfirmationEnabled) {
           this.footerBarService.footerElemReadingConfirmation.isActive = true;

@@ -1,5 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { IndexedDbService } from '../../storage/indexed.db.service';
+import { StorageService } from '../../storage/storage.service';
+import { StorageServiceMock } from '../../storage/storage.service.mock';
 
 import { I18nManagerApiService } from './i18n-manager-api.service';
 
@@ -9,7 +12,12 @@ describe('I18nManagerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [I18nManagerApiService],
+      providers: [
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, I18nManagerApiService,
+      ],
     });
     backend = TestBed.get(HttpTestingController);
   });

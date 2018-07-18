@@ -15,6 +15,7 @@ import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.s
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
+import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
@@ -47,7 +48,7 @@ describe('MemberGroupSelectComponent', () => {
         }),
       ],
       providers: [
-        {
+        IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {

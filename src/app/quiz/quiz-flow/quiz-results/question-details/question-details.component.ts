@@ -81,16 +81,16 @@ export class QuestionDetailsComponent implements OnInit {
         this._questionText = value;
       }
     });
-    const params = await this.route.params.toPromise();
-
-    this._questionIndex = +params['questionIndex'];
-    if (this._questionIndex < 0 || this._questionIndex > this.currentQuizService.questionIndex) {
-      this.router.navigate(['/quiz', 'flow', 'results']);
-      return;
-    }
-    this._question = this.currentQuizService.quiz.questionList[this._questionIndex];
-    await this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
-    await this.questionTextService.change(this._question.questionText);
+    this.route.params.subscribe(async params => {
+      this._questionIndex = +params['questionIndex'];
+      if (this._questionIndex < 0 || this._questionIndex > this.currentQuizService.questionIndex) {
+        this.router.navigate(['/quiz', 'flow', 'results']);
+        return;
+      }
+      this._question = this.currentQuizService.quiz.questionList[this._questionIndex];
+      await this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+      await this.questionTextService.change(this._question.questionText);
+    });
   }
 
   private handleMessages(): void {
@@ -120,7 +120,7 @@ export class QuestionDetailsComponent implements OnInit {
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
       }
-      await this.currentQuizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
+      this.currentQuizService.isOwner.subscribe(val => !!val ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data));
     });
   }
 

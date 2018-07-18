@@ -6,6 +6,9 @@ import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService }
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { SharedModule } from '../../shared/shared.module';
+import { IndexedDbService } from '../storage/indexed.db.service';
+import { StorageService } from '../storage/storage.service';
+import { StorageServiceMock } from '../storage/storage.service.mock';
 
 import { I18nService } from './i18n.service';
 
@@ -28,7 +31,10 @@ describe('I18nService', () => {
         }),
       ],
       providers: [
-        TranslateService, I18nService,
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, TranslateService, I18nService,
       ],
     });
   }));

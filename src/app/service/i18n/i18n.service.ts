@@ -1,7 +1,6 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
 import { CURRENCY_TYPE, DB_TABLE, LANGUAGE, NUMBER_TYPE, STORAGE_KEY } from '../../shared/enums';
 import { StorageService } from '../storage/storage.service';
 
@@ -28,23 +27,29 @@ export class I18nService {
     this.initLanguage();
   }
 
-  public formatNumber(number: number, type: NUMBER_TYPE = NUMBER_TYPE.DECIMAL, locale?: string): Observable<string> {
-    // console.log('formatnumber', JSON.stringify(arguments), this.currentLanguage);
+  public formatNumber(number: number, type: NUMBER_TYPE = NUMBER_TYPE.DECIMAL, locale?: string): string {
+    if (isNaN(number)) {
+      throw new Error(`Unsupported number: ${number}. Type was ${type.toString()}`);
+    }
 
-    return new Observable<string>(subscriber => {
+    if (!locale) {
       if (!this.currentLanguage) {
-        this.initLanguage().then(() => {
-          subscriber.next(parseFloat(String(number)).toLocaleString(locale, {
-            style: type.toString(),
-            currency: CURRENCY_TYPE[this.currentLanguage.toString()],
-          }));
-        });
+        locale = 'EN';
       } else {
-        subscriber.next(parseFloat(String(number)).toLocaleString(locale, {
-          style: type.toString(),
-          currency: CURRENCY_TYPE[this.currentLanguage.toString()],
-        }));
+        locale = this.currentLanguage.toString();
       }
+    }
+
+    if (!this.currentLanguage) {
+      return parseFloat(String(number)).toLocaleString(locale, {
+        style: type.toString(),
+        currency: 'EUR',
+      });
+    }
+
+    return parseFloat(String(number)).toLocaleString(locale, {
+      style: type.toString(),
+      currency: CURRENCY_TYPE[this.currentLanguage.toString()],
     });
   }
 

@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { parseGithubFlavoredMarkdown } from '../../../../../lib/markdown/markdown';
 import { I18nService } from '../../../../service/i18n/i18n.service';
-import { NUMBER_TYPE } from '../../../../shared/enums';
 
 @Component({
   selector: 'app-confidence-rate',
@@ -36,7 +35,7 @@ export class ConfidenceRateComponent {
 
   @Input() set data(value: any) {
     this._data = value;
-    this.i18nService.formatNumber(value.percent, NUMBER_TYPE.PERCENT).toPromise().then(val => this.percent = val);
+    this.percent = value.percent;
     this.base = value.base;
     this.absolute = value.absolute;
   }

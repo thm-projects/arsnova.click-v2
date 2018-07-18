@@ -6,6 +6,9 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { SharedModule } from '../../shared/shared.module';
+import { IndexedDbService } from '../storage/indexed.db.service';
+import { StorageService } from '../storage/storage.service';
+import { StorageServiceMock } from '../storage/storage.service.mock';
 import { UserService } from '../user/user.service';
 
 import { ProjectLoaderService } from './project-loader.service';
@@ -29,7 +32,10 @@ describe('ProjectLoaderService', () => {
         }),
       ],
       providers: [
-        ProjectLoaderService, UserService,
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, ProjectLoaderService, UserService,
       ],
     });
   });

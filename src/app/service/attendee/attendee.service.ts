@@ -21,6 +21,10 @@ export class AttendeeService implements OnDestroy {
 
   private _ownNick: string;
 
+  set ownNick(value: string) {
+    this._ownNick = value;
+  }
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
@@ -73,11 +77,11 @@ export class AttendeeService implements OnDestroy {
     this.persistToSessionStorage();
   }
 
-  public async isOwnNick(name: string): Promise<boolean> {
+  public isOwnNick(name: string): boolean {
     return name === this._ownNick;
   }
 
-  public async getOwnNick(): Promise<string> {
+  public getOwnNick(): string {
     return this._ownNick;
   }
 

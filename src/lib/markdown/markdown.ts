@@ -69,6 +69,13 @@ function postMarkdownRenderer(value: string): string {
     });
   }
 
+  const imgMatch = value.match(/<img.*">/g);
+  if (imgMatch) {
+    imgMatch.forEach(token => {
+      value = value.replace(token, token.replace('<img ', '<img class=\'mw-100\' '));
+    });
+  }
+
   const linkMatch = value.match(/<a href=".*">/g);
   if (linkMatch) {
     linkMatch.forEach(token => {

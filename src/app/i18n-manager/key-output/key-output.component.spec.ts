@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { PipesModule } from '../../pipes/pipes.module';
 import { CasLoginService } from '../../service/login/cas-login.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 
@@ -15,7 +18,10 @@ describe('KeyOutputComponent', () => {
       imports: [SharedModule, PipesModule],
       declarations: [KeyOutputComponent],
       providers: [
-        CasLoginService, UserService,
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, CasLoginService, UserService,
       ],
     })
     .compileComponents();

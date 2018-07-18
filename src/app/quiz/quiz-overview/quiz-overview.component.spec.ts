@@ -21,6 +21,7 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -93,7 +94,7 @@ describe('QuizOverviewComponent', () => {
         }),
       ],
       providers: [
-        {
+        IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {

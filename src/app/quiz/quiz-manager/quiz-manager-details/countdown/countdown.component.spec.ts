@@ -14,6 +14,9 @@ import { FooterBarService } from '../../../../service/footer-bar/footer-bar.serv
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
+import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
+import { StorageService } from '../../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../../shared/shared.module';
@@ -53,7 +56,10 @@ describe('CountdownComponent', () => {
           }),
         ],
         providers: [
-          {
+          IndexedDbService, {
+            provide: StorageService,
+            useClass: StorageServiceMock,
+          }, {
             provide: ActiveQuestionGroupService,
             useClass: ActiveQuestionGroupMockService,
           }, HeaderLabelService, FooterBarService, SettingsService, {

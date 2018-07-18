@@ -8,8 +8,8 @@ export class GlobalErrorHandler implements ErrorHandler {
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private injector: Injector) {
 
     if (isPlatformBrowser(this.platformId)) {
-      window.addEventListener('error', this.handleError, { passive: true });
-      window.onerror = this.handleError;
+      // window.addEventListener('error', this.handleError, { passive: true });
+      // window.onerror = this.handleError;
     }
   }
 

@@ -17,11 +17,14 @@ import { FooterBarService } from '../../../service/footer-bar/footer-bar.service
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { SettingsService } from '../../../service/settings/settings.service';
+import { IndexedDbService } from '../../../service/storage/indexed.db.service';
+import { StorageService } from '../../../service/storage/storage.service';
+import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
 
 import { ReadingConfirmationComponent } from './reading-confirmation.component';
 
-describe('QuizFow: ReadingConfirmationComponent', () => {
+describe('QuizFlow: ReadingConfirmationComponent', () => {
   let component: ReadingConfirmationComponent;
   let fixture: ComponentFixture<ReadingConfirmationComponent>;
 
@@ -43,7 +46,10 @@ describe('QuizFow: ReadingConfirmationComponent', () => {
         }),
       ],
       providers: [
-        {
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, {

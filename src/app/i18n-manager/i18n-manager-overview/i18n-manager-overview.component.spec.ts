@@ -11,6 +11,9 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 import { KeyOutputComponent } from '../key-output/key-output.component';
@@ -39,7 +42,10 @@ describe('I18nManagerOverviewComponent', () => {
         }),
       ],
       providers: [
-        UserService, CasLoginService, FooterBarService, HeaderLabelService, ModalOrganizerService,
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, UserService, CasLoginService, FooterBarService, HeaderLabelService, ModalOrganizerService,
       ],
       declarations: [KeyOutputComponent, I18nManagerOverviewComponent],
     })

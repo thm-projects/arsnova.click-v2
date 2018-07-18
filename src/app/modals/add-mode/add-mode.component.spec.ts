@@ -1,5 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
+import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 
@@ -15,7 +18,10 @@ describe('AddModeComponent', () => {
         SharedModule, NgbModalModule.forRoot(),
       ],
       providers: [
-        NgbActiveModal, UserService,
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, NgbActiveModal, UserService,
       ],
       declarations: [AddModeComponent],
     })

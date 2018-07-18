@@ -20,6 +20,7 @@ import { HeaderLabelService } from '../../service/header-label/header-label.serv
 import { I18nService } from '../../service/i18n/i18n.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
@@ -51,7 +52,7 @@ describe('RootComponent', () => {
           }), NgbModule.forRoot(),
         ],
         providers: [
-          HeaderLabelService, ThemesService, {
+          IndexedDbService, HeaderLabelService, ThemesService, {
             provide: CurrentQuizService,
             useClass: CurrentQuizMockService,
           }, {

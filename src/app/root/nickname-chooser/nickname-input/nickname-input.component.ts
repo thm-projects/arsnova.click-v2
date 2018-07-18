@@ -80,6 +80,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     });
     promise.then(() => {
       this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.NICK, nickname).subscribe();
+      this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
       switch (data.step) {
@@ -96,11 +97,9 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.attendeeService.getOwnNick().then(nick => {
-      if (nick) {
-        this.router.navigate(['/']);
-      }
-    });
+    if (this.attendeeService.getOwnNick()) {
+      this.router.navigate(['/']);
+    }
   }
 
   public ngOnDestroy(): void {

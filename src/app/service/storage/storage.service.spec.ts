@@ -3,12 +3,18 @@ import { SharedModule } from '../../shared/shared.module';
 import { IndexedDbService } from './indexed.db.service';
 
 import { StorageService } from './storage.service';
+import { StorageServiceMock } from './storage.service.mock';
 
 describe('StorageService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [SharedModule],
-      providers: [StorageService, IndexedDbService],
+      providers: [
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, StorageService, IndexedDbService,
+      ],
     });
   });
 
