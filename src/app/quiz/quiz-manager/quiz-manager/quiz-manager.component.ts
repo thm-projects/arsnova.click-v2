@@ -52,23 +52,22 @@ export class QuizManagerComponent implements OnDestroy {
       this.footerBarService.footerElemMemberGroup,
       this.footerBarService.footerElemSound,
     ]);
+    this.activeQuestionGroupService.loadData();
 
-    this.activeQuestionGroupService.loadData().then(() => {
-      this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
-      this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
+    this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
+    this.footerBarService.footerElemStartQuiz.isActive = activeQuestionGroupService.activeQuestionGroup.isValid();
 
-      this.footerBarService.footerElemStartQuiz.onClickCallback = async (self: FooterbarElement) => {
-        if (!self.isActive) {
-          return;
-        }
-        this.currentQuizService.quiz = this.questionGroupItem;
-        await this.currentQuizService.cacheQuiz();
-        await this.lobbyApiService.putLobby({
-          quiz: this.currentQuizService.quiz.serialize(),
-        }).toPromise();
-        this.router.navigate(['/quiz', 'flow', 'lobby']);
-      };
-    });
+    this.footerBarService.footerElemStartQuiz.onClickCallback = async (self: FooterbarElement) => {
+      if (!self.isActive) {
+        return;
+      }
+      this.currentQuizService.quiz = this.questionGroupItem;
+      await this.currentQuizService.cacheQuiz();
+      await this.lobbyApiService.putLobby({
+        quiz: this.currentQuizService.quiz.serialize(),
+      }).toPromise();
+      this.router.navigate(['/quiz', 'flow', 'lobby']);
+    };
   }
 
   public ngOnDestroy(): void {

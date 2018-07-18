@@ -76,17 +76,13 @@ describe('QuizManagerComponent', () => {
     }
   ));
 
-  it('should be created', (
-    () => {
-      expect(component).toBeTruthy();
-    }
-  ));
+  it('should be created', async(() => {
+    expect(component).toBeTruthy();
+  }));
 
-  it('should contain a TYPE reference', (
-    () => {
-      expect(QuizManagerComponent.TYPE).toEqual('QuizManagerComponent');
-    }
-  ));
+  it('should contain a TYPE reference', async(() => {
+    expect(QuizManagerComponent.TYPE).toEqual('QuizManagerComponent');
+  }));
 
   describe('#addQuestion', () => {
     it('should add a question', inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
