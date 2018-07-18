@@ -19,6 +19,8 @@ export class AttendeeService implements OnDestroy {
     this._attendees = value;
   }
 
+  private _ownNick: string;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
@@ -72,15 +74,11 @@ export class AttendeeService implements OnDestroy {
   }
 
   public async isOwnNick(name: string): Promise<boolean> {
-    if (isPlatformBrowser(this.platformId)) {
-      return name === await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise();
-    }
+    return name === this._ownNick;
   }
 
   public async getOwnNick(): Promise<string> {
-    if (isPlatformBrowser(this.platformId)) {
-      return this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise();
-    }
+    return this._ownNick;
   }
 
   public modifyResponse(attendee: INickname): void {
@@ -104,6 +102,7 @@ export class AttendeeService implements OnDestroy {
       });
       if (this._attendees.length) {
         this.footerBarService.footerElemStartQuiz.isActive = true;
+        this._ownNick = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise();
       }
     }
   }

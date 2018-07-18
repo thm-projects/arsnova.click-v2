@@ -161,7 +161,7 @@ export class FooterBarComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (!this.footerElements.length) {
+    if (!this.footerElements || this.footerElements.length < 2) {
       return true;
     }
 

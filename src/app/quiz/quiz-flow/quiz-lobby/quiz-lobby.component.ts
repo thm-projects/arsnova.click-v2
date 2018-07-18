@@ -140,6 +140,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   public parseNickname(value: string): SafeHtml {
+
     if (value.match(/:[\w\+\-]+:/g)) {
       return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
     }
