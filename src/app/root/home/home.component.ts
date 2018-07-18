@@ -140,6 +140,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.connectionService.initConnection().then(() => {
+      if (!this.connectionService.socket) {
+        return;
+      }
 
       this.connectionService.socket.subscribe(data => {
         this.connectionService.websocketAvailable = true;
