@@ -3,7 +3,7 @@
 ###### Global Dependencies
 
 CentOS / RHEL
----
+
 - `yum install google-chrome-stable gcc-c++ make clang libtiff libwmf-lite openjpeg2-devel libtool-ltdl-devel fftw3-devel djvulibre-devel OpenEXR-devel llibwebp4 libtool-ltdl-devel fftw3-devel djvulibre-devel libpng-devel`
 - Download `ImageMagick`and `ImageMagick-Libs` rpm packages from [https://www.imagemagick.org/script/download.php](https://www.imagemagick.org/script/download.php) and install them
 - Download `GraphicsMagick` from [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html) and install it (use ./configure CC=clang)
