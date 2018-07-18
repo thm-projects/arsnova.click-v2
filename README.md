@@ -1,11 +1,17 @@
 #### arsnova.click v2 Frontend
 
+###### Global Dependencies
+
+CentOS / RHEL
+---
+- `yum install google-chrome-stable gcc-c++ make clang libtiff libwmf-lite openjpeg2-devel libtool-ltdl-devel fftw3-devel djvulibre-devel OpenEXR-devel llibwebp4 libtool-ltdl-devel fftw3-devel djvulibre-devel libpng-devel`
+- Download `ImageMagick`and `ImageMagick-Libs` rpm packages from [https://www.imagemagick.org/script/download.php](https://www.imagemagick.org/script/download.php) and install them
+- Download `GraphicsMagick` from [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html) and install it (use ./configure CC=clang)
+
 ###### Environment Variables
 - `CHROME_BIN`: Points to the binary of the Google Chrome Browser
 
 ###### Jobs
-The frontend node server requires a local installation of `imagemagick` and `graphicsmagick`.
-
 Use `npm run job:images` or directly `node --experimental-modules jobs/GenerateImages.mjs` to generate the logo and preview images. Note, that the frontend must be running for the preview screenshots.
 Available commands (via running the nodejs module or by passing the command with the --command= switch) are:
 - `all - Will call all methods below synchronously`
