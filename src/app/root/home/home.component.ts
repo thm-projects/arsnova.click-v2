@@ -79,7 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this._ownQuizzes;
   }
 
-  private readonly _routerSubscription: Subscription;
+  private _routerSubscription: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -105,17 +105,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {
 
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
-
-    this._routerSubscription = this.route.params.subscribe(params => {
-      if (!Object.keys(params).length) {
-        return;
-      }
-      if (isPlatformBrowser(this.platformId)) {
-        this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).subscribe();
-      }
-      this.themesService.updateCurrentlyUsedTheme();
-      this.i18nService.setLanguage(<LANGUAGE>params.languageId.toUpperCase());
-    });
 
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemAbout,
@@ -164,7 +153,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.themesService.updateCurrentlyUsedTheme();
+
+    this._routerSubscription = this.route.params.subscribe(async params => {
+      if (!Object.keys(params).length || !params.themeId || !params.languageId) {
+        this.themesService.updateCurrentlyUsedTheme();
+        return;
+      }
+      if (isPlatformBrowser(this.platformId)) {
+        await this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise();
+        await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).toPromise();
+        this.themesService.updateCurrentlyUsedTheme();
+      }
+      this.i18nService.setLanguage(<LANGUAGE>params.languageId.toUpperCase());
+    });
   }
 
   public ngOnDestroy(): void {

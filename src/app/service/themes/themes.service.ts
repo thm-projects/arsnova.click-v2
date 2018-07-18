@@ -66,7 +66,9 @@ export class ThemesService {
       new Promise(resolve => {
         if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
           resolve(this.currentQuizService.quiz.sessionConfig.theme);
+          return;
         }
+        resolve();
       }),
     ]);
     const usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
