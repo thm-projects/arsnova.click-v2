@@ -13,18 +13,9 @@ export class SettingsService {
     return this._serverSettings;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              private connectionService: ConnectionService,
-              private storageService: StorageService,
-  ) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private connectionService: ConnectionService, private storageService: StorageService) {
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SERVER_SETTINGS).subscribe(val => {
-        if (val) {
-          this._serverSettings = val;
-        } else {
-          this.initServerSettings();
-        }
-      });
+      this.initServerSettings();
     }
   }
 

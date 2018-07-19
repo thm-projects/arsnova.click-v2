@@ -374,7 +374,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const questionGroupInstance = questionGroupReflection[currentQuiz.TYPE](currentQuiz);
     this.canAddQuiz = false;
     this.canEditQuiz = true;
-    this.canStartQuiz = questionGroupInstance.isValid();
+    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired && questionGroupInstance.isValid();
     this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
@@ -382,6 +382,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isAddingDemoQuiz = true;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
+    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired;
     this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
@@ -389,6 +390,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isAddingABCDQuiz = true;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
+    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired;
     this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
@@ -400,11 +402,13 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.canAddQuiz = false;
             this.canJoinQuiz = false;
             this.passwordRequired = false;
+            this.canStartQuiz = false;
             break;
           case 'QUIZ:AVAILABLE':
             this.canAddQuiz = false;
             this.canJoinQuiz = true;
             this.passwordRequired = false;
+            this.canStartQuiz = false;
             this._provideNickSelection = value.payload.provideNickSelection;
             this.casService.casLoginRequired = value.payload.authorizeViaCas;
             if (this.casService.casLoginRequired) {
@@ -415,6 +419,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.canAddQuiz = true;
             this.canJoinQuiz = false;
             this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+            this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired;
             break;
           default:
             console.log(value);

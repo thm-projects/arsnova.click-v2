@@ -84,9 +84,9 @@
         <button *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
                 id="addSession"
                 class="btn btn-success btn-block pointer"
-                [class.disabled]="!serverPassword.length"
+                [class.disabled]="passwordRequired && !serverPassword.length"
                 (click)="handleClick('addSession') && setAsCurrentQuiz(['/quiz', 'manager', 'overview'])"
-                [disabled]="!serverPassword.length">
+                [disabled]="passwordRequired && !serverPassword.length">
           <span class="mr-1">{{'component.hashtag_management.create_session' | translate}}</span>
           <i class="fas fa-edit"></i>
         </button>
@@ -100,18 +100,18 @@
         <button *ngIf="isAddingDemoQuiz"
                 id="runDemoQuizSession"
                 class="btn btn-success btn-block pointer"
-                [class.disabled]="!serverPassword.length"
+                [class.disabled]="passwordRequired && !serverPassword.length"
                 (click)="handleClick('add-demo-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
-                [disabled]="!serverPassword.length">
+                [disabled]="passwordRequired && !serverPassword.length">
           <span class="mr-1">{{'component.hashtag_management.create_demo_session' | translate}}</span>
           <i class="fas fa-paper-plane"></i>
         </button>
         <button *ngIf="isAddingABCDQuiz"
                 id="runABCDQuizSession"
                 class="btn btn-success btn-block pointer"
-                [class.disabled]="!serverPassword.length"
+                [class.disabled]="passwordRequired && !serverPassword.length"
                 (click)="handleClick('add-abcd-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
-                [disabled]="!serverPassword.length">
+                [disabled]="passwordRequired && !serverPassword.length">
           <span class="mr-1">{{'component.hashtag_management.create_abcd_session' | translate}}</span>
           <i class="fas fa-paper-plane"></i>
         </button>
