@@ -84,9 +84,9 @@
         <button *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
                 id="addSession"
                 class="btn btn-success btn-block pointer"
-                [class.disabled]="passwordRequired && !serverPassword.length"
+                [class.disabled]="!canAddQuiz"
                 (click)="handleClick('addSession') && setAsCurrentQuiz(['/quiz', 'manager', 'overview'])"
-                [disabled]="passwordRequired && !serverPassword.length">
+                [disabled]="!canAddQuiz">
           <span class="mr-1">{{'component.hashtag_management.create_session' | translate}}</span>
           <i class="fas fa-edit"></i>
         </button>
