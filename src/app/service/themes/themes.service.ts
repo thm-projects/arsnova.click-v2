@@ -32,7 +32,7 @@ export class ThemesService {
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).subscribe(val => {
-        if (val) {
+        if (!val) {
           this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, DefaultSettings.defaultQuizSettings.theme).subscribe();
         }
       });
