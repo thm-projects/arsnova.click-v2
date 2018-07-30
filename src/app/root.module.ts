@@ -6,11 +6,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { RouterModule, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { Angulartics2Module } from 'angulartics2';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { environment } from '../environments/environment';
+import { jwtOptionsFactory } from '../lib/jwt.factory';
 import { RoutePreloader } from '../lib/route-preloader';
 import { createTranslateLoader } from '../lib/translation.factory';
 import { FooterModule } from './footer/footer.module';
