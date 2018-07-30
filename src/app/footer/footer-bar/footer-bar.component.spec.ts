@@ -117,7 +117,7 @@ describe('FooterBarComponent', () => {
 
   it('#moveLeft', (
     inject([FooterBarService], (footerBarService: FooterBarService) => {
-      component.footerElements = [
+      component['_footerElements'] = [
         ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
       ];
       component.footerElemIndex = 2;
@@ -130,7 +130,7 @@ describe('FooterBarComponent', () => {
 
   it('#moveRight', (
     inject([FooterBarService], (footerBarService: FooterBarService) => {
-      component.footerElements = [
+      component['_footerElements'] = [
         ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
       ];
       component.footerElemIndex = 1;

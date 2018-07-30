@@ -2,8 +2,10 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { SharedModule } from '../../shared/shared.module';
 import { IndexedDbService } from '../storage/indexed.db.service';
@@ -17,7 +19,13 @@ describe('ProjectLoaderService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [StorageService],
+          },
+        }), HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (

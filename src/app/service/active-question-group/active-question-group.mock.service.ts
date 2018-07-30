@@ -6,6 +6,7 @@ import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ra
 import { SurveyQuestion } from 'arsnova-click-v2-types/src/questions/question_survey';
 import { DefaultQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_default';
 import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
+import { Observable, of } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 
 export class ActiveQuestionGroupMockService {
@@ -50,7 +51,7 @@ export class ActiveQuestionGroupMockService {
 
   public persist(): void {}
 
-  public loadData(): Promise<void> {
-    return new Promise(resolve => resolve());
+  public loadData(): Observable<IQuestionGroup> {
+    return of(this.activeQuestionGroup);
   }
 }

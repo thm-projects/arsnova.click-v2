@@ -2,9 +2,11 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { PipesModule } from '../../pipes/pipes.module';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -27,7 +29,13 @@ describe('I18nManagerOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, NgbModalModule.forRoot(), SharedModule, PipesModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [StorageService],
+          },
+        }), HttpClientTestingModule, NgbModalModule.forRoot(), SharedModule, PipesModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (

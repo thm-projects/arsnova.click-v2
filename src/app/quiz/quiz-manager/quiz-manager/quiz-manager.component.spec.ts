@@ -2,9 +2,11 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { availableQuestionTypes } from '../../../../lib/available-question-types';
+import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { FooterModule } from '../../../footer/footer.module';
 import { ActiveQuestionGroupMockService } from '../../../service/active-question-group/active-question-group.mock.service';
@@ -22,6 +24,7 @@ import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
+import { UserService } from '../../../service/user/user.service';
 import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../shared/shared.module';
@@ -35,7 +38,13 @@ describe('QuizManagerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, FooterModule, TranslateModule.forRoot({
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [StorageService],
+          },
+        }), HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, FooterModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (
@@ -50,7 +59,7 @@ describe('QuizManagerComponent', () => {
         }),
       ],
       providers: [
-        IndexedDbService, {
+        UserService, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {

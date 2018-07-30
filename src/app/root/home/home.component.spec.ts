@@ -4,9 +4,11 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ModalsModule } from '../../modals/modals.module';
 import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
@@ -47,7 +49,13 @@ describe('HomeComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [StorageService],
+          },
+        }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (
@@ -137,7 +145,7 @@ describe('HomeComponent', () => {
 
   describe('#autoJoinToSession', () => {
 
-    it('should join the SESSION by click', async(inject([Router], (router: Router) => {
+    it('should join the session by click', async(inject([Router], (router: Router) => {
       spyOn(component, 'selectQuizByList').and.callThrough();
       spyOn(router, 'navigate').and.callFake(() => {});
 

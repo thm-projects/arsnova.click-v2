@@ -1,5 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, TestBed } from '@angular/core/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { I18nManagerApiService } from '../../service/api/i18n-manager/i18n-manager-api.service';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
@@ -15,7 +17,13 @@ describe('FilterKeysPipe', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [StorageService],
+          },
+        }), HttpClientTestingModule,
       ],
       providers: [
         LanguageLoaderService, I18nManagerApiService, ProjectLoaderService, UserService, IndexedDbService, {

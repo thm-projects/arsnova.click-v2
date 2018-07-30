@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DefaultAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
 import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single';
@@ -10,6 +11,7 @@ import { DefaultQuestionGroup } from 'arsnova-click-v2-types/src/questions/quest
 import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
@@ -26,6 +28,7 @@ import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { UserService } from '../../service/user/user.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
 import { DB_TABLE } from '../../shared/enums';
@@ -79,7 +82,13 @@ describe('QuizOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [StorageService],
+          },
+        }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (
@@ -94,7 +103,7 @@ describe('QuizOverviewComponent', () => {
         }),
       ],
       providers: [
-        IndexedDbService, {
+        UserService, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {

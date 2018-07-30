@@ -2,9 +2,11 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
 import { HeaderComponent } from '../../header/header/header.component';
@@ -21,9 +23,11 @@ import { I18nService } from '../../service/i18n/i18n.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { UserService } from '../../service/user/user.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -37,7 +41,13 @@ describe('RootComponent', () => {
     () => {
       TestBed.configureTestingModule({
         imports: [
-          SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+          JwtModule.forRoot({
+            jwtOptionsProvider: {
+              provide: JWT_OPTIONS,
+              useFactory: jwtOptionsFactory,
+              deps: [StorageService],
+            },
+          }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
             loader: {
               provide: TranslateLoader,
               useFactory: (
@@ -52,7 +62,7 @@ describe('RootComponent', () => {
           }), NgbModule.forRoot(),
         ],
         providers: [
-          IndexedDbService, HeaderLabelService, ThemesService, {
+          UserService, IndexedDbService, HeaderLabelService, ThemesService, {
             provide: CurrentQuizService,
             useClass: CurrentQuizMockService,
           }, {
@@ -91,6 +101,6 @@ describe('RootComponent', () => {
   });
 
   it('#getFooterBarElements', () => {
-    expect(component.getFooterBarElements().length).toBe(0);
+    component.getFooterBarElements().subscribe(elements => expect(elements.length).toBe(0));
   });
 });

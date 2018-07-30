@@ -187,7 +187,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   public showQuiznameDatalist(): void {
     if (isPlatformBrowser(this.platformId)) {
       const elem = document.getElementById('hashtag-input-data-list');
-      elem.classList.remove('d-none');
+
+      if (elem) {
+        elem.classList.remove('d-none');
+      }
     }
     this.isShowingQuiznameDatalist = true;
   }
@@ -195,7 +198,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   public hideQuiznameDatalist(): void {
     if (isPlatformBrowser(this.platformId)) {
       const elem = document.getElementById('hashtag-input-data-list');
-      elem.classList.add('d-none');
+
+      if (elem) {
+        elem.classList.add('d-none');
+      }
     }
     this.isShowingQuiznameDatalist = false;
   }

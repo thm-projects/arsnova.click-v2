@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { PipesModule } from '../../pipes/pipes.module';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
@@ -15,7 +17,15 @@ describe('KeyOutputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [SharedModule, PipesModule],
+      imports: [
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [StorageService],
+          },
+        }), SharedModule, PipesModule,
+      ],
       declarations: [KeyOutputComponent],
       providers: [
         IndexedDbService, {
