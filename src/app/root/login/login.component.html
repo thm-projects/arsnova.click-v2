@@ -1,31 +1,33 @@
-<h4 class="text-light text-center mb-5 mt-sm-5">Please enter your login credentials to proceed to the requested resource</h4>
+<ng-container *ngIf="!isLoading">
+  <h4 class="text-light text-center mb-5 mt-sm-5">Please enter your login credentials to proceed to the requested resource</h4>
 
-<div class="input-group input-group-sm">
+  <div class="input-group input-group-sm">
 
-  <input type="text"
-         class="form-control"
-         name="username"
-         placeholder="Username"
-         (keypress)="trySubmit($event)"
-         [(ngModel)]="username"/>
+    <input type="text"
+           class="form-control"
+           name="username"
+           placeholder="Username"
+           (keypress)="trySubmit($event)"
+           [(ngModel)]="username"/>
 
-  <input type="password"
-         class="form-control my-2 my-sm-0"
-         name="password"
-         placeholder="Password"
-         (keypress)="trySubmit($event)"
-         [(ngModel)]="password"/>
+    <input type="password"
+           class="form-control my-2 my-sm-0"
+           name="password"
+           placeholder="Password"
+           (keypress)="trySubmit($event)"
+           [(ngModel)]="password"/>
 
-  <div class="input-group-append">
+    <div class="input-group-append">
 
-    <button class="btn btn-info"
-            (click)="login()">Login
-    </button>
+      <button class="btn btn-info"
+              (click)="login()">Login
+      </button>
 
+    </div>
   </div>
-</div>
 
 
-<h4 *ngIf="authorizationFailed"
-    class="text-danger text-center mt-5">Authorization failed
-</h4>
+  <h4 *ngIf="authorizationFailed"
+      class="text-danger text-center mt-5">Authorization failed
+  </h4>
+</ng-container>

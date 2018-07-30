@@ -1,5 +1,7 @@
-import { Injectable } from '@angular/core';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
+import { EventEmitter, Injectable } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { ILoginSerialized } from 'arsnova-click-v2-types/src/common';
+import { DB_TABLE, STORAGE_KEY, USER_AUTHORIZATION } from '../../shared/enums';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
 import { StorageService } from '../storage/storage.service';
 
@@ -12,11 +14,29 @@ export class UserService {
   }
 
   set isLoggedIn(value: boolean) {
-    this._casTicket = null;
-    this._staticLoginToken = null;
-    this._username = null;
-    this.persistTokens();
+    if (!value) {
+      this._casTicket = null;
+      this._staticLoginToken = null;
+      this._username = null;
+      this.deleteTokens();
+    } else {
+      this.persistTokens();
+    }
     this._isLoggedIn = value;
+    this._staticLoginTokenContent = this.decodeToken();
+    this._loginNotifier.emit(value);
+  }
+
+  private _staticLoginTokenContent: ILoginSerialized;
+
+  get staticLoginTokenContent(): ILoginSerialized {
+    return this._staticLoginTokenContent;
+  }
+
+  private _loginNotifier = new EventEmitter<boolean>();
+
+  get loginNotifier(): EventEmitter<boolean> {
+    return this._loginNotifier;
   }
 
   private _casTicket: string;
@@ -37,17 +57,18 @@ export class UserService {
     return this._staticLoginToken;
   }
 
-  constructor(private authorizeApiService: AuthorizeApiService, private storageService: StorageService) {
+  constructor(private authorizeApiService: AuthorizeApiService, private storageService: StorageService, private jwtHelper: JwtHelperService) {
   }
 
   public loadConfig(): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
-      if (!await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise()) {
+      const tokens = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise();
+
+      if (!tokens) {
         resolve(true);
         return;
       }
 
-      const tokens = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise();
       this._casTicket = tokens.casTicket;
       this._staticLoginToken = tokens.staticLoginToken;
       this._username = tokens.username;
@@ -58,10 +79,22 @@ export class UserService {
       }
 
       this.authorizeApiService.getValidateStaticLoginToken(this._username, this._staticLoginToken).subscribe(response => {
-        this._isLoggedIn = response.status === 'STATUS:SUCCESSFUL' && response.step === 'AUTHENTICATE_STATIC';
-        resolve(true);
+        this.isLoggedIn = response.status === 'STATUS:SUCCESSFUL' && response.step === 'AUTHENTICATE_STATIC';
+        resolve(this.isLoggedIn);
       });
     });
+  }
+
+  public logout(): void {
+    this.isLoggedIn = false;
+  }
+
+  public decodeToken(): ILoginSerialized {
+    if (!this.staticLoginToken) {
+      return null;
+    }
+
+    return this.jwtHelper.decodeToken(this.staticLoginToken);
   }
 
   public authenticateThroughCas(token: string): Promise<boolean> {
@@ -69,12 +102,11 @@ export class UserService {
       const data = await this.authorizeApiService.getAuthorizationForToken(token).toPromise();
 
       if (data.status === 'STATUS:SUCCESSFUL') {
-        this._isLoggedIn = true;
         this._casTicket = data.payload.casTicket;
-        this.persistTokens();
+        this.isLoggedIn = true;
         resolve(true);
       } else {
-        this._isLoggedIn = false;
+        this.isLoggedIn = false;
         resolve(false);
       }
     });
@@ -90,13 +122,12 @@ export class UserService {
       }).toPromise();
 
       if (data.status === 'STATUS:SUCCESSFUL') {
-        this._isLoggedIn = true;
         this._staticLoginToken = data.payload.token;
         this._username = username;
-        this.persistTokens();
+        this.isLoggedIn = true;
         resolve(true);
       } else {
-        this._isLoggedIn = false;
+        this.isLoggedIn = false;
         resolve(false);
       }
     });
@@ -104,6 +135,18 @@ export class UserService {
 
   public hashPassword(username: string, password: string): string {
     return this.sha1(`${username}|${password}`);
+  }
+
+  public isAuthorizedFor(authorization: USER_AUTHORIZATION): boolean {
+    if (!this.staticLoginTokenContent) {
+      return false;
+    }
+
+    return this.staticLoginTokenContent.userAuthorizations.find(value => value === authorization);
+  }
+
+  private deleteTokens(): void {
+    this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).subscribe();
   }
 
   private persistTokens(): void {

@@ -1,5 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { AbstractQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_abstract';
 import { Observable } from 'rxjs';
 import { DB_NAME, DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { IndexedDbService } from './indexed.db.service';
@@ -24,6 +25,10 @@ export class StorageService {
   }
 
   public create(table: DB_TABLE, key: string | STORAGE_KEY, value: any): Observable<any> {
+    if (value instanceof AbstractQuestionGroup) {
+      value = value.serialize();
+    }
+
     return this.indexedDbService.put(table, {
       id: this.formatKey(key),
       value,

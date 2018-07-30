@@ -10,9 +10,7 @@ import { DefaultSettings } from '../../../../lib/default.settings';
 })
 export class QuizApiService {
 
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) { }
 
   public QUIZ_STATUS_URL(quizName: string): string {
     return `${DefaultSettings.httpApiEndpoint}/quiz/status/${quizName}`;
@@ -82,6 +80,14 @@ export class QuizApiService {
     return `${DefaultSettings.httpApiEndpoint}/quiz/upload`;
   }
 
+  public QUIZ_EXPIRY_GET_URL(): string {
+    return `${DefaultSettings.httpApiEndpoint}/expiry-quiz/`;
+  }
+
+  public QUIZ_EXPIRY_POST_URL(): string {
+    return `${DefaultSettings.httpApiEndpoint}/expiry-quiz/quiz`;
+  }
+
   public getQuizStatus(quizName): Observable<IMessage> {
     return this.http.get<IMessage>(this.QUIZ_STATUS_URL(quizName));
   }
@@ -148,5 +154,21 @@ export class QuizApiService {
 
   public postQuizUpload(formData: FormData): Observable<IMessage> {
     return this.http.post<IMessage>(this.QUIZ_UPLOAD_POST_URL(), formData);
+  }
+
+  public getExpiryQuiz(): Observable<IMessage> {
+    return this.http.get<IMessage>(this.QUIZ_EXPIRY_GET_URL());
+  }
+
+  public postExpiryQuiz(data: object): Observable<IMessage> {
+    return this.http.post<IMessage>(this.QUIZ_EXPIRY_POST_URL(), data);
+  }
+
+  public postInitExpiryQuiz(data: object): Observable<IMessage> {
+    return this.http.post<IMessage>(this.QUIZ_EXPIRY_INIT_POST_URL(), data);
+  }
+
+  private QUIZ_EXPIRY_INIT_POST_URL(): string {
+    return `${DefaultSettings.httpApiEndpoint}/expiry-quiz/init`;
   }
 }

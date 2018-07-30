@@ -6,7 +6,7 @@
   <div class="container-fluid">
     <div class="row flex-sm-nowrap h-100">
       <div class="footer-bar-wrapper flex-grow-0 flex-shrink-0 p-0 relative">
-        <app-footer-bar [footerElements]="getFooterBarElements()"></app-footer-bar>
+        <app-footer-bar [footerElementEmitter]="getFooterBarElements()"></app-footer-bar>
         <div class="d-none d-md-block">
           <router-outlet name="additionalData-md"
                          class="d-none d-md-block"></router-outlet>

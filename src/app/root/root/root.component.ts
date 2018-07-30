@@ -1,5 +1,5 @@
 import { isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as introJs from 'intro.js';
@@ -11,6 +11,7 @@ import { I18nService } from '../../service/i18n/i18n.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { UserService } from '../../service/user/user.service';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 // Update global window.* object interface (https://stackoverflow.com/a/12709880/7992104)
@@ -53,15 +54,17 @@ export class RootComponent implements OnInit, AfterViewInit {
     private translateService: TranslateService,
     private router: Router,
     private storageService: StorageService,
+    private userService: UserService,
   ) {
     this.themesService.updateCurrentlyUsedTheme();
   }
 
-  public getFooterBarElements(): Array<IFooterBarElement> {
+  public getFooterBarElements(): EventEmitter<Array<IFooterBarElement>> {
     return this.footerBarService.footerElements;
   }
 
   public ngOnInit(): void {
+    this.userService.loadConfig();
     this.router.events.subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
         this._isLoading = true;

@@ -1,16 +1,16 @@
 <div class="row">
   <div class="text-light col-12">
-    <h4>Organize members in teams</h4>
+    <h4>{{'component.membergroup-manager.title' | translate}}</h4>
 
     <div class="row">
       <div class="col-12 col-sm-5">
         <form>
           <div class="form-group">
-            <label for="max-users-per-group">Max users per team</label>
+            <label for="max-users-per-group">{{'component.membergroup-manager.max-users' | translate}}</label>
             <input type="number"
                    class="form-control"
                    id="max-users-per-group"
-                   placeholder="Max users per group"
+                   [placeholder]="'component.membergroup-manager.max-users' | translate"
                    [ngModelOptions]="{standalone: true}"
                    [(ngModel)]="maxMembersPerGroup"/>
 
@@ -19,7 +19,7 @@
       </div>
 
       <div class="col-12 col-sm-7 mb-2">
-        <label class="d-block">Add users automatically to teams</label>
+        <label class="d-block">{{'component.membergroup-manager.autojoin-to-team' | translate}}</label>
         <label class="btn pointer mb-0"
                [class.btn-success]="autoJoinToGroup"
                [class.btn-danger]="!autoJoinToGroup">
@@ -40,10 +40,10 @@
     <div class="input-group">
       <input type="text"
              class="form-control"
-             placeholder="Add member group"
+             [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
              (keyup.enter)="addMemberGroup()"
              [(ngModel)]="memberGroupName"
-             aria-label="Add member group"
+             [attr.aria-label]="'component.membergroup-manager.create-team-placeholder' | translate"
              aria-describedby="add-member-group">
 
       <div class="input-group-append">
@@ -52,16 +52,16 @@
                 (click)="addMemberGroup()"
                 [class.disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length"
                 [disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length">
-          <span>Add a new team</span>
+          <span>{{'component.membergroup-manager.create-team' | translate}}</span>
         </button>
       </div>
     </div>
 
-    <h6 class="mt-4">Currently added teams:</h6>
-    <p *ngIf="!memberGroups.length">No teams added yet</p>
+    <h6 class="mt-4">{{'component.membergroup-manager.current-teams' | translate}}</h6>
+    <p *ngIf="!memberGroups.length">{{'component.membergroup-manager.no-current-teams' | translate}}</p>
     <ul *ngFor="let group of memberGroups"
         class="list-unstyled">
-      <li class="border-bottom p-2 mx-2">
+      <li class="border-bottom p-2">
         <span>{{group}}</span>
         <span class="pointer float-right"
               (click)="removeMemberGroup(group)"><i class="fas fa-trash"></i></span>

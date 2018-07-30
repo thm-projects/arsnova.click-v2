@@ -14,6 +14,7 @@
        [class.error]="elem.selectable && !elem.isActive"
        [id]="elem.id"
        [routerLink]="getLinkTarget(elem)"
+       [queryParams]="getQueryParams(elem)"
        [title]="elem.textName | translate"
        [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
        (click)="toggleSetting(elem)">

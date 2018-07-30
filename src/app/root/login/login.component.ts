@@ -20,6 +20,12 @@ export class LoginComponent implements OnInit {
     return this._authorizationFailed;
   }
 
+  private _isLoading = true;
+
+  get isLoading(): boolean {
+    return this._isLoading;
+  }
+
   private return = '';
 
   constructor(
@@ -29,13 +35,20 @@ export class LoginComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
   ) {
-    this.userService.isLoggedIn = false;
+    this.userService.logout();
     this.headerLabelService.headerLabel = 'Login';
     this.footerBarService.replaceFooterElements([]);
   }
 
   public ngOnInit(): void {
-    this.route.queryParams.subscribe(params => this.return = params['return'] || '/');
+    this.route.queryParams.subscribe(params => {
+      if (params['logout']) {
+        this.router.navigate(['/']);
+        return;
+      }
+      this._isLoading = false;
+      this.return = params['return'] || '/';
+    });
   }
 
   public async login(): Promise<void> {

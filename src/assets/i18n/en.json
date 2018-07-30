@@ -57,6 +57,10 @@
         "enable_cas_login": "Enable CAS Login",
         "global_leaderboard": "Global Leaderboard",
         "member_group": "Member Groups",
+        "edit-i18n": "Edit i18n",
+        "login": "Login",
+        "logout": "Logout",
+        "save_quiz": "Save Quiz",
         "description": {
           "qr-code": "Attendees can scan the QR code via their mobile devices to join the quiz.",
           "sound": "Set the sound for the background music or the countdown here.",
@@ -199,6 +203,10 @@
           "connected": "connected",
           "not_connected": "disconnected"
         },
+        "indexedDb_status": {
+          "writable": "writable",
+          "non_writable": "not writable"
+        },
         "localStorage_status": {
           "writable": "writable",
           "non_writable": "not writable"
@@ -290,6 +298,15 @@
         "nickname_input": "Here you can enter a name, which is different from the other players.",
         "choose_selectable_nick": "You can select one of the available nicknames from this list."
       }
+    },
+    "membergroup-manager": {
+      "title": "Organize members in Teams",
+      "max-users": "Max users per Team",
+      "autojoin-to-team": "Add users automatically to Teams",
+      "create-team-placeholder": "Enter a Team name here...",
+      "create-team": "Add Team",
+      "current-teams": "Currently added Teams:",
+      "no-current-teams": "No Teams added yet"
     },
     "hashtag_management": {
       "enter_quiz_name": "Enter the quiz name here",
@@ -412,6 +429,7 @@
       "no_nicks_selected": "No nicknames selected. All nicknames are allowed.",
       "block_illegal_nicks": "Block inappropriate nicknames",
       "restrict_to_cas": "Restrict to CAS users (THM University only)",
+      "filter": "Enter a search text here...",
       "category": {
         "disney": "Disney",
         "science": "Science",

@@ -8,6 +8,7 @@ export declare interface IFooterBarElement {
   selectable: boolean;
   showIntro: boolean;
   linkTarget?: Function | Array<string> | string;
+  queryParams?: object;
   onClickCallback?: Function;
   restoreClickCallback?: Function;
   isActive?: Observable<boolean> | boolean;

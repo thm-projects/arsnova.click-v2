@@ -9,6 +9,7 @@ export const DefaultSettings = {
   httpLibEndpoint: environmentData.httpLibEndpoint,
   serverEndpoint: environmentData.serverEndpoint,
   wsApiEndpoint: environmentData.wsApiEndpoint,
+  jwtSecret: 'arsnova.click-v2',
   defaultQuizSettings: {
     answers: {
       answerText: '',
@@ -56,7 +57,7 @@ export const DefaultSettings = {
       restrictToCasLogin: false,
       selectedNicks: [],
     },
-    theme: 'theme-Material',
+    theme: 'theme-SchroedelAktuell',
     readingConfirmationEnabled: true,
     showResponseProgress: true,
     confidenceSliderEnabled: true,

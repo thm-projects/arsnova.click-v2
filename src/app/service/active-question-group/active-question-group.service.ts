@@ -3,7 +3,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { Subscription } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { StorageService } from '../storage/storage.service';
@@ -82,12 +82,18 @@ export class ActiveQuestionGroupService {
     }
   }
 
-  public loadData(): Subscription {
-    return this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).subscribe(parsedObject => {
+  public loadData(): Observable<IQuestionGroup> {
+    if (this._activeQuestionGroup) {
+      return of(this._activeQuestionGroup);
+    }
+
+    const data = this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP);
+    data.subscribe(parsedObject => {
       if (parsedObject) {
         this._activeQuestionGroup = questionGroupReflection[parsedObject.TYPE](parsedObject);
       }
     });
+    return data;
   }
 
   private dec2hex(dec): string {

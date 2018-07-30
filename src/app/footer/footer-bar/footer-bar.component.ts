@@ -1,7 +1,5 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { isPlatformServer } from '@angular/common';
+import { Component, EventEmitter, Inject, Input, PLATFORM_ID } from '@angular/core';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -13,7 +11,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   templateUrl: './footer-bar.component.html',
   styleUrls: ['./footer-bar.component.scss'],
 })
-export class FooterBarComponent implements OnInit, OnDestroy {
+export class FooterBarComponent {
   public static TYPE = 'FooterBarComponent';
 
   private _footerElements: Array<IFooterBarElement> = [];
@@ -22,9 +20,8 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     return this._footerElements;
   }
 
-  @Input() set footerElements(value: Array<IFooterBarElement>) {
-    this.hasRightScrollElement = value.length > 1;
-    this._footerElements = value;
+  @Input() set footerElementEmitter(value: EventEmitter<Array<IFooterBarElement>>) {
+    value.subscribe(elements => this._footerElements = elements);
   }
 
   private _footerElemIndex = 1;
@@ -47,11 +44,8 @@ export class FooterBarComponent implements OnInit, OnDestroy {
     this._hasRightScrollElement = value;
   }
 
-  private _routerSubscription: Subscription;
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private router: Router,
     private footerBarService: FooterBarService,
     private currentQuizService: CurrentQuizService,
     private trackingService: TrackingService,
@@ -59,27 +53,12 @@ export class FooterBarComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public ngOnInit(): void {
-    this._routerSubscription = this.router.events.subscribe((val) => {
-      if (isPlatformBrowser(this.platformId)) {
-        const navbarFooter = document.getElementById('navbar-footer-container');
-        if (navbarFooter) {
-          navbarFooter.scrollLeft = 0;
-        }
-      }
-      this.footerElemIndex = 1;
-      if (val.hasOwnProperty('url')) {
-        this.footerBarService.footerElemTheme.linkTarget = val['url'].indexOf('lobby') > -1 ? '/quiz/flow/theme' : '/themes';
-      }
-    });
-  }
-
-  public ngOnDestroy(): void {
-    this._routerSubscription.unsubscribe();
-  }
-
   public getLinkTarget(elem: IFooterBarElement): Function | string {
     return typeof elem.linkTarget === 'function' ? elem.linkTarget(elem) : elem.linkTarget;
+  }
+
+  public getQueryParams(elem: IFooterBarElement): object {
+    return elem.queryParams;
   }
 
   public toggleSetting(elem: IFooterBarElement): void {

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { USER_AUTHORIZATION } from '../../shared/enums';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -13,7 +14,7 @@ export class StaticLoginService implements CanActivate {
 
     await this.userService.loadConfig();
 
-    if (this.userService.isLoggedIn) {
+    if (this.isAllowedToProceed(route)) {
       return true;
     }
 
@@ -23,5 +24,20 @@ export class StaticLoginService implements CanActivate {
       },
     });
     return false;
+  }
+
+  private isAllowedToProceed(route): boolean {
+    if (!this.userService.isLoggedIn) {
+      return false;
+    }
+
+    switch (route.routeConfig.path) {
+      case 'i18n-manager':
+        return this.userService.isAuthorizedFor(USER_AUTHORIZATION.EDIT_I18N);
+      case 'quiz-manager':
+        return this.userService.isAuthorizedFor(USER_AUTHORIZATION.CREATE_EXPIRED_QUIZ);
+      default:
+        return true;
+    }
   }
 }

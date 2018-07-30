@@ -57,6 +57,10 @@ export class FooterbarElement implements IFooterBarElement {
     this._isActive = value;
   }
 
+  get queryParams(): object {
+    return this._queryParams;
+  }
+
   private _restoreOnClickCallback: Function;
   private readonly _id: string;
   private readonly _iconClass: string;
@@ -64,8 +68,9 @@ export class FooterbarElement implements IFooterBarElement {
   private readonly _textName: string;
   private readonly _selectable: boolean;
   private readonly _showIntro: boolean;
+  private readonly _queryParams: object;
 
-  constructor({ id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget }: IFooterBarElement, onClickCallback?: Function) {
+  constructor({ id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget, queryParams }: IFooterBarElement, onClickCallback?: Function) {
     this._id = id;
     this._iconClass = iconClass;
     this._textClass = textClass;
@@ -81,6 +86,7 @@ export class FooterbarElement implements IFooterBarElement {
     }
 
     this._linkTarget = linkTarget;
+    this._queryParams = queryParams;
     this._onClickCallback = onClickCallback;
   }
 
