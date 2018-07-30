@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
@@ -63,7 +63,7 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
     if (document) {
-      document.getElementById('upload-SESSION').click();
+      document.getElementById('upload-session').click();
     }
   });
   public footerElemHashtagManagement: IFooterBarElement = new FooterbarElement({
@@ -216,8 +216,17 @@ export class FooterBarService {
     showIntro: false,
   }, function (): void {
   });
+  public footerElemSaveQuiz: IFooterBarElement = new FooterbarElement({
+    id: 'saveQuiz',
+    iconClass: 'fas fa-save',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.save_quiz',
+    selectable: true,
+    showIntro: false,
+  }, function (): void {
+  });
   public footerElemExport: IFooterBarElement = new FooterbarElement({
-    id: 'startQuiz',
+    id: 'exportQuiz',
     iconClass: 'fas fa-download',
     textClass: 'footerElementText',
     textName: 'component.leaderboard.export',
@@ -281,10 +290,43 @@ export class FooterBarService {
     linkTarget: '/quiz/manager/memberGroup',
   }, function (): void {
   });
+  public footerElemLogin: IFooterBarElement = new FooterbarElement({
+    id: 'login',
+    iconClass: 'fas fa-sign-in-alt',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.login',
+    selectable: false,
+    showIntro: false,
+    linkTarget: '/login',
+  }, function (): void {
+  });
+  public footerElemLogout: IFooterBarElement = new FooterbarElement({
+    id: 'logout',
+    iconClass: 'fas fa-sign-out-alt',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.logout',
+    selectable: false,
+    showIntro: false,
+    linkTarget: '/login',
+    queryParams: {
+      logout: true,
+    },
+  }, function (): void {
+  });
+  public footerElemEditI18n: IFooterBarElement = new FooterbarElement({
+    id: 'edit-i18n',
+    iconClass: 'fas fa-language',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.edit-i18n',
+    selectable: false,
+    showIntro: false,
+    linkTarget: '/i18n-manager',
+  }, function (): void {
+  });
 
-  private _footerElements: Array<IFooterBarElement> = [];
+  private _footerElements = new EventEmitter<Array<IFooterBarElement>>();
 
-  get footerElements(): Array<IFooterBarElement> {
+  get footerElements(): EventEmitter<Array<IFooterBarElement>> {
     return this._footerElements;
   }
 
@@ -292,7 +334,7 @@ export class FooterBarService {
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
-    this._footerElements = elements;
+    this._footerElements.next(elements);
   }
 
 }

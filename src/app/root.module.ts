@@ -126,6 +126,13 @@ export const appRoutes: Routes = [
     NgbModule.forRoot(),
     Angulartics2Module.forRoot([ArsnovaClickAngulartics2Piwik]),
     I18nManagerModule,
+    JwtModule.forRoot({
+      jwtOptionsProvider: {
+        provide: JWT_OPTIONS,
+        useFactory: jwtOptionsFactory,
+        deps: [StorageService],
+      },
+    }),
   ],
   providers: [
     /* {

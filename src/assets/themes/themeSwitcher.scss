@@ -5,6 +5,14 @@
   transition: background-color 800ms linear;
 }
 
+@mixin bgAnimationEffect($theme) {
+  transition: background-color 800ms linear;
+  animation-name: #{$theme}_colorChangingBg;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-duration: 4s;
+}
+
 @mixin introjs($map) {
   .introjs-helperLayer {
     background-color: map-get($map, "bg-introjs-helper_layer");
@@ -510,6 +518,17 @@
       #waiting_for_players_notifier {
         color: map-get($map, "fg-lobby-waiting-for-players-notifier");
       }
+      @keyframes #{$theme}_colorChangingBg {
+        0% {
+          background-color: map-get($map, colorChangingBg0);
+        }
+        50% {
+          background-color: map-get($map, colorChangingBg50);
+        }
+        100% {
+          background-color: map-get($map, colorChangingBg100);
+        }
+      }
       .own-nick {
         animation: colorChangingOwnNick 5s infinite;
       }
@@ -591,138 +610,138 @@
       }
       @keyframes #{$theme}_colorChangingArs {
         0% {
-          color: white;
+          color: map-get($map, colorChangingArs0);
         }
         25% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingArs25);
         }
         50% {
-          color: white;
+          color: map-get($map, colorChangingArs50);
         }
         75% {
-          color: white;
+          color: map-get($map, colorChangingArs75);
         }
         100% {
-          color: white;
+          color: map-get($map, colorChangingArs100);
         }
       }
       @keyframes #{$theme}_colorChangingNova {
         0% {
-          color: white;
+          color: map-get($map, colorChangingNova0);
         }
         25% {
-          color: white;
+          color: map-get($map, colorChangingNova25);
         }
         50% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingNova50);
         }
         75% {
-          color: white;
+          color: map-get($map, colorChangingNova75);
         }
         100% {
-          color: white;
+          color: map-get($map, colorChangingNova100);
         }
       }
       @keyframes #{$theme}_colorChangingDot {
         0% {
-          color: white;
+          color: map-get($map, colorChangingDot0);
         }
         25% {
-          color: white;
+          color: map-get($map, colorChangingDot25);
         }
         50% {
-          color: white;
+          color: map-get($map, colorChangingDot50);
         }
         75% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingDot75);
         }
         100% {
-          color: white;
+          color: map-get($map, colorChangingDot100);
         }
       }
       @keyframes #{$theme}_colorChangingClick {
         0% {
-          color: white;
+          color: map-get($map, colorChangingClick0);
         }
         25% {
-          color: white;
+          color: map-get($map, colorChangingClick25);
         }
         50% {
-          color: white;
+          color: map-get($map, colorChangingClick50);
         }
         75% {
-          color: white;
+          color: map-get($map, colorChangingClick75);
         }
         100% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingClick100);
         }
       }
       @-webkit-keyframes #{$theme}_colorChangingArs {
         0% {
-          color: white;
+          color: map-get($map, colorChangingArs0);
         }
         25% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingArs25);
         }
         50% {
-          color: white;
+          color: map-get($map, colorChangingArs50);
         }
         75% {
-          color: white;
+          color: map-get($map, colorChangingArs75);
         }
         100% {
-          color: white;
+          color: map-get($map, colorChangingArs100);
         }
       }
       @-webkit-keyframes #{$theme}_colorChangingNova {
         0% {
-          color: white;
+          color: map-get($map, colorChangingNova0);
         }
         25% {
-          color: white;
+          color: map-get($map, colorChangingNova25);
         }
         50% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingNova50);
         }
         75% {
-          color: white;
+          color: map-get($map, colorChangingNova75);
         }
         100% {
-          color: white;
+          color: map-get($map, colorChangingNova100);
         }
       }
       @-webkit-keyframes #{$theme}_colorChangingDot {
         0% {
-          color: white;
+          color: map-get($map, colorChangingDot0);
         }
         25% {
-          color: white;
+          color: map-get($map, colorChangingDot25);
         }
         50% {
-          color: white;
+          color: map-get($map, colorChangingDot50);
         }
         75% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingDot75);
         }
         100% {
-          color: white;
+          color: map-get($map, colorChangingDot100);
         }
       }
       @-webkit-keyframes #{$theme}_colorChangingClick {
         0% {
-          color: white;
+          color: map-get($map, colorChangingClick0);
         }
         25% {
-          color: white;
+          color: map-get($map, colorChangingClick25);
         }
         50% {
-          color: white;
+          color: map-get($map, colorChangingClick50);
         }
         75% {
-          color: white;
+          color: map-get($map, colorChangingClick75);
         }
         100% {
-          color: map-get($map, "input-background-color");
+          color: map-get($map, colorChangingClick100);
         }
       }
       .button-markdown-shadow, .button-markdown {
