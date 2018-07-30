@@ -1,4 +1,5 @@
-import { EventEmitter, Injectable } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ILoginSerialized } from 'arsnova-click-v2-types/src/common';
 import { DB_TABLE, STORAGE_KEY, USER_AUTHORIZATION } from '../../shared/enums';
@@ -57,11 +58,21 @@ export class UserService {
     return this._staticLoginToken;
   }
 
-  constructor(private authorizeApiService: AuthorizeApiService, private storageService: StorageService, private jwtHelper: JwtHelperService) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private authorizeApiService: AuthorizeApiService,
+    private storageService: StorageService,
+    private jwtHelper: JwtHelperService,
+  ) {
   }
 
   public loadConfig(): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
+      if (isPlatformServer(this.platformId)) {
+        resolve(true);
+        return;
+      }
+
       const tokens = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise();
 
       if (!tokens) {
