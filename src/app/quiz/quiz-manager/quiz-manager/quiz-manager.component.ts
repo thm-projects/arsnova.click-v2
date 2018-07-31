@@ -53,7 +53,7 @@ export class QuizManagerComponent implements OnDestroy {
       this.footerBarService.footerElemSound,
     ]);
 
-    this.activeQuestionGroupService.loadData().subscribe(questionGroup => {
+    this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
       if (!(
         questionGroup instanceof AbstractQuestionGroup
       )) {
