@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { RouterModule, Routes } from '@angular/router';
-import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterModule } from '../../footer/footer.module';
 import { LivePreviewModule } from '../../live-preview/live-preview.module';
 import { MarkdownModule } from '../../markdown/markdown.module';
@@ -23,61 +22,42 @@ const quizManagerRoutes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: 'overview',
-  },
-  {
-    path: '',
-    component: AdditionalDataComponent,
-    outlet: 'additionalData-xs',
-  },
-  {
-    path: '',
-    component: AdditionalDataComponent,
-    outlet: 'additionalData-md',
-  },
-  {
+  }, {
     path: 'overview',
     component: QuizManagerComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'memberGroup',
     component: MemberGroupManagerComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'nicknames',
     component: NicknameManagerComponent,
     data: {},
-  },
-  {
+  }, {
     path: 'sound',
     component: SoundManagerComponent,
     data: {},
-  },
-  {
+  }, {
     path: ':questionIndex',
     children: [
       {
         path: 'overview',
         component: QuizManagerDetailsOverviewComponent,
         data: {},
-      },
-      {
+      }, {
         path: 'questionText',
         component: QuestiontextComponent,
         data: {},
-      },
-      {
+      }, {
         path: 'answeroptions',
         component: AnsweroptionsComponent,
         data: {},
-      },
-      {
+      }, {
         path: 'countdown',
         component: CountdownComponent,
         data: {},
-      },
-      {
+      }, {
         path: 'questionType',
         component: QuestiontypeComponent,
         data: {},
@@ -88,19 +68,10 @@ const quizManagerRoutes: Routes = [
 
 @NgModule({
   imports: [
-    FooterModule,
-    FormsModule,
-    SharedModule,
-    QuizManagerDetailsModule,
-    MarkdownModule,
-    LivePreviewModule,
-    RouterModule.forChild(quizManagerRoutes),
+    FooterModule, FormsModule, SharedModule, QuizManagerDetailsModule, MarkdownModule, LivePreviewModule, RouterModule.forChild(quizManagerRoutes),
   ],
   declarations: [
-    QuizManagerComponent,
-    NicknameManagerComponent,
-    SoundManagerComponent,
-    MemberGroupManagerComponent,
+    QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent, MemberGroupManagerComponent,
   ],
 })
 export class QuizManagerModule {

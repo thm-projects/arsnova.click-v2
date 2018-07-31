@@ -37,6 +37,8 @@ declare interface IServerTarget {
 })
 export class RootComponent implements OnInit, AfterViewInit {
   public static TYPE = 'RootComponent';
+  public isInQuizManager = false;
+
   private _isLoading = true;
 
   get isLoading(): boolean {
@@ -71,6 +73,8 @@ export class RootComponent implements OnInit, AfterViewInit {
       } else if (event instanceof RouteConfigLoadEnd) {
         this._isLoading = false;
       }
+
+      this.isInQuizManager = this.router.isActive('/quiz/manager/overview', true);
     });
   }
 

@@ -3,21 +3,19 @@
     <app-header></app-header>
   </div>
 
-  <div class="container-fluid">
-    <div class="row flex-sm-nowrap h-100">
-      <div class="footer-bar-wrapper flex-grow-0 flex-shrink-0 p-0 relative">
+  <div class="container-fluid d-flex flex-column flex-sm-row flex-sm-wrap position-relative p-0">
+    <div class="row flex-sm-nowrap mx-0 mx-md-0"
+         [class.mx-sm-auto]="isInQuizManager">
+      <div class="footer-bar-wrapper flex-grow-0 flex-shrink-0 p-0 w-100">
         <app-footer-bar [footerElementEmitter]="getFooterBarElements()"></app-footer-bar>
-        <div class="d-none d-md-block">
-          <router-outlet name="additionalData-md"
-                         class="d-none d-md-block"></router-outlet>
-        </div>
+        <app-additional-data *ngIf="isInQuizManager"></app-additional-data>
       </div>
-
-      <main id="content-container"
-            class="container">
-        <router-outlet></router-outlet>
-      </main>
     </div>
+
+    <main id="content-container"
+          class="container">
+      <router-outlet></router-outlet>
+    </main>
   </div>
 </div>
 

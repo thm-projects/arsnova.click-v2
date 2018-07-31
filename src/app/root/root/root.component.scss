@@ -11,13 +11,16 @@
   .container {
     &#content-container {
       @include media-breakpoint-down(xs) {
-        top: calc(10vh + 50px);
-        position: absolute;
         z-index: 1040;
       }
       @include media-breakpoint-up(sm) {
-        height: 90vh;
         top: 20vh;
+      }
+      @include media-breakpoint-up(md) {
+        height: 90vh;
+      }
+      @include media-breakpoint-only(sm) {
+        height: 70vh;
       }
       @include media-breakpoint-only(md) {
         max-width: calc(#{map_get($container-max-widths, md)} - 20vw);
@@ -35,7 +38,6 @@
 .footer-bar-wrapper {
   @include media-breakpoint-only(xs) {
     width: 100%;
-    height: 50px;
   }
 }
 

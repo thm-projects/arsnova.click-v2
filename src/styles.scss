@@ -84,10 +84,6 @@ p {
   overflow: auto;
 }
 
-.relative {
-  position: relative;
-}
-
 button:disabled {
   cursor: not-allowed !important;
 }
@@ -95,15 +91,6 @@ button:disabled {
 img[alt*="emoji_"] {
   height: 24px;
   width: 24px;
-}
-
-#header {
-}
-
-#content {
-}
-
-#footer {
 }
 
 @mixin placeholder-align-center {

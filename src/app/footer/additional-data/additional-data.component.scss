@@ -2,6 +2,15 @@
 
 #quizSummaryHeader {
 
+  @include media-breakpoint-down(sm) {
+    max-width: 540px;
+    margin: auto;
+  }
+
+  @include media-breakpoint-down(xs) {
+    width: 100%;
+  }
+
   @include media-breakpoint-up(md) {
     opacity: 0.95;
     position: absolute;

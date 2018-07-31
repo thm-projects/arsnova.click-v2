@@ -1,6 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, HostListener, Inject } from '@angular/core';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { AbstractQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_abstract';
+import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -29,15 +31,19 @@ export class AdditionalDataComponent {
 
   private readonly _quizUrl: string;
 
-  constructor(
-    @Inject(DOCUMENT) readonly document,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
-    private trackingService: TrackingService,
-  ) {
-    this.questionGroupItem = activeQuestionGroupService.activeQuestionGroup;
-    if (this.questionGroupItem) {
-      this._quizUrl = encodeURI(`${document.location.origin}/quiz/${this.questionGroupItem.hashtag}`);
-    }
+  constructor(@Inject(DOCUMENT) readonly document, public activeQuestionGroupService: ActiveQuestionGroupService, private trackingService: TrackingService) {
+    this.activeQuestionGroupService.loadData().subscribe(questionGroup => {
+      if (!(
+        questionGroup instanceof AbstractQuestionGroup
+      )) {
+        questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
+      }
+
+      this.questionGroupItem = questionGroup;
+      if (this.questionGroupItem) {
+        this._quizUrl = encodeURI(`${document.location.origin}/quiz/${this.questionGroupItem.hashtag}`);
+      }
+    });
   }
 
   public switchShowMoreOrLess(): void {
