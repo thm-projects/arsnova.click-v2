@@ -27,7 +27,8 @@ import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { ITrackClickEvent, TrackingService } from '../../service/tracking/tracking.service';
-import { DB_TABLE, LANGUAGE, STORAGE_KEY } from '../../shared/enums';
+import { UserService } from '../../service/user/user.service';
+import { DB_TABLE, LANGUAGE, STORAGE_KEY, USER_AUTHORIZATION } from '../../shared/enums';
 
 @Component({
   selector: 'app-home',
@@ -101,19 +102,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private lobbyApiService: LobbyApiService,
     private storageService: StorageService,
+    private userService: UserService,
     public sharedService: SharedService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
-
-    footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemAbout,
-      this.footerBarService.footerElemTranslation,
-      this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemFullscreen,
-      this.footerBarService.footerElemHashtagManagement,
-      this.footerBarService.footerElemImport,
-    ]);
 
     headerLabelService.headerLabel = 'default';
 
@@ -127,6 +120,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.cleanUpSessionStorage();
     }
+
+    this.updateFooterElements(this.userService.isLoggedIn);
+    this.userService.loginNotifier.subscribe(isLoggedIn => {
+      this.updateFooterElements(isLoggedIn);
+    });
 
     this.connectionService.initConnection().then(() => {
       if (!this.connectionService.socket) {
@@ -156,11 +154,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this._routerSubscription = this.route.params.subscribe(async params => {
       if (!Object.keys(params).length || !params.themeId || !params.languageId) {
+        const theme = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise();
+
+        if (theme) {
+          return;
+        }
+
+        await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, DefaultSettings.defaultQuizSettings.theme).toPromise();
         this.themesService.updateCurrentlyUsedTheme();
         return;
       }
       if (isPlatformBrowser(this.platformId)) {
-        await this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise();
         await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).toPromise();
         this.themesService.updateCurrentlyUsedTheme();
       }
@@ -301,6 +305,30 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.reserveQuiz(questionGroup, routingTarget);
+  }
+
+  private updateFooterElements(isLoggedIn: boolean): void {
+    const footerElements = [
+      this.footerBarService.footerElemAbout,
+      this.footerBarService.footerElemTranslation,
+      this.footerBarService.footerElemTheme,
+      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemHashtagManagement,
+      this.footerBarService.footerElemImport,
+    ];
+
+    if (isLoggedIn) {
+      if (this.userService.isAuthorizedFor(USER_AUTHORIZATION.EDIT_I18N)) {
+        footerElements.push(this.footerBarService.footerElemEditI18n);
+      }
+      footerElements.push(this.footerBarService.footerElemLogout);
+
+    } else {
+      footerElements.push(this.footerBarService.footerElemLogin);
+
+    }
+
+    this.footerBarService.replaceFooterElements(footerElements);
   }
 
   private async reserveQuiz(questionGroup: IQuestionGroup, routingTarget: Array<string>): Promise<void> {

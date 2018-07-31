@@ -57,7 +57,7 @@ export const DefaultSettings = {
       restrictToCasLogin: false,
       selectedNicks: [],
     },
-    theme: 'theme-SchroedelAktuell',
+    theme: 'theme-Material',
     readingConfirmationEnabled: true,
     showResponseProgress: true,
     confidenceSliderEnabled: true,

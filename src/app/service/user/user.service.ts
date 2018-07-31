@@ -69,6 +69,7 @@ export class UserService {
   public loadConfig(): Promise<boolean> {
     return new Promise<boolean>(async resolve => {
       if (isPlatformServer(this.platformId)) {
+        this.isLoggedIn = false;
         resolve(true);
         return;
       }
@@ -76,6 +77,7 @@ export class UserService {
       const tokens = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise();
 
       if (!tokens) {
+        this.isLoggedIn = false;
         resolve(true);
         return;
       }
@@ -85,6 +87,7 @@ export class UserService {
       this._username = tokens.username;
 
       if (!this._staticLoginToken) {
+        this.isLoggedIn = false;
         resolve(true);
         return;
       }
