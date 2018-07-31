@@ -3,20 +3,29 @@ import { DefaultAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/an
 import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single';
 import { DefaultQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_default';
+import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
 import { Observable, of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
 
 @Injectable()
 export class CurrentQuizMockService {
-
-  public quiz: IQuestionGroup;
   public questionIndex = 0;
-
   public isOwner = new Observable<boolean>(subscriber => subscriber.next(true));
 
+  private _quiz: IQuestionGroup;
+
+  get quiz(): IQuestionGroup {
+    const quiz = JSON.parse(JSON.stringify(this._quiz.serialize()));
+    return questionGroupReflection[quiz.TYPE](quiz);
+  }
+
+  set quiz(value: IQuestionGroup) {
+    this._quiz = value;
+  }
+
   constructor(@Inject(PLATFORM_ID) private _platformId: Object) {
-    this.quiz = new DefaultQuestionGroup({
+    this._quiz = new DefaultQuestionGroup({
       hashtag: 'test',
       sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),
       questionList: [
@@ -36,7 +45,7 @@ export class CurrentQuizMockService {
   }
 
   public currentQuestion(): IQuestion {
-    return this.quiz.questionList[this.questionIndex];
+    return this._quiz.questionList[this.questionIndex];
   }
 
   public cacheQuiz(): Promise<any> {
@@ -64,7 +73,7 @@ export class CurrentQuizMockService {
   }
 
   public getVisibleQuestions(maxIndex?: number): Array<IQuestion> {
-    return this.quiz.questionList.slice(0, maxIndex || this.questionIndex + 1);
+    return this._quiz.questionList.slice(0, maxIndex || this.questionIndex + 1);
   }
 
 }

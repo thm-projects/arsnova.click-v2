@@ -133,7 +133,7 @@ describe('QuizJoinComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/']);
   })));
 
-  it('should add a cas casTicket to the casService if a casTicket is supplied',
+  it('should add a casTicket to the casService if a casTicket is supplied',
     async(inject([Router, CurrentQuizService, CasLoginService, QuizApiService, LobbyApiService], (
       router: Router,
       currentQuizService: CurrentQuizService,
