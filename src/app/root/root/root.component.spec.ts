@@ -8,6 +8,7 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
+import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
 import { HeaderComponent } from '../../header/header/header.component';
 import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
@@ -80,7 +81,7 @@ describe('RootComponent', () => {
           },
         ],
         declarations: [
-          HeaderComponent, FooterBarComponent, RootComponent,
+          HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent,
         ],
       }).compileComponents();
     }
