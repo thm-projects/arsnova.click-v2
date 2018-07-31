@@ -126,7 +126,9 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   private async getTooltipForRoute(route: string): Promise<void> {
     let hasStartedIntroJs = false;
-    const introState = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE).toPromise();
+    const introState = (
+                         await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE).toPromise()
+                       ) || {};
     if (window.innerWidth <= 768) {
       return;
     }

@@ -2,7 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
-import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionReflection } from 'arsnova-click-v2-types/src/questions/question_reflection';
 import { AbstractQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_abstract';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
@@ -23,8 +23,6 @@ import { TrackingService } from '../../../service/tracking/tracking.service';
 })
 export class QuizManagerComponent implements OnDestroy {
   public static TYPE = 'QuizManagerComponent';
-
-  public questionGroupItem: IQuestionGroup;
 
   private _selectableQuestionTypes = availableQuestionTypes;
 
@@ -62,7 +60,6 @@ export class QuizManagerComponent implements OnDestroy {
         questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
       }
 
-      this.questionGroupItem = questionGroup;
       this.footerBarService.footerElemStartQuiz.isActive = questionGroup.isValid();
     });
 
@@ -70,7 +67,7 @@ export class QuizManagerComponent implements OnDestroy {
       if (!self.isActive) {
         return;
       }
-      this.currentQuizService.quiz = this.questionGroupItem;
+      this.currentQuizService.quiz = this.activeQuestionGroupService.activeQuestionGroup;
       await this.currentQuizService.cacheQuiz();
       await this.lobbyApiService.putLobby({
         quiz: this.currentQuizService.quiz.serialize(),
