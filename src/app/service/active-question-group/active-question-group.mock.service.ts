@@ -54,4 +54,8 @@ export class ActiveQuestionGroupMockService {
   public loadData(): Observable<IQuestionGroup> {
     return of(this.activeQuestionGroup);
   }
+
+  public generatePrivateKey(): string {
+    return 'privateKey';
+  }
 }

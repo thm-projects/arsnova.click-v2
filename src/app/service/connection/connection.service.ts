@@ -1,5 +1,6 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { IMessage, IMessageStep } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
@@ -95,7 +96,7 @@ export class ConnectionService {
       return;
     }
     this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE',
+    this.sendAuthorizationMessage(hashtag, COMMUNICATION_PROTOCOL.AUTHORIZATION.AUTHENTICATE,
       await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION).toPromise());
   }
 
@@ -104,7 +105,7 @@ export class ConnectionService {
       return;
     }
     this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, 'WEBSOCKET:AUTHORIZE_AS_OWNER',
+    this.sendAuthorizationMessage(hashtag, COMMUNICATION_PROTOCOL.AUTHORIZATION.AUTHENTICATE_AS_OWNER,
       await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise());
   }
 
@@ -179,7 +180,7 @@ export class ConnectionService {
     }
   }
 
-  private sendAuthorizationMessage(hashtag: string, step: string, auth: string): void {
+  private sendAuthorizationMessage(hashtag: string, step: IMessageStep, auth: string): void {
     if (!this._socket) {
       return;
     }
@@ -191,7 +192,7 @@ export class ConnectionService {
       return;
     }
     this._socket.next({
-      step: step,
+      step,
       payload: {
         quizName: hashtag,
         webSocketAuthorization: auth,

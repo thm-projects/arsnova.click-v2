@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { LANGUAGE } from '../../shared/enums';
 import { I18nManagerApiService } from '../api/i18n-manager/i18n-manager-api.service';
 import { ProjectLoaderService } from '../project-loader/project-loader.service';
@@ -30,7 +31,7 @@ export class LanguageLoaderService {
 
   public getLangData(): void {
     this.i18nManagerService.getLangFileForProject(this.projectLoaderService.currentProject).subscribe((response: any) => {
-      if (response.status !== 'STATUS:SUCCESSFUL') {
+      if (response.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         this.projectLoaderService.connected = false;
         return;
       }
@@ -43,7 +44,7 @@ export class LanguageLoaderService {
 
   public updateProject(): void {
     this.i18nManagerService.postUpdateLangForProject(this.projectLoaderService.currentProject, this.parsedLangData).subscribe((response: any) => {
-      if (response.status !== 'STATUS:SUCCESSFUL') {
+      if (response.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         console.log(response);
       }
     });

@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMemberGroup } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -61,7 +62,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
         groupName: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).toPromise(),
         ticket: this.userService.casTicket,
       }).subscribe(data => {
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
+        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.MEMBER.ADDED) {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
             memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
           });
@@ -73,7 +74,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
         }
       }, (error) => {
         reject({
-          step: 'HTTP_ERROR',
+          step: COMMUNICATION_PROTOCOL.STATUS.FAILED,
           payload: error,
         });
       });
@@ -84,10 +85,10 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
       switch (data.step) {
-        case 'LOBBY:DUPLICATE_LOGIN':
+        case COMMUNICATION_PROTOCOL.LOBBY.DUPLICATE_LOGIN:
           this._failedLoginReason = 'plugins.splashscreen.error.error_messages.duplicate_user';
           break;
-        case 'LOBBY:ILLEGAL_NAME':
+        case COMMUNICATION_PROTOCOL.LOBBY.ILLEGAL_NAME:
           this._failedLoginReason = 'component.choose_nickname.nickname_blacklist_popup';
           break;
         default:

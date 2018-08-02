@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DefaultAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { ABCDSingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single_abcd';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
@@ -121,6 +122,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.cleanUpSessionStorage();
     }
 
+    this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).subscribe(val => {
+      if (!val) {
+        this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY, this.activeQuestionGroupService.generatePrivateKey()).subscribe();
+      }
+    });
+
     this.updateFooterElements(this.userService.isLoggedIn);
     this.userService.loginNotifier.subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
@@ -135,10 +142,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.connectionService.websocketAvailable = true;
 
         switch (data.step) {
-          case 'QUIZ:SET_ACTIVE':
+          case COMMUNICATION_PROTOCOL.QUIZ.SET_ACTIVE:
             this.sharedService.activeQuizzes.push(data.payload.quizName);
             break;
-          case 'QUIZ:SET_INACTIVE':
+          case COMMUNICATION_PROTOCOL.QUIZ.SET_INACTIVE:
             const index = this.sharedService.activeQuizzes.findIndex(name => name === data.payload.quizName);
             this.sharedService.activeQuizzes.splice(index, 1);
         }
@@ -300,10 +307,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (!await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise()) {
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY, this.activeQuestionGroupService.generatePrivateKey()).subscribe();
-    }
-
     this.reserveQuiz(questionGroup, routingTarget);
   }
 
@@ -338,7 +341,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       serverPassword: this._serverPassword,
     }).subscribe(async value => {
 
-      if (value.status === 'STATUS:SUCCESSFUL') {
+      if (value.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
         this.activeQuestionGroupService.persist();
 
@@ -363,11 +366,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       } else {
 
-        if (value.step === 'QUIZ:TOO_MUCH_ACTIVE_QUIZZES') {
+        if (value.step === COMMUNICATION_PROTOCOL.QUIZ.TOO_MUCH_ACTIVE_QUIZZES) {
           this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
-        } else if (value.step === 'QUIZ:SERVER_PASSWORD_REQUIRED') {
+        } else if (value.step === COMMUNICATION_PROTOCOL.QUIZ.SERVER_PASSWORD_REQUIRED) {
           this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
-        } else if (value.step === 'QUIZ:INSUFFICIENT_PERMISSIONS') {
+        } else if (value.step === COMMUNICATION_PROTOCOL.AUTHORIZATION.INSUFFICIENT_PERMISSIONS) {
           this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
         } else {
           console.log(value);
@@ -430,15 +433,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private selectQuizAsDefaultQuiz(quizName: string): void {
     this.quizApiService.getQuizStatus(quizName).subscribe(value => {
-      if (value.status === 'STATUS:SUCCESSFUL') {
+      if (value.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         switch (value.step) {
-          case 'QUIZ:EXISTS':
+          case COMMUNICATION_PROTOCOL.QUIZ.EXISTS:
             this.canAddQuiz = false;
             this.canJoinQuiz = false;
             this.passwordRequired = false;
             this.canStartQuiz = false;
             break;
-          case 'QUIZ:AVAILABLE':
+          case COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE:
             this.canAddQuiz = false;
             this.canJoinQuiz = true;
             this.passwordRequired = false;
@@ -449,7 +452,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.casService.quizName = quizName;
             }
             break;
-          case 'QUIZ:UNDEFINED':
+          case COMMUNICATION_PROTOCOL.QUIZ.UNDEFINED:
             this.canAddQuiz = true;
             this.canJoinQuiz = false;
             this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;

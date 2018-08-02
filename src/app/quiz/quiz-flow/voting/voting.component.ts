@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { MultipleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_multiple';
 import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single';
 import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_freetext';
@@ -127,9 +128,8 @@ export class VotingComponent implements OnInit, OnDestroy {
     )) {
       return;
     }
-    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) : this.toggleSelectedAnswers() ? this._selectedAnswers = [index]
-                                                                                                                               : this._selectedAnswers.push(
-        index);
+    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) : this.toggleSelectedAnswers() ? this._selectedAnswers
+      = [index] : this._selectedAnswers.push(index);
     if (this.toggleSelectedAnswers()) {
       this.sendResponses();
     }
@@ -154,7 +154,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     this.questionTextService.changeMultiple(this.currentQuizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
 
     this.quizApiService.getQuizStartTime(this.currentQuizService.quiz.hashtag).subscribe((data) => {
-      if (data.status === 'STATUS:SUCCESSFUL' && data.payload.startTimestamp) {
+      if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.payload.startTimestamp) {
 
         if (this.currentQuizService.currentQuestion().timer) {
           this.countdown = new Countdown(this.currentQuizService.currentQuestion(), data.payload.startTimestamp);
@@ -188,7 +188,7 @@ export class VotingComponent implements OnInit, OnDestroy {
       nickname: this.attendeeService.getOwnNick(),
       value: this._selectedAnswers,
     }).subscribe((data: IMessage) => {
-      if (data.status !== 'STATUS:SUCCESSFUL') {
+      if (data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         console.log(data);
       }
     });
@@ -197,18 +197,18 @@ export class VotingComponent implements OnInit, OnDestroy {
   private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
-        case 'MEMBER:UPDATED_RESPONSE':
+        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
-        case 'QUIZ:RESET':
+        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
           this.attendeeService.clearResponses();
           this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
-        case 'LOBBY:CLOSED':
+        case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
           this.router.navigate(['/']);
           break;
-        case 'QUIZ:STOP':
+        case COMMUNICATION_PROTOCOL.QUIZ.STOP:
           this._selectedAnswers = [];
           this.router.navigate(['/quiz', 'flow', 'results']);
           break;

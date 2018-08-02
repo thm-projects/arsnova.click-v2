@@ -1,6 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ITheme } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { themes } from '../../shared/availableThemes';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
@@ -44,7 +45,7 @@ export class ThemesService {
       }
 
       this.connectionService.socket.subscribe(data => {
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATED_SETTINGS') {
+        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.QUIZ.UPDATED_SETTINGS) {
           this.currentQuizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
           this.currentQuizService.persistToSessionStorage();
           if (data.payload.target === 'theme') {

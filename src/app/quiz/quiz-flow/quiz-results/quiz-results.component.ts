@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_freetext';
 import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
@@ -194,7 +195,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this.handleMessages();
 
       this.quizApiService.getCurrentQuizState(this.currentQuizService.quiz.hashtag).toPromise().then(currentStateData => {
-        if (currentStateData.status === 'STATUS:SUCCESSFUL') {
+        if (currentStateData.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
           const question = this.currentQuizService.currentQuestion();
 
           if (question.timer && new Date().getTime() - currentStateData.payload.startTimestamp < 0) {
@@ -220,7 +221,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     this.quizApiService.postQuizStop({
       quizName: this.currentQuizService.quiz.hashtag,
     }).subscribe(data => {
-      if (data.status !== 'STATUS:SUCCESSFUL') {
+      if (data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         console.log(data);
       }
     });
@@ -268,31 +269,32 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private handleMessages(): void {
     if (!this.attendeeService.attendees.length) {
       this.connectionService.sendMessage({
-        status: 'STATUS:SUCCESSFUL',
-        step: 'LOBBY:GET_PLAYERS',
+        status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+        step: COMMUNICATION_PROTOCOL.LOBBY.GET_PLAYERS,
         payload: { quizName: this.currentQuizService.quiz.hashtag },
       });
     }
     this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
-        case 'LOBBY:ALL_PLAYERS':
+        case COMMUNICATION_PROTOCOL.LOBBY.ALL_PLAYERS:
           data.payload.members.forEach((elem: INickname) => {
             this.attendeeService.addMember(elem);
           });
           break;
-        case 'MEMBER:UPDATED_RESPONSE':
+        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
           this.attendeeService.modifyResponse(data.payload.nickname);
           if (this.attendeeService.attendees.filter(attendee => {
-            return attendee.responses[this.currentQuizService.questionIndex] ? attendee.responses[this.currentQuizService.questionIndex].value : false;
+            return attendee.responses[this.currentQuizService.questionIndex] ? attendee.responses[this.currentQuizService.questionIndex].value
+                                                                             : false;
           }).length === this.attendeeService.attendees.length && this.countdown) {
             this.countdown.stop();
           }
           break;
-        case 'QUIZ:NEXT_QUESTION':
+        case COMMUNICATION_PROTOCOL.QUIZ.NEXT_QUESTION:
           this.currentQuizService.questionIndex = data.payload.questionIndex;
           this._selectedQuestionIndex = data.payload.questionIndex;
           break;
-        case 'QUIZ:RESET':
+        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
           this.attendeeService.clearResponses();
           this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
@@ -311,16 +313,16 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private handleMessagesForAttendee(data: IMessage): void {
     switch (data.step) {
-      case 'QUIZ:START':
+      case COMMUNICATION_PROTOCOL.QUIZ.START:
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
-      case 'QUIZ:READING_CONFIRMATION_REQUESTED':
+      case COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED:
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         break;
-      case 'LOBBY:CLOSED':
+      case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
         this.router.navigate(['/']);
         break;
-      case 'QUIZ:STOP':
+      case COMMUNICATION_PROTOCOL.QUIZ.STOP:
         this.countdown.stop();
         break;
     }
@@ -333,7 +335,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     const startQuizData = await this.quizApiService.postQuizData(target, {
       quizName: this.currentQuizService.quiz.hashtag,
     }).toPromise();
-    if (startQuizData.status !== 'STATUS:SUCCESSFUL') {
+    if (startQuizData.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
       console.log(startQuizData);
       return;
     }
@@ -341,7 +343,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     const question = this.currentQuizService.currentQuestion();
     await this.generateAnswers(question);
 
-    if (startQuizData.step === 'QUIZ:READING_CONFIRMATION_REQUESTED') {
+    if (startQuizData.step === COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED) {
       this.currentQuizService.readingConfirmationRequested = true;
       return;
     }

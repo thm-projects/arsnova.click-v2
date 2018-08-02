@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { PROJECT } from '../../shared/enums';
 import { I18nManagerApiService } from '../api/i18n-manager/i18n-manager-api.service';
 import { UserService } from '../user/user.service';
@@ -60,7 +61,7 @@ export class ProjectLoaderService {
                                username: this.userService.username,
                                token: this.userService.staticLoginToken,
                              }).toPromise()
-                           ).status === 'STATUS_SUCCESSFUL';
+                           ).status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL;
 
       this._isAuthorized = isAuthorized;
 

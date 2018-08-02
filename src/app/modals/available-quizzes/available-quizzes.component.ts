@@ -1,6 +1,7 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { IModal } from 'arsnova-click-v2-types/src/modals/interfaces';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
@@ -62,17 +63,17 @@ export class AvailableQuizzesComponent implements IModal {
       });
 
       const quizStatusData = await this.quizApiService.getQuizStatus(session.hashtag).toPromise();
-      if (quizStatusData.status !== 'STATUS:SUCCESSFUL') {
+      if (quizStatusData.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         resolve();
         return;
       }
-      if (quizStatusData.step === 'QUIZ:UNDEFINED') {
+      if (quizStatusData.step === COMMUNICATION_PROTOCOL.QUIZ.UNDEFINED) {
         await this.quizApiService.postQuizReservationOverride({
           quizName: session.hashtag,
           privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
         }).toPromise();
 
-      } else if (quizStatusData.step === 'QUIZ:AVAILABLE') {
+      } else if (quizStatusData.step === COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE) {
 
         const blob = new Blob([JSON.stringify(session.serialize())], { type: 'application/json' });
         this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, session.hashtag);
@@ -97,7 +98,7 @@ export class AvailableQuizzesComponent implements IModal {
         quiz: this.currentQuizService.quiz.serialize(),
       }).toPromise();
 
-      if (openQuizRequestData.status === 'STATUS:SUCCESSFUL') {
+      if (openQuizRequestData.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         this.router.navigate(['/quiz', 'flow']);
       }
 

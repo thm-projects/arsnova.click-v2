@@ -2,6 +2,7 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IMemberGroup, IMessage, INickname } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -66,7 +67,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         groupName: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).toPromise(),
         ticket: this.userService.casTicket,
       }).subscribe((data: IMessage) => {
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_ADDED') {
+        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.MEMBER.ADDED) {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
             memberGroup.members.forEach((nicksInMemberGroup: INickname) => {
               this.attendeeService.addMember(nicksInMemberGroup);
@@ -106,7 +107,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     this._isLoading = true;
     this.memberApiService.getAvailableMemberNames(this.currentQuizService.quiz.hashtag).subscribe(data => {
       this._isLoading = false;
-      if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:GET_REMAINING_NICKS') {
+      if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.QUIZ.GET_REMAINING_NICKS) {
         this._nicks = this._nicks.concat(data.payload.nicknames);
       }
     });

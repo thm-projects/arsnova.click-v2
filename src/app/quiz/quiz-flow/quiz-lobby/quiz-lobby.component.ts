@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
@@ -110,7 +111,7 @@ export class QuizLobbyComponent implements OnDestroy {
     this._kickMemberModalRef.close();
     const quizName = this.currentQuizService.quiz.hashtag;
     const data = await this.memberApiService.deleteMember(quizName, name).toPromise();
-    if (data.status !== 'STATUS:SUCCESSFUL') {
+    if (data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
       console.log(data);
     }
   }
@@ -186,7 +187,7 @@ export class QuizLobbyComponent implements OnDestroy {
       this.quizApiService.postQuizData(target, {
         quizName: this.currentQuizService.quiz.hashtag,
       }).subscribe((data: IMessage) => {
-        this.currentQuizService.readingConfirmationRequested = data.step === 'QUIZ:READING_CONFIRMATION_REQUESTED';
+        this.currentQuizService.readingConfirmationRequested = data.step === COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED;
         this.router.navigate(['/quiz', 'flow', 'results']);
       });
     };
@@ -214,8 +215,8 @@ export class QuizLobbyComponent implements OnDestroy {
   private handleMessages(): void {
     if (!this.attendeeService.attendees.length) {
       this.connectionService.sendMessage({
-        status: 'STATUS:SUCCESSFUL',
-        step: 'LOBBY:GET_PLAYERS',
+        status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+        step: COMMUNICATION_PROTOCOL.LOBBY.GET_PLAYERS,
         payload: {
           quizName: this.currentQuizService.quiz.hashtag,
         },
@@ -223,18 +224,18 @@ export class QuizLobbyComponent implements OnDestroy {
     }
     this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
-        case 'LOBBY:INACTIVE':
+        case COMMUNICATION_PROTOCOL.LOBBY.INACTIVE:
           setTimeout(this.handleMessages.bind(this), 500);
           break;
-        case 'LOBBY:ALL_PLAYERS':
+        case COMMUNICATION_PROTOCOL.LOBBY.ALL_PLAYERS:
           data.payload.members.forEach((elem: INickname) => {
             this.attendeeService.addMember(elem);
           });
           break;
-        case 'MEMBER:ADDED':
+        case COMMUNICATION_PROTOCOL.MEMBER.ADDED:
           this.attendeeService.addMember(data.payload.member);
           break;
-        case 'MEMBER:REMOVED':
+        case COMMUNICATION_PROTOCOL.MEMBER.REMOVED:
           this.attendeeService.removeMember(data.payload.name);
           break;
       }
@@ -244,13 +245,13 @@ export class QuizLobbyComponent implements OnDestroy {
 
   private handleMessagesForOwner(data: IMessage): void {
     switch (data.step) {
-      case 'LOBBY:ALL_PLAYERS':
+      case COMMUNICATION_PROTOCOL.LOBBY.ALL_PLAYERS:
         this.footerBarService.footerElemStartQuiz.isActive = !!this.attendeeService.attendees.length;
         break;
-      case 'MEMBER:ADDED':
+      case COMMUNICATION_PROTOCOL.MEMBER.ADDED:
         this.footerBarService.footerElemStartQuiz.isActive = true;
         break;
-      case 'MEMBER:REMOVED':
+      case COMMUNICATION_PROTOCOL.MEMBER.REMOVED:
         if (!this.attendeeService.attendees.length) {
           this.footerBarService.footerElemStartQuiz.isActive = false;
         }
@@ -260,16 +261,16 @@ export class QuizLobbyComponent implements OnDestroy {
 
   private async handleMessagesForAttendee(data: IMessage): Promise<void> {
     switch (data.step) {
-      case 'QUIZ:NEXT_QUESTION':
+      case COMMUNICATION_PROTOCOL.QUIZ.NEXT_QUESTION:
         this.currentQuizService.questionIndex = data.payload.questionIndex;
         break;
-      case 'QUIZ:START':
+      case COMMUNICATION_PROTOCOL.QUIZ.START:
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
-      case 'QUIZ:READING_CONFIRMATION_REQUESTED':
+      case COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED:
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         break;
-      case 'MEMBER:REMOVED':
+      case COMMUNICATION_PROTOCOL.MEMBER.REMOVED:
         if (isPlatformBrowser(this.platformId)) {
           const existingNickname = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise();
           if (existingNickname === data.payload.name) {
@@ -277,7 +278,7 @@ export class QuizLobbyComponent implements OnDestroy {
           }
         }
         break;
-      case 'LOBBY:CLOSED':
+      case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
         this.router.navigate(['/']);
         break;
     }

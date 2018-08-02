@@ -1,5 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 
 import { QuizApiService } from './quiz-api.service';
 
@@ -26,8 +27,8 @@ describe('QuizApiService', () => {
 
     const quizName = 'test';
     const quizStatusData = {
-      status: 'STATUS:FAILED',
-      step: 'QUIZ:UNAVAILABLE',
+      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
+      step: COMMUNICATION_PROTOCOL.QUIZ.UNAVAILABLE,
       payload: {
         authorizeViaCas: true,
         provideNickSelection: false,
@@ -44,8 +45,8 @@ describe('QuizApiService', () => {
 
     const quizName = 'test';
     const quizStatusData = {
-      status: 'STATUS:SUCCESSFUL',
-      step: 'LOBBY:MEMBER_UPDATED',
+      status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+      step: COMMUNICATION_PROTOCOL.MEMBER.UPDATED,
       payload: {
         groupName: 'testGroup',
       },

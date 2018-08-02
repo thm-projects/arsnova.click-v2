@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import { Subscription } from 'rxjs';
 import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
@@ -45,7 +46,7 @@ export class QuizJoinComponent implements OnInit {
   }
 
   private resolveQuizStatusData(quizStatusData, quizname): void {
-    if (quizStatusData.status !== 'STATUS:SUCCESSFUL' || quizStatusData.step !== 'QUIZ:AVAILABLE') {
+    if (quizStatusData.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL || quizStatusData.step !== COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE) {
       this.router.navigate(['/']);
       return;
     }

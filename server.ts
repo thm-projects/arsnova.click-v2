@@ -52,8 +52,8 @@ app.use(compress());
 app.param('project', (req, res, next, project) => {
   if (!project || !i18nFileBaseLocation[project]) {
     res.status(500).send({
-      status: 'STATUS:FAILED',
-      data: 'Invalid Project specified',
+      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
+      data: COMMUNICATION_PROTOCOL.I18N.INVALID_PROJECT_SPECIFIED,
       payload: { project },
     });
   } else {
@@ -252,7 +252,7 @@ app.get('/api/v1/plugin/i18nator/:project/langFile', async (req, res) => {
   payload.branch = cache[req.projectCache].branch;
 
   res.send({
-    status: 'STATUS:SUCCESSFUL',
+    status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
     payload,
   });
 });
@@ -262,16 +262,16 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
 
   if (!username || !token) {
     res.send({
-      status: 'STATUS:FAILED',
-      step: 'AUTHENTICATE_STATIC',
+      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
+      step: COMMUNICATION_PROTOCOL.AUTHORIZATION.AUTHENTICATE_STATIC,
       payload: { reason: 'UNKOWN_LOGIN' },
     });
     return;
   }
   if (!req.body.data) {
     res.status(500).send({
-      status: 'STATUS:FAILED',
-      data: 'Invalid Data',
+      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
+      data: COMMUNICATION_PROTOCOL.I18N.INVALID_DATA,
       payload: { body: req.body },
     });
     return;
@@ -287,7 +287,7 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
 
     response.on('end', () => {
       data = JSON.parse(data);
-      if (!data && data.status !== 'STATUS:SUCCESSFUL') {
+      if (!data && data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         return;
       }
 
@@ -312,15 +312,15 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
         const exists = fs.existsSync(fileLocation);
         if (!exists) {
           res.status(404).send({
-            status: 'STATUS:FAILED',
-            data: 'File not found',
+            status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
+            data: COMMUNICATION_PROTOCOL.I18N.FILE_NOT_FOUND,
             payload: { fileLocation },
           });
           return;
         }
         fs.writeFileSync(fileLocation, JSON.stringify(fileContent));
         if (index === langKeys.length - 1) {
-          res.send({ status: 'STATUS:SUCCESSFUL' });
+          res.send({ status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL });
         }
       });
     });
@@ -330,8 +330,8 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
     console.log('error at validating login token', error);
     request.abort();
     res.send({
-      status: 'STATUS:FAILED',
-      step: 'UPDATE_LANG',
+      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
+      step: COMMUNICATION_PROTOCOL.I18N.UPDATE_LANG,
       payload: { error },
     });
     return;

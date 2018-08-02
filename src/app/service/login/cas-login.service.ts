@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad } from '@angular/router';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { ISessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/interfaces';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
@@ -36,7 +37,7 @@ export class CasLoginService implements CanLoad, CanActivate {
     }
 
     const data = await this.quizApiService.getQuizSettings(this.quizName).toPromise();
-    if (data.status !== 'STATUS:SUCCESSFUL') {
+    if (data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
       return true;
     }
 

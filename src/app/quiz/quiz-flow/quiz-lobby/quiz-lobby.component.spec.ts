@@ -117,7 +117,8 @@ describe('QuizLobbyComponent', () => {
     const modalContent = '<div></div>';
     const nickToRemove = 'TestNick';
 
-    spyOn(modalService, 'open').and.callFake(() => {});
+    component['_ownsQuiz'] = true;
+    spyOn(modalService, 'open').and.returnValue({ close: () => {} });
     spyOn(component, 'kickMember').and.callThrough();
 
     component.openKickMemberModal(modalContent, nickToRemove);

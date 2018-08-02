@@ -2,6 +2,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ICurrentQuiz, ICurrentQuizData, IMessage } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import { Observable } from 'rxjs';
@@ -111,7 +112,7 @@ export class CurrentQuizService implements ICurrentQuiz {
       }
 
       this.connectionService.socket.subscribe((data: IMessage) => {
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'QUIZ:UPDATED_SETTINGS') {
+        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.QUIZ.UPDATED_SETTINGS) {
           this._quiz.sessionConfig[data.payload.target] = data.payload.state;
           this.persistToSessionStorage();
         }
@@ -130,7 +131,7 @@ export class CurrentQuizService implements ICurrentQuiz {
             quiz: this._quiz.serialize(),
           }).toPromise();
 
-          if (response.status !== 'STATUS:SUCCESSFUL') {
+          if (response.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
             console.log(response);
           } else {
             console.log('loading quiz as owner with caching');
@@ -188,7 +189,7 @@ export class CurrentQuizService implements ICurrentQuiz {
         },
       }).toPromise();
 
-      if (response.status !== 'STATUS:SUCCESSFUL') {
+      if (response.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         console.log(response);
       }
     }
@@ -224,7 +225,7 @@ export class CurrentQuizService implements ICurrentQuiz {
       target: target,
       state: state,
     }).subscribe(data => {
-      if (data.status !== 'STATUS:SUCCESSFUL') {
+      if (data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         console.log(data);
       }
     }, error => {

@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
@@ -26,8 +27,8 @@ import { ThemesService } from './themes.service';
 describe('ThemesService', () => {
   const themeUrl = `${DefaultSettings.httpApiEndpoint}/themes`;
   const themeData = {
-    'status': 'STATUS:SUCCESSFUL',
-    'step': 'GET_THEMES',
+    'status': COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+    'step': COMMUNICATION_PROTOCOL.THEMES.GET_THEMES,
     'payload': [
       {
         'name': 'component.theme_switcher.themes.material.name',
@@ -92,7 +93,7 @@ describe('ThemesService', () => {
     spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
     spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
     spyOn(connectionService.socket, 'subscribe').and.callFake(() => (
-      { status: 'STATUS:FAILED' }
+      { status: COMMUNICATION_PROTOCOL.STATUS.FAILED }
     ));
 
     expect(document.getElementById('link-manifest')).toBe(null);

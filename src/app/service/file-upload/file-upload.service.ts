@@ -27,7 +27,9 @@ export class FileUploadService {
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private quizApiService: QuizApiService,
     private storageService: StorageService,
-  ) {}
+  ) {
+    this._renameFilesQueue = new FormData();
+  }
 
   public async uploadFile(formData: FormData): Promise<void> {
     this._renameFilesQueue = new FormData();

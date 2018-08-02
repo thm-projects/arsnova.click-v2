@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -44,7 +45,7 @@ export class MemberGroupSelectComponent implements OnInit {
 
     if (this.currentQuizService.quiz.sessionConfig.nicks.autoJoinToGroup) {
       this.quizApiService.getFreeMemberGroup(this.currentQuizService.quiz.hashtag).subscribe((data: IMessage) => {
-        if (data.status === 'STATUS:SUCCESSFUL' && data.step === 'LOBBY:MEMBER_UPDATED') {
+        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.MEMBER.UPDATED) {
           this.addToGroup(data.payload.groupName);
         }
       });

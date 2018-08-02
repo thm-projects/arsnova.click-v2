@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
@@ -96,25 +97,25 @@ export class QuestionDetailsComponent implements OnInit {
   private handleMessages(): void {
     if (!this.attendeeService.attendees.length) {
       this.connectionService.sendMessage({
-        status: 'STATUS:SUCCESSFUL',
-        step: 'LOBBY:GET_PLAYERS',
+        status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+        step: COMMUNICATION_PROTOCOL.LOBBY.GET_PLAYERS,
         payload: { quizName: this.currentQuizService.quiz.hashtag },
       });
     }
     this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
-        case 'LOBBY:ALL_PLAYERS':
+        case COMMUNICATION_PROTOCOL.LOBBY.ALL_PLAYERS:
           data.payload.members.forEach((elem: INickname) => {
             this.attendeeService.addMember(elem);
           });
           break;
-        case 'MEMBER:UPDATED_RESPONSE':
+        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
-        case 'QUIZ:NEXT_QUESTION':
+        case COMMUNICATION_PROTOCOL.QUIZ.NEXT_QUESTION:
           this.currentQuizService.questionIndex = data.payload.questionIndex;
           break;
-        case 'QUIZ:RESET':
+        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
           this.attendeeService.clearResponses();
           this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
@@ -133,13 +134,13 @@ export class QuestionDetailsComponent implements OnInit {
 
   private handleMessagesForAttendee(data: IMessage): void {
     switch (data.step) {
-      case 'QUIZ:START':
+      case COMMUNICATION_PROTOCOL.QUIZ.START:
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
-      case 'QUIZ:READING_CONFIRMATION_REQUESTED':
+      case COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED:
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         break;
-      case 'LOBBY:CLOSED':
+      case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
         this.router.navigate(['/']);
         break;
     }

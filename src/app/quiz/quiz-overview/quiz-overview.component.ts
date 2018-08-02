@@ -2,6 +2,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions';
 import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
@@ -148,7 +149,7 @@ export class QuizOverviewComponent implements OnInit {
         privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
       },
     }).subscribe((response: IMessage) => {
-      if (response.status !== 'STATUS:SUCCESSFUL') {
+      if (response.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
         console.log(response);
       }
     });
@@ -170,13 +171,13 @@ export class QuizOverviewComponent implements OnInit {
 
   private async requestQuizStatus(session: IQuestionGroup): Promise<boolean> {
     const quizStatusResponse = await this.quizApiService.getQuizStatus(session.hashtag).toPromise();
-    if (quizStatusResponse.status !== 'STATUS:SUCCESSFUL') {
+    if (quizStatusResponse.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
       return false;
     }
-    if (quizStatusResponse.step === 'QUIZ:EXISTS') {
+    if (quizStatusResponse.step === COMMUNICATION_PROTOCOL.QUIZ.EXISTS) {
       return true;
     }
-    if (quizStatusResponse.step !== 'QUIZ:UNDEFINED') {
+    if (quizStatusResponse.step !== COMMUNICATION_PROTOCOL.QUIZ.UNDEFINED) {
       return false;
     }
 
@@ -193,7 +194,7 @@ export class QuizOverviewComponent implements OnInit {
       quiz: session.serialize(),
     }).toPromise();
 
-    if (lobbyResponse.status === 'STATUS:SUCCESSFUL') {
+    if (lobbyResponse.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
       this.router.navigate(['/quiz', 'flow']);
     }
   }

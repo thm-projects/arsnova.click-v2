@@ -2,6 +2,7 @@ import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILeaderBoardItem, IMessage } from 'arsnova-click-v2-types/src/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { Subscription } from 'rxjs';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
@@ -186,19 +187,19 @@ export class LeaderboardComponent implements OnInit {
   private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
-        case 'QUIZ:START':
+        case COMMUNICATION_PROTOCOL.QUIZ.START:
           this.router.navigate(['/quiz', 'flow', 'voting']);
           break;
-        case 'MEMBER:UPDATED_RESPONSE':
+        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
           console.log('modify response data for nickname in leaderboard view', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload.nickname);
           break;
-        case 'QUIZ:RESET':
+        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
           this.attendeeService.clearResponses();
           this.currentQuizService.questionIndex = 0;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
-        case 'LOBBY:CLOSED':
+        case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
           this.router.navigate(['/']);
           break;
       }

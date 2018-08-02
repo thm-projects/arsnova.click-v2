@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { of } from 'rxjs/index';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -118,8 +119,8 @@ describe('QuizJoinComponent', () => {
 
   it('should redirect the user to / on failure', async(inject([Router, QuizApiService], (router: Router, quizApiService: QuizApiService) => {
     const quizStatusData = {
-      status: 'STATUS:FAILED',
-      step: 'QUIZ:UNAVAILABLE',
+      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
+      step: COMMUNICATION_PROTOCOL.QUIZ.UNAVAILABLE,
       payload: {
         authorizeViaCas: true,
         provideNickSelection: false,
@@ -142,16 +143,16 @@ describe('QuizJoinComponent', () => {
       lobbyApiService: LobbyApiService,
     ) => {
       const quizStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
+        status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+        step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
         payload: {
           authorizeViaCas: true,
           provideNickSelection: false,
         },
       };
       const lobbyStatusData = {
-        status: 'STATUS:SUCCESSFUL',
-        step: 'QUIZ:AVAILABLE',
+        status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+        step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
         payload: {
           quiz: {
             originalObject: currentQuizService.quiz.serialize(),
@@ -174,16 +175,16 @@ describe('QuizJoinComponent', () => {
         const customQuiz = currentQuizService.quiz;
         customQuiz.sessionConfig.nicks.memberGroups = ['Group1', 'Group2'];
         const quizStatusData = {
-          status: 'STATUS:SUCCESSFUL',
-          step: 'QUIZ:AVAILABLE',
+          status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+          step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
           payload: {
             authorizeViaCas: true,
             provideNickSelection: false,
           },
         };
         const lobbyStatusData = {
-          status: 'STATUS:SUCCESSFUL',
-          step: 'QUIZ:AVAILABLE',
+          status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+          step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
           payload: {
             quiz: {
               originalObject: customQuiz.serialize(),
@@ -203,16 +204,16 @@ describe('QuizJoinComponent', () => {
     inject([CurrentQuizService, Router, QuizApiService, LobbyApiService],
       (currentQuizService: CurrentQuizService, router: Router, quizApiService: QuizApiService, lobbyApiService: LobbyApiService) => {
         const quizStatusData = {
-          status: 'STATUS:SUCCESSFUL',
-          step: 'QUIZ:AVAILABLE',
+          status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+          step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
           payload: {
             authorizeViaCas: true,
             provideNickSelection: false,
           },
         };
         const lobbyStatusData = {
-          status: 'STATUS:SUCCESSFUL',
-          step: 'QUIZ:AVAILABLE',
+          status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+          step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
           payload: {
             quiz: {
               originalObject: currentQuizService.quiz.serialize(),
@@ -236,16 +237,16 @@ describe('QuizJoinComponent', () => {
         customQuiz.sessionConfig.nicks.addSelectedNick('Predefined1');
         customQuiz.sessionConfig.nicks.addSelectedNick('Predefined2');
         const quizStatusData = {
-          status: 'STATUS:SUCCESSFUL',
-          step: 'QUIZ:AVAILABLE',
+          status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+          step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
           payload: {
             authorizeViaCas: true,
             provideNickSelection: true,
           },
         };
         const lobbyStatusData = {
-          status: 'STATUS:SUCCESSFUL',
-          step: 'QUIZ:AVAILABLE',
+          status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+          step: COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE,
           payload: {
             quiz: {
               originalObject: customQuiz.serialize(),
