@@ -3,6 +3,7 @@ import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
 import * as bodyParser from 'body-parser';
 import * as child_process from 'child_process';
 import * as compress from 'compression';
