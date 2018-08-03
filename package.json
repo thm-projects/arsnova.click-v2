@@ -95,6 +95,7 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-phantomjs-launcher": "^1.0.4",
     "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
     "protractor": "^5.4.0",
     "purify-css": "~1.2.5",
     "ts-node": "~6.0.3",
