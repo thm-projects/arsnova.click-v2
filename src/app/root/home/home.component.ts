@@ -158,43 +158,29 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      console.log('homecomponent ngoninit - isserver');
+      return;
+    }
+    console.log('homecomponent ngoninit - isclient');
 
     this._routerSubscription = this.route.params.subscribe(async params => {
       if (!Object.keys(params).length || !params.themeId || !params.languageId) {
-        const theme = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise();
+        const theme = this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise();
 
         if (theme) {
           return;
         }
 
         await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, DefaultSettings.defaultQuizSettings.theme).toPromise();
-
-        if (isPlatformServer(this.platformId)) {
-          const interval = setInterval(() => {
-            if (isPlatformBrowser(this.platformId)) {
-              clearInterval(interval);
-              this.themesService.updateCurrentlyUsedTheme();
-            }
-          }, 5000);
-        } else {
-          this.themesService.updateCurrentlyUsedTheme();
-        }
+        this.themesService.updateCurrentlyUsedTheme();
 
         return;
       }
-      if (isPlatformBrowser(this.platformId)) {
-        await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).toPromise();
-        this.themesService.updateCurrentlyUsedTheme();
-      } else {
-        const interval = setInterval(() => {
-          if (isPlatformBrowser(this.platformId)) {
-            clearInterval(interval);
-            this.themesService.updateCurrentlyUsedTheme();
-          }
-        }, 5000);
-      }
 
+      await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).toPromise();
       this.i18nService.setLanguage(<LANGUAGE>params.languageId.toUpperCase());
+      this.themesService.updateCurrentlyUsedTheme();
     });
   }
 

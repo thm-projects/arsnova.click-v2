@@ -58,7 +58,6 @@ export class RootComponent implements OnInit, AfterViewInit {
     private storageService: StorageService,
     private userService: UserService,
   ) {
-    this.themesService.updateCurrentlyUsedTheme();
   }
 
   public getFooterBarElements(): EventEmitter<Array<IFooterBarElement>> {
@@ -139,7 +138,8 @@ export class RootComponent implements OnInit, AfterViewInit {
       };
       this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
     }
-    if (hasStartedIntroJs || !await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR).toPromise() || introState[route].completed) {
+    if (hasStartedIntroJs || !await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR).toPromise()
+        || introState[route].completed) {
       return;
     }
     const customIntroJs = introJs();

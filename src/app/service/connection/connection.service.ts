@@ -1,3 +1,4 @@
+import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { IMessage, IMessageStep } from 'arsnova-click-v2-types/dist/common';
 import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
@@ -83,6 +84,7 @@ export class ConnectionService {
 
   public sendMessage(message: IMessage): void {
     if (!this._websocketAvailable) {
+      console.log('connectionservice - websocket not available, waiting 500ms');
       setTimeout(() => {
         this.sendMessage(message);
       }, 500);
@@ -110,6 +112,10 @@ export class ConnectionService {
   }
 
   public initConnection(overrideCurrentState?: boolean): Promise<any> {
+    if (isPlatformServer(this.platformId)) {
+      return new Promise<any>(resolve => resolve());
+    }
+
     return new Promise(async (resolve) => {
       if ((
             this.pending || this.serverAvailable
@@ -124,6 +130,7 @@ export class ConnectionService {
           this.serverAvailable = true;
           this._websocketAvailable = true;
           setTimeout(() => {
+            console.log('connectionservice - websocket not available, waiting 500ms');
             this.calculateRTT(new Date().getTime());
           }, 500);
           resolve2(httpData);
@@ -187,6 +194,7 @@ export class ConnectionService {
 
     if (!this._websocketAvailable) {
       setTimeout(() => {
+        console.log('connectionservice - websocket not available, waiting 500ms');
         this.sendAuthorizationMessage(hashtag, step, auth);
       }, 500);
       return;

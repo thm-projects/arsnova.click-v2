@@ -12,20 +12,24 @@ interface INamedType extends Type<Function> {
 @Injectable()
 export class ArsnovaClickAngulartics2Piwik extends Angulartics2Piwik {
 
-  constructor(
-    private _angulartics2: Angulartics2,
-    private route: ActivatedRoute,
-  ) {
+  constructor(private _angulartics2: Angulartics2, private route: ActivatedRoute) {
     super(_angulartics2);
   }
 
   public pageTrack(path: string, location?: any): void {
     try {
-      _paq.push(['setDocumentTitle', (<INamedType>this.getFirstRoutingChild(this.route).component).TYPE]);
+      _paq.push([
+        'setDocumentTitle',
+        (
+          <INamedType>this.getFirstRoutingChild(this.route).component
+        ).TYPE,
+      ]);
       _paq.push(['setCustomUrl', path]);
       _paq.push(['trackPageView']);
     } catch (e) {
-      if (!(e instanceof ReferenceError)) {
+      if (!(
+        e instanceof ReferenceError
+      )) {
         throw e;
       }
     }

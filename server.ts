@@ -18,6 +18,19 @@ import 'reflect-metadata';
 import 'zone.js/dist/zone-node';
 import { DefaultSettings } from './src/lib/default.settings';
 
+Error.stackTraceLimit = Infinity;
+console.error = (msg) => {
+  try {
+    throw Error(msg);
+  } catch (ex) {
+
+    console.log('-------------------------');
+    console.log(ex.name + ' - ' + ex.message);
+    console.log(ex.stack);
+    console.log('-------------------------');
+  }
+};
+
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
 

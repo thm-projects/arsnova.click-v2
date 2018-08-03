@@ -36,6 +36,7 @@ export class WebsocketService {
         if (socket.readyState === WebSocket.OPEN) {
           socket.send(JSON.stringify(data));
         } else if (socket.readyState === WebSocket.CONNECTING) {
+          console.log('websocketservice - waiting 500ms for connection');
           setTimeout(() => (observer.next(data)), 500);
         }
       },

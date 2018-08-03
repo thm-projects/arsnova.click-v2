@@ -48,9 +48,6 @@ build:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
     - npm run build:SSR
-    - cd dist
-    - node server &
-    - sleep 15s
   artifacts:
     paths:
       - dist
