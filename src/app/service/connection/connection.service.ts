@@ -1,6 +1,6 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IMessage, IMessageStep } from 'arsnova-click-v2-types/src/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
+import { IMessage, IMessageStep } from 'arsnova-click-v2-types/dist/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';

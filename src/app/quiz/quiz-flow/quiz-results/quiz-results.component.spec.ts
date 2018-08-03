@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { SurveyQuestion } from 'arsnova-click-v2-types/src/questions/question_survey';
+import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { Attendee } from '../../../../lib/attendee/attendee';
 import { Countdown } from '../../../../lib/countdown/countdown';
@@ -112,42 +112,45 @@ describe('QuizResultsComponent', () => {
     expect(component.showLeaderBoardButton(currentQuizService.questionIndex)).toBeTruthy();
   }));
 
-  it(`#showStopQuizButton`, inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
-    currentQuizService['_isOwner'] = true;
-    currentQuizService.currentQuestion().timer = 0;
-    attendeeService.addMember(new Attendee({
-      id: 0,
-      name: 'testNickname',
-      groupName: 'Default',
-      colorCode: '#00000',
-      responses: [],
+  it(`#showStopQuizButton`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+      currentQuizService['_isOwner'] = true;
+      currentQuizService.currentQuestion().timer = 0;
+      attendeeService.addMember(new Attendee({
+        id: 0,
+        name: 'testNickname',
+        groupName: 'Default',
+        colorCode: '#00000',
+        responses: [],
+      }));
+
+      expect(component.showStopQuizButton()).toBeTruthy();
     }));
 
-    expect(component.showStopQuizButton()).toBeTruthy();
-  }));
+  it(`#showStopCountdownButton`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+      currentQuizService.currentQuestion().timer = 10;
+      currentQuizService['_isOwner'] = true;
+      attendeeService.addMember(new Attendee({
+        id: 0,
+        name: 'testNickname',
+        groupName: 'Default',
+        colorCode: '#00000',
+        responses: [],
+      }));
+      component.countdown = new Countdown(currentQuizService.currentQuestion(), new Date().getTime());
 
-  it(`#showStopCountdownButton`, inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
-    currentQuizService.currentQuestion().timer = 10;
-    currentQuizService['_isOwner'] = true;
-    attendeeService.addMember(new Attendee({
-      id: 0,
-      name: 'testNickname',
-      groupName: 'Default',
-      colorCode: '#00000',
-      responses: [],
+      expect(component.countdown.isRunning).toBeTruthy();
+      expect(component.showStopCountdownButton()).toBeTruthy();
     }));
-    component.countdown = new Countdown(currentQuizService.currentQuestion(), new Date().getTime());
 
-    expect(component.countdown.isRunning).toBeTruthy();
-    expect(component.showStopCountdownButton()).toBeTruthy();
-  }));
+  it(`#showStartQuizButton`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+      currentQuizService['_isOwner'] = true;
+      currentQuizService.readingConfirmationRequested = true;
 
-  it(`#showStartQuizButton`, inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
-    currentQuizService['_isOwner'] = true;
-    currentQuizService.readingConfirmationRequested = true;
-
-    expect(component.showStartQuizButton()).toBeTruthy();
-  }));
+      expect(component.showStartQuizButton()).toBeTruthy();
+    }));
 
   it(`#hideProgressbarCssStyle`, inject([CurrentQuizService], (currentQuizService: CurrentQuizService) => {
     currentQuizService.readingConfirmationRequested = false;
@@ -155,25 +158,26 @@ describe('QuizResultsComponent', () => {
     expect(component.hideProgressbarCssStyle()).toBeTruthy();
   }));
 
-  it(`#showConfidenceRate`, inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
-    attendeeService.addMember(new Attendee({
-      id: 0,
-      name: 'testNickname',
-      groupName: 'Default',
-      colorCode: '#00000',
-      responses: [
-        {
-          value: 0,
-          confidence: 20,
-          readingConfirmation: true,
-          responseTime: 10,
-        },
-      ],
-    }));
-    currentQuizService.quiz.sessionConfig.confidenceSliderEnabled = true;
+  it(`#showConfidenceRate`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+      attendeeService.addMember(new Attendee({
+        id: 0,
+        name: 'testNickname',
+        groupName: 'Default',
+        colorCode: '#00000',
+        responses: [
+          {
+            value: 0,
+            confidence: 20,
+            readingConfirmation: true,
+            responseTime: 10,
+          },
+        ],
+      }));
+      currentQuizService.quiz.sessionConfig.confidenceSliderEnabled = true;
 
-    expect(component.showConfidenceRate(component.selectedQuestionIndex)).toBeTruthy();
-  }));
+      expect(component.showConfidenceRate(component.selectedQuestionIndex)).toBeTruthy();
+    }));
 
   it(`#modifyVisibleQuestion`, inject([QuestionTextService], async (questionTextService: QuestionTextService) => {
     spyOn(questionTextService, 'changeMultiple').and.callFake(() => {});
@@ -210,25 +214,26 @@ describe('QuizResultsComponent', () => {
     }
   }));
 
-  it(`#showReadingConfirmation`, inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
-    attendeeService.addMember(new Attendee({
-      id: 0,
-      name: 'testNickname',
-      groupName: 'Default',
-      colorCode: '#00000',
-      responses: [
-        {
-          value: 0,
-          confidence: 20,
-          readingConfirmation: true,
-          responseTime: 10,
-        },
-      ],
-    }));
-    currentQuizService.quiz.sessionConfig.readingConfirmationEnabled = true;
+  it(`#showReadingConfirmation`,
+    inject([CurrentQuizService, AttendeeService], (currentQuizService: CurrentQuizService, attendeeService: AttendeeService) => {
+      attendeeService.addMember(new Attendee({
+        id: 0,
+        name: 'testNickname',
+        groupName: 'Default',
+        colorCode: '#00000',
+        responses: [
+          {
+            value: 0,
+            confidence: 20,
+            readingConfirmation: true,
+            responseTime: 10,
+          },
+        ],
+      }));
+      currentQuizService.quiz.sessionConfig.readingConfirmationEnabled = true;
 
-    expect(component.showReadingConfirmation(component.selectedQuestionIndex)).toBeTruthy();
-  }));
+      expect(component.showReadingConfirmation(component.selectedQuestionIndex)).toBeTruthy();
+    }));
 
   it(`#showResponseProgress`, inject([CurrentQuizService], (currentQuizService: CurrentQuizService) => {
 

@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
 import { Observable, of } from 'rxjs';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { FooterBarService } from '../footer-bar/footer-bar.service';

@@ -102,7 +102,8 @@
     "tslib": "^1.7.1",
     "tslint": "~5.10.0",
     "typescript": "^2.7",
-    "webpack-cli": "^2.1.4"
+    "webpack-cli": "^2.1.4",
+    "webpack-node-externals": "^1.7.2"
   },
   "keywords": [
     "arsnova",

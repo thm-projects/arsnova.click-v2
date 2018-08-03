@@ -1,4 +1,4 @@
-import { INickname } from 'arsnova-click-v2-types/src/common';
+import { INickname } from 'arsnova-click-v2-types/dist/common';
 
 export class AttendeeMockService {
   public attendees = [];

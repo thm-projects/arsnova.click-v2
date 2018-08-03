@@ -1,8 +1,8 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ILeaderBoardItem, IMessage } from 'arsnova-click-v2-types/src/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
+import { ILeaderBoardItem, IMessage } from 'arsnova-click-v2-types/dist/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { Subscription } from 'rxjs';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';

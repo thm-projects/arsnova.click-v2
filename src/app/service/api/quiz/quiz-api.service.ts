@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IMessage } from 'arsnova-click-v2-types/src/common';
-import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions';
+import { IMessage } from 'arsnova-click-v2-types/dist/common';
+import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions';
 import { Observable } from 'rxjs/index';
 import { DefaultSettings } from '../../../../lib/default.settings';
 

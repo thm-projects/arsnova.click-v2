@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';

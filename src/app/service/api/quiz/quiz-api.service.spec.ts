@@ -1,6 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 
 import { QuizApiService } from './quiz-api.service';
 

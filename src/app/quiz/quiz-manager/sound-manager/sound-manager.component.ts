@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ISong } from 'arsnova-click-v2-types/src/common';
-import { IMusicSessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/interfaces';
+import { ISong } from 'arsnova-click-v2-types/dist/common';
+import { IMusicSessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/interfaces';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { FilesApiService } from '../../../service/api/files/files-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -39,12 +39,11 @@ export class SoundManagerComponent implements OnDestroy {
 
   private readonly _config: IMusicSessionConfiguration;
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private translateService: TranslateService,
-    private footerBarService: FooterBarService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
-    private filesApiService: FilesApiService,
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              private translateService: TranslateService,
+              private footerBarService: FooterBarService,
+              private activeQuestionGroupService: ActiveQuestionGroupService,
+              private filesApiService: FilesApiService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = SoundManagerComponent.TYPE;
@@ -61,12 +60,16 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   public selectSound(target: 'lobby' | 'countdownRunning' | 'countdownEnd', event: Event): void {
-    this.config.titleConfig[target] = (<HTMLSelectElement>event.target).value;
+    this.config.titleConfig[target] = (
+      <HTMLSelectElement>event.target
+    ).value;
     this.toggleMusicPreview(target);
   }
 
   public setGlobalVolume($event): void {
-    this.config.volumeConfig.global = parseInt((<HTMLInputElement>$event.target).value, 10);
+    this.config.volumeConfig.global = parseInt((
+      <HTMLInputElement>$event.target
+    ).value, 10);
   }
 
   public openTab(id: string): void {
@@ -93,35 +96,75 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   private setCountdownEndSongs(): void {
-    this._countdownEndSounds.push({ id: 'Song0', text: this.translateService.instant('plugins.sound.whistle') });
-    this._countdownEndSounds.push({ id: 'Song1', text: 'Chinese Gong' });
+    this._countdownEndSounds.push({
+      id: 'Song0',
+      text: this.translateService.instant('plugins.sound.whistle'),
+    });
+    this._countdownEndSounds.push({
+      id: 'Song1',
+      text: 'Chinese Gong',
+    });
   }
 
   private setCountdownRunningSongs(): void {
-    this._countdownRunningSounds.push({ id: 'Song0', text: 'Relax mood: "The Lounge" | Bensound.com' });
-    this._countdownRunningSounds.push({ id: 'Song1', text: 'Ukulele: "Cute" | Bensound.com' });
-    this._countdownRunningSounds.push({ id: 'Song2', text: 'Driving tune: "Epic" | Bensound.com' });
+    this._countdownRunningSounds.push({
+      id: 'Song0',
+      text: 'Relax mood: "The Lounge" | Bensound.com',
+    });
+    this._countdownRunningSounds.push({
+      id: 'Song1',
+      text: 'Ukulele: "Cute" | Bensound.com',
+    });
+    this._countdownRunningSounds.push({
+      id: 'Song2',
+      text: 'Driving tune: "Epic" | Bensound.com',
+    });
   }
 
   private setLobbySongs(): void {
-    this._lobbySongs.push({ id: 'Song0', text: 'Happy & fun mood: "Clear day" | Bensound.com' });
-    this._lobbySongs.push({ id: 'Song1', text: 'House music: "House" | Bensound.com' });
-    this._lobbySongs.push({ id: 'Song2', text: 'Gypsy french jazz: "Jazzy frenchy" | Bensound.com' });
-    this._lobbySongs.push({ id: 'Song3', text: 'Childish: "Little idea" | Bensound.com' });
+    this._lobbySongs.push({
+      id: 'Song0',
+      text: 'Happy & fun mood: "Clear day" | Bensound.com',
+    });
+    this._lobbySongs.push({
+      id: 'Song1',
+      text: 'House music: "House" | Bensound.com',
+    });
+    this._lobbySongs.push({
+      id: 'Song2',
+      text: 'Gypsy french jazz: "Jazzy frenchy" | Bensound.com',
+    });
+    this._lobbySongs.push({
+      id: 'Song3',
+      text: 'Childish: "Little idea" | Bensound.com',
+    });
   }
 
   private setRandomKey(): void {
     const value = this.translateService.instant('plugins.sound.random');
-    this._lobbySongs.push({ id: 'Random', text: value });
-    this._countdownRunningSounds.push({ id: 'Random', text: value });
-    this._countdownEndSounds.push({ id: 'Random', text: value });
+    this._lobbySongs.push({
+      id: 'Random',
+      text: value,
+    });
+    this._countdownRunningSounds.push({
+      id: 'Random',
+      text: value,
+    });
+    this._countdownEndSounds.push({
+      id: 'Random',
+      text: value,
+    });
   }
 
   private toggleMusicPreview(target: 'lobby' | 'countdownRunning' | 'countdownEnd'): void {
     if (isPlatformBrowser(this.platformId)) {
       const audioElements = document.getElementsByTagName('audio');
       for (let i = 0; i < audioElements.length; i++) {
-        (<HTMLAudioElement>audioElements.item(i)).volume = (this.config.volumeConfig[target] || 60) / 100;
+        (
+          <HTMLAudioElement>audioElements.item(i)
+        ).volume = (
+                     this.config.volumeConfig[target] || 60
+                   ) / 100;
       }
     }
   }

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IMessage, INickname } from 'arsnova-click-v2-types/dist/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
 import { CurrentQuizService } from '../../../../service/current-quiz/current-quiz.service';

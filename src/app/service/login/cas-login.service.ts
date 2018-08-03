@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad } from '@angular/router';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
-import { ISessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/interfaces';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { ISessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/interfaces';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { UserService } from '../user/user.service';

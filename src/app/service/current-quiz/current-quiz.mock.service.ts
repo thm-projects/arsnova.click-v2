@@ -1,10 +1,10 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { DefaultAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
-import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single';
-import { DefaultQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_default';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
-import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
+import { DefaultAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_default';
+import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
+import { DefaultQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_default';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
+import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
 import { Observable, of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
 

@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestionRanged } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestionRanged } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
@@ -40,24 +40,29 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _routerSubscription: Subscription;
 
-  constructor(
-    private headerLabelService: HeaderLabelService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
-    private route: ActivatedRoute,
+  constructor(private headerLabelService: HeaderLabelService,
+              private activeQuestionGroupService: ActiveQuestionGroupService,
+              private route: ActivatedRoute,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
   public updateMinRange(event: Event): void {
-    this._minRange = parseInt((<HTMLInputElement>event.target).value, 10);
+    this._minRange = parseInt((
+      <HTMLInputElement>event.target
+    ).value, 10);
   }
 
   public updateMaxRange(event: Event): void {
-    this._maxRange = parseInt((<HTMLInputElement>event.target).value, 10);
+    this._maxRange = parseInt((
+      <HTMLInputElement>event.target
+    ).value, 10);
   }
 
   public updateCorrectValue(event: Event): void {
-    this._correctValue = parseInt((<HTMLInputElement>event.target).value, 10);
+    this._correctValue = parseInt((
+      <HTMLInputElement>event.target
+    ).value, 10);
   }
 
   public ngOnInit(): void {

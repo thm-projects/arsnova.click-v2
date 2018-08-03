@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';

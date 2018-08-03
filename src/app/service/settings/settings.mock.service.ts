@@ -1,5 +1,5 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IServerSettings } from 'arsnova-click-v2-types/src/common';
+import { IServerSettings } from 'arsnova-click-v2-types/dist/common';
 
 @Injectable()
 export class SettingsMockService {
@@ -9,9 +9,7 @@ export class SettingsMockService {
     return this._serverSettings;
   }
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-  ) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
   }
 
   private async initServerSettings(): Promise<void> {

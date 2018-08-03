@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IServerSettings } from 'arsnova-click-v2-types/src/common';
+import { IServerSettings } from 'arsnova-click-v2-types/dist/common';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { ConnectionService } from '../connection/connection.service';
 import { StorageService } from '../storage/storage.service';

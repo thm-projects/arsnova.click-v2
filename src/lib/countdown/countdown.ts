@@ -1,5 +1,5 @@
 import { EventEmitter } from '@angular/core';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 
 export class Countdown {
   public onChange = new EventEmitter<number>();
@@ -26,7 +26,9 @@ export class Countdown {
   constructor(question: IQuestion, startTimestamp: number) {
     this._time = question.timer;
     const endTimestamp = startTimestamp + this._time * 1000;
-    this._remainingTime = Math.round((endTimestamp - new Date().getTime()) / 1000);
+    this._remainingTime = Math.round((
+                                       endTimestamp - new Date().getTime()
+                                     ) / 1000);
     if (this._remainingTime <= 0) {
       return;
     }

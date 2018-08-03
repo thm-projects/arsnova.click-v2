@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { questionReflection } from 'arsnova-click-v2-types/src/questions/question_reflection';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { questionReflection } from 'arsnova-click-v2-types/dist/questions/question_reflection';
 import { Subscription } from 'rxjs';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../../lib/available-question-types';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
@@ -31,16 +31,15 @@ export class QuestiontypeComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
-    private footerBarService: FooterBarService) {
+    private footerBarService: FooterBarService,
+  ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestiontypeComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
     ]);
   }
 

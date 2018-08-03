@@ -1,4 +1,4 @@
-import { ICasData, INickname, INicknameSerialized, IQuizResponse } from 'arsnova-click-v2-types/src/common';
+import { ICasData, INickname, INicknameSerialized, IQuizResponse } from 'arsnova-click-v2-types/dist/common';
 
 export class Attendee implements INickname {
   public webSocketAuthorization;

@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestionChoice } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestionChoice } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
@@ -24,8 +24,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return this._targetEnvironment;
   }
 
-  @Input()
-  set targetEnvironment(value: LIVE_PREVIEW_ENVIRONMENT) {
+  @Input() set targetEnvironment(value: LIVE_PREVIEW_ENVIRONMENT) {
     this._targetEnvironment = value;
   }
 
@@ -35,8 +34,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return this._targetDevice;
   }
 
-  @Input()
-  set targetDevice(value: DEVICE_TYPES) {
+  @Input() set targetDevice(value: DEVICE_TYPES) {
     this._targetDevice = value;
   }
 
@@ -104,11 +102,9 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._subscription = this.questionTextService.eventEmitter.subscribe(
-      value => {
-        this.dataSource = value;
-      },
-    );
+    this._subscription = this.questionTextService.eventEmitter.subscribe(value => {
+      this.dataSource = value;
+    });
     switch (this.targetEnvironment) {
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
         this._routerSubscription = this.route.params.subscribe(params => {

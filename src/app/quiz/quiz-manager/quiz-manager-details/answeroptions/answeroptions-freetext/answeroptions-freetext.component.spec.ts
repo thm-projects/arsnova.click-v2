@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { IFreetextAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/interfaces';
+import { IFreetextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/interfaces';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../../../lib/translation.factory';
 import { ActiveQuestionGroupMockService } from '../../../../../service/active-question-group/active-question-group.mock.service';

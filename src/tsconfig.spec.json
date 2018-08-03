@@ -13,14 +13,18 @@
     "polyfills.ts"
   ],
   "include": [
-    "../node_modules/arsnova-click-v2-types/src/**/*.ts",
+    "../node_modules/arsnova-click-v2-types/dist/**/*.ts",
     "**/*.spec.ts"
   ],
   "exclude": [
     "main.ts"
   ],
   "paths": {
-    "@app/*": ["app/*"],
-    "@env/*": ["environments/*"]
+    "@app/*": [
+      "app/*"
+    ],
+    "@env/*": [
+      "environments/*"
+    ]
   }
 }

@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_freetext';
-import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
-import { SurveyQuestion } from 'arsnova-click-v2-types/src/questions/question_survey';
+import { IMessage, INickname } from 'arsnova-click-v2-types/dist/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { FreeTextQuestion } from 'arsnova-click-v2-types/dist/questions/question_freetext';
+import { RangedQuestion } from 'arsnova-click-v2-types/dist/questions/question_ranged';
+import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
 import { Countdown } from '../../../../lib/countdown/countdown';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';

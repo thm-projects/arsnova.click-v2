@@ -1,10 +1,10 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ICurrentQuiz, ICurrentQuizData, IMessage } from 'arsnova-click-v2-types/src/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
-import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { ICurrentQuiz, ICurrentQuizData, IMessage } from 'arsnova-click-v2-types/dist/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { IQuestion, IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
 import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';

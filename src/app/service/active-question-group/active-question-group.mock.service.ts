@@ -1,11 +1,11 @@
-import { FreeTextAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/answeroption_freetext';
-import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { SingleChoiceQuestion } from 'arsnova-click-v2-types/src/questions/question_choice_single';
-import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_freetext';
-import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
-import { SurveyQuestion } from 'arsnova-click-v2-types/src/questions/question_survey';
-import { DefaultQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_default';
-import { SessionConfiguration } from 'arsnova-click-v2-types/src/session_configuration/session_config';
+import { FreeTextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_freetext';
+import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
+import { FreeTextQuestion } from 'arsnova-click-v2-types/dist/questions/question_freetext';
+import { RangedQuestion } from 'arsnova-click-v2-types/dist/questions/question_ranged';
+import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
+import { DefaultQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_default';
+import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
 import { Observable, of } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 

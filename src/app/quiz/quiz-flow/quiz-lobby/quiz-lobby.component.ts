@@ -3,9 +3,9 @@ import { Component, Inject, OnDestroy, PLATFORM_ID, SecurityContext } from '@ang
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { IMessage, INickname } from 'arsnova-click-v2-types/src/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { IMessage, INickname } from 'arsnova-click-v2-types/dist/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { MemberApiService } from '../../../service/api/member/member-api.service';

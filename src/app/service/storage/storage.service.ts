@@ -1,6 +1,6 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { AbstractQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_abstract';
+import { AbstractQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_abstract';
 import { Observable, of } from 'rxjs';
 import { DB_NAME, DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { IndexedDbService } from './indexed.db.service';

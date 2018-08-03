@@ -12,7 +12,7 @@
     "polyfills.ts"
   ],
   "include": [
-    "../node_modules/arsnova-click-v2-types/src/**/*.ts",
+    "../node_modules/arsnova-click-v2-types/dist/**/*.ts",
     "**/*.ts"
   ],
   "exclude": [

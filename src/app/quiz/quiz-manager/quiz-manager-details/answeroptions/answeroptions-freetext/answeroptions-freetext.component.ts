@@ -1,8 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FreeTextAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/answeroption_freetext';
-import { IFreetextAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/interfaces';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { FreeTextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_freetext';
+import { IFreetextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/interfaces';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
@@ -42,21 +42,24 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _routerSubscription: Subscription;
 
-  constructor(
-    private headerLabelService: HeaderLabelService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
-    private route: ActivatedRoute,
+  constructor(private headerLabelService: HeaderLabelService,
+              private activeQuestionGroupService: ActiveQuestionGroupService,
+              private route: ActivatedRoute,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
 
   public setTestInput(event: Event): void {
-    this._testInput = (<HTMLTextAreaElement>event.target).value;
+    this._testInput = (
+      <HTMLTextAreaElement>event.target
+    ).value;
   }
 
   public setMatchText(event: Event): void {
-    this._question.answerOptionList[0].answerText = (<HTMLTextAreaElement>event.target).value;
+    this._question.answerOptionList[0].answerText = (
+      <HTMLTextAreaElement>event.target
+    ).value;
   }
 
   public hasTestInput(): boolean {
@@ -64,11 +67,15 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   public isTestInputCorrect(): boolean {
-    return (<FreeTextAnswerOption>this._question.answerOptionList[0]).isCorrectInput(this._testInput);
+    return (
+      <FreeTextAnswerOption>this._question.answerOptionList[0]
+    ).isCorrectInput(this._testInput);
   }
 
   public setConfig(configIdentifier: string, configValue: boolean): void {
-    (<FreeTextAnswerOption>this._question.answerOptionList[0]).setConfig(configIdentifier, configValue);
+    (
+      <FreeTextAnswerOption>this._question.answerOptionList[0]
+    ).setConfig(configIdentifier, configValue);
   }
 
   public ngOnInit(): void {

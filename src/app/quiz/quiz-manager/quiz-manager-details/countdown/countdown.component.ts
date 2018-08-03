@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -71,9 +71,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
     ]);
   }
 
@@ -81,11 +79,21 @@ export class CountdownComponent implements OnInit, OnDestroy {
     if (typeof event === 'number') {
       this._countdown = event;
     } else {
-      this._countdown = parseInt((<HTMLInputElement>(<Event>event).target).value, 10);
+      this._countdown = parseInt((
+        <HTMLInputElement>(
+          <Event>event
+        ).target
+      ).value, 10);
     }
     const hours = Math.floor(this._countdown / 3600);
-    const minutes = Math.floor((this._countdown - hours * 3600) / 60);
-    const seconds = Math.floor((this._countdown - hours * 3600) - (minutes * 60));
+    const minutes = Math.floor((
+                                 this._countdown - hours * 3600
+                               ) / 60);
+    const seconds = Math.floor((
+                               this._countdown - hours * 3600
+                               ) - (
+                                 minutes * 60
+                               ));
 
     this._parsedHours = hours > 0 && hours < 10 ? '0' + hours : String(hours);
     this._parsedMinutes = minutes > 0 && minutes < 10 ? '0' + minutes : String(minutes);

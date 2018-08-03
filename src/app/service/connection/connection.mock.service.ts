@@ -1,4 +1,4 @@
-import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { IMessage } from 'arsnova-click-v2-types/dist/common';
 
 
 export class ConnectionMockService {

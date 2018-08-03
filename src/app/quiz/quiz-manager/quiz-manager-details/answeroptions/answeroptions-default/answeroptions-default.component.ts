@@ -1,6 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestionChoice, IQuestionSurvey } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestionChoice, IQuestionSurvey } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../../environments/environment';
 import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
@@ -44,12 +44,18 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   }
 
   public updateAnswerValue(event: Event, index: number): void {
-    this._question.answerOptionList[index].answerText = (<HTMLInputElement>event.target).value;
+    this._question.answerOptionList[index].answerText = (
+      <HTMLInputElement>event.target
+    ).value;
     this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
   }
 
   public toggleMultipleSelectionSurvey(): void {
-    (<IQuestionSurvey>this._question).multipleSelectionEnabled = !(<IQuestionSurvey>this._question).multipleSelectionEnabled;
+    (
+      <IQuestionSurvey>this._question
+    ).multipleSelectionEnabled = !(
+      <IQuestionSurvey>this._question
+    ).multipleSelectionEnabled;
   }
 
   public toggleShowOneAnswerPerRow(): void {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { LANGUAGE } from '../../shared/enums';
 import { I18nManagerApiService } from '../api/i18n-manager/i18n-manager-api.service';
 import { ProjectLoaderService } from '../project-loader/project-loader.service';

@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { IMathjaxResponse } from 'arsnova-click-v2-types/src/common';
+import { IMathjaxResponse } from 'arsnova-click-v2-types/dist/common';
 import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
 import { MathjaxApiService } from '../api/mathjax/mathjax-api.service';
 
@@ -14,9 +14,7 @@ export class QuestionTextService {
 
   private _inputCache = {};
 
-  constructor(
-    private mathjaxApiService: MathjaxApiService,
-  ) {
+  constructor(private mathjaxApiService: MathjaxApiService) {
   }
 
   public async change(value: string): Promise<void> {
@@ -42,7 +40,9 @@ export class QuestionTextService {
 
   private parseInput(value: string): Promise<string> {
     if (this._inputCache[value]) {
-      return new Promise((resolve => resolve(this._inputCache[value])));
+      return new Promise((
+        resolve => resolve(this._inputCache[value])
+      ));
     }
 
     const matchForDollar = value.match(/(\${1,2}.*\$)/g);

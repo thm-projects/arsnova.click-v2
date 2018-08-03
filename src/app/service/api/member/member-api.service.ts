@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IMessage } from 'arsnova-click-v2-types/src/common';
+import { IMessage } from 'arsnova-click-v2-types/dist/common';
 import { Observable } from 'rxjs/index';
 import { DefaultSettings } from '../../../../lib/default.settings';
 
@@ -9,9 +9,7 @@ import { DefaultSettings } from '../../../../lib/default.settings';
 })
 export class MemberApiService {
 
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) { }
 
   public MEMBER_CONFIDENCE_VALUE_PUT_URL(): string {
     return `${DefaultSettings.httpApiEndpoint}/member/confidence-value`;

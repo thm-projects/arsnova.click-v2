@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IDuplicateQuiz } from 'arsnova-click-v2-types/src/common';
-import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { IDuplicateQuiz } from 'arsnova-click-v2-types/dist/common';
+import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 
@@ -14,10 +14,9 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 export class QuizRenameComponent implements OnInit {
   public static TYPE = 'QuizRenameComponent';
 
-  constructor(
-    public readonly fileUploadService: FileUploadService,
-    private readonly footerBarService: FooterBarService,
-    private readonly router: Router,
+  constructor(public readonly fileUploadService: FileUploadService,
+              private readonly footerBarService: FooterBarService,
+              private readonly router: Router,
   ) {
     this.footerBarService.TYPE_REFERENCE = QuizRenameComponent.TYPE;
     this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
@@ -26,7 +25,9 @@ export class QuizRenameComponent implements OnInit {
   public sendRecommendation(duplicateQuiz: IDuplicateQuiz, renameRecommendation: string): void {
     const reader = new FileReader();
     const file: File = <File>this.fileUploadService.renameFilesQueue.getAll('uploadFiles[]').find((uploadedFile) => {
-      return (<File>uploadedFile).name === duplicateQuiz.fileName;
+      return (
+               <File>uploadedFile
+             ).name === duplicateQuiz.fileName;
     });
     reader.addEventListener<'load'>('load', () => {
       const jsonData = JSON.parse(reader.result);

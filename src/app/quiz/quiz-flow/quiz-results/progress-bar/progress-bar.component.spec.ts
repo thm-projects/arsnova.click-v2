@@ -4,7 +4,7 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { IQuestionChoice } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestionChoice } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { Attendee } from '../../../../../lib/attendee/attendee';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';

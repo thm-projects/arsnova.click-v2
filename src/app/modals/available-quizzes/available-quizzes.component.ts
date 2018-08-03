@@ -1,10 +1,10 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
-import { IModal } from 'arsnova-click-v2-types/src/modals/interfaces';
-import { IQuestionGroup } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { IModal } from 'arsnova-click-v2-types/dist/modals/interfaces';
+import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
 import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';

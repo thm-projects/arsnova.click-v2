@@ -1,11 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { DefaultAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/answeroption_default';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { questionReflection } from 'arsnova-click-v2-types/src/questions/question_reflection';
-import { AbstractQuestionGroup } from 'arsnova-click-v2-types/src/questions/questiongroup_abstract';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { DefaultAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_default';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { questionReflection } from 'arsnova-click-v2-types/dist/questions/question_reflection';
+import { AbstractQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_abstract';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
 import { DefaultSettings } from '../../../../lib/default.settings';
 import { FooterbarElement } from '../../../../lib/footerbar-element/footerbar-element';

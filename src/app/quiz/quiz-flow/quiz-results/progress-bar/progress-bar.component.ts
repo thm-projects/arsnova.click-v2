@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IFreetextAnswerOption } from 'arsnova-click-v2-types/src/answeroptions/interfaces';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
-import { FreeTextQuestion } from 'arsnova-click-v2-types/src/questions/question_freetext';
-import { RangedQuestion } from 'arsnova-click-v2-types/src/questions/question_ranged';
+import { IFreetextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/interfaces';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { FreeTextQuestion } from 'arsnova-click-v2-types/dist/questions/question_freetext';
+import { RangedQuestion } from 'arsnova-click-v2-types/dist/questions/question_ranged';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { CurrentQuizService } from '../../../../service/current-quiz/current-quiz.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';

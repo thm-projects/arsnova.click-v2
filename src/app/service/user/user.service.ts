@@ -1,8 +1,8 @@
 import { isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { ILoginSerialized } from 'arsnova-click-v2-types/src/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/src/communication_protocol';
+import { ILoginSerialized } from 'arsnova-click-v2-types/dist/common';
+import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { DB_TABLE, STORAGE_KEY, USER_AUTHORIZATION } from '../../shared/enums';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
 import { StorageService } from '../storage/storage.service';

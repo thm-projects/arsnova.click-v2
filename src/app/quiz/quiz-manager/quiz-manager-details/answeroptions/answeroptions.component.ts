@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestion } from 'arsnova-click-v2-types/src/questions/interfaces';
+import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -28,14 +28,13 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private activeQuestionGroupService: ActiveQuestionGroupService,
     private route: ActivatedRoute,
-    private footerBarService: FooterBarService) {
+    private footerBarService: FooterBarService,
+  ) {
 
     this.footerBarService.TYPE_REFERENCE = AnsweroptionsComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
     ]);
   }
 

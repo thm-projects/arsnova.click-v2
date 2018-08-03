@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { IAvailableNicks } from 'arsnova-click-v2-types/src/common';
+import { IAvailableNicks } from 'arsnova-click-v2-types/dist/common';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { NickApiService } from '../../../service/api/nick/nick-api.service';
@@ -46,14 +46,14 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
 
     this.footerBarService.TYPE_REFERENCE = NicknameManagerComponent.TYPE;
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemBlockRudeNicknames,
-      this.footerBarService.footerElemEnableCasLogin,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemBlockRudeNicknames, this.footerBarService.footerElemEnableCasLogin,
     ]);
   }
 
   public filterForKeyword(event: Event): void {
-    const searchValue = (<HTMLInputElement>event.target).value.toString().toLowerCase();
+    const searchValue = (
+      <HTMLInputElement>event.target
+    ).value.toString().toLowerCase();
 
     if (searchValue.length < this._previousSearchValue.length) {
       this._availableNicks = Object.assign({}, this._availableNicksBackup);
@@ -164,14 +164,11 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.nickApiService.getPredefinedNicks().subscribe(
-      data => {
-        this.availableNicks = data;
-      },
-      error => {
-        console.log(error);
-      },
-    );
+    this.nickApiService.getPredefinedNicks().subscribe(data => {
+      this.availableNicks = data;
+    }, error => {
+      console.log(error);
+    });
   }
 
   public ngOnDestroy(): void {

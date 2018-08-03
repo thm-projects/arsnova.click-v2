@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
-import { INickname } from 'arsnova-click-v2-types/src/common';
+import { INickname } from 'arsnova-click-v2-types/dist/common';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { CurrentQuizService } from '../current-quiz/current-quiz.service';

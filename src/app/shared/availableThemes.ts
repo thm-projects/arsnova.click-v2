@@ -1,4 +1,4 @@
-import { ITheme } from 'arsnova-click-v2-types/src/common';
+import { ITheme } from 'arsnova-click-v2-types/dist/common';
 
 export const themes: Array<ITheme> = [
   {

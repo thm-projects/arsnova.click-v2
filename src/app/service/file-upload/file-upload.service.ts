@@ -1,7 +1,7 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { IDuplicateQuiz, IMessage } from 'arsnova-click-v2-types/src/common';
-import { questionGroupReflection } from 'arsnova-click-v2-types/src/questions/questionGroup_reflection';
+import { IDuplicateQuiz, IMessage } from 'arsnova-click-v2-types/dist/common';
+import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { ActiveQuestionGroupService } from '../active-question-group/active-question-group.service';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
