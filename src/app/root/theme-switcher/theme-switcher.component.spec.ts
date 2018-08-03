@@ -11,6 +11,7 @@ import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.
 import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { I18nService } from '../../service/i18n/i18n.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
@@ -48,7 +49,7 @@ describe('ThemeSwitcherComponent', () => {
         }),
       ],
       providers: [
-        IndexedDbService, {
+        I18nService, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, ThemesService, {
