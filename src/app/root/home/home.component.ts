@@ -168,13 +168,32 @@ export class HomeComponent implements OnInit, OnDestroy {
         }
 
         await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, DefaultSettings.defaultQuizSettings.theme).toPromise();
-        this.themesService.updateCurrentlyUsedTheme();
+
+        if (isPlatformServer(this.platformId)) {
+          const interval = setInterval(() => {
+            if (isPlatformBrowser(this.platformId)) {
+              clearInterval(interval);
+              this.themesService.updateCurrentlyUsedTheme();
+            }
+          }, 5000);
+        } else {
+          this.themesService.updateCurrentlyUsedTheme();
+        }
+
         return;
       }
       if (isPlatformBrowser(this.platformId)) {
         await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).toPromise();
         this.themesService.updateCurrentlyUsedTheme();
+      } else {
+        const interval = setInterval(() => {
+          if (isPlatformBrowser(this.platformId)) {
+            clearInterval(interval);
+            this.themesService.updateCurrentlyUsedTheme();
+          }
+        }, 5000);
       }
+
       this.i18nService.setLanguage(<LANGUAGE>params.languageId.toUpperCase());
     });
   }

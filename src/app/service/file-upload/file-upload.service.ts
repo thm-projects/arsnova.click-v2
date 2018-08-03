@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IDuplicateQuiz, IMessage } from 'arsnova-click-v2-types/dist/common';
@@ -28,7 +29,9 @@ export class FileUploadService {
     private quizApiService: QuizApiService,
     private storageService: StorageService,
   ) {
-    this._renameFilesQueue = new FormData();
+    if (isPlatformBrowser(this.platformId)) {
+      this._renameFilesQueue = new FormData();
+    }
   }
 
   public async uploadFile(formData: FormData): Promise<void> {
