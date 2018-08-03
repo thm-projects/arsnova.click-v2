@@ -1,5 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -39,7 +40,7 @@ describe('NicknameSelectComponent', () => {
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
-            deps: [StorageService],
+            deps: [PLATFORM_ID, StorageService],
           },
         }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {

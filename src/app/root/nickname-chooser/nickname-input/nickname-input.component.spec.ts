@@ -1,5 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -38,7 +39,7 @@ describe('NicknameInputComponent', () => {
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
-            deps: [StorageService],
+            deps: [PLATFORM_ID, StorageService],
           },
         }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {

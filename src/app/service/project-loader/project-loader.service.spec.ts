@@ -1,5 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 import { inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -23,7 +24,7 @@ describe('ProjectLoaderService', () => {
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
-            deps: [StorageService],
+            deps: [PLATFORM_ID, StorageService],
           },
         }), HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {

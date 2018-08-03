@@ -4,7 +4,7 @@ const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   entry: {server: './server.ts'},
-  resolve: {extensions: ['.js', '.ts', '.json', '.mjs'], modules: [path.resolve('node_modules')]},
+  resolve: {extensions: ['.js', '.ts', '.json', '.mjs']},
   target: 'node',
   node: {
     __dirname: false,
@@ -12,9 +12,7 @@ module.exports = {
   },
   mode: 'none',
   // this makes sure we include node_modules and other 3rd party libraries
-  externals: [/node_modules/, nodeExternals({
-    whitelist: [/^arsnova-click-v2-types/]
-  })],
+  externals: [/node_modules/],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js'

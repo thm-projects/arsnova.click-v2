@@ -1,4 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
+import { PLATFORM_ID } from '@angular/core';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -19,7 +20,7 @@ describe('CasLoginService', () => {
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
-            deps: [StorageService],
+            deps: [PLATFORM_ID, StorageService],
           },
         }), SharedModule, RouterTestingModule, HttpClientModule,
       ],

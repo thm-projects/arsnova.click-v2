@@ -1,4 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -21,7 +22,7 @@ describe('FilterKeysPipe', () => {
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
-            deps: [StorageService],
+            deps: [PLATFORM_ID, StorageService],
           },
         }), HttpClientTestingModule,
       ],
