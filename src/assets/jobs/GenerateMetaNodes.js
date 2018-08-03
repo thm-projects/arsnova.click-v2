@@ -3,6 +3,7 @@ const fs = require('fs');
 const process = require('process');
 const minimist = require('minimist');
 const mkdirp = require('mkdirp');
+const mf = require('messageformat');
 
 const argv = minimist(process.argv.slice(2));
 
@@ -54,7 +55,7 @@ class GenerateMetaNodes {
   generateLinkImages() {
     themes.forEach(theme => {
       const basePath = `${this.baseUrl}/assets/images/theme/${theme}`;
-      const manifestPath = `${this.baseUrl}/assets/manifest/${theme}`;
+      const manifestPath = `${this.baseUrl}/assets/meta/${theme}/manifest_%%LANG%%.json`;
 
       const result = [
         {
@@ -136,11 +137,14 @@ class GenerateMetaNodes {
 
   generateManifest() {
     languages.forEach(language => {
+      const localizer = new mf(language);
+      const descriptionMessageSrc = JSON.parse(fs.readFileSync(path.join(this.pathToAssets, 'i18n', `${language}.json`), 'UTF-8')).manifest.description;
+      const descriptionMessage = localizer.compile(descriptionMessageSrc)();
       themes.forEach(theme => {
         const manifest = {
           short_name: 'arsnovaClick',
           name: 'arsnova.click',
-          description: '',
+          description: descriptionMessage,
           background_color: themeData[theme].exportedAtRowStyle.bg,
           theme_color: themeData[theme].exportedAtRowStyle.bg,
           start_url: `${this.baseUrl}`,

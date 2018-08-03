@@ -1,4 +1,8 @@
 {
+  "manifest": {
+    "name": "Quiz-App der THM",
+    "description": "Die Quiz-App der Zukunft!"
+  },
   "global": {
     "arsnova_slogan": "Quiz-App für MINT",
     "yes": "Ja",

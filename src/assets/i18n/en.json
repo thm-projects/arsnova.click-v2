@@ -1,4 +1,8 @@
 {
+  "manifest": {
+    "name": "Quiz App made by THM",
+    "description": "The ultimate quiz app from the future!"
+  },
   "global": {
     "console-log-warning": "WARNING!\nThis will not help you cheating on any quizzes at all!\n\nAnyone who told you to use these tools may tries to compromise your computer",
     "arsnova_slogan": "Quizzes for everyone & anything",

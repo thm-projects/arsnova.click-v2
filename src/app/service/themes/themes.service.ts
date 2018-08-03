@@ -8,6 +8,7 @@ import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizService } from '../current-quiz/current-quiz.service';
+import { I18nService } from '../i18n/i18n.service';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable()
@@ -30,6 +31,7 @@ export class ThemesService {
     private connectionService: ConnectionService,
     private themesApiService: ThemesApiService,
     private storageService: StorageService,
+    private i18nService: I18nService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).subscribe(val => {
@@ -98,6 +100,9 @@ export class ThemesService {
 
     this.themesApiService.getLinkImages(theme).subscribe(data => {
       data.forEach((elem) => {
+        if (elem.id === 'link-manifest') {
+          elem.href = elem.href.replace('%%LANG%%', this.i18nService.currentLanguage.toLowerCase());
+        }
         const previousElement = document.getElementById(elem.id);
         if (previousElement) {
           this.replaceExistingNode(previousElement, elem);
