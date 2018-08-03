@@ -14,6 +14,7 @@ import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
 import { CurrentQuizService } from '../current-quiz/current-quiz.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
+import { I18nService } from '../i18n/i18n.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
@@ -56,7 +57,7 @@ describe('ThemesService', () => {
         }),
       ],
       providers: [
-        IndexedDbService, {
+        I18nService, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
