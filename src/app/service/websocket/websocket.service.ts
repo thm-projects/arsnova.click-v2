@@ -23,21 +23,22 @@ export class WebsocketService {
     } catch (e) {
       return null;
     }
-    const observable = Observable.create(
-      (obsvr: Observer<MessageEvent>) => {
-        socket.onmessage = obsvr.next.bind(obsvr);
-        socket.onerror = obsvr.error.bind(obsvr);
-        socket.onclose = obsvr.complete.bind(obsvr);
-        return socket;
-      },
-    );
+    const observable = Observable.create((obsvr: Observer<MessageEvent>) => {
+      socket.onmessage = obsvr.next.bind(obsvr);
+      socket.onerror = obsvr.error.bind(obsvr);
+      socket.onclose = obsvr.complete.bind(obsvr);
+      return socket;
+    });
     const observer = {
       next: (data: Object) => {
         if (socket.readyState === WebSocket.OPEN) {
+          console.log('websocketservice - sending message', data);
           socket.send(JSON.stringify(data));
         } else if (socket.readyState === WebSocket.CONNECTING) {
           console.log('websocketservice - waiting 500ms for connection');
-          setTimeout(() => (observer.next(data)), 500);
+          setTimeout(() => (
+            observer.next(data)
+          ), 500);
         }
       },
     };

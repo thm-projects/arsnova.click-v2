@@ -176,6 +176,7 @@ export class ConnectionService {
     if (defaultSocket) {
       this._socket = <Subject<IMessage>>defaultSocket.pipe(map((response: MessageEvent): IMessage => {
         const parsedResponse = JSON.parse(response.data);
+        console.log('connectionservice - received message', parsedResponse);
         this._websocketAvailable = true;
 
         if (parsedResponse.payload && parsedResponse.payload.activeQuizzes) {
