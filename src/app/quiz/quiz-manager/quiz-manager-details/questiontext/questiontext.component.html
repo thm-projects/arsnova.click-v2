@@ -9,6 +9,7 @@
               [attr.aria-label]="'component.questions.enter_question_here' | translate"
               id="questionText"
               [placeholder]="'component.questions.enter_question_here' | translate"
+              [style.height]="computeQuestionTextInputHeight()"
               (keyup)="fireEvent($event)">
     </textarea>
   </div>

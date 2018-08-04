@@ -33,9 +33,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemNicknames,
-      this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
     ]);
   }
 
@@ -73,8 +71,9 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   }
 
   public fireEvent(event: Event): void {
-    this.computeQuestionTextInputHeight();
-    this.questionTextService.change((<HTMLTextAreaElement>event.target).value);
+    this.questionTextService.change((
+      <HTMLTextAreaElement>event.target
+    ).value);
   }
 
   public ngOnInit(): void {
@@ -86,7 +85,6 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
       this.questionTextElement.value = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText;
       this.questionTextService.change(this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText);
     }
-    this.computeQuestionTextInputHeight();
   }
 
   public ngOnDestroy(): void {
@@ -98,11 +96,9 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this.activeQuestionGroupService.persist();
   }
 
-  private computeQuestionTextInputHeight(): void {
+  public computeQuestionTextInputHeight(): number {
     if (isPlatformBrowser(this.platformId)) {
-      const questionTextElem = <HTMLInputElement>document.getElementById('questionText');
-      const lineHeight = window.getComputedStyle(questionTextElem).getPropertyValue('line-height').replace('px', '');
-      questionTextElem.style.height = (parseInt(lineHeight, 10)) * (questionTextElem.value.split('\n').length + 2) + 'px';
+      return this.questionTextElement.scrollHeight;
     }
   }
 
