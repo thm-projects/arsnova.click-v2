@@ -13,34 +13,30 @@
                     (input)="setMatchText($event)"
                     (propertychange)="setMatchText($event)"
                     [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate">
-            {{question.answerOptionList[0].answerText}}
+            {{question.answerOptionList[0]?.answerText}}
           </textarea>
       </div>
     </div>
     <div class="row mb-3">
-      <div class="col-12">
-        <div class="row">
-          <div *ngFor="let elem of answer"
-               class="col-12 col-sm-6 mb-2 d-flex answerOptionConfig"
-               [attr.data-intro]="elem.configTitle | translate">
-            <p class="mb-0 mr-2 text-light align-self-center config-label">
-              <span [innerHTML]="elem.configTitle | translate"></span>&#58;&nbsp;
-            </p>
-            <label class="btn pointer mb-0 align-self-center"
-                   [class.btn-success]="elem.enabled"
-                   [class.btn-danger]="!elem.enabled">
-              <input [id]="elem.id"
-                     type="checkbox"
-                     class="d-none"
-                     [attr.aria-label]="elem.configTitle | translate"
-                     autocomplete="off"
-                     role="switch"
-                     [checked]="elem.enabled"
-                     (change)="setConfig(elem.id, !elem.enabled)"/>
-              {{('component.answeroptions.free_text_question.' + (elem.enabled ? 'onText' : 'offText')) | translate}}
-            </label>
-          </div>
-        </div>
+      <div *ngFor="let elem of answer[0].getConfig()"
+           class="col-12 col-sm-6 mb-2 d-flex answerOptionConfig"
+           [attr.data-intro]="elem.configTitle | translate">
+        <p class="mb-0 mr-2 text-light align-self-center config-label">
+          <span [innerHTML]="elem.configTitle | translate"></span>&#58;&nbsp;
+        </p>
+        <label class="btn pointer mb-0 align-self-center"
+               [class.btn-success]="elem.enabled"
+               [class.btn-danger]="!elem.enabled">
+          <input [id]="elem.id"
+                 type="checkbox"
+                 class="d-none"
+                 [attr.aria-label]="elem.configTitle | translate"
+                 autocomplete="off"
+                 role="switch"
+                 [checked]="elem.enabled"
+                 (change)="setConfig(elem.id, !elem.enabled)"/>
+          {{('component.answeroptions.free_text_question.' + (elem.enabled ? 'onText' : 'offText')) | translate}}
+        </label>
       </div>
     </div>
     <div class="row"
@@ -57,10 +53,10 @@
                     [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate"></textarea>
         <div *ngIf="hasTestInput()"
              class="center-block mt-4 mb-0">
-          <h4 class="text-center"
+          <h5 class="text-center bg-light rounded py-2 px-2"
               [class.text-success]="isTestInputCorrect()"
               [class.text-danger]="!isTestInputCorrect()"
-              [innerHTML]="'component.answeroptions.free_text_question.check_' + (!isTestInputCorrect() ? 'in' : '') + 'correct' | translate"></h4>
+              [innerHTML]="'component.answeroptions.free_text_question.check_' + (!isTestInputCorrect() ? 'in' : '') + 'correct' | translate"></h5>
         </div>
       </div>
     </div>

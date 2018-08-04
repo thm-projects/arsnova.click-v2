@@ -2,6 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FreeTextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_freetext';
 import { IFreetextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/interfaces';
+import { AbstractQuestionGroup, questionGroupReflection } from 'arsnova-click-v2-types/dist/questions';
 import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
@@ -81,9 +82,29 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
-      this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
-      this._matchText = this._question.answerOptionList[0].answerText;
-      this._answer = <Array<IFreetextAnswerOption>>this._question.answerOptionList;
+
+      this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
+        if (!(
+          questionGroup instanceof AbstractQuestionGroup
+        )) {
+          questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
+        }
+
+        this._question = questionGroup.questionList[this._questionIndex];
+        this._answer = <Array<IFreetextAnswerOption>>this._question.answerOptionList;
+
+        if (!this._question.answerOptionList.length) {
+          this._question.answerOptionList.push(new FreeTextAnswerOption({
+            answerText: '',
+            configCaseSensitive: false,
+            configTrimWhitespaces: false,
+            configUseKeywords: false,
+            configUsePunctuation: false
+          }));
+        }
+
+        this._matchText = this._question.answerOptionList[0].answerText;
+      });
     });
   }
 

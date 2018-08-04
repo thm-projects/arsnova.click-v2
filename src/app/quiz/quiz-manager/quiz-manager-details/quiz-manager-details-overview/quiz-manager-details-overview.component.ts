@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AbstractQuestionGroup, questionGroupReflection } from 'arsnova-click-v2-types/dist/questions';
 import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -44,7 +45,15 @@ export class QuizManagerDetailsOverviewComponent implements OnInit {
   public ngOnInit(): void {
     this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
-      this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
+      this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
+        if (!(
+          questionGroup instanceof AbstractQuestionGroup
+        )) {
+          questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
+        }
+
+        this._question = questionGroup.questionList[this._questionIndex];
+      });
     });
   }
 

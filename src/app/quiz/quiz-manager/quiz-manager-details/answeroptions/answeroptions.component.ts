@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AbstractQuestionGroup, questionGroupReflection } from 'arsnova-click-v2-types/dist/questions';
 import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
@@ -41,8 +42,17 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._routerSubscription = this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
-      this._question = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
-      this._renderedComponent = this._question.preferredAnsweroptionComponent;
+
+      this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
+        if (!(
+          questionGroup instanceof AbstractQuestionGroup
+        )) {
+          questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
+        }
+
+        this._question = questionGroup.questionList[this._questionIndex];
+        this._renderedComponent = this._question.preferredAnsweroptionComponent;
+      });
     });
   }
 
