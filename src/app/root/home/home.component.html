@@ -74,8 +74,8 @@
                 id="startSession"
                 class="btn btn-success btn-block pointer"
                 (click)="handleClick('startSession') && setAsCurrentQuiz(['/quiz', 'flow'])"
-                [class.disabled]="!canStartQuiz || !serverPassword.length"
-                [disabled]="!canStartQuiz || !serverPassword.length">
+                [class.disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
+                [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)">
           <i class="fas fa-thumbs-up"></i>
           <span class="ml-1">{{'component.hashtag_management.start_session' | translate}}</span>
         </button>

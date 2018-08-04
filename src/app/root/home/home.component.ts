@@ -140,15 +140,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.connectionService.socket.subscribe(data => {
         this.connectionService.websocketAvailable = true;
-
-        switch (data.step) {
-          case COMMUNICATION_PROTOCOL.QUIZ.SET_ACTIVE:
-            this.sharedService.activeQuizzes.push(data.payload.quizName);
-            break;
-          case COMMUNICATION_PROTOCOL.QUIZ.SET_INACTIVE:
-            const index = this.sharedService.activeQuizzes.findIndex(name => name === data.payload.quizName);
-            this.sharedService.activeQuizzes.splice(index, 1);
-        }
       }, () => this.connectionService.websocketAvailable = false);
     });
   }
@@ -414,6 +405,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private async selectQuizAsExisting(quizname): Promise<void> {
     const currentQuiz = await this.storageService.read(DB_TABLE.QUIZ, quizname).toPromise();
     const questionGroupInstance = questionGroupReflection[currentQuiz.TYPE](currentQuiz);
+
     this.canAddQuiz = false;
     this.canEditQuiz = true;
     this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired && questionGroupInstance.isValid();
