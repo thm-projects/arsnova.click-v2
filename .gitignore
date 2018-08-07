@@ -38,7 +38,7 @@ testem.log
 /typings
 /src/assets/images/theme
 /src/assets/jobs/remote-profile
-/src/assets/meta/
+/src/assets/meta/**/*.json
 
 # e2e
 /e2e/*.js
