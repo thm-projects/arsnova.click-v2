@@ -1,18 +1,13 @@
 import path from 'path';
 import fs from 'fs';
-import gm from 'gm';
+import sharp from 'sharp';
 
 import derivates from '../imageDerivates';
 import themeData from '../themeData';
 import process from 'process';
 import child_process from 'child_process';
 import minimist from 'minimist';
-
-import imagemin from 'imagemin';
-import imageminPngquant from 'imagemin-pngquant';
 import {default as chromeLauncher} from 'chrome-launcher';
-
-const gmIM = gm.subClass({imageMagick: true});
 
 const argv = minimist(process.argv.slice(2));
 
@@ -31,28 +26,6 @@ const themes = [
 const languages = ['en', 'de', 'fr', 'it', 'es'];
 
 const __dirname = path.resolve();
-
-const gmToBuffer = (data) => {
-  return new Promise((resolve, reject) => {
-    data.stream((err, stdout, stderr) => {
-      if (err) {
-        return reject(err);
-      }
-      const chunks = [];
-      stdout.on('data', (chunk) => {
-        chunks.push(chunk);
-      });
-      // these are 'once' because they can and do fire multiple times for multiple errors,
-      // but this is a promise so you'll have to deal with them one at a time
-      stdout.once('end', () => {
-        resolve(Buffer.concat(chunks));
-      });
-      stderr.once('data', (stderrmsg) => {
-        reject(String(stderrmsg));
-      });
-    });
-  });
-};
 
 class GenerateImages {
 
@@ -137,53 +110,37 @@ class GenerateImages {
 
   }
 
+  async asyncForEach(array, callback) {
+    for (let index = 0; index < array.length; index++) {
+      await callback(array[index], index, array);
+    }
+  }
+
   generateLogoImages() {
     const source = path.join(this.pathToAssets, 'images', 'logo_transparent.png');
 
-    Object.keys(themeData).forEach(async (themeName) => {
-      await new Promise(resolveLogoImageGeneration => {
-        const theme = themeData[themeName].quizNameRowStyle.bg;
+    this.asyncForEach(Object.keys(themeData), async (themeName) => {
+      const theme = themeData[themeName].quizNameRowStyle.bg;
 
-        derivates.forEach(async (derivate) => {
-          const splittedDerivate = derivate.split('x');
-          const targetLogo = path.join(this.pathToDestination, `${themeName}`, `logo_s${derivate}.png`);
-          const size = {
-            width: splittedDerivate[0],
-            height: splittedDerivate[1],
-            roundX: Math.round((splittedDerivate[0] / Math.PI)),
-            roundY: Math.round((splittedDerivate[1] / Math.PI))
-          };
+      await this.asyncForEach(derivates, async (derivate) => {
+        const splittedDerivate = derivate.split('x');
+        const targetLogo = path.join(this.pathToDestination, `${themeName}`, `logo_s${derivate}.png`);
+        const size = {
+          width: parseInt(splittedDerivate[0], 10),
+          height: parseInt(splittedDerivate[1], 10),
+          roundX: Math.round((splittedDerivate[0] / Math.PI)),
+          roundY: Math.round((splittedDerivate[1] / Math.PI))
+        };
 
-          const bgData = gm(1, 1, 'none')
-          .setFormat('png')
-          .fill(theme)
-          .resize(size.width, size.height)
-          .drawRectangle(0, 0, size.width, size.height, size.roundX, size.roundY)
-          .compose('copyopacity');
-          const bgBuffer = await gmToBuffer(bgData);
-          if (!bgBuffer) {
-            console.log('gm error', bgBuffer);
-            return;
-          }
-
-          const fgData = gmIM(bgBuffer)
-          .setFormat('png')
-          .composite(source)
-          .resize(size.width, size.height);
-          const fgBuffer = await gmToBuffer(fgData);
-          if (!fgBuffer) {
-            console.log('gmIM error', fgBuffer);
-            return;
-          }
-
-          const minifiedBuffer = await imagemin.buffer(fgBuffer, {
-            plugins: [imageminPngquant({quality: '65-80'})]
-          });
-          fs.writeFileSync(targetLogo, minifiedBuffer, 'binary');
-          console.log(`Writing file '${targetLogo}'`);
-          console.log(`Icon with deriavate ${derivate} generated for theme ${themeName}`);
-          resolveLogoImageGeneration();
-        });
+        const minifiedBuffer = await sharp(source)
+        .resize(size.width, size.height)
+        .flatten({background: theme})
+        .sharpen()
+        .png()
+        .toBuffer();
+        fs.writeFileSync(targetLogo, minifiedBuffer, 'binary');
+        console.log(`Writing file '${targetLogo}'`);
+        console.log(`Icon with size of ${derivate}px generated for theme ${themeName}`);
       });
     });
   }

@@ -370,7 +370,20 @@
       "show_more": "Show 1 more",
       "show_more_plural": "Show %s more",
       "show_less": "Show less",
-      "export": "Export"
+      "export": "Export",
+      "team-result": {
+        "name": "Team \"{TEAM_NAME}\"",
+        "overall-response-time": "Overall Response Time: {RESPONSE_TIME}",
+        "score": "Score: {SCORE}"
+      }
+    },
+    "login": {
+      "title": "Please enter your login credentials",
+      "login": "Login",
+      "authorization_failed": "Authorization failed"
+    },
+    "member-group-select": {
+      "title": "Select a Team"
     },
     "liveResults": {
       "title": "Results",

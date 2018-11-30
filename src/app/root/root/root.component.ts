@@ -1,9 +1,12 @@
 import { isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import * as introJs from 'intro.js';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { INamedType } from '../../../lib/interfaces';
+import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
+import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -55,6 +58,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private themesService: ThemesService,
     private translateService: TranslateService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private storageService: StorageService,
     private userService: UserService,
   ) {
@@ -72,8 +76,6 @@ export class RootComponent implements OnInit, AfterViewInit {
       } else if (event instanceof RouteConfigLoadEnd) {
         this._isLoading = false;
       }
-
-      this.isInQuizManager = this.router.isActive('/quiz/manager/overview', true);
     });
   }
 
@@ -85,9 +87,18 @@ export class RootComponent implements OnInit, AfterViewInit {
           return;
         }
 
+        this.isInQuizManager = [QuizManagerComponent.TYPE, QuizManagerDetailsOverviewComponent.TYPE].includes(
+          this.fetchChildComponent(this.activatedRoute).TYPE);
+
         this.initializeCookieConsent(nav.url);
       }
     });
+  }
+
+  private fetchChildComponent(route: ActivatedRoute): INamedType {
+    return <INamedType>(
+      route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component
+    );
   }
 
   private initializeCookieConsent(currentUrl): void {

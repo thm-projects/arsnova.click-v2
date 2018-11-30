@@ -44,9 +44,7 @@ export class FileUploadService {
         this._duplicateQuizzes = data.payload.duplicateQuizzes;
         data.payload.duplicateQuizzes.forEach((duplicateQuiz: IDuplicateQuiz) => {
           this._renameFilesQueue.append('uploadFiles[]', <File>formData.getAll('uploadFiles[]').filter((file) => {
-            return (
-                     <File>file
-                   ).name === duplicateQuiz.fileName;
+            return (<File>file).name === duplicateQuiz.fileName;
           })[0], duplicateQuiz.fileName);
         });
         this.router.navigate(['/quiz', 'rename']);
@@ -60,7 +58,7 @@ export class FileUploadService {
           const reader = new FileReader();
           reader.onload = async () => {
 
-            const parsedFile = JSON.parse(reader.result);
+            const parsedFile = JSON.parse(reader.result.toString());
             this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[parsedFile.TYPE](parsedFile);
             this.activeQuestionGroupService.persist();
 

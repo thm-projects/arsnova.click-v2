@@ -19,10 +19,10 @@
     <ng-container *ngFor="let group of memberGroupResults">
       <div class="col-12 col-sm-6">
         <div class="leaderboard-item rounded p-2 my-2 ">
-          <h6 class="text-center mb-0">Team "{{group.name}}"</h6>
+          <h6 class="text-center mb-0">{{'component.leaderboard.team-result.name' | translate:{TEAM_NAME: group.name} }}</h6>
           <hr/>
-          <p>Overall Response Time: {{formatResponseTime(group.responseTime)}}</p>
-          <p>Score: {{group.score}}</p>
+          <p>{{'component.leaderboard.team-result.overall-response-time' | translate:{RESPONSE_TIME: formatResponseTime(group.responseTime)} }}</p>
+          <p>{{'component.leaderboard.team-result.score' | translate:{SCORE: group.score} }}</p>
         </div>
       </div>
     </ng-container>

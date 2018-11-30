@@ -26,7 +26,7 @@ class GenerateMetaNodes {
 
   constructor() {
     this.pathToAssets = path.join(__dirname, '..');
-    this.baseUrl = 'http://localhost:4200';
+    this.baseUrl = 'http://localhost:4210';
   }
 
   generateDirectories() {

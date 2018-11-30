@@ -25,12 +25,10 @@ export class QuizRenameComponent implements OnInit {
   public sendRecommendation(duplicateQuiz: IDuplicateQuiz, renameRecommendation: string): void {
     const reader = new FileReader();
     const file: File = <File>this.fileUploadService.renameFilesQueue.getAll('uploadFiles[]').find((uploadedFile) => {
-      return (
-               <File>uploadedFile
-             ).name === duplicateQuiz.fileName;
+      return (<File>uploadedFile).name === duplicateQuiz.fileName;
     });
     reader.addEventListener<'load'>('load', () => {
-      const jsonData = JSON.parse(reader.result);
+      const jsonData = JSON.parse(reader.result.toString());
       const quizData: IQuestionGroup = questionGroupReflection[jsonData.TYPE](jsonData);
       quizData.hashtag = renameRecommendation;
       const blob = new Blob([JSON.stringify(quizData.serialize())], { type: 'application/json' });

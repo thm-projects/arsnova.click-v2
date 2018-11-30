@@ -38,7 +38,7 @@ export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase
   }
 
   public async set(table: DB_TABLE, key: STORAGE_KEY | string, item: object | Array<any> | string | number): Promise<any> {
-    return new Promise<void>(resolve => {
+    return new Promise<IDBValidKey>(resolve => {
       const request = this.getStore(table).put(Object.assign({}, key, item));
       request.onsuccess = () => {
         resolve(request.result);

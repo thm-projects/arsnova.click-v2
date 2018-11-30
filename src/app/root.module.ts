@@ -106,9 +106,7 @@ export const appRoutes: Routes = [
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (
-          createTranslateLoader
-        ),
+        useFactory: (createTranslateLoader),
         deps: [HttpClient],
       },
       compiler: {
@@ -125,8 +123,8 @@ export const appRoutes: Routes = [
     HeaderModule,
     FooterModule,
     ModalsModule,
-    NgbModule.forRoot(),
-    Angulartics2Module.forRoot([ArsnovaClickAngulartics2Piwik]),
+    NgbModule,
+    Angulartics2Module.forRoot(),
     I18nManagerModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
@@ -159,6 +157,7 @@ export const appRoutes: Routes = [
     HeaderLabelService,
     QuestionTextService,
     ThemesService,
+    ArsnovaClickAngulartics2Piwik,
     TrackingService,
     UserService,
     WebsocketService,

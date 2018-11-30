@@ -5,6 +5,56 @@ import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { StorageService } from '../storage/storage.service';
 
+interface IFsDocument extends HTMLDocument {
+  mozFullScreenElement?: Element;
+  msFullscreenElement?: Element;
+  msExitFullscreen?: () => void;
+  mozCancelFullScreen?: () => void;
+}
+
+export function isFullScreen(): boolean {
+  const fsDoc = <IFsDocument> document;
+
+  return !!((fsDoc as any).fullscreenElement || fsDoc.mozFullScreenElement || (fsDoc as any).webkitFullscreenElement || fsDoc.msFullscreenElement);
+}
+
+interface IFsDocumentElement extends HTMLElement {
+  msRequestFullscreen?: () => void;
+  mozRequestFullScreen?: () => void;
+}
+
+export function toggleFullScreen(): void {
+  const fsDoc = <IFsDocument> document;
+
+  if (!isFullScreen()) {
+    const fsDocElem = <IFsDocumentElement> document.documentElement;
+
+    if (fsDocElem.requestFullscreen) {
+      (fsDocElem as any).requestFullscreen();
+    } else if (fsDocElem.msRequestFullscreen) {
+      fsDocElem.msRequestFullscreen();
+    } else if (fsDocElem.mozRequestFullScreen) {
+      fsDocElem.mozRequestFullScreen();
+    } else if ((fsDocElem as any).webkitRequestFullscreen) {
+      (fsDocElem as any).webkitRequestFullscreen();
+    }
+  } else if (fsDoc.exitFullscreen) {
+    (fsDoc as any).exitFullscreen();
+  } else if (fsDoc.msExitFullscreen) {
+    fsDoc.msExitFullscreen();
+  } else if (fsDoc.mozCancelFullScreen) {
+    fsDoc.mozCancelFullScreen();
+  } else if ((fsDoc as any).webkitExitFullscreen) {
+    (fsDoc as any).webkitExitFullscreen();
+  }
+}
+
+export function setFullScreen(full: boolean): void {
+  if (full !== isFullScreen()) {
+    toggleFullScreen();
+  }
+}
+
 @Injectable()
 export class FooterBarService {
 
@@ -88,22 +138,7 @@ export class FooterBarService {
     isActive: isPlatformBrowser(this.platformId) ? window.innerWidth === screen.width && window.innerHeight === screen.height : false,
   }, function (): void {
     this.isActive = !this.isActive;
-    if (document) {
-      const elem = document.documentElement;
-      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        if (elem.requestFullscreen) {
-          elem.requestFullscreen();
-        } else if (elem.webkitRequestFullscreen) {
-          elem.webkitRequestFullscreen();
-        }
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        } else if (document.webkitExitFullscreen) {
-          document.webkitExitFullscreen();
-        }
-      }
-    }
+    setFullScreen(this.isActive);
   });
   public footerElemHome: IFooterBarElement = new FooterbarElement({
     id: 'home',

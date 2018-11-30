@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError as observableThrowError } from 'rxjs';
 import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 interface ISchema {
@@ -244,7 +244,7 @@ export class IndexedDbService {
 
   private handleError(msg: string): Observable<any> {
     console.error(msg);
-    return Observable.throw(msg);
+    return observableThrowError(msg);
   }
 
   private open(): Observable<any> {
