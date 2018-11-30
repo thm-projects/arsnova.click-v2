@@ -10,12 +10,10 @@ describe('TrackingService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        Angulartics2Module.forRoot([ArsnovaClickAngulartics2Piwik]),
+        RouterTestingModule, HttpClientModule, Angulartics2Module.forRoot(),
       ],
       providers: [
-        TrackingService,
+        ArsnovaClickAngulartics2Piwik, TrackingService,
       ],
     });
   }));
