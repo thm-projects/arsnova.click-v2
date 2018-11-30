@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import * as introJs from 'intro.js';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { INamedType } from '../../../lib/interfaces';
+// tslint:disable-next-line:max-line-length
 import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -96,21 +97,15 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private fetchChildComponent(route: ActivatedRoute): INamedType {
-    return <INamedType>(
-      route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component
-    );
+    return <INamedType>(route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component);
   }
 
   private initializeCookieConsent(currentUrl): void {
     window.addEventListener('load', () => {
-      if (!(
-        <IWindow>window
-      ).cookieconsent) {
+      if (!(<IWindow>window).cookieconsent) {
         return;
       }
-      (
-        <IWindow>window
-      ).cookieconsent.initialise({
+      (<IWindow>window).cookieconsent.initialise({
         palette: {
           popup: {
             background: '#1d8a8a',
@@ -136,9 +131,7 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   private async getTooltipForRoute(route: string): Promise<void> {
     let hasStartedIntroJs = false;
-    const introState = (
-                         await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE).toPromise()
-                       ) || {};
+    const introState = (await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE).toPromise()) || {};
     if (window.innerWidth <= 768) {
       return;
     }
