@@ -53,16 +53,14 @@ describe('AnsweroptionsComponent', () => {
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
             useClass: TranslateMessageFormatCompiler,
           },
-        }), NgbModalModule.forRoot(),
+        }), NgbModalModule,
       ],
       providers: [
         IndexedDbService, {

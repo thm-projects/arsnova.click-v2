@@ -7,6 +7,7 @@ import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-comp
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { SharedModule } from '../../shared/shared.module';
 
 import { MarkdownBarComponent } from './markdown-bar.component';
 
@@ -17,12 +18,10 @@ describe('MarkdownBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {

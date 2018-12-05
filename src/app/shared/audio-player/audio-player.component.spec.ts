@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -13,11 +14,13 @@ describe('AudioPlayerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientModule,
-        HttpClientTestingModule,
+        FontAwesomeModule, HttpClientModule, HttpClientTestingModule,
       ],
       providers: [
-        { provide: TrackingService, useClass: TrackingMockService },
+        {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
       ],
       declarations: [AudioPlayerComponent],
     }).compileComponents();

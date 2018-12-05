@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '../../shared/shared.module';
 
 import { AddUserComponent } from './add-user.component';
 
@@ -8,7 +10,9 @@ describe('AddUserComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddUserComponent ]
+      imports: [SharedModule, NgbModalModule],
+      providers: [NgbActiveModal],
+      declarations: [AddUserComponent],
     })
     .compileComponents();
   }));

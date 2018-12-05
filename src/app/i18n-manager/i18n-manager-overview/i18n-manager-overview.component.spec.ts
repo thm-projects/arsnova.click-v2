@@ -36,19 +36,10 @@ describe('I18nManagerOverviewComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }),
-        HttpClientTestingModule,
-        NgbModalModule.forRoot(),
-        SharedModule,
-        PipesModule,
-        RouterTestingModule,
-        HttpClientModule,
-        TranslateModule.forRoot({
+        }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {

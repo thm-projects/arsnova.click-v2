@@ -7,7 +7,7 @@ describe('ModalOrganizerService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        NgbModalModule.forRoot(),
+        NgbModalModule,
       ],
       providers: [ModalOrganizerService],
     });

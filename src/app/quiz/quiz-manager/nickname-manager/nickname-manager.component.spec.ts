@@ -65,9 +65,7 @@ describe('NicknameManagerComponent', () => {
         SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -149,7 +147,8 @@ describe('NicknameManagerComponent', () => {
     it('should list all available categories', () => {
       const categories = component.availableNickCategories();
       expect(categories)
-      .toEqual(jasmine.arrayWithExactContents(['disney', 'science', 'fantasy', 'literature', 'mythology', 'actor', 'politics', 'turing_award', 'emojis']));
+      .toEqual(
+        jasmine.arrayWithExactContents(['disney', 'science', 'fantasy', 'literature', 'mythology', 'actor', 'politics', 'turing_award', 'emojis']));
     });
   });
 

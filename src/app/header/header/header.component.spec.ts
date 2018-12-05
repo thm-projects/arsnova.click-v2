@@ -14,6 +14,7 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
+import { SharedModule } from '../../shared/shared.module';
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -23,12 +24,10 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule.forRoot(), TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -69,8 +68,8 @@ describe('HeaderComponent', () => {
     expect(HeaderComponent.TYPE).toEqual('HeaderComponent');
   }));
 
-  it('#openConnectionQualityModal', (
-    inject([TrackingService, NgbModal, ConnectionService], (trackingService: TrackingService, modalService: NgbModal, connectionService: ConnectionService) => {
+  it('#openConnectionQualityModal', (inject([TrackingService, NgbModal, ConnectionService],
+    (trackingService: TrackingService, modalService: NgbModal, connectionService: ConnectionService) => {
       const modalContent = 'testcontent';
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
@@ -82,6 +81,5 @@ describe('HeaderComponent', () => {
       expect(trackingService.trackClickEvent).toHaveBeenCalled();
       expect(modalService.open).toHaveBeenCalledWith(modalContent);
       expect(connectionService.calculateRTT).toHaveBeenCalled();
-    })
-  ));
+    })));
 });

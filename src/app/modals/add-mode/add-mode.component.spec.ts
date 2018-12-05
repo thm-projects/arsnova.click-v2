@@ -24,7 +24,7 @@ describe('AddModeComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), SharedModule, NgbModalModule.forRoot(),
+        }), SharedModule, NgbModalModule,
       ],
       providers: [
         IndexedDbService, {

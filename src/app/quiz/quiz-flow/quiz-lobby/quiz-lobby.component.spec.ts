@@ -43,12 +43,10 @@ describe('QuizLobbyComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, SharedModule, NgxQRCodeModule, NgbModule.forRoot(), TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, SharedModule, NgxQRCodeModule, NgbModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -122,11 +120,7 @@ describe('QuizLobbyComponent', () => {
     spyOn(component, 'kickMember').and.callThrough();
 
     component.openKickMemberModal(modalContent, nickToRemove);
-    (
-      (
-        async () => await component.kickMember(nickToRemove)
-      )()
-    );
+    ((async () => await component.kickMember(nickToRemove))());
 
     expect(component.kickMember).toHaveBeenCalled();
   }));

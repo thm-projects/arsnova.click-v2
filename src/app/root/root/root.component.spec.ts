@@ -39,54 +39,50 @@ describe('RootComponent', () => {
   let component: RootComponent;
   let fixture: ComponentFixture<RootComponent>;
 
-  beforeEach((
-    () => {
-      TestBed.configureTestingModule({
-        imports: [
-          JwtModule.forRoot({
-            jwtOptionsProvider: {
-              provide: JWT_OPTIONS,
-              useFactory: jwtOptionsFactory,
-              deps: [PLATFORM_ID, StorageService],
-            },
-          }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: (
-                createTranslateLoader
-              ),
-              deps: [HttpClient],
-            },
-            compiler: {
-              provide: TranslateCompiler,
-              useClass: TranslateMessageFormatCompiler,
-            },
-          }), NgbModule.forRoot(),
-        ],
-        providers: [
-          UserService, IndexedDbService, HeaderLabelService, ThemesService, {
-            provide: CurrentQuizService,
-            useClass: CurrentQuizMockService,
-          }, {
-            provide: TrackingService,
-            useClass: TrackingMockService,
-          }, FooterBarService, SettingsService, {
-            provide: ConnectionService,
-            useClass: ConnectionMockService,
-          }, {
-            provide: WebsocketService,
-            useClass: WebsocketMockService,
-          }, SharedService, I18nService, FileUploadService, {
-            provide: ActiveQuestionGroupService,
-            useClass: ActiveQuestionGroupMockService,
+  beforeEach((() => {
+    TestBed.configureTestingModule({
+      imports: [
+        JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [PLATFORM_ID, StorageService],
           },
-        ],
-        declarations: [
-          HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent,
-        ],
-      }).compileComponents();
-    }
-  ));
+        }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [HttpClient],
+          },
+          compiler: {
+            provide: TranslateCompiler,
+            useClass: TranslateMessageFormatCompiler,
+          },
+        }), NgbModule,
+      ],
+      providers: [
+        UserService, IndexedDbService, HeaderLabelService, ThemesService, {
+          provide: CurrentQuizService,
+          useClass: CurrentQuizMockService,
+        }, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, I18nService, FileUploadService, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        },
+      ],
+      declarations: [
+        HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent,
+      ],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(RootComponent);

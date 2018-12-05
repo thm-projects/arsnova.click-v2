@@ -44,70 +44,60 @@ describe('QuestiontextComponent', () => {
   let component: QuestiontextComponent;
   let fixture: ComponentFixture<QuestiontextComponent>;
 
-  beforeEach((
-    () => {
-      TestBed.configureTestingModule({
-        imports: [
-          HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: (
-                createTranslateLoader
-              ),
-              deps: [HttpClient],
-            },
-            compiler: {
-              provide: TranslateCompiler,
-              useClass: TranslateMessageFormatCompiler,
-            },
-          }), NgbModalModule.forRoot(),
-        ],
-        providers: [
-          IndexedDbService, {
-            provide: StorageService,
-            useClass: StorageServiceMock,
-          }, {
-            provide: ActiveQuestionGroupService,
-            useClass: ActiveQuestionGroupMockService,
-          }, HeaderLabelService, FooterBarService, SettingsService, {
-            provide: ConnectionService,
-            useClass: ConnectionMockService,
-          }, {
-            provide: WebsocketService,
-            useClass: WebsocketMockService,
-          }, {
-            provide: ActivatedRoute,
-            useClass: MockRouter,
-          }, SharedService, QuestionTextService, {
-            provide: TrackingService,
-            useClass: TrackingMockService,
+  beforeEach((() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [HttpClient],
           },
-        ],
-        declarations: [
-          HeaderComponent, LivePreviewComponent, MarkdownBarComponent, QuestiontextComponent,
-        ],
-      }).compileComponents();
-    }
-  ));
+          compiler: {
+            provide: TranslateCompiler,
+            useClass: TranslateMessageFormatCompiler,
+          },
+        }), NgbModalModule,
+      ],
+      providers: [
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, {
+          provide: ActiveQuestionGroupService,
+          useClass: ActiveQuestionGroupMockService,
+        }, HeaderLabelService, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, {
+          provide: ActivatedRoute,
+          useClass: MockRouter,
+        }, SharedService, QuestionTextService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
+      ],
+      declarations: [
+        HeaderComponent, LivePreviewComponent, MarkdownBarComponent, QuestiontextComponent,
+      ],
+    }).compileComponents();
+  }));
 
-  beforeEach((
-    () => {
-      fixture = TestBed.createComponent(QuestiontextComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }
-  ));
+  beforeEach((() => {
+    fixture = TestBed.createComponent(QuestiontextComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
-  it('should be created', (
-    () => {
-      expect(component).toBeTruthy();
-    }
-  ));
-  it('should contain a TYPE reference', (
-    () => {
-      expect(QuestiontextComponent.TYPE).toEqual('QuestiontextComponent');
-    }
-  ));
+  it('should be created', (() => {
+    expect(component).toBeTruthy();
+  }));
+  it('should contain a TYPE reference', (() => {
+    expect(QuestiontextComponent.TYPE).toEqual('QuestiontextComponent');
+  }));
 
   describe('#connector', () => {
     it('should call the markdown interpreter if a markdown button is pressed', () => {

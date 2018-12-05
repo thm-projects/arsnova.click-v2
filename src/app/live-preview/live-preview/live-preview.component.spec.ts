@@ -32,12 +32,10 @@ describe('LivePreviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, HeaderModule, NgbModule.forRoot(), TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, HeaderModule, NgbModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {

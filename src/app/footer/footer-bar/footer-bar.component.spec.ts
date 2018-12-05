@@ -35,12 +35,10 @@ describe('FooterBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule.forRoot(), TranslateModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -90,56 +88,46 @@ describe('FooterBarComponent', () => {
     expect(FooterBarComponent.TYPE).toEqual('FooterBarComponent');
   }));
 
-  it('#getLinkTarget', (
-    inject([FooterBarService], (footerBarService: FooterBarService) => {
-      expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'about']));
-    })
-  ));
+  it('#getLinkTarget', (inject([FooterBarService], (footerBarService: FooterBarService) => {
+    expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'about']));
+  })));
 
-  it('#toggleSetting', (
-    inject([FooterBarService, TrackingService], (footerBarService: FooterBarService, trackingService: TrackingService) => {
-      const elem = footerBarService.footerElemAbout;
-      spyOn(elem, 'onClickCallback').and.callFake(() => {});
-      spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
-      component.toggleSetting(elem);
-      expect(elem.onClickCallback).toHaveBeenCalled();
-      expect(trackingService.trackClickEvent).toHaveBeenCalled();
-    })
-  ));
+  it('#toggleSetting', (inject([FooterBarService, TrackingService], (footerBarService: FooterBarService, trackingService: TrackingService) => {
+    const elem = footerBarService.footerElemAbout;
+    spyOn(elem, 'onClickCallback').and.callFake(() => {});
+    spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
+    component.toggleSetting(elem);
+    expect(elem.onClickCallback).toHaveBeenCalled();
+    expect(trackingService.trackClickEvent).toHaveBeenCalled();
+  })));
 
-  it('#fileChange', (
-    inject([FileUploadService], (fileUploadService: FileUploadService) => {
-      spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
-      component.fileChange({ target: { files: [{ name: 'testFile' }] } });
-      expect(fileUploadService.uploadFile).toHaveBeenCalled();
-    })
-  ));
+  it('#fileChange', (inject([FileUploadService], (fileUploadService: FileUploadService) => {
+    spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
+    component.fileChange({ target: { files: [{ name: 'testFile' }] } });
+    expect(fileUploadService.uploadFile).toHaveBeenCalled();
+  })));
 
-  it('#moveLeft', (
-    inject([FooterBarService], (footerBarService: FooterBarService) => {
-      component['_footerElements'] = [
-        ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
-      ];
-      component.footerElemIndex = 2;
-      component.moveLeft();
-      expect(component.footerElemIndex).toEqual(1);
-      component.moveLeft();
-      expect(component.footerElemIndex).toEqual(1);
-    })
-  ));
+  it('#moveLeft', (inject([FooterBarService], (footerBarService: FooterBarService) => {
+    component['_footerElements'] = [
+      ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
+    ];
+    component.footerElemIndex = 2;
+    component.moveLeft();
+    expect(component.footerElemIndex).toEqual(1);
+    component.moveLeft();
+    expect(component.footerElemIndex).toEqual(1);
+  })));
 
-  it('#moveRight', (
-    inject([FooterBarService], (footerBarService: FooterBarService) => {
-      component['_footerElements'] = [
-        ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
-      ];
-      component.footerElemIndex = 1;
+  it('#moveRight', (inject([FooterBarService], (footerBarService: FooterBarService) => {
+    component['_footerElements'] = [
+      ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
+    ];
+    component.footerElemIndex = 1;
+    component.moveRight();
+    expect(component.footerElemIndex).toEqual(2);
+    for (let i = 0; i < component.footerElements.length; i++) {
       component.moveRight();
-      expect(component.footerElemIndex).toEqual(2);
-      for (let i = 0; i < component.footerElements.length; i++) {
-        component.moveRight();
-      }
-      expect(component.footerElemIndex).toEqual(component.footerElements.length - 1);
-    })
-  ));
+    }
+    expect(component.footerElemIndex).toEqual(component.footerElements.length - 1);
+  })));
 });

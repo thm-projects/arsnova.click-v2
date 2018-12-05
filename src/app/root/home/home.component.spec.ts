@@ -59,16 +59,14 @@ describe('HomeComponent', () => {
         }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
             provide: TranslateCompiler,
             useClass: TranslateMessageFormatCompiler,
           },
-        }), ModalsModule, NgbModule.forRoot(),
+        }), ModalsModule, NgbModule,
       ],
       providers: [
         IndexedDbService, {
@@ -107,23 +105,19 @@ describe('HomeComponent', () => {
     }).compileComponents();
   });
 
-  beforeEach((
-    () => {
-      fixture = TestBed.createComponent(HomeComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }
-  ));
+  beforeEach((() => {
+    fixture = TestBed.createComponent(HomeComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain a TYPE reference', (
-    () => {
-      expect(HomeComponent.TYPE).toEqual('HomeComponent');
-    }
-  ));
+  it('should contain a TYPE reference', (() => {
+    expect(HomeComponent.TYPE).toEqual('HomeComponent');
+  }));
 
   it('should render \'arsnova.click\' in the main view', () => {
     const compiled = fixture.debugElement.nativeElement;

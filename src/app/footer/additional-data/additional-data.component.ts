@@ -27,7 +27,10 @@ export class AdditionalDataComponent {
 
   private readonly _quizUrl: string;
 
-  constructor(@Inject(DOCUMENT) readonly document, public activeQuestionGroupService: ActiveQuestionGroupService, private trackingService: TrackingService) {
+  constructor(@Inject(DOCUMENT) readonly document,
+              public activeQuestionGroupService: ActiveQuestionGroupService,
+              private trackingService: TrackingService,
+  ) {
   }
 
   public getQuizUrl(quizName: string): string {

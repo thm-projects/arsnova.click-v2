@@ -70,7 +70,10 @@ export class FooterbarElement implements IFooterBarElement {
   private readonly _showIntro: boolean;
   private readonly _queryParams: object;
 
-  constructor({ id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget, queryParams }: IFooterBarElement, onClickCallback?: Function) {
+  constructor(
+    { id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget, queryParams }: IFooterBarElement,
+    onClickCallback?: Function,
+  ) {
     this._id = id;
     this._iconClass = iconClass;
     this._textClass = textClass;
@@ -78,9 +81,7 @@ export class FooterbarElement implements IFooterBarElement {
     this._selectable = selectable;
     this._showIntro = showIntro;
     if (isActive instanceof Observable) {
-      (
-        <Observable<boolean>>isActive
-      ).subscribe(val => this._isActive = val);
+      (<Observable<boolean>>isActive).subscribe(val => this._isActive = val);
     } else {
       this._isActive = !!isActive;
     }
