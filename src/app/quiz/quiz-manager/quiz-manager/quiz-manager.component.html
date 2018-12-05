@@ -34,27 +34,27 @@
             <span *ngIf="!elem.isValid()"
                   class="text-warning ml-2"
                   [title]="'component.quiz_summary.question_failed' | translate">
-              <i class="fas fa-exclamation-triangle"></i>
+        <fa-icon [icon]="'exclamation-triangle'"></fa-icon>
             </span>
             <span class="questionButtonOptions text-right">
               <span class="pointer mr-2"
                     *ngIf="i"
                     (click)="moveQuestionUp(i)">
-                <i class="fas fa-arrow-up"></i>
+      <fa-icon [icon]="'arrow-up'"></fa-icon>
               </span>
               <span class="pointer mr-2"
                     *ngIf="i !== this.activeQuestionGroupService.activeQuestionGroup?.questionList.length - 1"
                     (click)="moveQuestionDown(i)">
-                <i class="fas fa-arrow-down"></i>
+      <fa-icon [icon]="'arrow-down'"></fa-icon>
               </span>
               <span class="pointer mr-2"
                     [routerLink]="['/quiz', 'manager', i,  'overview']"
                     (click)="trackEditQuestion()">
-                <i class="far fa-edit"></i>
+      <fa-icon [icon]="'edit'"></fa-icon>
               </span>
               <span class="pointer"
                     (click)="deleteQuestion(i)">
-                <i class="fas fa-trash"></i>
+      <fa-icon [icon]="'trash'"></fa-icon>
               </span>
             </span>
           </li>

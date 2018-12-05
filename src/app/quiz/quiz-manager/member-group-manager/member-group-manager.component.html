@@ -64,7 +64,9 @@
       <li class="border-bottom p-2">
         <span>{{group}}</span>
         <span class="pointer float-right"
-              (click)="removeMemberGroup(group)"><i class="fas fa-trash"></i></span>
+              (click)="removeMemberGroup(group)">
+      <fa-icon [icon]="'trash'"></fa-icon>
+        </span>
       </li>
     </ul>
   </div>

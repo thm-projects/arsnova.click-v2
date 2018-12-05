@@ -223,9 +223,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public setPassword(event: Event): void {
-    this._serverPassword = (
-      <HTMLInputElement>event.target
-    ).value;
+    this._serverPassword = (<HTMLInputElement>event.target).value;
   }
 
   public handleClick(id: string): boolean {
@@ -281,9 +279,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    if (this.passwordRequired && !(
-        this._serverPassword && this._serverPassword.length
-    )) {
+    if (this.passwordRequired && !(this._serverPassword && this._serverPassword.length)) {
       return;
     }
 
@@ -319,6 +315,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (isLoggedIn) {
       if (this.userService.isAuthorizedFor(USER_AUTHORIZATION.EDIT_I18N)) {
         footerElements.push(this.footerBarService.footerElemEditI18n);
+      }
+      if (this.userService.isAuthorizedFor([USER_AUTHORIZATION.QUIZ_ADMIN, USER_AUTHORIZATION.SUPER_ADMIN])) {
+        footerElements.push(this.footerBarService.footerElemAdmin);
       }
       footerElements.push(this.footerBarService.footerElemLogout);
 
@@ -416,7 +415,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isAddingDemoQuiz = true;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
-    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired;
+    this.canStartQuiz = false;
     this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
@@ -424,7 +423,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isAddingABCDQuiz = true;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
-    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired;
+    this.canStartQuiz = false;
     this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
@@ -453,7 +452,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.canAddQuiz = true;
             this.canJoinQuiz = false;
             this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
-            this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired;
+            this.canStartQuiz = false;
             break;
           default:
             console.log(value);
@@ -517,15 +516,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (hasMatchedABCDQuiz.length) {
       const rawQuiz = await this.storageService.read(DB_TABLE.QUIZ, hasMatchedABCDQuiz[0]).toPromise();
       const questionGroup = questionGroupReflection.DefaultQuestionGroup(rawQuiz);
-      const answerOptionList = (
-        <Array<DefaultAnswerOption>>[]
-      );
+      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
 
       answerList.forEach((character, index) => {
         answerOptionList.push(new DefaultAnswerOption({
-          answerText: (
-            String.fromCharCode(index + 65)
-          ),
+          answerText: (String.fromCharCode(index + 65)),
         }));
       });
       this.enteredSessionName = questionGroup.hashtag;
@@ -545,15 +540,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
 
       const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
-      const answerOptionList = (
-        <Array<DefaultAnswerOption>>[]
-      );
+      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
 
       answerList.forEach((character, index) => {
         answerOptionList.push(new DefaultAnswerOption({
-          answerText: (
-            String.fromCharCode(index + 65)
-          ),
+          answerText: (String.fromCharCode(index + 65)),
         }));
       });
       this.enteredSessionName = questionGroup.hashtag;

@@ -9,8 +9,11 @@
         [title]="elem.titleRef | translate"
         data-animation="false"
         (click)="connector(elem)">
-      <i [class]="elem.iconClass"
+      <i *ngIf="elem.customIcon"
+         [class]="elem.iconClass"
          aria-hidden="true"></i>
+      <fa-icon *ngIf="!elem.customIcon"
+               [icon]="elem.iconClass"></fa-icon>
     </li>
   </ul>
 </div>

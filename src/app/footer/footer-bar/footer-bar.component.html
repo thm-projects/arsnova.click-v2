@@ -19,8 +19,8 @@
        [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
        (click)="toggleSetting(elem)">
     <p class="footerElemIcon mb-0">
-      <i [class]="elem.iconClass"
-         aria-hidden="true"></i>
+      <fa-icon [icon]="elem.iconClass"
+               aria-hidden="true"></fa-icon>
     </p>
     <p class="footerElemText text-truncate text-left mb-0 ml-2 d-md-block"><span [class]="elem.textClass"
                                                                                  [innerHTML]="elem.textName | translate"></span></p>
@@ -31,11 +31,11 @@
       id="footer-move-left"
       [style.visibility]="footerElemIndex === 1 ? 'hidden' : 'visible'"
       (click)="moveLeft()">
-  <i class="fas fa-caret-left"></i>
+        <fa-icon [icon]="'caret-left'"></fa-icon>
 </span>
 <span class="d-flex d-sm-none position-absolute justify-content-center align-items-center"
       id="footer-move-right"
       [style.visibility]="hideRight() ? 'hidden' : 'visible'"
       (click)="moveRight()">
-  <i class="fas fa-caret-right"></i>
+        <fa-icon [icon]="'caret-right'"></fa-icon>
 </span>

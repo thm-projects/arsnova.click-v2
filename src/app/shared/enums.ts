@@ -93,4 +93,6 @@ export enum USER_AUTHORIZATION {
   CREATE_QUIZ_FROM_EXPIRED = 'CREATE_QUIZ_FROM_EXPIRED', //
   CREATE_QUIZ              = 'CREATE_QUIZ', //
   EDIT_I18N                = 'EDIT_I18N', //
+  QUIZ_ADMIN               = 'QUIZ_ADMIN', //
+  SUPER_ADMIN              = 'SUPER_ADMIN', //
 }

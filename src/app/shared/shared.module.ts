@@ -3,6 +3,53 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faAlignLeft,
+  faAppleAlt,
+  faArrowDown,
+  faArrowsAlt,
+  faArrowUp,
+  faBold,
+  faCaretLeft,
+  faCaretRight,
+  faCaretSquareDown,
+  faCaretUp,
+  faCode,
+  faDownload,
+  faEdit,
+  faExclamationTriangle,
+  faEye,
+  faFlag,
+  faGlobe,
+  faHeading,
+  faHome,
+  faHourglass,
+  faImage,
+  faInfoCircle,
+  faLanguage,
+  faListUl,
+  faLock,
+  faMusic,
+  faPaperPlane,
+  faPause,
+  faPlay,
+  faQrcode,
+  faSignInAlt,
+  faSignOutAlt,
+  faSlidersH,
+  faSpinner,
+  faStop,
+  faThumbsUp,
+  faTimes,
+  faTrash,
+  faUndo,
+  faUnlock,
+  faUpload,
+  faUsers,
+  faWrench,
+} from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -10,14 +57,56 @@ import { createTranslateLoader } from '../../lib/translation.factory';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 
+library.add(faTimes);
+library.add(faSpinner);
+library.add(faInfoCircle);
+library.add(faGlobe);
+library.add(faAppleAlt);
+library.add(faArrowsAlt);
+library.add(faWrench);
+library.add(faUpload);
+library.add(faLanguage);
+library.add(faUnlock);
+library.add(faSignOutAlt);
+library.add(faSignInAlt);
+library.add(faHome);
+library.add(faExclamationTriangle);
+library.add(faPaperPlane);
+library.add(faEdit);
+library.add(faDownload);
+library.add(faTrash);
+library.add(faCaretLeft);
+library.add(faCaretRight);
+library.add(faCaretSquareDown);
+library.add(faCaretUp);
+library.add(faArrowDown);
+library.add(faArrowUp);
+library.add(faUsers);
+library.add(faMusic);
+library.add(faFlag);
+library.add(faUndo);
+library.add(faBold);
+library.add(faHeading);
+library.add(faListUl);
+library.add(faCode);
+library.add(faImage);
+library.add(faHourglass);
+library.add(faLock);
+library.add(faPlay);
+library.add(faPause);
+library.add(faStop);
+library.add(faThumbsUp);
+library.add(faEye);
+library.add(faQrcode);
+library.add(faAlignLeft);
+library.add(faSlidersH);
+
 @NgModule({
   imports: [
-    FormsModule, CommonModule, HttpClientModule, TranslateModule.forChild({
+    FormsModule, CommonModule, HttpClientModule, FontAwesomeModule, TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
-        useFactory: (
-          createTranslateLoader
-        ),
+        useFactory: (createTranslateLoader),
         deps: [HttpClient],
       },
       compiler: {
@@ -27,7 +116,16 @@ import { GamificationAnimationComponent } from './gamification-animation/gamific
     }), NgbModule, RouterModule,
   ],
   exports: [
-    CommonModule, HttpClientModule, TranslatePipe, TranslateModule, NgbModule, RouterModule, AudioPlayerComponent, GamificationAnimationComponent,
+    FormsModule,
+    CommonModule,
+    HttpClientModule,
+    FontAwesomeModule,
+    TranslatePipe,
+    TranslateModule,
+    NgbModule,
+    RouterModule,
+    AudioPlayerComponent,
+    GamificationAnimationComponent,
   ],
   providers: [],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent],

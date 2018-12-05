@@ -14,14 +14,14 @@
            (click)="selectKey(i)">
       <span class="text-danger mr-2"
             *ngIf="hasEmptyKeys(elem)">
-        <i class="fas fa-exclamation-triangle"></i>
+        <fa-icon [icon]="'exclamation-triangle'"></fa-icon>
       </span>
         <span class="text-truncate"
               [title]="elem.key">{{elem.key}}</span>
         <span class="ml-auto pointer"
               *ngIf="selectedIndex === i"
               (click)="removeKey(i)">
-            <i class="fas fa-trash"></i>
+    <fa-icon [icon]="'trash'"></fa-icon>
       </span>
       </div>
     </div>

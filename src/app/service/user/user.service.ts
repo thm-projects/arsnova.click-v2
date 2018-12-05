@@ -26,6 +26,7 @@ export class UserService {
     }
     this._isLoggedIn = value;
     this._staticLoginTokenContent = this.decodeToken();
+    console.log(this._staticLoginTokenContent);
     this._loginNotifier.emit(value);
   }
 
@@ -93,11 +94,8 @@ export class UserService {
         return;
       }
 
-      this.authorizeApiService.getValidateStaticLoginToken(this._username, this._staticLoginToken).subscribe(response => {
-        this.isLoggedIn = response.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && response.step
-                          === COMMUNICATION_PROTOCOL.AUTHORIZATION.AUTHENTICATE_STATIC;
-        resolve(this.isLoggedIn);
-      });
+      this.isLoggedIn = !this.jwtHelper.isTokenExpired(this._staticLoginToken);
+      resolve(this.isLoggedIn);
     });
   }
 
@@ -153,9 +151,17 @@ export class UserService {
     return this.sha1(`${username}|${password}`);
   }
 
-  public isAuthorizedFor(authorization: USER_AUTHORIZATION): boolean {
+  public isAuthorizedFor(authorization: Array<USER_AUTHORIZATION>): boolean;
+  public isAuthorizedFor(authorization: USER_AUTHORIZATION): boolean;
+  public isAuthorizedFor(authorization: USER_AUTHORIZATION | Array<USER_AUTHORIZATION>): boolean {
     if (!this.staticLoginTokenContent) {
       return false;
+    }
+
+    if (authorization instanceof Array) {
+      return authorization.every(auth => {
+        return this.staticLoginTokenContent.userAuthorizations.find(value => value === auth);
+      });
     }
 
     return this.staticLoginTokenContent.userAuthorizations.find(value => value === authorization);
@@ -179,9 +185,7 @@ export class UserService {
 
   private tohex(i2: number): string {
     for (let h = '', s = 28; ; s -= 4) {
-      h += (
-        i2 >>> s & 0xf
-      ).toString(16);
+      h += (i2 >>> s & 0xf).toString(16);
       if (!s) {
         return h;
       }
@@ -203,9 +207,7 @@ export class UserService {
       wa.push(0);
     }
     wa.push(ml >>> 29);
-    wa.push((
-              ml << 3
-            ) & M);
+    wa.push((ml << 3) & M);
     for (let bo = 0; bo < wa.length; bo += 16) {
       for (i = 0; i < 16; i++) {
         W[i] = wa[bo + i];
@@ -215,32 +217,16 @@ export class UserService {
       }
       let A = H0, B = H1, C = H2, D = H3, E = H4;
       for (i = 0; i <= 19; i++) {
-        t = (
-              this.rotl(A, 5) + (
-                B & C | ~B & D
-              ) + E + W[i] + 0x5A827999
-            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (this.rotl(A, 5) + (B & C | ~B & D) + E + W[i] + 0x5A827999) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 20; i <= 39; i++) {
-        t = (
-              this.rotl(A, 5) + (
-                B ^ C ^ D
-              ) + E + W[i] + 0x6ED9EBA1
-            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (this.rotl(A, 5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 40; i <= 59; i++) {
-        t = (
-              this.rotl(A, 5) + (
-                B & C | B & D | C & D
-              ) + E + W[i] + 0x8F1BBCDC
-            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (this.rotl(A, 5) + (B & C | B & D | C & D) + E + W[i] + 0x8F1BBCDC) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 60; i <= 79; i++) {
-        t = (
-              this.rotl(A, 5) + (
-                B ^ C ^ D
-              ) + E + W[i] + 0xCA62C1D6
-            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (this.rotl(A, 5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       H0 = H0 + A & M;
       H1 = H1 + B & M;

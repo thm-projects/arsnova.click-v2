@@ -62,13 +62,11 @@
   <div class="modal-body">
     <ul class="p-0 list-unstyled">
       <li>
-        <i class="fas"
-           [class.fa-check-square]="connectionService.serverAvailable"
-           [class.text-success]="connectionService.serverAvailable"
-           [class.fa-times]="!connectionService.serverAvailable"
-           [class.text-danger]="!connectionService.serverAvailable"
-           data-fa-transform="shrink-5"
-           data-fa-mask="fas fa-square"></i>
+        <fa-icon [icon]="connectionService.serverAvailable ? 'check-square' : 'times'"
+                 [transform]="'shrink-5'"
+                 [mask]="'square'"
+                 [class.text-danger]="!connectionService.serverAvailable"
+                 [class.text-success]="connectionService.serverAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">
           <span>Server: </span>
           <span *ngIf="connectionService.serverAvailable">{{'region.header.connection_status.server_status.available' | translate}}</span>
@@ -76,13 +74,11 @@
         </p>
       </li>
       <li>
-        <i class="fas"
-           [class.fa-check-square]="connectionService.websocketAvailable"
-           [class.text-success]="connectionService.websocketAvailable"
-           [class.fa-times]="!connectionService.websocketAvailable"
-           [class.text-danger]="!connectionService.websocketAvailable"
-           data-fa-transform="shrink-5"
-           data-fa-mask="fas fa-square"></i>
+        <fa-icon [icon]="connectionService.websocketAvailable ? 'check-square' : 'times'"
+                 [transform]="'shrink-5'"
+                 [mask]="'square'"
+                 [class.text-danger]="!connectionService.websocketAvailable"
+                 [class.text-success]="connectionService.websocketAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">
           <span>Websocket: </span>
           <span *ngIf="connectionService.websocketAvailable">{{'region.header.connection_status.websocket_status.connected' | translate}}</span>
@@ -90,13 +86,11 @@
         </p>
       </li>
       <li>
-        <i class="fas"
-           [class.fa-check-square]="indexedDbAvailable"
-           [class.text-success]="indexedDbAvailable"
-           [class.fa-times]="!indexedDbAvailable"
-           [class.text-danger]="!indexedDbAvailable"
-           data-fa-transform="shrink-5"
-           data-fa-mask="fas fa-square"></i>
+        <fa-icon [icon]="connectionService.indexedDbAvailable ? 'check-square' : 'times'"
+                 [transform]="'shrink-5'"
+                 [mask]="'square'"
+                 [class.text-danger]="!connectionService.indexedDbAvailable"
+                 [class.text-success]="connectionService.indexedDbAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">
           <span>IndexedDb: </span>
           <span *ngIf="indexedDbAvailable">{{'region.header.connection_status.indexedDb_status.writable' | translate}}</span>
@@ -104,13 +98,11 @@
         </p>
       </li>
       <li>
-        <i class="fas"
-           [class.fa-check-square]="connectionService.rtt < 300 && connectionService.serverAvailable"
-           [class.text-success]="connectionService.rtt < 300 && connectionService.serverAvailable"
-           [class.fa-times]="connectionService.rtt > 300 || !connectionService.serverAvailable"
-           [class.text-danger]="connectionService.rtt > 300 || !connectionService.serverAvailable"
-           data-fa-transform="shrink-5"
-           data-fa-mask="fas fa-square"></i>
+        <fa-icon [icon]="connectionService.rtt <= 300 && connectionService.serverAvailable ? 'check-square' : 'times'"
+                 [transform]="'shrink-5'"
+                 [mask]="'square'"
+                 [class.text-danger]="connectionService.rtt > 300 || !connectionService.serverAvailable"
+                 [class.text-success]="connectionService.rtt <= 300 && connectionService.serverAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">
           <span>Round-Trip-Time: </span>
           <span *ngIf="connectionService.serverAvailable">{{connectionService.rtt}} ms</span>

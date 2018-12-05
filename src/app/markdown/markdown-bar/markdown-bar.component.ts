@@ -4,6 +4,12 @@ import { QuestiontextComponent } from '../../quiz/quiz-manager/quiz-manager-deta
 import { TrackingService } from '../../service/tracking/tracking.service';
 
 class MarkdownBarElement {
+  private _customIcon: boolean;
+
+  get customIcon(): boolean {
+    return this._customIcon;
+  }
+
   get hiddenByDefault(): boolean {
     return this._hiddenByDefault;
   }
@@ -40,10 +46,11 @@ class MarkdownBarElement {
   private readonly _titleRef: string;
   private readonly _hiddenByDefault: boolean;
 
-  constructor({ id, titleRef, iconClass, iconClassToggled = iconClass, hiddenByDefault = false }) {
+  constructor({ id, titleRef, iconClass, iconClassToggled = iconClass, hiddenByDefault = false, customIcon = false }) {
     this._id = id;
     this._titleRef = titleRef;
     this._iconClass = iconClass;
+    this._customIcon = customIcon;
     this._iconClassToggled = iconClassToggled;
     this._hiddenByDefault = hiddenByDefault;
   }
@@ -53,37 +60,37 @@ class MarkdownBarElement {
 const BoldMarkdownButton = new MarkdownBarElement({
   id: 'boldMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.bold',
-  iconClass: 'fas fa-bold',
+  iconClass: 'bold',
 });
 const HeaderMarkdownButton = new MarkdownBarElement({
   id: 'headerMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.heading',
-  iconClass: 'fas fa-heading',
+  iconClass: 'heading',
 });
 const HyperlinkMarkdownButton = new MarkdownBarElement({
   id: 'hyperlinkMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.hyperlink',
-  iconClass: 'fas fa-globe',
+  iconClass: 'globe',
 });
 const UlMarkdownButton = new MarkdownBarElement({
   id: 'unsortedListMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.unordered_list',
-  iconClass: 'fas fa-list-ul',
+  iconClass: 'list-ul',
 });
 const CodeMarkdownButton = new MarkdownBarElement({
   id: 'codeMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.code',
-  iconClass: 'fas fa-code',
+  iconClass: 'code',
 });
 const ImageMarkdownButton = new MarkdownBarElement({
   id: 'imageMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.image',
-  iconClass: 'fas fa-image',
+  iconClass: 'image',
 });
 const ShowMoreMarkdownButton = new MarkdownBarElement({
   id: 'showMoreMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.show_more',
-  iconClass: 'far fa-caret-square-down',
+  iconClass: 'caret-square-down',
   iconClassToggled: 'far fa-caret-square-up',
 });
 
@@ -92,24 +99,25 @@ const LatexMarkdownButton = new MarkdownBarElement({
   id: 'latexMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.latex',
   iconClass: 'latexIcon',
+  customIcon: true,
   hiddenByDefault: true,
 });
 const UnderlineMarkdownButton = new MarkdownBarElement({
   id: 'underlineMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.underline',
-  iconClass: 'fas fa-underline',
+  iconClass: 'underline',
   hiddenByDefault: true,
 });
 const StrikeThroughMarkdownButton = new MarkdownBarElement({
   id: 'strikeThroughMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.strike_through',
-  iconClass: 'fas fa-strikethrough',
+  iconClass: 'strikethrough',
   hiddenByDefault: true,
 });
 const ItalicMarkdownButton = new MarkdownBarElement({
   id: 'italicMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.italic',
-  iconClass: 'fas fa-italic',
+  iconClass: 'italic',
   hiddenByDefault: true,
 });
 
@@ -136,25 +144,10 @@ export class MarkdownBarComponent implements OnInit, OnDestroy {
     this._showHiddenMarkdownButtons = value;
   }
 
-  constructor(
-    private translateService: TranslateService,
-    private trackingService: TrackingService,
-  ) {
-    this.markdownBarElements.push(
-      BoldMarkdownButton,
-      HeaderMarkdownButton,
-      HyperlinkMarkdownButton,
-      UlMarkdownButton,
-      CodeMarkdownButton,
-      ImageMarkdownButton,
-      ShowMoreMarkdownButton,
-    );
-    this.hiddenMarkdownBarElements.push(
-      LatexMarkdownButton,
-      UnderlineMarkdownButton,
-      StrikeThroughMarkdownButton,
-      ItalicMarkdownButton,
-    );
+  constructor(private translateService: TranslateService, private trackingService: TrackingService) {
+    this.markdownBarElements.push(BoldMarkdownButton, HeaderMarkdownButton, HyperlinkMarkdownButton, UlMarkdownButton, CodeMarkdownButton,
+      ImageMarkdownButton, ShowMoreMarkdownButton);
+    this.hiddenMarkdownBarElements.push(LatexMarkdownButton, UnderlineMarkdownButton, StrikeThroughMarkdownButton, ItalicMarkdownButton);
     this.allDisplayedMarkdownBarElements = this.markdownBarElements;
   }
 

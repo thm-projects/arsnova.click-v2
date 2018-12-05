@@ -114,3 +114,35 @@ img[alt*="emoji_"] {
     @include placeholder-align-center;
   }
 }
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+fa-icon {
+  &.cursor-pointer {
+    &:hover {
+      color: lighten(#000, 50%)
+    }
+    &:active {
+      color: lighten(#000, 40%)
+    }
+  }
+}
+
+.card.cursor-pointer {
+  &:hover {
+    .card-img-top {
+      color: lighten(#0a5561, 5%)
+    }
+  }
+  &:active {
+    .card-img-top {
+      color: lighten(#0a5561, 6%)
+    }
+  }
+}

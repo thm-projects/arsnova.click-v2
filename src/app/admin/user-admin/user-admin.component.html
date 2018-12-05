@@ -1,0 +1,33 @@
+<button class="btn btn-primary"
+        (click)="showAddUserModal()">
+  Add User
+</button>
+
+<div *ngFor="let user of data; let i = index"
+     class="card mx-sm-auto mx-5 my-3 w-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-end">
+      <fa-icon *ngIf="!isDeletingElem(i)"
+               class="cursor-pointer mr-2"
+               (click)="editElem(i)"
+               [icon]="'edit'"></fa-icon>
+      <fa-icon *ngIf="isDeletingElem(i)"
+               [icon]="'spinner'"
+               [spin]="true"></fa-icon>
+      <fa-icon *ngIf="!isDeletingElem(i)"
+               [icon]="'times'"
+               class="cursor-pointer"
+               (click)="deleteElem(i)"></fa-icon>
+    </div>
+    <p class="card-text">Username: {{user.username}}</p>
+    <p class="card-text">Gitlab Token: {{user.gitlabToken}}</p>
+    <p class="card-text">
+      <span>Password-Hash:</span><br/>
+      <span>{{user.passwordHash}}</span>
+    </p>
+    <p class="card-text">User Authorizations:</p>
+    <ul>
+      <li *ngFor="let auth of user.userAuthorizations">{{auth}}</li>
+    </ul>
+  </div>
+</div>

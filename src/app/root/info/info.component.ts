@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { DefaultSettings } from '../../../lib/default.settings';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
@@ -53,5 +54,9 @@ export class InfoComponent implements OnInit, OnDestroy {
       action: InfoComponent.TYPE,
       label: `info-${target}`,
     });
+  }
+
+  public openApiDocsWindow(): void {
+    window.open(`${DefaultSettings.httpApiEndpoint}/api-docs`);
   }
 }

@@ -27,10 +27,13 @@
     "compress": "gzip dist/browser/** -r",
     "http-startup": "http-server dist/browser/ -p 4711",
     "prod-test": "npm run build:PROD && npm run purify && npm run compress && npm run http-startup",
-    "prod-test:SSR": "npm run build:SSR && npm run start:SSR",
+    "prod-test:SSR": "npm run build:SSR && npm run job && npm run start:SSR",
+    "job": "npm run job:images; npm run job:link; npm run job:manifest",
     "job:images:logo": "cd dist/browser/assets/jobs/; node --experimental-modules GenerateImages.mjs --command=generateLogoImages",
-    "job:images:frontend": "cd dist/browser/assets/jobs/; node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4210",
-    "job:images": "cd dist/browser/assets/jobs/; node --experimental-modules GenerateImages.mjs --command=all"
+    "job:images:frontend": "cd dist/browser/assets/jobs/; node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4000",
+    "job:images": "cd dist/browser/assets/jobs/; node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000",
+    "job:link": "cd dist/browser/assets/jobs/; node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=http://localhost:4000",
+    "job:manifest": "cd dist/browser/assets/jobs/; node GenerateMetaNodes.js --command=generateManifest --baseUrl=http://localhost:4000"
   },
   "private": true,
   "dependencies": {
@@ -45,6 +48,10 @@
     "@angular/platform-server": "^7.1.1",
     "@angular/router": "^7.1.1",
     "@angular/service-worker": "^7.1.1",
+    "@auth0/angular-jwt": "2.0.0",
+    "@fortawesome/angular-fontawesome": "^0.3.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.8",
+    "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@ng-bootstrap/ng-bootstrap": "^4.0.0",
     "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
     "@nguniversal/express-engine": "^7.0.2",
@@ -65,8 +72,7 @@
     "ngx-translate-messageformat-compiler": "^4.4.0",
     "rxjs": "^6.3.3",
     "ts-loader": "^5.3.1",
-    "zone.js": "^0.8.26",
-    "@auth0/angular-jwt": "2.0.0"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^0.11.0",

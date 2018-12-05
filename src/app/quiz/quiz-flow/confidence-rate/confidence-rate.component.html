@@ -15,8 +15,7 @@
     <button type="button"
             (click)="sendConfidence()"
             class="btn btn-default mt-5 w-100 pointer">
-      <span class="fas fa-paper-plane"
-            aria-hidden="true"></span>
+      <fa-icon [icon]="'paper-plane'"></fa-icon>
       <span>{{("component.voting." + (confidenceValue ? 'send' : 'abstention')) | translate}}</span>
     </button>
   </div>

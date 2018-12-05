@@ -125,7 +125,6 @@ export class RootComponent implements OnInit, AfterViewInit {
         },
       });
 
-      this.getTooltipForRoute(currentUrl);
     });
   }
 

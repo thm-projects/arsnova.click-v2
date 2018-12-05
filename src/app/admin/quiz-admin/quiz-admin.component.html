@@ -1,0 +1,85 @@
+<div *ngFor="let quiz of data; let i = index"
+     class="card mx-sm-auto mx-5 my-3 w-100">
+  <div class="card-body">
+    <div class="d-flex justify-content-end">
+      <fa-icon *ngIf="isDeletingElem(i)"
+               [icon]="'spinner'"
+               [spin]="true"></fa-icon>
+      <fa-icon *ngIf="!isDeletingElem(i)"
+               [icon]="'times'"
+               class="cursor-pointer"
+               (click)="deleteElem(i)"></fa-icon>
+    </div>
+    <p class="card-text">
+      <span>Name: </span>
+      <span *ngIf="quiz.name">{{quiz.name}}</span>
+      <span *ngIf="quiz.originalObject?.hashtag">{{quiz.originalObject.hashtag}}</span>
+    </p>
+    <p class="card-text">Is Active: {{isActiveQuiz(quiz)}}</p>
+    <ng-container *ngIf="isActiveQuiz(quiz)">
+      <p class="card-text">MemberEntity Groups:</p>
+      <ul>
+        <li *ngFor="let group of quiz.memberGroups">
+          <span>Name: {{group.name}}</span>
+          <ul>
+            <li *ngFor="let member of group.members">
+              <span>MemberEntity Name: {{member}}</span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul>
+        <li *ngFor="let question of quiz.questionList">
+          <span>Type: {{question.TYPE}}</span>
+          <ul>
+            <li *ngFor="let answers of group.answerOptionList">
+              <span>Answer Text: {{answers.answerText}}</span><br/>
+              <span>Is Correct: {{answers.isCorrect}}</span><br/>
+              <span>Type: {{answers.TYPE}}</span><br/>
+            </li>
+          </ul>
+          <span>Display Answer Text: {{question.displayAnswerText}}</span>
+          <span>Multiple Selection Enabled: {{question.multipleSelectionEnabled}}</span>
+          <span>Show One Answer Per Row: {{question.showOneAnswerPerRow}}</span>
+          <span>Timer: {{question.timer}}</span>
+          <span>Question Text: {{question.questionText}}</span>
+        </li>
+      </ul>
+      <p class="card-text">Music Config</p>
+      <p class="card-text">Lobby</p>
+      <ul>
+        <li>Enabled: {{quiz.originalObject.sessionConfig.music.enabled.lobby}}</li>
+        <li>Title: {{quiz.originalObject.sessionConfig.music.titleConfig.lobby}}</li>
+        <li>Title: {{quiz.originalObject.sessionConfig.music.volumeConfig.lobby}}</li>
+      </ul>
+      <p class="card-text">Countdown Running</p>
+      <ul>
+        <li>Enabled: {{quiz.originalObject.sessionConfig.music.enabled.countdownRunning}}</li>
+        <li>Title: {{quiz.originalObject.sessionConfig.music.titleConfig.countdownRunning}}</li>
+        <li>Title: {{quiz.originalObject.sessionConfig.music.volumeConfig.countdownRunning}}</li>
+      </ul>
+      <p class="card-text">Countdown End</p>
+      <ul>
+        <li>Enabled: {{quiz.originalObject.sessionConfig.music.enabled.countdownEnd}}</li>
+        <li>Title: {{quiz.originalObject.sessionConfig.music.titleConfig.countdownEnd}}</li>
+        <li>Title: {{quiz.originalObject.sessionConfig.music.volumeConfig.countdownEnd}}</li>
+      </ul>
+      <p class="card-text">Nick Config</p>
+      <ul>
+        <li>MemberEntity Groups: {{quiz.originalObject.sessionConfig.nicks.memberGroups}}</li>
+        <li>Max Members Per Group: {{quiz.originalObject.sessionConfig.nicks.maxMembersPerGroup}}</li>
+        <li>Automatically join to Group: {{quiz.originalObject.sessionConfig.nicks.autoJoinToGroup}}</li>
+        <li>Selected Nicks: {{quiz.originalObject.sessionConfig.nicks.selectedNicks}}</li>
+        <li>blockIllegalNicks: {{quiz.originalObject.sessionConfig.nicks.blockIllegalNicks}}</li>
+        <li>restrictToCasLogin: {{quiz.originalObject.sessionConfig.nicks.restrictToCasLogin}}</li>
+      </ul>
+      <p class="card-text">Session Config</p>
+      <ul>
+        <li>readingConfirmationEnabled: {{quiz.originalObject.sessionConfig.readingConfirmationEnabled}}</li>
+        <li>confidenceSliderEnabled: {{quiz.originalObject.sessionConfig.confidenceSliderEnabled}}</li>
+        <li>showResponseProgress: {{quiz.originalObject.sessionConfig.showResponseProgress}}</li>
+        <li>theme: {{quiz.originalObject.sessionConfig.theme}}</li>
+      </ul>
+    </ng-container>
+  </div>
+</div>

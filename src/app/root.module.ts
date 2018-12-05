@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgModule, PLATFORM_ID } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { RouterModule, Routes } from '@angular/router';
@@ -48,6 +47,9 @@ import { ThemesModule } from './themes/themes.module';
 
 export const appRoutes: Routes = [
   {
+    path: 'admin',
+    loadChildren: 'app/admin/admin.module#AdminModule',
+  }, {
     path: 'info',
     loadChildren: 'app/root/info/info.module#InfoModule',
   }, {
@@ -100,7 +102,6 @@ export const appRoutes: Routes = [
   imports: [
     BrowserModule.withServerTransition({ appId: 'frontend' }),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-    FormsModule,
     CommonModule,
     ModalsModule,
     TranslateModule.forRoot({

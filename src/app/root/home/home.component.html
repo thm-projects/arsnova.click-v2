@@ -30,7 +30,7 @@
               id="collapse-quiz-name-datalist"
               *ngIf="isShowingQuiznameDatalist"
               (click)="hideQuiznameDatalist()">
-          <i class="fas fa-caret-up"></i>
+      <fa-icon [icon]="'caret-up'"></fa-icon>
         </span>
         <div class="list-group text-default d-none list-group-flush"
              id="hashtag-input-data-list">
@@ -67,7 +67,7 @@
                 [class.disabled]="!canJoinQuiz"
                 [routerLink]="['/quiz', enteredSessionName]"
                 [disabled]="!canJoinQuiz">
-          <i class="fas fa-thumbs-up"></i>
+          <fa-icon [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.hashtag_management.join_session' | translate}}</span>
         </button>
         <button *ngIf="canStartQuiz"
@@ -76,7 +76,7 @@
                 (click)="handleClick('startSession') && setAsCurrentQuiz(['/quiz', 'flow'])"
                 [class.disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
                 [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)">
-          <i class="fas fa-thumbs-up"></i>
+          <fa-icon [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.hashtag_management.start_session' | translate}}</span>
         </button>
       </div>
@@ -88,14 +88,14 @@
                 (click)="handleClick('addSession') && setAsCurrentQuiz(['/quiz', 'manager', 'overview'])"
                 [disabled]="!canAddQuiz">
           <span class="mr-1">{{'component.hashtag_management.create_session' | translate}}</span>
-          <i class="fas fa-edit"></i>
+          <fa-icon [icon]="'edit'"></fa-icon>
         </button>
         <button *ngIf="canEditQuiz"
                 id="editSession"
                 class="btn btn-success btn-block pointer"
                 (click)="handleClick('editSession') && setActiveQuestionGroup(['/quiz', 'manager', 'overview'])">
           <span class="mr-1">{{'component.hashtag_management.edit_session' | translate}}</span>
-          <i class="fas fa-edit"></i>
+          <fa-icon [icon]="'edit'"></fa-icon>
         </button>
         <button *ngIf="isAddingDemoQuiz"
                 id="runDemoQuizSession"
@@ -104,7 +104,7 @@
                 (click)="handleClick('add-demo-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
                 [disabled]="passwordRequired && !serverPassword.length">
           <span class="mr-1">{{'component.hashtag_management.create_demo_session' | translate}}</span>
-          <i class="fas fa-paper-plane"></i>
+          <fa-icon [icon]="'paper-plane'"></fa-icon>
         </button>
         <button *ngIf="isAddingABCDQuiz"
                 id="runABCDQuizSession"
@@ -113,7 +113,7 @@
                 (click)="handleClick('add-abcd-quiz') && setActiveQuestionGroup() && setAsCurrentQuiz(['/quiz', 'flow'])"
                 [disabled]="passwordRequired && !serverPassword.length">
           <span class="mr-1">{{'component.hashtag_management.create_abcd_session' | translate}}</span>
-          <i class="fas fa-paper-plane"></i>
+          <fa-icon [icon]="'paper-plane'"></fa-icon>
         </button>
       </div>
     </div>

@@ -3,7 +3,7 @@
      class="overflow-hidden mb-3 d-flex">
   <div class="ml-auto">
     <span>{{countdownValue}}</span>
-    <i class="fas fa-hourglass"></i>
+    <fa-icon [icon]="'hourglass'"></fa-icon>
   </div>
 </div>
 
@@ -45,5 +45,5 @@
         class="btn btn-default w-100 mt-5 pointer"
         (click)="sendResponses()">
   <span>{{'component.voting.send' | translate}}</span>
-  <i class="fas fa-paper-plane"></i>
+  <fa-icon [icon]="'paper-plane'"></fa-icon>
 </button>

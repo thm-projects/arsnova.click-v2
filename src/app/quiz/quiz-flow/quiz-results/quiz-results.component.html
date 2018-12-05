@@ -2,12 +2,12 @@
      id="countdown-header"
      class="overflow-hidden mb-3 d-flex justify-content-between">
   <div>
-    <i class="fas fa-users"></i>
+    <fa-icon [icon]="'users'"></fa-icon>
     <span>{{attendeeService.attendees.length}}</span>
   </div>
   <div>
     <span>{{countdown.remainingTime}}</span>
-    <i class="fas fa-hourglass"></i>
+    <fa-icon [icon]="'hourglass'"></fa-icon>
   </div>
 </div>
 
@@ -26,21 +26,21 @@
       <span *ngIf="!currentQuizService.quiz.sessionConfig.readingConfirmationEnabled">
         {{'component.liveResults.start_round' | translate}}
       </span>
-      <i class="fas fa-paper-plane"></i>
+      <fa-icon [icon]="'paper-plane'"></fa-icon>
     </button>
     <button *ngIf="showStopCountdownButton()"
             (click)="stopQuiz()"
             class="btn btn-default pointer"
             [class.w-100]="!currentQuizService.getVisibleQuestions().length">
       <span [innerHTML]="'component.liveResults.abort_countdown' | translate"></span>
-      <i class="fas fa-ban"></i>
+      <fa-icon [icon]="'ban'"></fa-icon>
     </button>
     <button *ngIf="showStopQuizButton()"
             (click)="stopQuiz()"
             class="btn btn-default pointer"
             [class.w-100]="!currentQuizService.getVisibleQuestions().length">
       <span [innerHTML]="'component.liveResults.abort_question' | translate"></span>
-      <i class="fas fa-ban"></i>
+      <fa-icon [icon]="'ban'"></fa-icon>
     </button>
     <button *ngFor="let question of currentQuizService.getVisibleQuestions(); let i = index"
             class="btn btn-default pointer"
@@ -62,15 +62,13 @@
             [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
-      <i class="fas fa-trophy"
-         aria-hidden="true"></i>
+      <fa-icon [icon]="'trophy'"></fa-icon>
       <span>{{'component.liveResults.ranking' | translate}}</span>
     </button>
     <button [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
             type="button"
             class="btn btn-info w-100 pointer">
-      <i class="fas fa-question"
-         aria-hidden="true"></i>
+      <fa-icon [icon]="'question'"></fa-icon>
       <span>{{'component.liveResults.question' | translate}}</span>
     </button>
   </div>
