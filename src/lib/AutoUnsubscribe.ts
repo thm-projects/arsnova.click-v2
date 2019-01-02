@@ -9,7 +9,7 @@ export function AutoUnsubscribe(subContainer: string): Function {
           property.unsubscribe();
         }
       });
-      original && typeof original === 'function' && original.apply(this, arguments);
+      return original && typeof original === 'function' && original.apply(this, arguments);
     };
   };
 }
