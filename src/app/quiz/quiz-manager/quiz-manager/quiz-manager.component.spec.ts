@@ -93,12 +93,12 @@ describe('QuizManagerComponent', () => {
 
   describe('#addQuestion', () => {
     it('should add a question', inject([QuizService], (quizService: QuizService) => {
-      const id = availableQuestionTypes[0];
+      const id = availableQuestionTypes[0].id;
 
       quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
 
       expect(quizService.quiz.questionList.length).toEqual(1);
-      expect(quizService.quiz.questionList[0].TYPE).toEqual(id);
+      expect(quizService.quiz.questionList[0].TYPE.toString()).toEqual(id);
     }));
 
     it('should not add an invalid question', inject([QuizService], (quizService: QuizService) => {

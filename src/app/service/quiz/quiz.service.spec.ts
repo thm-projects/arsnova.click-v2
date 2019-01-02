@@ -68,11 +68,6 @@ describe('QuizService', () => {
     expect(service).toBeTruthy();
   })));
 
-  it('#generatePrivateKey', async(inject([QuizService], (service: QuizService) => {
-    const privateKey = service.generatePrivateKey();
-    expect(typeof privateKey).toEqual('string');
-  })));
-
   it('#persist', async(inject([QuizService, StorageService], (service: QuizService, storageService: StorageService) => {
     service.persist();
     storageService.getAllQuiznames().then(quiznames => {
