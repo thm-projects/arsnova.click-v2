@@ -29,7 +29,7 @@
             [attr.data-intro]="'component.quiz_manager.description.added_questions' | translate">
           <li *ngFor="let elem of this.quizService.quiz?.questionList; let i = index;"
               [id]="i + '_draggable'"
-              [class]="'questionElementWrapper d-flex justify-content-center align-items-center px-2 py-2 mb-2 rounded questionType_' + i">
+              [class]="'questionElementWrapper d-flex flex-shrink-0 justify-content-center align-items-center px-2 py-2 mb-2 rounded questionType_' + i">
             <span [innerHTML]="elem.translationReferrer() | translate"></span>
             <span *ngIf="!elem.isValid()"
                   class="text-warning ml-2"

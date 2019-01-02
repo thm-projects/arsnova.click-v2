@@ -67,10 +67,6 @@ export class StorageService {
   }
 
   private initDb(dbName): void {
-    if (this.indexedDbService.dbName === dbName) {
-      return;
-    }
-
     this.indexedDbService.setName(dbName);
     this.indexedDbService.create([
       { name: DbTable.Config }, {
@@ -83,6 +79,7 @@ export class StorageService {
           this.create(DbTable.Config, StorageKey.PrivateKey, val).subscribe();
         }
         localStorage.setItem('privateKey', val);
+        this.indexedDbService.stateNotifier.next('initialized');
       });
     });
   }

@@ -110,28 +110,26 @@ export class HomeComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'default';
 
     if (isPlatformBrowser(this.platformId)) {
-      this.cleanUpSessionStorage();
-
       this.storageService.stateNotifier.subscribe(val => {
         if (val === 'initialized') {
+          this.cleanUpSessionStorage();
           this.storageService.getAllQuiznames().then(quizNames => {
             this._ownQuizzes = quizNames;
             if (this._ownQuizzes.length) {
               this.modalService.open(AvailableQuizzesComponent);
             }
           });
+
+          this.quizApiService.getPublicQuizAmount().subscribe(val => {
+            this.publicQuizAmount = val;
+          });
+
+          this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
+            this.ownPublicQuizAmount = val;
+          });
         }
       });
     }
-
-    this.quizApiService.getPublicQuizAmount().subscribe(val => {
-      this.publicQuizAmount = val;
-    });
-
-    this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
-      this.ownPublicQuizAmount = val;
-    });
-
     this.updateFooterElements(this.userService.isLoggedIn);
     this.userService.loginNotifier.subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
