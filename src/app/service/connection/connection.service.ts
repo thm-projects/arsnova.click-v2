@@ -1,13 +1,11 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IMessage, IMessageStep } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
+import { MessageProtocol } from '../../../lib/enums/Message';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
 import { SharedService } from '../shared/shared.service';
-import { StorageService } from '../storage/storage.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable()
@@ -18,23 +16,23 @@ export class ConnectionService {
     return this._socket;
   }
 
-  private _serverAvailable: Boolean;
+  private _serverAvailable: boolean;
 
-  get serverAvailable(): Boolean {
+  get serverAvailable(): boolean {
     return this._serverAvailable;
   }
 
-  set serverAvailable(value: Boolean) {
+  set serverAvailable(value: boolean) {
     this._serverAvailable = value;
   }
 
-  private _websocketAvailable: Boolean = false;
+  private _websocketAvailable = false;
 
-  get websocketAvailable(): Boolean {
+  get websocketAvailable(): boolean {
     return this._websocketAvailable;
   }
 
-  set websocketAvailable(value: Boolean) {
+  set websocketAvailable(value: boolean) {
     this._websocketAvailable = value;
   }
 
@@ -73,7 +71,6 @@ export class ConnectionService {
     private websocketService: WebsocketService,
     private sharedService: SharedService,
     private statisticsApiService: StatisticsApiService,
-    private storageService: StorageService,
   ) {
     this.initWebsocket();
   }
@@ -93,33 +90,13 @@ export class ConnectionService {
     this._socket.next(message);
   }
 
-  public async authorizeWebSocket(hashtag: string): Promise<void> {
-    if (this._isWebSocketAuthorized) {
-      return;
-    }
-    this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, COMMUNICATION_PROTOCOL.AUTHORIZATION.AUTHENTICATE,
-      await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION).toPromise());
-  }
-
-  public async authorizeWebSocketAsOwner(hashtag: string): Promise<void> {
-    if (this._isWebSocketAuthorized) {
-      return;
-    }
-    this._isWebSocketAuthorized = true;
-    this.sendAuthorizationMessage(hashtag, COMMUNICATION_PROTOCOL.AUTHORIZATION.AUTHENTICATE_AS_OWNER,
-      await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise());
-  }
-
   public initConnection(overrideCurrentState?: boolean): Promise<any> {
     if (isPlatformServer(this.platformId)) {
       return new Promise<any>(resolve => resolve());
     }
 
     return new Promise(async (resolve) => {
-      if ((
-            this.pending || this.serverAvailable
-          ) && !overrideCurrentState) {
+      if ((this.pending || this.serverAvailable) && !overrideCurrentState) {
         resolve();
         return;
       }
@@ -157,6 +134,43 @@ export class ConnectionService {
     });
   }
 
+  public connectToChannel(name: string): void {
+    if (!this._socket) {
+      return;
+    }
+
+    if (!this._websocketAvailable) {
+      setTimeout(() => {
+        console.log('connectionservice - websocket not available, waiting 500ms');
+        this.connectToChannel(name);
+      }, 500);
+      return;
+    }
+    this._socket.next({
+      step: MessageProtocol.Connect,
+      payload: {
+        name,
+      },
+    });
+  }
+
+  public disconnectFromChannel(): void {
+    if (!this._socket) {
+      return;
+    }
+
+    if (!this._websocketAvailable) {
+      setTimeout(() => {
+        console.log('connectionservice - websocket not available, waiting 500ms');
+        this.disconnectFromChannel();
+      }, 500);
+      return;
+    }
+    this._socket.next({
+      step: MessageProtocol.Disconnect,
+    });
+  }
+
   private calculateConnectionSpeedIndicator(): void {
     if (this._rtt > 800) {
       this._lowSpeed = true;
@@ -186,26 +200,5 @@ export class ConnectionService {
         return parsedResponse;
       }));
     }
-  }
-
-  private sendAuthorizationMessage(hashtag: string, step: IMessageStep, auth: string): void {
-    if (!this._socket) {
-      return;
-    }
-
-    if (!this._websocketAvailable) {
-      setTimeout(() => {
-        console.log('connectionservice - websocket not available, waiting 500ms');
-        this.sendAuthorizationMessage(hashtag, step, auth);
-      }, 500);
-      return;
-    }
-    this._socket.next({
-      step,
-      payload: {
-        quizName: hashtag,
-        webSocketAuthorization: auth,
-      },
-    });
   }
 }

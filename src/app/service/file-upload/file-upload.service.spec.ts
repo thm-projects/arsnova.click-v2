@@ -6,13 +6,12 @@ import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService }
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { SharedModule } from '../../shared/shared.module';
-import { ActiveQuestionGroupMockService } from '../active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../current-quiz/current-quiz.service';
+import { QuizService } from '../current-quiz/current-quiz.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
+import { QuizMockService } from '../quiz/quiz-mock.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
@@ -30,9 +29,7 @@ describe('FileUploadService', () => {
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -52,11 +49,11 @@ describe('FileUploadService', () => {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, SettingsService, TranslateService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, FooterBarService, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, FileUploadService,
       ],
     });

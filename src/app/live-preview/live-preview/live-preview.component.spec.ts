@@ -9,13 +9,13 @@ import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-comp
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { HeaderModule } from '../../header/header.module';
-import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -49,8 +49,8 @@ describe('LivePreviewComponent', () => {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, {
           provide: WebsocketService,
           useClass: WebsocketMockService,

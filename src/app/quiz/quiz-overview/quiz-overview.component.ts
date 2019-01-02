@@ -1,19 +1,21 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions';
-import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
-import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { DbTable } from '../../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { UserRole } from '../../../lib/enums/UserRole';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { QuizSaveComponent } from '../../modals/quiz-save/quiz-save.component';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
+import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
+import { UserService } from '../../service/user/user.service';
 
 @Component({
   selector: 'app-quiz-overview',
@@ -22,24 +24,28 @@ import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 })
 export class QuizOverviewComponent implements OnInit {
   public static TYPE = 'QuizOverviewComponent';
+  public publicQuizAmount: number;
 
-  private _sessions: Array<IQuestionGroup> = [];
+  private _sessions: Array<QuizEntity> = [];
 
-  get sessions(): Array<IQuestionGroup> {
+  get sessions(): Array<QuizEntity> {
     return this._sessions;
   }
+
+  private _isSaving: Array<number> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
-    private currentQuizService: CurrentQuizService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizService: QuizService,
     private router: Router,
     private trackingService: TrackingService,
     private quizApiService: QuizApiService,
-    private lobbyApiService: LobbyApiService,
     private storageService: StorageService,
+    private userService: UserService,
+    private modalService: NgbModal,
+    public connectionService: ConnectionService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizOverviewComponent.TYPE;
@@ -52,7 +58,11 @@ export class QuizOverviewComponent implements OnInit {
       this.footerBarService.footerElemImport,
     ]);
 
-    headerLabelService.headerLabel = 'component.hashtag_management.session_management';
+    headerLabelService.headerLabel = 'component.name_management.session_management';
+
+    this.quizApiService.getPublicQuizAmount().subscribe(val => {
+      this.publicQuizAmount = val;
+    });
   }
 
   public startQuiz(index: number): Promise<void> {
@@ -73,8 +83,8 @@ export class QuizOverviewComponent implements OnInit {
         return;
       }
 
-      this.currentQuizService.quiz = this.sessions[index];
-      await this.currentQuizService.cacheQuiz();
+      this.quizService.quiz = this.sessions[index];
+      this.quizService.isOwner = true;
       await this.openLobby(this.sessions[index]);
 
       resolve();
@@ -91,8 +101,9 @@ export class QuizOverviewComponent implements OnInit {
       label: `edit-quiz`,
     });
 
-    this.activeQuestionGroupService.activeQuestionGroup = this.sessions[index];
-    this.router.navigate(['/quiz', 'manager']);
+    this.quizService.quiz = this.sessions[index];
+    this.quizService.isOwner = true;
+    this.router.navigate(['/quiz', 'manager', 'overview']);
   }
 
   public async exportQuiz(index: number, onClick?: (self: HTMLAnchorElement, event: MouseEvent) => void): Promise<void> {
@@ -103,11 +114,9 @@ export class QuizOverviewComponent implements OnInit {
     const a = document.createElement('a');
     const time = new Date();
     const type = 'text/json';
-    const sessionName = this.sessions[index].hashtag;
-    const exportData = `${type};charset=utf-8,${encodeURIComponent(JSON.stringify(this.sessions[index].serialize()))}`;
-    const timestring = time.getDate() + '_' + (
-                       time.getMonth() + 1
-    ) + '_' + time.getFullYear();
+    const sessionName = this.sessions[index].name;
+    const exportData = `${type};charset=utf-8,${encodeURIComponent(JSON.stringify(this.sessions[index]))}`;
+    const timestring = time.getDate() + '_' + (time.getMonth() + 1) + '_' + time.getFullYear();
     const fileName = `${sessionName}-${timestring}.json`;
 
     a.href = 'data:' + exportData;
@@ -139,18 +148,13 @@ export class QuizOverviewComponent implements OnInit {
       return;
     }
 
-    const sessionName = this.sessions[index].hashtag;
-
-    this.sessions.splice(index, 1);
-    this.storageService.delete(DB_TABLE.QUIZ, sessionName).subscribe();
-    this.quizApiService.deleteQuiz({
-      body: {
-        quizName: sessionName,
-        privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
-      },
-    }).subscribe((response: IMessage) => {
-      if (response.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+    this.quizApiService.deleteQuiz(this.sessions[index]).subscribe((response: IMessage) => {
+      if (response.status !== StatusProtocol.Success) {
         console.log(response);
+      } else {
+        const sessionName = this.sessions[index].name;
+        this.sessions.splice(index, 1);
+        this.storageService.delete(DbTable.Quiz, sessionName).subscribe();
       }
     });
   }
@@ -159,43 +163,70 @@ export class QuizOverviewComponent implements OnInit {
     this.loadData();
   }
 
+  public isSaved(index: number): boolean {
+    return this._isSaving.includes(index);
+  }
+
+  public saveQuiz(index: number): void {
+    if (this.isSaved(index)) {
+      return;
+    }
+
+    this.trackingService.trackClickEvent({
+      action: QuizOverviewComponent.TYPE,
+      label: `save-quiz`,
+    });
+
+    this.modalService.open(QuizSaveComponent).result.catch(() => {}).then(val => {
+      if (!val || new Date(val.expiry).getTime() <= new Date().getTime()) {
+        return;
+      }
+
+      this.sessions[index].expiry = new Date(val.expiry);
+      this.sessions[index].visibility = val.visibility;
+      this.sessions[index].description = val.description;
+      this._isSaving.push(index);
+      this.quizApiService.putSavedQuiz(this.sessions[index]).subscribe(() => {
+        this._isSaving.splice(this._isSaving.indexOf(index), 1);
+      }, () => {
+        this._isSaving.splice(this._isSaving.indexOf(index), 1);
+      });
+    });
+  }
+
+  public isAuthorizedToSaveQuiz(): boolean {
+    return this.userService.isAuthorizedFor([UserRole.CreateExpiredQuiz, UserRole.SuperAdmin]);
+  }
+
   private loadData(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.getAll(DB_TABLE.QUIZ).subscribe((rawSessions) => {
+      this.storageService.getAll(DbTable.Quiz).subscribe((rawSessions) => {
         rawSessions.forEach(session => {
-          this._sessions.push(questionGroupReflection[session.value.TYPE](session.value));
+          this._sessions.push(new QuizEntity(session.value));
         });
       });
     }
   }
 
-  private async requestQuizStatus(session: IQuestionGroup): Promise<boolean> {
-    const quizStatusResponse = await this.quizApiService.getQuizStatus(session.hashtag).toPromise();
-    if (quizStatusResponse.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
-      return false;
-    }
-    if (quizStatusResponse.step === COMMUNICATION_PROTOCOL.QUIZ.EXISTS) {
+  private async requestQuizStatus(session: QuizEntity): Promise<boolean> {
+    const quizStatusResponse = await this.quizApiService.getQuizStatus(session.name).toPromise();
+    if (quizStatusResponse.step === MessageProtocol.Available) {
       return true;
     }
-    if (quizStatusResponse.step !== COMMUNICATION_PROTOCOL.QUIZ.UNDEFINED) {
+    if (quizStatusResponse.step !== MessageProtocol.Unavailable) {
       return false;
     }
 
-    await this.quizApiService.postQuizReservationOverride({
-      quizName: session.hashtag,
-      privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
-    }).toPromise();
+    const updatedQuiz = await this.quizApiService.setQuiz(session).toPromise();
+    sessionStorage.setItem('token', updatedQuiz.adminToken);
 
     return true;
   }
 
-  private async openLobby(session: IQuestionGroup): Promise<any> {
-    const lobbyResponse = await this.lobbyApiService.putLobby({
-      quiz: session.serialize(),
-    }).toPromise();
-
-    if (lobbyResponse.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+  private async openLobby(session: QuizEntity): Promise<any> {
+    this.quizApiService.setQuiz(session).subscribe((updatedQuiz) => {
+      sessionStorage.setItem('token', updatedQuiz.adminToken);
       this.router.navigate(['/quiz', 'flow']);
-    }
+    });
   }
 }

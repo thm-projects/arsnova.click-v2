@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -23,16 +22,15 @@ import { LanguageSwitcherComponent } from './root/language-switcher/language-swi
 import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
-import { ActiveQuestionGroupService } from './service/active-question-group/active-question-group.service';
 import { AttendeeService } from './service/attendee/attendee.service';
 import { ConnectionService } from './service/connection/connection.service';
-import { CurrentQuizService } from './service/current-quiz/current-quiz.service';
 import { FileUploadService } from './service/file-upload/file-upload.service';
 import { FooterBarService } from './service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from './service/header-label/header-label.service';
 import { I18nService } from './service/i18n/i18n.service';
 import { CasLoginService } from './service/login/cas-login.service';
 import { QuestionTextService } from './service/question-text/question-text.service';
+import { QuizService } from './service/quiz/quiz.service';
 import { SettingsService } from './service/settings/settings.service';
 import { SharedService } from './service/shared/shared.service';
 import { IndexedDbService } from './service/storage/indexed.db.service';
@@ -102,7 +100,6 @@ export const appRoutes: Routes = [
   imports: [
     BrowserModule.withServerTransition({ appId: 'frontend' }),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
-    CommonModule,
     ModalsModule,
     TranslateModule.forRoot({
       loader: {
@@ -131,7 +128,7 @@ export const appRoutes: Routes = [
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,
         useFactory: jwtOptionsFactory,
-        deps: [PLATFORM_ID, StorageService],
+        deps: [PLATFORM_ID],
       },
     }),
   ],
@@ -145,9 +142,8 @@ export const appRoutes: Routes = [
     StorageService,
     I18nService,
     FooterBarService,
-    ActiveQuestionGroupService,
     ConnectionService,
-    CurrentQuizService,
+    QuizService,
     TranslateModule,
     CasLoginService,
     FileUploadService,

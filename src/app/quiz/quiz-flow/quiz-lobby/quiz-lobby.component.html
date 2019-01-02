@@ -1,31 +1,31 @@
 <div class="row">
   <ng-container *ngIf="attendeeService.getMemberGroups().length === 1; else attendeesByGroup">
-    <div class="col-12">
-      <ng-container *ngIf="!attendeeService.attendees.length">
+    <ng-container *ngIf="!attendeeService.attendees.length">
+      <div class="col-12">
         <h3 class="text-center text-light center-top d-flex align-self-center justify-content-center">{{'component.lobby.waiting_for_players' | translate}}</h3>
-      </ng-container>
-      <div *ngFor="let elem of attendeeService.attendees"
-           class="mb-1 col-sm-4 col-md-3">
-        <div [id]="elem.id"
-             (click)="openKickMemberModal(removeMemberModal, elem.name)"
-             class="member-wrapper"
-             [class.pointer]="ownsQuiz"
-             [class.own-nick]="attendeeService.isOwnNick(elem.name)"
-             [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-             [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
-          <p class="mb-0 text-center"
-             [innerHTML]="parseNickname(elem.name)"></p>
-        </div>
+      </div>
+    </ng-container>
+    <div *ngFor="let elem of attendeeService.attendees"
+         class="mb-1 col-sm-4 col-md-3">
+      <div [id]="elem.id"
+           (click)="openKickMemberModal(removeMemberModal, elem.name)"
+           class="member-wrapper h-100"
+           [class.pointer]="quizService.isOwner"
+           [class.own-nick]="attendeeService.isOwnNick(elem.name)"
+           [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
+           [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
+        <p class="mb-0 h-100 align-items-center justify-content-center d-flex p-2 text-center"
+           [innerHTML]="parseNickname(elem.name)"></p>
       </div>
     </div>
   </ng-container>
 </div>
 
-<app-audio-player *ngIf="ownsQuiz && currentQuizService.quiz.sessionConfig?.music.enabled.lobby"
-                  [original_volume]="currentQuizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? currentQuizService.quiz.sessionConfig.music.volumeConfig.global : currentQuizService.quiz.sessionConfig.music.volumeConfig.lobby"
+<app-audio-player *ngIf="quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby"
+                  [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.lobby"
                   [autostart]="true"
                   [target]="'lobby'"
-                  [src]="currentQuizService.quiz.sessionConfig.music.titleConfig.lobby"></app-audio-player>
+                  [src]="quizService.quiz.sessionConfig.music.titleConfig.lobby"></app-audio-player>
 
 <ngx-qrcode [qrc-value]="qrCodeContent"
             qrc-class="qrCodeContent position-absolute"
@@ -46,7 +46,7 @@
       </ng-container>
       <div *ngFor="let elem of attendeeService.getMembersOfGroup(group)"
            (click)="openKickMemberModal(removeMemberModal, elem.name)"
-           [class.pointer]="ownsQuiz"
+           [class.pointer]="quizService.isOwner"
            class="d-inline-flex mw-100 mr-3">
         <fa-icon [icon]="'user'"
                  [id]="elem.id"

@@ -1,5 +1,12 @@
-<app-answeroptions-default *ngIf="renderedComponent === 'AnsweroptionsDefaultComponent'"></app-answeroptions-default>
-<app-answeroptions-ranged *ngIf="renderedComponent === 'AnsweroptionsRangedComponent'"></app-answeroptions-ranged>
-<app-answeroptions-freetext *ngIf="renderedComponent === 'AnsweroptionsFreetextComponent'"></app-answeroptions-freetext>
+<ng-container *ngIf="question">
+  <ng-container *ngIf="[questionType.RangedQuestion, questionType.FreeTextQuestion].includes(question.TYPE); else defaultFallback">
+    <app-answeroptions-ranged *ngIf="question.TYPE === questionType.RangedQuestion"></app-answeroptions-ranged>
+    <app-answeroptions-freetext *ngIf="question.TYPE === questionType.FreeTextQuestion"></app-answeroptions-freetext>
+  </ng-container>
+
+  <ng-template #defaultFallback>
+    <app-answeroptions-default></app-answeroptions-default>
+  </ng-template>
+</ng-container>
 
 <!-- Live preview -->

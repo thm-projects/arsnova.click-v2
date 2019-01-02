@@ -1,0 +1,59 @@
+<div class="modal-header">
+  <h4 class="modal-title">Settings for saved Quizzes</h4>
+  <button type="button"
+          class="close"
+          aria-label="Close"
+          (click)="dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="form-row">
+    <div class="form-group col-12">
+      <label class="d-block">
+        <span>Access to this Quiz is allowed for:</span>
+        <select [(ngModel)]="quizVisibility"
+                name="quizVisibility"
+                class="form-control">
+          <option *ngFor="let option of getQuizVisibility()"
+                  [selected]="quizVisibility === option">
+            {{option}}
+          </option>
+        </select>
+      </label>
+    </div>
+  </div>
+  <div class="form-row"
+       *ngIf="isPublicVisibility()">
+    <div class="form-group col-12">
+      <label class="d-block">
+        <span>Description</span>
+        <textarea class="form-control"
+                  name="description"
+                  placeholder="description"
+                  [(ngModel)]="description"></textarea>
+      </label>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12">
+      <label class="d-block">
+        <span>Expiry</span>
+        <input type="date"
+               class="form-control"
+               name="expiry"
+               placeholder="expiry"
+               [(ngModel)]="expiry"/>
+      </label>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button"
+          class="btn btn-outline-dark"
+          [disabled]="isSubmitting"
+          (click)="save()">
+    <span *ngIf="!isSubmitting">Save</span>
+    <span *ngIf="isSubmitting">Submitting...</span>
+  </button>
+</div>

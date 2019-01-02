@@ -1,9 +1,9 @@
 import { isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { ILoginSerialized } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { DB_TABLE, STORAGE_KEY, USER_AUTHORIZATION } from '../../shared/enums';
+import { StatusProtocol } from '../../../lib/enums/Message';
+import { UserRole } from '../../../lib/enums/UserRole';
+import { ILoginSerialized } from '../../../lib/interfaces/ILoginSerialized';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
 import { StorageService } from '../storage/storage.service';
 
@@ -22,11 +22,13 @@ export class UserService {
       this._username = null;
       this.deleteTokens();
     } else {
+      this._staticLoginTokenContent = this.decodeToken();
+      this._username = this._staticLoginTokenContent.name;
       this.persistTokens();
     }
+    this.storageService.switchDb(this._username);
     this._isLoggedIn = value;
-    this._staticLoginTokenContent = this.decodeToken();
-    console.log(this._staticLoginTokenContent);
+    console.log(this._staticLoginTokenContent, this._username);
     this._loginNotifier.emit(value);
   }
 
@@ -76,17 +78,14 @@ export class UserService {
         return;
       }
 
-      const tokens = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).toPromise();
+      this._staticLoginToken = sessionStorage.getItem('userToken');
+      this._casTicket = sessionStorage.getItem('castoken');
 
-      if (!tokens) {
+      if (!this._staticLoginToken) {
         this.isLoggedIn = false;
         resolve(true);
         return;
       }
-
-      this._casTicket = tokens.casTicket;
-      this._staticLoginToken = tokens.staticLoginToken;
-      this._username = tokens.username;
 
       if (!this._staticLoginToken) {
         this.isLoggedIn = false;
@@ -115,7 +114,7 @@ export class UserService {
     return new Promise(async resolve => {
       const data = await this.authorizeApiService.getAuthorizationForToken(token).toPromise();
 
-      if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+      if (data.status === StatusProtocol.Success) {
         this._casTicket = data.payload.casTicket;
         this.isLoggedIn = true;
         resolve(true);
@@ -133,9 +132,13 @@ export class UserService {
         username,
         passwordHash,
         token: this._staticLoginToken,
-      }).toPromise();
+      }).toPromise().catch(() => resolve(false));
 
-      if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+      if (!data) {
+        return;
+      }
+
+      if (data.status === StatusProtocol.Success) {
         this._staticLoginToken = data.payload.token;
         this._username = username;
         this.isLoggedIn = true;
@@ -151,15 +154,15 @@ export class UserService {
     return this.sha1(`${username}|${password}`);
   }
 
-  public isAuthorizedFor(authorization: Array<USER_AUTHORIZATION>): boolean;
-  public isAuthorizedFor(authorization: USER_AUTHORIZATION): boolean;
-  public isAuthorizedFor(authorization: USER_AUTHORIZATION | Array<USER_AUTHORIZATION>): boolean {
+  public isAuthorizedFor(authorization: Array<UserRole>): boolean;
+  public isAuthorizedFor(authorization: UserRole): boolean;
+  public isAuthorizedFor(authorization: UserRole | Array<UserRole>): boolean {
     if (!this.staticLoginTokenContent) {
       return false;
     }
 
     if (authorization instanceof Array) {
-      return authorization.every(auth => {
+      return authorization.some(auth => {
         return this.staticLoginTokenContent.userAuthorizations.find(value => value === auth);
       });
     }
@@ -168,15 +171,11 @@ export class UserService {
   }
 
   private deleteTokens(): void {
-    this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN).subscribe();
+    sessionStorage.removeItem('userToken');
   }
 
   private persistTokens(): void {
-    this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.TOKEN, {
-      casTicket: this._casTicket,
-      staticLoginToken: this._staticLoginToken,
-      username: this._username,
-    }).subscribe();
+    sessionStorage.setItem('userToken', this._staticLoginToken);
   }
 
   private rotl(n, s): number {

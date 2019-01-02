@@ -5,18 +5,18 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { IQuestionSurvey } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { SurveyQuestionEntity } from '../../../../../../lib/entities/question/SurveyQuestionEntity';
 import { createTranslateLoader } from '../../../../../../lib/translation.factory';
 import { HeaderComponent } from '../../../../../header/header/header.component';
 import { LivePreviewComponent } from '../../../../../live-preview/live-preview/live-preview.component';
-import { ActiveQuestionGroupMockService } from '../../../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../../../service/question-text/question-text.service';
+import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../../service/settings/settings.service';
 import { SharedService } from '../../../../../service/shared/shared.service';
 import { TrackingMockService } from '../../../../../service/tracking/tracking.mock.service';
@@ -63,8 +63,8 @@ const imports = [
 
 const providers: Array<any> = [
   {
-    provide: ActiveQuestionGroupService,
-    useClass: ActiveQuestionGroupMockService,
+    provide: QuizService,
+    useClass: QuizMockService,
   }, FooterBarService, SettingsService, {
     provide: ConnectionService,
     useClass: ConnectionMockService,
@@ -181,9 +181,9 @@ describe('AnsweroptionsDefaultComponent', () => {
     describe('#toggleMultipleSelectionSurvey', () => {
 
       it('should toggle the multipleSelectionEnabled option of a survey question', () => {
-        const initValue = (<IQuestionSurvey>component.question).multipleSelectionEnabled;
+        const initValue = (<SurveyQuestionEntity>component.question).multipleSelectionEnabled;
         component.toggleMultipleSelectionSurvey();
-        expect((<IQuestionSurvey>component.question).multipleSelectionEnabled).not.toEqual(initValue);
+        expect((<SurveyQuestionEntity>component.question).multipleSelectionEnabled).not.toEqual(initValue);
       });
     });
   });

@@ -1,21 +1,10 @@
-import { ICasData, INickname, INicknameSerialized, IQuizResponse } from 'arsnova-click-v2-types/dist/common';
+import { ICasData, IQuizResponse } from 'arsnova-click-v2-types/dist/common';
+import { IMemberSerialized } from '../interfaces/entities/Member/IMemberSerialized';
 
-export class Attendee implements INickname {
-  public webSocketAuthorization;
+export class Attendee implements IMemberSerialized {
   public casProfile: ICasData;
   public webSocket;
-
-  get groupName(): string {
-    return this._groupName;
-  }
-
-  get colorCode(): string {
-    return this._colorCode;
-  }
-
-  get id(): number {
-    return this._id;
-  }
+  public webSocketAuthorization: number;
 
   private _responses: Array<IQuizResponse>;
 
@@ -37,25 +26,62 @@ export class Attendee implements INickname {
     this._name = value;
   }
 
-  private readonly _id: number;
-  private readonly _groupName: string;
-  private readonly _colorCode: string;
+  private _currentQuizName: string;
 
-  constructor({ id, name, groupName, colorCode, responses }: INicknameSerialized) {
-    this._id = id;
-    this._name = name;
-    this._groupName = groupName;
-    this._colorCode = colorCode;
-    this._responses = responses || [];
+  get currentQuizName(): string {
+    return this._currentQuizName;
   }
 
-  public serialize(): INicknameSerialized {
-    return {
-      id: this.id,
-      name: this.name,
-      groupName: this.groupName,
-      colorCode: this.colorCode,
-      responses: this.responses,
-    };
+  set currentQuizName(value: string) {
+    this._currentQuizName = value;
+  }
+
+  private _ticket: string;
+
+  get ticket(): string {
+    return this._ticket;
+  }
+
+  set ticket(value: string) {
+    this._ticket = value;
+  }
+
+  private _id: string;
+
+  get id(): string {
+    return this._id;
+  }
+
+  set id(value: string) {
+    this._id = value;
+  }
+
+  private _groupName: string;
+
+  get groupName(): string {
+    return this._groupName;
+  }
+
+  set groupName(value: string) {
+    this._groupName = value;
+  }
+
+  private _colorCode: string;
+
+  get colorCode(): string {
+    return this._colorCode;
+  }
+
+  set colorCode(value: string) {
+    this._colorCode = value;
+  }
+
+  constructor(member: IMemberSerialized) {
+    this._id = member.id;
+    this._name = member.name;
+    this._groupName = member.groupName;
+    this._colorCode = member.colorCode;
+    this._responses = member.responses || [];
+    this._ticket = member.ticket;
   }
 }

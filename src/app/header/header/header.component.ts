@@ -69,9 +69,7 @@ export class HeaderComponent implements OnInit {
   public ngOnInit(): void {
     this.router.events.subscribe((url: any) => {
       if (isPlatformBrowser(this.platformId)) {
-        this.inHomeRoute = (
-          location.pathname === '/home' || location.pathname === '/'
-        );
+        this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
       }
     });
   }
@@ -104,9 +102,8 @@ export class HeaderComponent implements OnInit {
   }
 
   private indexedDbSupported(): boolean {
-    return (
-      isPlatformBrowser(this.platformId) && //
-      'indexedDB' in window //
+    return (isPlatformBrowser(this.platformId) && //
+            'indexedDB' in window //
     );
   }
 }

@@ -49,7 +49,7 @@ export class UserAdminComponent implements OnInit {
 
   public showAddUserModal(): void {
     this.ngbModal.open(AddUserComponent).result.then(value => {
-      value.passwordHash = this.userService.hashPassword(value.username, value.password);
+      value.passwordHash = this.userService.hashPassword(value.name, value.password);
       delete value.password;
       this.adminService.updateUser(value).subscribe(() => {
         this._data.push(value);
@@ -59,15 +59,17 @@ export class UserAdminComponent implements OnInit {
 
   public editElem(index: number): void {
     const ref = this.ngbModal.open(AddUserComponent);
-    ref.componentInstance.username = (this._data[index] as any).username;
+    ref.componentInstance.name = (this._data[index] as any).name;
     ref.componentInstance.gitlabToken = (this._data[index] as any).gitlabToken;
     ref.componentInstance.userAuthorizations = (this._data[index] as any).userAuthorizations;
+
     ref.result.then(value => {
-      value.originalUser = (this._data[index] as any).username;
+      value.originalUser = (this._data[index] as any).name;
+      value.passwordHash = this.userService.hashPassword(value.name, value.password);
+      delete value.password;
+
       this.adminService.updateUser(value).subscribe(() => {
-        value.passwordHash = this.userService.hashPassword(value.username, value.password);
-        delete value.password;
-        (this._data[index] as any).username = value.username;
+        (this._data[index] as any).name = value.name;
         (this._data[index] as any).passwordHash = value.passwordHash;
         (this._data[index] as any).gitlabToken = value.gitlabToken;
         (this._data[index] as any).userAuthorizations = value.userAuthorizations;

@@ -5,13 +5,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
@@ -27,65 +27,55 @@ describe('QuizRenameComponent', () => {
   let component: QuizRenameComponent;
   let fixture: ComponentFixture<QuizRenameComponent>;
 
-  beforeEach((
-    () => {
-      TestBed.configureTestingModule({
-        imports: [
-          SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: (
-                createTranslateLoader
-              ),
-              deps: [HttpClient],
-            },
-            compiler: {
-              provide: TranslateCompiler,
-              useClass: TranslateMessageFormatCompiler,
-            },
-          }),
-        ],
-        providers: [
-          IndexedDbService, {
-            provide: StorageService,
-            useClass: StorageServiceMock,
-          }, {
-            provide: FileUploadService,
-            useClass: FileUploadMockService,
-          }, {
-            provide: ActiveQuestionGroupService,
-            useClass: ActiveQuestionGroupMockService,
-          }, FooterBarService, SettingsService, {
-            provide: ConnectionService,
-            useClass: ConnectionMockService,
-          }, {
-            provide: WebsocketService,
-            useClass: WebsocketMockService,
-          }, SharedService,
-        ],
-        declarations: [QuizRenameComponent],
-      }).compileComponents();
-    }
-  ));
+  beforeEach((() => {
+    TestBed.configureTestingModule({
+      imports: [
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [HttpClient],
+          },
+          compiler: {
+            provide: TranslateCompiler,
+            useClass: TranslateMessageFormatCompiler,
+          },
+        }),
+      ],
+      providers: [
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, {
+          provide: FileUploadService,
+          useClass: FileUploadMockService,
+        }, {
+          provide: QuizService,
+          useClass: QuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService,
+      ],
+      declarations: [QuizRenameComponent],
+    }).compileComponents();
+  }));
 
-  beforeEach((
-    () => {
-      fixture = TestBed.createComponent(QuizRenameComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }
-  ));
+  beforeEach((() => {
+    fixture = TestBed.createComponent(QuizRenameComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
-  it('should be created', (
-    () => {
-      expect(component).toBeTruthy();
-    }
-  ));
-  it('should contain a TYPE reference', (
-    () => {
-      expect(QuizRenameComponent.TYPE).toEqual('QuizRenameComponent');
-    }
-  ));
+  it('should be created', (() => {
+    expect(component).toBeTruthy();
+  }));
+  it('should contain a TYPE reference', (() => {
+    expect(QuizRenameComponent.TYPE).toEqual('QuizRenameComponent');
+  }));
 
   describe('#sendRecommendation', () => {
     it('should parse and send the recommendation for a duplicate quiz', () => {

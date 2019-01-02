@@ -292,7 +292,7 @@
         "choose_selectable_nick": "Tu puoi scegliere un nickname da questo elenco."
       }
     },
-    "hashtag_management": {
+    "name_management": {
       "enter_quiz_name": "Inserire il nome del quiz o il PIN …",
       "join_session": "Partecipa al quiz!",
       "start_session": "Inizia il quiz",
@@ -312,7 +312,7 @@
       "no_sessions": "In questo browser non è stato salvato nessun quiz.",
       "password": "Password for starting the quiz",
       "aria_description": {
-        "hashtag-input-field": "Inserisci qui il nome del quiz",
+        "name-input-field": "Inserisci qui il nome del quiz",
         "joinSession": "Partecipa ad un quiz già esistente",
         "addNewHashtag": "Crea un nuovo quiz",
         "splashscreen_description": "Lista di tutti i quiz validi e non validi nel tuo browser"
@@ -320,8 +320,8 @@
       "enter_server_password": "",
       "create_abcd_session": ""
     },
-    "hashtag_view": {
-      "hashtag_input": {
+    "name_view": {
+      "name_input": {
         "already_exists": "Questo nome del quiz è già stato assegnato",
         "illegal_chars": "Il nome del quiz contiene simboli non validi"
       },
@@ -644,7 +644,7 @@
       "abstention": "",
       "confidence_level": ""
     },
-    "hashtag_home": "",
+    "name_home": "",
     "quiz_rename": ""
   },
   "plugins": {
@@ -732,7 +732,7 @@
           "session_exists_arsnova_import": "Dai al tuo quiz un nome univoco:",
           "session_exists_new": "Dai un nuovo nome:",
           "session_not_exists": "Questo quiz non esiste!",
-          "hashtag_exists": "Questo nome esiste già!",
+          "name_exists": "Questo nome esiste già!",
           "session_not_available": "Al momento non si può accedere a questo round.",
           "private_browsing": "Se il tuo Browser è in modalità privata, arsnova.click funziona solo come partecipante visto che il tuo Browser nega la scrittra della memoria. Disattiva la modalità privata durante l´utilizzo di arsnova.click e avvia arsnova.click nuovamente. Il tuo anonimato è garantito, anche se la modalità privata è disattivata.",
           "kicked_from_quiz": "Sei stato allontanato dal quiz!",
@@ -740,7 +740,7 @@
           "export_failed": "Non è stato possibile esportare i dati del quiz! - %s",
           "not_authorized": "Il quiz non esiste oppure non hai il diritto di leggere questi dati",
           "maximum_answer_options_exceeded": "Il numero massimo di possibili risposte è stato già raggiunto",
-          "hashtag_not_found": "Purtroppo il nome di questo quiz non è stato trovato",
+          "name_not_found": "Purtroppo il nome di questo quiz non è stato trovato",
           "member_not_found": "Purtroppo il partecipante non è stato trovato",
           "duplicate_response": "Il partecipante ha già dato una risposta",
           "answeroption_not_found": "Non esiste nessuna risposta con questo index",

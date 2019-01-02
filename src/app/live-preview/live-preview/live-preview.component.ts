@@ -1,12 +1,12 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestionChoice } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { AbstractChoiceQuestionEntity } from '../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-live-preview',
@@ -38,9 +38,9 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     this._targetDevice = value;
   }
 
-  private _question: IQuestionChoice;
+  private _question: AbstractChoiceQuestionEntity;
 
-  get question(): IQuestionChoice {
+  get question(): AbstractChoiceQuestionEntity {
     return this._question;
   }
 
@@ -52,7 +52,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   constructor(
     public questionTextService: QuestionTextService,
     public connectionService: ConnectionService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizService: QuizService,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
   ) {
@@ -109,7 +109,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
         this._routerSubscription = this.route.params.subscribe(params => {
           this._questionIndex = +params['questionIndex'];
-          this._question = <IQuestionChoice>this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
+          this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
           this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
         });
         break;

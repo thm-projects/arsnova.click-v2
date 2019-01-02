@@ -1,23 +1,23 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { Subscription } from 'rxjs/index';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
+import { MessageProtocol } from '../../../../lib/enums/Message';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
-import { StorageService } from '../../../service/storage/storage.service';
-import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
+import { QuizService } from '../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-confidence-rate',
   templateUrl: './confidence-rate.component.html',
   styleUrls: ['./confidence-rate.component.scss'],
-})
-export class ConfidenceRateComponent implements OnInit {
+}) //
+@AutoUnsubscribe('_subscriptions')
+export class ConfidenceRateComponent {
   public static TYPE = 'ConfidenceRateComponent';
 
   private _confidenceValue = 100;
@@ -26,8 +26,11 @@ export class ConfidenceRateComponent implements OnInit {
     return this._confidenceValue;
   }
 
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private _subscriptions: Array<Subscription> = [];
+
   constructor(
-    public currentQuizService: CurrentQuizService,
+    public quizService: QuizService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
@@ -35,16 +38,24 @@ export class ConfidenceRateComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
-    private storageService: StorageService,
   ) {
 
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
+
+      this.initData();
+    }));
   }
 
-  public ngOnInit(): void {
+  public initData(): void {
     this.connectionService.initConnection().then(() => {
-      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+      this.connectionService.connectToChannel(this.quizService.quiz.name);
       this.handleMessages();
     });
   }
@@ -64,17 +75,11 @@ export class ConfidenceRateComponent implements OnInit {
   }
 
   public updateConficence(event: Event): void {
-    this._confidenceValue = parseInt((
-      <HTMLInputElement>event.target
-    ).value, 10);
+    this._confidenceValue = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   public async sendConfidence(): Promise<Subscription> {
-    return this.memberApiService.putConfidenceValue({
-      quizName: this.currentQuizService.quiz.hashtag,
-      nickname: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise(),
-      confidenceValue: this._confidenceValue,
-    }).subscribe((data: IMessage) => {
+    return this.memberApiService.putConfidenceValue(this._confidenceValue).subscribe((data: IMessage) => {
       this.router.navigate(['/quiz', 'flow', 'results']);
     });
   }
@@ -82,28 +87,35 @@ export class ConfidenceRateComponent implements OnInit {
   private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
-        case COMMUNICATION_PROTOCOL.QUIZ.NEXT_QUESTION:
-          this.currentQuizService.questionIndex = data.payload.questionIndex;
+        case MessageProtocol.NextQuestion:
+          this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.START:
+        case MessageProtocol.Start:
+          this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
           this.router.navigate(['/quiz', 'flow', 'voting']);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.STOP:
+        case MessageProtocol.Stop:
           this.router.navigate(['/quiz', 'flow', 'results']);
           break;
-        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
+        case MessageProtocol.UpdatedResponse:
           console.log('modify response data for nickname in confidence rate view', data.payload.nickname);
-          this.attendeeService.modifyResponse(data.payload.nickname);
+          this.attendeeService.modifyResponse(data.payload);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED:
+        case MessageProtocol.ReadingConfirmationRequested:
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
+        case MessageProtocol.Reset:
           this.attendeeService.clearResponses();
-          this.currentQuizService.questionIndex = 0;
+          this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
-        case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
+        case MessageProtocol.Added:
+          this.attendeeService.addMember(data.payload.member);
+          break;
+        case MessageProtocol.Removed:
+          this.attendeeService.removeMember(data.payload.name);
+          break;
+        case MessageProtocol.Closed:
           this.router.navigate(['/']);
           break;
       }

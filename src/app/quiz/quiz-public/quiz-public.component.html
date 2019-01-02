@@ -1,0 +1,32 @@
+<h4 class="text-center text-light mb-5">This is a list of {{isViewingOwnQuizzes ? 'your ' : ''}}public quizzes{{!isViewingOwnQuizzes ? ' of other users' : ''}}</h4>
+<h5 *ngIf="!availablePublicQuizzes.length"
+    class="text-center text-light">None available</h5>
+
+<div class="row">
+  <div class="col-sm-6"
+       *ngFor="let quiz of availablePublicQuizzes; let i = index">
+    <div class="card mb-2">
+      <div class="card-body">
+        <div class="d-flex">
+          <fa-icon *ngIf="isViewingOwnQuizzes"
+                   class="ml-auto cursor-pointer"
+                   [title]="'remove the quiz'"
+                   [icon]="'times'"
+                   (click)="removeQuiz(i)"></fa-icon>
+          <fa-icon *ngIf="!isViewingOwnQuizzes"
+                   class="ml-auto cursor-pointer"
+                   [title]="'play the quiz'"
+                   [icon]="'paper-plane'"
+                   (click)="playQuiz(i)"></fa-icon>
+        </div>
+        <h5 class="card-title">Name: {{quiz.name}}</h5>
+        <p class="card-subtitle text-muted mb-2">{{quiz.description}}</p>
+        <p class="card-text mb-0">Features:</p>
+        <ul>
+          <li>Number of Questions: {{quiz.questionList.length}}</li>
+          <li>CAS Login required: {{quiz.sessionConfig.nicks.restrictToCasLogin}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

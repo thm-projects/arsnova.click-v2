@@ -4,7 +4,7 @@
     "description": "The ultimate quiz app from the future!"
   },
   "global": {
-    "console-log-warning": "WARNING!\nThis will not help you cheating on any quizzes at all!\n\nAnyone who told you to use these tools may tries to compromise your computer",
+    "console-log-warning": "WARNING! This will not help you cheating on any quizzes at all! Anyone who told you to use these tools may tries to compromise your computer",
     "arsnova_slogan": "Quizzes for everyone & anything",
     "back": "Back",
     "next": "Next",
@@ -65,6 +65,8 @@
         "login": "Login",
         "logout": "Logout",
         "save_quiz": "Save Quiz",
+        "api-docs": "API Docs",
+        "admin": "Administrate",
         "description": {
           "qr-code": "Attendees can scan the QR code via their mobile devices to join the quiz.",
           "sound": "Set the sound for the background music or the countdown here.",
@@ -243,7 +245,7 @@
       "show_answer_content_on_buttons": "Display the answer's content on the buttons?",
       "show_one_answer_per_row": "Show only one answer per row?",
       "multiple_selection_survey": "Allow selection of multiple answers?",
-      "emoji_info": "You can embed also one of these <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis (external website!)</a> in your answeroptions <img class='w-50px' src='http://localhost:3000/api/v1/files/images/emojis/smile.png' alt='emoji'/> <br/>Simply click on the website on the Emoji and paste it into the answeroption.",
+      "emoji_info": "You can embed also one of these <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis (external website!)</a> in your answeroptions <img class='w-50px' src='/assets/images/emojis/smile.png' alt='emoji'/> <br/>Simply click on the website on the Emoji and paste it into the answeroption.",
       "description": {
         "default_answer_row": "Drag this block into the list of answeroptions to create a new one.",
         "added_answers": "Here are all already created answeroptions. You can change the order of the answers via drag & drop.",
@@ -312,7 +314,7 @@
       "current-teams": "Currently added Teams:",
       "no-current-teams": "No Teams added yet"
     },
-    "hashtag_management": {
+    "name_management": {
       "enter_quiz_name": "Enter the quiz name here",
       "enter_server_password": "Enter the server password here",
       "join_session": "Join now!",
@@ -333,14 +335,14 @@
       "invalid_question": "Invalid Quiz",
       "no_sessions": "There are no quizzes stored in your browser.",
       "aria_description": {
-        "hashtag-input-field": "Enter the Quizname here",
+        "name-input-field": "Enter the Quizname here",
         "joinSession": "Participate at an active quiz",
         "addNewHashtag": "Create a new quiz",
         "splashscreen_description": "List of all valid and invalid quizzes in your browser"
       }
     },
-    "hashtag_home": {
-      "hashtag_input": {
+    "name_home": {
+      "name_input": {
         "already_exists": "This quizname is already taken.",
         "illegal_chars": "The quizname contains illegal characters."
       },
@@ -465,6 +467,7 @@
       "back": "Back to the quiz manager",
       "description": {
         "type_wrapper": "Here you can change the type of quiz question. Each type has different settings. Change the type by clicking on the respective box.",
+        "AbcdSingleChoiceQuestion": "ABCD questions contain at maximum 26 answers (from A - Z), one of them must be marked as correct.",
         "SingleChoiceQuestion": "Single-choice questions contain as many answer options as you like, one of them must be marked as correct.",
         "YesNoSingleChoiceQuestion": "Yes|No questions contain only two answers (yes and no), one of them must be marked as correct.",
         "TrueFalseSingleChoiceQuestion": "True|False questions also contain only two answers (True and False), one of them must be marked as correct.",
@@ -481,6 +484,7 @@
       "forward": "Proceed to the answer options",
       "back": "Back to the quiz manager",
       "single_choice_question": "Single Choice",
+      "single_choice_question_abcd": "ABCD Single-Choice question",
       "single_choice_question_yes_no": "Yes-No Single-Choice question",
       "single_choice_question_true_false": "True-False Single-Choice question",
       "multiple_choice_question": "Multiple Choice",
@@ -766,7 +770,7 @@
           "session_exists_arsnova_import": "Please enter a name for your arsnova quiz:",
           "session_exists_new": "To import it it is required to rename the session:",
           "session_not_exists": "This session does not exist!",
-          "hashtag_exists": "This hashtag exists already!",
+          "name_exists": "This name exists already!",
           "session_not_available": "Session is currently not available for joining",
           "private_browsing": "If you use ARSnova.click in private browsing you can only join a quiz as an attendee. Unfortunately your browser seems to reject any write access to the local storage. Please use ARSnova.click only via a normal browser tab. Your anonymity will be respected even without using the private mode.",
           "kicked_from_quiz": "You've been kicked from the quiz!",
@@ -774,7 +778,7 @@
           "export_failed": "Could not export! - %s",
           "not_authorized": "Either there is no quiz or you don't have write access",
           "maximum_answer_options_exceeded": "Maximum number of possible answer options exceeded",
-          "hashtag_not_found": "No such hashtag with the given key",
+          "name_not_found": "No such name with the given key",
           "member_not_found": "Member not found",
           "duplicate_response": "User has already given a response",
           "answeroption_not_found": "There is no answer option with the given answerOptionNumber",

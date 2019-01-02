@@ -1,14 +1,14 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ITheme } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { DbTable, StorageKey } from '../../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { themes } from '../../shared/availableThemes';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
-import { CurrentQuizService } from '../current-quiz/current-quiz.service';
 import { I18nService } from '../i18n/i18n.service';
+import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable()
@@ -27,34 +27,16 @@ export class ThemesService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private connectionService: ConnectionService,
     private themesApiService: ThemesApiService,
     private storageService: StorageService,
     private i18nService: I18nService,
   ) {
-    if (isPlatformBrowser(this.platformId)) {
-      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).subscribe(val => {
-        if (!val) {
-          this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, DefaultSettings.defaultQuizSettings.theme).subscribe();
-        }
-      });
-    }
-
-    this.connectionService.initConnection().then(() => {
-      if (!this.connectionService.socket) {
-        return;
+    this.storageService.stateNotifier.subscribe(val => {
+      if (val === 'initialized') {
+        this.initTheme();
       }
-
-      this.connectionService.socket.subscribe(data => {
-        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.QUIZ.UPDATED_SETTINGS) {
-          this.currentQuizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
-          this.currentQuizService.persistToSessionStorage();
-          if (data.payload.target === 'theme') {
-            this.updateCurrentlyUsedTheme();
-          }
-        }
-      });
     });
   }
 
@@ -63,12 +45,12 @@ export class ThemesService {
       return;
     }
 
-    const themeConfig = await Promise.all([
-      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise(),
-      this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.QUIZ_THEME).toPromise(),
+    const themeConfig = await Promise.all<any>([
+      this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise(),
+      this.storageService.read(DbTable.Config, StorageKey.QuizTheme).toPromise(),
       new Promise(resolve => {
-        if (this.currentQuizService.quiz && this.currentQuizService.quiz.sessionConfig.theme) {
-          resolve(this.currentQuizService.quiz.sessionConfig.theme);
+        if (this.quizService.quiz && this.quizService.quiz.sessionConfig.theme) {
+          resolve(this.quizService.quiz.sessionConfig.theme);
           return;
         }
         resolve();
@@ -89,9 +71,7 @@ export class ThemesService {
   }
 
   public reloadLinkNodes(theme?): void {
-    if (isPlatformServer(this.platformId) || (
-      !document.getElementById('link-manifest') && !theme
-    )) {
+    if (isPlatformServer(this.platformId) || (!document.getElementById('link-manifest') && !theme)) {
       return;
     }
 
@@ -109,6 +89,32 @@ export class ThemesService {
           this.replaceExistingNode(previousElement, elem);
         } else {
           this.addNewNode(elem);
+        }
+      });
+    });
+  }
+
+  private initTheme(): void {
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).subscribe(val => {
+        if (!val) {
+          this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, DefaultSettings.defaultQuizSettings.sessionConfig.theme).subscribe();
+        }
+      });
+    }
+
+    this.connectionService.initConnection().then(() => {
+      if (!this.connectionService.socket) {
+        return;
+      }
+
+      this.connectionService.socket.subscribe(data => {
+        if (data.status === StatusProtocol.Success && data.step === MessageProtocol.UpdatedSettings) {
+          this.quizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
+          if (data.payload.target === 'theme') {
+            this.updateCurrentlyUsedTheme();
+          }
         }
       });
     });

@@ -12,7 +12,7 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
@@ -52,7 +52,7 @@ describe('VotingComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, {
           provide: AttendeeService,

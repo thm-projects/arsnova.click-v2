@@ -1,25 +1,43 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Observable, throwError as observableThrowError } from 'rxjs';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
+import { BehaviorSubject, Observable, throwError as observableThrowError } from 'rxjs';
+import { DbName, DbTable, StorageKey } from '../../../lib/enums/enums';
 
 interface ISchema {
-  name: DB_TABLE;
+  name: DbTable;
   indexes?: Array<string>;
   seeds?: Array<any>;
 }
 
 @Injectable()
 export class IndexedDbService {
-  private _indexedDB: any;
+  get stateNotifier(): BehaviorSubject<string> {
+    return this._stateNotifier;
+  }
+
   private _dbName: string;
+
+  get dbName(): string {
+    return this._dbName;
+  }
+
+  private _indexedDB: any;
+  private _dbInstance: any;
+
+  private _isInitialized = !!this._dbInstance;
+
+  get isInitialized(): boolean {
+    return this._isInitialized;
+  }
+
+  private readonly _stateNotifier = new BehaviorSubject<string>(this.isInitialized ? 'initialized' : null);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
       this._indexedDB = indexedDB;
     }
 
-    this._dbName = 'db'; // by default
+    this._dbName = DbName.Default; // by default
   }
 
   public setName(dbName: string): void {
@@ -30,7 +48,7 @@ export class IndexedDbService {
     }
   }
 
-  public put(source: DB_TABLE, object: any): Observable<any> {
+  public put(source: DbTable, object: any): Observable<any> {
     const self = this;
 
     return Observable.create((observer: any) => {
@@ -41,7 +59,6 @@ export class IndexedDbService {
 
         tx.oncomplete = () => {
           observer.next(object);
-          db.close();
           observer.complete();
         };
         db.onerror = (e: any) => {
@@ -52,7 +69,7 @@ export class IndexedDbService {
     });
   }
 
-  public post(source: DB_TABLE, object: any): Observable<any> {
+  public post(source: DbTable, object: any): Observable<any> {
     const self = this;
 
     return Observable.create((observer: any) => {
@@ -63,7 +80,6 @@ export class IndexedDbService {
 
         request.onsuccess = (e: any) => {
           observer.next(e.target.result);
-          db.close();
           observer.complete();
         };
         db.onerror = (e: any) => {
@@ -74,7 +90,7 @@ export class IndexedDbService {
     });
   }
 
-  public get(source: DB_TABLE, id: STORAGE_KEY | string): Observable<any> {
+  public get(source: DbTable, id: StorageKey | string): Observable<any> {
     const self = this;
 
     return Observable.create((observer: any) => {
@@ -86,7 +102,6 @@ export class IndexedDbService {
 
         request.onsuccess = () => {
           observer.next(request.result ? request.result.value ? request.result.value : request.result : null);
-          db.close();
           observer.complete();
         };
         db.onerror = (e: any) => {
@@ -97,7 +112,7 @@ export class IndexedDbService {
     });
   }
 
-  public all(source: DB_TABLE, filter?: string): Observable<any[]> {
+  public all(source: DbTable, filter?: string): Observable<any[]> {
     const self = this;
 
     return Observable.create((observer: any) => {
@@ -117,7 +132,6 @@ export class IndexedDbService {
             cursor.continue();
           } else {
             observer.next(results);
-            db.close();
             observer.complete();
           }
         };
@@ -129,7 +143,7 @@ export class IndexedDbService {
     });
   }
 
-  public remove(source: DB_TABLE, id: STORAGE_KEY | string): Observable<any> {
+  public remove(source: DbTable, id: StorageKey | string): Observable<any> {
     const self = this;
 
     return Observable.create((observer: any) => {
@@ -141,7 +155,6 @@ export class IndexedDbService {
 
         tx.oncomplete = (e: any) => {
           observer.next(id);
-          db.close();
           observer.complete();
         };
         db.onerror = (e: any) => {
@@ -152,7 +165,7 @@ export class IndexedDbService {
     });
   }
 
-  public count(source: DB_TABLE): Observable<number> {
+  public count(source: DbTable): Observable<number> {
     const self = this;
 
     return Observable.create((observer: any) => {
@@ -165,7 +178,6 @@ export class IndexedDbService {
 
         request.onsuccess = () => {
           observer.next(request.result);
-          db.close();
           observer.complete();
         };
         db.onerror = (e: any) => {
@@ -177,14 +189,12 @@ export class IndexedDbService {
   }
 
   public create(schema?: Array<ISchema>): Observable<any> {
-    const self = this;
-
     return Observable.create((observer: any) => {
-      const request = this._indexedDB.open(this._dbName);
+      this._dbInstance = this._indexedDB.open(this._dbName);
 
-      request.onupgradeneeded = () => {
+      this._dbInstance.onupgradeneeded = () => {
         // The database did not previously exist, so create object stores and indexes.
-        const db = request.result;
+        const db = this._dbInstance.result;
 
         for (let i = 0; i < schema.length; i++) {
           const store = db.createObjectStore(schema[i].name, {
@@ -209,16 +219,16 @@ export class IndexedDbService {
         }
 
         observer.next('done');
+      };
+
+      this._dbInstance.onerror = () => {
+        this.handleError(this._dbInstance.error);
+        observer.error(this._dbInstance.error);
+      };
+
+      this._dbInstance.onsuccess = () => {
+        this.stateNotifier.next('initialized');
         observer.complete();
-      };
-
-      request.onerror = () => {
-        self.handleError(request.error);
-      };
-
-      request.onsuccess = () => {
-        const db = request.result;
-        db.close();
       };
     });
   }
@@ -248,16 +258,21 @@ export class IndexedDbService {
   }
 
   private open(): Observable<any> {
-    const self = this;
-
     return Observable.create((observer: any) => {
-      const request = this._indexedDB.open(this._dbName);
+      if (this._dbInstance) {
+        observer.next(this._dbInstance.result);
+        observer.complete();
+        return;
+      }
 
-      request.onsuccess = () => {
-        observer.next(request.result);
+      this._dbInstance = this._indexedDB.open(this._dbName);
+
+      this._dbInstance.onsuccess = () => {
+        this.stateNotifier.next('initialized');
+        observer.next(this._dbInstance.result);
         observer.complete();
       };
-      request.onerror = () => self.handleError(request.error);
+      this._dbInstance.onerror = () => this.handleError.call(this, this._dbInstance.error);
     });
   }
 }

@@ -30,37 +30,39 @@ export const DefaultSettings = {
       correctValue: 30,
       answerOptionList: [],
     },
-    music: {
-      enabled: {
-        lobby: true,
-        countdownRunning: true,
-        countdownEnd: true,
+    sessionConfig: {
+      music: {
+        enabled: {
+          lobby: true,
+          countdownRunning: true,
+          countdownEnd: true,
+        },
+        volumeConfig: {
+          global: 60,
+          lobby: 60,
+          countdownRunning: 60,
+          countdownEnd: 60,
+          useGlobalVolume: true,
+        },
+        titleConfig: {
+          lobby: 'Song0',
+          countdownRunning: 'Song0',
+          countdownEnd: 'Song0',
+        },
       },
-      volumeConfig: {
-        global: 60,
-        lobby: 60,
-        countdownRunning: 60,
-        countdownEnd: 60,
-        useGlobalVolume: true,
+      nicks: {
+        memberGroups: ['Default'],
+        maxMembersPerGroup: 10,
+        autoJoinToGroup: false,
+        blockIllegalNicks: true,
+        restrictToCasLogin: false,
+        selectedNicks: [],
       },
-      titleConfig: {
-        lobby: 'Song0',
-        countdownRunning: 'Song0',
-        countdownEnd: 'Song0',
-      },
+      theme: 'theme-Material',
+      readingConfirmationEnabled: true,
+      showResponseProgress: true,
+      confidenceSliderEnabled: true,
+      cacheQuizAssets: false,
     },
-    nicks: {
-      memberGroups: ['Default'],
-      maxMembersPerGroup: 10,
-      autoJoinToGroup: false,
-      blockIllegalNicks: true,
-      restrictToCasLogin: false,
-      selectedNicks: [],
-    },
-    theme: 'theme-Material',
-    readingConfirmationEnabled: true,
-    showResponseProgress: true,
-    confidenceSliderEnabled: true,
-    cacheQuizAssets: false,
   },
 };

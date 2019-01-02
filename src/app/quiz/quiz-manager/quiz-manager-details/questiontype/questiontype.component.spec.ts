@@ -6,12 +6,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
@@ -43,9 +43,7 @@ describe('QuestiontypeComponent', () => {
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -59,8 +57,8 @@ describe('QuestiontypeComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
@@ -99,19 +97,17 @@ describe('QuestiontypeComponent', () => {
   });
 
   describe('#morphToQuestionType', () => {
-    it('should convert the current question type to a new one',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        const targetType = 'MultipleChoiceQuestion';
-        component.morphToQuestionType(targetType);
-        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).toEqual(targetType);
-      }));
-    it('should not convert the current question type if the passed type does not exist',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        const targetType = 'NotExistingType';
-        const initType = activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE;
-        component.morphToQuestionType(targetType);
-        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).not.toEqual(targetType);
-        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).toEqual(initType);
-      }));
+    it('should convert the current question type to a new one', inject([QuizService], (quizService: QuizService) => {
+      const targetType = 'MultipleChoiceQuestion';
+      component.morphToQuestionType(targetType);
+      expect(quizService.quiz.questionList[0].TYPE).toEqual(targetType);
+    }));
+    it('should not convert the current question type if the passed type does not exist', inject([QuizService], (quizService: QuizService) => {
+      const targetType = 'NotExistingType';
+      const initType = quizService.quiz.questionList[0].TYPE;
+      component.morphToQuestionType(targetType);
+      expect(quizService.quiz.questionList[0].TYPE).not.toEqual(targetType);
+      expect(quizService.quiz.questionList[0].TYPE).toEqual(initType);
+    }));
   });
 });

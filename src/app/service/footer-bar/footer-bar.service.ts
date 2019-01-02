@@ -1,9 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
-import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
-import { StorageService } from '../storage/storage.service';
 
 interface IFsDocument extends HTMLDocument {
   mozFullScreenElement?: Element;
@@ -120,7 +118,7 @@ export class FooterBarService {
     id: 'sessionManagement',
     iconClass: 'wrench',
     textClass: 'footerElementText',
-    textName: 'component.hashtag_management.session_management',
+    textName: 'component.name_management.session_management',
     selectable: false,
     showIntro: false,
     linkTarget: '/quiz/overview',
@@ -193,21 +191,6 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
 
-  });
-  public footerElemProductTour: IFooterBarElement = new FooterbarElement({
-    id: 'product-tour',
-    iconClass: 'flag',
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.show_product_tour',
-    selectable: true,
-    showIntro: false,
-    linkTarget: null,
-    isActive: isPlatformBrowser(this.platformId) ? this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR) : false,
-  }, (self: IFooterBarElement) => {
-    self.isActive = !self.isActive;
-    if (isPlatformBrowser(this.platformId)) {
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR, self.isActive).subscribe();
-    }
   });
   public footerElemResponseProgress: IFooterBarElement = new FooterbarElement({
     id: 'response-progress',
@@ -369,17 +352,17 @@ export class FooterBarService {
   }, function (): void {
   });
 
-  private _footerElements = new EventEmitter<Array<IFooterBarElement>>();
+  private _footerElements: Array<IFooterBarElement> = [];
 
-  get footerElements(): EventEmitter<Array<IFooterBarElement>> {
+  get footerElements(): Array<IFooterBarElement> {
     return this._footerElements;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storageService: StorageService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
-    this._footerElements.next(elements);
+    this._footerElements = elements;
   }
 
 }

@@ -4,7 +4,6 @@
        role="navigation"
        [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
     <button type="button"
-            *ngIf="question?.canEditQuestionText"
             class="btn btn-default pointer"
             (click)="trackDetailsTarget('question-text')"
             [routerLink]="['/quiz', 'manager', questionIndex, 'questionText']">
@@ -14,7 +13,6 @@
             [innerHTML]="'component.quiz_manager.details.question_text.short' | translate"></span>
     </button>
     <button type="button"
-            *ngIf="question?.canEditAnsweroptions"
             class="btn btn-default pointer"
             (click)="trackDetailsTarget('answeroptions')"
             [routerLink]="['/quiz', 'manager', questionIndex, 'answeroptions']">
@@ -24,7 +22,6 @@
             [innerHTML]="'component.quiz_manager.details.answeroptions.short' | translate"></span>
     </button>
     <button type="button"
-            *ngIf="question?.canEditQuestionTimer"
             class="btn btn-default pointer"
             (click)="trackDetailsTarget('question-timer')"
             [routerLink]="['/quiz', 'manager', questionIndex, 'countdown']">
@@ -34,7 +31,6 @@
             [innerHTML]="'component.quiz_manager.details.timer.short' | translate"></span>
     </button>
     <button type="button"
-            *ngIf="question?.canEditQuestionType"
             class="btn btn-default pointer"
             (click)="trackDetailsTarget('question-type')"
             [routerLink]="['/quiz', 'manager', questionIndex, 'questionType']">
@@ -73,17 +69,17 @@
         <div *ngIf="question?.TYPE === 'RangedQuestion'">
           <p role="listitem"
              class="mb-0">
-            <span [innerHTML]="'component.answeroptions.ranged_question?.correct_value' | translate"></span>:&nbsp;
+            <span [innerHTML]="'component.answeroptions.ranged_question.correct_value' | translate"></span>:&nbsp;
             <span [innerHTML]="question?.correctValue"></span>
           </p>
           <p role="listitem"
              class="mb-0">
-            <span [innerHTML]="'component.answeroptions.ranged_question?.min_range' | translate"></span>:&nbsp;
+            <span [innerHTML]="'component.answeroptions.ranged_question.min_range' | translate"></span>:&nbsp;
             <span [innerHTML]="question?.rangeMin"></span>
           </p>
           <p role="listitem"
              class="mb-0">
-            <span [innerHTML]="'component.answeroptions.ranged_question?.max_range' | translate"></span>:&nbsp;
+            <span [innerHTML]="'component.answeroptions.ranged_question.max_range' | translate"></span>:&nbsp;
             <span [innerHTML]="question?.rangeMax"></span>
           </p>
         </div>

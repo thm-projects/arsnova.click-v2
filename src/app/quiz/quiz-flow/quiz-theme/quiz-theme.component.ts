@@ -1,7 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class QuizThemeComponent implements OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private themesService: ThemesService,
   ) {
 
@@ -31,7 +31,6 @@ export class QuizThemeComponent implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.currentQuizService.persistToSessionStorage();
     this.themesService.updateCurrentlyUsedTheme();
   }
 
@@ -42,9 +41,9 @@ export class QuizThemeComponent implements OnDestroy {
 
     document.getElementsByTagName('html').item(0).dataset['theme'] = id;
     this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
-    this.currentQuizService.quiz.sessionConfig.theme = id;
+    this.quizService.quiz.sessionConfig.theme = id;
 
-    this.currentQuizService.toggleSettingByName('theme', id);
+    this.quizService.toggleSettingByName('theme', id);
   }
 
   public previewTheme(id): void {

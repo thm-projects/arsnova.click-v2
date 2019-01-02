@@ -293,7 +293,7 @@
         "choose_selectable_nick": "Puedes elegir un apodo de esa lista."
       }
     },
-    "hashtag_management": {
+    "name_management": {
       "enter_quiz_name": "¡Inserta el nombre del concurso o el PIN …!",
       "join_session": "¡Participa!",
       "start_session": "¡Empieza el concurso!",
@@ -314,15 +314,15 @@
       "no_sessions": "No concursos son memorizada en eso navegador.",
       "password": "Password for starting the quiz",
       "aria_description": {
-        "hashtag-input-field": "¡Inserta un nombre de concurso aquí!",
+        "name-input-field": "¡Inserta un nombre de concurso aquí!",
         "joinSession": "¡Participa en un concurso existente!",
         "addNewHashtag": "¡Crea un concurso nuevo!",
         "splashscreen_description": "Eso es la liste de todos los concursos válidos e inválidos en tu navegador."
       },
       "enter_server_password": ""
     },
-    "hashtag_view": {
-      "hashtag_input": {
+    "name_view": {
+      "name_input": {
         "already_exists": "Eso nombre del concurso ya es perdido.",
         "illegal_chars": "Eso nombre del concurso contiene caracteres inválidos."
       },
@@ -656,7 +656,7 @@
       },
       "confidence_level": ""
     },
-    "hashtag_home": "",
+    "name_home": "",
     "quiz_rename": ""
   },
   "plugins": {
@@ -744,7 +744,7 @@
           "session_exists_arsnova_import": "Por favor, ¡da un nombre obvio para tu concurso!",
           "session_exists_new": "¡Da un nuevo!",
           "session_not_exists": "Eso concurso no existe",
-          "hashtag_exists": "Eso concurso ya existe",
+          "name_exists": "Eso concurso ya existe",
           "session_not_available": "No puedes participar en eso rondo del concurso actualmente.",
           "private_browsing": "En el modo privado, solo puedes usar arsnova.click como un participante porque no permite usar tu memoria. ¡Desactiva el modo privado durante el uso de arsnova.click! Quedas anónima aunque el modo privado es desactivado.",
           "kicked_from_quiz": "Eras echado del concurso",
@@ -752,7 +752,7 @@
           "export_failed": "No fue posible exportar los datos del concurso - %s",
           "not_authorized": "O no hay el concurso o no estás autorizado para leer los datos.",
           "maximum_answer_options_exceeded": "El número máximo de respuestas es logrado",
-          "hashtag_not_found": "No podemos encontrar eso nombre del concurso",
+          "name_not_found": "No podemos encontrar eso nombre del concurso",
           "member_not_found": "No podemos encontrar eso participante",
           "duplicate_response": "El participante ya había dado un respuesta",
           "answeroption_not_found": "No podemos encontrar una respuesta con eso índice",

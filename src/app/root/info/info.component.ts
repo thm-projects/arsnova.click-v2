@@ -15,7 +15,21 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class InfoComponent implements OnInit, OnDestroy {
   public static TYPE = 'InfoComponent';
   public currentData: string;
-  public readonly infoButtons = ['about', 'tos', 'imprint', 'dataprivacy'];
+  public readonly infoButtons = [
+    {
+      id: 'about',
+      i18nRef: 'region.footer.footer_bar.about',
+    }, {
+      id: 'tos',
+      i18nRef: 'region.footer.footer_bar.tos',
+    }, {
+      id: 'imprint',
+      i18nRef: 'region.footer.footer_bar.imprint',
+    }, {
+      id: 'dataprivacy',
+      i18nRef: 'region.footer.footer_bar.dataprivacy',
+    },
+  ];
   private _routerSubscription: Subscription;
 
   constructor(

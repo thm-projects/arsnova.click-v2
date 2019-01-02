@@ -15,7 +15,7 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
@@ -61,7 +61,7 @@ describe('NicknameSelectComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,

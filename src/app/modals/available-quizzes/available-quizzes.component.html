@@ -1,7 +1,7 @@
 <div class="available-quizzes-modal">
   <div class="modal-header">
     <h5 class="modal-title"
-        [innerHTML]="'component.hashtag_management.quiz_management' | translate"></h5>
+        [innerHTML]="'component.name_management.quiz_management' | translate"></h5>
     <button type="button"
             class="close pointer"
             data-dismiss="modal"
@@ -17,7 +17,7 @@
             [class.bg-success]="elem.isValid()"
             [class.bg-danger]="!elem.isValid()"
             (click)="elem.isValid() ? startQuiz(elem) : editQuiz(elem)">
-        {{elem.hashtag}}
+        {{elem.name}}
       </span>
     </div>
   </div>

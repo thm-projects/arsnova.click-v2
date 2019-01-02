@@ -3,50 +3,66 @@
   <div class="col-12">
     <h2 *ngIf="sessions.length === 0"
         class="text-center text-light"
-        [innerHTML]="'component.hashtag_management.no_sessions' | translate"></h2>
+        [innerHTML]="'component.name_management.no_sessions' | translate"></h2>
   </div>
   <div class="col-12">
     <div *ngFor="let elem of sessions; let i = index"
-         [id]="elem.hashtag"
+         [id]="elem.name"
          class="row">
       <div class="col-12">
-        <p class="hashtag-name">{{elem.hashtag}}</p>
+        <p class="name-name">{{elem.name}}</p>
       </div>
-      <div class="col-3">
+      <div class="col"
+           *ngIf="isAuthorizedToSaveQuiz()">
         <button type="button"
                 class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
-                [title]="'component.hashtag_management.start_session' | translate"
-                [disabled]="!elem.isValid()"
+                [title]="'component.name_management.save_session' | translate"
+                [disabled]="!elem.isValid() || !connectionService.serverAvailable"
+                (click)="saveQuiz(i)"
+                data-animation="false">
+          <fa-icon [icon]="'check'"
+                   *ngIf="isSaved(i)"></fa-icon>
+          <fa-icon [icon]="'save'"
+                   *ngIf="!isSaved(i)"></fa-icon>
+        </button>
+      </div>
+      <div class="col">
+        <button type="button"
+                class="btn btn-default btn-block pointer"
+                data-toggle="tooltip"
+                [title]="'component.name_management.start_session' | translate"
+                [disabled]="!elem.isValid() || !connectionService.serverAvailable"
                 (click)="startQuiz(i)"
                 data-animation="false">
           <fa-icon [icon]="'paper-plane'"></fa-icon>
         </button>
       </div>
-      <div class="col-3">
+      <div class="col">
         <button type="button"
                 class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
-                [title]="'component.hashtag_management.edit_session' | translate"
+                [title]="'component.name_management.edit_session' | translate"
                 (click)="editQuiz(i)"
                 data-animation="false">
           <fa-icon [icon]="'edit'"></fa-icon>
         </button>
       </div>
-      <div class="col-3">
+      <div class="col">
         <button class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
-                [title]="'component.hashtag_management.export' | translate"
+                [title]="'component.name_management.export' | translate"
                 (click)="exportQuiz(i)"
                 data-animation="false">
           <fa-icon [icon]="'download'"></fa-icon>
         </button>
       </div>
-      <div class="col-3">
+      <div class="col">
         <button type="button"
                 class="btn btn-default btn-block pointer"
                 data-toggle="tooltip"
-                [title]="'component.hashtag_management.delete_session' | translate"
+                [title]="'component.name_management.delete_session' | translate"
+                [disabled]="!connectionService.serverAvailable"
                 (click)="deleteQuiz(i)"
                 data-animation="false">
           <fa-icon [icon]="'trash'"></fa-icon>
@@ -54,5 +70,10 @@
       </div>
       <hr *ngIf="i < sessions.length - 1"/>
     </div>
+
+    <h5 *ngIf="publicQuizAmount > 0"
+        class="text-center mt-5 pt-5">
+      <a [routerLink]="['/quiz', 'public']">Looking for more? Click here to choose from a list of {{publicQuizAmount}} public quiz{{publicQuizAmount !== 1 ? 'zes' : ''}}!</a>
+    </h5>
   </div>
 </div>

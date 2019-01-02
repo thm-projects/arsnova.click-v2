@@ -14,8 +14,8 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
@@ -44,9 +44,7 @@ describe('NicknameInputComponent', () => {
         }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -60,7 +58,7 @@ describe('NicknameInputComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,

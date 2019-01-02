@@ -1,17 +1,17 @@
-import { DB_NAME, DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
+import { DbName, DbTable, StorageKey } from '../../../../lib/enums/enums';
 import { AbstractStorageAdapter } from './abstract-storage-adapter';
 
 export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase> {
 
-  constructor(db: IDBFactory, dbName: DB_NAME) {
+  constructor(db: IDBFactory, dbName: DbName) {
     super(null);
 
     const request = db.open(dbName, 1);
     request.onupgradeneeded = () => {
-      console.log('Datenbank angelegt', dbName, Object.keys(DB_TABLE));
+      console.log('Datenbank angelegt', dbName, Object.keys(DbTable));
       this.storage = request.result;
 
-      Object.keys(DB_TABLE).forEach(dbtablesKey => {
+      Object.keys(DbTable).forEach(dbtablesKey => {
         console.log('checking if store exists', dbtablesKey, 'result:', this.storage.objectStoreNames.contains(dbtablesKey));
         if (!this.storage.objectStoreNames.contains(dbtablesKey)) {
           console.log('creating store', dbtablesKey);
@@ -28,7 +28,7 @@ export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase
     };
   }
 
-  public async get(table: DB_TABLE, key: any): Promise<any> {
+  public async get(table: DbTable, key: any): Promise<any> {
     return new Promise<void>(resolve => {
       const request = this.getStore(table).get(key);
       request.onsuccess = () => {
@@ -37,7 +37,7 @@ export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase
     });
   }
 
-  public async set(table: DB_TABLE, key: STORAGE_KEY | string, item: object | Array<any> | string | number): Promise<any> {
+  public async set(table: DbTable, key: StorageKey | string, item: object | Array<any> | string | number): Promise<any> {
     return new Promise<IDBValidKey>(resolve => {
       const request = this.getStore(table).put(Object.assign({}, key, item));
       request.onsuccess = () => {
@@ -46,7 +46,7 @@ export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase
     });
   }
 
-  public async remove(table: DB_TABLE, key: IDBKeyRange | IDBValidKey): Promise<any> {
+  public async remove(table: DbTable, key: IDBKeyRange | IDBValidKey): Promise<any> {
     return new Promise<void>(resolve => {
       const request = this.getStore(table).delete(key);
       request.onsuccess = () => {
@@ -55,11 +55,11 @@ export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase
     });
   }
 
-  public getDefaultValue(key: STORAGE_KEY): any {
+  public getDefaultValue(key: StorageKey): any {
     return super.getDefaultValue(key);
   }
 
-  private getStore(table: DB_TABLE): IDBObjectStore {
+  private getStore(table: DbTable): IDBObjectStore {
     const trans = this.storage.transaction([table], 'readwrite');
     return trans.objectStore(table);
   }

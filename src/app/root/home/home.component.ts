@@ -3,33 +3,31 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DefaultAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_default';
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
-import { ABCDSingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single_abcd';
-import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
-import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { AbstractAnswerEntity } from '../../../lib/entities/answer/AbstractAnswerEntity';
+import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
+import { ABCDSingleChoiceQuestionEntity } from '../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { DbTable, Language, StorageKey } from '../../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { QuestionType } from '../../../lib/enums/QuestionType';
+import { UserRole } from '../../../lib/enums/UserRole';
 import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
-import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { ITrackClickEvent, TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
-import { DB_TABLE, LANGUAGE, STORAGE_KEY, USER_AUTHORIZATION } from '../../shared/enums';
 
 @Component({
   selector: 'app-home',
@@ -46,6 +44,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   public isAddingDemoQuiz = false;
   public isAddingABCDQuiz = false;
   public enteredSessionName = '';
+  public publicQuizAmount: number;
+  public ownPublicQuizAmount: number;
 
   private _provideNickSelection = false;
 
@@ -88,8 +88,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private modalService: NgbModal,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private router: Router,
     private themesService: ThemesService,
     private route: ActivatedRoute,
@@ -101,7 +100,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private trackingService: TrackingService,
     private quizApiService: QuizApiService,
-    private lobbyApiService: LobbyApiService,
     private storageService: StorageService,
     private userService: UserService,
     public sharedService: SharedService,
@@ -112,20 +110,26 @@ export class HomeComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'default';
 
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.getAllQuiznames().then(val => {
-        this._ownQuizzes = val;
-        if (this._ownQuizzes.length) {
-          this.modalService.open(AvailableQuizzesComponent);
+      this.cleanUpSessionStorage();
+
+      this.storageService.stateNotifier.subscribe(val => {
+        if (val === 'initialized') {
+          this.storageService.getAllQuiznames().then(quizNames => {
+            this._ownQuizzes = quizNames;
+            if (this._ownQuizzes.length) {
+              this.modalService.open(AvailableQuizzesComponent);
+            }
+          });
         }
       });
-
-      this.cleanUpSessionStorage();
     }
 
-    this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).subscribe(val => {
-      if (!val) {
-        this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY, this.activeQuestionGroupService.generatePrivateKey()).subscribe();
-      }
+    this.quizApiService.getPublicQuizAmount().subscribe(val => {
+      this.publicQuizAmount = val;
+    });
+
+    this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
+      this.ownPublicQuizAmount = val;
     });
 
     this.updateFooterElements(this.userService.isLoggedIn);
@@ -153,25 +157,29 @@ export class HomeComponent implements OnInit, OnDestroy {
       console.log('homecomponent ngoninit - isserver');
       return;
     }
-    console.log('homecomponent ngoninit - isclient');
 
-    this._routerSubscription = this.route.params.subscribe(async params => {
-      if (!Object.keys(params).length || !params.themeId || !params.languageId) {
-        const theme = this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME).toPromise();
+    this._routerSubscription = this.route.params.subscribe(params => {
+      this.storageService.stateNotifier.subscribe(async val => {
+        if (val === 'initialized') {
+          if (!Object.keys(params).length || !params.themeId || !params.languageId) {
+            const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
 
-        if (theme) {
-          return;
+            if (theme) {
+              return;
+            }
+
+            await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, DefaultSettings.defaultQuizSettings.sessionConfig.theme)
+            .toPromise();
+            this.themesService.updateCurrentlyUsedTheme();
+
+            return;
+          }
+
+          await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, params.themeId).toPromise();
+          this.i18nService.setLanguage(<Language>params.languageId.toUpperCase());
+          this.themesService.updateCurrentlyUsedTheme();
         }
-
-        await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, DefaultSettings.defaultQuizSettings.theme).toPromise();
-        this.themesService.updateCurrentlyUsedTheme();
-
-        return;
-      }
-
-      await this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, params.themeId).toPromise();
-      this.i18nService.setLanguage(<LANGUAGE>params.languageId.toUpperCase());
-      this.themesService.updateCurrentlyUsedTheme();
+      });
     });
   }
 
@@ -187,13 +195,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this.selectQuizByList(quizname);
+    this.joinQuiz();
 
     this.router.navigate(['/quiz', quizname]);
   }
 
   public showQuiznameDatalist(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const elem = document.getElementById('hashtag-input-data-list');
+      const elem = document.getElementById('name-input-data-list');
 
       if (elem) {
         elem.classList.remove('d-none');
@@ -204,7 +213,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public hideQuiznameDatalist(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const elem = document.getElementById('hashtag-input-data-list');
+      const elem = document.getElementById('name-input-data-list');
 
       if (elem) {
         elem.classList.add('d-none');
@@ -259,22 +268,29 @@ export class HomeComponent implements OnInit, OnDestroy {
     return true;
   }
 
-  public async setActiveQuestionGroup(routingTarget?: Array<string>): Promise<boolean> {
-    if (isPlatformBrowser(this.platformId)) {
-      const questionGroupSerialized = await this.storageService.read(DB_TABLE.QUIZ, this.enteredSessionName).toPromise();
-      if (questionGroupSerialized) {
-        this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized);
-      }
+  public editQuiz(): void {
+    if (isPlatformServer(this.platformId)) {
+      return null;
     }
 
-    if (routingTarget) {
-      this.router.navigate(routingTarget);
-    }
-
-    return true;
+    sessionStorage.setItem('currentQuizName', this.enteredSessionName);
+    this.router.navigate(['/quiz', 'manager', 'overview']);
   }
 
-  public async setAsCurrentQuiz(routingTarget: Array<string>): Promise<void> {
+  public addQuiz(): void {
+    if (isPlatformServer(this.platformId)) {
+      return null;
+    }
+
+    sessionStorage.setItem('currentQuizName', this.enteredSessionName);
+    this.runQuiz(['/quiz', 'manager', 'overview']);
+  }
+
+  public joinQuiz(): void {
+    sessionStorage.setItem('currentQuizName', this.enteredSessionName);
+  }
+
+  public async runQuiz(routingTarget: Array<string>): Promise<void> {
     if (isPlatformServer(this.platformId)) {
       return null;
     }
@@ -283,18 +299,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const questionGroupSerialized = await this.storageService.read(DB_TABLE.QUIZ, this.enteredSessionName).toPromise();
-    const questionGroup = await new Promise<IQuestionGroup>((resolve) => {
+    const questionGroupSerialized = await this.storageService.read(DbTable.Quiz, this.enteredSessionName).toPromise();
+    const questionGroup = await new Promise<QuizEntity>((resolve) => {
       if (this.isAddingDemoQuiz) {
         this.addDemoQuiz().then(value => resolve(value));
       } else if (this.isAddingABCDQuiz) {
         this.addAbcdQuiz().then(value => resolve(value));
       } else if (questionGroupSerialized) {
-        resolve(questionGroupReflection[questionGroupSerialized.TYPE](questionGroupSerialized));
+        resolve(new QuizEntity(questionGroupSerialized));
       } else {
-        resolve(questionGroupReflection.DefaultQuestionGroup({
-          hashtag: this.enteredSessionName,
-          sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),
+        resolve(new QuizEntity({
+          name: this.enteredSessionName,
+          sessionConfig: DefaultSettings.defaultQuizSettings.sessionConfig,
         }));
       }
     });
@@ -313,10 +329,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     ];
 
     if (isLoggedIn) {
-      if (this.userService.isAuthorizedFor(USER_AUTHORIZATION.EDIT_I18N)) {
+      if (this.userService.isAuthorizedFor(UserRole.EditI18n)) {
         footerElements.push(this.footerBarService.footerElemEditI18n);
       }
-      if (this.userService.isAuthorizedFor([USER_AUTHORIZATION.QUIZ_ADMIN, USER_AUTHORIZATION.SUPER_ADMIN])) {
+      if (this.userService.isAuthorizedFor([UserRole.QuizAdmin, UserRole.SuperAdmin])) {
         footerElements.push(this.footerBarService.footerElemAdmin);
       }
       footerElements.push(this.footerBarService.footerElemLogout);
@@ -329,47 +345,36 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements(footerElements);
   }
 
-  private async reserveQuiz(questionGroup: IQuestionGroup, routingTarget: Array<string>): Promise<void> {
-    this.quizApiService.postQuizReservation({
-      quizName: this.enteredSessionName,
-      privateKey: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise(),
-      serverPassword: this._serverPassword,
-    }).subscribe(async value => {
+  private async reserveQuiz(questionGroup: QuizEntity, routingTarget: Array<string>): Promise<void> {
+    console.log(questionGroup);
+    this.quizApiService.setQuiz(questionGroup).subscribe(modifiedQuestionGroup => {
+      sessionStorage.setItem('token', modifiedQuestionGroup.adminToken);
+      this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
+      this.quizService.isOwner = true;
+      this.quizService.persist();
 
-      if (value.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
-        this.activeQuestionGroupService.activeQuestionGroup = questionGroup;
-        this.activeQuestionGroupService.persist();
+      if (this.isAddingABCDQuiz) {
+        this.trackingService.trackConversionEvent({
+          action: HomeComponent.TYPE,
+          label: 'ABCD Quiz created',
+        });
+      } else if (this.isAddingDemoQuiz) {
+        this.trackingService.trackConversionEvent({
+          action: HomeComponent.TYPE,
+          label: 'Demo Quiz created',
+        });
+      }
 
-        this.currentQuizService.quiz = questionGroup;
-        this.currentQuizService.persistToSessionStorage();
-
-        if (this.isAddingABCDQuiz) {
-          this.trackingService.trackConversionEvent({
-            action: HomeComponent.TYPE,
-            label: 'ABCD Quiz created',
-          });
-        } else if (this.isAddingDemoQuiz) {
-          this.trackingService.trackConversionEvent({
-            action: HomeComponent.TYPE,
-            label: 'Demo Quiz created',
-          });
-        }
-
-        await this.activateQuiz(questionGroup).toPromise();
-
-        this.router.navigate(routingTarget);
-
+      this.router.navigate(routingTarget);
+    }, error => {
+      if (error === MessageProtocol.TooMuchActiveQuizzes) {
+        this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
+      } else if (error === MessageProtocol.ServerPasswordRequired) {
+        this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
+      } else if (error === MessageProtocol.InsufficientPermissions) {
+        this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
       } else {
-
-        if (value.step === COMMUNICATION_PROTOCOL.QUIZ.TOO_MUCH_ACTIVE_QUIZZES) {
-          this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
-        } else if (value.step === COMMUNICATION_PROTOCOL.QUIZ.SERVER_PASSWORD_REQUIRED) {
-          this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
-        } else if (value.step === COMMUNICATION_PROTOCOL.AUTHORIZATION.INSUFFICIENT_PERMISSIONS) {
-          this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
-        } else {
-          console.log(value);
-        }
+        console.log(error);
       }
     });
   }
@@ -402,12 +407,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private async selectQuizAsExisting(quizname): Promise<void> {
-    const currentQuiz = await this.storageService.read(DB_TABLE.QUIZ, quizname).toPromise();
-    const questionGroupInstance = questionGroupReflection[currentQuiz.TYPE](currentQuiz);
-
+    const currentQuiz = new QuizEntity(await this.storageService.read(DbTable.Quiz, quizname).toPromise());
     this.canAddQuiz = false;
     this.canEditQuiz = true;
-    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired && questionGroupInstance.isValid();
+    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired && currentQuiz.isValid();
     this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
@@ -429,15 +432,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private selectQuizAsDefaultQuiz(quizName: string): void {
     this.quizApiService.getQuizStatus(quizName).subscribe(value => {
-      if (value.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+      if (value.status === StatusProtocol.Success) {
         switch (value.step) {
-          case COMMUNICATION_PROTOCOL.QUIZ.EXISTS:
+          case MessageProtocol.AlreadyTaken:
             this.canAddQuiz = false;
             this.canJoinQuiz = false;
             this.passwordRequired = false;
             this.canStartQuiz = false;
             break;
-          case COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE:
+          case MessageProtocol.Available:
             this.canAddQuiz = false;
             this.canJoinQuiz = true;
             this.passwordRequired = false;
@@ -448,7 +451,7 @@ export class HomeComponent implements OnInit, OnDestroy {
               this.casService.quizName = quizName;
             }
             break;
-          case COMMUNICATION_PROTOCOL.QUIZ.UNDEFINED:
+          case MessageProtocol.Unavailable:
             this.canAddQuiz = true;
             this.canJoinQuiz = false;
             this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
@@ -462,24 +465,24 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private cleanUpSessionStorage(): void {
-    if (this.activeQuestionGroupService.activeQuestionGroup) {
-      this.activeQuestionGroupService.cleanUp();
-    }
-    if (isPlatformBrowser(this.platformId)) {
-      this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.QUIZ_THEME).subscribe();
-    }
     this.attendeeService.cleanUp();
-    this.currentQuizService.cleanUp();
+    this.quizService.cleanUp();
     this.connectionService.cleanUp();
+    sessionStorage.removeItem('currentQuizName');
+    sessionStorage.removeItem('nick');
+    sessionStorage.removeItem('token');
+    if (isPlatformBrowser(this.platformId)) {
+      this.storageService.delete(DbTable.Config, StorageKey.QuizTheme).subscribe();
+    }
   }
 
-  private checkABCDOrdering(hashtag: string): boolean {
+  private checkABCDOrdering(name: string): boolean {
     let ordered = true;
-    if (!hashtag || hashtag.length < 2 || hashtag.charAt(0) !== 'a') {
+    if (!name || name.length < 2 || name.charAt(0) !== 'a') {
       return false;
     }
-    for (let i = 1; i < hashtag.length; i++) {
-      if (hashtag.charCodeAt(i) !== hashtag.charCodeAt(i - 1) + 1) {
+    for (let i = 1; i < name.length; i++) {
+      if (name.charCodeAt(i) !== name.charCodeAt(i - 1) + 1) {
         ordered = false;
         break;
       }
@@ -487,22 +490,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     return ordered;
   }
 
-  private activateQuiz(questionGroup: IQuestionGroup): Observable<IMessage> {
-    return this.lobbyApiService.putLobby({
-      quiz: questionGroup.serialize(),
-    });
-  }
-
-  private async addDemoQuiz(): Promise<IQuestionGroup> {
+  private async addDemoQuiz(): Promise<QuizEntity> {
     const value = await this.quizApiService.generateDemoQuiz(this.i18nService.currentLanguage.toString()).toPromise();
-    Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
-    const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
-    this.enteredSessionName = questionGroup.hashtag;
+    value.sessionConfig = Object.assign({}, DefaultSettings.defaultQuizSettings.sessionConfig, value.sessionConfig);
+    const questionGroup = new QuizEntity(value);
+    this.enteredSessionName = questionGroup.name;
 
     return questionGroup;
   }
 
-  private async addAbcdQuiz(): Promise<IQuestionGroup> {
+  private async addAbcdQuiz(): Promise<QuizEntity> {
     const language = this.i18nService.currentLanguage.toString();
     const answerList = this.enteredSessionName.split('');
 
@@ -514,17 +511,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       return quizName.split(' ')[0] === this.enteredSessionName;
     });
     if (hasMatchedABCDQuiz.length) {
-      const rawQuiz = await this.storageService.read(DB_TABLE.QUIZ, hasMatchedABCDQuiz[0]).toPromise();
-      const questionGroup = questionGroupReflection.DefaultQuestionGroup(rawQuiz);
-      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+      const questionGroup = await this.storageService.read(DbTable.Quiz, hasMatchedABCDQuiz[0]).toPromise();
+      const answerOptionList = (<Array<AbstractAnswerEntity>>[]);
 
       answerList.forEach((character, index) => {
-        answerOptionList.push(new DefaultAnswerOption({
+        answerOptionList.push(new DefaultAnswerEntity({
           answerText: (String.fromCharCode(index + 65)),
+          isCorrect: false,
         }));
       });
-      this.enteredSessionName = questionGroup.hashtag;
-      const abcdQuestion = new ABCDSingleChoiceQuestion({
+      this.enteredSessionName = questionGroup.name;
+      const abcdQuestion: ABCDSingleChoiceQuestionEntity = new ABCDSingleChoiceQuestionEntity({
         questionText: '',
         timer: 60,
         displayAnswerText: false,
@@ -532,23 +529,24 @@ export class HomeComponent implements OnInit, OnDestroy {
         showOneAnswerPerRow: false,
       });
       questionGroup.questionList = [abcdQuestion];
-      return questionGroup;
+      return new QuizEntity(questionGroup);
 
     } else {
 
       const value = await this.quizApiService.generateABCDQuiz(language, answerList.length).toPromise();
-      Object.assign(value.sessionConfig, DefaultSettings.defaultQuizSettings);
+      Object.assign({}, DefaultSettings.defaultQuizSettings.sessionConfig, value.sessionConfig);
 
-      const questionGroup = questionGroupReflection.DefaultQuestionGroup(value);
-      const answerOptionList = (<Array<DefaultAnswerOption>>[]);
+      const questionGroup = value;
+      const answerOptionList = (<Array<AbstractAnswerEntity>>[]);
 
       answerList.forEach((character, index) => {
-        answerOptionList.push(new DefaultAnswerOption({
+        answerOptionList.push(new DefaultAnswerEntity({
           answerText: (String.fromCharCode(index + 65)),
         }));
       });
-      this.enteredSessionName = questionGroup.hashtag;
-      const abcdQuestion = new ABCDSingleChoiceQuestion({
+      this.enteredSessionName = questionGroup.name;
+      const abcdQuestion: ABCDSingleChoiceQuestionEntity = new ABCDSingleChoiceQuestionEntity({
+        TYPE: QuestionType.ABCDSingleChoiceQuestion,
         questionText: '',
         timer: 60,
         displayAnswerText: false,
@@ -556,7 +554,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         showOneAnswerPerRow: false,
       });
       questionGroup.questionList = [abcdQuestion];
-      return questionGroup;
+      return new QuizEntity(questionGroup);
     }
   }
 }

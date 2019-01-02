@@ -4,17 +4,16 @@ import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
-import { DefaultQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_default';
 import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { createTranslateLoader } from '../../../lib/translation.factory';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../current-quiz/current-quiz.service';
+import { QuizService } from '../current-quiz/current-quiz.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
@@ -24,18 +23,16 @@ import { StorageServiceMock } from '../storage/storage.service.mock';
 import { WebsocketMockService } from '../websocket/websocket.mock.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
-import { ActiveQuestionGroupService } from './active-question-group.service';
+import { QuizService } from './quiz.service';
 
-describe('ActiveQuestionGroupService', () => {
+describe('QuizService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -55,54 +52,45 @@ describe('ActiveQuestionGroupService', () => {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, SettingsService, TranslateService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
-        }, FooterBarService, ActiveQuestionGroupService,
+        }, FooterBarService, QuizService,
       ],
     });
   }));
 
-  beforeEach(async(inject([ActiveQuestionGroupService], (service: ActiveQuestionGroupService) => {
-    service.activeQuestionGroup = new DefaultQuestionGroup({
-      hashtag: 'test',
-      sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),
+  beforeEach(async(inject([QuizService], (service: QuizService) => {
+    service.quiz = new QuizEntity({
+      name: 'test',
+      sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings.sessionConfig),
       questionList: [
         new SingleChoiceQuestion({}),
       ],
     });
+    service.isOwner = true;
   })));
 
-  it('should be created', async(inject([ActiveQuestionGroupService], (service: ActiveQuestionGroupService) => {
+  it('should be created', async(inject([QuizService], (service: QuizService) => {
     expect(service).toBeTruthy();
   })));
 
-  it('#generatePrivateKey', async(inject([ActiveQuestionGroupService], (service: ActiveQuestionGroupService) => {
+  it('#generatePrivateKey', async(inject([QuizService], (service: QuizService) => {
     const privateKey = service.generatePrivateKey();
     expect(typeof privateKey).toEqual('string');
   })));
 
-  it('#cleanUp', async(inject([ActiveQuestionGroupService, StorageService], (service: ActiveQuestionGroupService, storageService: StorageService) => {
-    storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP, JSON.stringify(service.activeQuestionGroup.serialize())).subscribe();
-    service.cleanUp();
-    storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.ACTIVE_QUESTION_GROUP).toPromise().then(result => {
-      expect(result).toBe(null);
+  it('#persist', async(inject([QuizService, StorageService], (service: QuizService, storageService: StorageService) => {
+    service.persist();
+    storageService.getAllQuiznames().then(quiznames => {
+      expect(quiznames).toContain('test');
     });
   })));
 
-  it('#persist', async(inject([ActiveQuestionGroupService, StorageService], (service: ActiveQuestionGroupService, storageService: StorageService) => {
-    service.persist().then(() => {
-      storageService.getAllQuiznames().then(quiznames => {
-        expect(quiznames).toContain('test');
-      });
-    });
+  it('#updateFooterElementsState', async(inject([QuizService, FooterBarService], (service: QuizService, footerBarService: FooterBarService) => {
+    const defaultNickConfig = DefaultSettings.defaultQuizSettings.sessionConfig.nicks;
+    service.updateFooterElementsState();
+
+    expect(footerBarService.footerElemEnableCasLogin.isActive).toEqual(defaultNickConfig.restrictToCasLogin);
+    expect(footerBarService.footerElemBlockRudeNicknames.isActive).toEqual(defaultNickConfig.blockIllegalNicks);
   })));
-
-  it('#updateFooterElementsState',
-    async(inject([ActiveQuestionGroupService, FooterBarService], (service: ActiveQuestionGroupService, footerBarService: FooterBarService) => {
-      const defaultNickConfig = DefaultSettings.defaultQuizSettings.nicks;
-      service.updateFooterElementsState();
-
-      expect(footerBarService.footerElemEnableCasLogin.isActive).toEqual(defaultNickConfig.restrictToCasLogin);
-      expect(footerBarService.footerElemBlockRudeNicknames.isActive).toEqual(defaultNickConfig.blockIllegalNicks);
-    })));
 });

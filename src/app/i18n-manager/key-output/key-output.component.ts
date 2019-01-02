@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Filter } from '../../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
-import { FILTER } from '../../shared/enums';
 
 @Component({
   selector: 'app-key-output',
@@ -12,12 +12,12 @@ import { FILTER } from '../../shared/enums';
 export class KeyOutputComponent {
   public static readonly TYPE = 'KeyOutputComponent';
 
-  public readonly filters = FILTER;
+  public readonly filters = Filter;
   @Input() public changedData;
   public scrollPos = 0;
 
   public readonly Math = Math;
-  @Input() public filter = FILTER.NONE;
+  @Input() public filter = Filter.None;
   @Input() public searchFilter = '';
 
   private _selectedIndex: number;
@@ -38,9 +38,7 @@ export class KeyOutputComponent {
   }
 
   public scrollHandler(event: Event): void {
-    const pos = (
-      <HTMLElement>event.target
-    ).scrollTop;
+    const pos = (<HTMLElement>event.target).scrollTop;
 
     if (this.scrollPos !== Math.floor(pos / 40)) {
       this.scrollPos = Math.floor(pos / 40);
@@ -56,7 +54,7 @@ export class KeyOutputComponent {
   }
 
   public hasEmptyKeys(elem): boolean {
-    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.LANGUAGE).length;
+    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.language).length;
   }
 
   public removeKey(target: any): void {

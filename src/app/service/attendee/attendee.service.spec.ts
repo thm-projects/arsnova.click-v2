@@ -9,7 +9,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../current-quiz/current-quiz.service';
+import { QuizService } from '../current-quiz/current-quiz.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
@@ -28,9 +28,7 @@ describe('AttendeeService', () => {
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -50,7 +48,7 @@ describe('AttendeeService', () => {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, SettingsService, TranslateService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, FooterBarService, AttendeeService,
       ],

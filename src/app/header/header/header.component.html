@@ -62,9 +62,7 @@
   <div class="modal-body">
     <ul class="p-0 list-unstyled">
       <li>
-        <fa-icon [icon]="connectionService.serverAvailable ? 'check-square' : 'times'"
-                 [transform]="'shrink-5'"
-                 [mask]="'square'"
+        <fa-icon [icon]="connectionService.serverAvailable ? 'check' : 'times'"
                  [class.text-danger]="!connectionService.serverAvailable"
                  [class.text-success]="connectionService.serverAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">
@@ -74,9 +72,7 @@
         </p>
       </li>
       <li>
-        <fa-icon [icon]="connectionService.websocketAvailable ? 'check-square' : 'times'"
-                 [transform]="'shrink-5'"
-                 [mask]="'square'"
+        <fa-icon [icon]="connectionService.websocketAvailable ? 'check' : 'times'"
                  [class.text-danger]="!connectionService.websocketAvailable"
                  [class.text-success]="connectionService.websocketAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">
@@ -86,11 +82,9 @@
         </p>
       </li>
       <li>
-        <fa-icon [icon]="connectionService.indexedDbAvailable ? 'check-square' : 'times'"
-                 [transform]="'shrink-5'"
-                 [mask]="'square'"
-                 [class.text-danger]="!connectionService.indexedDbAvailable"
-                 [class.text-success]="connectionService.indexedDbAvailable"></fa-icon>
+        <fa-icon [icon]="indexedDbAvailable ? 'check' : 'times'"
+                 [class.text-danger]="!indexedDbAvailable"
+                 [class.text-success]="indexedDbAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">
           <span>IndexedDb: </span>
           <span *ngIf="indexedDbAvailable">{{'region.header.connection_status.indexedDb_status.writable' | translate}}</span>
@@ -98,9 +92,7 @@
         </p>
       </li>
       <li>
-        <fa-icon [icon]="connectionService.rtt <= 300 && connectionService.serverAvailable ? 'check-square' : 'times'"
-                 [transform]="'shrink-5'"
-                 [mask]="'square'"
+        <fa-icon [icon]="connectionService.rtt <= 300 && connectionService.serverAvailable ? 'check' : 'times'"
                  [class.text-danger]="connectionService.rtt > 300 || !connectionService.serverAvailable"
                  [class.text-success]="connectionService.rtt <= 300 && connectionService.serverAvailable"></fa-icon>
         <p class="ml-2 mb-0 d-inline">

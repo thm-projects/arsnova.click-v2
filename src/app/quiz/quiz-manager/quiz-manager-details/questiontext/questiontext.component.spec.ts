@@ -10,13 +10,13 @@ import { createTranslateLoader } from '../../../../../lib/translation.factory';
 import { HeaderComponent } from '../../../../header/header/header.component';
 import { LivePreviewComponent } from '../../../../live-preview/live-preview/live-preview.component';
 import { MarkdownBarComponent } from '../../../../markdown/markdown-bar/markdown-bar.component';
-import { ActiveQuestionGroupMockService } from '../../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
+import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
@@ -64,8 +64,8 @@ describe('QuestiontextComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, HeaderLabelService, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,

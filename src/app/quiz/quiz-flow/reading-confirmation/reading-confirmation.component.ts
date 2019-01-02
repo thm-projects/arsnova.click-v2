@@ -1,17 +1,17 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { MessageProtocol } from '../../../../lib/enums/Message';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { StorageService } from '../../../service/storage/storage.service';
-import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-reading-confirmation',
@@ -29,7 +29,7 @@ export class ReadingConfirmationComponent implements OnInit {
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
     private router: Router,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private questionTextService: QuestionTextService,
     private sanitizer: DomSanitizer,
     private headerLabelService: HeaderLabelService,
@@ -40,7 +40,7 @@ export class ReadingConfirmationComponent implements OnInit {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
     headerLabelService.headerLabel = 'component.liveResults.reading_confirmation';
-    this.questionIndex = currentQuizService.questionIndex;
+    this.questionIndex = quizService.quiz.currentQuestionIndex;
     this.footerBarService.replaceFooterElements([]);
   }
 
@@ -50,20 +50,16 @@ export class ReadingConfirmationComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     await this.connectionService.initConnection();
-    this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+    this.connectionService.connectToChannel(this.quizService.quiz.name);
     this.handleMessages();
     this.questionTextService.eventEmitter.subscribe((value: string) => {
       this.questionText = value;
     });
-    await this.questionTextService.change(this.currentQuizService.currentQuestion().questionText);
+    await this.questionTextService.change(this.quizService.currentQuestion().questionText);
   }
 
   public async confirmReading(): Promise<void> {
-    this.memberApiService.putReadingConfirmationValue({
-      quizName: this.currentQuizService.quiz.hashtag,
-      nickname: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.NICK).toPromise(),
-      questionIndex: this.questionIndex,
-    }).subscribe(() => {
+    this.memberApiService.putReadingConfirmationValue().subscribe(() => {
       this.router.navigate(['/quiz', 'flow', 'results']);
     });
   }
@@ -71,20 +67,34 @@ export class ReadingConfirmationComponent implements OnInit {
   private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
-        case COMMUNICATION_PROTOCOL.QUIZ.START:
+        case MessageProtocol.Inactive:
+          setTimeout(this.handleMessages.bind(this), 500);
+          break;
+        case MessageProtocol.Start:
           this.router.navigate(['/quiz', 'flow', 'voting']);
           break;
-        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
+        case MessageProtocol.UpdatedResponse:
           console.log('modify response data for nickname in reading confirmation view', data.payload.nickname);
-          this.attendeeService.modifyResponse(data.payload.nickname);
+          this.attendeeService.modifyResponse(data.payload);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
+        case MessageProtocol.Reset:
           this.attendeeService.clearResponses();
-          this.currentQuizService.questionIndex = 0;
+          this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
-        case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
+        case MessageProtocol.Closed:
           this.router.navigate(['/']);
+          break;
+        case MessageProtocol.Added:
+          this.attendeeService.addMember(data.payload.member);
+          break;
+        case MessageProtocol.Removed:
+          this.attendeeService.removeMember(data.payload.name);
+          break;
+        case MessageProtocol.AllPlayers:
+          data.payload.members.forEach((elem: IMemberSerialized) => {
+            this.attendeeService.addMember(elem);
+          });
           break;
       }
     });

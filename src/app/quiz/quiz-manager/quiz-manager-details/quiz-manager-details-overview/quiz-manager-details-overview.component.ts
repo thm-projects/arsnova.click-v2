@@ -1,23 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AbstractQuestionGroup, questionGroupReflection } from 'arsnova-click-v2-types/dist/questions';
-import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
+import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 
 @Component({
   selector: 'app-quiz-manager-details-overview',
   templateUrl: './quiz-manager-details-overview.component.html',
   styleUrls: ['./quiz-manager-details-overview.component.scss'],
-})
-export class QuizManagerDetailsOverviewComponent implements OnInit {
+}) //
+@AutoUnsubscribe('_subscriptions')
+export class QuizManagerDetailsOverviewComponent {
   public static TYPE = 'QuizManagerDetailsOverviewComponent';
 
-  private _question: IQuestion;
+  private _question: AbstractQuestionEntity;
 
-  get question(): IQuestion {
+  get question(): AbstractQuestionEntity {
     return this._question;
   }
 
@@ -27,9 +29,12 @@ export class QuizManagerDetailsOverviewComponent implements OnInit {
     return this._questionIndex;
   }
 
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
+
   constructor(
     private headerLabelService: HeaderLabelService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizService: QuizService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService,
     private trackingService: TrackingService,
@@ -38,23 +43,21 @@ export class QuizManagerDetailsOverviewComponent implements OnInit {
     this.footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames,
     ]);
-  }
 
-  public ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
-      this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
-        if (!(
-          questionGroup instanceof AbstractQuestionGroup
-        )) {
-          questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
-        }
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
 
-        this._question = questionGroup.questionList[this._questionIndex];
-      });
-    });
+      this._subscriptions.push(this.route.params.subscribe(params => {
+        this._questionIndex = +params['questionIndex'];
+        this._question = this.quizService.quiz.questionList[this._questionIndex];
+      }));
+    }));
+
+    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
   }
 
   public trackDetailsTarget(link: string): void {
@@ -63,5 +66,4 @@ export class QuizManagerDetailsOverviewComponent implements OnInit {
       label: link,
     });
   }
-
 }

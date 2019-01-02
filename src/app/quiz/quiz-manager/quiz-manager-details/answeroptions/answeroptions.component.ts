@@ -1,33 +1,38 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AbstractQuestionGroup, questionGroupReflection } from 'arsnova-click-v2-types/dist/questions';
-import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { Subscription } from 'rxjs';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
+import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
+import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
+import { QuestionType } from '../../../../../lib/enums/QuestionType';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-answeroptions',
   templateUrl: './answeroptions.component.html',
   styleUrls: ['./answeroptions.component.scss'],
-})
+}) //
+@AutoUnsubscribe('_subscriptions')
 export class AnsweroptionsComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsComponent';
 
-  private _renderedComponent: string;
+  public readonly questionType = QuestionType;
 
-  get renderedComponent(): string {
-    return this._renderedComponent;
+  private _question: AbstractQuestionEntity;
+
+  get question(): AbstractQuestionEntity {
+    return this._question;
   }
 
   private _questionIndex: number;
-  private _question: IQuestion;
-  private _routerSubscription: Subscription;
+
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
     private headerLabelService: HeaderLabelService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizService: QuizService,
     private route: ActivatedRoute,
     private footerBarService: FooterBarService,
   ) {
@@ -35,31 +40,26 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = AnsweroptionsComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames,
     ]);
   }
 
   public ngOnInit(): void {
-    this._routerSubscription = this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
 
-      this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
-        if (!(
-          questionGroup instanceof AbstractQuestionGroup
-        )) {
-          questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
+      this._subscriptions.push(this.route.params.subscribe(params => {
+        this._questionIndex = +params['questionIndex'];
+        if (this.quizService.quiz) {
+          this._question = this.quizService.quiz.questionList[this._questionIndex];
         }
+      }));
+    }));
 
-        this._question = questionGroup.questionList[this._questionIndex];
-        this._renderedComponent = this._question.preferredAnsweroptionComponent;
-      });
-    });
+    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
   }
 
-  public ngOnDestroy(): void {
-    if (this._routerSubscription) {
-      this._routerSubscription.unsubscribe();
-    }
-  }
-
+  public ngOnDestroy(): void {}
 }

@@ -293,7 +293,7 @@
         "choose_selectable_nick": "Vous pouvez également choisir un pseudo dans la liste donnée."
       }
     },
-    "hashtag_management": {
+    "name_management": {
       "enter_quiz_name": "Entrez un nom de quiz…",
       "join_session": "Une partie?",
       "start_session": "Commencer",
@@ -314,15 +314,15 @@
       "no_sessions": "Aucun Quiz n’est enregistré sur ce navigateur.",
       "password": "Password for starting the quiz",
       "aria_description": {
-        "hashtag-input-field": "Entrez le nom du Quiz",
+        "name-input-field": "Entrez le nom du Quiz",
         "joinSession": "Faire une partie de Quiz",
         "addNewHashtag": "Créez un nouveau Quiz",
         "splashscreen_description": "Liste de tous les quiz sur votre navigateur"
       },
       "enter_server_password": ""
     },
-    "hashtag_view": {
-      "hashtag_input": {
+    "name_view": {
+      "name_input": {
         "already_exists": "Ce nom de quiz existe déjà",
         "illegal_chars": "Ce nom contient des caractères invalides"
       },
@@ -648,7 +648,7 @@
       },
       "confidence_level": ""
     },
-    "hashtag_home": "",
+    "name_home": "",
     "quiz_rename": ""
   },
   "plugins": {
@@ -736,7 +736,7 @@
           "session_exists_arsnova_import": "Chaque quiz doit avoir un nom unique:",
           "session_exists_new": "Saisissez-en un autre:",
           "session_not_exists": "Ce Quiz n’existe pas!",
-          "hashtag_exists": "Ce nom de quiz exixte déjà!",
+          "name_exists": "Ce nom de quiz exixte déjà!",
           "session_not_available": "Cette partie de quiz n’est pas ouverte pour l‘instant.",
           "private_browsing": "Si votre navigateur est en mode privé, vous ne pouvez utiliser arsona.click qu’en tant que participant, car en mode privé plusieurs propriétés de la mémoire sont bloquées. Si vous avez l’intention d’utiliser arsonova.click pour un long moment, nous vous conseillons de désactiver le mode privé. N’ayez crainte, votre anonymat demeure préservé.",
           "kicked_from_quiz": "Vous avez été éliminé du Quiz!",
@@ -744,7 +744,7 @@
           "export_failed": "Echec lors de l’export des données! - %s",
           "not_authorized": "Ce quiz est soit inexistant, soit expressément inaccessible à vous.",
           "maximum_answer_options_exceeded": "Nombre maximal d’options de réponses atteint!",
-          "hashtag_not_found": "Désolé, ce nom de quiz n’existe pas!",
+          "name_not_found": "Désolé, ce nom de quiz n’existe pas!",
           "member_not_found": "Désolé, ce joueur n’existe pas!",
           "duplicate_response": "Désolé, une seule réponse par joueur!",
           "answeroption_not_found": "Il n’existe aucune réponse à cet indice",

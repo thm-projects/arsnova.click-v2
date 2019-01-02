@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Filter, Language } from '../../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
-import { FILTER } from '../../shared/enums';
 
 @Pipe({
   name: 'filterKeys',
@@ -9,24 +9,24 @@ export class FilterKeysPipe implements PipeTransform {
 
   constructor(private languageLoaderService: LanguageLoaderService) {}
 
-  public transform(value: Array<any>, filterSetting?: FILTER): any {
+  public transform(value: Array<any>, filterSetting?: Filter): any {
     switch (filterSetting) {
-      case FILTER.NONE:
+      case Filter.None:
         return value;
-      case FILTER.UNUSED:
+      case Filter.Unused:
         return value.filter(elem => this.isUnused(elem));
-      case FILTER.INVALID_KEYS:
+      case Filter.InvalidKeys:
         return value.filter(elem => this.hasEmptyKeys(elem));
-      case FILTER.INVALID_DE:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'DE'));
-      case FILTER.INVALID_EN:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'EN'));
-      case FILTER.INVALID_ES:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'ES'));
-      case FILTER.INVALID_FR:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'FR'));
-      case FILTER.INVALID_IT:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, 'IT'));
+      case Filter.InvalidDE:
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.DE));
+      case Filter.InvalidEN:
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.EN));
+      case Filter.InvalidES:
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.ES));
+      case Filter.InvalidFr:
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.FR));
+      case Filter.InvalidIt:
+        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.IT));
     }
   }
 
@@ -38,7 +38,7 @@ export class FilterKeysPipe implements PipeTransform {
   }
 
   private hasEmptyKeys(elem): boolean {
-    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.LANGUAGE).length;
+    return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.language).length;
   }
 
   private hasEmptyKeysForLang(elem, lang): boolean {
@@ -46,10 +46,7 @@ export class FilterKeysPipe implements PipeTransform {
   }
 
   private isUnused(elem): boolean {
-    const elements = Object.keys(this.languageLoaderService.unusedKeys).filter(langRef => {
-      return this.languageLoaderService.unusedKeys[langRef].find(unusedKey => unusedKey === elem.key);
-    });
-    return elements.length > 0;
+    return !!this.languageLoaderService.unusedKeys.find(unusedKey => unusedKey === elem.key);
   }
 
 }

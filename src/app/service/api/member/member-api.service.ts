@@ -1,61 +1,73 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../../lib/default.settings';
+import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MemberApiService {
 
-  constructor(private http: HttpClient) { }
+  private _putMemberUrl: string;
+  private _putResponseUrl: string;
+  private _deleteMemberUrl: string;
+  private _getMembersUrl: string;
+  private _getAvailableMemberNamesUrl: string;
+  private _putConfidenceValueUrl: string;
+  private _putReadingConfirmationValueUrl: string;
+  private _postMemberTokenUrl: string;
 
-  public MEMBER_CONFIDENCE_VALUE_PUT_URL(): string {
-    return `${DefaultSettings.httpApiEndpoint}/member/confidence-value`;
+  constructor(private http: HttpClient) {
+    this.loadUrls();
   }
 
-  public MEMBER_READING_CONFIRMATION_PUT_URL(): string {
-    return `${DefaultSettings.httpApiEndpoint}/member/reading-confirmation`;
+  public putMember(member: MemberEntity): Observable<IMessage> {
+    return this.http.put<IMessage>(this._putMemberUrl, { member }, { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
-  public MEMBER_DELETE_URL(quizName, memberName): string {
-    return `${DefaultSettings.httpApiEndpoint}/member/${quizName}/${memberName}`;
+  public putResponse(response: any): Observable<IMessage> {
+    return this.http.put<IMessage>(this._putResponseUrl, { response }, { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
-  public MEMBER_RESPONSE_PUT_URL(): string {
-    return `${DefaultSettings.httpApiEndpoint}/member/response`;
+  public deleteMember(quizName, nickName): Observable<IMessage> {
+    return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${quizName}/${nickName}`,
+      { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
-  public MEMBER_PUT_MEMBER_URL(): string {
-    return `${DefaultSettings.httpApiEndpoint}/member`;
+  public getMembers(): Observable<Array<MemberEntity>> {
+    return this.http.get<Array<MemberEntity>>(`${this._getMembersUrl}`, { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
-  public MEMBER_GET_AVAILABLE_NAMES_URL(quizName: string): string {
-    return `${DefaultSettings.httpApiEndpoint}/member/${quizName}/available`;
+  public getAvailableNames(quizName: string): Observable<Array<string>> {
+    return this.http.get<Array<string>>(`${this._getAvailableMemberNamesUrl}/${quizName}`);
   }
 
-  public putConfidenceValue(data: object): Observable<IMessage> {
-    return this.http.put<IMessage>(this.MEMBER_CONFIDENCE_VALUE_PUT_URL(), data);
+  public putConfidenceValue(confidenceValue: number): Observable<IMessage> {
+    return this.http.put<IMessage>(`${this._putConfidenceValueUrl}`, { confidenceValue },
+      { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
-  public deleteMember(quizName, memberName): Observable<IMessage> {
-    return this.http.delete<IMessage>(this.MEMBER_DELETE_URL(quizName, memberName));
+  public putReadingConfirmationValue(): Observable<IMessage> {
+    return this.http.put<IMessage>(`${this._putReadingConfirmationValueUrl}`, {}, { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
-  public putReadingConfirmationValue(data: object): Observable<IMessage> {
-    return this.http.put<IMessage>(this.MEMBER_READING_CONFIRMATION_PUT_URL(), data);
+  public generateMemberToken(name, quizName): Observable<string> {
+    return this.http.post<string>(`${this._postMemberTokenUrl}`, {
+      name,
+      quizName,
+    });
   }
 
-  public putResponse(data: object): Observable<IMessage> {
-    return this.http.put<IMessage>(this.MEMBER_RESPONSE_PUT_URL(), data);
-  }
-
-  public putMember(data): Observable<IMessage> {
-    return this.http.put<IMessage>(this.MEMBER_PUT_MEMBER_URL(), data);
-  }
-
-  public getAvailableMemberNames(quizName: string): Observable<IMessage> {
-    return this.http.get<IMessage>(this.MEMBER_GET_AVAILABLE_NAMES_URL(quizName));
+  private loadUrls(): void {
+    this._putMemberUrl = `${DefaultSettings.httpApiEndpoint}/member`;
+    this._deleteMemberUrl = `${DefaultSettings.httpApiEndpoint}/member`;
+    this._getMembersUrl = `${DefaultSettings.httpApiEndpoint}/member`;
+    this._getAvailableMemberNamesUrl = `${DefaultSettings.httpApiEndpoint}/member/available`;
+    this._putResponseUrl = `${DefaultSettings.httpApiEndpoint}/member/response`;
+    this._putConfidenceValueUrl = `${DefaultSettings.httpApiEndpoint}/member/confidence-value`;
+    this._putReadingConfirmationValueUrl = `${DefaultSettings.httpApiEndpoint}/member/reading-confirmation`;
+    this._postMemberTokenUrl = `${DefaultSettings.httpApiEndpoint}/member/token`;
   }
 }

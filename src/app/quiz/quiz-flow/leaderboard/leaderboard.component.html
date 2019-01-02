@@ -15,7 +15,7 @@
     </span>
   </h4>
 
-  <ng-container *ngIf="currentQuizService.quiz.sessionConfig.nicks.memberGroups.length > 1;else attendeeView">
+  <ng-container *ngIf="quizService.quiz.sessionConfig.nicks.memberGroups.length > 1;else attendeeView">
     <ng-container *ngFor="let group of memberGroupResults">
       <div class="col-12 col-sm-6">
         <div class="leaderboard-item rounded p-2 my-2 ">
@@ -66,6 +66,7 @@
          [class.own-nick]="!i || attendeeService.isOwnNick(attendee.name)"
          [class.text-center]="!i">
       <fa-icon *ngIf="!i"
+               class="mr-2"
                [icon]="'trophy'"></fa-icon>
       <span *ngIf="i">{{i + 1}}.&nbsp;</span>
       <span><span class="d-inline-flex"

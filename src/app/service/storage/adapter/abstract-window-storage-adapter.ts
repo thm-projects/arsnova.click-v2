@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from '../../../shared/enums';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { AbstractStorageAdapter } from './abstract-storage-adapter';
 
 export abstract class AbstractWindowStorageAdapter<T extends Storage> extends AbstractStorageAdapter<T> {
@@ -19,7 +19,7 @@ export abstract class AbstractWindowStorageAdapter<T extends Storage> extends Ab
     this.storage.removeItem(key);
   }
 
-  public getDefaultValue(key: STORAGE_KEY): any {
+  public getDefaultValue(key: StorageKey): any {
     return super.getDefaultValue(key);
   }
 }

@@ -16,7 +16,7 @@
          (keyup)="key = $event.target.value"
          placeholder="Enter the Key here"/>
 
-  <div *ngFor="let langKey of getKeys(languageLoaderService.LANGUAGE)">
+  <div *ngFor="let langKey of getKeys(languageLoaderService.language)">
     <p class="mb-0">{{langKey.toUpperCase()}}</p>
     <textarea class="w-100 key-textarea"
               (keyup)="updateKey($event, langKey)"></textarea>

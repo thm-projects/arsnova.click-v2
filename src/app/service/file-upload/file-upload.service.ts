@@ -1,11 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { IDuplicateQuiz, IMessage } from 'arsnova-click-v2-types/dist/common';
-import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
-import { ActiveQuestionGroupService } from '../active-question-group/active-question-group.service';
+import { IDuplicateQuiz } from 'arsnova-click-v2-types/dist/common';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { DbTable } from '../../../lib/enums/enums';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
+import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable()
@@ -25,7 +26,7 @@ export class FileUploadService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizService: QuizService,
     private quizApiService: QuizApiService,
     private storageService: StorageService,
   ) {
@@ -34,10 +35,9 @@ export class FileUploadService {
     }
   }
 
-  public async uploadFile(formData: FormData): Promise<void> {
+  public uploadFile(formData: FormData): void {
     this._renameFilesQueue = new FormData();
     this._duplicateQuizzes = [];
-    formData.append('privateKey', await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PRIVATE_KEY).toPromise());
 
     this.quizApiService.postQuizUpload(formData).subscribe((data: IMessage) => {
       if (data.payload.duplicateQuizzes.length) {
@@ -56,13 +56,13 @@ export class FileUploadService {
             return;
           }
           const reader = new FileReader();
-          reader.onload = async () => {
+          reader.onload = () => {
 
-            const parsedFile = JSON.parse(reader.result.toString());
-            this.activeQuestionGroupService.activeQuestionGroup = questionGroupReflection[parsedFile.TYPE](parsedFile);
-            this.activeQuestionGroupService.persist();
+            this.quizService.quiz = new QuizEntity(JSON.parse(reader.result.toString()));
+            this.quizService.persist();
+            this.quizService.quiz = null;
 
-            this.storageService.delete(DB_TABLE.QUIZ, file.name).subscribe();
+            this.storageService.delete(DbTable.Quiz, file.name).subscribe();
 
             this.router.navigate(['/']);
           };

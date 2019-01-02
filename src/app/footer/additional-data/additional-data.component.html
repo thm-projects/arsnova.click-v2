@@ -10,7 +10,7 @@
         <h5 class="text-center">{{'component.quiz_summary.quiz_name' | translate}}</h5>
         <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold text-center"
            role="listitem">
-          <span>{{this.activeQuestionGroupService.activeQuestionGroup?.hashtag}}</span>
+          <span>{{this.quizService.quiz?.name}}</span>
         </p>
       </div>
     </div>
@@ -22,11 +22,11 @@
         <h5 class="text-center">{{'component.quiz_summary.validation_question_group' | translate}}</h5>
         <p class="mb-0 d-flex align-self-center align-items-end h-100 text-bold text-center"
            role="listitem">
-          <span *ngIf="this.activeQuestionGroupService.activeQuestionGroup?.isValid()"
+          <span *ngIf="this.quizService.quiz?.isValid()"
                 class="text-success">
             {{'component.quiz_summary.question_group_successful' | translate}}
           </span>
-          <span *ngIf="!this.activeQuestionGroupService.activeQuestionGroup?.isValid()"
+          <span *ngIf="!this.quizService.quiz?.isValid()"
                 class="text-danger">
             {{'component.quiz_summary.question_group_failed' | translate}}
           </span>
@@ -42,21 +42,21 @@
         <h5 class="text-center">{{'component.quiz_summary.quiz_url' | translate}}</h5>
         <p class="mb-0 text-wrap"
            role="listitem">
-          <span>{{getQuizUrl(this.activeQuestionGroupService.activeQuestionGroup?.hashtag)}}</span>
+          <span>{{getQuizUrl(this.quizService.quiz?.name)}}</span>
         </p>
       </div>
     </div>
 
-    <div *ngIf="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.length === 0 && isShowingMore"
+    <div *ngIf="this.quizService.quiz?.sessionConfig.nicks.selectedNicks.length === 0 && isShowingMore"
          class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
       <div class="element-wrapper bg-white px-2 py-2 mb-2 h-100">
         <h5 class="text-center text-hyphen">{{'component.quiz_summary.isRestrictingRudeNicks' | translate}}</h5>
         <p class="mb-0 text-center"
            role="listitem">
-          <span *ngIf="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.blockIllegalNicks">
+          <span *ngIf="this.quizService.quiz?.sessionConfig.nicks.blockIllegalNicks">
             {{'global.yes' | translate}}
           </span>
-          <span *ngIf="!this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.blockIllegalNicks">
+          <span *ngIf="!this.quizService.quiz?.sessionConfig.nicks.blockIllegalNicks">
             {{'global.no' | translate}}
           </span>
         </p>
@@ -71,10 +71,10 @@
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingToCAS' | translate}}</h5>
         <p class="mb-0 text-center text-hyphen"
            role="listitem">
-          <span *ngIf="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.restrictToCasLogin">
+          <span *ngIf="this.quizService.quiz?.sessionConfig.nicks.restrictToCasLogin">
             {{'global.yes' | translate}}
           </span>
-          <span *ngIf="!this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.restrictToCasLogin">
+          <span *ngIf="!this.quizService.quiz?.sessionConfig.nicks.restrictToCasLogin">
             {{'global.no' | translate}}
           </span>
         </p>
@@ -82,26 +82,26 @@
     </div>
 
     <div *ngIf="isShowingMore"
-         [class.col-6]="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.length === 0"
-         [class.col-md-12]="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.length === 0"
-         [class.col-12]="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.length > 0"
+         [class.col-6]="this.quizService.quiz?.sessionConfig.nicks.selectedNicks.length === 0"
+         [class.col-md-12]="this.quizService.quiz?.sessionConfig.nicks.selectedNicks.length === 0"
+         [class.col-12]="this.quizService.quiz?.sessionConfig.nicks.selectedNicks.length > 0"
          class="mt-sm-2 mb-2 mb-sm-0 px-0">
       <div class="element-wrapper bg-white px-2 py-2 mb-2 h-100">
         <h5 class="text-center">{{'component.quiz_summary.selected_nicks' | translate}}</h5>
 
         <p class="mb-0">
-          <span *ngIf="!this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.length">
+          <span *ngIf="!this.quizService.quiz?.sessionConfig.nicks.selectedNicks.length">
             {{'component.quiz_summary.no_selected_nicks' | translate}}
           </span>
 
-          <span *ngIf="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.length">
+          <span *ngIf="this.quizService.quiz?.sessionConfig.nicks.selectedNicks.length">
             {{'component.quiz_summary.selected_nicks' | translate}}&#58;&nbsp;
-            {{this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.length}}
+            {{this.quizService.quiz?.sessionConfig.nicks.selectedNicks.length}}
           </span>
         </p>
 
         <p class="mb-0"
-           [innerHTML]="this.activeQuestionGroupService.activeQuestionGroup?.sessionConfig.nicks.selectedNicks.join(', ')">
+           [innerHTML]="this.quizService.quiz?.sessionConfig.nicks.selectedNicks.join(', ')">
         </p>
       </div>
     </div>

@@ -1,26 +1,28 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { DefaultAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_default';
-import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
-import { questionReflection } from 'arsnova-click-v2-types/dist/questions/question_reflection';
-import { AbstractQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_abstract';
-import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { DefaultAnswerEntity } from '../../../../lib/entities/answer/DefaultAnswerEntity';
+import { TrueFalseSingleChoiceQuestionEntity } from '../../../../lib/entities/question/TrueFalseSingleChoiceQuestionEntity';
+import { YesNoSingleChoiceQuestionEntity } from '../../../../lib/entities/question/YesNoSingleChoiceQuestionEntity';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { FooterbarElement } from '../../../../lib/footerbar-element/footerbar-element';
-import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
-import { LobbyApiService } from '../../../service/api/lobby/lobby-api.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { getQuestionForType } from '../../../../lib/QuizValidator';
+import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
+import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
 
 @Component({
   selector: 'app-quiz-manager',
   templateUrl: './quiz-manager.component.html',
   styleUrls: ['./quiz-manager.component.scss'],
-})
+}) //
+@AutoUnsubscribe('_subscriptions')
 export class QuizManagerComponent implements OnDestroy {
   public static TYPE = 'QuizManagerComponent';
 
@@ -30,15 +32,18 @@ export class QuizManagerComponent implements OnDestroy {
     return this._selectableQuestionTypes;
   }
 
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
+
   constructor(
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private router: Router,
-    private currentQuizService: CurrentQuizService,
     private translateService: TranslateService,
-    public activeQuestionGroupService: ActiveQuestionGroupService,
+    public quizService: QuizService,
     private trackingService: TrackingService,
-    private lobbyApiService: LobbyApiService,
+    private quizApiService: QuizApiService,
+    private connectionService: ConnectionService,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
@@ -47,32 +52,24 @@ export class QuizManagerComponent implements OnDestroy {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemStartQuiz,
-      this.footerBarService.footerElemProductTour,
       this.footerBarService.footerElemNicknames,
       this.footerBarService.footerElemMemberGroup,
       this.footerBarService.footerElemSound,
     ]);
 
-    this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
-      if (!(
-        questionGroup instanceof AbstractQuestionGroup
-      )) {
-        questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
-      }
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(() => {
+      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
+    }));
+    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
 
-      this.footerBarService.footerElemStartQuiz.isActive = questionGroup.isValid();
-    });
-
-    this.footerBarService.footerElemStartQuiz.onClickCallback = async (self: FooterbarElement) => {
+    this.footerBarService.footerElemStartQuiz.onClickCallback = (self: FooterbarElement) => {
       if (!self.isActive) {
         return;
       }
-      this.currentQuizService.quiz = this.activeQuestionGroupService.activeQuestionGroup;
-      await this.currentQuizService.cacheQuiz();
-      await this.lobbyApiService.putLobby({
-        quiz: this.currentQuizService.quiz.serialize(),
-      }).toPromise();
-      this.router.navigate(['/quiz', 'flow', 'lobby']);
+      this.quizApiService.setQuiz(this.quizService.quiz).subscribe(updatedQuiz => {
+        sessionStorage.setItem('token', updatedQuiz.adminToken);
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      });
     };
   }
 
@@ -80,43 +77,46 @@ export class QuizManagerComponent implements OnDestroy {
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
   }
 
-  public addQuestion(id: string): void {
-    if (!questionReflection[id]) {
-      return;
-    }
-
-    const question: IQuestion = questionReflection[id](DefaultSettings.defaultQuizSettings.question);
+  public addQuestion(id: QuestionType): void {
+    let question;
 
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
       label: `add-question`,
     });
     switch (id) {
-      case 'TrueFalseSingleChoiceQuestion':
-        question.answerOptionList = [
-          new DefaultAnswerOption({
-            answerText: this.translateService.instant('global.true'),
-            isCorrect: false,
-          }), new DefaultAnswerOption({
-            answerText: this.translateService.instant('global.false'),
-            isCorrect: false,
-          }),
-        ];
+      case QuestionType.TrueFalseSingleChoiceQuestion:
+        question = new TrueFalseSingleChoiceQuestionEntity({
+          answerOptionList: [
+            new DefaultAnswerEntity({
+              answerText: this.translateService.instant('global.true'),
+              isCorrect: false,
+            }), new DefaultAnswerEntity({
+              answerText: this.translateService.instant('global.false'),
+              isCorrect: false,
+            }),
+          ],
+        });
         break;
-      case 'YesNoSingleChoiceQuestion':
-        question.answerOptionList = [
-          new DefaultAnswerOption({
-            answerText: this.translateService.instant('global.yes'),
-            isCorrect: false,
-          }), new DefaultAnswerOption({
-            answerText: this.translateService.instant('global.no'),
-            isCorrect: false,
-          }),
-        ];
+      case QuestionType.YesNoSingleChoiceQuestion:
+        question = new YesNoSingleChoiceQuestionEntity({
+          answerOptionList: [
+            new DefaultAnswerEntity({
+              answerText: this.translateService.instant('global.yes'),
+              isCorrect: false,
+            }), new DefaultAnswerEntity({
+              answerText: this.translateService.instant('global.no'),
+              isCorrect: false,
+            }),
+          ],
+        });
+        break;
+      default:
+        question = getQuestionForType(id);
     }
-    this.activeQuestionGroupService.activeQuestionGroup.addQuestion(question);
-    this.footerBarService.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
-    this.activeQuestionGroupService.persist();
+    this.quizService.quiz.addQuestion(question);
+    this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid();
+    this.quizService.persist();
   }
 
   public moveQuestionUp(id: number): void {
@@ -124,29 +124,29 @@ export class QuizManagerComponent implements OnDestroy {
       return;
     }
 
-    const question = this.activeQuestionGroupService.activeQuestionGroup.questionList[id];
+    const question = this.quizService.quiz.questionList[id];
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
       label: `move-question-up`,
     });
-    this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(id);
-    this.activeQuestionGroupService.activeQuestionGroup.addQuestion(question, id - 1);
-    this.activeQuestionGroupService.persist();
+    this.quizService.quiz.removeQuestion(id);
+    this.quizService.quiz.addQuestion(question, id - 1);
+    this.quizService.persist();
   }
 
   public moveQuestionDown(id: number): void {
-    if (id === this.activeQuestionGroupService.activeQuestionGroup.questionList.length - 1) {
+    if (id === this.quizService.quiz.questionList.length - 1) {
       return;
     }
 
-    const question = this.activeQuestionGroupService.activeQuestionGroup.questionList[id];
+    const question = this.quizService.quiz.questionList[id];
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
       label: `move-question-down`,
     });
-    this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(id);
-    this.activeQuestionGroupService.activeQuestionGroup.addQuestion(question, id + 1);
-    this.activeQuestionGroupService.persist();
+    this.quizService.quiz.removeQuestion(id);
+    this.quizService.quiz.addQuestion(question, id + 1);
+    this.quizService.persist();
   }
 
   public deleteQuestion(id: number): void {
@@ -154,9 +154,9 @@ export class QuizManagerComponent implements OnDestroy {
       action: QuizManagerComponent.TYPE,
       label: `delete-question`,
     });
-    this.activeQuestionGroupService.activeQuestionGroup.removeQuestion(id);
-    this.footerBarService.footerElemStartQuiz.isActive = this.activeQuestionGroupService.activeQuestionGroup.isValid();
-    this.activeQuestionGroupService.persist();
+    this.quizService.quiz.removeQuestion(id);
+    this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid();
+    this.quizService.persist();
   }
 
   public trackEditQuestion(): void {

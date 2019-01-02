@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Angulartics2 } from 'angulartics2';
 import { Angulartics2Piwik } from 'angulartics2/piwik';
-import { INamedType } from '../../../lib/interfaces';
+import { INamedType } from '../../../lib/interfaces/interfaces';
 
 declare var _paq: any;
 

@@ -36,7 +36,7 @@ export class QuizAdminComponent implements OnInit {
 
   public deleteElem(index: number): void {
     this._deletingElements.push(index);
-    this.adminService.deleteQuiz((this._data[index] as any).name || (this._data[index] as any).originalObject.hashtag).subscribe(() => {
+    this.adminService.deleteQuiz((this._data[index] as any).name || (this._data[index] as any).originalObject.name).subscribe(() => {
       this._deletingElements.splice(this._deletingElements.indexOf(index), 1);
       this._data.splice(index, 1);
     }, () => {

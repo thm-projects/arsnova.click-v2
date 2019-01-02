@@ -1,9 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { IQuestionRanged } from 'arsnova-click-v2-types/dist/questions/interfaces';
-import { Subscription } from 'rxjs';
-import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
+import { RangedQuestionEntity } from '../../../../../../lib/entities/question/RangedQuestionEntity';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
+import { QuizService } from '../../../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-answeroptions-ranged',
@@ -13,9 +12,9 @@ import { HeaderLabelService } from '../../../../../service/header-label/header-l
 export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsRangedComponent';
 
-  private _question: IQuestionRanged;
+  private _question: RangedQuestionEntity;
 
-  get question(): IQuestionRanged {
+  get question(): RangedQuestionEntity {
     return this._question;
   }
 
@@ -38,37 +37,27 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   }
 
   private _questionIndex: number;
-  private _routerSubscription: Subscription;
 
-  constructor(private headerLabelService: HeaderLabelService,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private route: ActivatedRoute,
-  ) {
+  constructor(private headerLabelService: HeaderLabelService, private quizService: QuizService, private route: ActivatedRoute) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
   public updateMinRange(event: Event): void {
-    this._minRange = parseInt((
-      <HTMLInputElement>event.target
-    ).value, 10);
+    this._minRange = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   public updateMaxRange(event: Event): void {
-    this._maxRange = parseInt((
-      <HTMLInputElement>event.target
-    ).value, 10);
+    this._maxRange = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   public updateCorrectValue(event: Event): void {
-    this._correctValue = parseInt((
-      <HTMLInputElement>event.target
-    ).value, 10);
+    this._correctValue = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   public ngOnInit(): void {
-    this._routerSubscription = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
-      this._question = <IQuestionRanged>this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex];
+      this._question = <RangedQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
       this._minRange = this._question.rangeMin;
       this._maxRange = this._question.rangeMax;
       this._correctValue = this._question.correctValue;
@@ -80,11 +69,8 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     this._question.rangeMin = this._minRange;
     this._question.rangeMax = this._maxRange;
     this._question.correctValue = this._correctValue;
-    this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex] = this._question;
-    this.activeQuestionGroupService.persist();
-    if (this._routerSubscription) {
-      this._routerSubscription.unsubscribe();
-    }
+    this.quizService.quiz.questionList[this._questionIndex] = <RangedQuestionEntity>this._question;
+    this.quizService.persist();
   }
 
 }

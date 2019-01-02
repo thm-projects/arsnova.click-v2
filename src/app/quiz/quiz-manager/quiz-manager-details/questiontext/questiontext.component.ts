@@ -3,28 +3,32 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../environments/environment';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
+import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-questiontext',
   templateUrl: './questiontext.component.html',
   styleUrls: ['./questiontext.component.scss'],
-})
+}) //
+@AutoUnsubscribe('_subscriptions')
 export class QuestiontextComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestiontextComponent';
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
   private questionTextElement: HTMLTextAreaElement;
   private _questionIndex: number;
-  private _routerSubscription: Subscription;
+
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private headerLabelService: HeaderLabelService,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizService: QuizService,
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
     private route: ActivatedRoute,
@@ -33,7 +37,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames, this.footerBarService.footerElemProductTour,
+      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames,
     ]);
   }
 
@@ -71,29 +75,34 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   }
 
   public fireEvent(event: Event): void {
-    this.questionTextService.change((
-      <HTMLTextAreaElement>event.target
-    ).value);
+    this.questionTextService.change((<HTMLTextAreaElement>event.target).value);
   }
 
   public ngOnInit(): void {
-    this._routerSubscription = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
     });
+
     if (isPlatformBrowser(this.platformId)) {
       this.questionTextElement = <HTMLTextAreaElement>document.getElementById('questionText');
-      this.questionTextElement.value = this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText;
-      this.questionTextService.change(this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText);
+
+      this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+        if (!quiz) {
+          return;
+        }
+
+        this.questionTextElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
+        this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText);
+      }));
+
+      this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
     }
   }
 
   public ngOnDestroy(): void {
-    if (this._routerSubscription) {
-      this._routerSubscription.unsubscribe();
-    }
     this.questionTextService.change(this.questionTextElement.value);
-    this.activeQuestionGroupService.activeQuestionGroup.questionList[this._questionIndex].questionText = this.questionTextElement.value;
-    this.activeQuestionGroupService.persist();
+    this.quizService.quiz.questionList[this._questionIndex].questionText = this.questionTextElement.value;
+    this.quizService.persist();
   }
 
   public computeQuestionTextInputHeight(): number {

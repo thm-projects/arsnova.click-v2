@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IDuplicateQuiz } from 'arsnova-click-v2-types/dist/common';
-import { IQuestionGroup } from 'arsnova-click-v2-types/dist/questions/interfaces';
-import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { IDuplicateQuiz } from '../../../lib/interfaces/quizzes/IDuplicateQuiz';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 
@@ -28,10 +27,9 @@ export class QuizRenameComponent implements OnInit {
       return (<File>uploadedFile).name === duplicateQuiz.fileName;
     });
     reader.addEventListener<'load'>('load', () => {
-      const jsonData = JSON.parse(reader.result.toString());
-      const quizData: IQuestionGroup = questionGroupReflection[jsonData.TYPE](jsonData);
-      quizData.hashtag = renameRecommendation;
-      const blob = new Blob([JSON.stringify(quizData.serialize())], { type: 'application/json' });
+      const quizData: QuizEntity = JSON.parse(reader.result.toString());
+      quizData.name = renameRecommendation;
+      const blob = new Blob([JSON.stringify(quizData)], { type: 'application/json' });
       this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, duplicateQuiz.fileName);
       this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
     });

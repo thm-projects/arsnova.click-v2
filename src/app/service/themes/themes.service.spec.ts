@@ -3,16 +3,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { of } from 'rxjs/index';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { CurrentQuizMockService } from '../current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../current-quiz/current-quiz.service';
+import { QuizService } from '../current-quiz/current-quiz.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { I18nService } from '../i18n/i18n.service';
 import { SettingsService } from '../settings/settings.service';
@@ -28,8 +28,8 @@ import { ThemesService } from './themes.service';
 describe('ThemesService', () => {
   const themeUrl = `${DefaultSettings.httpApiEndpoint}/themes`;
   const themeData = {
-    'status': COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
-    'step': COMMUNICATION_PROTOCOL.THEMES.GET_THEMES,
+    'status': StatusProtocol.Success,
+    'step': MessageProtocol.GetThemes,
     'payload': [
       {
         'name': 'component.theme_switcher.themes.material.name',
@@ -45,9 +45,7 @@ describe('ThemesService', () => {
         SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -67,7 +65,7 @@ describe('ThemesService', () => {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, {
           provide: WebsocketService,
@@ -84,18 +82,14 @@ describe('ThemesService', () => {
     }
   });
 
-  it('should be created', (
-    inject([ThemesService], (service: ThemesService) => {
-      expect(service).toBeTruthy();
-    })
-  ));
+  it('should be created', (inject([ThemesService], (service: ThemesService) => {
+    expect(service).toBeTruthy();
+  })));
 
   it('#updateCurrentlyUsedTheme', async(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
     spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
     spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
-    spyOn(connectionService.socket, 'subscribe').and.callFake(() => (
-      { status: COMMUNICATION_PROTOCOL.STATUS.FAILED }
-    ));
+    spyOn(connectionService.socket, 'subscribe').and.callFake(() => ({ status: StatusProtocol.Failed }));
 
     expect(document.getElementById('link-manifest')).toBe(null);
     expect(service.currentTheme).toEqual('theme-Material');

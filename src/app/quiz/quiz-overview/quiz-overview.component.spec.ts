@@ -8,20 +8,20 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { DefaultAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_default';
 import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
-import { DefaultQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_default';
 import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { DbTable } from '../../../lib/enums/enums';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
@@ -32,7 +32,6 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
 import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
 import { WebsocketService } from '../../service/websocket/websocket.service';
-import { DB_TABLE } from '../../shared/enums';
 import { SharedModule } from '../../shared/shared.module';
 
 import { QuizOverviewComponent } from './quiz-overview.component';
@@ -41,9 +40,9 @@ describe('QuizOverviewComponent', () => {
   let component: QuizOverviewComponent;
   let fixture: ComponentFixture<QuizOverviewComponent>;
 
-  const validQuiz = new DefaultQuestionGroup({
-    hashtag: 'validtestquiz',
-    sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),
+  const validQuiz = new QuizEntity({
+    name: 'validtestquiz',
+    sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings.sessionConfig),
     questionList: [
       new SingleChoiceQuestion({
         questionText: 'testtext',
@@ -62,9 +61,9 @@ describe('QuizOverviewComponent', () => {
       }),
     ],
   });
-  const invalidQuiz = new DefaultQuestionGroup({
-    hashtag: 'invalidtestquiz',
-    sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings),
+  const invalidQuiz = new QuizEntity({
+    name: 'invalidtestquiz',
+    sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings.sessionConfig),
     questionList: [
       new SingleChoiceQuestion({
         answerOptionList: [
@@ -92,9 +91,7 @@ describe('QuizOverviewComponent', () => {
         }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -108,11 +105,11 @@ describe('QuizOverviewComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, {
           provide: TrackingService,
           useClass: TrackingMockService,
@@ -129,14 +126,14 @@ describe('QuizOverviewComponent', () => {
   }));
 
   beforeEach(async(() => {
-    TestBed.get(StorageService).create(DB_TABLE.QUIZ, 'validtestquiz', JSON.stringify(validQuiz.serialize())).subscribe();
+    TestBed.get(StorageService).create(DbTable.Quiz, 'validtestquiz', JSON.stringify(validQuiz)).subscribe();
     fixture = TestBed.createComponent(QuizOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
   afterEach(() => {
-    TestBed.get(StorageService).delete(DB_TABLE.QUIZ, 'validtestquiz').subscribe();
+    TestBed.get(StorageService).delete(DbTable.Quiz, 'validtestquiz').subscribe();
   });
 
   it('should be created', async(() => {
@@ -148,16 +145,14 @@ describe('QuizOverviewComponent', () => {
 
   describe('#startQuiz', () => {
 
-    it('should start the quiz', inject([CurrentQuizService, Router], (currentQuizService: CurrentQuizService, router: Router) => {
+    it('should start the quiz', inject([QuizService, Router], (quizService: QuizService, router: Router) => {
 
       const quizName = 'validtestquiz';
 
-      spyOn(currentQuizService, 'cacheQuiz').and.callThrough();
       spyOn(router, 'navigate').and.callFake(() => {});
 
       component.startQuiz(0).then(() => {
-        expect(currentQuizService.quiz.serialize()).toEqual(jasmine.objectContaining(validQuiz.serialize()));
-        expect(currentQuizService.cacheQuiz).toHaveBeenCalled();
+        expect(quizService.quiz).toEqual(jasmine.objectContaining(validQuiz));
         expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'flow']));
       });
     }));
@@ -165,22 +160,21 @@ describe('QuizOverviewComponent', () => {
 
   describe('#editQuiz', () => {
 
-    it('should redirect to the quiz manager',
-      inject([ActiveQuestionGroupService, Router], (activeQuestionGroupService: ActiveQuestionGroupService, router: Router) => {
-        spyOn(router, 'navigate').and.callFake(() => {});
+    it('should redirect to the quiz manager', inject([QuizService, Router], (quizService: QuizService, router: Router) => {
+      spyOn(router, 'navigate').and.callFake(() => {});
 
-        component.editQuiz(0);
+      component.editQuiz(0);
 
-        expect(activeQuestionGroupService.activeQuestionGroup.serialize()).toEqual(jasmine.objectContaining(validQuiz.serialize()));
-        expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager']));
+      expect(quizService.quiz).toEqual(jasmine.objectContaining(validQuiz));
+      expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager']));
 
-      }));
+    }));
   });
 
   describe('#exportQuiz', () => {
 
     it('should generate an export file containing the quiz data', async () => {
-      const exportData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(validQuiz.serialize()));
+      const exportData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(validQuiz));
 
       await component.exportQuiz(0, (self, event) => {
         event.preventDefault();
@@ -196,7 +190,7 @@ describe('QuizOverviewComponent', () => {
       const quizName = 'validtestquiz';
 
       await component.deleteQuiz(0);
-      storageService.read(DB_TABLE.QUIZ, quizName).subscribe(quiz => {
+      storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
         expect(quiz).toBe(null);
       });
     }));

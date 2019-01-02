@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
-import { TRACKING_CATEGORY_TYPE } from '../../shared/enums';
+import { TrackingCategoryType } from '../../../lib/enums/enums';
 import { ArsnovaClickAngulartics2Piwik } from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
 
 interface ITrackEvent {
   action: string;
-  category: TRACKING_CATEGORY_TYPE;
+  category: TrackingCategoryType;
   label: string;
   value?: number;
   customDimensions?: any;
@@ -35,7 +35,7 @@ export class TrackingService {
     this.angulartics2.eventTrack.next({
       action,
       properties: {
-        category: TRACKING_CATEGORY_TYPE[category].toLowerCase(),
+        category: TrackingCategoryType[category].toLowerCase(),
         label,
         value,
       },
@@ -44,7 +44,7 @@ export class TrackingService {
 
   public trackConversionEvent({ action, label = '' }: ITrackConversionEvent): void {
     this.trackEvent({
-      category: TRACKING_CATEGORY_TYPE.CONVERSION,
+      category: TrackingCategoryType.Conversion,
       action,
       label,
     });
@@ -52,7 +52,7 @@ export class TrackingService {
 
   public trackClickEvent({ action, label, value, customDimensions = {} }: ITrackClickEvent): void {
     this.trackEvent({
-      category: TRACKING_CATEGORY_TYPE.CLICK,
+      category: TrackingCategoryType.Click,
       action,
       label,
       value,

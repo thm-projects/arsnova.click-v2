@@ -1,23 +1,22 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
+import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
-import { StorageService } from '../../../service/storage/storage.service';
-import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
+import { QuizService } from '../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-member-group-select',
   templateUrl: './member-group-select.component.html',
   styleUrls: ['./member-group-select.component.scss'],
 })
-export class MemberGroupSelectComponent implements OnInit {
+export class MemberGroupSelectComponent {
   public static TYPE = 'MemberGroupSelectComponent';
 
-  private _memberGroups: Array<string> = this.currentQuizService.quiz.sessionConfig.nicks.memberGroups;
+  private _memberGroups: Array<string> = [];
 
   get memberGroups(): Array<string> {
     return this._memberGroups;
@@ -27,9 +26,9 @@ export class MemberGroupSelectComponent implements OnInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private router: Router,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private quizApiService: QuizApiService,
-    private storageService: StorageService,
+    private attendeeService: AttendeeService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = MemberGroupSelectComponent.TYPE;
@@ -39,31 +38,30 @@ export class MemberGroupSelectComponent implements OnInit {
     this.footerBarService.footerElemBack.onClickCallback = () => {
       this.router.navigate(['/']);
     };
+
+    this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
+
+      if (this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup) {
+        this.quizApiService.getFreeMemberGroup().subscribe((data: IMessage) => {
+          if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Updated) {
+            this.addToGroup(data.payload.groupName);
+          }
+        });
+      } else {
+        this._memberGroups = this.quizService.quiz.sessionConfig.nicks.memberGroups;
+      }
+    });
+    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
   }
 
-  public ngOnInit(): void {
-
-    if (this.currentQuizService.quiz.sessionConfig.nicks.autoJoinToGroup) {
-      this.quizApiService.getFreeMemberGroup(this.currentQuizService.quiz.hashtag).subscribe((data: IMessage) => {
-        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.MEMBER.UPDATED) {
-          this.addToGroup(data.payload.groupName);
-        }
-      });
-    }
-  }
-
-  public async addToGroup(groupName): Promise<void> {
+  public addToGroup(groupName): void {
     if (isPlatformBrowser(this.platformId)) {
-      const provideNickSelection: boolean = await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.PROVIDE_NICK_SELECTION).toPromise()
-                                            === 'true';
-      this.storageService.delete(DB_TABLE.CONFIG, STORAGE_KEY.PROVIDE_NICK_SELECTION).subscribe();
-
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP, groupName).subscribe();
+      this.attendeeService.getOwnNick().groupName = groupName;
       this.router.navigate([
-        '/nicks',
-        (
-          provideNickSelection ? 'select' : 'input'
-        ),
+        '/nicks', (this.quizService.quiz.sessionConfig.nicks.selectedNicks.length ? 'select' : 'input'),
       ]);
     }
   }

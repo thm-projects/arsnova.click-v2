@@ -1,29 +1,29 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { MultipleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_multiple';
-import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
-import { FreeTextQuestion } from 'arsnova-click-v2-types/dist/questions/question_freetext';
-import { RangedQuestion } from 'arsnova-click-v2-types/dist/questions/question_ranged';
-import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
+import { SurveyQuestionEntity } from '../../../../lib/entities/question/SurveyQuestionEntity';
+import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-voting',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.scss'],
-})
-export class VotingComponent implements OnInit, OnDestroy {
+}) //
+@AutoUnsubscribe('_subscriptions')
+export class VotingComponent implements OnDestroy {
   public static TYPE = 'VotingComponent';
   public answers: Array<string> = [];
 
@@ -47,14 +47,17 @@ export class VotingComponent implements OnInit, OnDestroy {
     this._countdownValue = value;
   }
 
-  private _selectedAnswers: Array<number> | string | number = [];
+  private _selectedAnswers: Array<number> | string | number;
 
   get selectedAnswers(): Array<number> | string | number {
     return this._selectedAnswers;
   }
 
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
+
   constructor(
-    public currentQuizService: CurrentQuizService,
+    public quizService: QuizService,
     private attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
     private connectionService: ConnectionService,
@@ -71,6 +74,16 @@ export class VotingComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'component.voting.title';
 
     this.footerBarService.replaceFooterElements([]);
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
+
+      this.initData();
+      this.attendeeService.restoreMembers();
+    }));
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -78,16 +91,16 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public displayAnswerButtons(): boolean {
-    const question = this.currentQuizService.currentQuestion();
-    return question instanceof SingleChoiceQuestion || question instanceof SurveyQuestion || question instanceof MultipleChoiceQuestion;
+    return !this.displayRangedButtons() && //
+           !this.displayFreetextInput();
   }
 
   public displayRangedButtons(): boolean {
-    return this.currentQuizService.currentQuestion() instanceof RangedQuestion;
+    return this.quizService.currentQuestion().TYPE === QuestionType.RangedQuestion;
   }
 
   public displayFreetextInput(): boolean {
-    return this.currentQuizService.currentQuestion() instanceof FreeTextQuestion;
+    return this.quizService.currentQuestion().TYPE === QuestionType.FreeTextQuestion;
   }
 
   public normalizeAnswerOptionIndex(index: number): string {
@@ -95,19 +108,15 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public isSelected(index: number): boolean {
-    return this._selectedAnswers instanceof Array && this._selectedAnswers.indexOf(index) > -1;
+    return (this._selectedAnswers instanceof Array && this._selectedAnswers.indexOf(index) > -1) || this._selectedAnswers === index;
   }
 
   public parseTextInput(event: Event): void {
-    this._selectedAnswers = (
-      <HTMLInputElement>event.target
-    ).value;
+    this._selectedAnswers = (<HTMLInputElement>event.target).value;
   }
 
   public parseNumberInput(event: Event): void {
-    this._selectedAnswers = parseInt((
-      <HTMLInputElement>event.target
-    ).value, 10);
+    this._selectedAnswers = parseInt((<HTMLInputElement>event.target).value, 10);
   }
 
   public isNumber(value: any): boolean {
@@ -115,21 +124,17 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public showSendResponseButton(): boolean {
-    return this.isNumber(this.selectedAnswers) || (
-      this.selectedAnswers instanceof Array && !!this.selectedAnswers.length
-    ) || (
-             typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length
-           );
+    return this.isNumber(this.selectedAnswers) || (this.selectedAnswers instanceof Array && !!this.selectedAnswers.length)
+           || (typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length);
   }
 
   public toggleSelectAnswer(index: number): void {
-    if (!(
-      this._selectedAnswers instanceof Array
-    )) {
+    if (!(this._selectedAnswers instanceof Array)) {
       return;
     }
-    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index)) : this.toggleSelectedAnswers() ? this._selectedAnswers
-      = [index] : this._selectedAnswers.push(index);
+    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index), 1) : this.toggleSelectedAnswers()
+                                                                                                     ? this._selectedAnswers = [index]
+                                                                                                     : this._selectedAnswers.push(index);
     if (this.toggleSelectedAnswers()) {
       this.sendResponses();
     }
@@ -141,54 +146,53 @@ export class VotingComponent implements OnInit, OnDestroy {
       this.countdown.stop();
     }
     this.router.navigate([
-      '/quiz', 'flow', this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
+      '/quiz', 'flow', this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
     ]);
   }
 
-  public ngOnInit(): void {
+  public initData(): void {
+    switch (this.quizService.currentQuestion().TYPE) {
+      case QuestionType.FreeTextQuestion:
+        this._selectedAnswers = '';
+        break;
+      case QuestionType.RangedQuestion:
+        this._selectedAnswers = -1;
+        break;
+      default:
+        this._selectedAnswers = [];
+    }
+
     this.connectionService.initConnection().then(() => {
-      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+      this.connectionService.connectToChannel(this.quizService.quiz.name);
       this.handleMessages();
     });
     this.questionTextService.eventEmitter.subscribe((value: Array<string>) => this.answers = value);
-    this.questionTextService.changeMultiple(this.currentQuizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
+    this.questionTextService.changeMultiple(this.quizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
 
-    this.quizApiService.getQuizStartTime(this.currentQuizService.quiz.hashtag).subscribe((data) => {
-      if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.payload.startTimestamp) {
-
-        if (this.currentQuizService.currentQuestion().timer) {
-          this.countdown = new Countdown(this.currentQuizService.currentQuestion(), data.payload.startTimestamp);
-          this.countdown.onChange.subscribe((value) => {
-            this.countdownValue = value;
-            if (!value) {
-              this.sendResponses();
-            }
-          });
-        }
-
-      } else {
-
-        this.router.navigate([
-          '/quiz', 'flow', 'results',
-        ]);
-
+    this.quizApiService.getQuizStartTime().subscribe((startTime) => {
+      if ((startTime + this.quizService.currentQuestion().timer * 1000) < new Date().getTime()) {
+        this.sendResponses();
       }
+
+      this.countdown = new Countdown(this.quizService.currentQuestion(), startTime);
+      this.countdown.onChange.subscribe((value) => {
+        this.countdownValue = value;
+        if (!value || value < 1) {
+          this.sendResponses();
+        }
+      });
     });
   }
 
   public ngOnDestroy(): void {
     console.log({
-      quizName: this.currentQuizService.quiz.hashtag,
-      nickname: this.attendeeService.getOwnNick(),
+      quizName: this.quizService.quiz.name,
+      nickname: this.attendeeService.ownNick,
       value: this._selectedAnswers,
     });
 
-    this.memberApiService.putResponse({
-      quizName: this.currentQuizService.quiz.hashtag,
-      nickname: this.attendeeService.getOwnNick(),
-      value: this._selectedAnswers,
-    }).subscribe((data: IMessage) => {
-      if (data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+    this.memberApiService.putResponse(this._selectedAnswers).subscribe((data: IMessage) => {
+      if (data.status !== StatusProtocol.Success) {
         console.log(data);
       }
     });
@@ -197,18 +201,18 @@ export class VotingComponent implements OnInit, OnDestroy {
   private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
-        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
-          this.attendeeService.modifyResponse(data.payload.nickname);
+        case MessageProtocol.UpdatedResponse:
+          this.attendeeService.modifyResponse(data.payload);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
+        case MessageProtocol.Reset:
           this.attendeeService.clearResponses();
-          this.currentQuizService.questionIndex = 0;
+          this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
-        case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
+        case MessageProtocol.Closed:
           this.router.navigate(['/']);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.STOP:
+        case MessageProtocol.Stop:
           this._selectedAnswers = [];
           this.router.navigate(['/quiz', 'flow', 'results']);
           break;
@@ -217,11 +221,17 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   private toggleSelectedAnswers(): boolean {
-    return this.currentQuizService.currentQuestion() instanceof SingleChoiceQuestion || (
-      this.currentQuizService.currentQuestion() instanceof SurveyQuestion && !(
-        <SurveyQuestion>this.currentQuizService.currentQuestion()
-      ).multipleSelectionEnabled
-    );
+    const question = this.quizService.currentQuestion();
+    if (question.TYPE === QuestionType.SurveyQuestion && !(question as SurveyQuestionEntity).multipleSelectionEnabled) {
+      return true;
+    }
+
+    return [
+      QuestionType.SingleChoiceQuestion,
+      QuestionType.TrueFalseSingleChoiceQuestion,
+      QuestionType.ABCDSingleChoiceQuestion,
+      QuestionType.YesNoSingleChoiceQuestion,
+    ].includes(question.TYPE);
   }
 
 }

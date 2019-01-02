@@ -11,8 +11,8 @@
 
         <button [id]="'translation_' + elem.tag"
                 class="btn btn-block pointer"
-                [class.btn-success]="i18nService.currentLanguage === elem.tag"
-                [class.btn-grey]="i18nService.currentLanguage !== elem.tag"
+                [class.btn-success]="i18nService.currentLanguage.toString().toUpperCase() === elem.tag"
+                [class.btn-grey]="i18nService.currentLanguage.toString().toUpperCase() !== elem.tag"
                 (click)="changeLanguage(elem.tag)">
           <span>{{elem.text}}</span>
 

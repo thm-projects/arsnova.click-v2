@@ -12,20 +12,19 @@ import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-comp
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ModalsModule } from '../../modals/modals.module';
-import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsMockService } from '../../service/settings/settings.mock.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
@@ -82,8 +81,8 @@ describe('HomeComponent', () => {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, SharedService, HeaderLabelService, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, {
           provide: ThemesService,
           useClass: ThemesMockService,
@@ -94,7 +93,7 @@ describe('HomeComponent', () => {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, {
           provide: FileUploadService,

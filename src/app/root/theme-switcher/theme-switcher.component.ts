@@ -1,10 +1,10 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { DbTable, StorageKey } from '../../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 @Component({
   selector: 'app-theme-switcher',
@@ -43,7 +43,7 @@ export class ThemeSwitcherComponent {
     if (isPlatformBrowser(this.platformId)) {
       document.getElementsByTagName('html').item(0).dataset['theme'] = id;
       this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.DEFAULT_THEME, this.previewThemeBackup).subscribe();
+      this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this.previewThemeBackup).subscribe();
     }
   }
 

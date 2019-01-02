@@ -22,12 +22,12 @@
   <div class="col-12 col-lg-6">
     <h2 class="text-light mt-4 mt-lg-0">{{'component.quiz_manager.added_questions_title' | translate}}</h2>
     <h4 class="text-light"
-        *ngIf="!this.activeQuestionGroupService.activeQuestionGroup?.questionList.length">{{'component.quiz_manager.no_added_questions' | translate}}</h4>
+        *ngIf="!this.quizService.quiz?.questionList.length">{{'component.quiz_manager.no_added_questions' | translate}}</h4>
     <div class="row">
       <div class="col-12">
         <ul id="added_questions_wrapper"
             [attr.data-intro]="'component.quiz_manager.description.added_questions' | translate">
-          <li *ngFor="let elem of this.activeQuestionGroupService.activeQuestionGroup?.questionList; let i = index;"
+          <li *ngFor="let elem of this.quizService.quiz?.questionList; let i = index;"
               [id]="i + '_draggable'"
               [class]="'questionElementWrapper d-flex justify-content-center align-items-center px-2 py-2 mb-2 rounded questionType_' + i">
             <span [innerHTML]="elem.translationReferrer() | translate"></span>
@@ -43,7 +43,7 @@
       <fa-icon [icon]="'arrow-up'"></fa-icon>
               </span>
               <span class="pointer mr-2"
-                    *ngIf="i !== this.activeQuestionGroupService.activeQuestionGroup?.questionList.length - 1"
+                    *ngIf="i !== this.quizService.quiz?.questionList.length - 1"
                     (click)="moveQuestionDown(i)">
       <fa-icon [icon]="'arrow-down'"></fa-icon>
               </span>

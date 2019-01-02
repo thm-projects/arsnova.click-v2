@@ -1,4 +1,4 @@
-import { INickname } from 'arsnova-click-v2-types/dist/common';
+import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 
 export class AttendeeMockService {
   public attendees = [];
@@ -11,7 +11,7 @@ export class AttendeeMockService {
     return new Promise(resolve => resolve('testNickname'));
   }
 
-  public addMember(attendee: INickname): void {
+  public addMember(attendee: IMemberSerialized): void {
     attendee.name = 'testNickname';
     this.attendees.push(attendee);
   }

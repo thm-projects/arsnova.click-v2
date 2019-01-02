@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-import { USER_AUTHORIZATION } from '../../shared/enums';
+import { UserRole } from '../../../lib/enums/UserRole';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -33,9 +33,9 @@ export class StaticLoginService implements CanActivate {
 
     switch (route.routeConfig.path) {
       case 'i18n-manager':
-        return this.userService.isAuthorizedFor(USER_AUTHORIZATION.EDIT_I18N);
+        return this.userService.isAuthorizedFor(UserRole.EditI18n);
       case 'quiz-manager':
-        return this.userService.isAuthorizedFor(USER_AUTHORIZATION.CREATE_EXPIRED_QUIZ);
+        return this.userService.isAuthorizedFor(UserRole.CreateExpiredQuiz);
       default:
         return true;
     }

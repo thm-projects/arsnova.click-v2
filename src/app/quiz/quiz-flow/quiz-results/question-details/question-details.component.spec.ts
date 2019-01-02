@@ -9,18 +9,17 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { Observable } from 'rxjs';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
+import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
@@ -59,9 +58,7 @@ describe('QuestionDetailsComponent', () => {
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -84,13 +81,13 @@ describe('QuestionDetailsComponent', () => {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, SharedService, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, I18nService, HeaderLabelService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
         }, QuestionTextService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, {
           provide: ActivatedRoute,

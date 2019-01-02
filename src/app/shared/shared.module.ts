@@ -11,11 +11,14 @@ import {
   faArrowDown,
   faArrowsAlt,
   faArrowUp,
+  faBan,
   faBold,
   faCaretLeft,
   faCaretRight,
   faCaretSquareDown,
+  faCaretSquareUp,
   faCaretUp,
+  faCheck,
   faCode,
   faDownload,
   faEdit,
@@ -28,6 +31,7 @@ import {
   faHourglass,
   faImage,
   faInfoCircle,
+  faItalic,
   faLanguage,
   faListUl,
   faLock,
@@ -36,14 +40,19 @@ import {
   faPause,
   faPlay,
   faQrcode,
+  faQuestion,
+  faSave,
   faSignInAlt,
   faSignOutAlt,
   faSlidersH,
   faSpinner,
   faStop,
+  faStrikethrough,
   faThumbsUp,
   faTimes,
   faTrash,
+  faTrophy,
+  faUnderline,
   faUndo,
   faUnlock,
   faUpload,
@@ -100,6 +109,15 @@ library.add(faEye);
 library.add(faQrcode);
 library.add(faAlignLeft);
 library.add(faSlidersH);
+library.add(faQuestion);
+library.add(faCaretSquareUp);
+library.add(faCheck);
+library.add(faUnderline);
+library.add(faStrikethrough);
+library.add(faItalic);
+library.add(faTrophy);
+library.add(faBan);
+library.add(faSave);
 
 @NgModule({
   imports: [

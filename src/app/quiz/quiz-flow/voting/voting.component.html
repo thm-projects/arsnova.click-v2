@@ -15,11 +15,11 @@
        class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
        [class.selected]="isSelected(i)"
        (click)="toggleSelectAnswer(i)"
-       [style.flex-basis]="currentQuizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
-    <p *ngIf="currentQuizService.currentQuestion().displayAnswerText"
+       [style.flex-basis]="quizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
+    <p *ngIf="quizService.currentQuestion().displayAnswerText"
        class="mb-0 markdown-answer"
        [innerHTML]="sanitizeHTML(elem)"></p>
-    <p *ngIf="!currentQuizService.currentQuestion().displayAnswerText"
+    <p *ngIf="!quizService.currentQuestion().displayAnswerText"
        class="mb-0"
        [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
   </div>

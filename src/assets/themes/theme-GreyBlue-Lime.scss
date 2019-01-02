@@ -208,8 +208,8 @@
     "bg-btn-more-learners": $dark_primary_color,
     "fg-btn-more-learners": white,
     /* Quiz management */
-    "fg-hashtag_management-hashtag_name": map-get($stdStyle, "default-text-color"),
-    "border-hashtag_management-HR": map-get($stdStyle, "default-text-color"),
+    "fg-name_management-name_name": map-get($stdStyle, "default-text-color"),
+    "border-name_management-HR": map-get($stdStyle, "default-text-color"),
     /* Slider for estimation answer */
     "bg-rangedSlider-invalid": map-get($stdStyle, "md_red_500"),
     "bg-rangedSlider-valid": $dark_primary_color,

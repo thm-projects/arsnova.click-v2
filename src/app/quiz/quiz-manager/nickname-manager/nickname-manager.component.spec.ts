@@ -6,11 +6,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
@@ -79,8 +79,8 @@ describe('NicknameManagerComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
@@ -100,9 +100,8 @@ describe('NicknameManagerComponent', () => {
     fixture.detectChanges();
   }));
 
-  beforeEach(inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-    activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.splice(0,
-      activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.length);
+  beforeEach(inject([QuizService], (quizService: QuizService) => {
+    quizService.quiz.sessionConfig.nicks.selectedNicks.splice(0, quizService.quiz.sessionConfig.nicks.selectedNicks.length);
   }));
 
   it('should be created', async(() => {
@@ -167,12 +166,12 @@ describe('NicknameManagerComponent', () => {
 
   describe('#selectNick', () => {
 
-    it('should select a given nickname', inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    it('should select a given nickname', inject([QuizService], (quizService: QuizService) => {
       const nick = 'Tarzan';
-      spyOn(activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks, 'toggleSelectedNick').and.callThrough();
+      spyOn(quizService.quiz.sessionConfig.nicks, 'toggleSelectedNick').and.callThrough();
 
       component.selectNick(nick);
-      expect(activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick).toHaveBeenCalled();
+      expect(quizService.quiz.sessionConfig.nicks.toggleSelectedNick).toHaveBeenCalled();
     }));
   });
 
@@ -251,25 +250,23 @@ describe('NicknameManagerComponent', () => {
 
   describe('#toggleAllNicks', () => {
 
-    it('should select all nicks of a given category if not all nicks are selected',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        spyOn(component, 'hasSelectedAllNicks').and.callFake(() => false);
-        spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
+    it('should select all nicks of a given category if not all nicks are selected', inject([QuizService], (quizService: QuizService) => {
+      spyOn(component, 'hasSelectedAllNicks').and.callFake(() => false);
+      spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
 
-        component.toggleAllNicks();
+      component.toggleAllNicks();
 
-        const selectedNicksLength = activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.length;
-        expect(selectedNicksLength).toEqual(nicknames.disney.length);
-      }));
+      const selectedNicksLength = quizService.quiz.sessionConfig.nicks.selectedNicks.length;
+      expect(selectedNicksLength).toEqual(nicknames.disney.length);
+    }));
 
-    it('should deselect all nicks of a given category if all nicks have been selected',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        spyOn(component, 'hasSelectedAllNicks').and.callFake(() => true);
-        spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
+    it('should deselect all nicks of a given category if all nicks have been selected', inject([QuizService], (quizService: QuizService) => {
+      spyOn(component, 'hasSelectedAllNicks').and.callFake(() => true);
+      spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
 
-        component.toggleAllNicks();
-        const selectedNicksLength = activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks.length;
-        expect(selectedNicksLength).toEqual(0);
-      }));
+      component.toggleAllNicks();
+      const selectedNicksLength = quizService.quiz.sessionConfig.nicks.selectedNicks.length;
+      expect(selectedNicksLength).toEqual(0);
+    }));
   });
 });

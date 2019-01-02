@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { IFooterBarElement } from './interfaces';
 
 export class FooterbarElement implements IFooterBarElement {
@@ -80,12 +79,7 @@ export class FooterbarElement implements IFooterBarElement {
     this._textName = textName;
     this._selectable = selectable;
     this._showIntro = showIntro;
-    if (isActive instanceof Observable) {
-      (<Observable<boolean>>isActive).subscribe(val => this._isActive = val);
-    } else {
-      this._isActive = !!isActive;
-    }
-
+    this._isActive = isActive;
     this._linkTarget = linkTarget;
     this._queryParams = queryParams;
     this._onClickCallback = onClickCallback;

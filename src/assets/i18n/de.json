@@ -161,7 +161,7 @@
       "show_answer_content_on_buttons": "Antworttext auf Abstimmbuttons?",
       "show_one_answer_per_row": "Zeige nur eine Antwortoption pro Zeile?",
       "multiple_selection_survey": "Mehrere Optionen auswählbar?",
-      "emoji_info": "Du kannst auch Emojis einfügen! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-50px' src='http://localhost:3000/api/v1/files/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
+      "emoji_info": "Du kannst auch Emojis einfügen! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-50px' src='/assets/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
       "description": {
         "default_answer_row": "Ziehe diesen Block in die Liste der Antwortoptionen oder klick auf ihn, um eine neue Antwort einzufügen.",
         "added_answers": "Hier siehst du die Antwortoptionen der Frage. Du kannst die Reihenfolge per Drag & Drop ändern.",
@@ -195,7 +195,7 @@
         "nickname_input": "Hier kannst du dir einen Namen geben, der in der Quiz-Lobby und in der Rangliste angezeigt wird."
       }
     },
-    "hashtag_management": {
+    "name_management": {
       "enter_quiz_name": "Quiznamen oder PIN eingeben …",
       "join_session": "Mach mit beim Quiz!",
       "start_session": "Quiz starten",
@@ -395,14 +395,14 @@
         "title": "Wie sicher bist du dir bei deiner Antwort?"
       }
     },
-    "hashtag_home": {
+    "name_home": {
       "demo_quiz": {
         "title": {
           "2": "Gib »ABCD« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiznamen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
           "3": "Besuch arsnova.eu und lerne, wie du Quizze im Unterricht einsetzen kannst."
         }
       },
-      "hashtag_input": {}
+      "name_input": {}
     },
     "quiz_rename": {
       "rename": "Der Name {NAME} ist bereits vergeben"

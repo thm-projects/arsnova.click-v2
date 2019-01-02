@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -19,10 +19,7 @@ describe('AdditionalDataComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        HttpClientModule,
-        HttpClientTestingModule,
-        TranslateModule.forRoot({
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
             useFactory: (createTranslateLoader),
@@ -35,8 +32,13 @@ describe('AdditionalDataComponent', () => {
         }),
       ],
       providers: [
-        { provide: ActiveQuestionGroupService, useClass: ActiveQuestionGroupMockService },
-        { provide: TrackingService, useClass: TrackingMockService },
+        {
+          provide: QuizService,
+          useClass: QuizMockService,
+        }, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        },
       ],
       declarations: [AdditionalDataComponent],
     }).compileComponents();

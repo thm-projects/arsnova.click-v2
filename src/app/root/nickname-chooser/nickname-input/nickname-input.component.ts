@@ -1,16 +1,16 @@
 import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { IMemberGroup } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
+import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
+import { IMemberGroupSerialized } from '../../../../lib/interfaces/users/IMemberGroupSerialized';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { UserService } from '../../../service/user/user.service';
-import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-nickname-input',
@@ -33,7 +33,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private userService: UserService,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private memberApiService: MemberApiService,
     private storageService: StorageService,
   ) {
@@ -47,48 +47,26 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     };
   }
 
-  public joinQuiz(): void {
+  public async joinQuiz(): Promise<void> {
     if (isPlatformServer(this.platformId)) {
       return;
     }
 
-    const nickname = (
-      <HTMLInputElement>document.getElementById('input-nickname')
-    ).value;
-    const promise = new Promise(async (resolve, reject) => {
-      this.memberApiService.putMember({
-        quizName: this.currentQuizService.quiz.hashtag,
-        nickname: nickname,
-        groupName: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).toPromise(),
-        ticket: this.userService.casTicket,
-      }).subscribe(data => {
-        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.MEMBER.ADDED) {
-          data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
-            memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
-          });
-          this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION, data.payload.webSocketAuthorization).subscribe();
-          this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-          resolve();
-        } else {
-          reject(data);
-        }
-      }, (error) => {
-        reject({
-          step: COMMUNICATION_PROTOCOL.STATUS.FAILED,
-          payload: error,
-        });
-      });
-    });
-    promise.then(() => {
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.NICK, nickname).subscribe();
+    const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
+
+    const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
+
+    sessionStorage.setItem('token', token);
+
+    this.putMember(nickname, sessionStorage.getItem('memberGroup')).then(() => {
       this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
       switch (data.step) {
-        case COMMUNICATION_PROTOCOL.LOBBY.DUPLICATE_LOGIN:
+        case MessageProtocol.DuplicateLogin:
           this._failedLoginReason = 'plugins.splashscreen.error.error_messages.duplicate_user';
           break;
-        case COMMUNICATION_PROTOCOL.LOBBY.ILLEGAL_NAME:
+        case MessageProtocol.IllegalName:
           this._failedLoginReason = 'component.choose_nickname.nickname_blacklist_popup';
           break;
         default:
@@ -98,13 +76,39 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    if (this.attendeeService.getOwnNick()) {
+    if (this.attendeeService.ownNick) {
       this.router.navigate(['/']);
     }
   }
 
   public ngOnDestroy(): void {
     this.footerBarService.footerElemBack.restoreClickCallback();
+  }
+
+  private putMember(name, groupName): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.memberApiService.putMember(new MemberEntity({
+        currentQuizName: this.quizService.quiz.name,
+        name,
+        groupName,
+        ticket: this.userService.casTicket,
+      })).subscribe(data => {
+        if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
+          data.payload.memberGroups.forEach((memberGroup: IMemberGroupSerialized) => {
+            memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
+          });
+          this.connectionService.connectToChannel(this.quizService.quiz.name);
+          resolve();
+        } else {
+          reject(data);
+        }
+      }, (error) => {
+        reject({
+          status: StatusProtocol.Failed,
+          payload: error,
+        });
+      });
+    });
   }
 
 }

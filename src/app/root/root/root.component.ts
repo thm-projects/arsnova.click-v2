@@ -1,10 +1,8 @@
 import { isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import * as introJs from 'intro.js';
-import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
-import { INamedType } from '../../../lib/interfaces';
+import { INamedType } from '../../../lib/interfaces/interfaces';
 // tslint:disable-next-line:max-line-length
 import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
@@ -16,7 +14,6 @@ import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 // Update global window.* object interface (https://stackoverflow.com/a/12709880/7992104)
 declare global {
@@ -63,10 +60,6 @@ export class RootComponent implements OnInit, AfterViewInit {
     private storageService: StorageService,
     private userService: UserService,
   ) {
-  }
-
-  public getFooterBarElements(): EventEmitter<Array<IFooterBarElement>> {
-    return this.footerBarService.footerElements;
   }
 
   public ngOnInit(): void {
@@ -127,62 +120,4 @@ export class RootComponent implements OnInit, AfterViewInit {
 
     });
   }
-
-  private async getTooltipForRoute(route: string): Promise<void> {
-    let hasStartedIntroJs = false;
-    const introState = (await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE).toPromise()) || {};
-    if (window.innerWidth <= 768) {
-      return;
-    }
-    if (!introState[route]) {
-      introState[route] = {
-        completed: false,
-        elements: {},
-      };
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
-    }
-    if (hasStartedIntroJs || !await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.SHOW_PRODUCT_TOUR).toPromise()
-        || introState[route].completed) {
-      return;
-    }
-    const customIntroJs = introJs();
-    const introJsOptions = {
-      'overlayOpacity': 0,
-      'tooltipPosition': 'auto',
-      'hidePrev': true,
-      'hideNext': true,
-      'showStepNumbers': false,
-      'showBullets': false,
-      'showProgress': false,
-      'exitOnOverlayClick': true,
-      'keyboardNavigation': false,
-      'disableInteraction': false,
-      'nextLabel': ' > ',
-      'prevLabel': ' < ',
-      'scrollToElement': true,
-      'doneLabel': '',
-      'skipLabel': '',
-    };
-    const key = this.translateService.instant('global.close_window');
-    introJsOptions.doneLabel = key;
-    introJsOptions.skipLabel = key;
-    customIntroJs.setOptions(introJsOptions);
-
-    const alreadyVisitedElements = Object.keys(introState[route].elements).length;
-    if (alreadyVisitedElements > 0) {
-      customIntroJs.goToStep(alreadyVisitedElements).start();
-    } else {
-      customIntroJs.start();
-    }
-    hasStartedIntroJs = true;
-    customIntroJs.onafterchange((targetElement) => {
-      introState[route].elements[targetElement.id] = true;
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
-    }).oncomplete(() => {
-      introState[route].completed = true;
-      hasStartedIntroJs = false;
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.INTRO_STATE, introState).subscribe();
-    });
-  }
-
 }

@@ -1,17 +1,19 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { IMemberGroup, IMessage, INickname } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
+import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IMemberGroupSerialized } from '../../../../lib/interfaces/users/IMemberGroupSerialized';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { UserService } from '../../../service/user/user.service';
-import { DB_TABLE, STORAGE_KEY } from '../../../shared/enums';
 
 @Component({
   selector: 'app-nickname-select',
@@ -41,7 +43,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private connectionService: ConnectionService,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private memberApiService: MemberApiService,
     private storageService: StorageService,
   ) {
@@ -55,26 +57,30 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     };
   }
 
-  public joinQuiz(nickname: any): void {
+  public async joinQuiz(nickname: any): Promise<void> {
     if (nickname.changingThisBreaksApplicationSecurity) {
       nickname = nickname.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
     nickname = nickname.toString();
+
+    const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
+
+    sessionStorage.setItem('token', token);
+
     const promise = new Promise(async (resolve, reject) => {
-      this.memberApiService.putMember({
-        quizName: this.currentQuizService.quiz.hashtag,
-        nickname: nickname,
-        groupName: await this.storageService.read(DB_TABLE.CONFIG, STORAGE_KEY.MEMBER_GROUP).toPromise(),
+      this.memberApiService.putMember(new MemberEntity({
+        currentQuizName: this.quizService.quiz.name,
+        name: nickname,
+        groupName: sessionStorage.getItem('memberGroup'),
         ticket: this.userService.casTicket,
-      }).subscribe((data: IMessage) => {
-        if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.MEMBER.ADDED) {
-          data.payload.memberGroups.forEach((memberGroup: IMemberGroup) => {
-            memberGroup.members.forEach((nicksInMemberGroup: INickname) => {
+      })).subscribe((data: IMessage) => {
+        if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
+          data.payload.memberGroups.forEach((group: IMemberGroupSerialized) => {
+            group.members.forEach((nicksInMemberGroup: IMemberSerialized) => {
               this.attendeeService.addMember(nicksInMemberGroup);
             });
           });
-          this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.WEBSOCKET_AUTHORIZATION, data.payload.webSocketAuthorization).subscribe();
-          this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+          this.connectionService.connectToChannel(this.quizService.quiz.name);
           resolve();
         } else {
           reject();
@@ -84,7 +90,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       });
     });
     promise.then(() => {
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.NICK, nickname).subscribe();
       this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
@@ -101,15 +106,13 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    if (this.attendeeService.getOwnNick()) {
+    if (this.attendeeService.ownNick) {
       this.router.navigate(['/']);
     }
     this._isLoading = true;
-    this.memberApiService.getAvailableMemberNames(this.currentQuizService.quiz.hashtag).subscribe(data => {
+    this.memberApiService.getAvailableNames(this.quizService.quiz.name).subscribe(data => {
       this._isLoading = false;
-      if (data.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL && data.step === COMMUNICATION_PROTOCOL.QUIZ.GET_REMAINING_NICKS) {
-        this._nicks = this._nicks.concat(data.payload.nicknames);
-      }
+      this._nicks = this._nicks.concat(data);
     });
   }
 

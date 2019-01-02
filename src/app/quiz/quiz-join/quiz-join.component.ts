@@ -1,15 +1,11 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { questionGroupReflection } from 'arsnova-click-v2-types/dist/questions/questionGroup_reflection';
-import { Subscription } from 'rxjs';
-import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
-import { StorageService } from '../../service/storage/storage.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { ThemesService } from '../../service/themes/themes.service';
-import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 
 @Component({
   selector: 'app-quiz-join',
@@ -19,18 +15,15 @@ import { DB_TABLE, STORAGE_KEY } from '../../shared/enums';
 export class QuizJoinComponent implements OnInit {
   public static TYPE = 'QuizJoinComponent';
 
-  private _routerSubscription: Subscription;
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
     private casService: CasLoginService,
-    public currentQuizService: CurrentQuizService,
+    public quizService: QuizService,
     private themesService: ThemesService,
-    private lobbyApiService: LobbyApiService,
     private quizApiService: QuizApiService,
-    private storageService: StorageService,
+    private memberApiService: MemberApiService,
   ) {
   }
 
@@ -46,7 +39,7 @@ export class QuizJoinComponent implements OnInit {
   }
 
   private resolveQuizStatusData(quizStatusData, quizname): void {
-    if (quizStatusData.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL || quizStatusData.step !== COMMUNICATION_PROTOCOL.QUIZ.AVAILABLE) {
+    if (quizStatusData.status !== StatusProtocol.Success || quizStatusData.step !== MessageProtocol.Available) {
       this.router.navigate(['/']);
       return;
     }
@@ -56,27 +49,20 @@ export class QuizJoinComponent implements OnInit {
       this.casService.quizName = quizname;
     }
 
-    this.lobbyApiService.getLobbyStatus(quizname).subscribe(lobbyStatusData => this.resolveLobbyStatusData(quizStatusData, lobbyStatusData));
+    this.resolveLobbyStatusData(quizStatusData);
   }
 
-  private resolveLobbyStatusData(quizStatusData, lobbyStatusData): void {
-    const quiz = lobbyStatusData.payload.quiz.originalObject;
-
-    this.currentQuizService.quiz = new questionGroupReflection[quiz.TYPE](quiz);
-    this.currentQuizService.persistToSessionStorage();
-
+  private resolveLobbyStatusData(quizStatusData): void {
+    this.quizService.quiz = quizStatusData.payload.quiz;
+    this.quizService.isOwner = false;
     this.themesService.updateCurrentlyUsedTheme();
 
-    if (this.currentQuizService.quiz.sessionConfig.nicks.memberGroups.length > 1) {
-      this.storageService.create(DB_TABLE.CONFIG, STORAGE_KEY.PROVIDE_NICK_SELECTION, quizStatusData.payload.provideNickSelection).subscribe();
+    if (quizStatusData.payload.memberGroups.length > 1) {
       this.router.navigate(['/nicks', 'memberGroup']);
 
     } else {
       this.router.navigate([
-        '/nicks',
-        (
-          quizStatusData.payload.provideNickSelection ? 'select' : 'input'
-        ),
+        '/nicks', (quizStatusData.payload.provideNickSelection ? 'select' : 'input'),
       ]);
 
     }

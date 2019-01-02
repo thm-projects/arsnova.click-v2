@@ -1,8 +1,7 @@
-import { isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { AbstractQuestionGroup } from 'arsnova-click-v2-types/dist/questions/questiongroup_abstract';
 import { Observable, of } from 'rxjs';
-import { DB_NAME, DB_TABLE, STORAGE_KEY } from '../../shared/enums';
+import { DbName, DbTable, StorageKey } from '../../../lib/enums/enums';
 import { IndexedDbService } from './indexed.db.service';
 
 @Injectable({
@@ -10,27 +9,18 @@ import { IndexedDbService } from './indexed.db.service';
 })
 export class StorageService {
 
+  public readonly stateNotifier = this.indexedDbService.stateNotifier.asObservable();
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private indexedDbService: IndexedDbService) {
 
     if (isPlatformServer(this.platformId)) {
       return;
     }
-
-    this.indexedDbService.setName(DB_NAME.DEFAULT);
-    this.indexedDbService.create([
-      { name: DB_TABLE.CONFIG }, {
-        name: DB_TABLE.QUIZ,
-      },
-    ]).subscribe();
   }
 
-  public create(table: DB_TABLE, key: string | STORAGE_KEY, value: any): Observable<any> {
+  public create(table: DbTable, key: string | StorageKey, value: any): Observable<any> {
     if (isPlatformServer(this.platformId)) {
       return of(null);
-    }
-
-    if (value instanceof AbstractQuestionGroup) {
-      value = value.serialize();
     }
 
     return this.indexedDbService.put(table, {
@@ -39,7 +29,7 @@ export class StorageService {
     });
   }
 
-  public read(table: DB_TABLE, key: string | STORAGE_KEY): Observable<any> {
+  public read(table: DbTable, key: string | StorageKey): Observable<any> {
     if (isPlatformServer(this.platformId)) {
       return of(null);
     }
@@ -47,7 +37,7 @@ export class StorageService {
     return this.indexedDbService.get(table, this.formatKey(key));
   }
 
-  public delete(table: DB_TABLE, key: string | STORAGE_KEY): Observable<any> {
+  public delete(table: DbTable, key: string | StorageKey): Observable<any> {
     if (isPlatformServer(this.platformId)) {
       return of(null);
     }
@@ -60,12 +50,10 @@ export class StorageService {
       return of(null).toPromise();
     }
 
-    return (
-      await this.indexedDbService.all(DB_TABLE.QUIZ).toPromise()
-    ).map(value => value.id);
+    return (await this.indexedDbService.all(DbTable.Quiz).toPromise()).map(value => value.id);
   }
 
-  public getAll(table: DB_TABLE): Observable<any> {
+  public getAll(table: DbTable): Observable<any> {
     if (isPlatformServer(this.platformId)) {
       return of(null);
     }
@@ -73,7 +61,48 @@ export class StorageService {
     return this.indexedDbService.all(table);
   }
 
-  private formatKey(key: string | STORAGE_KEY): string {
+  public switchDb(username: string): void {
+    console.log('switching db to', username || DbName.Default);
+    this.initDb(username || DbName.Default);
+  }
+
+  private initDb(dbName): void {
+    if (this.indexedDbService.dbName === dbName) {
+      return;
+    }
+
+    this.indexedDbService.setName(dbName);
+    this.indexedDbService.create([
+      { name: DbTable.Config }, {
+        name: DbTable.Quiz,
+      },
+    ]).subscribe(() => {}, () => {}, () => {
+      this.read(DbTable.Config, StorageKey.PrivateKey).subscribe(val => {
+        if (!val) {
+          val = this.generatePrivateKey();
+          this.create(DbTable.Config, StorageKey.PrivateKey, val).subscribe();
+        }
+        localStorage.setItem('privateKey', val);
+      });
+    });
+  }
+
+  private generatePrivateKey(length?: number): string {
+    const arr = new Uint8Array((length || 40) / 2);
+
+    if (isPlatformBrowser(this.platformId)) {
+      window.crypto.getRandomValues(arr);
+    }
+
+    return Array.from(arr, this.dec2hex).join('');
+  }
+
+  private dec2hex(dec): string {
+    return ('0' + dec.toString(16)).substr(-2);
+  }
+
+
+  private formatKey(key: string | StorageKey): string {
     return key.toString().toLowerCase();
   }
 }

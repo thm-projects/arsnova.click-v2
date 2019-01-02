@@ -1,7 +1,7 @@
 {
   "ssrEndpoint": "http://localhost:4000",
-  "serverEndpoint": "http://localhost:3000",
-  "httpApiEndpoint": "http://localhost:3000/api/v1",
-  "httpLibEndpoint": "http://localhost:3000/lib",
-  "wsApiEndpoint": "ws://localhost:3000"
+  "serverEndpoint": "http://localhost:3010",
+  "httpApiEndpoint": "http://localhost:3010/api/v1",
+  "httpLibEndpoint": "http://localhost:3010/lib",
+  "wsApiEndpoint": "ws://localhost:3010"
 }

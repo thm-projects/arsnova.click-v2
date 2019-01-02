@@ -1,5 +1,4 @@
-import { IMessage } from 'arsnova-click-v2-types/dist/common';
-
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 
 export class ConnectionMockService {
 
@@ -19,11 +18,11 @@ export class ConnectionMockService {
 
   }
 
-  public authorizeWebSocket(hashtag: string): void {
+  public authorizeWebSocket(name: string): void {
 
   }
 
-  public authorizeWebSocketAsOwner(hashtag: string): void {
+  public authorizeWebSocketAsOwner(name: string): void {
 
   }
 
@@ -45,7 +44,7 @@ export class ConnectionMockService {
 
   }
 
-  private sendAuthorizationMessage(hashtag: string, step: string, auth: string): void {
+  private sendAuthorizationMessage(name: string, step: string, auth: string): void {
 
   }
 }

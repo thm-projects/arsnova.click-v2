@@ -1,12 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import { Observable, of } from 'rxjs/index';
+import { Observable, of } from 'rxjs';
+import { Filter, Language, Project } from '../../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
-import { FILTER, PROJECT } from '../../shared/enums';
+import { UserService } from '../../service/user/user.service';
 
 @Component({
   selector: 'app-i18n-manager-overview',
@@ -16,9 +17,9 @@ import { FILTER, PROJECT } from '../../shared/enums';
 export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   public static readonly TYPE = 'I18nManagerOverviewComponent';
-  public readonly filters = FILTER;
+  public readonly filters = Filter;
 
-  private _langRef = ['en', 'de', 'fr', 'it', 'es'];
+  private _langRef = Object.values(Language);
 
   get langRef(): Array<string> {
     return this._langRef;
@@ -46,38 +47,38 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this._searchFilter = value;
   }
 
-  private _filter = FILTER.NONE;
+  private _filter = Filter.None;
 
-  get filter(): FILTER {
+  get filter(): Filter {
     return this._filter;
   }
 
-  set filter(value: FILTER) {
+  set filter(value: Filter) {
     this.hasAnyMatches = of(false);
     switch (parseInt(String(value), 10)) {
       case 0:
-        this._filter = FILTER.NONE;
+        this._filter = Filter.None;
         return;
       case 1:
-        this._filter = FILTER.UNUSED;
+        this._filter = Filter.Unused;
         return;
       case 2:
-        this._filter = FILTER.INVALID_KEYS;
+        this._filter = Filter.InvalidKeys;
         return;
       case 3:
-        this._filter = FILTER.INVALID_DE;
+        this._filter = Filter.InvalidDE;
         return;
       case 4:
-        this._filter = FILTER.INVALID_EN;
+        this._filter = Filter.InvalidEN;
         return;
       case 5:
-        this._filter = FILTER.INVALID_ES;
+        this._filter = Filter.InvalidES;
         return;
       case 6:
-        this._filter = FILTER.INVALID_FR;
+        this._filter = Filter.InvalidFr;
         return;
       case 7:
-        this._filter = FILTER.INVALID_IT;
+        this._filter = Filter.InvalidIt;
         return;
       default:
         throw Error(`Unknown filter set: ${value}`);
@@ -101,13 +102,14 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     private languageLoaderService: LanguageLoaderService,
     public modalOrganizerService: ModalOrganizerService,
     public projectLoaderService: ProjectLoaderService,
+    public userService: UserService,
   ) {
     this.headerLabelService.headerLabel = 'I18Nator';
     this.footerBarService.replaceFooterElements([]);
   }
 
   public ngOnInit(): void {
-    this.setProject(PROJECT.FRONTEND);
+    this.setProject(Project.Frontend);
 
     if (isPlatformBrowser(this.platformId)) {
       const contentContainer = document.getElementById('content-container');
@@ -140,14 +142,12 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this._selectedKey = null;
   }
 
-  public async setProject(value: PROJECT): Promise<void> {
+  public setProject(value: Project): void {
     this._selectedKey = undefined;
     this.languageLoaderService.reset();
     this.projectLoaderService.currentProject = value;
 
-    if (await this.projectLoaderService.isAuthorizedForProject(value)) {
-      this.reloadLanguageData();
-    }
+    this.reloadLanguageData();
   }
 
   public dataChanged(key): void {
@@ -174,6 +174,10 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
     }
 
+  }
+
+  public isUnusedKey(): boolean {
+    return !!this.languageLoaderService.unusedKeys.find(unusedKey => unusedKey === this._selectedKey.key);
   }
 
   private reloadLanguageData(): void {

@@ -7,14 +7,13 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { createTranslateLoader } from '../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
@@ -52,7 +51,7 @@ describe('FooterBarComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, FooterBarService, SharedService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, SettingsService, {
           provide: ConnectionService,
@@ -64,8 +63,8 @@ describe('FooterBarComponent', () => {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, FileUploadService, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         },
       ],
       declarations: [

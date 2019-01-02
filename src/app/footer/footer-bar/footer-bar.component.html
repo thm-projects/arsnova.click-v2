@@ -1,4 +1,4 @@
-<nav *ngIf="footerElements.length"
+<nav *ngIf="footerBarService.footerElements.length"
      id="navbar-footer-container"
      class="nav navbar-footer flex-nowrap flex-sm-column justify-content-sm-start p-1"
      role="navigation">
@@ -8,7 +8,7 @@
          (change)="fileChange($event)"
          accept="application/json"
          multiple="multiple"/>
-  <div *ngFor="let elem of footerElements"
+  <div *ngFor="let elem of footerBarService.footerElements"
        class="footerElement px-2 py-2 px-sm-1 py-sm-2 pointer d-flex align-items-center justify-content-center justify-content-sm-start"
        [class.success]="elem.selectable && elem.isActive"
        [class.error]="elem.selectable && !elem.isActive"

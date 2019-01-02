@@ -2,22 +2,20 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ISong } from 'arsnova-click-v2-types/dist/common';
-import { IMusicSessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/interfaces';
-import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
-import { FilesApiService } from '../../../service/api/files/files-api.service';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
+import { MusicSessionConfigurationEntity } from '../../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-sound-manager',
   templateUrl: './sound-manager.component.html',
   styleUrls: ['./sound-manager.component.scss'],
-})
+}) //
+@AutoUnsubscribe('_subscriptions')
 export class SoundManagerComponent implements OnDestroy {
   public static TYPE = 'SoundManagerComponent';
-
-  get config(): IMusicSessionConfiguration {
-    return this._config;
-  }
 
   private _lobbySongs: Array<ISong> = [];
 
@@ -37,13 +35,20 @@ export class SoundManagerComponent implements OnDestroy {
     return this._countdownEndSounds;
   }
 
-  private readonly _config: IMusicSessionConfiguration;
+  private _config: MusicSessionConfigurationEntity;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              private translateService: TranslateService,
-              private footerBarService: FooterBarService,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private filesApiService: FilesApiService,
+  get config(): MusicSessionConfigurationEntity {
+    return this._config;
+  }
+
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private translateService: TranslateService,
+    private footerBarService: FooterBarService,
+    private quizService: QuizService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = SoundManagerComponent.TYPE;
@@ -51,25 +56,29 @@ export class SoundManagerComponent implements OnDestroy {
       this.footerBarService.footerElemBack,
     ]);
 
-    this._config = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.music;
 
-    this.setRandomKey();
-    this.setLobbySongs();
-    this.setCountdownRunningSongs();
-    this.initConfig();
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
+
+      this._config = this.quizService.quiz.sessionConfig.music;
+      this.initConfig();
+      this.setLobbySongs();
+      this.setRandomKey();
+      this.setCountdownRunningSongs();
+    }));
+
+    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
   }
 
   public selectSound(target: 'lobby' | 'countdownRunning' | 'countdownEnd', event: Event): void {
-    this.config.titleConfig[target] = (
-      <HTMLSelectElement>event.target
-    ).value;
+    this.config.titleConfig[target] = (<HTMLSelectElement>event.target).value;
     this.toggleMusicPreview(target);
   }
 
   public setGlobalVolume($event): void {
-    this.config.volumeConfig.global = parseInt((
-      <HTMLInputElement>$event.target
-    ).value, 10);
+    this.config.volumeConfig.global = parseInt((<HTMLInputElement>$event.target).value, 10);
   }
 
   public openTab(id: string): void {
@@ -85,8 +94,8 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.music = this._config;
-    this.activeQuestionGroupService.persist();
+    this.quizService.quiz.sessionConfig.music = this._config;
+    this.quizService.persist();
   }
 
   private initConfig(): void {
@@ -160,11 +169,7 @@ export class SoundManagerComponent implements OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       const audioElements = document.getElementsByTagName('audio');
       for (let i = 0; i < audioElements.length; i++) {
-        (
-          <HTMLAudioElement>audioElements.item(i)
-        ).volume = (
-                     this.config.volumeConfig[target] || 60
-                   ) / 100;
+        (<HTMLAudioElement>audioElements.item(i)).volume = (this.config.volumeConfig[target] || 60) / 100;
       }
     }
   }

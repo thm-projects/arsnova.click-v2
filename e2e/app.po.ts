@@ -49,7 +49,7 @@ export class FrontendPage {
   }
 
   private getQuiznameInputElement(): ElementFinder {
-    return element(by.css('#hashtag-input-field'));
+    return element(by.css('#name-input-field'));
   }
 
   private getPasswordInputElement(): ElementFinder {

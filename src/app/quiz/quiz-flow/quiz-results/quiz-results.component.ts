@@ -1,27 +1,29 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { IMessage, INickname } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
-import { FreeTextQuestion } from 'arsnova-click-v2-types/dist/questions/question_freetext';
-import { RangedQuestion } from 'arsnova-click-v2-types/dist/questions/question_ranged';
-import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
+import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
+import { NumberType } from '../../../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { I18nService } from '../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
-import { NUMBER_TYPE } from '../../../shared/enums';
+import { QuizService } from '../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-quiz-results',
   templateUrl: './quiz-results.component.html',
   styleUrls: ['./quiz-results.component.scss'],
-})
+}) //
+@AutoUnsubscribe('_subscriptions')
 export class QuizResultsComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizResultsComponent';
   public countdown: Countdown;
@@ -33,14 +35,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return this._selectedQuestionIndex;
   }
 
-  private _ownsQuiz: boolean;
-
-  get ownsQuiz(): boolean {
-    return this._ownsQuiz;
-  }
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
-    public currentQuizService: CurrentQuizService,
+    public quizService: QuizService,
     public attendeeService: AttendeeService,
     private i18nService: I18nService,
     private router: Router,
@@ -55,75 +54,92 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     headerLabelService.headerLabel = 'component.liveResults.title';
 
-    this._selectedQuestionIndex = currentQuizService.questionIndex;
+    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
 
-    this.currentQuizService.isOwner.subscribe(val => {
-      this._ownsQuiz = !!val;
+      this._selectedQuestionIndex = quizService.quiz.currentQuestionIndex;
+      this.initData();
+      this.attendeeService.restoreMembers();
       this.addFooterElements();
-    });
+    }));
   }
 
   public showLeaderBoardButton(index: number): boolean {
-    return !(
-      this.currentQuizService.quiz.questionList[index] instanceof SurveyQuestion
-    );
+    if (!this.quizService.quiz || typeof index === 'undefined' || index < 0 || index > this.quizService.quiz.questionList.length) {
+      return;
+    }
+
+    return this.quizService.quiz.questionList[index].TYPE !== QuestionType.SurveyQuestion;
   }
 
   public showStopQuizButton(): boolean {
-    return this.ownsQuiz && !this.currentQuizService.currentQuestion().timer && (
-      this.attendeeService.attendees.length > this.attendeeService.attendees.filter(nick => {
-        return nick.responses[this.currentQuizService.questionIndex];
-      }).length
-    );
+    return this.quizService.isOwner && //
+           !this.quizService.currentQuestion().timer && //
+           this.attendeeService.attendees.some(nick => {
+             const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+             return typeof val === 'number' ? val > -1 : val.length === 0;
+           });
   }
 
   public showStopCountdownButton(): boolean {
-    return this.ownsQuiz && (
-      this.attendeeService.attendees.length > this.attendeeService.attendees.filter(nick => {
-        return nick.responses[this.currentQuizService.questionIndex];
-      }).length
-    ) && (
-           this.countdown && this.countdown.isRunning && this.countdown.remainingTime > 0
-           );
+    return this.quizService.isOwner && //
+           this.attendeeService.attendees.some(nick => {
+             const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+             return typeof val === 'number' ? val > -1 : val.length === 0;
+           }) && //
+           this.countdown && //
+           this.countdown.isRunning && //
+           this.countdown.remainingTime > 0;
   }
 
   public showStartQuizButton(): boolean {
-    return this.ownsQuiz && !this.showStopCountdownButton() && !this.showStopQuizButton() && this.currentQuizService.questionIndex
-           === this._selectedQuestionIndex && (
-             this.currentQuizService.questionIndex < this.currentQuizService.quiz.questionList.length - 1
-             || this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled && this.currentQuizService.readingConfirmationRequested
+    return this.quizService.isOwner && //
+           !this.showStopCountdownButton() && //
+           !this.showStopQuizButton() && //
+           this.quizService.quiz.currentQuestionIndex === this._selectedQuestionIndex && //
+           ( //
+             this.quizService.quiz && //
+             this.quizService.quiz.currentQuestionIndex < this.quizService.quiz.questionList.length - 1 || //
+             (this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
+              this.quizService.readingConfirmationRequested) //
            );
   }
 
   public hideProgressbarCssStyle(): boolean {
-    const resultLength = this.attendeeService.attendees.filter(nick => {
-      const responses = nick.responses[this._selectedQuestionIndex];
-      if (responses) {
-        if (typeof responses.value === 'number') {
-          return responses.value > 0;
-        }
-        return responses.value.length > 0;
-      }
-      return false;
-    }).length;
+    const results = this.attendeeService.attendees.some(nick => {
+      const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+      return typeof val === 'number' ? val > -1 : val.length === 0;
+    });
 
-    return (
-      this._selectedQuestionIndex <= this.currentQuizService.questionIndex && !resultLength && !this.currentQuizService.readingConfirmationRequested
-    );
+    return (this._selectedQuestionIndex <= this.quizService.quiz.currentQuestionIndex && //
+            !results && //
+            (this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
+            !this.quizService.readingConfirmationRequested));
   }
 
   public showConfidenceRate(questionIndex: number): boolean {
+    if (!this.quizService.quiz) {
+      return;
+    }
+
     const matches = this.attendeeService.attendees.filter(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].confidence : false;
     });
-    const hasConfidenceSet = typeof this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled !== 'undefined';
-    const isConfidenceEnabled = typeof hasConfidenceSet ? this.currentQuizService.quiz.sessionConfig.confidenceSliderEnabled : false;
+    const hasConfidenceSet = typeof this.quizService.quiz.sessionConfig.confidenceSliderEnabled !== 'undefined';
+    const isConfidenceEnabled = typeof hasConfidenceSet ? this.quizService.quiz.sessionConfig.confidenceSliderEnabled : false;
     return hasConfidenceSet ? matches.length > 0 || isConfidenceEnabled : matches.length > 0;
   }
 
   public async modifyVisibleQuestion(index: number): Promise<void> {
+    if (!this.quizService.quiz) {
+      return;
+    }
+
     this._selectedQuestionIndex = index;
-    await this.generateAnswers(this.currentQuizService.quiz.questionList[index]);
+    await this.generateAnswers(this.quizService.quiz.questionList[index]);
   }
 
   public getConfidenceData(questionIndex: number): { base: number, absolute: number, percent: string } {
@@ -142,24 +158,26 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return currentValue + nextValue;
       }) : 0;
       result.absolute = matches.length;
-      result.percent = this.i18nService.formatNumber(absoluteValues / (
-        matches.length || 1
-      ) / 100, NUMBER_TYPE.PERCENT);
+      result.percent = this.i18nService.formatNumber(absoluteValues / (matches.length || 1) / 100, NumberType.Percent);
     }
     return result;
   }
 
   public showReadingConfirmation(questionIndex: number): boolean {
+    if (!this.quizService.quiz) {
+      return;
+    }
+
     const matchCount = this.attendeeService.attendees.filter(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
     }).length;
-    const readingConfirmationStatus = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled;
+    const readingConfirmationStatus = this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
     const isReadingConfirmationEnabled = typeof readingConfirmationStatus === 'undefined' ? false : readingConfirmationStatus;
     return matchCount > 0 || isReadingConfirmationEnabled;
   }
 
   public showResponseProgress(): boolean {
-    return this.currentQuizService.quiz.sessionConfig.showResponseProgress;
+    return this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress;
   }
 
   public getReadingConfirmationData(questionIndex: number): { base: number, absolute: number, percent: string } {
@@ -173,9 +191,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
       }).length;
       result.absolute = matchCount;
-      result.percent = this.i18nService.formatNumber(matchCount / (
-        this.attendeeService.attendees.length || 1
-      ), NUMBER_TYPE.PERCENT);
+      result.percent = this.i18nService.formatNumber(matchCount / (this.attendeeService.attendees.length || 1), NumberType.Percent);
     }
     return result;
   }
@@ -184,33 +200,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     this.questionTextService.eventEmitter.subscribe((data: Array<string>) => {
       this.answers = data;
     });
-
-    this.connectionService.initConnection().then(() => {
-
-      if (this.ownsQuiz) {
-        this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
-      } else {
-        this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
-      }
-      this.handleMessages();
-
-      this.quizApiService.getCurrentQuizState(this.currentQuizService.quiz.hashtag).toPromise().then(currentStateData => {
-        if (currentStateData.status === COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
-          const question = this.currentQuizService.currentQuestion();
-
-          if (question.timer && new Date().getTime() - currentStateData.payload.startTimestamp < 0) {
-            this.countdown = new Countdown(question, currentStateData.payload.startTimestamp);
-          }
-
-          this.generateAnswers(question);
-        }
-        if (this.attendeeService.attendees.filter(attendee => {
-          return attendee.responses[this.currentQuizService.questionIndex];
-        }).length === this.attendeeService.attendees.length && this.countdown) {
-          this.countdown.stop();
-        }
-      });
-    });
   }
 
   public ngOnDestroy(): void {
@@ -218,23 +207,80 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public stopQuiz(): void {
-    this.quizApiService.postQuizStop({
-      quizName: this.currentQuizService.quiz.hashtag,
-    }).subscribe(data => {
-      if (data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+    this.quizApiService.stopQuiz(this.quizService.quiz).subscribe(data => {
+      if (data.status !== StatusProtocol.Success) {
         console.log(data);
       }
     });
     this.countdown.stop();
   }
 
+  public async startQuiz(): Promise<void> {
+    const startQuizData = await this.quizApiService.nextStep().toPromise();
+    if (startQuizData.status !== StatusProtocol.Success) {
+      console.log(startQuizData);
+      return;
+    }
+
+    const question = this.quizService.currentQuestion();
+    await this.generateAnswers(question);
+
+    if (startQuizData.step === MessageProtocol.ReadingConfirmationRequested) {
+      this.quizService.readingConfirmationRequested = true;
+      return;
+    }
+
+    this.quizService.readingConfirmationRequested = false;
+
+    if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
+      ]);
+    }
+  }
+
+  private initData(): void {
+
+    this.connectionService.initConnection().then(() => {
+      this.connectionService.connectToChannel(this.quizService.quiz.name);
+      this.handleMessages();
+    });
+
+    this.quizApiService.getQuizStatus(this.quizService.quiz.name).toPromise().then(currentStateData => {
+      if (currentStateData.status === StatusProtocol.Success) {
+        const question = this.quizService.currentQuestion();
+
+        if (question.timer && (new Date().getTime() - question.timer * 1000 - currentStateData.payload.startTimestamp) < 0) {
+          this.countdown = new Countdown(question, currentStateData.payload.startTimestamp);
+        }
+        console.log('quiz results timer data', this.countdown);
+
+        this.generateAnswers(question);
+      }
+      if (this.attendeeService.attendees.every(nick => {
+        const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+        return typeof val === 'number' ? val > -1 : val.length > 0;
+      }) && this.countdown) {
+        console.log('Stopping countdown in the quiz results since all attendees have answered the current question');
+        this.countdown.stop();
+      } else {
+        console.log(this.attendeeService.attendees);
+        this.attendeeService.attendees.every(nick => {
+          const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+          console.log('checking response of nick', nick, val);
+          return typeof val === 'number' ? val > -1 : val.length > 0;
+        });
+      }
+    });
+  }
+
   private addFooterElements(): void {
 
     let footerElems;
 
-    if (this.ownsQuiz) {
-      this.connectionService.authorizeWebSocketAsOwner(this.currentQuizService.quiz.hashtag);
-      if (this.currentQuizService.questionIndex === this.currentQuizService.quiz.questionList.length - 1) {
+    if (this.quizService.isOwner) {
+      this.connectionService.connectToChannel(this.quizService.quiz.name);
+      if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
         footerElems = [
           this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
         ];
@@ -248,12 +294,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         ];
       }
       this.footerBarService.footerElemBack.onClickCallback = async () => {
-        await this.quizApiService.patchQuizReset(this.currentQuizService.quiz.hashtag).toPromise();
-        this.currentQuizService.questionIndex = 0;
+        await this.quizApiService.resetQuiz(this.quizService.quiz).toPromise();
+        this.quizService.quiz.currentQuestionIndex = -1;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       };
     } else {
-      if (this.currentQuizService.questionIndex === this.currentQuizService.quiz.questionList.length - 1) {
+      if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
         footerElems = [
           this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
         ];
@@ -269,43 +315,55 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private handleMessages(): void {
     if (!this.attendeeService.attendees.length) {
       this.connectionService.sendMessage({
-        status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
-        step: COMMUNICATION_PROTOCOL.LOBBY.GET_PLAYERS,
-        payload: { quizName: this.currentQuizService.quiz.hashtag },
+        status: StatusProtocol.Success,
+        step: MessageProtocol.GetPlayers,
+        payload: { quizName: this.quizService.quiz.name },
       });
     }
     this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
-        case COMMUNICATION_PROTOCOL.LOBBY.ALL_PLAYERS:
-          data.payload.members.forEach((elem: INickname) => {
+        case MessageProtocol.AllPlayers:
+          data.payload.members.forEach((elem: IMemberSerialized) => {
             this.attendeeService.addMember(elem);
           });
           break;
-        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
-          this.attendeeService.modifyResponse(data.payload.nickname);
-          if (this.attendeeService.attendees.filter(attendee => {
-            return attendee.responses[this.currentQuizService.questionIndex] ? attendee.responses[this.currentQuizService.questionIndex].value
-                                                                             : false;
-          }).length === this.attendeeService.attendees.length && this.countdown) {
+        case MessageProtocol.Added:
+          this.attendeeService.addMember(data.payload.member);
+          break;
+        case MessageProtocol.Removed:
+          this.attendeeService.removeMember(data.payload.name);
+          break;
+        case MessageProtocol.UpdatedResponse:
+          this.attendeeService.modifyResponse(data.payload);
+          if (this.attendeeService.attendees.every(nick => {
+            const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+            return typeof val === 'number' ? val > -1 : val.length > 0;
+          }) && this.countdown) {
             this.countdown.stop();
           }
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.NEXT_QUESTION:
-          this.currentQuizService.questionIndex = data.payload.questionIndex;
-          this._selectedQuestionIndex = data.payload.questionIndex;
+        case MessageProtocol.NextQuestion:
+          this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
+          this._selectedQuestionIndex = data.payload.nextQuestionIndex;
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
+        case MessageProtocol.Start:
+          this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
+          break;
+        case MessageProtocol.Reset:
           this.attendeeService.clearResponses();
-          this.currentQuizService.questionIndex = 0;
+          this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
       }
-      this.ownsQuiz ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
+      this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
   }
 
   private handleMessagesForOwner(data: IMessage): void {
     switch (data.step) {
+      case MessageProtocol.Start:
+        this.countdown = new Countdown(this.quizService.currentQuestion(), this.quizService.quiz.currentStartTimestamp);
+        break;
       default:
         return;
     }
@@ -313,59 +371,26 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private handleMessagesForAttendee(data: IMessage): void {
     switch (data.step) {
-      case COMMUNICATION_PROTOCOL.QUIZ.START:
+      case MessageProtocol.Start:
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
-      case COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED:
+      case MessageProtocol.ReadingConfirmationRequested:
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         break;
-      case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
+      case MessageProtocol.Closed:
         this.router.navigate(['/']);
         break;
-      case COMMUNICATION_PROTOCOL.QUIZ.STOP:
+      case MessageProtocol.Stop:
         this.countdown.stop();
         break;
     }
   }
 
-  private async startQuiz(): Promise<void> {
-    const target = this.currentQuizService.quiz.sessionConfig.readingConfirmationEnabled && !this.currentQuizService.readingConfirmationRequested
-                   ? 'reading-confirmation' : 'start';
-
-    const startQuizData = await this.quizApiService.postQuizData(target, {
-      quizName: this.currentQuizService.quiz.hashtag,
-    }).toPromise();
-    if (startQuizData.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
-      console.log(startQuizData);
-      return;
-    }
-
-    const question = this.currentQuizService.currentQuestion();
-    await this.generateAnswers(question);
-
-    if (startQuizData.step === COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED) {
-      this.currentQuizService.readingConfirmationRequested = true;
-      return;
-    }
-
-    this.currentQuizService.readingConfirmationRequested = false;
-
-    if (question.timer) {
-      this.countdown = new Countdown(question, startQuizData.payload.startTimestamp);
-    }
-
-    if (this.currentQuizService.questionIndex === this.currentQuizService.quiz.questionList.length - 1) {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
-      ]);
-    }
-  }
-
-  private async generateAnswers(question: IQuestion): Promise<void> {
-    if (question instanceof RangedQuestion) {
+  private async generateAnswers(question: AbstractQuestionEntity): Promise<void> {
+    if (question.TYPE === QuestionType.RangedQuestion) {
       this.answers = ['guessed_correct', 'guessed_in_range', 'guessed_wrong'];
 
-    } else if (question instanceof FreeTextQuestion) {
+    } else if (question.TYPE === QuestionType.FreeTextQuestion) {
       this.answers = ['correct_answer', 'wrong_answer'];
 
     } else {

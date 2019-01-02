@@ -6,12 +6,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
@@ -37,74 +37,64 @@ describe('CountdownComponent', () => {
   let component: CountdownComponent;
   let fixture: ComponentFixture<CountdownComponent>;
 
-  beforeEach((
-    () => {
-      TestBed.configureTestingModule({
-        imports: [
-          HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: (
-                createTranslateLoader
-              ),
-              deps: [HttpClient],
-            },
-            compiler: {
-              provide: TranslateCompiler,
-              useClass: TranslateMessageFormatCompiler,
-            },
-          }),
-        ],
-        providers: [
-          IndexedDbService, {
-            provide: StorageService,
-            useClass: StorageServiceMock,
-          }, {
-            provide: ActiveQuestionGroupService,
-            useClass: ActiveQuestionGroupMockService,
-          }, HeaderLabelService, FooterBarService, SettingsService, {
-            provide: ConnectionService,
-            useClass: ConnectionMockService,
-          }, {
-            provide: WebsocketService,
-            useClass: WebsocketMockService,
-          }, {
-            provide: ActivatedRoute,
-            useClass: MockRouter,
-          }, SharedService,
-        ],
-        declarations: [CountdownComponent],
-      }).compileComponents();
-    }
-  ));
+  beforeEach((() => {
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [HttpClient],
+          },
+          compiler: {
+            provide: TranslateCompiler,
+            useClass: TranslateMessageFormatCompiler,
+          },
+        }),
+      ],
+      providers: [
+        IndexedDbService, {
+          provide: StorageService,
+          useClass: StorageServiceMock,
+        }, {
+          provide: QuizService,
+          useClass: QuizMockService,
+        }, HeaderLabelService, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, {
+          provide: ActivatedRoute,
+          useClass: MockRouter,
+        }, SharedService,
+      ],
+      declarations: [CountdownComponent],
+    }).compileComponents();
+  }));
 
-  beforeEach((
-    () => {
-      fixture = TestBed.createComponent(CountdownComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }
-  ));
+  beforeEach((() => {
+    fixture = TestBed.createComponent(CountdownComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
-  it('should be created', (
-    () => {
-      expect(component).toBeTruthy();
-    }
-  ));
-  it('should contain a TYPE reference', (
-    () => {
-      expect(CountdownComponent.TYPE).toEqual('CountdownComponent');
-    }
-  ));
+  it('should be created', (() => {
+    expect(component).toBeTruthy();
+  }));
+  it('should contain a TYPE reference', (() => {
+    expect(CountdownComponent.TYPE).toEqual('CountdownComponent');
+  }));
 
   describe('#updateCountdown', () => {
-    it('should update the countdown', inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-      const initValue = activeQuestionGroupService.activeQuestionGroup.questionList[0].timer;
+    it('should update the countdown', inject([QuizService], (quizService: QuizService) => {
+      const initValue = quizService.quiz.questionList[0].timer;
       const newValue = initValue + 10;
 
       component.updateCountdown(newValue);
 
-      expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].timer).toEqual(newValue);
+      expect(quizService.quiz.questionList[0].timer).toEqual(newValue);
       expect(component.countdown).toEqual(newValue);
     }));
   });

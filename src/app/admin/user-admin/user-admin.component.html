@@ -1,4 +1,4 @@
-<button class="btn btn-primary"
+<button class="btn btn-info"
         (click)="showAddUserModal()">
   Add User
 </button>
@@ -19,13 +19,17 @@
                class="cursor-pointer"
                (click)="deleteElem(i)"></fa-icon>
     </div>
-    <p class="card-text">Username: {{user.username}}</p>
-    <p class="card-text">Gitlab Token: {{user.gitlabToken}}</p>
-    <p class="card-text">
+    <p class="card-text mb-0">Username: {{user.name}}</p>
+    <p class="card-text mb-0">
+      <span>Gitlab Token:&nbsp;</span>
+      <span *ngIf="!user.gitlabToken">No Gitlab access token set</span>
+      <span>{{user.gitlabToken}}</span>
+    </p>
+    <p class="card-text mb-0">
       <span>Password-Hash:</span><br/>
       <span>{{user.passwordHash}}</span>
     </p>
-    <p class="card-text">User Authorizations:</p>
+    <p class="card-text mb-0">User Authorizations:</p>
     <ul>
       <li *ngFor="let auth of user.userAuthorizations">{{auth}}</li>
     </ul>

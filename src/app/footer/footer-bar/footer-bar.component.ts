@@ -1,9 +1,9 @@
 import { isPlatformServer } from '@angular/common';
-import { Component, EventEmitter, Inject, Input, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
@@ -13,16 +13,6 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 })
 export class FooterBarComponent {
   public static TYPE = 'FooterBarComponent';
-
-  private _footerElements: Array<IFooterBarElement> = [];
-
-  get footerElements(): Array<IFooterBarElement> {
-    return this._footerElements;
-  }
-
-  @Input() set footerElementEmitter(value: EventEmitter<Array<IFooterBarElement>>) {
-    value.subscribe(elements => this._footerElements = elements);
-  }
 
   private _footerElemIndex = 1;
 
@@ -46,8 +36,8 @@ export class FooterBarComponent {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private footerBarService: FooterBarService,
-    private currentQuizService: CurrentQuizService,
+    public footerBarService: FooterBarService,
+    private quizService: QuizService,
     private trackingService: TrackingService,
     private fileUploadService: FileUploadService,
   ) {
@@ -62,7 +52,7 @@ export class FooterBarComponent {
   }
 
   public toggleSetting(elem: IFooterBarElement): void {
-    this.currentQuizService.toggleSetting(elem);
+    this.quizService.toggleSetting(elem);
     elem.onClickCallback(elem);
     this.trackingService.trackClickEvent({
       action: this.footerBarService.TYPE_REFERENCE,
@@ -104,14 +94,12 @@ export class FooterBarComponent {
     } else {
       const child = navbarFooter.children.item(this.footerElemIndex);
       const childWidth = child.clientWidth;
-      navbarFooter.scrollLeft -= (
-        childWidth
-      );
+      navbarFooter.scrollLeft -= (childWidth);
     }
   }
 
   public moveRight(): void {
-    if (isPlatformServer(this.platformId) || this.footerElemIndex === this.footerElements.length - 1) {
+    if (isPlatformServer(this.platformId) || this.footerElemIndex === this.footerBarService.footerElements.length - 1) {
       return;
     }
 
@@ -126,9 +114,7 @@ export class FooterBarComponent {
     if (this.footerElemIndex === 1) {
       const childWidth = child.clientWidth;
       const leftButtonWidth = document.getElementById('footer-move-left').clientWidth;
-      navbarFooter.scrollLeft += (
-        childWidth - leftButtonWidth
-      );
+      navbarFooter.scrollLeft += (childWidth - leftButtonWidth);
     } else {
       navbarFooter.scrollLeft += child.clientWidth;
     }
@@ -140,7 +126,7 @@ export class FooterBarComponent {
       return;
     }
 
-    if (!this.footerElements || this.footerElements.length < 2) {
+    if (!this.footerBarService.footerElements || this.footerBarService.footerElements.length < 2) {
       return true;
     }
 

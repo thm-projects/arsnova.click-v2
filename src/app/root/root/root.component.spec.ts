@@ -12,16 +12,15 @@ import { createTranslateLoader } from '../../../lib/translation.factory';
 import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
 import { HeaderComponent } from '../../header/header/header.component';
-import { ActiveQuestionGroupMockService } from '../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../service/current-quiz/current-quiz.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
@@ -62,7 +61,7 @@ describe('RootComponent', () => {
       ],
       providers: [
         UserService, IndexedDbService, HeaderLabelService, ThemesService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, {
           provide: TrackingService,
@@ -74,8 +73,8 @@ describe('RootComponent', () => {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, SharedService, I18nService, FileUploadService, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         },
       ],
       declarations: [
@@ -96,9 +95,5 @@ describe('RootComponent', () => {
 
   it('should contain a TYPE reference', () => {
     expect(RootComponent.TYPE).toEqual('RootComponent');
-  });
-
-  it('#getFooterBarElements', () => {
-    component.getFooterBarElements().subscribe(elements => expect(elements.length).toBe(0));
   });
 });

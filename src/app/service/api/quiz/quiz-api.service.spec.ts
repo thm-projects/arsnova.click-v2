@@ -1,6 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { QuizEntity } from '../../../../lib/entities/QuizEntity';
+import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 
 import { QuizApiService } from './quiz-api.service';
 
@@ -27,8 +28,8 @@ describe('QuizApiService', () => {
 
     const quizName = 'test';
     const quizStatusData = {
-      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
-      step: COMMUNICATION_PROTOCOL.QUIZ.UNAVAILABLE,
+      status: StatusProtocol.Failed,
+      step: MessageProtocol.Unavailable,
       payload: {
         authorizeViaCas: true,
         provideNickSelection: false,
@@ -36,7 +37,7 @@ describe('QuizApiService', () => {
     };
 
     service.getQuizStatus(quizName).subscribe();
-    backend.expectOne(service.QUIZ_STATUS_URL(quizName)).flush(quizStatusData);
+    backend.expectOne(`${service.getQuizStatusUrl}/${quizName}`).flush(quizStatusData);
 
     expect(service).toBeTruthy();
   }));
@@ -45,86 +46,15 @@ describe('QuizApiService', () => {
 
     const quizName = 'test';
     const quizStatusData = {
-      status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
-      step: COMMUNICATION_PROTOCOL.MEMBER.UPDATED,
+      status: StatusProtocol.Success,
+      step: MessageProtocol.Updated,
       payload: {
         groupName: 'testGroup',
       },
     };
 
-    service.getFreeMemberGroup(quizName).subscribe();
-    backend.expectOne(service.QUIZ_MEMBER_GROUP_URL(quizName)).flush(quizStatusData);
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should reserve a quiz name', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-    const quizReservationData = {
-      quizName: quizName,
-      privateKey: '1234567890',
-    };
-
-    service.postQuizReservationOverride(quizReservationData).subscribe();
-    backend.expectOne(service.QUIZ_RESERVATION_OVERRIDE_URL()).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should post some quiz data', inject([QuizApiService], (service: QuizApiService) => {
-
-    const target = 'reading-confirmation';
-    const quizName = 'test';
-    const quizReservationData = {
-      quizName,
-    };
-
-    service.postQuizData(target, quizReservationData).subscribe();
-    backend.expectOne(service.QUIZ_POST_DATA_URL(target)).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should get the current quiz state', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-
-    service.getCurrentQuizState(quizName).subscribe();
-    backend.expectOne(service.QUIZ_CURRENT_STATE_URL(quizName)).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should reset the quiz', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-
-    service.patchQuizReset(quizName).subscribe();
-    backend.expectOne(service.QUIZ_RESET_URL(quizName)).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should stop the quiz', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-    const quizStopData = {
-      quizName,
-    };
-
-    service.postQuizStop(quizStopData).subscribe();
-    backend.expectOne(service.QUIZ_STOP_URL()).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should get the quiz start time', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-
-    service.getQuizStartTime(quizName).subscribe();
-    backend.expectOne(service.QUIZ_GET_START_TIME_URL(quizName)).flush({});
+    service.getFreeMemberGroup().subscribe();
+    backend.expectOne(service.getFreeMemberGroupUrl).flush(quizStatusData);
 
     expect(service).toBeTruthy();
   }));
@@ -133,30 +63,12 @@ describe('QuizApiService', () => {
 
     const quizName = 'test';
     const quizDeleteData = {
-      body: {
-        quizName,
-        privateKey: '123456789',
-      },
+      quizName,
+      privateKey: '123456789',
     };
 
-    service.deleteQuiz(quizDeleteData).subscribe();
-    backend.expectOne(service.QUIZ_DELETE_URL()).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should deactivate an active quiz', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-    const quizDeactivateData = {
-      body: {
-        quizName,
-        privateKey: '123456789',
-      },
-    };
-
-    service.deactivateQuizAsOwner(quizDeactivateData).subscribe();
-    backend.expectOne(service.QUIZ_DEACTIVATE_DELETE_URL()).flush({});
+    service.deleteQuiz(new QuizEntity(quizDeleteData)).subscribe();
+    backend.expectOne(`${service.deleteQuizUrl}/${quizName}`).flush({});
 
     expect(service).toBeTruthy();
   }));
@@ -166,7 +78,7 @@ describe('QuizApiService', () => {
     const langKey = 'en';
 
     service.generateDemoQuiz(langKey).subscribe();
-    backend.expectOne(service.QUIZ_GENERATE_DEMO_QUIZ_URL(langKey)).flush({});
+    backend.expectOne(`${service.getDemoQuizUrl}/${langKey}`).flush({});
 
     expect(service).toBeTruthy();
   }));
@@ -177,23 +89,7 @@ describe('QuizApiService', () => {
     const length = 4;
 
     service.generateABCDQuiz(langKey, length).subscribe();
-    backend.expectOne(service.QUIZ_GENERATE_ABCD_QUIZ_URL(langKey, length)).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
-  it('should cache the quiz assets', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-    const quizContentData = {
-      body: {
-        quizName,
-        privateKey: '123456789',
-      },
-    };
-
-    service.postCacheQuizAssets(quizContentData).subscribe();
-    backend.expectOne(service.QUIZ_CACHE_QUIZ_ASSETS_POST_URL()).flush({});
+    backend.expectOne(`${service.getAbcdQuizUrl}/${langKey}/${length}`).flush({});
 
     expect(service).toBeTruthy();
   }));
@@ -208,7 +104,7 @@ describe('QuizApiService', () => {
     };
 
     service.postQuizSettingsUpdate(quizSettingsUpdateData).subscribe();
-    backend.expectOne(service.QUIZ_SETTINGS_UPDATE_POST_URL()).flush({});
+    backend.expectOne(service.postQuizSettingsUpdateUrl).flush({});
 
     expect(service).toBeTruthy();
   }));
@@ -217,8 +113,8 @@ describe('QuizApiService', () => {
 
     const quizName = 'test';
 
-    service.getQuizSettings(quizName).subscribe();
-    backend.expectOne(service.QUIZ_SETTINGS_GET_URL(quizName)).flush({});
+    service.getQuizStatus(quizName).subscribe();
+    backend.expectOne(`${service.getQuizStatusUrl}/${quizName}`).flush({});
 
     expect(service).toBeTruthy();
   }));
@@ -229,7 +125,7 @@ describe('QuizApiService', () => {
     formData.append('privateKey', '123456789');
 
     service.postQuizUpload(formData).subscribe();
-    backend.expectOne(service.QUIZ_UPLOAD_POST_URL()).flush({});
+    backend.expectOne(service.postQuizUploadUrl).flush({});
 
     expect(service).toBeTruthy();
   }));

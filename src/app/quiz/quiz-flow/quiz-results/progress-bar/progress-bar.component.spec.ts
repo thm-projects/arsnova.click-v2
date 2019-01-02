@@ -4,22 +4,20 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { IQuestionChoice } from 'arsnova-click-v2-types/dist/questions/interfaces';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { Attendee } from '../../../../../lib/attendee/attendee';
+import { AbstractChoiceQuestionEntity } from '../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../../service/active-question-group/active-question-group.service';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
+import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
@@ -48,9 +46,7 @@ describe('ProgressBarComponent', () => {
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -66,9 +62,6 @@ describe('ProgressBarComponent', () => {
         }, NgbActiveModal, {
           provide: TrackingService,
           useClass: TrackingMockService,
-        }, {
-          provide: CurrentQuizService,
-          useClass: CurrentQuizMockService,
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
@@ -76,8 +69,8 @@ describe('ProgressBarComponent', () => {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, SharedService, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, I18nService, HeaderLabelService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
@@ -100,21 +93,17 @@ describe('ProgressBarComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', (
-    () => {
-      expect(component).toBeTruthy();
-    }
-  ));
-  it('should contain a TYPE reference', (
-    () => {
-      expect(ProgressBarComponent.TYPE).toEqual('ProgressBarComponent');
-    }
-  ));
+  it('should be created', (() => {
+    expect(component).toBeTruthy();
+  }));
+  it('should contain a TYPE reference', (() => {
+    expect(ProgressBarComponent.TYPE).toEqual('ProgressBarComponent');
+  }));
 
-  it('#attendeeDataForAnswer', async(inject([CurrentQuizService, AttendeeService, QuestionTextService],
-    (currentQuizService: CurrentQuizService, attendeeService: AttendeeService, questionTextService: QuestionTextService) => {
+  it('#attendeeDataForAnswer', async(inject([QuizService, AttendeeService, QuestionTextService],
+    (quizService: QuizService, attendeeService: AttendeeService, questionTextService: QuestionTextService) => {
       component.questionIndex = 0;
-      const question = <IQuestionChoice>currentQuizService.quiz.questionList[component.questionIndex];
+      const question = <AbstractChoiceQuestionEntity>quizService.quiz.questionList[component.questionIndex];
 
       attendeeService.addMember(new Attendee({
         id: 0,

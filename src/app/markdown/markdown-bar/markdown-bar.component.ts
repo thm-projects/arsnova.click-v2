@@ -91,7 +91,7 @@ const ShowMoreMarkdownButton = new MarkdownBarElement({
   id: 'showMoreMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.show_more',
   iconClass: 'caret-square-down',
-  iconClassToggled: 'far fa-caret-square-up',
+  iconClassToggled: 'caret-square-up',
 });
 
 /* Hidden Markdown buttons - visible only by clicking on ShowMoreMarkdownButton */

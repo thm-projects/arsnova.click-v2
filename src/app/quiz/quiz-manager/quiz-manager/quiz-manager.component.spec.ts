@@ -10,14 +10,13 @@ import { availableQuestionTypes } from '../../../../lib/available-question-types
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { FooterModule } from '../../../footer/footer.module';
-import { ActiveQuestionGroupMockService } from '../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
@@ -48,9 +47,7 @@ describe('QuizManagerComponent', () => {
         }), HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, FooterModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -64,11 +61,11 @@ describe('QuizManagerComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
-          provide: CurrentQuizService,
+          provide: QuizService,
           useClass: CurrentQuizMockService,
         }, {
-          provide: ActiveQuestionGroupService,
-          useClass: ActiveQuestionGroupMockService,
+          provide: QuizService,
+          useClass: QuizMockService,
         }, {
           provide: TrackingService,
           useClass: TrackingMockService,
@@ -84,13 +81,11 @@ describe('QuizManagerComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach((
-    () => {
-      fixture = TestBed.createComponent(QuizManagerComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }
-  ));
+  beforeEach((() => {
+    fixture = TestBed.createComponent(QuizManagerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -101,58 +96,56 @@ describe('QuizManagerComponent', () => {
   }));
 
   describe('#addQuestion', () => {
-    it('should add a question', inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    it('should add a question', inject([QuizService], (quizService: QuizService) => {
       const id = availableQuestionTypes[0].id;
 
-      activeQuestionGroupService.activeQuestionGroup.questionList.splice(0, activeQuestionGroupService.activeQuestionGroup.questionList.length);
+      quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
 
       component.addQuestion(id);
 
-      expect(activeQuestionGroupService.activeQuestionGroup.questionList.length).toEqual(1);
-      expect(activeQuestionGroupService.activeQuestionGroup.questionList[0].TYPE).toEqual(id);
+      expect(quizService.quiz.questionList.length).toEqual(1);
+      expect(quizService.quiz.questionList[0].TYPE).toEqual(id);
     }));
 
-    it('should not add an invalid question', inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
+    it('should not add an invalid question', inject([QuizService], (quizService: QuizService) => {
       const id = 'NotExisting';
 
-      activeQuestionGroupService.activeQuestionGroup.questionList.splice(0, activeQuestionGroupService.activeQuestionGroup.questionList.length);
+      quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
 
       component.addQuestion(id);
 
-      expect(activeQuestionGroupService.activeQuestionGroup.questionList.length).toEqual(0);
+      expect(quizService.quiz.questionList.length).toEqual(0);
     }));
   });
 
   describe('#moveQuestionUp', () => {
-    it('should decrement the index of a question in the questionlist by 1',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        const question = activeQuestionGroupService.activeQuestionGroup.questionList[1];
-        component.moveQuestionUp(1);
-        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0]).toEqual(question);
-      }));
+    it('should decrement the index of a question in the questionlist by 1', inject([QuizService], (quizService: QuizService) => {
+      const question = quizService.quiz.questionList[1];
+      component.moveQuestionUp(1);
+      expect(quizService.quiz.questionList[0]).toEqual(question);
+    }));
 
     it('should not decrement the index of a question in the questionlist if it is at first position',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        const question = activeQuestionGroupService.activeQuestionGroup.questionList[0];
+      inject([QuizService], (quizService: QuizService) => {
+        const question = quizService.quiz.questionList[0];
         component.moveQuestionUp(0);
-        expect(activeQuestionGroupService.activeQuestionGroup.questionList[0]).toEqual(question);
+        expect(quizService.quiz.questionList[0]).toEqual(question);
       }));
   });
 
   describe('#moveQuestionDown', () => {
-    it('should increment the index of a question in the questionlist by 1',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        const question = activeQuestionGroupService.activeQuestionGroup.questionList[1];
-        component.moveQuestionDown(1);
-        expect(activeQuestionGroupService.activeQuestionGroup.questionList[2]).toEqual(question);
-      }));
+    it('should increment the index of a question in the questionlist by 1', inject([QuizService], (quizService: QuizService) => {
+      const question = quizService.quiz.questionList[1];
+      component.moveQuestionDown(1);
+      expect(quizService.quiz.questionList[2]).toEqual(question);
+    }));
 
     it('should not increment the index of a question in the questionlist if it is at the last position',
-      inject([ActiveQuestionGroupService], (activeQuestionGroupService: ActiveQuestionGroupService) => {
-        const lastIndex = activeQuestionGroupService.activeQuestionGroup.questionList.length - 1;
-        const question = activeQuestionGroupService.activeQuestionGroup.questionList[lastIndex];
+      inject([QuizService], (quizService: QuizService) => {
+        const lastIndex = quizService.quiz.questionList.length - 1;
+        const question = quizService.quiz.questionList[lastIndex];
         component.moveQuestionDown(lastIndex);
-        expect(activeQuestionGroupService.activeQuestionGroup.questionList[lastIndex]).toEqual(question);
+        expect(quizService.quiz.questionList[lastIndex]).toEqual(question);
       }));
   });
 });

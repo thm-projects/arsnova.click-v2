@@ -294,10 +294,10 @@
       }
       .session-management {
         hr {
-          border-color: map-get($map, "border-hashtag_management-HR");
+          border-color: map-get($map, "border-name_management-HR");
         }
-        .hashtag-name {
-          color: map-get($map, "fg-hashtag_management-hashtag_name");
+        .name-name {
+          color: map-get($map, "fg-name_management-name_name");
         }
       }
       button:disabled {

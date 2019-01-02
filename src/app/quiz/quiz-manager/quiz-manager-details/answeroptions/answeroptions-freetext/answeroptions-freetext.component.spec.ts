@@ -7,12 +7,12 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { IFreetextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/interfaces';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../../../../lib/translation.factory';
-import { ActiveQuestionGroupMockService } from '../../../../../service/active-question-group/active-question-group.mock.service';
-import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
 import { ConnectionMockService } from '../../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
+import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../../service/settings/settings.service';
 import { SharedService } from '../../../../../service/shared/shared.service';
 import { WebsocketMockService } from '../../../../../service/websocket/websocket.mock.service';
@@ -34,63 +34,53 @@ describe('AnsweroptionsFreetextComponent', () => {
   let component: AnsweroptionsFreetextComponent;
   let fixture: ComponentFixture<AnsweroptionsFreetextComponent>;
 
-  beforeEach((
-    () => {
-      TestBed.configureTestingModule({
-        imports: [
-          RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: (
-                createTranslateLoader
-              ),
-              deps: [HttpClient],
-            },
-            compiler: {
-              provide: TranslateCompiler,
-              useClass: TranslateMessageFormatCompiler,
-            },
-          }),
-        ],
-        providers: [
-          {
-            provide: ActiveQuestionGroupService,
-            useClass: ActiveQuestionGroupMockService,
-          }, HeaderLabelService, FooterBarService, SettingsService, {
-            provide: ConnectionService,
-            useClass: ConnectionMockService,
-          }, {
-            provide: WebsocketService,
-            useClass: WebsocketMockService,
-          }, SharedService, {
-            provide: ActivatedRoute,
-            useClass: MockRouter,
+  beforeEach((() => {
+    TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: (createTranslateLoader),
+            deps: [HttpClient],
           },
-        ],
-        declarations: [AnsweroptionsFreetextComponent],
-      }).compileComponents();
-    }
-  ));
+          compiler: {
+            provide: TranslateCompiler,
+            useClass: TranslateMessageFormatCompiler,
+          },
+        }),
+      ],
+      providers: [
+        {
+          provide: QuizService,
+          useClass: QuizMockService,
+        }, HeaderLabelService, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, {
+          provide: WebsocketService,
+          useClass: WebsocketMockService,
+        }, SharedService, {
+          provide: ActivatedRoute,
+          useClass: MockRouter,
+        },
+      ],
+      declarations: [AnsweroptionsFreetextComponent],
+    }).compileComponents();
+  }));
 
-  beforeEach((
-    () => {
-      fixture = TestBed.createComponent(AnsweroptionsFreetextComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }
-  ));
+  beforeEach((() => {
+    fixture = TestBed.createComponent(AnsweroptionsFreetextComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
-  it('should be created', (
-    () => {
-      expect(component).toBeTruthy();
-    }
-  ));
+  it('should be created', (() => {
+    expect(component).toBeTruthy();
+  }));
 
-  it('should contain a TYPE reference', (
-    () => {
-      expect(AnsweroptionsFreetextComponent.TYPE).toEqual('AnsweroptionsFreetextComponent');
-    }
-  ));
+  it('should contain a TYPE reference', (() => {
+    expect(AnsweroptionsFreetextComponent.TYPE).toEqual('AnsweroptionsFreetextComponent');
+  }));
 
   describe('#setTestInput', () => {
     it('should add a test input', () => {
@@ -144,13 +134,9 @@ describe('AnsweroptionsFreetextComponent', () => {
 
   describe('#setConfig', () => {
     it('should set a validation configuration of the question', () => {
-      const initValue = (
-        <IFreetextAnswerOption>component.question.answerOptionList[0]
-      ).getConfig()[0];
+      const initValue = (<IFreetextAnswerOption>component.question.answerOptionList[0]).getConfig()[0];
       component.setConfig(initValue.id, !initValue.enabled);
-      const newValue = (
-        <IFreetextAnswerOption>component.question.answerOptionList[0]
-      ).getConfig()[0];
+      const newValue = (<IFreetextAnswerOption>component.question.answerOptionList[0]).getConfig()[0];
       expect(newValue.id).toEqual(initValue.id);
       expect(newValue.enabled).not.toEqual(initValue.enabled);
     });

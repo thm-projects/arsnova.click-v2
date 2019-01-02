@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IAvailableNicks } from 'arsnova-click-v2-types/dist/common';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
-import { ActiveQuestionGroupService } from '../../../service/active-question-group/active-question-group.service';
 import { NickApiService } from '../../../service/api/nick/nick-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-nickname-manager',
@@ -39,7 +39,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
 
   constructor(
     private sanitizer: DomSanitizer,
-    private activeQuestionGroupService: ActiveQuestionGroupService,
+    private quizService: QuizService,
     private footerBarService: FooterBarService,
     private nickApiService: NickApiService,
   ) {
@@ -48,12 +48,12 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack, this.footerBarService.footerElemBlockRudeNicknames, this.footerBarService.footerElemEnableCasLogin,
     ]);
+
+    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
   }
 
   public filterForKeyword(event: Event): void {
-    const searchValue = (
-      <HTMLInputElement>event.target
-    ).value.toString().toLowerCase();
+    const searchValue = (<HTMLInputElement>event.target).value.toString().toLowerCase();
 
     if (searchValue.length < this._previousSearchValue.length) {
       this._availableNicks = Object.assign({}, this._availableNicksBackup);
@@ -92,7 +92,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     if (this.selectedCategory === 'emojis') {
       name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
-    this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.toggleSelectedNick(name.toString());
+    this.quizService.toggleSelectedNick(name.toString());
   }
 
   public parseAvailableNick(name: any): SafeHtml {
@@ -106,7 +106,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     if (this.selectedCategory === 'emojis') {
       name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
-    return this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.hasSelectedNick(name.toString());
+    return this.quizService.quiz.sessionConfig.nicks.selectedNicks.indexOf(name) !== -1;
   }
 
   public hasSelectedCategory(category?: string): boolean {
@@ -114,7 +114,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public hasSelectedAllNicks(): boolean {
-    const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
+    const selectedNicks = this.quizService.quiz.sessionConfig.nicks.selectedNicks;
     const filteredNicksLength = this.availableNicks[this.selectedCategory].filter(elem => {
       if (this.selectedCategory === 'emojis') {
         const emojiMatch = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g);
@@ -127,11 +127,11 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public getNumberOfSelectedNicksOfCategory(category: string): number {
-    if (!this.availableNicks[category]) {
+    if (!this.availableNicks[category] || !this.quizService.quiz) {
       return 0;
     }
 
-    const selectedNicks = this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.selectedNicks;
+    const selectedNicks = this.quizService.quiz.sessionConfig.nicks.selectedNicks;
     return this.availableNicks[category].filter(elem => {
       return selectedNicks.indexOf(elem) > -1;
     }).length;
@@ -151,14 +151,14 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
         if (this.selectedCategory === 'emojis') {
           elem = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
         }
-        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.removeSelectedNickByName(elem.toString());
+        this.quizService.removeSelectedNickByName(elem.toString());
       });
     } else {
       this.availableNicks[this.selectedCategory].forEach(elem => {
         if (this.selectedCategory === 'emojis') {
           elem = elem.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
         }
-        this.activeQuestionGroupService.activeQuestionGroup.sessionConfig.nicks.addSelectedNick(elem.toString());
+        this.quizService.addSelectedNick(elem.toString());
       });
     }
   }
@@ -172,7 +172,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.activeQuestionGroupService.persist();
+    this.quizService.persist();
   }
 
 }

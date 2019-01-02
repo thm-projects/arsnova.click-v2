@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, HostListener, Inject } from '@angular/core';
-import { ActiveQuestionGroupService } from '../../service/active-question-group/active-question-group.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
@@ -27,10 +27,7 @@ export class AdditionalDataComponent {
 
   private readonly _quizUrl: string;
 
-  constructor(@Inject(DOCUMENT) readonly document,
-              public activeQuestionGroupService: ActiveQuestionGroupService,
-              private trackingService: TrackingService,
-  ) {
+  constructor(@Inject(DOCUMENT) readonly document, public quizService: QuizService, private trackingService: TrackingService) {
   }
 
   public getQuizUrl(quizName: string): string {

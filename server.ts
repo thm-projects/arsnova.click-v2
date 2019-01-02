@@ -3,7 +3,6 @@ import { enableProdMode } from '@angular/core';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
 import * as bodyParser from 'body-parser';
 import * as child_process from 'child_process';
 import * as compress from 'compression';
@@ -17,6 +16,7 @@ import 'reflect-metadata';
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
 import { DefaultSettings } from './src/lib/default.settings';
+import { MessageProtocol, StatusProtocol } from './src/lib/enums/Message';
 
 Error.stackTraceLimit = Infinity;
 console.error = (msg) => {
@@ -66,8 +66,8 @@ app.use(compress());
 app.param('project', (req, res, next, project) => {
   if (!project || !i18nFileBaseLocation[project]) {
     res.status(500).send({
-      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
-      data: COMMUNICATION_PROTOCOL.I18N.INVALID_PROJECT_SPECIFIED,
+      status: StatusProtocol.Failed,
+      data: MessageProtocol.InvalidProjectSpecified,
       payload: { project },
     });
   } else {
@@ -197,21 +197,19 @@ const getUnusedKeys = (req) => {
     const i18nFileContent = JSON.parse(fs.readFileSync(path.join(req.i18nFileBaseLocation, `${langRefs[i]}.json`)).toString('UTF-8'));
     const objectPaths = objectPath(i18nFileContent);
 
-    objectPaths.forEach((
-      i18nPath => {
-        let matched = false;
-        fileNames.forEach(filename => {
-          if (matched) {
-            return;
-          }
-          const fileContent = fs.readFileSync(filename).toString('UTF-8');
-          matched = fileContent.indexOf(i18nPath) > -1;
-        });
-        if (!matched) {
-          result[langRefs[i]].push(i18nPath);
+    objectPaths.forEach((i18nPath => {
+      let matched = false;
+      fileNames.forEach(filename => {
+        if (matched) {
+          return;
         }
+        const fileContent = fs.readFileSync(filename).toString('UTF-8');
+        matched = fileContent.indexOf(i18nPath) > -1;
+      });
+      if (!matched) {
+        result[langRefs[i]].push(i18nPath);
       }
-    ));
+    }));
   }
 
   return result;
@@ -266,7 +264,7 @@ app.get('/api/v1/plugin/i18nator/:project/langFile', async (req, res) => {
   payload.branch = cache[req.projectCache].branch;
 
   res.send({
-    status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
+    status: StatusProtocol.Success,
     payload,
   });
 });
@@ -276,16 +274,16 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
 
   if (!username || !token) {
     res.send({
-      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
-      step: COMMUNICATION_PROTOCOL.AUTHORIZATION.AUTHENTICATE_STATIC,
+      status: StatusProtocol.Failed,
+      step: MessageProtocol.AuthenticateStatic,
       payload: { reason: 'UNKOWN_LOGIN' },
     });
     return;
   }
   if (!req.body.data) {
     res.status(500).send({
-      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
-      data: COMMUNICATION_PROTOCOL.I18N.INVALID_DATA,
+      status: StatusProtocol.Failed,
+      data: MessageProtocol.InvalidData,
       payload: { body: req.body },
     });
     return;
@@ -301,7 +299,7 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
 
     response.on('end', () => {
       data = JSON.parse(data);
-      if (!data && data.status !== COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL) {
+      if (!data && data.status !== StatusProtocol.Success) {
         return;
       }
 
@@ -326,15 +324,15 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
         const exists = fs.existsSync(fileLocation);
         if (!exists) {
           res.status(404).send({
-            status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
-            data: COMMUNICATION_PROTOCOL.I18N.FILE_NOT_FOUND,
+            status: StatusProtocol.Failed,
+            data: MessageProtocol.FileNotFound,
             payload: { fileLocation },
           });
           return;
         }
         fs.writeFileSync(fileLocation, JSON.stringify(fileContent));
         if (index === langKeys.length - 1) {
-          res.send({ status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL });
+          res.send({ status: StatusProtocol.Success });
         }
       });
     });
@@ -344,8 +342,8 @@ app.post('/api/v1/plugin/i18nator/:project/updateLang', async (req, res) => {
     console.log('error at validating login token', error);
     request.abort();
     res.send({
-      status: COMMUNICATION_PROTOCOL.STATUS.FAILED,
-      step: COMMUNICATION_PROTOCOL.I18N.UPDATE_LANG,
+      status: StatusProtocol.Failed,
+      step: MessageProtocol.UpdateLang,
       payload: { error },
     });
     return;

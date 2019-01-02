@@ -1,12 +1,9 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { FreeTextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_freetext';
-import { IFreetextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/interfaces';
-import { AbstractQuestionGroup, questionGroupReflection } from 'arsnova-click-v2-types/dist/questions';
-import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
-import { Subscription } from 'rxjs';
-import { ActiveQuestionGroupService } from '../../../../../service/active-question-group/active-question-group.service';
+import { FreeTextAnswerEntity } from '../../../../../../lib/entities/answer/FreetextAnwerEntity';
+import { AbstractQuestionEntity } from '../../../../../../lib/entities/question/AbstractQuestionEntity';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
+import { QuizService } from '../../../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-answeroptions-freetext',
@@ -16,9 +13,9 @@ import { HeaderLabelService } from '../../../../../service/header-label/header-l
 export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsFreetextComponent';
 
-  private _question: IQuestion;
+  private _question: AbstractQuestionEntity;
 
-  get question(): IQuestion {
+  get question(): AbstractQuestionEntity {
     return this._question;
   }
 
@@ -28,9 +25,9 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
     return this._matchText;
   }
 
-  private _answer: Array<IFreetextAnswerOption>;
+  private _answer: Array<FreeTextAnswerEntity>;
 
-  get answer(): Array<IFreetextAnswerOption> {
+  get answer(): Array<FreeTextAnswerEntity> {
     return this._answer;
   }
 
@@ -41,26 +38,18 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   private _questionIndex: number;
-  private _routerSubscription: Subscription;
 
-  constructor(private headerLabelService: HeaderLabelService,
-              private activeQuestionGroupService: ActiveQuestionGroupService,
-              private route: ActivatedRoute,
-  ) {
+  constructor(private headerLabelService: HeaderLabelService, private quizService: QuizService, private route: ActivatedRoute) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
 
   public setTestInput(event: Event): void {
-    this._testInput = (
-      <HTMLTextAreaElement>event.target
-    ).value;
+    this._testInput = (<HTMLTextAreaElement>event.target).value;
   }
 
   public setMatchText(event: Event): void {
-    this._question.answerOptionList[0].answerText = (
-      <HTMLTextAreaElement>event.target
-    ).value;
+    this._question.answerOptionList[0].answerText = (<HTMLTextAreaElement>event.target).value;
   }
 
   public hasTestInput(): boolean {
@@ -68,51 +57,38 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   public isTestInputCorrect(): boolean {
-    return (
-      <FreeTextAnswerOption>this._question.answerOptionList[0]
-    ).isCorrectInput(this._testInput);
+    return (<FreeTextAnswerEntity>this._question.answerOptionList[0]).isCorrectInput(this._testInput);
   }
 
   public setConfig(configIdentifier: string, configValue: boolean): void {
-    (
-      <FreeTextAnswerOption>this._question.answerOptionList[0]
-    ).setConfig(configIdentifier, configValue);
+    (<FreeTextAnswerEntity>this._question.answerOptionList[0]).setConfig(configIdentifier, configValue);
   }
 
   public ngOnInit(): void {
-    this._routerSubscription = this.route.params.subscribe(params => {
+    this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
 
-      this.activeQuestionGroupService.loadData().subscribe((questionGroup: any) => {
-        if (!(
-          questionGroup instanceof AbstractQuestionGroup
-        )) {
-          questionGroup = questionGroupReflection[questionGroup.TYPE](questionGroup);
-        }
+      if (this.quizService.quiz) {
+        this._question = this.quizService.quiz.questionList[this._questionIndex];
+      }
+      this._answer = <Array<FreeTextAnswerEntity>>this._question.answerOptionList;
 
-        this._question = questionGroup.questionList[this._questionIndex];
-        this._answer = <Array<IFreetextAnswerOption>>this._question.answerOptionList;
+      if (!this._question.answerOptionList.length) {
+        this._question.answerOptionList.push(new FreeTextAnswerEntity({
+          answerText: '',
+          configCaseSensitive: false,
+          configTrimWhitespaces: false,
+          configUseKeywords: false,
+          configUsePunctuation: false,
+        }));
+      }
 
-        if (!this._question.answerOptionList.length) {
-          this._question.answerOptionList.push(new FreeTextAnswerOption({
-            answerText: '',
-            configCaseSensitive: false,
-            configTrimWhitespaces: false,
-            configUseKeywords: false,
-            configUsePunctuation: false
-          }));
-        }
-
-        this._matchText = this._question.answerOptionList[0].answerText;
-      });
+      this._matchText = this._question.answerOptionList[0].answerText;
     });
   }
 
   @HostListener('window:beforeunload', ['$event'])
   public ngOnDestroy(): void {
-    this.activeQuestionGroupService.persist();
-    if (this._routerSubscription) {
-      this._routerSubscription.unsubscribe();
-    }
+    this.quizService.persist();
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { USER_AUTHORIZATION } from '../../shared/enums';
+import { UserRole } from '../../../lib/enums/UserRole';
 
 @Component({
   selector: 'app-add-user',
@@ -8,14 +8,14 @@ import { USER_AUTHORIZATION } from '../../shared/enums';
   styleUrls: ['./add-user.component.scss'],
 })
 export class AddUserComponent implements OnInit {
-  private _username = '';
+  private _name = '';
 
-  get username(): string {
-    return this._username;
+  get name(): string {
+    return this._name;
   }
 
-  set username(value: string) {
-    this._username = value;
+  set name(value: string) {
+    this._name = value;
   }
 
   private _password = '';
@@ -60,19 +60,19 @@ export class AddUserComponent implements OnInit {
   }
 
   public getUserRoles(): Array<string> {
-    return Object.values(USER_AUTHORIZATION);
+    return Object.values(UserRole);
   }
 
   public save(): void {
     this._isSubmitting = true;
 
-    if (!this.password || !this.username || !this.userAuthorizations.length) {
+    if (!this.password || !this.name || !this.userAuthorizations.length) {
       this._isSubmitting = false;
       return;
     }
 
     this.ngbModal.close({
-      username: this.username,
+      name: this.name,
       password: this.password,
       gitlabToken: this.gitlabToken,
       userAuthorizations: this.userAuthorizations,

@@ -1,14 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IMessage, INickname } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
-import { IQuestion } from 'arsnova-click-v2-types/dist/questions/interfaces';
+import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
+import { MessageProtocol, StatusProtocol } from '../../../../../lib/enums/Message';
+import { IMessage } from '../../../../../lib/interfaces/communication/IMessage';
+import { IMemberSerialized } from '../../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
+import { QuizService } from '../../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-question-details',
@@ -18,9 +19,9 @@ import { QuestionTextService } from '../../../../service/question-text/question-
 export class QuestionDetailsComponent implements OnInit {
   public static TYPE = 'QuestionDetailsComponent';
 
-  private _question: IQuestion;
+  private _question: AbstractQuestionEntity;
 
-  get question(): IQuestion {
+  get question(): AbstractQuestionEntity {
     return this._question;
   }
 
@@ -48,7 +49,7 @@ export class QuestionDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private currentQuizService: CurrentQuizService,
+    private quizService: QuizService,
     private sanitizer: DomSanitizer,
     private router: Router,
     private questionTextService: QuestionTextService,
@@ -84,11 +85,13 @@ export class QuestionDetailsComponent implements OnInit {
     });
     this.route.params.subscribe(async params => {
       this._questionIndex = +params['questionIndex'];
-      if (this._questionIndex < 0 || this._questionIndex > this.currentQuizService.questionIndex) {
+      if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
         this.router.navigate(['/quiz', 'flow', 'results']);
         return;
       }
-      this._question = this.currentQuizService.quiz.questionList[this._questionIndex];
+      if (this.quizService.quiz) {
+        this._question = this.quizService.quiz.questionList[this._questionIndex];
+      }
       await this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
       await this.questionTextService.change(this._question.questionText);
     });
@@ -97,31 +100,34 @@ export class QuestionDetailsComponent implements OnInit {
   private handleMessages(): void {
     if (!this.attendeeService.attendees.length) {
       this.connectionService.sendMessage({
-        status: COMMUNICATION_PROTOCOL.STATUS.SUCCESSFUL,
-        step: COMMUNICATION_PROTOCOL.LOBBY.GET_PLAYERS,
-        payload: { quizName: this.currentQuizService.quiz.hashtag },
+        status: StatusProtocol.Success,
+        step: MessageProtocol.GetPlayers,
+        payload: { quizName: this.quizService.quiz.name },
       });
     }
     this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
-        case COMMUNICATION_PROTOCOL.LOBBY.ALL_PLAYERS:
-          data.payload.members.forEach((elem: INickname) => {
+        case MessageProtocol.AllPlayers:
+          data.payload.members.forEach((elem: IMemberSerialized) => {
             this.attendeeService.addMember(elem);
           });
           break;
-        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
-          this.attendeeService.modifyResponse(data.payload.nickname);
+        case MessageProtocol.UpdatedResponse:
+          this.attendeeService.modifyResponse(data.payload);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.NEXT_QUESTION:
-          this.currentQuizService.questionIndex = data.payload.questionIndex;
+        case MessageProtocol.NextQuestion:
+          this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
+        case MessageProtocol.Start:
+          this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
+          break;
+        case MessageProtocol.Reset:
           this.attendeeService.clearResponses();
-          this.currentQuizService.questionIndex = 0;
+          this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
       }
-      this.currentQuizService.isOwner.subscribe(val => !!val ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data));
+      this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
   }
 
@@ -134,13 +140,13 @@ export class QuestionDetailsComponent implements OnInit {
 
   private handleMessagesForAttendee(data: IMessage): void {
     switch (data.step) {
-      case COMMUNICATION_PROTOCOL.QUIZ.START:
+      case MessageProtocol.Start:
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
-      case COMMUNICATION_PROTOCOL.QUIZ.READING_CONFIRMATION_REQUESTED:
+      case MessageProtocol.ReadingConfirmationRequested:
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         break;
-      case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
+      case MessageProtocol.Closed:
         this.router.navigate(['/']);
         break;
     }

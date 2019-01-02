@@ -1,17 +1,19 @@
 import { Component, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ILeaderBoardItem, IMessage } from 'arsnova-click-v2-types/dist/common';
-import { COMMUNICATION_PROTOCOL } from 'arsnova-click-v2-types/dist/communication_protocol';
+import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
 import { Subscription } from 'rxjs';
+import { MessageProtocol } from '../../../../lib/enums/Message';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
+import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizService } from '../../../service/current-quiz/current-quiz.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { I18nService } from '../../../service/i18n/i18n.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -58,7 +60,7 @@ export class LeaderboardComponent implements OnInit {
   }
 
   private _routerSubscription: Subscription;
-  private readonly _hashtag: string;
+  private readonly _name: string;
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -67,29 +69,27 @@ export class LeaderboardComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private router: Router,
     private connectionService: ConnectionService,
-    public currentQuizService: CurrentQuizService,
     public attendeeService: AttendeeService,
     private i18nService: I18nService,
     private leaderboardApiService: LeaderboardApiService,
+    public quizService: QuizService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
 
-    this._hashtag = this.currentQuizService.quiz.hashtag;
+    this._name = this.quizService.quiz.name;
     this._leaderBoardCorrect = [];
     this._leaderBoardPartiallyCorrect = [];
 
-    this.currentQuizService.isOwner.subscribe(value => {
-      if (value) {
-        this.footerBarService.replaceFooterElements([
-          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
-        ]);
-      } else {
-        this.footerBarService.replaceFooterElements([
-          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
-        ]);
-      }
-    });
+    if (this.quizService.isOwner) {
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
+      ]);
+    } else {
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
+      ]);
+    }
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -112,34 +112,20 @@ export class LeaderboardComponent implements OnInit {
       return Math.round(value);
     }
 
-    if (isNaN(value) || !(
-      digits % 1 === 0
-    )) {
+    if (isNaN(value) || !(digits % 1 === 0)) {
       return NaN;
     }
 
     value = value.toString().split('e');
-    value = Math.round(+(
-      value[0] + 'e' + (
-        value[1] ? (
-      +value[1] + digits
-        ) : digits
-      )
-    ));
+    value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + digits) : digits)));
 
     value = value.toString().split('e');
-    return +(
-      value[0] + 'e' + (
-        value[1] ? (
-          +value[1] - digits
-        ) : -digits
-      )
-    );
+    return +(value[0] + 'e' + (value[1] ? (+value[1] - digits) : -digits));
   }
 
   public ngOnInit(): void {
     this.connectionService.initConnection().then(() => {
-      this.connectionService.authorizeWebSocket(this.currentQuizService.quiz.hashtag);
+      this.connectionService.connectToChannel(this.quizService.quiz.name);
       this.handleMessages();
     });
 
@@ -156,13 +142,13 @@ export class LeaderboardComponent implements OnInit {
       } else {
         this.headerLabelService.headerLabel = 'component.leaderboard.header';
 
-        const questionType = this.currentQuizService.quiz.questionList[this.questionIndex].TYPE;
-        this._hasMultipleAnswersAvailable = questionType === 'MultipleChoiceQuestion';
+        const questionType = this.quizService.quiz.questionList[this.questionIndex].TYPE;
+        this._hasMultipleAnswersAvailable = questionType === QuestionType.MultipleChoiceQuestion;
       }
 
     });
 
-    this.leaderboardApiService.getLeaderboardData(this._hashtag, this.questionIndex).subscribe(lederboardData => {
+    this.leaderboardApiService.getLeaderboardData(this._name, this.questionIndex).subscribe(lederboardData => {
       this._leaderBoardCorrect = lederboardData.payload.correctResponses;
       this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
       this._memberGroupResults = lederboardData.payload.memberGroupResults;
@@ -187,19 +173,19 @@ export class LeaderboardComponent implements OnInit {
   private handleMessages(): void {
     this.connectionService.socket.subscribe((data: IMessage) => {
       switch (data.step) {
-        case COMMUNICATION_PROTOCOL.QUIZ.START:
+        case MessageProtocol.Start:
           this.router.navigate(['/quiz', 'flow', 'voting']);
           break;
-        case COMMUNICATION_PROTOCOL.MEMBER.UPDATED_RESPONSE:
+        case MessageProtocol.UpdatedResponse:
           console.log('modify response data for nickname in leaderboard view', data.payload.nickname);
-          this.attendeeService.modifyResponse(data.payload.nickname);
+          this.attendeeService.modifyResponse(data.payload);
           break;
-        case COMMUNICATION_PROTOCOL.QUIZ.RESET:
+        case MessageProtocol.Reset:
           this.attendeeService.clearResponses();
-          this.currentQuizService.questionIndex = 0;
+          this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
-        case COMMUNICATION_PROTOCOL.LOBBY.CLOSED:
+        case MessageProtocol.Closed:
           this.router.navigate(['/']);
           break;
       }
