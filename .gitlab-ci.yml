@@ -28,6 +28,7 @@ ts_lint:
 
 npm_test:
   stage: test
+  allow_failure: true
   tags:
     - nodejs
   script:
