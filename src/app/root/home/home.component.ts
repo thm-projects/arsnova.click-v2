@@ -110,8 +110,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'default';
 
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.stateNotifier.subscribe(val => {
-        if (val === 'initialized') {
+      this.storageService.stateNotifier.subscribe(state => {
+        if (state === 'initialized') {
           this.cleanUpSessionStorage();
           this.storageService.getAllQuiznames().then(quizNames => {
             this._ownQuizzes = quizNames;
