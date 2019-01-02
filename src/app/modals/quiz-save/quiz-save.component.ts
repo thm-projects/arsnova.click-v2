@@ -12,6 +12,12 @@ export class QuizSaveComponent {
   public expiry: string;
   public description: string;
 
+  private _isSubmitting: boolean;
+
+  get isSubmitting(): boolean {
+    return this._isSubmitting;
+  }
+
   constructor(private activeModal: NgbActiveModal) {
     this.expiry = new Date(new Date().getTime() + 3600000 * 24 * 30).toISOString().split('T')[0];
   }
@@ -25,6 +31,13 @@ export class QuizSaveComponent {
   }
 
   public save(): void {
+    this._isSubmitting = true;
+
+    if (!this.quizVisibility || !this.expiry) {
+      this._isSubmitting = false;
+      return;
+    }
+
     this.activeModal.close({
       visibility: this.quizVisibility,
       expiry: this.expiry,
