@@ -49,7 +49,7 @@ export class QuizLobbyComponent implements OnDestroy {
     this._qrCodeContent = value;
   }
 
-  private _reconnectTimeout: number;
+  private _reconnectTimeout: any;
   private _nickToRemove: string;
   private _kickMemberModalRef: NgbActiveModal;
   // noinspection JSMismatchedCollectionQueryUpdate

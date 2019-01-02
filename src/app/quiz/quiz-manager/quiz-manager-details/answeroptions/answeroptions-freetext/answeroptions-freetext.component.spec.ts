@@ -134,9 +134,9 @@ describe('AnsweroptionsFreetextComponent', () => {
 
   describe('#setConfig', () => {
     it('should set a validation configuration of the question', () => {
-      const initValue = (<IFreetextAnswerOption>component.question.answerOptionList[0]).getConfig()[0];
+      const initValue = (component.question.answerOptionList[0] as unknown as IFreetextAnswerOption).getConfig()[0];
       component.setConfig(initValue.id, !initValue.enabled);
-      const newValue = (<IFreetextAnswerOption>component.question.answerOptionList[0]).getConfig()[0];
+      const newValue = (component.question.answerOptionList[0] as unknown as IFreetextAnswerOption).getConfig()[0];
       expect(newValue.id).toEqual(initValue.id);
       expect(newValue.enabled).not.toEqual(initValue.enabled);
     });

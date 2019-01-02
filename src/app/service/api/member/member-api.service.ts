@@ -9,14 +9,43 @@ import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
   providedIn: 'root',
 })
 export class MemberApiService {
-
   private _putMemberUrl: string;
+
+  get putMemberUrl(): string {
+    return this._putMemberUrl;
+  }
+
   private _putResponseUrl: string;
+
+  get putResponseUrl(): string {
+    return this._putResponseUrl;
+  }
+
   private _deleteMemberUrl: string;
-  private _getMembersUrl: string;
+
+  get deleteMemberUrl(): string {
+    return this._deleteMemberUrl;
+  }
+
   private _getAvailableMemberNamesUrl: string;
+
+  get getAvailableMemberNamesUrl(): string {
+    return this._getAvailableMemberNamesUrl;
+  }
+
   private _putConfidenceValueUrl: string;
+
+  get putConfidenceValueUrl(): string {
+    return this._putConfidenceValueUrl;
+  }
+
   private _putReadingConfirmationValueUrl: string;
+
+  get putReadingConfirmationValueUrl(): string {
+    return this._putReadingConfirmationValueUrl;
+  }
+
+  private _getMembersUrl: string;
   private _postMemberTokenUrl: string;
 
   constructor(private http: HttpClient) {

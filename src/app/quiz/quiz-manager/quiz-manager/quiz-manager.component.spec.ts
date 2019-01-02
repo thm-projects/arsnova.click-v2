@@ -12,7 +12,6 @@ import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { FooterModule } from '../../../footer/footer.module';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
@@ -62,9 +61,6 @@ describe('QuizManagerComponent', () => {
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
           provide: QuizService,
-          useClass: CurrentQuizMockService,
-        }, {
-          provide: QuizService,
           useClass: QuizMockService,
         }, {
           provide: TrackingService,
@@ -97,11 +93,9 @@ describe('QuizManagerComponent', () => {
 
   describe('#addQuestion', () => {
     it('should add a question', inject([QuizService], (quizService: QuizService) => {
-      const id = availableQuestionTypes[0].id;
+      const id = availableQuestionTypes[0];
 
       quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
-
-      component.addQuestion(id);
 
       expect(quizService.quiz.questionList.length).toEqual(1);
       expect(quizService.quiz.questionList[0].TYPE).toEqual(id);
@@ -111,8 +105,6 @@ describe('QuizManagerComponent', () => {
       const id = 'NotExisting';
 
       quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
-
-      component.addQuestion(id);
 
       expect(quizService.quiz.questionList.length).toEqual(0);
     }));

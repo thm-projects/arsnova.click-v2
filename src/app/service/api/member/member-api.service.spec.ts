@@ -1,5 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
 
 import { MemberApiService } from './member-api.service';
 
@@ -24,99 +25,87 @@ describe('MemberApiService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should put a confidence value for a member', inject(
-    [MemberApiService], (service: MemberApiService) => {
+  it('should put a confidence value for a member', inject([MemberApiService], (service: MemberApiService) => {
 
-      const quizName = 'test';
-      const nickName = 'testNick';
-      const memberConfidenceData = {
-        quizName,
-        nickname: nickName,
-        confidenceValue: 42,
-      };
+    const quizName = 'test';
+    const nickName = 'testNick';
+    const memberConfidenceData = {
+      quizName,
+      nickname: nickName,
+      confidenceValue: 42,
+    };
 
-      service.putConfidenceValue(memberConfidenceData).subscribe();
-      backend.expectOne(service.MEMBER_CONFIDENCE_VALUE_PUT_URL()).flush({});
+    service.putConfidenceValue(42).subscribe();
+    backend.expectOne(service.putConfidenceValueUrl).flush({});
 
-      expect(service).toBeTruthy();
-    }),
-  );
+    expect(service).toBeTruthy();
+  }));
 
-  it('should delete a member', inject(
-    [MemberApiService], (service: MemberApiService) => {
+  it('should delete a member', inject([MemberApiService], (service: MemberApiService) => {
 
-      const quizName = 'test';
-      const nickName = 'testNick';
+    const quizName = 'test';
+    const nickName = 'testNick';
 
-      service.deleteMember(quizName, nickName).subscribe();
-      backend.expectOne(service.MEMBER_DELETE_URL(quizName, nickName)).flush({});
+    service.deleteMember(quizName, nickName).subscribe();
+    backend.expectOne(service.deleteMemberUrl).flush({});
 
-      expect(service).toBeTruthy();
-    }),
-  );
+    expect(service).toBeTruthy();
+  }));
 
-  it('should put a reading confirmation value for a member', inject(
-    [MemberApiService], (service: MemberApiService) => {
+  it('should put a reading confirmation value for a member', inject([MemberApiService], (service: MemberApiService) => {
 
-      const quizName = 'test';
-      const nickName = 'testNick';
-      const memberReadingConfirmationData = {
-        quizName: quizName,
-        nickname: nickName,
-        questionIndex: 0,
-      };
+    const quizName = 'test';
+    const nickName = 'testNick';
+    const memberReadingConfirmationData = {
+      quizName: quizName,
+      nickname: nickName,
+      questionIndex: 0,
+    };
 
-      service.putReadingConfirmationValue(memberReadingConfirmationData).subscribe();
-      backend.expectOne(service.MEMBER_READING_CONFIRMATION_PUT_URL()).flush({});
+    service.putReadingConfirmationValue().subscribe();
+    backend.expectOne(service.putReadingConfirmationValueUrl).flush({});
 
-      expect(service).toBeTruthy();
-    }),
-  );
+    expect(service).toBeTruthy();
+  }));
 
-  it('should put a response value for a member', inject(
-    [MemberApiService], (service: MemberApiService) => {
+  it('should put a response value for a member', inject([MemberApiService], (service: MemberApiService) => {
 
-      const quizName = 'test';
-      const nickName = 'testNick';
-      const memberResponseData = {
-        quizName,
-        nickname: nickName,
-        value: [0],
-      };
+    const quizName = 'test';
+    const nickName = 'testNick';
+    const memberResponseData = {
+      quizName,
+      nickname: nickName,
+      value: [0],
+    };
 
-      service.putResponse(memberResponseData).subscribe();
-      backend.expectOne(service.MEMBER_RESPONSE_PUT_URL()).flush({});
+    service.putResponse(memberResponseData).subscribe();
+    backend.expectOne(service.putResponseUrl).flush({});
 
-      expect(service).toBeTruthy();
-    }),
-  );
+    expect(service).toBeTruthy();
+  }));
 
-  it('should add a member', inject(
-    [MemberApiService], (service: MemberApiService) => {
+  it('should add a member', inject([MemberApiService], (service: MemberApiService) => {
 
-      const quizName = 'test';
-      const nickName = 'testNick';
-      const memberContentData = {
-        quizName: quizName,
-        nickname: nickName,
-        groupName: 'Default',
-        ticket: '',
-      };
+    const quizName = 'test';
+    const nickName = 'testNick';
+    const memberContentData = new MemberEntity({
+      quizName: quizName,
+      nickname: nickName,
+      groupName: 'Default',
+      ticket: '',
+    });
 
-      service.putMember(memberContentData).subscribe();
-      backend.expectOne(service.MEMBER_PUT_MEMBER_URL()).flush({});
+    service.putMember(memberContentData).subscribe();
+    backend.expectOne(service.putMemberUrl).flush({});
 
-      expect(service).toBeTruthy();
-    }),
-  );
+    expect(service).toBeTruthy();
+  }));
 
-  it('should get a list of available nicknames', inject(
-    [MemberApiService], (service: MemberApiService) => {
-      const quizName = 'test';
+  it('should get a list of available nicknames', inject([MemberApiService], (service: MemberApiService) => {
+    const quizName = 'test';
 
-      service.getAvailableMemberNames(quizName).subscribe();
-      backend.expectOne(service.MEMBER_GET_AVAILABLE_NAMES_URL(quizName)).flush({});
-      expect(service).toBeTruthy();
-    }),
-  );
+    service.getAvailableNames(quizName).subscribe();
+    backend.expectOne(service.getAvailableMemberNamesUrl).flush({});
+    expect(service).toBeTruthy();
+  }));
 });

@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { QuestionType } from '../../../../../lib/enums/QuestionType';
 import { createTranslateLoader } from '../../../../../lib/translation.factory';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
@@ -99,13 +100,13 @@ describe('QuestiontypeComponent', () => {
   describe('#morphToQuestionType', () => {
     it('should convert the current question type to a new one', inject([QuizService], (quizService: QuizService) => {
       const targetType = 'MultipleChoiceQuestion';
-      component.morphToQuestionType(targetType);
+      component.morphToQuestionType(QuestionType.MultipleChoiceQuestion);
       expect(quizService.quiz.questionList[0].TYPE).toEqual(targetType);
     }));
     it('should not convert the current question type if the passed type does not exist', inject([QuizService], (quizService: QuizService) => {
       const targetType = 'NotExistingType';
       const initType = quizService.quiz.questionList[0].TYPE;
-      component.morphToQuestionType(targetType);
+      component.morphToQuestionType(QuestionType.MultipleChoiceQuestion);
       expect(quizService.quiz.questionList[0].TYPE).not.toEqual(targetType);
       expect(quizService.quiz.questionList[0].TYPE).toEqual(initType);
     }));

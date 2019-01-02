@@ -9,7 +9,6 @@ import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-eleme
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
@@ -52,7 +51,7 @@ describe('FooterBarComponent', () => {
           useClass: StorageServiceMock,
         }, FooterBarService, SharedService, {
           provide: QuizService,
-          useClass: CurrentQuizMockService,
+          useClass: QuizMockService,
         }, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
@@ -124,9 +123,9 @@ describe('FooterBarComponent', () => {
     component.footerElemIndex = 1;
     component.moveRight();
     expect(component.footerElemIndex).toEqual(2);
-    for (let i = 0; i < component.footerElements.length; i++) {
+    for (let i = 0; i < footerBarService.footerElements.length; i++) {
       component.moveRight();
     }
-    expect(component.footerElemIndex).toEqual(component.footerElements.length - 1);
+    expect(component.footerElemIndex).toEqual(footerBarService.footerElements.length - 1);
   })));
 });

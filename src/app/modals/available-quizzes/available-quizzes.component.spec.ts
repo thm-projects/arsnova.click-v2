@@ -7,11 +7,10 @@ import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
-import { LobbyApiService } from '../../service/api/lobby/lobby-api.service';
+import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -53,12 +52,12 @@ describe('AvailableQuizzesComponent', () => {
         IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, NgbActiveModal, LobbyApiService, QuizApiService, {
+        }, NgbActiveModal, MemberApiService, QuizApiService, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, {
           provide: QuizService,
-          useClass: CurrentQuizMockService,
+          useClass: QuizMockService,
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
@@ -66,9 +65,6 @@ describe('AvailableQuizzesComponent', () => {
           provide: WebsocketService,
           useClass: WebsocketMockService,
         }, SharedService, {
-          provide: QuizService,
-          useClass: QuizMockService,
-        }, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
         },
@@ -131,8 +127,8 @@ describe('AvailableQuizzesComponent', () => {
     expect(trackingService.trackClickEvent).toHaveBeenCalled();
   })));
 
-  it('#editQuiz', (inject([QuizService, TrackingService, QuizService, Router],
-    (quizService: QuizService, trackingService: TrackingService, quizService: QuizService, router: Router) => {
+  it('#editQuiz',
+    (inject([QuizService, TrackingService, QuizService, Router], (quizService: QuizService, trackingService: TrackingService, router: Router) => {
       const quiz = quizService.quiz;
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});

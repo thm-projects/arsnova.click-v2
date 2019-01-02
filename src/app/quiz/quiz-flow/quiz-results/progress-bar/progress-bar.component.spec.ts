@@ -106,9 +106,10 @@ describe('ProgressBarComponent', () => {
       const question = <AbstractChoiceQuestionEntity>quizService.quiz.questionList[component.questionIndex];
 
       attendeeService.addMember(new Attendee({
-        id: 0,
+        id: '',
         name: 'testNickname',
         groupName: 'Default',
+        currentQuizName: '',
         colorCode: '#00000',
         responses: [],
       }));

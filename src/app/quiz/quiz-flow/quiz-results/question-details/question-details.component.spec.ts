@@ -13,7 +13,6 @@ import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../../../service/current-quiz/current-quiz.mock.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
@@ -87,9 +86,6 @@ describe('QuestionDetailsComponent', () => {
           provide: AttendeeService,
           useClass: AttendeeMockService,
         }, QuestionTextService, {
-          provide: QuizService,
-          useClass: CurrentQuizMockService,
-        }, {
           provide: ActivatedRoute,
           useClass: MockRouter,
         },

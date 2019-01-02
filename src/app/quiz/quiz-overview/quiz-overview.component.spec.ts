@@ -17,7 +17,6 @@ import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
@@ -105,9 +104,6 @@ describe('QuizOverviewComponent', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
-          provide: QuizService,
-          useClass: CurrentQuizMockService,
-        }, {
           provide: QuizService,
           useClass: QuizMockService,
         }, {

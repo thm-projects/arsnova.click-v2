@@ -13,11 +13,11 @@ import { AttendeeMockService } from '../../../service/attendee/attendee.mock.ser
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { I18nService } from '../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
+import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
@@ -66,7 +66,7 @@ describe('QuizResultsComponent', () => {
           useClass: ConnectionMockService,
         }, {
           provide: QuizService,
-          useClass: CurrentQuizMockService,
+          useClass: QuizMockService,
         }, {
           provide: WebsocketService,
           useClass: WebsocketMockService,
@@ -94,7 +94,7 @@ describe('QuizResultsComponent', () => {
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    quizService.questionIndex = 0;
+    quizService.quiz.currentQuestionIndex = 0;
   })));
 
   it(`should be created`, () => {
@@ -106,19 +106,21 @@ describe('QuizResultsComponent', () => {
   });
 
   it(`#showLeaderBoardButton`, inject([QuizService], (quizService: QuizService) => {
-    expect(quizService.quiz[quizService.questionIndex] instanceof SurveyQuestion).toBeFalsy();
-    expect(component.showLeaderBoardButton(quizService.questionIndex)).toBeTruthy();
+    expect(quizService.quiz[quizService.quiz.currentQuestionIndex] instanceof SurveyQuestion).toBeFalsy();
+    expect(component.showLeaderBoardButton(quizService.quiz.currentQuestionIndex)).toBeTruthy();
   }));
 
   it(`#showStopQuizButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     quizService['_isOwner'] = true;
     quizService.currentQuestion().timer = 0;
     attendeeService.addMember(new Attendee({
-      id: 0,
+      id: '',
       name: 'testNickname',
       groupName: 'Default',
       colorCode: '#00000',
       responses: [],
+      currentQuizName: '',
+      ticket: '',
     }));
 
     expect(component.showStopQuizButton()).toBeTruthy();
@@ -128,11 +130,13 @@ describe('QuizResultsComponent', () => {
     quizService.currentQuestion().timer = 10;
     quizService['_isOwner'] = true;
     attendeeService.addMember(new Attendee({
-      id: 0,
+      id: '',
       name: 'testNickname',
       groupName: 'Default',
       colorCode: '#00000',
       responses: [],
+      currentQuizName: '',
+      ticket: '',
     }));
     component.countdown = new Countdown(quizService.currentQuestion(), new Date().getTime());
 
@@ -149,16 +153,17 @@ describe('QuizResultsComponent', () => {
 
   it(`#hideProgressbarCssStyle`, inject([QuizService], (quizService: QuizService) => {
     quizService.readingConfirmationRequested = false;
-    quizService.questionIndex = 0;
+    quizService.quiz.currentQuestionIndex = 0;
     expect(component.hideProgressbarCssStyle()).toBeTruthy();
   }));
 
   it(`#showConfidenceRate`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     attendeeService.addMember(new Attendee({
-      id: 0,
+      id: '',
       name: 'testNickname',
       groupName: 'Default',
       colorCode: '#00000',
+      currentQuizName: '',
       responses: [
         {
           value: 0,
@@ -182,10 +187,11 @@ describe('QuizResultsComponent', () => {
 
   it(`#getConfidenceData`, inject([AttendeeService, I18nService], (attendeeService: AttendeeService, i18nService: I18nService) => {
     attendeeService.addMember(new Attendee({
-      id: 0,
+      id: '',
       name: 'testNickname',
       groupName: 'Default',
       colorCode: '#00000',
+      currentQuizName: '',
       responses: [
         {
           value: 0,
@@ -210,10 +216,11 @@ describe('QuizResultsComponent', () => {
 
   it(`#showReadingConfirmation`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     attendeeService.addMember(new Attendee({
-      id: 0,
+      id: '',
       name: 'testNickname',
       groupName: 'Default',
       colorCode: '#00000',
+      currentQuizName: '',
       responses: [
         {
           value: 0,
@@ -235,10 +242,11 @@ describe('QuizResultsComponent', () => {
 
   it(`#getReadingConfirmationData`, inject([AttendeeService, I18nService], (attendeeService: AttendeeService, i18nService: I18nService) => {
     attendeeService.addMember(new Attendee({
-      id: 0,
+      id: '',
       name: 'testNickname',
       groupName: 'Default',
       colorCode: '#00000',
+      currentQuizName: '',
       responses: [
         {
           value: 0,

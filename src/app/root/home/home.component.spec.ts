@@ -16,7 +16,6 @@ import { AttendeeMockService } from '../../service/attendee/attendee.mock.servic
 import { AttendeeService } from '../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -92,9 +91,6 @@ describe('HomeComponent', () => {
         }, CasLoginService, UserService, {
           provide: TrackingService,
           useClass: TrackingMockService,
-        }, {
-          provide: QuizService,
-          useClass: CurrentQuizMockService,
         }, {
           provide: FileUploadService,
           useClass: FileUploadMockService,

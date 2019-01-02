@@ -14,7 +14,6 @@ import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component
 import { HeaderComponent } from '../../header/header/header.component';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -61,9 +60,6 @@ describe('RootComponent', () => {
       ],
       providers: [
         UserService, IndexedDbService, HeaderLabelService, ThemesService, {
-          provide: QuizService,
-          useClass: CurrentQuizMockService,
-        }, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, FooterBarService, SettingsService, {

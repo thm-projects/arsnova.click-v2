@@ -10,10 +10,10 @@ import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../service/current-quiz/current-quiz.mock.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
@@ -61,7 +61,7 @@ describe('UserAdminComponent', () => {
           useClass: StorageServiceMock,
         }, HeaderLabelService, ThemesService, {
           provide: QuizService,
-          useClass: CurrentQuizMockService,
+          useClass: QuizMockService,
         }, {
           provide: TrackingService,
           useClass: TrackingMockService,

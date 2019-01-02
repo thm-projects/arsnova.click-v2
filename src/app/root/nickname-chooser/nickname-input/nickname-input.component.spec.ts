@@ -13,8 +13,8 @@ import { AttendeeMockService } from '../../../service/attendee/attendee.mock.ser
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
-import { CurrentQuizMockService } from '../../../service/current-quiz/current-quiz.mock.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
@@ -59,7 +59,7 @@ describe('NicknameInputComponent', () => {
           useClass: StorageServiceMock,
         }, {
           provide: QuizService,
-          useClass: CurrentQuizMockService,
+          useClass: QuizMockService,
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
