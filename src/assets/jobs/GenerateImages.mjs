@@ -7,7 +7,6 @@ import themeData from '../themeData';
 import process from 'process';
 import child_process from 'child_process';
 import minimist from 'minimist';
-import {default as chromeLauncher} from 'chrome-launcher';
 import {default as imagemin} from 'imagemin';
 import {default as imageminPngquant} from 'imagemin-pngquant';
 
@@ -71,8 +70,6 @@ class GenerateImages {
   }
 
   async generateFrontendPreview(host) {
-    const CHROME_BIN = process.env.CHROME_BIN;
-    const flags = ['--headless', '--hide-scrollbars', '--no-sandbox', '--remote-debugging-port=9222', '--disable-gpu', '--user-data-dir=remote-profile'];
     const params = [];
     const themePreviewEndpoint = `${host}/preview`;
     themes.forEach((theme) => {
@@ -81,22 +78,8 @@ class GenerateImages {
       });
     });
 
-    if (await this.isRunning(CHROME_BIN, CHROME_BIN, CHROME_BIN)) {
-      throw new Error('Chrome instance already running');
-    }
-
-    const chromeInstance = await chromeLauncher.launch({
-      startingUrl: 'https://google.com',
-      chromeFlags: flags,
-      chromePath: CHROME_BIN,
-      port: 9222
-    });
-    console.log(`Chrome debugging port running on ${chromeInstance.port}`);
-
-    console.log('chrome stuff', CHROME_BIN, themePreviewEndpoint, params);
-    // const chromeInstance = child_process.spawnSync(CHROME_BIN, flags);
     const chromeDriver = child_process.spawn(`node`, [
-      path.join('ChromeDriver.js'), `--urls=${JSON.stringify(params)} --full --delay=100`
+      path.join('puppeteer.js'), `--urls=${JSON.stringify(params)}`
     ]);
 
     chromeDriver.stdout.on('data', (data) => {
@@ -107,7 +90,6 @@ class GenerateImages {
     });
     chromeDriver.on('exit', (code, signal) => {
       console.log(`ChromeDriver: Done. Exit ${!!code ? 'code' : 'signal'} was: ${!!code ? code : signal}`);
-      chromeInstance.kill();
     });
 
   }
