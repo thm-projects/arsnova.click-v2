@@ -344,12 +344,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private async reserveQuiz(questionGroup: QuizEntity, routingTarget: Array<string>): Promise<void> {
-    console.log(questionGroup);
     this.quizApiService.setQuiz(questionGroup).subscribe(modifiedQuestionGroup => {
+      this.quizService.quiz = new QuizEntity(questionGroup);
+      this.quizService.persist();
+
       sessionStorage.setItem('token', modifiedQuestionGroup.adminToken);
       this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
       this.quizService.isOwner = true;
-      this.quizService.persist();
 
       if (this.isAddingABCDQuiz) {
         this.trackingService.trackConversionEvent({
