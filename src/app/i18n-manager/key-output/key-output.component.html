@@ -7,18 +7,16 @@
     <div #langDataElement
          style="height: calc(100vh - 200px);">
 
-      <div *ngFor="let elem of (languageLoaderService.parsedLangData | filterKeys:filter | searchFilter:searchFilter | sort) | justafew:scrollPos; let i = index"
+      <div *ngFor="let elem of (languageLoaderService.parsedLangData | filterKeys:filter | searchFilter:searchFilter | sort) | justafew:scrollPos"
            class="px-2 py-2 pointer d-flex"
-           [class.bg-warning]="selectedIndex === i"
-           (keydown.ArrowUp)="selectKey(i - 1)"
-           (keydown.ArrowDown)="selectKey(i + 1)"
-           (click)="selectKey(i)">
+           [class.bg-warning]="selectedKey === elem.key"
+           (click)="selectKey(elem.key)">
         <fa-icon *ngIf="hasEmptyKeys(elem)"
                  class="text-danger mr-2"
                  [icon]="'exclamation-triangle'"></fa-icon>
         <span class="text-truncate"
               [title]="elem.key">{{elem.key}}</span>
-        <fa-icon *ngIf="selectedIndex === i"
+        <fa-icon *ngIf="selectedKey === elem.key"
                  class="ml-auto pointer"
                  (click)="removeKey(elem.key)"
                  [icon]="'trash'"></fa-icon>

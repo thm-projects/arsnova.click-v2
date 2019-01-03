@@ -17,15 +17,15 @@ export class KeyOutputComponent {
   @Input() public filter = Filter.None;
   @Input() public searchFilter = '';
 
-  private _selectedIndex: number;
+  private _selectedKey: string;
 
-  get selectedIndex(): number {
-    return this._selectedIndex;
+  get selectedKey(): string {
+    return this._selectedKey;
   }
 
-  set selectedIndex(value: number) {
-    this._selectedIndex = value;
-    this.changeEmitter.emit(value);
+  set selectedKey(value: string) {
+    this._selectedKey = value;
+    this.changeEmitter.emit(this.languageLoaderService.parsedLangData.find(val => val.key === value));
   }
 
   @Output() private changeEmitter = new EventEmitter<Object>();
@@ -41,11 +41,11 @@ export class KeyOutputComponent {
     }
   }
 
-  public selectKey(index: number): void {
-    if (this.selectedIndex === index) {
-      this.selectedIndex = undefined;
+  public selectKey(key: string): void {
+    if (this.selectedKey === key) {
+      this.selectedKey = undefined;
     } else {
-      this.selectedIndex = index;
+      this.selectedKey = key;
     }
   }
 

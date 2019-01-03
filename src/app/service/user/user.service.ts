@@ -28,7 +28,6 @@ export class UserService {
     }
     this.storageService.switchDb(this._username);
     this._isLoggedIn = value;
-    console.log(this._staticLoginTokenContent, this._username);
     this._loginNotifier.emit(value);
   }
 

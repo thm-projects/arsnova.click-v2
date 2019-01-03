@@ -10,18 +10,19 @@
 <div class="modal-body">
   <div class="form-row">
     <div class="form-group col-12 col-sm">
-      <label>
+      <label class="w-100">
         <span>Username</span>
         <input type="text"
                class="form-control"
                name="name"
+               placeholder="Username"
                [(ngModel)]="name"/>
       </label>
     </div>
   </div>
   <div class="form-row">
     <div class="form-group col-12 col-sm">
-      <label>
+      <label class="w-100">
         <span>Password</span>
         <input type="password"
                class="form-control"
@@ -33,10 +34,11 @@
   </div>
   <div class="form-row">
     <div class="form-group col-12 col-sm">
-      <label>
+      <label class="w-100">
         <span>Gitlab Token</span>
         <input type="text"
                class="form-control"
+               placeholder="Api Access Token (optional)"
                name="gitlabToken"
                [(ngModel)]="gitlabToken"/>
       </label>
@@ -44,7 +46,7 @@
   </div>
   <div class="form-row">
     <div class="form-group col-12 col-sm">
-      <label>
+      <label class="w-100">
         <span>User Authorizations</span>
         <select [(ngModel)]="userAuthorizations"
                 name="userAuthorizations"

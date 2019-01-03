@@ -106,8 +106,8 @@ export class ConnectionService {
           this.pending = false;
           this.serverAvailable = true;
           this._websocketAvailable = true;
+          console.log('connectionservice - websocket is now available');
           setTimeout(() => {
-            console.log('connectionservice - websocket not available, waiting 500ms');
             this.calculateRTT(new Date().getTime());
           }, 500);
           resolve2(httpData);

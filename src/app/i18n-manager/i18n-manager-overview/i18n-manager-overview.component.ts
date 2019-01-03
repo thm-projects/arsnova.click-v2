@@ -39,6 +39,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   set searchFilter(value: string) {
     this._searchFilter = value;
+    this._selectedKey = null;
   }
 
   private _filter = Filter.None;
@@ -137,14 +138,15 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   public setProject(value: Project): void {
     this._selectedKey = null;
+    this._searchFilter = '';
     this.languageLoaderService.reset();
     this.projectLoaderService.currentProject = value;
 
     this.reloadLanguageData();
   }
 
-  public dataChanged(index: number): void {
-    this._selectedKey = this.languageLoaderService.parsedLangData[index];
+  public dataChanged(key: any): void {
+    this._selectedKey = key;
   }
 
   public getKeys(dataNode: object): Array<string> {
