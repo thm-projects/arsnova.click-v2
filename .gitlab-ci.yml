@@ -71,7 +71,7 @@ generate_assets:
     - sleep 15s
     - cd browser/assets/jobs
     - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
-    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4000
+    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4000 --root=true
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
   artifacts:

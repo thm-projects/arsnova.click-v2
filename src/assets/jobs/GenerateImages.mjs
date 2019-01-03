@@ -69,7 +69,7 @@ class GenerateImages {
     console.log('----------------------');
   }
 
-  async generateFrontendPreview(host) {
+  async generateFrontendPreview(host, isRoot) {
     const params = [];
     const themePreviewEndpoint = `${host}/preview`;
     themes.forEach((theme) => {
@@ -79,7 +79,7 @@ class GenerateImages {
     });
 
     const chromeDriver = child_process.spawn(`node`, [
-      path.join('puppeteer.js'), `--urls=${JSON.stringify(params)}`
+      path.join('puppeteer.js'), `--urls=${JSON.stringify(params)}`, `${isRoot ? '--no-sandbox' : ''}`
     ]);
 
     chromeDriver.stdout.on('data', (data) => {
@@ -198,7 +198,7 @@ const init = () => {
           generateImages.help();
           break;
         }
-        generateImages.generateFrontendPreview(argv.host);
+        generateImages.generateFrontendPreview(argv.host, argv.root);
         break;
       case 'generateLogoImages':
         generateImages.generateLogoImages();
