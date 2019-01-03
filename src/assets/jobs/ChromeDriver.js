@@ -93,8 +93,7 @@ async function runNavigation({Page, DOM, Emulation, client, url, imgPath}) {
       }
 
       const screenshot = await Page.captureScreenshot({format});
-      const buffer = new Buffer(screenshot.data, 'base64');
-      file.writeFile(`${imgPath}`, buffer, 'base64', function (err) {
+      file.writeFile(`${imgPath}`, screenshot.data, function (err) {
         if (err) {
           console.error(err);
         } else {

@@ -8,6 +8,8 @@ import process from 'process';
 import child_process from 'child_process';
 import minimist from 'minimist';
 import {default as chromeLauncher} from 'chrome-launcher';
+import {default as imagemin} from 'imagemin';
+import {default as imageminPngquant} from 'imagemin-pngquant';
 
 const argv = minimist(process.argv.slice(2));
 
@@ -94,7 +96,7 @@ class GenerateImages {
     console.log('chrome stuff', CHROME_BIN, themePreviewEndpoint, params);
     // const chromeInstance = child_process.spawnSync(CHROME_BIN, flags);
     const chromeDriver = child_process.spawn(`node`, [
-      path.join('ChromeDriver.js'), `--urls=${JSON.stringify(params)}`
+      path.join('ChromeDriver.js'), `--urls=${JSON.stringify(params)} --full --delay=100`
     ]);
 
     chromeDriver.stdout.on('data', (data) => {
@@ -135,13 +137,18 @@ class GenerateImages {
           `<svg><rect x="0" y="0" width="${size.width}" height="${size.height}" rx="${size.roundX}" ry="${size.roundY}"/></svg>`
         );
 
-        const minifiedBuffer = await sharp(source)
+        const buffer = await sharp(source)
         .resize(size.width, size.height)
         .overlayWith(roundedCorners, {cutout: true})
         .flatten({background: theme})
         .sharpen()
         .png()
         .toBuffer();
+
+        const minifiedBuffer = await imagemin.buffer(buffer, {
+          plugins: [imageminPngquant({quality: '65-80'})]
+        });
+
         fs.writeFileSync(targetLogo, minifiedBuffer, 'binary');
         console.log(`Writing file '${targetLogo}'`);
         console.log(`Icon with size of ${derivate}px generated for theme ${themeName}`);

@@ -69,7 +69,10 @@ generate_assets:
     - apt-get -y install --allow-unauthenticated google-chrome-stable imagemagick libpng-dev zlib1g-dev clang
     - export CHROME_BIN=`whereis google-chrome | cut -d " " -f 2`
     - npm install
-    - cd dist/browser/assets/jobs
+    - cd dist
+    - node server &
+    - sleep 15s
+    - cd browser/assets/jobs
     - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4000
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
