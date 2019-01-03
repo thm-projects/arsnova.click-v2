@@ -48,7 +48,7 @@ export class IndexedDbService {
     if (dbName.length > 0 && dbName !== undefined) {
       this._dbName = dbName;
     } else {
-      console.log('Error: invalid dbName');
+      console.error('Error: invalid dbName');
     }
   }
 
