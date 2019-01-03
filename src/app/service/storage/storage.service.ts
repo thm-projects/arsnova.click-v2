@@ -62,6 +62,7 @@ export class StorageService {
   }
 
   public switchDb(username: string): void {
+    this.indexedDbService.dbInstance = null;
     console.log('switching db to', username || DbName.Default);
     this.initDb(username || DbName.Default);
   }
@@ -73,6 +74,7 @@ export class StorageService {
         name: DbTable.Quiz,
       },
     ]).subscribe(() => {}, () => {}, () => {
+      console.log('init db completed');
       this.read(DbTable.Config, StorageKey.PrivateKey).subscribe(val => {
         if (!val) {
           val = this.generatePrivateKey();
@@ -80,6 +82,7 @@ export class StorageService {
         }
         localStorage.setItem('privateKey', val);
         this.indexedDbService.stateNotifier.next('initialized');
+        console.log('updated indexdb state notifier');
       });
     });
   }

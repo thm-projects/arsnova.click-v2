@@ -21,8 +21,11 @@ export class IndexedDbService {
     return this._dbName;
   }
 
-  private _indexedDB: any;
   private _dbInstance: any;
+
+  set dbInstance(value: any) {
+    this._dbInstance = value;
+  }
 
   private _isInitialized = !!this._dbInstance;
 
@@ -30,6 +33,7 @@ export class IndexedDbService {
     return this._isInitialized;
   }
 
+  private _indexedDB: any;
   private readonly _stateNotifier = new BehaviorSubject<string>(this.isInitialized ? 'initialized' : null);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -190,11 +194,11 @@ export class IndexedDbService {
 
   public create(schema?: Array<ISchema>): Observable<any> {
     return Observable.create((observer: any) => {
-      this._dbInstance = this._indexedDB.open(this._dbName);
+      const instance = this._indexedDB.open(this._dbName);
 
-      this._dbInstance.onupgradeneeded = () => {
+      instance.onupgradeneeded = () => {
         // The database did not previously exist, so create object stores and indexes.
-        const db = this._dbInstance.result;
+        const db = instance.result;
 
         for (let i = 0; i < schema.length; i++) {
           const store = db.createObjectStore(schema[i].name, {
@@ -221,13 +225,13 @@ export class IndexedDbService {
         observer.next('done');
       };
 
-      this._dbInstance.onerror = () => {
-        this.handleError(this._dbInstance.error);
-        observer.error(this._dbInstance.error);
+      instance.onerror = () => {
+        this.handleError(instance.error);
+        observer.error(instance.error);
       };
 
-      this._dbInstance.onsuccess = () => {
-        this.stateNotifier.next('initialized');
+      instance.onsuccess = () => {
+        this._dbInstance = instance;
         observer.complete();
       };
     });
@@ -258,21 +262,17 @@ export class IndexedDbService {
   }
 
   private open(): Observable<any> {
+    this._dbInstance = null;
+
     return Observable.create((observer: any) => {
-      if (this._dbInstance) {
-        observer.next(this._dbInstance.result);
-        observer.complete();
-        return;
-      }
+      const instance = this._indexedDB.open(this._dbName);
 
-      this._dbInstance = this._indexedDB.open(this._dbName);
-
-      this._dbInstance.onsuccess = () => {
-        this.stateNotifier.next('initialized');
+      instance.onsuccess = () => {
+        this._dbInstance = instance;
         observer.next(this._dbInstance.result);
         observer.complete();
       };
-      this._dbInstance.onerror = () => this.handleError.call(this, this._dbInstance.error);
+      instance.onerror = () => this.handleError.call(this, instance.error);
     });
   }
 }
