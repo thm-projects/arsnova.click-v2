@@ -79,7 +79,7 @@ class GenerateImages {
     });
 
     const chromeDriver = child_process.spawn(`node`, [
-      path.join('puppeteer.js'), `--urls=${JSON.stringify(params)}`, `${isRoot ? '--no-sandbox' : ''}`
+      path.join('puppeteer.js'), `--urls=${JSON.stringify(params)}`, `${isRoot ? '--root=true' : ''}`
     ]);
 
     chromeDriver.stdout.on('data', (data) => {

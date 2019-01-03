@@ -8,7 +8,7 @@ const format = argv.format === 'png' ? 'png' : 'jpeg';
 const viewportWidth = argv.viewportWidth || 1024;
 const viewportHeight = argv.viewportHeight || 768;
 const delay = argv.delay || 0;
-const params = argv.noSandbox ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {};
+const params = argv.root ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {};
 
 (async () => {
   const browser = await puppeteer.launch(params);
