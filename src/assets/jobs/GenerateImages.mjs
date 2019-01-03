@@ -131,9 +131,13 @@ class GenerateImages {
           roundX: Math.round((splittedDerivate[0] / Math.PI)),
           roundY: Math.round((splittedDerivate[1] / Math.PI))
         };
+        const roundedCorners = Buffer.from(
+          `<svg><rect x="0" y="0" width="${size.width}" height="${size.height}" rx="${size.roundX}" ry="${size.roundY}"/></svg>`
+        );
 
         const minifiedBuffer = await sharp(source)
         .resize(size.width, size.height)
+        .overlayWith(roundedCorners, {cutout: true})
         .flatten({background: theme})
         .sharpen()
         .png()
