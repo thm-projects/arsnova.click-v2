@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { QuizState } from '../../../lib/enums/QuizState';
 import { AdminService } from '../../service/api/admin/admin.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 
@@ -27,7 +28,7 @@ export class QuizAdminComponent implements OnInit {
   }
 
   public isActiveQuiz(quiz): boolean {
-    return quiz.hasOwnProperty('originalObject');
+    return [QuizState.Active, QuizState.Finished, QuizState.Running].includes(quiz.state);
   }
 
   public isDeletingElem(index: number): boolean {
