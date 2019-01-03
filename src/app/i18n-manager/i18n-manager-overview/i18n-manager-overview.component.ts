@@ -31,12 +31,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     return this._selectedKey;
   }
 
-  private _changedData = false;
-
-  get changedData(): boolean {
-    return this._changedData;
-  }
-
   private _searchFilter = '';
 
   get searchFilter(): string {
@@ -99,7 +93,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
-    private languageLoaderService: LanguageLoaderService,
+    public languageLoaderService: LanguageLoaderService,
     public modalOrganizerService: ModalOrganizerService,
     public projectLoaderService: ProjectLoaderService,
     public userService: UserService,
@@ -134,7 +128,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   public updateData(): void {
     this.languageLoaderService.updateProject();
-    this._changedData = false;
   }
 
   public changeFilter(filter: number): void {
@@ -143,15 +136,15 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   }
 
   public setProject(value: Project): void {
-    this._selectedKey = undefined;
+    this._selectedKey = null;
     this.languageLoaderService.reset();
     this.projectLoaderService.currentProject = value;
 
     this.reloadLanguageData();
   }
 
-  public dataChanged(key): void {
-    this._selectedKey = key;
+  public dataChanged(index: number): void {
+    this._selectedKey = this.languageLoaderService.parsedLangData[index];
   }
 
   public getKeys(dataNode: object): Array<string> {
@@ -164,7 +157,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public updateKey(event, langRef, key): void {
     const value = event.target.value;
 
-    this._changedData = true;
+    this.languageLoaderService.changedData = true;
 
     if (!value.length) {
       delete key.value[langRef];

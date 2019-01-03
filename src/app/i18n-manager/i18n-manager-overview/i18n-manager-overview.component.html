@@ -19,11 +19,11 @@
     <div *ngIf="this.projectLoaderService.connected"
          class="btn-group ml-auto">
       <button class="btn btn-secondary pointer"
-              [disabled]="!changedData"
+              [disabled]="!this.languageLoaderService.changedData"
               (click)="updateData()"><span>Save Changes</span>
       </button>
       <button class="btn btn-secondary pointer"
-              (click)="modalOrganizerService.addKey(languageLoaderService.parsedLangData)">
+              (click)="modalOrganizerService.addKey()">
         <span>Add Key</span>
       </button>
     </div>
@@ -74,7 +74,6 @@
        [class.col-sm-6]="!!selectedKey">
     <app-key-output [filter]="filter"
                     [searchFilter]="searchFilter"
-                    [changedData]="changedData"
                     (changeEmitter)="dataChanged($event)"></app-key-output>
   </div>
   <div class="col-12 col-sm-6 d-flex flex-column"

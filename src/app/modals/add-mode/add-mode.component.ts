@@ -3,7 +3,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 
 @Component({
-  selector: 'app-add-mode', templateUrl: './add-mode.component.html', styleUrls: ['./add-mode.component.scss'],
+  selector: 'app-add-mode',
+  templateUrl: './add-mode.component.html',
+  styleUrls: ['./add-mode.component.scss'],
 })
 export class AddModeComponent {
 
@@ -38,9 +40,13 @@ export class AddModeComponent {
       return;
     }
 
-    this.dataMap.push({ key: this.key, value: this.value });
+    this.languageLoaderService.parsedLangData.push({
+      key: this.key,
+      value: this.value,
+    });
+    this.languageLoaderService.changedData = true;
 
     window.scroll(0, this.scrollY);
-    this.activeModal.close({ dataMap: this.dataMap });
+    this.activeModal.close();
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Filter } from '../../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
@@ -7,16 +7,13 @@ import { ProjectLoaderService } from '../../service/project-loader/project-loade
   selector: 'app-key-output',
   templateUrl: './key-output.component.html',
   styleUrls: ['./key-output.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeyOutputComponent {
   public static readonly TYPE = 'KeyOutputComponent';
 
-  public readonly filters = Filter;
-  @Input() public changedData;
   public scrollPos = 0;
-
   public readonly Math = Math;
+
   @Input() public filter = Filter.None;
   @Input() public searchFilter = '';
 
@@ -32,7 +29,6 @@ export class KeyOutputComponent {
   }
 
   @Output() private changeEmitter = new EventEmitter<Object>();
-  @Output() private changeLangEmitter = new EventEmitter<string>();
 
   constructor(public projectLoaderService: ProjectLoaderService, public languageLoaderService: LanguageLoaderService) {
   }
@@ -57,8 +53,10 @@ export class KeyOutputComponent {
     return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.language).length;
   }
 
-  public removeKey(target: any): void {
-    this.languageLoaderService.parsedLangData.splice(this.languageLoaderService.parsedLangData.findIndex(elem => elem === target), 1);
+  public removeKey(key: string): void {
+    this.languageLoaderService.parsedLangData.splice(this.languageLoaderService.parsedLangData.findIndex(val => val.key === key), 1);
+    this.selectKey(undefined);
+    this.languageLoaderService.changedData = true;
   }
 
   public getKeys(dataNode: object): Array<string> {

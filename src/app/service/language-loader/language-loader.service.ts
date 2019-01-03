@@ -23,6 +23,16 @@ export class LanguageLoaderService {
     return this._unusedKeys;
   }
 
+  private _changedData = false;
+
+  get changedData(): boolean {
+    return this._changedData;
+  }
+
+  set changedData(value: boolean) {
+    this._changedData = value;
+  }
+
   constructor(private i18nManagerService: I18nManagerApiService, private projectLoaderService: ProjectLoaderService) {
   }
 
@@ -31,7 +41,6 @@ export class LanguageLoaderService {
   }
 
   public getLangData(): void {
-    console.log('getting langfile for project', this.projectLoaderService.currentProject);
     this.i18nManagerService.getLangFileForProject(this.projectLoaderService.currentProject).subscribe((response: any) => {
       if (response.status !== StatusProtocol.Success) {
         this.projectLoaderService.connected = false;
@@ -40,6 +49,7 @@ export class LanguageLoaderService {
       this.projectLoaderService.connected = true;
       this._parsedLangData = response.payload.langData;
       this._unusedKeys = response.payload.unused;
+      this._changedData = false;
     });
   }
 
@@ -47,7 +57,9 @@ export class LanguageLoaderService {
     this.i18nManagerService.postUpdateLangForProject(this.projectLoaderService.currentProject, this.parsedLangData).subscribe((response: any) => {
       if (response.status !== StatusProtocol.Success) {
         console.log(response);
+        return;
       }
+      this._changedData = false;
     });
   }
 }
