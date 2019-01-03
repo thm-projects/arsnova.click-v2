@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AbstractAnswerEntity } from '../../../lib/entities/answer/AbstractAnswerEntity';
 import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
@@ -33,7 +34,8 @@ import { UserService } from '../../service/user/user.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-})
+}) //
+@AutoUnsubscribe('_subscriptions')
 export class HomeComponent implements OnInit, OnDestroy {
   public static TYPE = 'HomeComponent';
   public canJoinQuiz = false;
@@ -82,6 +84,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private _routerSubscription: Subscription;
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private _subscriptions: Array<Subscription> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -110,7 +114,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'default';
 
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.stateNotifier.subscribe(state => {
+      this._subscriptions.push(this.storageService.stateNotifier.subscribe(state => {
         if (state === 'initialized') {
           this.cleanUpSessionStorage();
           this.storageService.getAllQuiznames().then(quizNames => {
@@ -128,7 +132,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             this.ownPublicQuizAmount = val;
           });
         }
-      });
+      }));
     }
     this.updateFooterElements(this.userService.isLoggedIn);
     this.userService.loginNotifier.subscribe(isLoggedIn => {

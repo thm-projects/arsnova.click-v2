@@ -45,7 +45,7 @@ export class ThemesService {
       return;
     }
 
-    const themeConfig = await Promise.all<any>([
+    const themeConfig = await Promise.all<any>(<any>[
       this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise(),
       this.storageService.read(DbTable.Config, StorageKey.QuizTheme).toPromise(),
       new Promise(resolve => {

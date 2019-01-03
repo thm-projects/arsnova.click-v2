@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
-import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -23,7 +22,6 @@ export class QuizJoinComponent implements OnInit {
     public quizService: QuizService,
     private themesService: ThemesService,
     private quizApiService: QuizApiService,
-    private memberApiService: MemberApiService,
   ) {
   }
 

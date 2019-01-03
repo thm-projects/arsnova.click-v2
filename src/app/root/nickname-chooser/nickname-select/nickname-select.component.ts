@@ -12,7 +12,6 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
-import { StorageService } from '../../../service/storage/storage.service';
 import { UserService } from '../../../service/user/user.service';
 
 @Component({
@@ -45,7 +44,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private quizService: QuizService,
     private memberApiService: MemberApiService,
-    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;

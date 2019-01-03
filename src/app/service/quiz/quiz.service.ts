@@ -35,6 +35,10 @@ export class QuizService {
   set quiz(value: QuizEntity) {
     if (value) {
       sessionStorage.setItem('currentQuizName', value.name);
+      // noinspection SuspiciousInstanceOfGuard
+      if (!(value instanceof QuizEntity)) {
+        value = new QuizEntity(value);
+      }
     }
     this._quiz = value;
     this.quizUpdateEmitter.emit(value);

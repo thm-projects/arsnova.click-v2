@@ -105,8 +105,6 @@ export class ConnectionService {
         this.statisticsApiService.getBaseStatistics().subscribe(httpData => {
           this.pending = false;
           this.serverAvailable = true;
-          this._websocketAvailable = true;
-          console.log('connectionservice - websocket is now available');
           setTimeout(() => {
             this.calculateRTT(new Date().getTime());
           }, 500);
@@ -188,17 +186,21 @@ export class ConnectionService {
     const defaultSocket = <Subject<MessageEvent>>this.websocketService.connect();
 
     if (defaultSocket) {
+      console.log('connectionservice - websocket is now available');
       this._socket = <Subject<IMessage>>defaultSocket.pipe(map((response: MessageEvent): IMessage => {
         const parsedResponse = JSON.parse(response.data);
-        console.log('connectionservice - received message', parsedResponse);
         this._websocketAvailable = true;
-
-        if (parsedResponse.payload && parsedResponse.payload.activeQuizzes) {
-          this.sharedService.activeQuizzes = [...parsedResponse.payload.activeQuizzes];
-        }
+        console.log('connectionservice - received message', parsedResponse);
 
         return parsedResponse;
       }));
+      this._socket.subscribe(val => {
+        this._websocketAvailable = true;
+
+        if (val.payload && val.payload.activeQuizzes) {
+          this.sharedService.activeQuizzes = [...val.payload.activeQuizzes];
+        }
+      });
     }
   }
 }
