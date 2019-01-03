@@ -71,6 +71,6 @@ export class InfoComponent implements OnInit, OnDestroy {
   }
 
   public openApiDocsWindow(): void {
-    window.open(`${DefaultSettings.httpApiEndpoint}/api-docs`);
+    window.open(`${DefaultSettings.httpApiEndpoint}/api-docs/`);
   }
 }

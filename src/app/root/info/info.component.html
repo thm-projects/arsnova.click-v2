@@ -5,7 +5,7 @@
        [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
     <button *ngFor="let elem of infoButtons"
             type="button"
-            class="btn pointer"
+            class="btn pointer text-nowrap"
             [class.btn-secondary]="currentData === elem.id"
             [class.btn-default]="currentData !== elem.id"
             (click)="toInfoContent(elem.id)"
@@ -13,12 +13,12 @@
       <span [innerHTML]="(elem.i18nRef) | translate"></span>
     </button>
     <button type="button"
-            class="btn btn-default pointer"
+            class="btn btn-default pointer text-nowrap"
             onclick="window.open('https://arsnova.eu/blog');">
       <span [innerHTML]="'region.footer.footer_bar.blog' | translate"></span>
     </button>
     <button type="button"
-            class="btn btn-default pointer"
+            class="btn btn-default pointer text-nowrap"
             (click)="openApiDocsWindow()">
       <span [innerHTML]="'region.footer.footer_bar.api-docs' | translate"></span>
     </button>
