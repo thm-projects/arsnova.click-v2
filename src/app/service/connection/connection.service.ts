@@ -189,18 +189,22 @@ export class ConnectionService {
       console.log('connectionservice - websocket is now available');
       this._socket = <Subject<IMessage>>defaultSocket.pipe(map((response: MessageEvent): IMessage => {
         const parsedResponse = JSON.parse(response.data);
-        this._websocketAvailable = true;
         console.log('connectionservice - received message', parsedResponse);
 
+        this._websocketAvailable = true;
+        this.parseActiveQuizzes(parsedResponse);
         return parsedResponse;
       }));
       this._socket.subscribe(val => {
         this._websocketAvailable = true;
-
-        if (val.payload && val.payload.activeQuizzes) {
-          this.sharedService.activeQuizzes = [...val.payload.activeQuizzes];
-        }
+        this.parseActiveQuizzes(val);
       });
+    }
+  }
+
+  private parseActiveQuizzes(val): void {
+    if (val.payload && val.payload.activeQuizzes) {
+      this.sharedService.activeQuizzes = [...val.payload.activeQuizzes];
     }
   }
 }
