@@ -13,8 +13,6 @@ export class FilterKeysPipe implements PipeTransform {
     switch (filterSetting) {
       case Filter.None:
         return value;
-      case Filter.Unused:
-        return value.filter(elem => this.isUnused(elem));
       case Filter.InvalidKeys:
         return value.filter(elem => this.hasEmptyKeys(elem));
       case Filter.InvalidDE:
@@ -44,9 +42,4 @@ export class FilterKeysPipe implements PipeTransform {
   private hasEmptyKeysForLang(elem, lang): boolean {
     return !elem.value[lang];
   }
-
-  private isUnused(elem): boolean {
-    return !!this.languageLoaderService.unusedKeys.find(unusedKey => unusedKey === elem.key);
-  }
-
 }

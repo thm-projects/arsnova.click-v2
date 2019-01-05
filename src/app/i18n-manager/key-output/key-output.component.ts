@@ -16,6 +16,7 @@ export class KeyOutputComponent {
 
   @Input() public filter = Filter.None;
   @Input() public searchFilter = '';
+  @Input() public unusedKeyFilter: boolean;
 
   private _selectedKey: string;
 

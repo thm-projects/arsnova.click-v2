@@ -7,7 +7,7 @@
     <div #langDataElement
          style="height: calc(100vh - 200px);">
 
-      <div *ngFor="let elem of (languageLoaderService.parsedLangData | filterKeys:filter | searchFilter:searchFilter | sort) | justafew:scrollPos"
+      <div *ngFor="let elem of (languageLoaderService.parsedLangData | unusedKeyFilter:unusedKeyFilter | filterKeys:filter | searchFilter:searchFilter | sort) | justafew:scrollPos"
            class="px-2 py-2 pointer d-flex"
            [class.bg-warning]="selectedKey === elem.key"
            (click)="selectKey(elem.key)">

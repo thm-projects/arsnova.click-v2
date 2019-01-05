@@ -15,7 +15,6 @@ import { UserService } from '../../service/user/user.service';
   styleUrls: ['./i18n-manager-overview.component.scss'],
 })
 export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
-
   public static readonly TYPE = 'I18nManagerOverviewComponent';
   public readonly filters = Filter;
 
@@ -42,6 +41,16 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this._selectedKey = null;
   }
 
+  private _unusedKeyFilter: boolean;
+
+  get unusedKeyFilter(): boolean {
+    return this._unusedKeyFilter;
+  }
+
+  set unusedKeyFilter(value: boolean) {
+    this._unusedKeyFilter = value;
+  }
+
   private _filter = Filter.None;
 
   get filter(): Filter {
@@ -53,9 +62,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     switch (parseInt(String(value), 10)) {
       case 0:
         this._filter = Filter.None;
-        return;
-      case 1:
-        this._filter = Filter.Unused;
         return;
       case 2:
         this._filter = Filter.InvalidKeys;

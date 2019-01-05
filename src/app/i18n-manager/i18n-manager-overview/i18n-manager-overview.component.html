@@ -16,6 +16,12 @@
       {{!this.projectLoaderService.connected ? 'Not ' : ''}} Loaded{{this.projectLoaderService.connected && !this.userService.staticLoginTokenContent.gitlabToken ? ' (Readonly)' : ''}}
     </span>
 
+    <label class="d-inline-flex mx-2 align-items-center mb-0">
+      <span class="mr-2">Show unused keys</span>
+      <input type="checkbox"
+             [(ngModel)]="unusedKeyFilter"/>
+    </label>
+
     <div *ngIf="this.projectLoaderService.connected"
          class="btn-group ml-auto">
       <button class="btn btn-secondary pointer"
@@ -38,9 +44,6 @@
               (change)="changeFilter($event.target.value)">
         <option [value]="filters.None"
                 [selected]="filter === filters.None">No Filter
-        </option>
-        <option [value]="filters.Unused"
-                [selected]="filter === filters.Unused">Unused Keys
         </option>
         <option [value]="filters.InvalidKeys"
                 [selected]="filter === filters.InvalidKeys">Empty Keys
@@ -73,6 +76,7 @@
   <div class="col-12 key-list overflow-auto"
        [class.col-sm-6]="!!selectedKey">
     <app-key-output [filter]="filter"
+                    [unusedKeyFilter]="unusedKeyFilter"
                     [searchFilter]="searchFilter"
                     (changeEmitter)="dataChanged($event)"></app-key-output>
   </div>
