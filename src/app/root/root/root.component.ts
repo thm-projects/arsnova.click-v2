@@ -60,17 +60,6 @@ export class RootComponent implements OnInit, AfterViewInit {
     private storageService: StorageService,
     private userService: UserService,
   ) {
-  }
-
-  public ngOnInit(): void {
-    this.userService.loadConfig();
-    this.router.events.subscribe((event: any) => {
-      if (event instanceof RouteConfigLoadStart) {
-        this._isLoading = true;
-      } else if (event instanceof RouteConfigLoadEnd) {
-        this._isLoading = false;
-      }
-    });
 
     /* Reload the page if the fetch of production chunks failed
      * https://stackoverflow.com/a/49805926
@@ -94,6 +83,17 @@ export class RootComponent implements OnInit, AfterViewInit {
       // Run original handler
       oldHandler(err);
     };
+  }
+
+  public ngOnInit(): void {
+    this.userService.loadConfig();
+    this.router.events.subscribe((event: any) => {
+      if (event instanceof RouteConfigLoadStart) {
+        this._isLoading = true;
+      } else if (event instanceof RouteConfigLoadEnd) {
+        this._isLoading = false;
+      }
+    });
   }
 
   public ngAfterViewInit(): void {
