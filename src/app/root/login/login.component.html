@@ -1,5 +1,5 @@
 <ng-container *ngIf="!isLoading">
-  <h4 class="text-light text-center mb-5 mt-sm-5">{{'component.login.title'}}</h4>
+  <h4 class="text-light text-center mb-5 mt-sm-5">{{'component.login.title' | translate}}</h4>
 
   <div class="input-group input-group-sm">
 
@@ -20,7 +20,7 @@
     <div class="input-group-append">
 
       <button class="btn btn-info"
-              (click)="login()">{{'component.login.login'}}
+              (click)="login()">{{'component.login.login' | translate}}
       </button>
 
     </div>
@@ -28,6 +28,6 @@
 
 
   <h4 *ngIf="authorizationFailed"
-      class="text-danger text-center mt-5">{{'component.login.authorization_failed'}}
+      class="text-danger text-center mt-5">{{'component.login.authorization_failed' | translate}}
   </h4>
 </ng-container>
