@@ -71,6 +71,29 @@ export class RootComponent implements OnInit, AfterViewInit {
         this._isLoading = false;
       }
     });
+
+    /* Reload the page if the fetch of production chunks failed
+     * https://stackoverflow.com/a/49805926
+     */
+    // Keep the original error handler
+    const oldHandler = this.router.errorHandler;
+    // Replace route error handler
+    this.router.errorHandler = (err: any) => {
+      // Check if there is an error loading the chunk
+      if (err.originalStack && err.originalStack.indexOf('Error: Loading chunk') >= 0) {
+        // Check if is the first time the error happend
+        if (localStorage.getItem('lastChunkError') !== err.originalStack) {
+          // Save the last error to avoid an infinite reload loop if the chunk really does not exists after reload
+          localStorage.setItem('lastChunkError', err.originalStack);
+          location.reload(true);
+        } else {
+          // The chunk really does not exists after reload
+          console.error('We really don\'t find the chunk...');
+        }
+      }
+      // Run original handler
+      oldHandler(err);
+    };
   }
 
   public ngAfterViewInit(): void {
