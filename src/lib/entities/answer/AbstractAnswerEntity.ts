@@ -38,7 +38,7 @@ export abstract class AbstractAnswerEntity {
     return (this.answerText.length === 0) ? [
       {
         occurredAt: { type: 'answerOption' },
-        reason: 'answer_text_empty',
+        reason: 'component.quiz_summary.validation_errors.reasons.answer_text_empty',
       },
     ] : [];
   }

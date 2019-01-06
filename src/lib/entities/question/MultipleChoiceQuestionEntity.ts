@@ -28,7 +28,7 @@ export class MultipleChoiceQuestionEntity extends AbstractChoiceQuestionEntity {
     if (!hasValidAnswer) {
       parentStackTrace.push({
         occurredAt: { type: 'question' },
-        reason: 'no_valid_answers',
+        reason: 'component.quiz_summary.validation_errors.reasons.no_valid_answers',
       });
     }
     return parentStackTrace;

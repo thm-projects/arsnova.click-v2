@@ -80,7 +80,7 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
   }));
 
   it('#getConfidenceLevel', async(() => {
-    expect(component.getConfidenceLevel()).toEqual('very_sure');
+    expect(component.getConfidenceLevelTranslation()).toEqual('component.voting.confidence_level.very_sure');
   }));
 
   it('#updateConficence', async(() => {
@@ -89,7 +89,7 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
 
     component.updateConficence(event);
 
-    expect(component.getConfidenceLevel()).toEqual('no_idea');
+    expect(component.getConfidenceLevelTranslation()).toEqual('component.voting.confidence_level.no_idea');
   }));
 
   it('#sendConfidence', async(() => {

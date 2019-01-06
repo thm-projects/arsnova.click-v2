@@ -66,18 +66,18 @@ export abstract class AbstractQuestionEntity {
     if (questionTextWithoutMarkdownChars < 5) {
       result.push({
         occurredAt: { type: 'question' },
-        reason: 'question_text_too_small',
+        reason: 'component.quiz_summary.validation_errors.reasons.question_text_too_small',
       });
     } else if (questionTextWithoutMarkdownChars > 50000) {
       result.push({
         occurredAt: { type: 'question' },
-        reason: 'question_text_too_long',
+        reason: 'component.quiz_summary.validation_errors.reasons.question_text_too_long',
       });
     }
     if (this.timer < 1) {
       result.push({
         occurredAt: { type: 'question' },
-        reason: 'timer_too_small',
+        reason: 'component.quiz_summary.validation_errors.reasons.timer_too_small',
       });
     }
     this.answerOptionList.forEach(answerOption => {

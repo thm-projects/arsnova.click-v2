@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit {
     private footerBarService: FooterBarService,
   ) {
     this.userService.logout();
-    this.headerLabelService.headerLabel = 'Login';
+    this.headerLabelService.headerLabel = 'component.login.login';
     this.footerBarService.replaceFooterElements([]);
   }
 

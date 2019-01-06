@@ -9,14 +9,15 @@
            (propertyChange)="updateConficence($event)">
   </div>
   <div class="col-12">
-    <p class="text-center mb-5">{{('component.voting.confidence_level.' + getConfidenceLevel()) | translate}}</p>
+    <p class="text-center mb-5">{{getConfidenceLevelTranslation() | translate}}</p>
   </div>
   <div class="col-12">
     <button type="button"
             (click)="sendConfidence()"
             class="btn btn-default mt-5 w-100 pointer">
       <fa-icon [icon]="'paper-plane'"></fa-icon>
-      <span>{{("component.voting." + (confidenceValue ? 'send' : 'abstention')) | translate}}</span>
+      <span *ngIf="confidenceValue">{{"component.voting.send" | translate}}</span>
+      <span *ngIf="!confidenceValue">{{"component.voting.abstention" | translate}}</span>
     </button>
   </div>
 </div>

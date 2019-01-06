@@ -31,13 +31,13 @@ export class RangedQuestionEntity extends AbstractQuestionEntity {
     if (!hasValidRange) {
       parentStackTrace.push({
         occurredAt: { type: 'question' },
-        reason: 'invalid_range',
+        reason: 'component.quiz_summary.validation_errors.reasons.invalid_range',
       });
     }
     if (!hasValidCorrectValue) {
       parentStackTrace.push({
         occurredAt: { type: 'question' },
-        reason: 'invalid_correct_value',
+        reason: 'component.quiz_summary.validation_errors.reasons.invalid_correct_value',
       });
     }
     return parentStackTrace;

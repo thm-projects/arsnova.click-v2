@@ -25,7 +25,7 @@ export class SingleChoiceQuestionEntity extends AbstractChoiceQuestionEntity {
     if (hasValidAnswer !== 1) {
       parentStackTrace.push({
         occurredAt: { type: 'question' },
-        reason: 'one_valid_answer_required',
+        reason: 'component.quiz_summary.validation_errors.reasons.one_valid_answer_required',
       });
     }
     return parentStackTrace;

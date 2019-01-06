@@ -10,7 +10,7 @@
             [class.btn-default]="currentData !== elem.id"
             (click)="toInfoContent(elem.id)"
             [routerLink]="['/info', elem.id]">
-      <span [innerHTML]="(elem.i18nRef) | translate"></span>
+      <span [innerHTML]="elem.i18nRef | translate"></span>
     </button>
     <button type="button"
             class="btn btn-default pointer text-nowrap"

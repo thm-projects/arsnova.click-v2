@@ -60,17 +60,17 @@ export class ConfidenceRateComponent {
     });
   }
 
-  public getConfidenceLevel(): string {
+  public getConfidenceLevelTranslation(): string {
     if (this.confidenceValue === 100) {
-      return 'very_sure';
+      return 'component.voting.confidence_level.very_sure';
     } else if (this.confidenceValue > 70) {
-      return 'quite_sure';
+      return 'component.voting.confidence_level.quite_sure';
     } else if (this.confidenceValue > 50) {
-      return 'unsure';
+      return 'component.voting.confidence_level.unsure';
     } else if (this.confidenceValue > 20) {
-      return 'not_sure';
+      return 'component.voting.confidence_level.not_sure';
     } else {
-      return 'no_idea';
+      return 'component.voting.confidence_level.no_idea';
     }
   }
 
