@@ -1,7 +1,7 @@
-<div class="row d-flex flex-wrap mb-2 text-light">
+<div class="row d-flex flex-wrap mb-md-2 text-light">
 
-  <div class="d-flex col-12">
-    <span class="d-inline-flex mx-2 align-items-center">Current Project:</span>
+  <div class="d-flex col-12 col-md mb-3 mb-md-0 text-nowrap">
+    <span class="d-inline-flex mx-md-2 align-items-center">Current Project:</span>
     <select class="border-0 bg-transparent text-light"
             (change)="setProject($event.target.value)">
       <option [value]="projectLoaderService.projects.Frontend">Frontend
@@ -15,15 +15,19 @@
           [class.text-danger]="!this.projectLoaderService.connected">
       {{!this.projectLoaderService.connected ? 'Not ' : ''}} Loaded{{this.projectLoaderService.connected && !this.userService.staticLoginTokenContent.gitlabToken ? ' (Readonly)' : ''}}
     </span>
+  </div>
 
-    <label class="d-inline-flex mx-2 align-items-center mb-0">
-      <span class="mr-2">Hide unused keys</span>
+  <div class="d-flex col-12 col-md mb-3 mb-md-0">
+    <label class="d-inline-flex mx-md-2 align-items-center mb-0">
+      <span class="mr-2">Show unused keys</span>
       <input type="checkbox"
              [(ngModel)]="unusedKeyFilter"/>
     </label>
+  </div>
 
+  <div class="col-12 col-md mb-3 mb-md-0">
     <div *ngIf="this.projectLoaderService.connected"
-         class="btn-group ml-auto">
+         class="btn-group ml-md-auto">
       <button class="btn btn-secondary pointer"
               [disabled]="!this.languageLoaderService.changedData"
               (click)="updateData()"><span>Save Changes</span>

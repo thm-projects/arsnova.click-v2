@@ -48,6 +48,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   }
 
   set unusedKeyFilter(value: boolean) {
+    this._selectedKey = null;
     this._unusedKeyFilter = value;
   }
 

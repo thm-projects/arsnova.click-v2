@@ -19,7 +19,7 @@
            (click)="toggleSelectedCategory(cat)">
         <div class="nickCategoryText">
           <p class="mb-0"
-             [innerHTML]="('component.nickname_categories.category.' + cat) | translate"></p>
+             [innerHTML]="getCategoryTranslation(cat) | translate"></p>
           <p class="mb-0">({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
         </div>
       </div>

@@ -175,4 +175,24 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this.quizService.persist();
   }
 
+  public getCategoryTranslation(cat: string): string {
+    switch (cat) {
+      case 'disney':
+        return 'component.nickname_categories.category.disney';
+      case 'science':
+        return 'component.nickname_categories.category.science';
+      case 'fantasy':
+        return 'component.nickname_categories.category.fantasy';
+      case 'literature':
+        return 'component.nickname_categories.category.literature';
+      case 'mythology':
+        return 'component.nickname_categories.category.mythology';
+      case 'actor':
+        return 'component.nickname_categories.category.actor';
+      case 'politics':
+        return 'component.nickname_categories.category.politics';
+      case 'turing_award':
+        return 'component.nickname_categories.category.turing_award';
+    }
+  }
 }

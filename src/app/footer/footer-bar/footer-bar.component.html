@@ -9,14 +9,14 @@
          accept="application/json"
          multiple="multiple"/>
   <div *ngFor="let elem of footerBarService.footerElements"
-       class="footerElement px-2 py-2 px-sm-1 py-sm-2 pointer d-flex align-items-center justify-content-center justify-content-sm-start"
+       class="footerElement px-2 px-sm-1 py-sm-2 pointer d-flex align-items-center justify-content-center justify-content-sm-start"
        [class.success]="elem.selectable && elem.isActive"
        [class.error]="elem.selectable && !elem.isActive"
        [id]="elem.id"
        [routerLink]="getLinkTarget(elem)"
        [queryParams]="getQueryParams(elem)"
        [title]="elem.textName | translate"
-       [attr.data-intro]="elem.showIntro ? (('region.footer.footer_bar.description.' + elem.id) | translate) : null"
+       [attr.data-intro]="elem.showIntro ? (elem.introTranslate | translate) : null"
        (click)="toggleSetting(elem)">
     <p class="footerElemIcon mb-0">
       <fa-icon [icon]="elem.iconClass"
@@ -27,13 +27,13 @@
   </div>
 </nav>
 
-<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center"
+<span class="d-none position-absolute justify-content-center align-items-center"
       id="footer-move-left"
       [style.visibility]="footerElemIndex === 1 ? 'hidden' : 'visible'"
       (click)="moveLeft()">
         <fa-icon [icon]="'caret-left'"></fa-icon>
 </span>
-<span class="d-flex d-sm-none position-absolute justify-content-center align-items-center"
+<span class="d-none position-absolute justify-content-center align-items-center"
       id="footer-move-right"
       [style.visibility]="hideRight() ? 'hidden' : 'visible'"
       (click)="moveRight()">

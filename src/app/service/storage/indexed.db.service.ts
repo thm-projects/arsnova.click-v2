@@ -27,14 +27,18 @@ export class IndexedDbService {
     this._dbInstance = value;
   }
 
-  private _isInitialized = !!this._dbInstance;
+  private _isInitialized = false;
 
   get isInitialized(): boolean {
     return this._isInitialized;
   }
 
+  set isInitialized(value: boolean) {
+    this._isInitialized = value;
+  }
+
   private _indexedDB: any;
-  private readonly _stateNotifier = new BehaviorSubject<string>(this.isInitialized ? 'initialized' : null);
+  private readonly _stateNotifier = new BehaviorSubject<string>(null);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
@@ -47,6 +51,9 @@ export class IndexedDbService {
   public setName(dbName: string): void {
     if (dbName.length > 0 && dbName !== undefined) {
       this._dbName = dbName;
+      this._dbInstance = null;
+      this._isInitialized = false;
+      this.stateNotifier.next('destroy');
     } else {
       console.error('Error: invalid dbName');
     }
@@ -262,9 +269,13 @@ export class IndexedDbService {
   }
 
   private open(): Observable<any> {
-    this._dbInstance = null;
-
     return Observable.create((observer: any) => {
+      if (this._isInitialized) {
+        observer.next(this._dbInstance.result);
+        observer.complete();
+        return;
+      }
+
       const instance = this._indexedDB.open(this._dbName);
 
       instance.onsuccess = () => {

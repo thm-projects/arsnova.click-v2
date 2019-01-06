@@ -1,5 +1,5 @@
 <div id="quizSummaryHeader"
-     class="quizSummary mt-3 mt-sm-0 mt-md-3 px-md-0">
+     class="quizSummary mt-3 mt-sm-0 mt-md-3 px-md-0 mb-3">
 
   <div class="row no-gutters">
 
@@ -106,7 +106,7 @@
       </div>
     </div>
 
-    <button class="btn btn-block d-md-none mt-sm-2"
+    <button class="btn btn-block btn-white d-md-none mt-sm-2"
             (click)="switchShowMoreOrLess()">
       <span *ngIf="isShowingMore">{{'component.quiz_manager.show_less' | translate}}</span>
       <span *ngIf="!isShowingMore">{{'component.quiz_manager.show_more' | translate}}</span>

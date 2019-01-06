@@ -113,27 +113,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     headerLabelService.headerLabel = 'default';
 
-    if (isPlatformBrowser(this.platformId)) {
-      this._subscriptions.push(this.storageService.stateNotifier.subscribe(state => {
-        if (state === 'initialized') {
-          this.cleanUpSessionStorage();
-          this.storageService.getAllQuiznames().then(quizNames => {
-            this._ownQuizzes = quizNames;
-            if (this._ownQuizzes.length) {
-              this.modalService.open(AvailableQuizzesComponent);
-            }
-          });
-
-          this.quizApiService.getPublicQuizAmount().subscribe(val => {
-            this.publicQuizAmount = val;
-          });
-
-          this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
-            this.ownPublicQuizAmount = val;
-          });
-        }
-      }));
-    }
     this.updateFooterElements(this.userService.isLoggedIn);
     this.userService.loginNotifier.subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
@@ -160,8 +139,33 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this._subscriptions.push(this.storageService.stateNotifier.subscribe(state => {
+      if (state === 'destroy') {
+        this._subscriptions.forEach(sub => sub.unsubscribe());
+        return;
+      }
+
+      if (state === 'initialized') {
+        this.cleanUpSessionStorage();
+        this.storageService.getAllQuiznames().then(quizNames => {
+          this._ownQuizzes = quizNames;
+          if (this._ownQuizzes.length) {
+            this.modalService.open(AvailableQuizzesComponent);
+          }
+        });
+
+        this.quizApiService.getPublicQuizAmount().subscribe(val => {
+          this.publicQuizAmount = val;
+        });
+
+        this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
+          this.ownPublicQuizAmount = val;
+        });
+      }
+    }));
+
     this._routerSubscription = this.route.params.subscribe(params => {
-      this.storageService.stateNotifier.subscribe(async val => {
+      this._subscriptions.push(this.storageService.stateNotifier.subscribe(async val => {
         if (val === 'initialized') {
           if (!Object.keys(params).length || !params.themeId || !params.languageId) {
             const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
@@ -181,7 +185,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.i18nService.setLanguage(<Language>params.languageId.toUpperCase());
           this.themesService.updateCurrentlyUsedTheme();
         }
-      });
+      }));
     });
   }
 
@@ -189,6 +193,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this._routerSubscription) {
       this._routerSubscription.unsubscribe();
     }
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public autoJoinToSession(quizname): void {

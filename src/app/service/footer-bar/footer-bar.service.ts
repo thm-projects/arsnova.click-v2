@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { IndexedDbService } from '../storage/indexed.db.service';
 
 interface IFsDocument extends HTMLDocument {
   mozFullScreenElement?: Element;
@@ -65,6 +66,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.languages',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.translation',
     linkTarget: '/languages',
   }, function (): void {
   });
@@ -75,6 +77,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.sound',
     selectable: false,
     showIntro: true,
+    introTranslate: 'region.footer.footer_bar.description.sound',
     linkTarget: '/quiz/manager/sound',
   }, function (): void {
 
@@ -86,6 +89,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.reading-confirmation',
     selectable: true,
     showIntro: true,
+    introTranslate: 'region.footer.footer_bar.description.reading-confirmation',
     linkTarget: null,
   }, function (): void {
 
@@ -97,6 +101,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.style',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.theme',
     linkTarget: '/themes',
   }, function (): void {
 
@@ -108,6 +113,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.import',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.import',
     linkTarget: null,
   }, function (): void {
     if (document) {
@@ -121,6 +127,7 @@ export class FooterBarService {
     textName: 'component.name_management.session_management',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.sessionManagement',
     linkTarget: '/quiz/overview',
   }, function (): void {
 
@@ -132,6 +139,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.fullscreen',
     selectable: true,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.fullscreen',
     linkTarget: null,
     isActive: isPlatformBrowser(this.platformId) ? window.innerWidth === screen.width && window.innerHeight === screen.height : false,
   }, function (): void {
@@ -145,6 +153,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.home',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.home',
     linkTarget: '/',
   }, function (): void {
 
@@ -156,6 +165,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.info',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.about',
     linkTarget: ['info', 'about'],
   }, function (): void {
 
@@ -167,6 +177,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.qr_code',
     selectable: false,
     showIntro: true,
+    introTranslate: 'region.footer.footer_bar.description.qr-code',
     linkTarget: null,
   }, function (): void {
   });
@@ -177,6 +188,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.nicknames',
     selectable: false,
     showIntro: true,
+    introTranslate: 'region.footer.footer_bar.description.nicknames',
     linkTarget: '/quiz/manager/nicknames',
   }, function (): void {
 
@@ -188,6 +200,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.edit_quiz',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.edit-quiz',
     linkTarget: null,
   }, function (): void {
 
@@ -199,6 +212,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.show_response_progress',
     selectable: true,
     showIntro: true,
+    introTranslate: 'region.footer.footer_bar.description.response-progress',
     linkTarget: null,
   }, function (): void {
 
@@ -210,6 +224,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.show_confidence_slider',
     selectable: true,
     showIntro: true,
+    introTranslate: 'region.footer.footer_bar.description.confidence-slider',
     linkTarget: null,
   }, function (): void {
 
@@ -221,6 +236,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.back',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.back',
     linkTarget: null,
   }, function (): void {
     history.back();
@@ -231,6 +247,7 @@ export class FooterBarService {
     textClass: 'footerElementText',
     textName: 'component.lobby.start_quiz',
     selectable: true,
+    introTranslate: 'region.footer.footer_bar.description.startQuiz',
     showIntro: false,
   }, function (): void {
   });
@@ -240,6 +257,7 @@ export class FooterBarService {
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.save_quiz',
     selectable: true,
+    introTranslate: 'region.footer.footer_bar.description.saveQuiz',
     showIntro: false,
   }, function (): void {
   });
@@ -250,6 +268,7 @@ export class FooterBarService {
     textName: 'component.leaderboard.export',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.exportQuiz',
     linkTarget: null,
   }, function (): void {
   });
@@ -264,6 +283,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.cache_assets',
     selectable: true,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.saveAssets',
     linkTarget: null,
   }, function (): void {
   });
@@ -275,6 +295,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.block_rude_nicknames',
     selectable: true,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.blockRudeNicknames',
     linkTarget: null,
   }, function (): void {
   });
@@ -285,6 +306,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.enable_cas_login',
     selectable: true,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.enableCasLogin',
     linkTarget: null,
   }, function (): void {
   });
@@ -295,6 +317,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.global_leaderboard',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.leaderboard',
     linkTarget: '/quiz/flow/leaderboard',
   }, function (): void {
   });
@@ -305,6 +328,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.member_group',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.memberGroup',
     linkTarget: '/quiz/manager/memberGroup',
   }, function (): void {
   });
@@ -315,6 +339,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.login',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.login',
     linkTarget: '/login',
   }, function (): void {
   });
@@ -325,11 +350,13 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.logout',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.logout',
     linkTarget: '/login',
     queryParams: {
       logout: true,
     },
-  }, function (): void {
+  }, () => {
+    this.indexedDbService.isInitialized = false;
   });
   public footerElemEditI18n: IFooterBarElement = new FooterbarElement({
     id: 'edit-i18n',
@@ -338,6 +365,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.edit-i18n',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.edit-i18n',
     linkTarget: '/i18n-manager',
   }, function (): void {
   });
@@ -348,6 +376,7 @@ export class FooterBarService {
     textName: 'region.footer.footer_bar.admin',
     selectable: false,
     showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.admin',
     linkTarget: '/admin',
   }, function (): void {
   });
@@ -358,7 +387,7 @@ export class FooterBarService {
     return this._footerElements;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private indexedDbService: IndexedDbService) {
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {

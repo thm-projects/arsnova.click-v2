@@ -5,6 +5,7 @@ export declare interface IFooterBarElement {
   textName: string;
   selectable: boolean;
   showIntro: boolean;
+  introTranslate?: string;
   linkTarget?: Function | Array<string> | string;
   queryParams?: object;
   onClickCallback?: Function;

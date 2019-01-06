@@ -9,10 +9,10 @@ export class UnusedKeyFilterPipe implements PipeTransform {
 
   public transform(value: Array<any>, args?: any): any {
     if (args) {
-      return value.filter(elem => !this.isUnused(elem));
+      return value.filter(elem => this.isUnused(elem));
     }
 
-    return value.filter(elem => this.isUnused(elem));
+    return value.filter(elem => !this.isUnused(elem));
   }
 
   private isUnused(elem): boolean {

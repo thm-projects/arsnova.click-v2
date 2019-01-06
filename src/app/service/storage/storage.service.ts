@@ -66,7 +66,6 @@ export class StorageService {
       return;
     }
 
-    this.indexedDbService.dbInstance = null;
     this.initDb(username || DbName.Default);
   }
 
@@ -83,6 +82,7 @@ export class StorageService {
           this.create(DbTable.Config, StorageKey.PrivateKey, val).subscribe();
         }
         localStorage.setItem('privateKey', val);
+        this.indexedDbService.isInitialized = true;
         this.indexedDbService.stateNotifier.next('initialized');
       });
     });

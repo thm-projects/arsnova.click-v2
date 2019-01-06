@@ -51,9 +51,10 @@
   }
 
   @include media-breakpoint-down(xs) {
-    height: 50px;
+    min-height: 50px;
     width: 100%;
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: auto;
     position: relative;
   }
   @include media-breakpoint-up(sm) {

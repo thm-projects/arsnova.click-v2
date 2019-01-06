@@ -1,6 +1,10 @@
 import { IFooterBarElement } from './interfaces';
 
 export class FooterbarElement implements IFooterBarElement {
+  get introTranslate(): string {
+    return this._introTranslate;
+  }
+
   get selectable(): boolean {
     return this._selectable;
   }
@@ -60,6 +64,7 @@ export class FooterbarElement implements IFooterBarElement {
     return this._queryParams;
   }
 
+  private readonly _introTranslate: string;
   private _restoreOnClickCallback: Function;
   private readonly _id: string;
   private readonly _iconClass: string;
@@ -70,7 +75,7 @@ export class FooterbarElement implements IFooterBarElement {
   private readonly _queryParams: object;
 
   constructor(
-    { id, iconClass, textClass, textName, selectable, showIntro, isActive, linkTarget, queryParams }: IFooterBarElement,
+    { id, iconClass, textClass, textName, selectable, showIntro, introTranslate, isActive, linkTarget, queryParams }: IFooterBarElement,
     onClickCallback?: Function,
   ) {
     this._id = id;
@@ -79,6 +84,7 @@ export class FooterbarElement implements IFooterBarElement {
     this._textName = textName;
     this._selectable = selectable;
     this._showIntro = showIntro;
+    this._introTranslate = introTranslate;
     this._isActive = isActive;
     this._linkTarget = linkTarget;
     this._queryParams = queryParams;

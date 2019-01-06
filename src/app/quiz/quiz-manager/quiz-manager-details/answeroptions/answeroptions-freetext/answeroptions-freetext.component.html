@@ -35,7 +35,8 @@
                  role="switch"
                  [checked]="elem.enabled"
                  (change)="setConfig(elem.id, !elem.enabled)"/>
-          {{('component.answeroptions.free_text_question.' + (elem.enabled ? 'onText' : 'offText')) | translate}}
+          <span *ngIf="elem.enabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+          <span *ngIf="!elem.enabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
         </label>
       </div>
     </div>
@@ -55,8 +56,10 @@
              class="center-block mt-4 mb-0">
           <h5 class="text-center bg-light rounded py-2 px-2"
               [class.text-success]="isTestInputCorrect()"
-              [class.text-danger]="!isTestInputCorrect()"
-              [innerHTML]="'component.answeroptions.free_text_question.check_' + (!isTestInputCorrect() ? 'in' : '') + 'correct' | translate"></h5>
+              [class.text-danger]="!isTestInputCorrect()">
+            <span *ngIf="isTestInputCorrect">{{'component.answeroptions.free_text_question.check_correct' | translate}}</span>
+            <span *ngIf="isTestInputCorrect">{{'component.answeroptions.free_text_question.check_incorrect' | translate}}</span>
+          </h5>
         </div>
       </div>
     </div>
