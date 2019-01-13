@@ -44,7 +44,10 @@ export class FooterBarComponent {
   }
 
   public getLinkTarget(elem: IFooterBarElement): Function | string {
-    return typeof elem.linkTarget === 'function' ? elem.linkTarget(elem) : elem.linkTarget instanceof Array ? elem.linkTarget : [elem.linkTarget];
+    return typeof elem.linkTarget === 'function' ? elem.linkTarget(elem) : //
+           elem.linkTarget instanceof Array ? elem.linkTarget : //
+           !!elem.linkTarget ? [elem.linkTarget] : //
+           null;
   }
 
   public getQueryParams(elem: IFooterBarElement): object {

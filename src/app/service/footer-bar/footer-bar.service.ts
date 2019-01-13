@@ -239,6 +239,7 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.description.back',
     linkTarget: null,
   }, function (): void {
+    console.log('going back');
     history.back();
   });
   public footerElemStartQuiz: IFooterBarElement = new FooterbarElement({

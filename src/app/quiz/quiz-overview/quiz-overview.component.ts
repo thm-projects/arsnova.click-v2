@@ -210,17 +210,7 @@ export class QuizOverviewComponent implements OnInit {
 
   private async requestQuizStatus(session: QuizEntity): Promise<boolean> {
     const quizStatusResponse = await this.quizApiService.getQuizStatus(session.name).toPromise();
-    if (quizStatusResponse.step === MessageProtocol.Available) {
-      return true;
-    }
-    if (quizStatusResponse.step !== MessageProtocol.Unavailable) {
-      return false;
-    }
-
-    const updatedQuiz = await this.quizApiService.setQuiz(session).toPromise();
-    sessionStorage.setItem('token', updatedQuiz.adminToken);
-
-    return true;
+    return [MessageProtocol.Editable, MessageProtocol.Unavailable].includes(quizStatusResponse.step);
   }
 
   private async openLobby(session: QuizEntity): Promise<any> {

@@ -171,6 +171,7 @@ export class HomeComponent implements OnInit, OnDestroy {
             const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
 
             if (theme) {
+              this.themesService.updateCurrentlyUsedTheme();
               return;
             }
 

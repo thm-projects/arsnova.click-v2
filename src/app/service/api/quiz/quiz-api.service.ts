@@ -112,12 +112,8 @@ export class QuizApiService {
   }
 
   public getQuizStatus(quizName): Observable<IMessage> {
-    const headers: any = {};
-    if (!quizName) {
-      headers.authorization = sessionStorage.getItem('token');
-    }
-
-    return this.http.get<IMessage>(`${this._getQuizStatusUrl}${quizName ? '/' + quizName : ''}`, { headers });
+    return this.http.get<IMessage>(`${this._getQuizStatusUrl}${quizName ? '/' + quizName : ''}`,
+      { headers: { authorization: localStorage.getItem('privateKey') } });
   }
 
   public getQuizStartTime(): Observable<number> {

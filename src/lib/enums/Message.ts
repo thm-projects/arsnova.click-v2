@@ -64,6 +64,7 @@ export enum MessageProtocol {
   QuizNotFound                 = 'QuizNotFound', //
   Connect                      = 'Connect', //
   Disconnect                   = 'Disconnect', //
+  Editable                     = 'Editable', //
 }
 
 export const Message = {
