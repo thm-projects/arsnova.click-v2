@@ -11,7 +11,7 @@ import { KeyOutputComponent } from './key-output/key-output.component';
 
 const i18nManagerRoutes: Routes = [
   {
-    path: 'i18n-manager',
+    path: '',
     canActivate: [StaticLoginService],
     component: I18nManagerOverviewComponent,
   },

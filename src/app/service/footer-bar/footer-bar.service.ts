@@ -67,7 +67,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.translation',
-    linkTarget: '/languages',
+    linkTarget: ['/', 'languages'],
   }, function (): void {
   });
   public footerElemSound: IFooterBarElement = new FooterbarElement({
@@ -78,7 +78,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: true,
     introTranslate: 'region.footer.footer_bar.description.sound',
-    linkTarget: '/quiz/manager/sound',
+    linkTarget: ['/', 'quiz', 'manager', 'sound'],
   }, function (): void {
 
   });
@@ -102,7 +102,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.theme',
-    linkTarget: '/themes',
+    linkTarget: ['/', 'themes'],
   }, function (): void {
 
   });
@@ -128,7 +128,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.sessionManagement',
-    linkTarget: '/quiz/overview',
+    linkTarget: ['/', 'quiz', 'overview'],
   }, function (): void {
 
   });
@@ -154,7 +154,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.home',
-    linkTarget: '/',
+    linkTarget: ['/'],
   }, function (): void {
 
   });
@@ -166,7 +166,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.about',
-    linkTarget: ['info', 'about'],
+    linkTarget: ['/', 'info', 'about'],
   }, function (): void {
 
   });
@@ -189,7 +189,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: true,
     introTranslate: 'region.footer.footer_bar.description.nicknames',
-    linkTarget: '/quiz/manager/nicknames',
+    linkTarget: ['/', 'quiz', 'manager', 'nicknames'],
   }, function (): void {
 
   });
@@ -319,7 +319,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.leaderboard',
-    linkTarget: '/quiz/flow/leaderboard',
+    linkTarget: ['/', 'quiz', 'flow', 'leaderboard'],
   }, function (): void {
   });
   public footerElemMemberGroup: IFooterBarElement = new FooterbarElement({
@@ -330,7 +330,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.memberGroup',
-    linkTarget: '/quiz/manager/memberGroup',
+    linkTarget: ['/', 'quiz', 'manager', 'memberGroup'],
   }, function (): void {
   });
   public footerElemLogin: IFooterBarElement = new FooterbarElement({
@@ -341,7 +341,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.login',
-    linkTarget: '/login',
+    linkTarget: ['/', 'login'],
   }, function (): void {
   });
   public footerElemLogout: IFooterBarElement = new FooterbarElement({
@@ -352,7 +352,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.logout',
-    linkTarget: '/login',
+    linkTarget: ['/', 'login'],
     queryParams: {
       logout: true,
     },
@@ -367,7 +367,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.edit-i18n',
-    linkTarget: '/i18n-manager',
+    linkTarget: ['/', 'i18n-manager'],
   }, function (): void {
   });
   public footerElemAdmin: IFooterBarElement = new FooterbarElement({
@@ -378,7 +378,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.admin',
-    linkTarget: '/admin',
+    linkTarget: ['/', 'admin'],
   }, function (): void {
   });
 

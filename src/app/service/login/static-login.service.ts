@@ -14,6 +14,7 @@ export class StaticLoginService implements CanActivate {
 
     await this.userService.loadConfig();
 
+    console.log('is allowed to proceed', this.isAllowedToProceed(route));
     if (this.isAllowedToProceed(route)) {
       return true;
     }

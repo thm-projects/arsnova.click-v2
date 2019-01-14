@@ -166,7 +166,7 @@ export class UserService {
       });
     }
 
-    return this.staticLoginTokenContent.userAuthorizations.find(value => value === authorization);
+    return this.staticLoginTokenContent.userAuthorizations.includes(authorization);
   }
 
   private deleteTokens(): void {

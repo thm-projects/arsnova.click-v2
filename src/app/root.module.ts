@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { Angulartics2Module } from 'angulartics2';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -15,7 +15,6 @@ import { RoutePreloader } from '../lib/route-preloader';
 import { createTranslateLoader } from '../lib/translation.factory';
 import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
-import { I18nManagerModule } from './i18n-manager/i18n-manager.module';
 import { ModalsModule } from './modals/modals.module';
 import { HomeComponent } from './root/home/home.component';
 import { LanguageSwitcherComponent } from './root/language-switcher/language-switcher.component';
@@ -114,16 +113,13 @@ export const appRoutes: Routes = [
     }),
     RouterModule.forRoot(appRoutes, {
       preloadingStrategy: RoutePreloader,
-      enableTracing: false, // <-- debugging purposes only
+      enableTracing: true, // <-- debugging purposes only
     }),
     SharedModule,
     ThemesModule,
     HeaderModule,
     FooterModule,
-    ModalsModule,
-    NgbModule,
     Angulartics2Module.forRoot(),
-    I18nManagerModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

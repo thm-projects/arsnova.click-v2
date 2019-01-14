@@ -43,10 +43,9 @@ export class FooterBarComponent {
   ) {
   }
 
-  public getLinkTarget(elem: IFooterBarElement): Function | string {
+  public getLinkTarget(elem: IFooterBarElement): Array<string> {
     return typeof elem.linkTarget === 'function' ? elem.linkTarget(elem) : //
-           elem.linkTarget instanceof Array ? elem.linkTarget : //
-           !!elem.linkTarget ? [elem.linkTarget] : //
+           elem.linkTarget ? elem.linkTarget : //
            null;
   }
 

@@ -57,7 +57,6 @@ export class ThemesService {
       }),
     ]);
     const usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
-    console.log('themes-service ', usedTheme);
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
     if (!document.getElementById('link-manifest') && themeDataset === usedTheme) {
@@ -66,7 +65,7 @@ export class ThemesService {
     if (themeDataset !== usedTheme) {
       this._currentTheme = usedTheme;
       document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
-      this.reloadLinkNodes();
+      this.reloadLinkNodes(usedTheme);
     }
   }
 

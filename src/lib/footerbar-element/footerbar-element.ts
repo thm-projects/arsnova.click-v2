@@ -40,13 +40,13 @@ export class FooterbarElement implements IFooterBarElement {
     this._onClickCallback = value;
   }
 
-  private _linkTarget: Function | Array<string> | string;
+  private _linkTarget: Function | Array<string>;
 
-  get linkTarget(): Function | Array<string> | string {
+  get linkTarget(): Function | Array<string> {
     return this._linkTarget;
   }
 
-  set linkTarget(value: Function | Array<string> | string) {
+  set linkTarget(value: Function | Array<string>) {
     this._linkTarget = value;
   }
 
