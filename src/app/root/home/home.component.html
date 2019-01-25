@@ -36,10 +36,10 @@
              id="name-input-data-list">
           <span class="list-group-item list-group-item-action list-group-item-success text-capitalize pointer"
                 *ngFor="let quizname of sharedService.activeQuizzes"
-                (click)="autoJoinToSession(quizname)">{{'component.home.join' | translate:{name: quizname} }}}}</span>
+                (click)="autoJoinToSession(quizname)">{{'component.home.join' | translate:{name: quizname} }}</span>
           <span class="list-group-item list-group-item-action text-capitalize pointer"
                 *ngFor="let quizname of ownQuizzes"
-                (click)="selectQuizByList(quizname)">{{'component.home.use' | translate:{name: quizname} }}}}</span>
+                (click)="selectQuizByList(quizname)">{{'component.home.use' | translate:{name: quizname} }}</span>
           <span class="list-group-item list-group-item-action pointer"
                 (click)="selectQuizByList('Demo Quiz')">{{'component.home.new-demo-quiz' | translate}}</span>
           <span class="list-group-item list-group-item-action pointer"
