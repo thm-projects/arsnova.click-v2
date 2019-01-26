@@ -89,9 +89,9 @@ export class CountdownComponent implements OnInit, OnDestroy {
     const minutes = Math.floor((this._countdown - hours * 3600) / 60);
     const seconds = Math.floor((this._countdown - hours * 3600) - (minutes * 60));
 
-    this._parsedHours = hours > 0 && hours < 10 ? '0' + hours : String(hours);
-    this._parsedMinutes = minutes > 0 && minutes < 10 ? '0' + minutes : String(minutes);
-    this._parsedSeconds = seconds > 0 && seconds < 10 ? '0' + seconds : String(seconds);
+    this._parsedHours = String(hours);
+    this._parsedMinutes = String(minutes);
+    this._parsedSeconds = String(seconds);
 
     this._plainHours = parseInt(this._parsedHours, 10);
     this._plainMinutes = parseInt(this._parsedMinutes, 10);

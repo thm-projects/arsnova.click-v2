@@ -112,8 +112,8 @@ class GenerateImages {
         const size = {
           width: parseInt(splittedDerivate[0], 10),
           height: parseInt(splittedDerivate[1], 10),
-          roundX: Math.round((splittedDerivate[0] / Math.PI)),
-          roundY: Math.round((splittedDerivate[1] / Math.PI))
+          roundX: Math.round((splittedDerivate[0] / (Math.PI * 2))),
+          roundY: Math.round((splittedDerivate[1] / (Math.PI * 2)))
         };
         const roundedCorners = Buffer.from(
           `<svg><rect x="0" y="0" width="${size.width}" height="${size.height}" rx="${size.roundX}" ry="${size.roundY}"/></svg>`

@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { CanLoad, Router } from '@angular/router';
+import { Route } from '@angular/router/src/config';
+import { UrlSegment } from '@angular/router/src/url_tree';
 import { UserRole } from '../../../lib/enums/UserRole';
 import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StaticLoginService implements CanActivate {
+export class StaticLoginService implements CanLoad {
 
   constructor(private router: Router, private userService: UserService) { }
 
-  public async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-
-    await this.userService.loadConfig();
+  public canLoad(route: Route, segments: UrlSegment[]): boolean {
+    this.userService.loadConfig();
 
     console.log('is allowed to proceed', this.isAllowedToProceed(route));
     if (this.isAllowedToProceed(route)) {
@@ -21,18 +22,18 @@ export class StaticLoginService implements CanActivate {
 
     this.router.navigate(['/login'], {
       queryParams: {
-        return: state.url,
+        return: segments.map(segment => segment.path).join('/'),
       },
     });
     return false;
   }
 
-  private isAllowedToProceed(route): boolean {
+  private isAllowedToProceed(route: Route): boolean {
     if (!this.userService.isLoggedIn) {
       return false;
     }
 
-    switch (route.routeConfig.path) {
+    switch (route.path) {
       case 'i18n-manager':
         return this.userService.isAuthorizedFor(UserRole.EditI18n);
       case 'quiz-manager':

@@ -55,15 +55,13 @@ export class LoginComponent implements OnInit {
     this._authorizationFailed = false;
     if (this.username && this.password) {
       const passwordHash = this.userService.hashPassword(this.username, this.password);
+      const isLoggedIn = await this.userService.authenticateThroughLogin(this.username.toLowerCase(), passwordHash);
 
-      this.userService.loginNotifier.subscribe(isLoggedIn => {
-        if (isLoggedIn) {
-          this.router.navigateByUrl(this.return);
-        } else {
-          this._authorizationFailed = true;
-        }
-      });
-      this.userService.authenticateThroughLogin(this.username.toLowerCase(), passwordHash);
+      if (isLoggedIn) {
+        this.router.navigateByUrl(this.return);
+      } else {
+        this._authorizationFailed = true;
+      }
     }
   }
 

@@ -77,7 +77,7 @@ export class QuestionDetailsComponent implements OnInit {
     this.handleMessages();
 
     this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
-      if (value instanceof Array) {
+      if (Array.isArray(value)) {
         this._answers = value;
       } else {
         this._questionText = value;

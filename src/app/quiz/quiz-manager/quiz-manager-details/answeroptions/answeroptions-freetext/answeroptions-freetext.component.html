@@ -54,12 +54,12 @@
                     [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate"></textarea>
         <div *ngIf="hasTestInput()"
              class="center-block mt-4 mb-0">
-          <h5 class="text-center bg-light rounded py-2 px-2"
-              [class.text-success]="isTestInputCorrect()"
-              [class.text-danger]="!isTestInputCorrect()">
-            <span *ngIf="isTestInputCorrect">{{'component.answeroptions.free_text_question.check_correct' | translate}}</span>
-            <span *ngIf="isTestInputCorrect">{{'component.answeroptions.free_text_question.check_incorrect' | translate}}</span>
-          </h5>
+          <h6 class="text-center bg-light rounded py-2 px-2">
+            <span *ngIf="isTestInputCorrect()"
+                  class="text-success">{{'component.answeroptions.free_text_question.check_correct' | translate}}</span>
+            <span *ngIf="!isTestInputCorrect()"
+                  class="text-danger">{{'component.answeroptions.free_text_question.check_incorrect' | translate}}</span>
+          </h6>
         </div>
       </div>
     </div>

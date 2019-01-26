@@ -71,7 +71,7 @@ export class ProgressBarComponent {
       }
       const responseValue: any = value.responses[this.questionIndex].value;
 
-      if (responseValue instanceof Array) {
+      if (Array.isArray(responseValue)) {
         if (isNaN(responseValue[0])) {
           return (<any>responseValue.indexOf(question.answerOptionList[answerIndex].answerText)) > -1;
         } else {
@@ -97,7 +97,7 @@ export class ProgressBarComponent {
         return false;
       }
       const responseValue = value.responses[this.questionIndex].value;
-      if (responseValue instanceof Array) {
+      if (Array.isArray(responseValue)) {
         return false;
       }
       if (result.label === 'guessed_correct') {

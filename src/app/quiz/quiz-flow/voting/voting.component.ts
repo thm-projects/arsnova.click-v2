@@ -108,7 +108,7 @@ export class VotingComponent implements OnDestroy {
   }
 
   public isSelected(index: number): boolean {
-    return (this._selectedAnswers instanceof Array && this._selectedAnswers.indexOf(index) > -1) || this._selectedAnswers === index;
+    return (Array.isArray(this._selectedAnswers) && this._selectedAnswers.indexOf(index) > -1) || this._selectedAnswers === index;
   }
 
   public parseTextInput(event: Event): void {
@@ -124,12 +124,12 @@ export class VotingComponent implements OnDestroy {
   }
 
   public showSendResponseButton(): boolean {
-    return this.isNumber(this.selectedAnswers) || (this.selectedAnswers instanceof Array && !!this.selectedAnswers.length)
+    return this.isNumber(this.selectedAnswers) || (Array.isArray(this.selectedAnswers) && !!this.selectedAnswers.length)
            || (typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length);
   }
 
   public toggleSelectAnswer(index: number): void {
-    if (!(this._selectedAnswers instanceof Array)) {
+    if (!Array.isArray(this._selectedAnswers)) {
       return;
     }
     this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index), 1) : this.toggleSelectedAnswers()

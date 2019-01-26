@@ -69,32 +69,22 @@ export class UserService {
   ) {
   }
 
-  public loadConfig(): Promise<boolean> {
-    return new Promise<boolean>(async resolve => {
-      if (isPlatformServer(this.platformId)) {
-        this.isLoggedIn = false;
-        resolve(true);
-        return;
-      }
+  public loadConfig(): boolean {
+    if (isPlatformServer(this.platformId)) {
+      this.isLoggedIn = false;
+      return this.isLoggedIn;
+    }
 
-      this._staticLoginToken = sessionStorage.getItem('userToken');
-      this._casTicket = sessionStorage.getItem('castoken');
+    this._staticLoginToken = sessionStorage.getItem('userToken');
+    this._casTicket = sessionStorage.getItem('castoken');
 
-      if (!this._staticLoginToken) {
-        this.isLoggedIn = false;
-        resolve(true);
-        return;
-      }
+    if (!this._staticLoginToken) {
+      this.isLoggedIn = false;
+      return this.isLoggedIn;
+    }
 
-      if (!this._staticLoginToken) {
-        this.isLoggedIn = false;
-        resolve(true);
-        return;
-      }
-
-      this.isLoggedIn = !this.jwtHelper.isTokenExpired(this._staticLoginToken);
-      resolve(this.isLoggedIn);
-    });
+    this.isLoggedIn = !this.jwtHelper.isTokenExpired(this._staticLoginToken);
+    return this.isLoggedIn;
   }
 
   public logout(): void {
@@ -160,7 +150,7 @@ export class UserService {
       return false;
     }
 
-    if (authorization instanceof Array) {
+    if (Array.isArray(authorization)) {
       return authorization.some(auth => {
         return this.staticLoginTokenContent.userAuthorizations.find(value => value === auth);
       });

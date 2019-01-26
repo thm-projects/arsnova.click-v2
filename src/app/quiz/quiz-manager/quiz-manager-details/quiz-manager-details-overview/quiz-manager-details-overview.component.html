@@ -89,8 +89,7 @@
           <p *ngFor="let answer of question?.answerOptionList; let i = index;"
              class="mb-0"
              role="listitem">
-            <span [innerHTML]="'component.quiz_summary.answer' | translate"></span>
-            <span>{{i+1}}</span>
+            <span>{{'component.quiz_summary.answer' | translate}}&nbsp;{{i+1}}</span>
             <span *ngIf="question?.TYPE !== 'SurveyQuestion'">
               <span *ngIf="answer.isCorrect">({{'component.quiz_summary.correct' | translate}})</span>
               <span *ngIf="!answer.isCorrect">({{'component.quiz_summary.wrong' | translate}})</span>

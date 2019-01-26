@@ -95,7 +95,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   public sanitizeHTML(value: string): SafeHtml;
   public sanitizeHTML<T>(value: Array<string>): SafeHtml;
   public sanitizeHTML(value: string | Array<string>): SafeHtml {
-    if (value instanceof Array) {
+    if (Array.isArray(value)) {
       value = value.join('');
     }
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);

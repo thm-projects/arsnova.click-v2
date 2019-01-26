@@ -1,10 +1,10 @@
 <h4 class="text-center text-light mb-5">
-  <span *ngIf="isViewingOwnQuizzes">{{'component.public-quizzes.own.title' | translate}}This is a list of your public quizzes</span>
-  <span *ngIf="!isViewingOwnQuizzes">{{'component.public-quizzes.title' | translate}}This is a list of public quizzes of other users</span>
+  <span *ngIf="isViewingOwnQuizzes">{{'component.public-quizzes.own.title' | translate}}</span>
+  <span *ngIf="!isViewingOwnQuizzes">{{'component.public-quizzes.title' | translate}}</span>
 </h4>
 
 <h5 *ngIf="!availablePublicQuizzes.length"
-    class="text-center text-light">{{'component.public-quizzes.none-available'}}None available</h5>
+    class="text-center text-light">{{'component.public-quizzes.none-available'}}</h5>
 
 <div class="row">
   <div class="col-sm-6"
@@ -23,12 +23,12 @@
                    [icon]="'paper-plane'"
                    (click)="playQuiz(i)"></fa-icon>
         </div>
-        <h5 class="card-title">{{'component.public-quizzes.name' | translate}}: {{quiz.name}}</h5>
+        <h5 class="card-title">{{'component.public-quizzes.name' | translate}}&nbsp;{{quiz.name}}</h5>
         <p class="card-subtitle text-muted mb-2">{{quiz.description}}</p>
-        <p class="card-text mb-0">{{'component.public-quizzes.features' | translate}}:</p>
+        <p class="card-text mb-0">{{'component.public-quizzes.features' | translate}}</p>
         <ul>
-          <li>{{'component.public-quizzes.number-of-questions' | translate}}Number of Questions: {{quiz.questionList.length}}</li>
-          <li>{{'component.public-quizzes.cas-required' | translate}}CAS Login required: {{quiz.sessionConfig.nicks.restrictToCasLogin}}</li>
+          <li>{{'component.public-quizzes.number-of-questions' | translate}}&nbsp;{{quiz.questionList.length}}</li>
+          <li>{{'component.public-quizzes.cas-required' | translate}}&nbsp;{{quiz.sessionConfig.nicks.restrictToCasLogin}}</li>
         </ul>
       </div>
     </div>

@@ -28,6 +28,7 @@ import { FooterBarService } from './service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from './service/header-label/header-label.service';
 import { I18nService } from './service/i18n/i18n.service';
 import { CasLoginService } from './service/login/cas-login.service';
+import { StaticLoginService } from './service/login/static-login.service';
 import { QuestionTextService } from './service/question-text/question-text.service';
 import { QuizService } from './service/quiz/quiz.service';
 import { SettingsService } from './service/settings/settings.service';
@@ -51,6 +52,7 @@ export const appRoutes: Routes = [
     loadChildren: 'app/root/info/info.module#InfoModule',
   }, {
     path: 'i18n-manager',
+    canLoad: [StaticLoginService],
     loadChildren: 'app/i18n-manager/i18n-manager.module#I18nManagerModule',
   }, {
     path: 'quiz/manager',
@@ -113,7 +115,7 @@ export const appRoutes: Routes = [
     }),
     RouterModule.forRoot(appRoutes, {
       preloadingStrategy: RoutePreloader,
-      enableTracing: true, // <-- debugging purposes only
+      enableTracing: false, // <-- debugging purposes only
     }),
     SharedModule,
     ThemesModule,

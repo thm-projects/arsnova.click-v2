@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Settings for saved Quizzes</h4>
+  <h4 class="modal-title">{{'component.quiz-save.title'}}Settings for saved Quizzes</h4>
   <button type="button"
           class="close"
           aria-label="Close"
@@ -11,7 +11,7 @@
   <div class="form-row">
     <div class="form-group col-12">
       <label class="d-block">
-        <span>Access to this Quiz is allowed for:</span>
+        <span>{{'component.quiz-save.access-allowed-for'}}</span>
         <select [(ngModel)]="quizVisibility"
                 name="quizVisibility"
                 class="form-control">
@@ -27,7 +27,7 @@
        *ngIf="isPublicVisibility()">
     <div class="form-group col-12">
       <label class="d-block">
-        <span>Description</span>
+        <span>{{'component.quiz-save.description'}}</span>
         <textarea class="form-control"
                   name="description"
                   placeholder="description"
@@ -38,7 +38,7 @@
   <div class="form-row">
     <div class="form-group col-12">
       <label class="d-block">
-        <span>Expiry</span>
+        <span>{{'component.quiz-save.expiry'}}</span>
         <input type="date"
                class="form-control"
                name="expiry"
@@ -53,7 +53,7 @@
           class="btn btn-outline-dark"
           [disabled]="isSubmitting"
           (click)="save()">
-    <span *ngIf="!isSubmitting">Save</span>
-    <span *ngIf="isSubmitting">Submitting...</span>
+    <span *ngIf="!isSubmitting">{{'component.quiz-save.save'}}</span>
+    <span *ngIf="isSubmitting">{{'component.quiz-save.is-submitting'}}Submitting...</span>
   </button>
 </div>

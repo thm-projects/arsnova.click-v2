@@ -116,7 +116,7 @@ describe('ProgressBarComponent', () => {
 
       questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
       questionTextService.eventEmitter.subscribe((value) => {
-        if (value instanceof Array) {
+        if (Array.isArray(value)) {
           component.data = value;
           expect(component.attendeeDataForAnswer(0)).toBeTruthy();
         }

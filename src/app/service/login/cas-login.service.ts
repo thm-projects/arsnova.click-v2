@@ -21,7 +21,7 @@ export class CasLoginService implements CanLoad, CanActivate {
   }
 
   public async canLoad(): Promise<boolean> {
-    await this.userService.loadConfig();
+    this.userService.loadConfig();
 
     if (this.userService.isLoggedIn || !this.casLoginRequired) {
       return true;
