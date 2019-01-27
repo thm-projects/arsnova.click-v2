@@ -60,30 +60,30 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
   public deviceClass(): string {
     switch (this.targetDevice) {
-      case 0:
+      case DEVICE_TYPES.XS:
         return 'device_xs';
-      case 1:
+      case DEVICE_TYPES.SM:
         return 'device_sm';
-      case 2:
+      case DEVICE_TYPES.MD:
         return 'device_md';
-      case 3:
+      case DEVICE_TYPES.LG:
         return 'device_lg';
-      case 4:
+      case DEVICE_TYPES.XLG:
         return 'device_xlg';
     }
   }
 
   public getComputedWidth(): string {
     switch (this.targetDevice) {
-      case 0:
+      case DEVICE_TYPES.XS:
         return 'calc(50% - 1rem)';
-      case 1:
+      case DEVICE_TYPES.SM:
         return 'device_sm';
-      case 2:
+      case DEVICE_TYPES.MD:
         return 'device_md';
-      case 3:
+      case DEVICE_TYPES.LG:
         return 'device_lg';
-      case 4:
+      case DEVICE_TYPES.XLG:
         return 'device_xlg';
     }
   }

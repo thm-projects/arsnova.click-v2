@@ -12,7 +12,8 @@
       </svg>
     </a>
   </div>
-  <div class="header-title d-flex align-items-center">
+  <div *ngIf="showHeader"
+       class="header-title d-flex align-items-center">
     <div class="center-block">
       <div class="text-center header-label"
            *ngIf="headerLabelService.headerLabel !== 'default'"

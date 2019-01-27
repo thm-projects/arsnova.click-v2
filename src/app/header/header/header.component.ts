@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,8 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 })
 export class HeaderComponent implements OnInit {
   public static TYPE = 'HeaderComponent';
+
+  @Input() public showHeader = true;
 
   private _origin: string = isPlatformBrowser(this.platformId) ? location.hostname : '';
 

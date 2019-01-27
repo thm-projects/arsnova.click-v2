@@ -15,7 +15,6 @@ export class StaticLoginService implements CanLoad {
   public canLoad(route: Route, segments: UrlSegment[]): boolean {
     this.userService.loadConfig();
 
-    console.log('is allowed to proceed', this.isAllowedToProceed(route));
     if (this.isAllowedToProceed(route)) {
       return true;
     }
