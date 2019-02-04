@@ -37,6 +37,8 @@ export class StaticLoginService implements CanLoad {
         return this.userService.isAuthorizedFor(UserRole.EditI18n);
       case 'quiz-manager':
         return this.userService.isAuthorizedFor(UserRole.CreateExpiredQuiz);
+      case 'admin':
+        return this.userService.isAuthorizedFor([UserRole.QuizAdmin, UserRole.SuperAdmin]);
       default:
         return true;
     }

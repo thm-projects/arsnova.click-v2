@@ -131,10 +131,10 @@
           id="quizSummaryValidationErrors"
           [attr.data-intro]="'component.quiz_summary.description.validation_errors' | translate"
           [attr.aria-label]="'component.quiz_summary.description.validation_errors' | translate">
-        <li *ngFor="let validationError of question?.getValidationStackTrace(); let i = index">
-          <span *ngIf="validationError.occurredAt.type === 'question'">{{'component.quiz_summary.validation_errors.types.question' | translate}}</span>
-          <span *ngIf="validationError.occurredAt.type === 'answerOption'">{{'component.quiz_summary.validation_errors.types.answerOption' | translate}} {{i + 1}}</span>
-          <span>:&nbsp;{{validationError.reason | translate}}</span>
+        <li *ngFor="let validationError of question?.getValidationStackTrace()">
+          <span *ngIf="validationError.occurredAt?.type === 'question'">{{'component.quiz_summary.validation_errors.types.question' | translate}}:&nbsp;</span>
+          <span *ngIf="validationError.occurredAt?.type === 'answerOption'">{{'component.quiz_summary.validation_errors.types.answerOption' | translate}}:&nbsp;</span>
+          <span>{{validationError.reason | translate}}</span>
         </li>
       </ul>
     </div>

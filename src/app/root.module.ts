@@ -46,6 +46,7 @@ import { ThemesModule } from './themes/themes.module';
 export const appRoutes: Routes = [
   {
     path: 'admin',
+    canLoad: [StaticLoginService],
     loadChildren: 'app/admin/admin.module#AdminModule',
   }, {
     path: 'info',

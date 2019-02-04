@@ -77,15 +77,15 @@
   </div>
 
   <div class="modal-body">
-    <p class="d-inline-flex"
-       [innerHTML]="'component.lobby.kick_member_confirmation' | translate:{NAME: parseNickname(_nickToRemove)}"></p>
+    <p class="d-inline-flex">
+      {{'component.lobby.kick_member_confirmation' | translate:{NAME: parseNickname(nickToRemove)} }}</p>
   </div>
 
   <div class="modal-footer">
     <button type="button"
             class="btn btn-danger pointer mr-auto"
             data-dismiss="modal"
-            (click)="kickMember(_nickToRemove)"
+            (click)="kickMember(nickToRemove)"
             [innerHTML]="'global.yes' | translate"></button>
 
     <button type="button"

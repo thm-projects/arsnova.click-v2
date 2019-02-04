@@ -49,8 +49,13 @@ export class QuizLobbyComponent implements OnDestroy {
     this._qrCodeContent = value;
   }
 
-  private _reconnectTimeout: any;
   private _nickToRemove: string;
+
+  get nickToRemove(): string {
+    return this._nickToRemove;
+  }
+
+  private _reconnectTimeout: any;
   private _kickMemberModalRef: NgbActiveModal;
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];
@@ -101,7 +106,7 @@ export class QuizLobbyComponent implements OnDestroy {
     this._nickToRemove = name;
   }
 
-  public async kickMember(name: string): Promise<void> {
+  public kickMember(name: string): void {
     this._kickMemberModalRef.close();
     this.memberApiService.deleteMember(this.quizService.quiz.name, name).subscribe();
   }

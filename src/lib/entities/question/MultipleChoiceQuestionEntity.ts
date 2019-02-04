@@ -17,6 +17,11 @@ export class MultipleChoiceQuestionEntity extends AbstractChoiceQuestionEntity {
     return 'component.question_type.description.MultipleChoiceQuestion';
   }
 
+  public isValid(): boolean {
+    const correctAnswers = this.answerOptionList.filter(answeroption => answeroption.isCorrect).length;
+    return super.isValid() && correctAnswers > 0;
+  }
+
   public getValidationStackTrace(): Array<IValidationStackTrace> {
     const parentStackTrace = super.getValidationStackTrace();
     let hasValidAnswer = false;
@@ -27,7 +32,6 @@ export class MultipleChoiceQuestionEntity extends AbstractChoiceQuestionEntity {
     });
     if (!hasValidAnswer) {
       parentStackTrace.push({
-        occurredAt: { type: 'question' },
         reason: 'component.quiz_summary.validation_errors.reasons.no_valid_answers',
       });
     }

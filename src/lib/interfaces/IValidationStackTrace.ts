@@ -1,5 +1,5 @@
 export interface IValidationStackTrace {
-  occurredAt: {
+  occurredAt?: {
     type: string;
   };
   reason: string;
