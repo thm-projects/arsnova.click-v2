@@ -383,6 +383,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       case MessageProtocol.Stop:
         this.countdown.stop();
         break;
+      case MessageProtocol.Removed:
+        const existingNickname = sessionStorage.getItem('nick');
+        if (existingNickname === data.payload.name) {
+          this.router.navigate(['/']);
+        }
+        break;
     }
   }
 

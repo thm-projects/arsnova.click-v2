@@ -1,5 +1,5 @@
 <div class="row">
-  <ng-container *ngIf="attendeeService.getMemberGroups().length === 1; else attendeesByGroup">
+  <ng-container *ngIf="attendeeService.getMemberGroups()?.length === 1; else attendeesByGroup">
     <ng-container *ngIf="!attendeeService.attendees.length">
       <div class="col-12">
         <h3 class="text-center text-light center-top d-flex align-self-center justify-content-center">{{'component.lobby.waiting_for_players' | translate}}</h3>

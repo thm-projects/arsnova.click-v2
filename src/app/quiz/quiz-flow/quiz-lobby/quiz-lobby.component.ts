@@ -176,7 +176,6 @@ export class QuizLobbyComponent implements OnDestroy {
       this.footerBarService.footerElemEditQuiz,
       this.footerBarService.footerElemStartQuiz,
       this.footerBarService.footerElemReadingConfirmation,
-      this.footerBarService.footerElemTheme,
       this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemQRCode,
       this.footerBarService.footerElemResponseProgress,
@@ -206,6 +205,7 @@ export class QuizLobbyComponent implements OnDestroy {
       }
     };
     this.footerBarService.footerElemEditQuiz.onClickCallback = async () => {
+      this.quizService.close();
       this.attendeeService.cleanUp();
       this.connectionService.cleanUp();
       this.router.navigate(['/quiz', 'manager', 'overview']);
@@ -213,7 +213,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.socket.subscribe(async (data: IMessage) => {
+    this._subscriptions.push(this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Inactive:
           this._reconnectTimeout = setTimeout(this.handleMessages.bind(this), 500);
@@ -237,7 +237,7 @@ export class QuizLobbyComponent implements OnDestroy {
           break;
       }
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
-    });
+    }));
   }
 
   private handleMessagesForOwner(data: IMessage): void {
