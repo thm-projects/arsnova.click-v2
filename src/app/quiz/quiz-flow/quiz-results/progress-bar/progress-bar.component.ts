@@ -125,13 +125,13 @@ export class ProgressBarComponent {
         return;
       }
       const answer = question.answerOptionList[0] = new FreeTextAnswerEntity(question.answerOptionList[0]);
-      if (result.label === 'correct_answer') {
+      if (result.label === 'component.liveResults.correct_answer') {
         return answer.isCorrectInput(responseValue);
       } else {
         return !answer.isCorrectInput(responseValue);
       }
     });
-    result.isCorrect = result.label === 'correct_answer' ? 1 : -1;
+    result.isCorrect = result.label === 'component.liveResults.correct_answer' ? 1 : -1;
     result.label = this.translate.instant(`${result.label}`);
     result.absolute = matches.length;
     result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberType.Percent);

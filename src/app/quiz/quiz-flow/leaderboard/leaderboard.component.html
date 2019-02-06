@@ -15,7 +15,7 @@
     </span>
   </h4>
 
-  <ng-container *ngIf="quizService.quiz.sessionConfig.nicks.memberGroups.length > 1;else attendeeView">
+  <ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length > 1;else attendeeView">
     <ng-container *ngFor="let group of memberGroupResults">
       <div class="col-12 col-sm-6">
         <div class="leaderboard-item rounded p-2 my-2 ">
@@ -71,7 +71,7 @@
       <span *ngIf="i">{{i + 1}}.&nbsp;</span>
       <span><span class="d-inline-flex"
                   [innerHTML]="parseNickname(attendee.name)"></span>&nbsp;-&nbsp;</span>
-      <span>{{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}</span>
+      <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
     </div>
   </div>
 </ng-template>

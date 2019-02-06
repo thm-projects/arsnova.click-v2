@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
 import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
@@ -19,7 +20,8 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-leaderboard',
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
-})
+}) //
+@AutoUnsubscribe('_subscriptions')
 export class LeaderboardComponent implements OnInit {
   public static TYPE = 'LeaderboardComponent';
 
@@ -29,13 +31,13 @@ export class LeaderboardComponent implements OnInit {
     return this._questionIndex;
   }
 
-  private _leaderBoardCorrect: Array<ILeaderBoardItem>;
+  private _leaderBoardCorrect: Array<ILeaderBoardItem> = [];
 
   get leaderBoardCorrect(): Array<ILeaderBoardItem> {
     return this._leaderBoardCorrect;
   }
 
-  private _leaderBoardPartiallyCorrect: Array<ILeaderBoardItem>;
+  private _leaderBoardPartiallyCorrect: Array<ILeaderBoardItem> = [];
 
   get leaderBoardPartiallyCorrect(): Array<ILeaderBoardItem> {
     return this._leaderBoardPartiallyCorrect;
@@ -60,7 +62,10 @@ export class LeaderboardComponent implements OnInit {
   }
 
   private _routerSubscription: Subscription;
-  private readonly _name: string;
+  private _name: string;
+
+  // noinspection JSMismatchedCollectionQueryUpdate
+  private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -77,19 +82,25 @@ export class LeaderboardComponent implements OnInit {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
 
-    this._name = this.quizService.quiz.name;
-    this._leaderBoardCorrect = [];
-    this._leaderBoardPartiallyCorrect = [];
+    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
 
-    if (this.quizService.isOwner) {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
-      ]);
-    } else {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
-      ]);
-    }
+      this._name = this.quizService.quiz.name;
+      this.attendeeService.restoreMembers();
+
+      if (this.quizService.isOwner) {
+        this.footerBarService.replaceFooterElements([
+          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
+        ]);
+      } else {
+        this.footerBarService.replaceFooterElements([
+          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
+        ]);
+      }
+    }));
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -124,45 +135,51 @@ export class LeaderboardComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
-      this.handleMessages();
-    });
-
     this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
-      this._isGlobalRanking = isNaN(this._questionIndex);
-      if (this._isGlobalRanking) {
-        this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
-        this._questionIndex = null;
-        if (params['questionIndex']) {
-          this.router.navigate(['/quiz', 'flow', 'leaderboard']);
+      this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+
+        if (!quiz) {
           return;
         }
-      } else {
-        this.headerLabelService.headerLabel = 'component.leaderboard.header';
 
-        const questionType = this.quizService.quiz.questionList[this.questionIndex].TYPE;
-        this._hasMultipleAnswersAvailable = questionType === QuestionType.MultipleChoiceQuestion;
-      }
-
-    });
-
-    this.leaderboardApiService.getLeaderboardData(this._name, this.questionIndex).subscribe(lederboardData => {
-      this._leaderBoardCorrect = lederboardData.payload.correctResponses;
-      this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
-      this._memberGroupResults = lederboardData.payload.memberGroupResults;
-      this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
-        this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
-          if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
-            this._leaderBoardCorrect.splice(index, 1);
-          }
+        this.connectionService.initConnection().then(() => {
+          this.connectionService.connectToChannel(this.quizService.quiz.name);
+          this.handleMessages();
         });
-      });
 
-      this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-        return memberGroupResult.correctQuestions.length > 0;
-      });
+        this._questionIndex = +params['questionIndex'];
+        this._isGlobalRanking = isNaN(this._questionIndex);
+        if (this._isGlobalRanking) {
+          this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
+          this._questionIndex = null;
+          if (params['questionIndex']) {
+            this.router.navigate(['/quiz', 'flow', 'leaderboard']);
+            return;
+          }
+        } else {
+          this.headerLabelService.headerLabel = 'component.leaderboard.header';
+
+          const questionType = this.quizService.quiz.questionList[this.questionIndex].TYPE;
+          this._hasMultipleAnswersAvailable = questionType === QuestionType.MultipleChoiceQuestion;
+        }
+
+        this.leaderboardApiService.getLeaderboardData(this._name, this.questionIndex).subscribe(lederboardData => {
+          this._leaderBoardCorrect = lederboardData.payload.correctResponses;
+          this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
+          this._memberGroupResults = lederboardData.payload.memberGroupResults;
+          this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
+            this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
+              if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
+                this._leaderBoardCorrect.splice(index, 1);
+              }
+            });
+          });
+
+          this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
+            return memberGroupResult.correctQuestions.length > 0;
+          });
+        });
+      }));
     });
   }
 

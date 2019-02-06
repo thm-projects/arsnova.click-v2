@@ -62,7 +62,7 @@
       <div class="col-6 col-join-session px-1">
         <button *ngIf="!canStartQuiz"
                 id="joinSession"
-                class="btn btn-success btn-block pointer"
+                class="btn btn-success btn-block pointer text-nowrap"
                 (click)="handleClick('joinSession') && joinQuiz()"
                 [class.disabled]="!canJoinQuiz"
                 [routerLink]="['/quiz', enteredSessionName]"
@@ -72,7 +72,7 @@
         </button>
         <button *ngIf="canStartQuiz"
                 id="startSession"
-                class="btn btn-success btn-block pointer"
+                class="btn btn-success btn-block pointer text-nowrap"
                 (click)="handleClick('startSession') && runQuiz(['/quiz', 'flow'])"
                 [class.disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
                 [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)">
@@ -83,7 +83,7 @@
       <div class="col-6 col-create-session px-1">
         <button *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
                 id="addSession"
-                class="btn btn-success btn-block pointer"
+                class="btn btn-success btn-block pointer text-nowrap"
                 [class.disabled]="!canAddQuiz"
                 (click)="handleClick('addSession') && addQuiz()"
                 [disabled]="!canAddQuiz">
@@ -92,14 +92,14 @@
         </button>
         <button *ngIf="canEditQuiz"
                 id="editSession"
-                class="btn btn-success btn-block pointer"
+                class="btn btn-success btn-block pointer text-nowrap"
                 (click)="handleClick('editSession') && editQuiz()">
           <span class="mr-1">{{'component.name_management.edit_session' | translate}}</span>
           <fa-icon [icon]="'edit'"></fa-icon>
         </button>
         <button *ngIf="isAddingDemoQuiz"
                 id="runDemoQuizSession"
-                class="btn btn-success btn-block pointer"
+                class="btn btn-success btn-block pointer text-nowrap"
                 [class.disabled]="passwordRequired && !serverPassword.length"
                 (click)="handleClick('add-demo-quiz') && runQuiz(['/quiz', 'flow'])"
                 [disabled]="passwordRequired && !serverPassword.length">
@@ -108,7 +108,7 @@
         </button>
         <button *ngIf="isAddingABCDQuiz"
                 id="runABCDQuizSession"
-                class="btn btn-success btn-block pointer"
+                class="btn btn-success btn-block pointer text-nowrap"
                 [class.disabled]="passwordRequired && !serverPassword.length"
                 (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
                 [disabled]="passwordRequired && !serverPassword.length">

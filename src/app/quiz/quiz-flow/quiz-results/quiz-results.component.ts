@@ -111,7 +111,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public hideProgressbarCssStyle(): boolean {
     const results = this.attendeeService.attendees.some(nick => {
       const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
-      return typeof val === 'number' ? val > -1 : val.length === 0;
+      return typeof val === 'number' ? val > -1 : val.length > 0;
     });
 
     return (this._selectedQuestionIndex <= this.quizService.quiz.currentQuestionIndex && //
@@ -133,13 +133,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return hasConfidenceSet ? matches.length > 0 || isConfidenceEnabled : matches.length > 0;
   }
 
-  public async modifyVisibleQuestion(index: number): Promise<void> {
+  public modifyVisibleQuestion(index: number): void {
     if (!this.quizService.quiz) {
       return;
     }
 
     this._selectedQuestionIndex = index;
-    await this.generateAnswers(this.quizService.quiz.questionList[index]);
+    this.generateAnswers(this.quizService.quiz.questionList[index]);
   }
 
   public getConfidenceData(questionIndex: number): { base: number, absolute: number, percent: string } {
@@ -223,7 +223,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     }
 
     const question = this.quizService.currentQuestion();
-    await this.generateAnswers(question);
+    this.generateAnswers(question);
 
     if (startQuizData.step === MessageProtocol.ReadingConfirmationRequested) {
       this.quizService.readingConfirmationRequested = true;
@@ -264,12 +264,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         console.log('Stopping countdown in the quiz results since all attendees have answered the current question');
         this.countdown.stop();
       } else {
-        console.log(this.attendeeService.attendees);
-        this.attendeeService.attendees.every(nick => {
+        console.log(this.attendeeService.attendees, this.attendeeService.attendees.every(nick => {
           const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
           console.log('checking response of nick', nick, val);
           return typeof val === 'number' ? val > -1 : val.length > 0;
-        });
+        }));
       }
     });
   }
@@ -392,7 +391,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private async generateAnswers(question: AbstractQuestionEntity): Promise<void> {
+  private generateAnswers(question: AbstractQuestionEntity): void {
     if (question.TYPE === QuestionType.RangedQuestion) {
       this.answers = ['component.liveResults.guessed_correct', 'component.liveResults.guessed_in_range', 'component.liveResults.guessed_wrong'];
 
@@ -400,7 +399,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this.answers = ['component.liveResults.correct_answer', 'component.liveResults.wrong_answer'];
 
     } else {
-      await this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {
+      this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {
         return answer.answerText;
       }));
     }

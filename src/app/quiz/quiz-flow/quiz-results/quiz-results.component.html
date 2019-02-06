@@ -15,7 +15,7 @@
   <div class="my-3 btn-group">
     <button *ngIf="showStartQuizButton()"
             (click)="startQuiz()"
-            class="btn btn-default pointer"
+            class="btn btn-default pointer text-nowrap"
             [class.w-100]="quizService.getVisibleQuestions().length">
       <span *ngIf="quizService.quiz && quizService.quiz.sessionConfig.readingConfirmationEnabled && quizService.readingConfirmationRequested">
         {{'component.liveResults.start_round' | translate}}
@@ -30,20 +30,20 @@
     </button>
     <button *ngIf="showStopCountdownButton()"
             (click)="stopQuiz()"
-            class="btn btn-default pointer"
+            class="btn btn-default pointer text-nowrap"
             [class.w-100]="!quizService.getVisibleQuestions().length">
       <span [innerHTML]="'component.liveResults.abort_countdown' | translate"></span>
       <fa-icon [icon]="'ban'"></fa-icon>
     </button>
     <button *ngIf="showStopQuizButton()"
             (click)="stopQuiz()"
-            class="btn btn-default pointer"
+            class="btn btn-default pointer text-nowrap"
             [class.w-100]="!quizService.getVisibleQuestions().length">
       <span [innerHTML]="'component.liveResults.abort_question' | translate"></span>
       <fa-icon [icon]="'ban'"></fa-icon>
     </button>
     <button *ngFor="let question of quizService.getVisibleQuestions(); let i = index"
-            class="btn btn-default pointer"
+            class="btn btn-default pointer text-nowrap"
             [class.disabled]="i === selectedQuestionIndex"
             [disabled]="i === selectedQuestionIndex"
             (click)="modifyVisibleQuestion(i)">
