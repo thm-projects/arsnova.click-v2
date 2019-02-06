@@ -65,8 +65,8 @@ export class MemberApiService {
       { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
-  public getMembers(): Observable<Array<MemberEntity>> {
-    return this.http.get<Array<MemberEntity>>(`${this._getMembersUrl}`, { headers: { authorization: sessionStorage.getItem('token') } });
+  public getMembers(quizname: string): Observable<Array<MemberEntity>> {
+    return this.http.get<Array<MemberEntity>>(`${this._getMembersUrl}/${quizname}`, { headers: { authorization: sessionStorage.getItem('token') } });
   }
 
   public getAvailableNames(quizName: string): Observable<Array<string>> {
