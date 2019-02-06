@@ -1,7 +1,7 @@
 <div class="progress my-2 position-relative"
      style="height: 2rem;">
   <div *ngIf="base && percent"
-       class="progress-bar overflow-hidden bg-secondary"
+       class="progress-bar overflow-hidden progress-default"
        role="progressbar"
        [style.width]="sanitizeStyle(percent)"
        [attr.aria-valuenow]="percent"

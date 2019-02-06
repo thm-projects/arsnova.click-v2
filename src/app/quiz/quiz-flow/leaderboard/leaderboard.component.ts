@@ -1,4 +1,4 @@
-import { Component, OnInit, SecurityContext } from '@angular/core';
+import { Component, OnDestroy, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
@@ -22,7 +22,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./leaderboard.component.scss'],
 }) //
 @AutoUnsubscribe('_subscriptions')
-export class LeaderboardComponent implements OnInit {
+export class LeaderboardComponent implements OnDestroy {
   public static TYPE = 'LeaderboardComponent';
 
   private _questionIndex: number;
@@ -61,7 +61,6 @@ export class LeaderboardComponent implements OnInit {
     return this._hasMultipleAnswersAvailable;
   }
 
-  private _routerSubscription: Subscription;
   private _name: string;
 
   // noinspection JSMismatchedCollectionQueryUpdate
@@ -89,18 +88,14 @@ export class LeaderboardComponent implements OnInit {
       }
 
       this._name = this.quizService.quiz.name;
+      this.initData();
       this.attendeeService.restoreMembers();
-
-      if (this.quizService.isOwner) {
-        this.footerBarService.replaceFooterElements([
-          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
-        ]);
-      } else {
-        this.footerBarService.replaceFooterElements([
-          this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
-        ]);
-      }
+      this.addFooterElements();
     }));
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -134,57 +129,51 @@ export class LeaderboardComponent implements OnInit {
     return +(value[0] + 'e' + (value[1] ? (+value[1] - digits) : -digits));
   }
 
-  public ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
-
-        if (!quiz) {
-          return;
-        }
-
-        this.connectionService.initConnection().then(() => {
-          this.connectionService.connectToChannel(this.quizService.quiz.name);
-          this.handleMessages();
-        });
-
-        this._questionIndex = +params['questionIndex'];
-        this._isGlobalRanking = isNaN(this._questionIndex);
-        if (this._isGlobalRanking) {
-          this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
-          this._questionIndex = null;
-          if (params['questionIndex']) {
-            this.router.navigate(['/quiz', 'flow', 'leaderboard']);
-            return;
-          }
-        } else {
-          this.headerLabelService.headerLabel = 'component.leaderboard.header';
-
-          const questionType = this.quizService.quiz.questionList[this.questionIndex].TYPE;
-          this._hasMultipleAnswersAvailable = questionType === QuestionType.MultipleChoiceQuestion;
-        }
-
-        this.leaderboardApiService.getLeaderboardData(this._name, this.questionIndex).subscribe(lederboardData => {
-          this._leaderBoardCorrect = lederboardData.payload.correctResponses;
-          this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
-          this._memberGroupResults = lederboardData.payload.memberGroupResults;
-          this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
-            this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
-              if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
-                this._leaderBoardCorrect.splice(index, 1);
-              }
-            });
-          });
-
-          this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-            return memberGroupResult.correctQuestions.length > 0;
-          });
-        });
-      }));
-    });
-  }
-
   public formatResponseTime(responseTime: number): string {
     return this.i18nService.formatNumber(this.roundResponseTime(responseTime, 2));
+  }
+
+  private initData(): void {
+    this.route.params.subscribe(params => {
+
+      this.connectionService.initConnection().then(() => {
+        this.connectionService.connectToChannel(this.quizService.quiz.name);
+        this.handleMessages();
+      });
+
+      this._questionIndex = +params['questionIndex'];
+      this._isGlobalRanking = isNaN(this._questionIndex);
+      if (this._isGlobalRanking) {
+        this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
+        this._questionIndex = null;
+        if (params['questionIndex']) {
+          this.router.navigate(['/quiz', 'flow', 'leaderboard']);
+          return;
+        }
+      } else {
+        this.headerLabelService.headerLabel = 'component.leaderboard.header';
+
+        const questionType = this.quizService.quiz.questionList[this.questionIndex].TYPE;
+        this._hasMultipleAnswersAvailable = questionType === QuestionType.MultipleChoiceQuestion;
+      }
+
+      this.leaderboardApiService.getLeaderboardData(this._name, this.questionIndex).subscribe(lederboardData => {
+        this._leaderBoardCorrect = lederboardData.payload.correctResponses;
+        this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
+        this._memberGroupResults = lederboardData.payload.memberGroupResults;
+        this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
+          this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
+            if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
+              this._leaderBoardCorrect.splice(index, 1);
+            }
+          });
+        });
+
+        this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
+          return memberGroupResult.correctQuestions.length > 0;
+        });
+      });
+    });
   }
 
   private handleMessages(): void {
@@ -209,4 +198,15 @@ export class LeaderboardComponent implements OnInit {
     });
   }
 
+  private addFooterElements(): void {
+    if (this.quizService.isOwner) {
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
+      ]);
+    } else {
+      this.footerBarService.replaceFooterElements([
+        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
+      ]);
+    }
+  }
 }

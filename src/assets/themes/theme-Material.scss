@@ -202,9 +202,9 @@
     /* Voting results */
     "bg-button_result": $primary_color,
     "progress-bar-success-color": map-get($stdStyle, "md_green_500"),
-    "progress-bar-danger-color": $accent_color,
-    "progress-bar-warning-color": map-get($stdStyle, "md_red_500"),
-    "progress-bar-default-color": map-get($stdStyle, "md_blue_grey_700"), /* partially correct */
+    "progress-bar-danger-color": map-get($stdStyle, "md_deep_orange_700"),
+    "progress-bar-warning-color": map-get($stdStyle, "md_yellow_700"),
+    "progress-bar-default-color": map-get($stdStyle, "md_grey_500"), /* partially correct */
     "bg-button-result-progress": $dark_primary_color,
     "fg-button-result-percentage": white,
     /* Winning player on ranking list */
