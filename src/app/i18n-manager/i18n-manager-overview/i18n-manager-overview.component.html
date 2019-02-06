@@ -13,7 +13,10 @@
     <span class="d-inline-flex mx-2 align-items-center"
           [class.text-warning]="this.projectLoaderService.connected"
           [class.text-danger]="!this.projectLoaderService.connected">
-      {{!this.projectLoaderService.connected ? 'Not ' : ''}} Loaded{{this.projectLoaderService.connected && !this.userService.staticLoginTokenContent.gitlabToken ? ' (Readonly)' : ''}}
+      <span *ngIf="!this.projectLoaderService.connected">Not&nbsp;</span>
+      <span>Loaded</span>
+      <span *ngIf="this.projectLoaderService.connected && !this.userService.staticLoginTokenContent.gitlabToken"
+            class="text-danger">&nbsp;(Readonly - No Gitlab API Token set for user)</span>
     </span>
   </div>
 
@@ -30,6 +33,7 @@
          class="btn-group ml-md-auto">
       <button class="btn btn-secondary pointer"
               [disabled]="!this.languageLoaderService.changedData"
+              [title]="!this.userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''"
               (click)="updateData()"><span>Save Changes</span>
       </button>
       <button class="btn btn-secondary pointer"
