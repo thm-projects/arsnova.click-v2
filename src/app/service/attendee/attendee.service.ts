@@ -3,7 +3,6 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 import { MemberGroupEntity } from '../../../lib/entities/member/MemberGroupEntity';
-import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { MemberApiService } from '../api/member/member-api.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
@@ -114,7 +113,7 @@ export class AttendeeService {
   }
 
   public restoreMembers(): void {
-    this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data: IMessage) => {
+    this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {
       if (!data || !data.payload) {
         return;
       }
