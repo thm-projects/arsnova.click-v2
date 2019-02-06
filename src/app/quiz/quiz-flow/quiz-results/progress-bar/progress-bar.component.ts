@@ -100,16 +100,17 @@ export class ProgressBarComponent {
       if (Array.isArray(responseValue)) {
         return false;
       }
-      if (result.label === 'guessed_correct') {
+      if (result.label === 'component.liveResults.guessed_correct') {
         return responseValue === question.correctValue;
-      } else if (result.label === 'guessed_in_range') {
+      } else if (result.label === 'component.liveResults.guessed_in_range') {
         return responseValue !== question.correctValue && responseValue >= question.rangeMin && responseValue <= question.rangeMax;
       } else {
         return responseValue < question.rangeMin || responseValue > question.rangeMax;
       }
     });
-    result.isCorrect = result.label === 'guessed_correct' ? 1 : result.label === 'guessed_in_range' ? 0 : -1;
-    result.label = this.translate.instant(`component.liveResults.${result.label}`);
+    result.isCorrect = result.label === 'component.liveResults.guessed_correct' ? 1 : result.label === 'component.liveResults.guessed_in_range' ? 0
+                                                                                                                                                : -1;
+    result.label = this.translate.instant(`${result.label}`);
     result.absolute = matches.length;
     result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberType.Percent);
   }

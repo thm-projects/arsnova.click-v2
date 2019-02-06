@@ -394,10 +394,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   private async generateAnswers(question: AbstractQuestionEntity): Promise<void> {
     if (question.TYPE === QuestionType.RangedQuestion) {
-      this.answers = ['guessed_correct', 'guessed_in_range', 'guessed_wrong'];
+      this.answers = ['component.liveResults.guessed_correct', 'component.liveResults.guessed_in_range', 'component.liveResults.guessed_wrong'];
 
     } else if (question.TYPE === QuestionType.FreeTextQuestion) {
-      this.answers = ['correct_answer', 'wrong_answer'];
+      this.answers = ['component.liveResults.correct_answer', 'component.liveResults.wrong_answer'];
 
     } else {
       await this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {

@@ -13,6 +13,8 @@ cache:
 
 install_node_modules:
   stage: install
+  except:
+    - /^i18n-change_[a-zA-Z0-9]*/ix
   tags:
     - nodejs
   script:
@@ -20,6 +22,8 @@ install_node_modules:
 
 ts_lint:
   stage: test
+  except:
+    - /^i18n-change_[a-zA-Z0-9]*/ix
   tags:
     - nodejs
   script:
