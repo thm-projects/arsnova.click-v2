@@ -132,7 +132,7 @@ export class ProgressBarComponent {
       }
     });
     result.isCorrect = result.label === 'correct_answer' ? 1 : -1;
-    result.label = this.translate.instant(`component.liveResults.${result.label}`);
+    result.label = this.translate.instant(`${result.label}`);
     result.absolute = matches.length;
     result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberType.Percent);
   }
