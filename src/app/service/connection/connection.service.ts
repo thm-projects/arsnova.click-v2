@@ -133,7 +133,9 @@ export class ConnectionService {
   }
 
   public connectToChannel(name: string): void {
+    console.log('connecting to channel', name);
     if (!this._socket) {
+      console.error('cannot connect to channel since no socket was found');
       return;
     }
 
@@ -154,6 +156,7 @@ export class ConnectionService {
 
   public disconnectFromChannel(): void {
     if (!this._socket) {
+      console.error('cannot disconnect from channel since no socket was found');
       return;
     }
 

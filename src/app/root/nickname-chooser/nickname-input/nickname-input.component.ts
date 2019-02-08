@@ -6,10 +6,8 @@ import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { IMemberGroupSerialized } from '../../../../lib/interfaces/users/IMemberGroupSerialized';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
-import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
-import { StorageService } from '../../../service/storage/storage.service';
 import { UserService } from '../../../service/user/user.service';
 
 @Component({
@@ -31,11 +29,9 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private router: Router,
     private attendeeService: AttendeeService,
-    private connectionService: ConnectionService,
     private userService: UserService,
     private quizService: QuizService,
     private memberApiService: MemberApiService,
-    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -97,7 +93,6 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
           data.payload.memberGroups.forEach((memberGroup: IMemberGroupSerialized) => {
             memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
           });
-          this.connectionService.connectToChannel(this.quizService.quiz.name);
           resolve();
         } else {
           reject(data);

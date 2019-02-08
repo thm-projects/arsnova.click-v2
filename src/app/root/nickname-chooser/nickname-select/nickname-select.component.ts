@@ -9,7 +9,6 @@ import { IMemberGroupSerialized } from '../../../../lib/interfaces/users/IMember
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
-import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { UserService } from '../../../service/user/user.service';
@@ -41,7 +40,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private router: Router,
     private attendeeService: AttendeeService,
     private userService: UserService,
-    private connectionService: ConnectionService,
     private quizService: QuizService,
     private memberApiService: MemberApiService,
   ) {
@@ -78,7 +76,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
               this.attendeeService.addMember(nicksInMemberGroup);
             });
           });
-          this.connectionService.connectToChannel(this.quizService.quiz.name);
           resolve();
         } else {
           reject();

@@ -81,8 +81,7 @@ describe('QuizResultsComponent', () => {
         ProgressBarSingleChoiceComponent,
         ProgressBarMultipleChoiceComponent,
         ProgressBarSurveyComponent,
-        ProgressBarRangedComponent,
-        ProgressBarFreetextComponent, ReadingConfirmationProgressComponent,
+        ProgressBarRangedComponent, ProgressBarFreetextComponent, ReadingConfirmationProgressComponent,
         QuizResultsComponent,
       ],
     }).compileComponents();

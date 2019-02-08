@@ -152,6 +152,7 @@ export class QuizLobbyComponent implements OnDestroy {
     this.headerLabelService.headerLabel = this.quizService.quiz.name;
 
     this.connectionService.initConnection().then(() => {
+      console.log('connection in lobby initialized');
       this.connectionService.connectToChannel(this.quizService.quiz.name);
       this.handleMessages();
     });
