@@ -4,12 +4,12 @@ import { parseGithubFlavoredMarkdown } from '../../../../../lib/markdown/markdow
 import { I18nService } from '../../../../service/i18n/i18n.service';
 
 @Component({
-  selector: 'app-reading-confirmation',
-  templateUrl: './reading-confirmation.component.html',
-  styleUrls: ['./reading-confirmation.component.scss'],
+  selector: 'app-reading-confirmation-progress',
+  templateUrl: './reading-confirmation-progress.component.html',
+  styleUrls: ['./reading-confirmation-progress.component.scss'],
 })
-export class ReadingConfirmationComponent {
-  public static TYPE = 'ReadingConfirmationComponent';
+export class ReadingConfirmationProgressComponent {
+  public static TYPE = 'ReadingConfirmationProgressComponent';
 
   private _percent: string;
 

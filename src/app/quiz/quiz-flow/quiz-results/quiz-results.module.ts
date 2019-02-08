@@ -5,15 +5,13 @@ import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.compo
 import { ProgressBarModule } from './progress-bar/progress-bar.module';
 import { QuestionDetailsComponent } from './question-details/question-details.component';
 import { QuizResultsComponent } from './quiz-results.component';
-import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
+import { ReadingConfirmationProgressComponent } from './reading-confirmation-progress/reading-confirmation-progress.component';
 
 @NgModule({
   imports: [
-    SharedModule,
-    ProgressBarModule,
-    HeaderModule,
+    SharedModule, ProgressBarModule, HeaderModule,
   ],
-  declarations: [QuizResultsComponent, ConfidenceRateComponent, ReadingConfirmationComponent, QuestionDetailsComponent],
+  declarations: [QuizResultsComponent, ConfidenceRateComponent, ReadingConfirmationProgressComponent, QuestionDetailsComponent],
   exports: [QuizResultsComponent],
 })
 export class QuizResultsModule {

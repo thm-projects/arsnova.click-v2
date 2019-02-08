@@ -263,6 +263,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }) && this.countdown) {
         console.log('Stopping countdown in the quiz results since all attendees have answered the current question');
         this.countdown.stop();
+      } else if (currentStateData.payload.readingConfirmationRequested && this.countdown) {
+        console.log('Stopping countdown since reading confirmation is requested');
+        this.countdown.stop();
       } else {
         console.log(this.attendeeService.attendees, this.attendeeService.attendees.every(nick => {
           const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;

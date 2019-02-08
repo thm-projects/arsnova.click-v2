@@ -92,8 +92,8 @@ export class QuestionDetailsComponent implements OnInit {
       if (this.quizService.quiz) {
         this._question = this.quizService.quiz.questionList[this._questionIndex];
       }
-      await this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
-      await this.questionTextService.change(this._question.questionText);
+      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+      this.questionTextService.change(this._question.questionText);
     });
   }
 

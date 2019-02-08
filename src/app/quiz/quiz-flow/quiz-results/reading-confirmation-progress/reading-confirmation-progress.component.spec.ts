@@ -13,11 +13,11 @@ import { WebsocketMockService } from '../../../../service/websocket/websocket.mo
 import { WebsocketService } from '../../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../../shared/shared.module';
 
-import { ReadingConfirmationComponent } from './reading-confirmation.component';
+import { ReadingConfirmationProgressComponent } from './reading-confirmation-progress.component';
 
 describe('Quiz-Results: ReadingConfirmationComponent', () => {
-  let component: ReadingConfirmationComponent;
-  let fixture: ComponentFixture<ReadingConfirmationComponent>;
+  let component: ReadingConfirmationProgressComponent;
+  let fixture: ComponentFixture<ReadingConfirmationProgressComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -25,9 +25,7 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
         HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -45,12 +43,12 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
           useClass: WebsocketMockService,
         },
       ],
-      declarations: [ReadingConfirmationComponent],
+      declarations: [ReadingConfirmationProgressComponent],
     }).compileComponents();
   }));
 
   beforeEach(async(() => {
-    fixture = TestBed.createComponent(ReadingConfirmationComponent);
+    fixture = TestBed.createComponent(ReadingConfirmationProgressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
@@ -59,7 +57,7 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
     expect(component).toBeTruthy();
   }));
   it('should contain a TYPE reference', () => {
-    expect(ReadingConfirmationComponent.TYPE).toEqual('ReadingConfirmationComponent');
+    expect(ReadingConfirmationProgressComponent.TYPE).toEqual('ReadingConfirmationComponent');
   });
 
   it('#sanitizeStyle', () => {

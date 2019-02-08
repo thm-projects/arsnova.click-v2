@@ -11,7 +11,6 @@ import { FooterBarService } from '../../../service/footer-bar/footer-bar.service
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
-import { StorageService } from '../../../service/storage/storage.service';
 
 @Component({
   selector: 'app-reading-confirmation',
@@ -35,7 +34,6 @@ export class ReadingConfirmationComponent implements OnInit {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
-    private storageService: StorageService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
@@ -48,17 +46,19 @@ export class ReadingConfirmationComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
-  public async ngOnInit(): Promise<void> {
-    await this.connectionService.initConnection();
-    this.connectionService.connectToChannel(this.quizService.quiz.name);
-    this.handleMessages();
+  public ngOnInit(): void {
+    this.connectionService.initConnection().then(() => {
+      this.connectionService.connectToChannel(this.quizService.quiz.name);
+      this.handleMessages();
+    });
+
     this.questionTextService.eventEmitter.subscribe((value: string) => {
       this.questionText = value;
     });
-    await this.questionTextService.change(this.quizService.currentQuestion().questionText);
+    this.questionTextService.change(this.quizService.currentQuestion().questionText);
   }
 
-  public async confirmReading(): Promise<void> {
+  public confirmReading(): void {
     this.memberApiService.putReadingConfirmationValue().subscribe(() => {
       this.router.navigate(['/quiz', 'flow', 'results']);
     });

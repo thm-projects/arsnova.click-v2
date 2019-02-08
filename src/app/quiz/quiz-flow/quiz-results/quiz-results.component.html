@@ -74,8 +74,8 @@
       <span>{{'component.liveResults.question' | translate}}</span>
     </button>
   </div>
-  <app-reading-confirmation *ngIf="showReadingConfirmation(selectedQuestionIndex)"
-                            [data]="getReadingConfirmationData(selectedQuestionIndex)"></app-reading-confirmation>
+  <app-reading-confirmation-progress *ngIf="showReadingConfirmation(selectedQuestionIndex)"
+                                     [data]="getReadingConfirmationData(selectedQuestionIndex)"></app-reading-confirmation-progress>
   <app-confidence-rate *ngIf="showConfidenceRate(selectedQuestionIndex)"
                        [data]="getConfidenceData(selectedQuestionIndex)"></app-confidence-rate>
   <app-progress-bar *ngIf="showResponseProgress()"

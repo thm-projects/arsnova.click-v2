@@ -25,7 +25,12 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 @AutoUnsubscribe('_subscriptions')
 export class VotingComponent implements OnDestroy {
   public static TYPE = 'VotingComponent';
-  public answers: Array<string> = [];
+
+  private _answers: Array<string> = [];
+
+  get answers(): Array<string> {
+    return this._answers;
+  }
 
   private _countdown: Countdown;
 
@@ -35,6 +40,12 @@ export class VotingComponent implements OnDestroy {
 
   set countdown(value: Countdown) {
     this._countdown = value;
+  }
+
+  private _questionText: string;
+
+  get questionText(): string {
+    return this._questionText;
   }
 
   private _countdownValue: number;
@@ -166,12 +177,21 @@ export class VotingComponent implements OnDestroy {
       this.connectionService.connectToChannel(this.quizService.quiz.name);
       this.handleMessages();
     });
-    this.questionTextService.eventEmitter.subscribe((value: Array<string>) => this.answers = value);
+
+    this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+      if (Array.isArray(value)) {
+        this._answers = value;
+      } else {
+        this._questionText = value;
+      }
+    });
+
     this.questionTextService.changeMultiple(this.quizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
+    this.questionTextService.change(this.quizService.currentQuestion().questionText);
 
     this.quizApiService.getQuizStartTime().subscribe((startTime) => {
       if ((startTime + this.quizService.currentQuestion().timer * 1000) < new Date().getTime()) {
-        this.sendResponses();
+        // this.sendResponses();
       }
 
       this.countdown = new Countdown(this.quizService.currentQuestion(), startTime);

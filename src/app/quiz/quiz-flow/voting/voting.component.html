@@ -7,6 +7,9 @@
   </div>
 </div>
 
+<p *ngIf="!quizService.quiz?.sessionConfig?.readingConfirmationEnabled"
+   [innerHtml]="sanitizeHTML(questionText)"></p>
+
 <div *ngIf="displayAnswerButtons()"
      id="answer-option-element-wrapper"
      class="d-flex justify-content-around align-items-center flex-wrap">
@@ -42,7 +45,7 @@
 </div>
 
 <button *ngIf="showSendResponseButton()"
-        class="btn btn-default w-100 mt-5 pointer"
+        class="btn btn-default w-100 my-5 pointer"
         (click)="sendResponses()">
   <span>{{'component.voting.send' | translate}}</span>
   <fa-icon [icon]="'paper-plane'"></fa-icon>

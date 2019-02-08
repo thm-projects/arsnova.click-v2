@@ -36,7 +36,7 @@ import { ProgressBarSurveyComponent } from './progress-bar/progress-bar-survey/p
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 
 import { QuizResultsComponent } from './quiz-results.component';
-import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
+import { ReadingConfirmationProgressComponent } from './reading-confirmation-progress/reading-confirmation-progress.component';
 
 describe('QuizResultsComponent', () => {
   let component: QuizResultsComponent;
@@ -82,8 +82,7 @@ describe('QuizResultsComponent', () => {
         ProgressBarMultipleChoiceComponent,
         ProgressBarSurveyComponent,
         ProgressBarRangedComponent,
-        ProgressBarFreetextComponent,
-        ReadingConfirmationComponent,
+        ProgressBarFreetextComponent, ReadingConfirmationProgressComponent,
         QuizResultsComponent,
       ],
     }).compileComponents();
