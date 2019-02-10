@@ -160,6 +160,10 @@ export class UserService {
   }
 
   private deleteTokens(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     sessionStorage.removeItem('userToken');
   }
 
