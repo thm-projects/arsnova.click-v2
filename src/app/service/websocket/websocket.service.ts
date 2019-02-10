@@ -25,15 +25,9 @@ export class WebsocketService {
       return null;
     }
     const observable = Observable.create((obsvr: Observer<MessageEvent>) => {
-      socket.onmessage = () => {
-        obsvr.next.bind(obsvr);
-        this.connectionEmitter.emit(true);
-      };
+      socket.onmessage = obsvr.next.bind(obsvr);
       socket.onerror = obsvr.error.bind(obsvr);
-      socket.onclose = () => {
-        obsvr.complete.bind(obsvr);
-        this.connectionEmitter.emit(false);
-      };
+      socket.onclose = obsvr.complete.bind(obsvr);
       return socket;
     });
     const observer = {
