@@ -214,7 +214,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this._subscriptions.push(this.connectionService.socket.subscribe(async (data: IMessage) => {
+    this.connectionService.socket.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Inactive:
           this._reconnectTimeout = setTimeout(this.handleMessages.bind(this), 500);
@@ -238,7 +238,7 @@ export class QuizLobbyComponent implements OnDestroy {
           break;
       }
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
-    }));
+    });
   }
 
   private handleMessagesForOwner(data: IMessage): void {

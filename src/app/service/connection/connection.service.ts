@@ -198,10 +198,6 @@ export class ConnectionService {
         this.parseActiveQuizzes(parsedResponse);
         return parsedResponse;
       }));
-      this._socket.subscribe(val => {
-        this._websocketAvailable = true;
-        this.parseActiveQuizzes(val);
-      });
     }
   }
 
