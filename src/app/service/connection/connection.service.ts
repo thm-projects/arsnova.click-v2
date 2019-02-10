@@ -112,7 +112,6 @@ export class ConnectionService {
         }, () => {
           this.pending = false;
           this.serverAvailable = false;
-          this._websocketAvailable = false;
           resolve2();
         });
       });
@@ -127,8 +126,6 @@ export class ConnectionService {
       this.calculateConnectionSpeedIndicator();
     }, () => {
       this.serverAvailable = false;
-      this._websocketAvailable = false;
-      this._socket = null;
     });
   }
 
@@ -198,6 +195,12 @@ export class ConnectionService {
         this.parseActiveQuizzes(parsedResponse);
         return parsedResponse;
       }));
+
+      this._socket.subscribe(); // Initiates socket isAlive handling
+
+      this.websocketService.connectionEmitter.subscribe(isConnected => {
+        this._websocketAvailable = isConnected;
+      });
     }
   }
 
