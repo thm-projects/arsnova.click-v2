@@ -53,7 +53,7 @@ export class ThemesService {
           resolve(this.quizService.quiz.sessionConfig.theme);
           return;
         }
-        resolve();
+        resolve('theme-Material');
       }),
     ]);
     const usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
