@@ -16,7 +16,8 @@
     "console-log-warning": "WARNUNG! Dies wird dir nicht beim schummeln helfen! Jeder, der dir gesagt hat, dass du diese Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren",
     "true": "Wahr",
     "false": "Falsch",
-    "aria_description": {}
+    "aria_description": {},
+    "in-cooperation-with": "in Kooperation mit"
   },
   "region": {
     "footer": {

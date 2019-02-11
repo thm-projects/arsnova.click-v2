@@ -139,9 +139,27 @@
   </div>
   <div class="col-12 px-1 mb-5 mt-2 justify-content-center d-flex mathjax-container"
        *ngIf="!isShowingQuiznameDatalist">
-    <ng-container *ngTemplateOutlet="mathjaxExample3"></ng-container>
+    <ng-container *ngTemplateOutlet="thmschroedelCoop"></ng-container>
   </div>
 </div>
+
+<ng-template #thmschroedelCoop>
+  <div class="row mt-4">
+    <div class="col-12 col-sm d-flex">
+      <img class="mx-auto align-self-center"
+           src="/assets/images/external/thm-logo-negativ.png"
+           style="height: 70px"/>
+    </div>
+    <div class="col-12 col-sm d-flex">
+      <h6 class="mx-auto text-light my-4 my-sm-0 align-self-center"><strong>{{'global.in-cooperation-with' | translate}}</strong></h6>
+    </div>
+    <div class="col-12 col-sm d-flex">
+      <img class="mx-auto bg-white align-self-center"
+           src="/assets/images/external/schroedel-aktuell.png"
+           style="height: 70px"/>
+    </div>
+  </div>
+</ng-template>
 
 <ng-template #mathjaxExample3>
   <svg xmlns:xlink="http://www.w3.org/1999/xlink"
