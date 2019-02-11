@@ -256,7 +256,10 @@ export class VotingComponent implements OnDestroy {
     }
 
     return [
-      QuestionType.SingleChoiceQuestion, QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.ABCDSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion,
+      QuestionType.SingleChoiceQuestion,
+      QuestionType.TrueFalseSingleChoiceQuestion,
+      QuestionType.ABCDSingleChoiceQuestion,
+      QuestionType.YesNoSingleChoiceQuestion,
     ].includes(question.TYPE);
   }
 

@@ -13,6 +13,7 @@ import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DbTable, Language, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
+import { QuizState } from '../../../lib/enums/QuizState';
 import { UserRole } from '../../../lib/enums/UserRole';
 import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
@@ -444,32 +445,28 @@ export class HomeComponent implements OnInit, OnDestroy {
   private selectQuizAsDefaultQuiz(quizName: string): void {
     this.quizApiService.getQuizStatus(quizName).subscribe(value => {
       if (value.status === StatusProtocol.Success) {
-        switch (value.step) {
-          case MessageProtocol.AlreadyTaken:
-            this.canAddQuiz = false;
-            this.canJoinQuiz = false;
-            this.passwordRequired = false;
-            this.canStartQuiz = false;
-            break;
-          case MessageProtocol.Available:
-            this.canAddQuiz = false;
-            this.canJoinQuiz = true;
-            this.passwordRequired = false;
-            this.canStartQuiz = false;
-            this._provideNickSelection = value.payload.provideNickSelection;
-            this.casService.casLoginRequired = value.payload.authorizeViaCas;
-            if (this.casService.casLoginRequired) {
-              this.casService.quizName = quizName;
-            }
-            break;
-          case MessageProtocol.Unavailable:
-            this.canAddQuiz = true;
-            this.canJoinQuiz = false;
-            this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
-            this.canStartQuiz = false;
-            break;
-          default:
-            console.log(value);
+        if (value.step === MessageProtocol.AlreadyTaken || value.payload.state !== QuizState.Active) {
+          this.canAddQuiz = false;
+          this.canJoinQuiz = false;
+          this.passwordRequired = false;
+          this.canStartQuiz = false;
+        } else if (value.step === MessageProtocol.Available && value.payload.state === QuizState.Active) {
+          this.canAddQuiz = false;
+          this.canJoinQuiz = true;
+          this.passwordRequired = false;
+          this.canStartQuiz = false;
+          this._provideNickSelection = value.payload.provideNickSelection;
+          this.casService.casLoginRequired = value.payload.authorizeViaCas;
+          if (this.casService.casLoginRequired) {
+            this.casService.quizName = quizName;
+          }
+        } else if (value.step === MessageProtocol.Unavailable) {
+          this.canAddQuiz = true;
+          this.canJoinQuiz = false;
+          this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+          this.canStartQuiz = false;
+        } else {
+          console.error('Invalid quiz status response in home component', value);
         }
       }
     });
