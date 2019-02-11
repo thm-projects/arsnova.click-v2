@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnDestroy, SecurityContext } from '@angular/core';
+import { Component, Inject, OnDestroy, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
@@ -68,6 +68,7 @@ export class LeaderboardComponent implements OnDestroy {
   private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private sanitizer: DomSanitizer,
     private footerBarService: FooterBarService,
     private route: ActivatedRoute,

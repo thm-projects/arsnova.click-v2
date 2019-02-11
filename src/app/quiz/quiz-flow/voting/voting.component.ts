@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -69,6 +69,7 @@ export class VotingComponent implements OnDestroy {
   private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     public quizService: QuizService,
     private attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
