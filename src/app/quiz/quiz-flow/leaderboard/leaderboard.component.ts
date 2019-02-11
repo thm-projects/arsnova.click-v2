@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component, OnDestroy, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -190,6 +191,14 @@ export class LeaderboardComponent implements OnDestroy {
           this.attendeeService.clearResponses();
           this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
+          break;
+        case MessageProtocol.Removed:
+          if (isPlatformBrowser(this.platformId)) {
+            const existingNickname = sessionStorage.getItem('nick');
+            if (existingNickname === data.payload.name) {
+              this.router.navigate(['/']);
+            }
+          }
           break;
         case MessageProtocol.Closed:
           this.router.navigate(['/']);

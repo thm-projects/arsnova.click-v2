@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -232,6 +233,14 @@ export class VotingComponent implements OnDestroy {
         case MessageProtocol.Closed:
           this.router.navigate(['/']);
           break;
+        case MessageProtocol.Removed:
+          if (isPlatformBrowser(this.platformId)) {
+            const existingNickname = sessionStorage.getItem('nick');
+            if (existingNickname === data.payload.name) {
+              this.router.navigate(['/']);
+            }
+          }
+          break;
         case MessageProtocol.Stop:
           this._selectedAnswers = [];
           this.router.navigate(['/quiz', 'flow', 'results']);
@@ -247,10 +256,7 @@ export class VotingComponent implements OnDestroy {
     }
 
     return [
-      QuestionType.SingleChoiceQuestion,
-      QuestionType.TrueFalseSingleChoiceQuestion,
-      QuestionType.ABCDSingleChoiceQuestion,
-      QuestionType.YesNoSingleChoiceQuestion,
+      QuestionType.SingleChoiceQuestion, QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.ABCDSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion,
     ].includes(question.TYPE);
   }
 
