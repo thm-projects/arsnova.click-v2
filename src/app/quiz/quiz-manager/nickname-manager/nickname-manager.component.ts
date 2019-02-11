@@ -193,6 +193,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
         return 'component.nickname_categories.category.politics';
       case 'turing_award':
         return 'component.nickname_categories.category.turing_award';
+      case 'emojis':
+        return 'component.nickname_categories.category.emojis';
     }
   }
 }
