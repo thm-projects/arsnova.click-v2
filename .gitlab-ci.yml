@@ -64,7 +64,7 @@ deploy:
   tags:
     - rsync
   dependencies:
-    - generate_assets
+    - build
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
