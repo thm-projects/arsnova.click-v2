@@ -27,14 +27,16 @@
                   [target]="'lobby'"
                   [src]="quizService.quiz.sessionConfig.music.titleConfig.lobby"></app-audio-player>
 
-<ngx-qrcode [qrc-value]="qrCodeContent"
-            qrc-class="qrCodeContent position-absolute"
-            qrc-errorCorrectionLevel="L"
-            qrc-element-type="img"
-            class="justify-content-center align-items-center qr-code-element"
-            [class.d-flex]="showQrCode"
-            [class.d-none]="!showQrCode">
-</ngx-qrcode>
+<div class="qrCodeContent position-absolute justify-content-center align-items-center p-3 flex-column bg-white rounded"
+     [class.d-flex]="showQrCode"
+     [class.d-none]="!showQrCode">
+  <ngx-qrcode [qrc-value]="qrCodeContent"
+              qrc-errorCorrectionLevel="L"
+              qrc-element-type="img"
+              class="">
+  </ngx-qrcode>
+  <h6 class="mb-0">{{qrCodeContent}}</h6>
+</div>
 
 <ng-template #attendeesByGroup>
   <div class="col-12 col-sm-6"

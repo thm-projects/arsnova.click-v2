@@ -200,7 +200,7 @@ export class QuizLobbyComponent implements OnDestroy {
     };
     this.footerBarService.footerElemQRCode.onClickCallback = () => {
       if (isPlatformBrowser(this.platformId)) {
-        const classList = document.getElementsByClassName('qr-code-element').item(0).classList;
+        const classList = document.getElementsByClassName('qrCodeContent').item(0).classList;
         classList.toggle('d-none');
         classList.toggle('d-flex');
       }
