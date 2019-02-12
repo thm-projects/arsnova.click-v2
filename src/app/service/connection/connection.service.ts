@@ -199,7 +199,9 @@ export class ConnectionService {
       this._socket.subscribe(val => {
         this._websocketAvailable = true;
         this.parseActiveQuizzes(val);
-      }); // Initiates socket isAlive handling
+      }, err => {
+        console.error('An error in the socket connection occured', err);
+      }, () => this.initWebsocket()); // Initiates socket isAlive handling
 
       this.websocketService.connectionEmitter.subscribe(isConnected => {
         this._websocketAvailable = isConnected;
