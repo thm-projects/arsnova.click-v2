@@ -221,7 +221,7 @@ export class VotingComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.socket.subscribe((data: IMessage) => {
+    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.UpdatedResponse:
           this.attendeeService.modifyResponse(data.payload);

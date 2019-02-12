@@ -85,7 +85,7 @@ export class ConfidenceRateComponent {
   }
 
   private handleMessages(): void {
-    this.connectionService.socket.subscribe((data: IMessage) => {
+    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.NextQuestion:
           this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;

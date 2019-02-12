@@ -124,9 +124,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.connectionService.disconnectFromChannel();
+      // this.connectionService.disconnectFromChannel();
 
-      this.connectionService.socket.subscribe(data => {
+      this.connectionService.dataEmitter.subscribe(data => {
         this.connectionService.websocketAvailable = true;
       }, () => this.connectionService.websocketAvailable = false);
     });

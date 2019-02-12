@@ -179,7 +179,7 @@ export class LeaderboardComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.socket.subscribe((data: IMessage) => {
+    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Start:
           this.router.navigate(['/quiz', 'flow', 'voting']);

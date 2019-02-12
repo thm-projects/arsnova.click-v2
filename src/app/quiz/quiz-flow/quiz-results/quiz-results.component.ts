@@ -322,7 +322,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         payload: { quizName: this.quizService.quiz.name },
       });
     }
-    this.connectionService.socket.subscribe(async (data: IMessage) => {
+    this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.AllPlayers:
           data.payload.members.forEach((elem: IMemberSerialized) => {

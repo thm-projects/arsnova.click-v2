@@ -89,7 +89,7 @@ describe('ThemesService', () => {
   it('#updateCurrentlyUsedTheme', async(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
     spyOnProperty(service, 'currentTheme').and.returnValue('theme-Material');
     spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
-    spyOn(connectionService.socket, 'subscribe').and.callFake(() => ({ status: StatusProtocol.Failed }));
+    spyOn(connectionService.dataEmitter, 'subscribe').and.callFake(() => ({ status: StatusProtocol.Failed }));
 
     expect(document.getElementById('link-manifest')).toBe(null);
     expect(service.currentTheme).toEqual('theme-Material');

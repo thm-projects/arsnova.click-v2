@@ -65,7 +65,7 @@ export class ReadingConfirmationComponent implements OnInit {
   }
 
   private handleMessages(): void {
-    this.connectionService.socket.subscribe((data: IMessage) => {
+    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Inactive:
           setTimeout(this.handleMessages.bind(this), 500);

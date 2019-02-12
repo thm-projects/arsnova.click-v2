@@ -108,7 +108,7 @@ export class ThemesService {
         return;
       }
 
-      this.connectionService.socket.subscribe(data => {
+      this.connectionService.dataEmitter.subscribe(data => {
         if (data.status === StatusProtocol.Success && data.step === MessageProtocol.UpdatedSettings) {
           this.quizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
           if (data.payload.target === 'theme') {

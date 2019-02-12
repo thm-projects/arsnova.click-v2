@@ -1,8 +1,7 @@
 import { isPlatformServer } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { MessageProtocol } from '../../../lib/enums/Message';
+import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
 import { SharedService } from '../shared/shared.service';
@@ -10,9 +9,11 @@ import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable()
 export class ConnectionService {
-  private _socket: Subject<IMessage>;
+  public readonly dataEmitter: EventEmitter<IMessage> = new EventEmitter<IMessage>();
 
-  get socket(): Subject<IMessage> | any {
+  private _socket: WebSocket;
+
+  get socket(): WebSocket | any {
     return this._socket;
   }
 
@@ -64,6 +65,7 @@ export class ConnectionService {
     this._pending = value;
   }
 
+  private lastTimeout = 500;
   private _isWebSocketAuthorized = false;
 
   constructor(
@@ -73,6 +75,11 @@ export class ConnectionService {
     private statisticsApiService: StatisticsApiService,
   ) {
     this.initWebsocket();
+    this.dataEmitter.subscribe((data: IMessage) => {
+      if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Connected && data.payload.activeQuizzes) {
+        this.parseActiveQuizzes(data);
+      }
+    });
   }
 
   public cleanUp(): void {
@@ -87,7 +94,7 @@ export class ConnectionService {
       }, 500);
       return;
     }
-    this._socket.next(message);
+    this._socket.send(JSON.stringify(message));
   }
 
   public initConnection(overrideCurrentState?: boolean): Promise<any> {
@@ -143,7 +150,7 @@ export class ConnectionService {
       }, 500);
       return;
     }
-    this._socket.next({
+    this.sendMessage({
       step: MessageProtocol.Connect,
       payload: {
         name,
@@ -164,7 +171,7 @@ export class ConnectionService {
       }, 500);
       return;
     }
-    this._socket.next({
+    this.sendMessage({
       step: MessageProtocol.Disconnect,
     });
   }
@@ -183,30 +190,32 @@ export class ConnectionService {
   }
 
   private initWebsocket(): void {
-    const defaultSocket = <Subject<MessageEvent>>this.websocketService.connect();
-
-    if (defaultSocket) {
-      console.log('connectionservice - websocket is now available');
-      this._socket = <Subject<IMessage>>defaultSocket.pipe(map((response: MessageEvent): IMessage => {
-        const parsedResponse = JSON.parse(response.data);
-        console.log('connectionservice - received message', parsedResponse);
-
-        this._websocketAvailable = true;
-        this.parseActiveQuizzes(parsedResponse);
-        return parsedResponse;
-      }));
-
-      this._socket.subscribe(val => {
-        this._websocketAvailable = true;
-        this.parseActiveQuizzes(val);
-      }, err => {
-        console.error('An error in the socket connection occured', err);
-      }, () => this.initWebsocket()); // Initiates socket isAlive handling
-
-      this.websocketService.connectionEmitter.subscribe(isConnected => {
-        this._websocketAvailable = isConnected;
-      });
-    }
+    this._socket = new WebSocket(DefaultSettings.wsApiEndpoint);
+    this._socket.onopen = () => {
+      this._websocketAvailable = true;
+      this._serverAvailable = true;
+    };
+    this._socket.onmessage = data => {
+      try {
+        const parsedData = JSON.parse(data.data);
+        this.dataEmitter.emit(parsedData);
+      } catch (ex) {
+        console.error(ex);
+      }
+    };
+    this._socket.onerror = err => {
+      console.error(err);
+    };
+    this._socket.onclose = () => {
+      this._websocketAvailable = false;
+      this._serverAvailable = false;
+      const timeout = this.lastTimeout * 2;
+      this.lastTimeout = timeout;
+      console.log(`Socket connection dropped, waiting ${timeout}ms for reconnect`);
+      setTimeout(() => {
+        this.initWebsocket();
+      }, timeout);
+    };
   }
 
   private parseActiveQuizzes(val): void {

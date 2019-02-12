@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit {
     const colorCode = this.connectionService.lowSpeed || //
                       !this.indexedDbAvailable ? 'var(--danger)' : //
                       this.connectionService.mediumSpeed ? 'var(--danger)' : //
-                      !this.connectionService.serverAvailable ? 'var(--grey)' : 'var(--success)';
+                      !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? 'var(--grey)' : 'var(--success)';
 
     return this.sanitizeStyle(colorCode);
   }

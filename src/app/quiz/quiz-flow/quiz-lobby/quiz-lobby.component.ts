@@ -214,7 +214,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.socket.subscribe(async (data: IMessage) => {
+    this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Inactive:
           this._reconnectTimeout = setTimeout(this.handleMessages.bind(this), 500);
