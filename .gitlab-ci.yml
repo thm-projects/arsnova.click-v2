@@ -2,7 +2,6 @@ stages:
   - install
   - test
   - build
-  - assets
   - deploy
 
 # Cache modules in between jobs
@@ -53,7 +52,7 @@ build:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
     - npm install typescript@3.1.6
-    - npm run build:SSR
+    - npm run build:PROD
   artifacts:
     paths:
       - dist
