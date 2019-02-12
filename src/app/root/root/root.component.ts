@@ -69,11 +69,14 @@ export class RootComponent implements OnInit, AfterViewInit {
     // Replace route error handler
     this.router.errorHandler = (err: any) => {
       // Check if there is an error loading the chunk
+      console.error('error while loading route', err);
       if (err.originalStack && err.originalStack.indexOf('Error: Loading chunk') >= 0) {
         // Check if is the first time the error happend
+        console.error('loading chunk failed');
         if (sessionStorage.getItem('lastChunkError') !== err.originalStack) {
           // Save the last error to avoid an infinite reload loop if the chunk really does not exists after reload
           sessionStorage.setItem('lastChunkError', err.originalStack);
+          console.error('no previous reload found, so forcing reload now');
           location.reload(true);
         } else {
           // The chunk really does not exists after reload
@@ -87,6 +90,9 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   public ngOnInit(): void {
     this.userService.loadConfig();
+    this.translateService.onLangChange.subscribe(() => {
+      this.initializeCookieConsent(nav.url);
+    });
     this.router.events.subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
         this._isLoading = true;
@@ -106,8 +112,6 @@ export class RootComponent implements OnInit, AfterViewInit {
 
         this.isInQuizManager = [QuizManagerComponent.TYPE, QuizManagerDetailsOverviewComponent.TYPE].includes(
           this.fetchChildComponent(this.activatedRoute).TYPE);
-
-        this.initializeCookieConsent(nav.url);
       }
     });
   }
