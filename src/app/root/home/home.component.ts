@@ -104,8 +104,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private settingsService: SettingsService,
     private trackingService: TrackingService,
     private quizApiService: QuizApiService,
-    private storageService: StorageService,
-    private userService: UserService, public connectionService: ConnectionService,
+    private storageService: StorageService, private userService: UserService, public connectionService: ConnectionService,
     public sharedService: SharedService,
   ) {
 
