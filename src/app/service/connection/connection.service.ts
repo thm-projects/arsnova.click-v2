@@ -190,6 +190,10 @@ export class ConnectionService {
   }
 
   private initWebsocket(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this._socket = new WebSocket(DefaultSettings.wsApiEndpoint);
     this._socket.onopen = () => {
       this._websocketAvailable = true;
