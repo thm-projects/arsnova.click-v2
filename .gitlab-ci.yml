@@ -58,9 +58,6 @@ build:
       - dist
 
 generate_assets:
-  stage: assets
-  only:
-    - master
   tags:
     - nodejs
   dependencies:
