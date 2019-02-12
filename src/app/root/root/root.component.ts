@@ -1,6 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 // tslint:disable-next-line:max-line-length
@@ -58,7 +59,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private storageService: StorageService,
-    private userService: UserService,
+    private userService: UserService, private swUpdate: SwUpdate,
   ) {
 
     /* Reload the page if the fetch of production chunks failed
@@ -86,6 +87,21 @@ export class RootComponent implements OnInit, AfterViewInit {
       // Run original handler
       oldHandler(err);
     };
+
+    console.log('sw isenabled', this.swUpdate.isEnabled);
+    this.swUpdate.available.subscribe(event => {
+      console.log('current version is', event.current);
+      console.log('available version is', event.available);
+      console.log('event type is', event.type);
+      if (window.confirm('update?')) {
+        this.swUpdate.activateUpdate().then(() => document.location.reload());
+      }
+    });
+    this.swUpdate.activated.subscribe(event => {
+      console.log('previous version was', event.previous);
+      console.log('current version is', event.current);
+      console.log('event type is', event.type);
+    });
   }
 
   public ngOnInit(): void {
