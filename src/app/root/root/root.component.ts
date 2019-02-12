@@ -91,7 +91,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   public ngOnInit(): void {
     this.userService.loadConfig();
     this.translateService.onLangChange.subscribe(() => {
-      this.initializeCookieConsent(nav.url);
+      this.initializeCookieConsent();
     });
     this.router.events.subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
@@ -120,31 +120,34 @@ export class RootComponent implements OnInit, AfterViewInit {
     return <INamedType>(route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component);
   }
 
-  private initializeCookieConsent(currentUrl): void {
-    window.addEventListener('load', () => {
-      if (!(<IWindow>window).cookieconsent) {
-        return;
-      }
-      (<IWindow>window).cookieconsent.initialise({
-        palette: {
-          popup: {
-            background: '#1d8a8a',
-          },
-          button: {
-            background: 'transparent',
-            text: '#62ffaa',
-            border: '#62ffaa',
-          },
-        },
-        position: 'bottom-right',
-        content: {
-          message: this.translateService.instant('global.cookie_consent.message'),
-          dismiss: this.translateService.instant('global.cookie_consent.dismiss'),
-          link: this.translateService.instant('global.cookie_consent.learn_more'),
-          href: 'dataprivacy',
-        },
-      });
+  private initializeCookieConsent(): void {
+    if (!(<IWindow>window).cookieconsent) {
+      return;
+    }
 
+    const elements = document.getElementsByClassName('cc-window');
+    for (let i = 0; i < elements.length; i++) {
+      elements.item(i).remove();
+    }
+
+    (<IWindow>window).cookieconsent.initialise({
+      palette: {
+        popup: {
+          background: '#1d8a8a',
+        },
+        button: {
+          background: 'transparent',
+          text: '#62ffaa',
+          border: '#62ffaa',
+        },
+      },
+      position: 'bottom-right',
+      content: {
+        message: this.translateService.instant('global.cookie_consent.message'),
+        dismiss: this.translateService.instant('global.cookie_consent.dismiss'),
+        link: this.translateService.instant('global.cookie_consent.learn_more'),
+        href: 'dataprivacy',
+      },
     });
   }
 }
