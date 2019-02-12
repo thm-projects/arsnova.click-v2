@@ -65,6 +65,7 @@ export class ConnectionService {
     this._pending = value;
   }
 
+  private _connectedChannel: string;
   private lastTimeout = 500;
   private _isWebSocketAuthorized = false;
 
@@ -156,9 +157,14 @@ export class ConnectionService {
         name,
       },
     });
+    this._connectedChannel = name;
   }
 
   public disconnectFromChannel(): void {
+    if (!this._connectedChannel) {
+      return;
+    }
+
     if (!this._socket) {
       console.error('cannot disconnect from channel since no socket was found');
       return;
@@ -174,6 +180,7 @@ export class ConnectionService {
     this.sendMessage({
       step: MessageProtocol.Disconnect,
     });
+    this._connectedChannel = null;
   }
 
   private calculateConnectionSpeedIndicator(): void {
