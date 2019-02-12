@@ -153,13 +153,13 @@ export class VotingComponent implements OnDestroy {
     }
   }
 
-  public sendResponses(): void {
+  public sendResponses(route?: string): void {
     if (this.countdown) {
       this.countdown.onChange.unsubscribe();
       this.countdown.stop();
     }
     this.router.navigate([
-      '/quiz', 'flow', this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
+      '/quiz', 'flow', route ? route : this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
     ]);
   }
 
@@ -180,13 +180,13 @@ export class VotingComponent implements OnDestroy {
       this.handleMessages();
     });
 
-    this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
         this._answers = value;
       } else {
         this._questionText = value;
       }
-    });
+    }));
 
     this.questionTextService.changeMultiple(this.quizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
     this.questionTextService.change(this.quizService.currentQuestion().questionText);
@@ -200,24 +200,20 @@ export class VotingComponent implements OnDestroy {
       this.countdown.onChange.subscribe((value) => {
         this.countdownValue = value;
         if (!value || value < 1) {
-          this.sendResponses();
+          this.sendResponses('results');
         }
       });
     });
   }
 
   public ngOnDestroy(): void {
-    console.log({
-      quizName: this.quizService.quiz.name,
-      nickname: this.attendeeService.ownNick,
-      value: this._selectedAnswers,
-    });
-
     this.memberApiService.putResponse(this._selectedAnswers).subscribe((data: IMessage) => {
       if (data.status !== StatusProtocol.Success) {
         console.log(data);
       }
     });
+
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   private handleMessages(): void {

@@ -112,18 +112,21 @@ export class AttendeeService {
     return this._attendees.find(member => member.name === name);
   }
 
-  public restoreMembers(): void {
-    this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {
-      if (!data || !data.payload) {
-        return;
-      }
+  public restoreMembers(): Promise<void> {
+    return new Promise<void>(resolve => {
+      this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {
+        if (!data || !data.payload) {
+          return;
+        }
 
-      this._attendees = data.payload.members.map((attendee) => {
-        return new Attendee(attendee);
+        this._attendees = data.payload.members.map((attendee) => {
+          return new Attendee(attendee);
+        });
+        if (this._attendees.length) {
+          this.footerBarService.footerElemStartQuiz.isActive = true;
+        }
+        resolve();
       });
-      if (this._attendees.length) {
-        this.footerBarService.footerElemStartQuiz.isActive = true;
-      }
     });
   }
 

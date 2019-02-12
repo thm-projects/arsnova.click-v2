@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
@@ -17,11 +18,12 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   templateUrl: './reading-confirmation.component.html',
   styleUrls: ['./reading-confirmation.component.scss'],
 })
-export class ReadingConfirmationComponent implements OnInit {
+export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   public static TYPE = 'ReadingConfirmationComponent';
 
   public questionIndex: number;
   public questionText: string;
+  private _subscriptions: Array<Subscription> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -52,10 +54,14 @@ export class ReadingConfirmationComponent implements OnInit {
       this.handleMessages();
     });
 
-    this.questionTextService.eventEmitter.subscribe((value: string) => {
+    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string) => {
       this.questionText = value;
-    });
+    }));
     this.questionTextService.change(this.quizService.currentQuestion().questionText);
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public confirmReading(): void {

@@ -86,8 +86,9 @@ export class QuizLobbyComponent implements OnDestroy {
       if (this.quizService.isOwner) {
         console.log('quiz in lobby set', this.quizService.quiz);
         this.handleNewQuiz(this.quizService.quiz);
-        this.attendeeService.restoreMembers();
-        this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
+        this.attendeeService.restoreMembers().then(() => {
+          this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
+        });
       } else {
         this.handleNewAttendee();
         this.attendeeService.restoreMembers();

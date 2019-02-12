@@ -138,6 +138,13 @@ export class ConnectionService {
   }
 
   public connectToChannel(name: string): void {
+    if (this._connectedChannel === name) {
+      return;
+    }
+    if (this._connectedChannel) {
+      this.disconnectFromChannel();
+    }
+
     console.log('connecting to channel', name);
     if (!this._socket) {
       console.error('cannot connect to channel since no socket was found');

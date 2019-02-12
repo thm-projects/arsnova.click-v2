@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { MessageProtocol, StatusProtocol } from '../../../../../lib/enums/Message';
 import { IMessage } from '../../../../../lib/interfaces/communication/IMessage';
@@ -15,8 +17,9 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-question-details',
   templateUrl: './question-details.component.html',
   styleUrls: ['./question-details.component.scss'],
-})
-export class QuestionDetailsComponent implements OnInit {
+}) //
+@AutoUnsubscribe('_subscriptions')
+export class QuestionDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestionDetailsComponent';
 
   private _question: AbstractQuestionEntity;
@@ -47,6 +50,8 @@ export class QuestionDetailsComponent implements OnInit {
     return this._answers;
   }
 
+  private _subscriptions: Array<Subscription> = [];
+
   constructor(
     private route: ActivatedRoute,
     private quizService: QuizService,
@@ -76,13 +81,13 @@ export class QuestionDetailsComponent implements OnInit {
     await this.connectionService.initConnection();
     this.handleMessages();
 
-    this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
         this._answers = value;
       } else {
         this._questionText = value;
       }
-    });
+    }));
     this.route.params.subscribe(async params => {
       this._questionIndex = +params['questionIndex'];
       if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
@@ -95,6 +100,10 @@ export class QuestionDetailsComponent implements OnInit {
       this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
       this.questionTextService.change(this._question.questionText);
     });
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   private handleMessages(): void {

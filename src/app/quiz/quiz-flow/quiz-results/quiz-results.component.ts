@@ -61,8 +61,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
 
       this._selectedQuestionIndex = quizService.quiz.currentQuestionIndex;
-      this.initData();
-      this.attendeeService.restoreMembers();
+      this.attendeeService.restoreMembers().then(() => {
+        this.initData();
+      });
       this.addFooterElements();
     }));
   }
@@ -109,15 +110,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public hideProgressbarCssStyle(): boolean {
-    const results = this.attendeeService.attendees.some(nick => {
-      const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
-      return typeof val === 'number' ? val > -1 : val.length > 0;
-    });
-
-    return (this._selectedQuestionIndex <= this.quizService.quiz.currentQuestionIndex && //
-            !results && //
-            (this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
-            !this.quizService.readingConfirmationRequested));
+    return this._selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex && this.countdown && this.countdown.remainingTime > 0;
   }
 
   public showConfidenceRate(questionIndex: number): boolean {
@@ -197,13 +190,14 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.questionTextService.eventEmitter.subscribe((data: Array<string>) => {
+    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((data: Array<string>) => {
       this.answers = data;
-    });
+    }));
   }
 
   public ngOnDestroy(): void {
     this.footerBarService.footerElemBack.restoreClickCallback();
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public stopQuiz(): void {
@@ -250,6 +244,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       if (currentStateData.status === StatusProtocol.Success) {
         const question = this.quizService.currentQuestion();
 
+        console.log(question);
         if (question.timer && (new Date().getTime() - question.timer * 1000 - currentStateData.payload.startTimestamp) < 0) {
           this.countdown = new Countdown(question, currentStateData.payload.startTimestamp);
         }
@@ -281,7 +276,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     let footerElems;
 
     if (this.quizService.isOwner) {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
       if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
         footerElems = [
           this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
