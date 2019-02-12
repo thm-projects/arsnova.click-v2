@@ -2,6 +2,7 @@ stages:
   - install
   - test
   - build
+  - assets
   - deploy
 
 # Cache modules in between jobs
@@ -52,7 +53,28 @@ build:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
     - npm install typescript@3.1.6
-    - npm run build:PROD
+    - npm run build:SSR
+  artifacts:
+    paths:
+      - dist
+
+generate_assets:
+  tags:
+    - nodejs
+  dependencies:
+    - build
+  script:
+    - apt-get -y update
+    - apt-get -y install --allow-unauthenticated gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+    - npm install
+    - cd dist
+    - node server &
+    - sleep 15s
+    - cd browser/assets/jobs
+    - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
+    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4000 --root=true
+    - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
+    - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
   artifacts:
     paths:
       - dist
@@ -64,7 +86,7 @@ deploy:
   tags:
     - rsync
   dependencies:
-    - build
+    - generate_assets
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)

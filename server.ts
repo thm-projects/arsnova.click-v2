@@ -1,12 +1,13 @@
 import { enableProdMode } from '@angular/core';
+import { renderModuleFactory } from '@angular/platform-server';
 // Express Engine
-import { ngExpressEngine } from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as bodyParser from 'body-parser';
 import * as compress from 'compression';
 import * as cors from 'cors';
 import * as express from 'express';
+import { readFileSync } from 'fs';
 import * as path from 'path';
 
 import 'reflect-metadata';
@@ -36,12 +37,21 @@ app.options('*', cors(corsOptions));
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 const { RootServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
 
-app.engine('html', ngExpressEngine({
-  bootstrap: RootServerModuleNgFactory,
-  providers: [
-    provideModuleMap(LAZY_MODULE_MAP),
-  ],
-}));
+const template = readFileSync(path.join(DIST_FOLDER, 'browser', 'index.html')).toString();
+
+app.engine('html', (_, options, callback) => {
+  renderModuleFactory(RootServerModuleNgFactory, {
+    // Our index.html
+    document: template,
+    url: options.req.url, // DI so that we can get lazy-loading to work differently (since we need it to just instantly render it)
+    extraProviders: [
+      provideModuleMap(LAZY_MODULE_MAP),
+    ],
+  }).then(html => {
+    callback(null, html);
+  });
+});
+
 
 app.set('view engine', 'html');
 app.set('views', path.join(DIST_FOLDER, 'browser'));

@@ -84,9 +84,9 @@
         <button *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
                 id="addSession"
                 class="btn btn-success btn-block pointer text-nowrap"
-                [class.disabled]="!canAddQuiz"
+                [class.disabled]="!canAddQuiz || !connectionService.serverAvailable"
                 (click)="handleClick('addSession') && addQuiz()"
-                [disabled]="!canAddQuiz">
+                [disabled]="!canAddQuiz || !connectionService.serverAvailable">
           <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
           <fa-icon [icon]="'edit'"></fa-icon>
         </button>
@@ -100,18 +100,18 @@
         <button *ngIf="isAddingDemoQuiz"
                 id="runDemoQuizSession"
                 class="btn btn-success btn-block pointer text-nowrap"
-                [class.disabled]="passwordRequired && !serverPassword.length"
+                [class.disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
                 (click)="handleClick('add-demo-quiz') && runQuiz(['/quiz', 'flow'])"
-                [disabled]="passwordRequired && !serverPassword.length">
+                [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable">
           <span class="mr-1">{{'component.name_management.create_demo_session' | translate}}</span>
           <fa-icon [icon]="'paper-plane'"></fa-icon>
         </button>
         <button *ngIf="isAddingABCDQuiz"
                 id="runABCDQuizSession"
                 class="btn btn-success btn-block pointer text-nowrap"
-                [class.disabled]="passwordRequired && !serverPassword.length"
+                [class.disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
                 (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
-                [disabled]="passwordRequired && !serverPassword.length">
+                [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable">
           <span class="mr-1">{{'component.name_management.create_abcd_session' | translate}}</span>
           <fa-icon [icon]="'paper-plane'"></fa-icon>
         </button>

@@ -99,14 +99,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private i18nService: I18nService,
     private attendeeService: AttendeeService,
-    private connectionService: ConnectionService,
     private sanitizer: DomSanitizer,
     private casService: CasLoginService,
     private settingsService: SettingsService,
     private trackingService: TrackingService,
     private quizApiService: QuizApiService,
     private storageService: StorageService,
-    private userService: UserService,
+    private userService: UserService, public connectionService: ConnectionService,
     public sharedService: SharedService,
   ) {
 
@@ -445,7 +444,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private selectQuizAsDefaultQuiz(quizName: string): void {
     this.quizApiService.getQuizStatus(quizName).subscribe(value => {
       if (value.status === StatusProtocol.Success) {
-        if (value.step === MessageProtocol.AlreadyTaken || value.payload.state !== QuizState.Active) {
+        if (value.step === MessageProtocol.AlreadyTaken || (value.payload.state && value.payload.state !== QuizState.Active)) {
           this.canAddQuiz = false;
           this.canJoinQuiz = false;
           this.passwordRequired = false;
