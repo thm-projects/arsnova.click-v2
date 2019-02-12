@@ -58,8 +58,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private translateService: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private storageService: StorageService,
-    private userService: UserService, private swUpdate: SwUpdate,
+    private storageService: StorageService, private userService: UserService, private swUpdate: SwUpdate,
   ) {
 
     /* Reload the page if the fetch of production chunks failed
