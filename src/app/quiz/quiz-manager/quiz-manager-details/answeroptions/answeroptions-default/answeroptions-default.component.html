@@ -34,7 +34,7 @@
                      [value]="elem.answerText"
                      (input)="updateAnswerValue($event, i)"
                      (propertychange)="updateAnswerValue($event, i)">
-              <label *ngIf="question.TYPE !== 'SurveyQuestion'"
+              <label *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"
                      class="btn pointer mb-0"
                      [class.btn-success]="elem.isCorrect"
                      [class.btn-danger]="!elem.isCorrect">

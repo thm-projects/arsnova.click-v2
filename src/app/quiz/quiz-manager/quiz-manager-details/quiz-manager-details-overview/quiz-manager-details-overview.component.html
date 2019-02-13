@@ -90,7 +90,7 @@
              class="mb-0"
              role="listitem">
             <span>{{'component.quiz_summary.answer' | translate}}&nbsp;{{i+1}}</span>
-            <span *ngIf="question?.TYPE !== 'SurveyQuestion'">
+            <span *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question?.TYPE)">
               <span *ngIf="answer.isCorrect">({{'component.quiz_summary.correct' | translate}})</span>
               <span *ngIf="!answer.isCorrect">({{'component.quiz_summary.wrong' | translate}})</span>
             </span>
