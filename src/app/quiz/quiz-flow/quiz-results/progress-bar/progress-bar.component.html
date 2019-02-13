@@ -5,11 +5,11 @@
                                   [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
   <app-progress-bar-single-choice *ngIf="question.TYPE === 'TrueFalseSingleChoiceQuestion'"
                                   [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
-  <app-progress-bar-single-choice *ngIf="question.TYPE === 'ABCDSingleChoiceQuestion'"
-                                  [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
   <app-progress-bar-multiple-choice *ngIf="question.TYPE === 'MultipleChoiceQuestion'"
                                     [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-multiple-choice>
   <app-progress-bar-survey *ngIf="question.TYPE === 'SurveyQuestion'"
+                           [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-survey>
+  <app-progress-bar-survey *ngIf="question.TYPE === 'ABCDSingleChoiceQuestion'"
                            [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-survey>
   <app-progress-bar-ranged *ngIf="question.TYPE === 'RangedQuestion'"
                            [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-ranged>

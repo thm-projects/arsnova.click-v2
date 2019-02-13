@@ -73,7 +73,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    return this.quizService.quiz.questionList[index].TYPE !== QuestionType.SurveyQuestion;
+    return ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
   }
 
   public showStopQuizButton(): boolean {
