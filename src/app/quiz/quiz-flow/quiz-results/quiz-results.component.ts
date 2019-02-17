@@ -7,6 +7,7 @@ import { AbstractQuestionEntity } from '../../../../lib/entities/question/Abstra
 import { NumberType } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
+import { QuizState } from '../../../../lib/enums/QuizState';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
@@ -241,17 +242,21 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     });
 
     this.quizApiService.getQuizStatus(this.quizService.quiz.name).toPromise().then(currentStateData => {
-      if (currentStateData.status === StatusProtocol.Success) {
-        const question = this.quizService.currentQuestion();
-
-        console.log(question);
-        if (question.timer && (new Date().getTime() - question.timer * 1000 - currentStateData.payload.startTimestamp) < 0) {
-          this.countdown = new Countdown(question, currentStateData.payload.startTimestamp);
-        }
-        console.log('quiz results timer data', this.countdown);
-
-        this.generateAnswers(question);
+      if (currentStateData.status !== StatusProtocol.Success) {
+        this.router.navigate(['/']);
       }
+      if (currentStateData.payload.state === QuizState.Active) {
+        this.attendeeService.clearResponses();
+        this.quizService.quiz.currentQuestionIndex = -1;
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      }
+      const question = this.quizService.currentQuestion();
+
+      if (question.timer && (new Date().getTime() - question.timer * 1000 - currentStateData.payload.startTimestamp) < 0) {
+        this.countdown = new Countdown(question, currentStateData.payload.startTimestamp);
+      }
+
+      this.generateAnswers(question);
       if (this.attendeeService.attendees.every(nick => {
         const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
         return typeof val === 'number' ? val > -1 : val.length > 0;
@@ -357,7 +362,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
       }
-      console.log('registering message handler. is owner:', this.quizService.isOwner);
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
   }
