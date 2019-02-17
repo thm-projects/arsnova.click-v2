@@ -179,7 +179,7 @@ export class LeaderboardComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
+    this._subscriptions.push(this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Start:
           this.router.navigate(['/quiz', 'flow', 'voting']);
@@ -205,7 +205,7 @@ export class LeaderboardComponent implements OnDestroy {
           this.router.navigate(['/']);
           break;
       }
-    });
+    }));
   }
 
   private addFooterElements(): void {

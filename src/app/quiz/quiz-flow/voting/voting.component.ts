@@ -217,7 +217,7 @@ export class VotingComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
+    this._subscriptions.push(this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.UpdatedResponse:
           this.attendeeService.modifyResponse(data.payload);
@@ -243,7 +243,7 @@ export class VotingComponent implements OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'results']);
           break;
       }
-    });
+    }));
   }
 
   private toggleSelectedAnswers(): boolean {

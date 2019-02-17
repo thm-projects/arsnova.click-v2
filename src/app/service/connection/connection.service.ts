@@ -4,6 +4,7 @@ import { DefaultSettings } from '../../../lib/default.settings';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
+import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SharedService } from '../shared/shared.service';
 import { WebsocketService } from '../websocket/websocket.service';
 
@@ -74,6 +75,7 @@ export class ConnectionService {
     private websocketService: WebsocketService,
     private sharedService: SharedService,
     private statisticsApiService: StatisticsApiService,
+    private footerBarService: FooterBarService,
   ) {
     this.initWebsocket();
     this.dataEmitter.subscribe((data: IMessage) => {
@@ -212,6 +214,12 @@ export class ConnectionService {
     this._socket.onopen = () => {
       this._websocketAvailable = true;
       this._serverAvailable = true;
+      this.toggleFooterElemState(true);
+      if (this._connectedChannel) {
+        const name = this._connectedChannel;
+        this._connectedChannel = null;
+        this.connectToChannel(name);
+      }
     };
     this._socket.onmessage = data => {
       try {
@@ -227,6 +235,7 @@ export class ConnectionService {
     this._socket.onclose = () => {
       this._websocketAvailable = false;
       this._serverAvailable = false;
+      this.toggleFooterElemState(false);
       const timeout = this.lastTimeout * 2;
       this.lastTimeout = timeout;
       console.log(`Socket connection dropped, waiting ${timeout}ms for reconnect`);
@@ -240,5 +249,13 @@ export class ConnectionService {
     if (val.payload && val.payload.activeQuizzes) {
       this.sharedService.activeQuizzes = [...val.payload.activeQuizzes];
     }
+  }
+
+  private toggleFooterElemState(isActive: boolean): void {
+    this.footerBarService.footerElemLeaderboard.isActive = isActive;
+    this.footerBarService.footerElemImport.isActive = isActive;
+    this.footerBarService.footerElemLogin.isActive = isActive;
+    this.footerBarService.footerElemStartQuiz.isActive = isActive;
+    this.footerBarService.footerElemAdmin.isActive = isActive;
   }
 }

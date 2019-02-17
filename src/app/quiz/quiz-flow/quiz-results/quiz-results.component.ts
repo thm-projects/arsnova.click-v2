@@ -276,18 +276,22 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     let footerElems;
 
     if (this.quizService.isOwner) {
+      footerElems = [
+        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
+      ];
       if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
-        footerElems = [
-          this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
-        ];
+        if (this.quizService.quiz.questionList.every(
+          question => [QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question.TYPE))) {
+          footerElems.push(this.footerBarService.footerElemExport);
+        } else {
+          footerElems.push(this.footerBarService.footerElemLeaderboard);
+        }
       } else {
-        footerElems = [
-          this.footerBarService.footerElemBack,
+        footerElems.push(...[
           this.footerBarService.footerElemReadingConfirmation,
           this.footerBarService.footerElemConfidenceSlider,
           this.footerBarService.footerElemResponseProgress,
-          this.footerBarService.footerElemFullscreen,
-        ];
+        ]);
       }
       this.footerBarService.footerElemBack.onClickCallback = async () => {
         await this.quizApiService.resetQuiz(this.quizService.quiz).toPromise();
@@ -295,14 +299,16 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       };
     } else {
+      footerElems = [
+        this.footerBarService.footerElemFullscreen,
+      ];
       if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
-        footerElems = [
-          this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
-        ];
-      } else {
-        footerElems = [
-          this.footerBarService.footerElemFullscreen,
-        ];
+        if (this.quizService.quiz.questionList.every(
+          question => [QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question.TYPE))) {
+          footerElems.push(this.footerBarService.footerElemExport);
+        } else {
+          footerElems.push(this.footerBarService.footerElemLeaderboard);
+        }
       }
     }
     this.footerBarService.replaceFooterElements(footerElems);
@@ -351,6 +357,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
       }
+      console.log('registering message handler. is owner:', this.quizService.isOwner);
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
   }

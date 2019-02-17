@@ -30,16 +30,20 @@
 
 <div *ngIf="displayRangedButtons()">
   <input type="number"
+         autofocus
          [placeholder]="'component.voting.ranged_question.title' | translate"
          (input)="parseNumberInput($event)"
+         (keyup.enter)="sendResponses()"
          (propertyChange)="parseNumberInput($event)"
          class="w-100 px-2 py-1 rounded border-0"/>
 </div>
 
 <div *ngIf="displayFreetextInput()">
   <input type="text"
+         autofocus
          [placeholder]="'component.voting.free_text_question.title' | translate"
          (input)="parseTextInput($event)"
+         (keyup.enter)="sendResponses()"
          (propertyChange)="parseTextInput($event)"
          class="w-100 px-2 py-1 rounded border-0"/>
 </div>

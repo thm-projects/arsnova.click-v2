@@ -3,7 +3,9 @@
 <div class="row">
   <div class="col-12">
     <input type="range"
+           autofocus
            class="w-100"
+           (keyup.enter)="sendConfidence()"
            [value]="confidenceValue"
            (input)="updateConficence($event)"
            (propertyChange)="updateConficence($event)">

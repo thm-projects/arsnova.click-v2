@@ -48,9 +48,7 @@
         <span class="d-inline-flex">
           {{parseNickname(attendee.name)}}&nbsp;-&nbsp;
         </span>
-        <span>
-          {{roundResponseTime(attendee.responseTime, 2)}}&nbsp;{{'component.leaderboard.second' | translate:{COUNT:2} }}
-        </span>
+        <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
       </div>
     </div>
   </div>
