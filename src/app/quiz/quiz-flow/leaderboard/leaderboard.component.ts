@@ -38,12 +38,6 @@ export class LeaderboardComponent implements OnDestroy {
     return this._leaderBoardCorrect;
   }
 
-  private _leaderBoardPartiallyCorrect: Array<ILeaderBoardItem> = [];
-
-  get leaderBoardPartiallyCorrect(): Array<ILeaderBoardItem> {
-    return this._leaderBoardPartiallyCorrect;
-  }
-
   private _memberGroupResults: Array<ILeaderBoardItem>;
 
   get memberGroupResults(): Array<ILeaderBoardItem> {
@@ -161,15 +155,7 @@ export class LeaderboardComponent implements OnDestroy {
 
       this.leaderboardApiService.getLeaderboardData(this._name, this.questionIndex).subscribe(lederboardData => {
         this._leaderBoardCorrect = lederboardData.payload.correctResponses;
-        this._leaderBoardPartiallyCorrect = lederboardData.payload.partiallyCorrectResponses;
         this._memberGroupResults = lederboardData.payload.memberGroupResults;
-        this._leaderBoardPartiallyCorrect.forEach(partiallyCorrectLeaderboardElement => {
-          this._leaderBoardCorrect.forEach((allLeaderboardElements, index) => {
-            if (partiallyCorrectLeaderboardElement.name === allLeaderboardElements.name) {
-              this._leaderBoardCorrect.splice(index, 1);
-            }
-          });
-        });
 
         this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
           return memberGroupResult.correctQuestions.length > 0;

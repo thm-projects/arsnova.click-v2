@@ -1,8 +1,7 @@
 <div class="row">
   <h4 *ngIf="!leaderBoardCorrect.length"
       class="col-12 mt-5 text-center text-light">
-    <span *ngIf="isGlobalRanking">{{'component.leaderboard.no_attendee_correct_global' | translate}}</span>
-    <span *ngIf="!isGlobalRanking">{{'component.leaderboard.no_attendee_correct' | translate}}</span>
+    <span>{{'component.leaderboard.no_attendee_correct' | translate}}</span>
   </h4>
 
   <h4 *ngIf="leaderBoardCorrect.length"
@@ -29,32 +28,6 @@
   </ng-container>
 
 </div>
-
-<ng-container *ngIf="leaderBoardPartiallyCorrect.length && (isGlobalRanking || hasMultipleAnswersAvailable)">
-  <hr/>
-
-  <div class="row">
-    <h4 class="col-12 text-light">
-      <span *ngIf="isGlobalRanking">{{'component.leaderboard.title.all_questions_partially' | translate }}</span>
-      <span *ngIf="!isGlobalRanking">
-        {{'component.leaderboard.title.single_question_partially' | translate:{QUESTION_ID: (questionIndex + 1)} }}
-      </span>
-    </h4>
-
-    <div *ngFor="let attendee of leaderBoardPartiallyCorrect"
-         class="ml-3">
-      <div class="partially-correct-leaderboard-item rounded p-2 my-2"
-           [class.own-nick]="attendeeService.isOwnNick(attendee.name)">
-        <span class="d-inline-flex">
-          {{parseNickname(attendee.name)}}&nbsp;-&nbsp;
-        </span>
-        <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
-      </div>
-    </div>
-  </div>
-
-</ng-container>
-
 
 <ng-template #attendeeView>
   <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
