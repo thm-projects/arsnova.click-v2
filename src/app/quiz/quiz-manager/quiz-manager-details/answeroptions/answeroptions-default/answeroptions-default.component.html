@@ -16,7 +16,8 @@
             </div>
           </div>
         </div>
-        <div class="row">
+        <div *ngIf="canEditAnswer()"
+             class="row">
           <div class="col-md-12"
                [attr.data-intro]="'component.answeroptions.description.added_answers' | translate"
                [attr.aria-label]="'component.answeroptions.description.added_answers' | translate"
@@ -24,7 +25,8 @@
                role="list">
             <div *ngFor="let elem of question.answerOptionList; let i = index"
                  class="btn-group mb-2 d-flex">
-              <span (click)="deleteAnswer(i)"
+              <span *ngIf="canDeleteAnswer()"
+                    (click)="deleteAnswer(i)"
                     class="delete-icon px-2 rounded-left">
       <fa-icon [icon]="'trash'"
                class="pointer h-100 d-flex align-items-center"></fa-icon>
@@ -55,7 +57,8 @@
       </div>
       <div class="col-12 my-4">
         <div class="row">
-          <div class="col-12 mb-2 d-flex"
+          <div *ngIf="canShowAnswerContentOnButtons()"
+               class="col-12 mb-2 d-flex"
                [attr.data-intro]="'component.answeroptions.description.show_answer_content_on_buttons' | translate">
             <p class="mb-0 mr-2 text-light align-self-center"
                style="width: 100%;line-height: 1.2;"
@@ -76,7 +79,7 @@
               <span *ngIf="!question.displayAnswerText">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
-          <div class="col-12 mb-2 d-flex answerOptionConfig"
+          <div class="col-12 mb-2 d-flex"
                [attr.data-intro]="'component.answeroptions.description.show_one_answer_per_row' | translate">
             <p class="mb-0 mr-2 text-light align-self-center"
                style="width: 100%;line-height: 1.2;"
@@ -98,7 +101,7 @@
             </label>
           </div>
           <div *ngIf="question.TYPE === 'SurveyQuestion'"
-               class="col-12 mb-2 d-flex answerOptionConfig"
+               class="col-12 mb-2 d-flex"
                [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
             <p class="mb-0 mr-2 text-light align-self-center"
                style="width: 100%;line-height: 1.2;"
@@ -121,7 +124,8 @@
           </div>
         </div>
       </div>
-      <div class="col-12">
+      <div *ngIf="canInjectEmojis()"
+           class="col-12">
         <p class="text-light text-center"
            id="emojiInfo"
            [innerHTML]="'component.answeroptions.emoji_info' | translate"></p>

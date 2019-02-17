@@ -79,5 +79,21 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.quizService.persist();
   }
+
+  public canDeleteAnswer(): boolean {
+    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+  }
+
+  public canEditAnswer(): boolean {
+    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+  }
+
+  public canShowAnswerContentOnButtons(): boolean {
+    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+  }
+
+  public canInjectEmojis(): boolean {
+    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+  }
 }
 

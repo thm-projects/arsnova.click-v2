@@ -19,7 +19,7 @@
     </div>
     <div class="row mb-3">
       <div *ngFor="let elem of answer[0].getConfig()"
-           class="col-12 col-sm-6 mb-2 d-flex answerOptionConfig"
+           class="col-12 col-sm-6 mb-2 d-flex"
            [attr.data-intro]="elem.configTitle | translate">
         <p class="mb-0 mr-2 text-light align-self-center config-label">
           <span [innerHTML]="elem.configTitle | translate"></span>&#58;&nbsp;

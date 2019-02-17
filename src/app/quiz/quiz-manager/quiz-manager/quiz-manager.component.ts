@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
 import { DefaultAnswerEntity } from '../../../../lib/entities/answer/DefaultAnswerEntity';
+import { ABCDSingleChoiceQuestionEntity } from '../../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { TrueFalseSingleChoiceQuestionEntity } from '../../../../lib/entities/question/TrueFalseSingleChoiceQuestionEntity';
 import { YesNoSingleChoiceQuestionEntity } from '../../../../lib/entities/question/YesNoSingleChoiceQuestionEntity';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
@@ -107,6 +108,25 @@ export class QuizManagerComponent implements OnDestroy {
               isCorrect: false,
             }), new DefaultAnswerEntity({
               answerText: this.translateService.instant('global.no'),
+              isCorrect: false,
+            }),
+          ],
+        });
+        break;
+      case QuestionType.ABCDSingleChoiceQuestion:
+        question = new ABCDSingleChoiceQuestionEntity({
+          answerOptionList: [
+            new DefaultAnswerEntity({
+              answerText: 'A',
+              isCorrect: false,
+            }), new DefaultAnswerEntity({
+              answerText: 'B',
+              isCorrect: false,
+            }), new DefaultAnswerEntity({
+              answerText: 'C',
+              isCorrect: false,
+            }), new DefaultAnswerEntity({
+              answerText: 'D',
               isCorrect: false,
             }),
           ],
