@@ -55,6 +55,7 @@ export class QuizApiService {
     return this._getQuizStatusUrl;
   }
 
+  private _getQuizUrl: string;
   private _setQuizAsPrivateUrl: string;
   private _getOwnPublicQuizzesUrl: string;
   private _getOwnPublicQuizAmountUrl: string;
@@ -116,6 +117,11 @@ export class QuizApiService {
       { headers: { authorization: localStorage.getItem('privateKey') } });
   }
 
+  public getQuiz(quizName): Observable<IMessage> {
+    return this.http.get<IMessage>(`${this._getQuizUrl}${quizName ? '/' + quizName : ''}`,
+      { headers: { authorization: localStorage.getItem('privateKey') } });
+  }
+
   public getQuizStartTime(): Observable<number> {
     return this.http.get<number>(`${this._getQuizStartTimeUrl}`, { headers: { authorization: sessionStorage.getItem('token') } });
   }
@@ -172,6 +178,7 @@ export class QuizApiService {
     this._postQuizSettingsUpdateUrl = `${DefaultSettings.httpApiEndpoint}/quiz/settings`;
     this._getQuizSettingsUrl = `${DefaultSettings.httpApiEndpoint}/quiz/settings`;
     this._postQuizUploadUrl = `${DefaultSettings.httpApiEndpoint}/quiz/upload`;
+    this._getQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz`;
     this._getQuizStatusUrl = `${DefaultSettings.httpApiEndpoint}/quiz/status`;
     this._getQuizStartTimeUrl = `${DefaultSettings.httpApiEndpoint}/quiz/start-time`;
     this._getFreeMemberGroupUrl = `${DefaultSettings.httpApiEndpoint}/quiz/member-group`;

@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
-import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
-import { IMemberGroupSerialized } from '../../../../lib/interfaces/users/IMemberGroupSerialized';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -71,11 +69,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         ticket: this.userService.casTicket,
       })).subscribe((data: IMessage) => {
         if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
-          data.payload.memberGroups.forEach((group: IMemberGroupSerialized) => {
-            group.members.forEach((nicksInMemberGroup: IMemberSerialized) => {
-              this.attendeeService.addMember(nicksInMemberGroup);
-            });
-          });
           resolve();
         } else {
           reject();

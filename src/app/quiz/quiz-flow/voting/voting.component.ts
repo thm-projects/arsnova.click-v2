@@ -49,16 +49,6 @@ export class VotingComponent implements OnDestroy {
     return this._questionText;
   }
 
-  private _countdownValue: number;
-
-  get countdownValue(): number {
-    return this._countdownValue;
-  }
-
-  set countdownValue(value: number) {
-    this._countdownValue = value;
-  }
-
   private _selectedAnswers: Array<number> | string | number;
 
   get selectedAnswers(): Array<number> | string | number {
@@ -192,13 +182,8 @@ export class VotingComponent implements OnDestroy {
     this.questionTextService.change(this.quizService.currentQuestion().questionText);
 
     this.quizApiService.getQuizStartTime().subscribe((startTime) => {
-      if ((startTime + this.quizService.currentQuestion().timer * 1000) < new Date().getTime()) {
-        // this.sendResponses();
-      }
-
       this.countdown = new Countdown(this.quizService.currentQuestion(), startTime);
       this.countdown.onChange.subscribe((value) => {
-        this.countdownValue = value;
         if (!value || value < 1) {
           this.sendResponses('results');
         }

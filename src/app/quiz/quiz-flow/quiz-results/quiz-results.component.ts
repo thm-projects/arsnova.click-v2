@@ -77,6 +77,14 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
   }
 
+  public showQuestionButton(index: number): boolean {
+    if (!this.quizService.quiz || typeof index === 'undefined' || index < 0 || index > this.quizService.quiz.questionList.length) {
+      return;
+    }
+
+    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
+  }
+
   public showStopQuizButton(): boolean {
     return this.quizService.isOwner && //
            !this.quizService.currentQuestion().timer && //

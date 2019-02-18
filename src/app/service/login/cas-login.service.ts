@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad } from '@angular/router';
-import { ISessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/interfaces';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { StatusProtocol } from '../../../lib/enums/Message';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
@@ -41,8 +40,7 @@ export class CasLoginService implements CanLoad, CanActivate {
       return true;
     }
 
-    const settings = <ISessionConfiguration>data.payload.settings;
-    if (settings.nicks.restrictToCasLogin) {
+    if (data.payload.authorizeViaCas) {
       location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
       return false;
     }

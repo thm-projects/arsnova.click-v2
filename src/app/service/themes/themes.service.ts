@@ -60,9 +60,12 @@ export class ThemesService {
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
     if (!document.getElementById('link-manifest') && themeDataset === usedTheme) {
+      console.log('Reloading link nodes because no link node was found', document.getElementById('link-manifest'), themeDataset, usedTheme,
+        this.currentTheme);
       this.reloadLinkNodes(usedTheme);
     }
     if (themeDataset !== usedTheme) {
+      console.log('Reloading link nodes because theme changed', themeDataset, usedTheme, this.currentTheme);
       this._currentTheme = usedTheme;
       document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
       this.reloadLinkNodes(usedTheme);

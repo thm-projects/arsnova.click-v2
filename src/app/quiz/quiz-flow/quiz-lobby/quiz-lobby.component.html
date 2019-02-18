@@ -50,14 +50,14 @@
            (click)="openKickMemberModal(removeMemberModal, elem.name)"
            [class.pointer]="quizService.isOwner"
            class="d-inline-flex mw-100 mr-3">
-        <fa-icon [icon]="'user'"
+        <fa-icon [icon]="'users'"
                  [id]="elem.id"
                  class="member-wrapper px-1 py-1 fa-2x"
                  [class.own-nick]="attendeeService.isOwnNick(elem.name)"
                  [style.background-color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
                  [style.color]="'#' + sanitizeHTML(elem.colorCode)">>
         </fa-icon>
-        <p class="ml-2 attendee-text text-light text-truncate"
+        <p class="ml-2 attendee-text text-light text-truncate mb-0 align-self-center"
            [innerHTML]="parseNickname(elem.name)"></p>
       </div>
     </div>

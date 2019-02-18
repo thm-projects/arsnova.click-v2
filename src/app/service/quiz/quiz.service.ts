@@ -190,7 +190,7 @@ export class QuizService {
   }
 
   public restoreSettings(quizName: string): void {
-    this.quizApiService.getQuizStatus(quizName).subscribe(response => {
+    this.quizApiService.getQuiz(quizName).subscribe(response => {
       this.quiz = response.payload.quiz;
       this.isOwner = false;
     });
@@ -203,7 +203,7 @@ export class QuizService {
         return;
       }
 
-      this.quizApiService.getQuizStatus(quizName).subscribe(response => {
+      this.quizApiService.getQuiz(quizName).subscribe(response => {
         if (!response.payload.quiz) {
           throw new Error(`No valid quiz found in quizStatus: ${JSON.stringify(response)}`);
         }

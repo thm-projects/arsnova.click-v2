@@ -59,7 +59,7 @@ export class MemberGroupSelectComponent {
 
   public addToGroup(groupName): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.attendeeService.getOwnNick().groupName = groupName;
+      sessionStorage.setItem('memberGroup', groupName);
       this.router.navigate([
         '/nicks', (this.quizService.quiz.sessionConfig.nicks.selectedNicks.length ? 'select' : 'input'),
       ]);

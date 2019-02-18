@@ -2,7 +2,6 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
-import { MemberGroupEntity } from '../../../lib/entities/member/MemberGroupEntity';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { MemberApiService } from '../api/member/member-api.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
@@ -44,20 +43,16 @@ export class AttendeeService {
     }
   }
 
-  public getMemberGroups(): Array<MemberGroupEntity> {
+  public getMemberGroups(): Array<string> {
 
     if (!this.quizService.quiz) {
-      if (!this.quizService.quiz) {
-        return [];
-      }
-
-      return this.quizService.quiz.memberGroups;
+      return [];
     }
 
-    return this.quizService.quiz.memberGroups;
+    return this.quizService.quiz.sessionConfig.nicks.memberGroups;
   }
 
-  public getMembersOfGroup(groupName: string): Array<IMemberSerialized> {
+  public getMembersOfGroup(groupName: string): Array<MemberEntity> {
     return this._attendees.filter(attendee => attendee.groupName === groupName);
   }
 

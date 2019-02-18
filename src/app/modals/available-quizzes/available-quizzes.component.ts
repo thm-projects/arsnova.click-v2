@@ -64,9 +64,9 @@ export class AvailableQuizzesComponent implements IModal {
         return;
       }
 
-      this.quizApiService.getQuizStatus(session.name).subscribe((data) => {
+      this.quizApiService.getQuiz(session.name).subscribe((data) => {
         if (data.payload.state === QuizState.Inactive || data.step === MessageProtocol.Unavailable) {
-          this.quizService.quiz = new QuizEntity(session);
+          this.quizService.quiz = new QuizEntity(data.payload.quiz);
           this.quizService.isOwner = true;
           this.quizService.persist();
 

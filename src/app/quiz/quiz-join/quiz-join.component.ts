@@ -47,22 +47,24 @@ export class QuizJoinComponent implements OnInit {
       this.casService.quizName = quizname;
     }
 
-    this.resolveLobbyStatusData(quizStatusData);
+    this.resolveLobbyStatusData(quizStatusData, quizname);
   }
 
-  private resolveLobbyStatusData(quizStatusData): void {
-    this.quizService.quiz = quizStatusData.payload.quiz;
-    this.quizService.isOwner = false;
-    this.themesService.updateCurrentlyUsedTheme();
+  private resolveLobbyStatusData(quizStatusData, quizname): void {
+    this.quizApiService.getQuiz(quizname).subscribe(quizData => {
+      this.quizService.quiz = quizData.payload.quiz;
+      this.quizService.isOwner = false;
+      this.themesService.updateCurrentlyUsedTheme();
 
-    if (quizStatusData.payload.memberGroups.length > 1) {
-      this.router.navigate(['/nicks', 'memberGroup']);
+      if (quizData.payload.quiz.sessionConfig.nicks.memberGroups.length > 1) {
+        this.router.navigate(['/nicks', 'memberGroup']);
 
-    } else {
-      this.router.navigate([
-        '/nicks', (quizStatusData.payload.provideNickSelection ? 'select' : 'input'),
-      ]);
+      } else {
+        this.router.navigate([
+          '/nicks', (quizStatusData.payload.provideNickSelection ? 'select' : 'input'),
+        ]);
 
-    }
+      }
+    });
   }
 }

@@ -3,7 +3,6 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { Router } from '@angular/router';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
-import { IMemberGroupSerialized } from '../../../../lib/interfaces/users/IMemberGroupSerialized';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -90,9 +89,6 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
         ticket: this.userService.casTicket,
       })).subscribe(data => {
         if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
-          data.payload.memberGroups.forEach((memberGroup: IMemberGroupSerialized) => {
-            memberGroup.members.forEach(attendee => this.attendeeService.addMember(attendee));
-          });
           resolve();
         } else {
           reject(data);
