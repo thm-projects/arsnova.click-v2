@@ -88,7 +88,7 @@ export class FooterbarElement implements IFooterBarElement {
     this._isActive = isActive;
     this._linkTarget = linkTarget;
     this._queryParams = queryParams;
-    this._onClickCallback = onClickCallback;
+    this.onClickCallback = onClickCallback;
   }
 
   public restoreClickCallback(): void {
