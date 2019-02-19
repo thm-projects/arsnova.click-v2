@@ -6,15 +6,15 @@
       </div>
     </ng-container>
     <div *ngFor="let elem of attendeeService.attendees"
-         class="mb-1 col-sm-4 col-md-3">
+         class="my-1 col-sm-4 col-md-3">
       <div [id]="elem.id"
            (click)="openKickMemberModal(removeMemberModal, elem.name)"
-           class="member-wrapper h-100"
+           class="member-wrapper h-100 d-flex align-items-center justify-content-center"
            [class.pointer]="quizService.isOwner"
            [class.own-nick]="attendeeService.isOwnNick(elem.name)"
            [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
            [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
-        <p class="mb-0 p-2 text-center break-word"
+        <p class="mb-0 p-2 break-word"
            [innerHTML]="parseNickname(elem.name)"></p>
       </div>
     </div>
