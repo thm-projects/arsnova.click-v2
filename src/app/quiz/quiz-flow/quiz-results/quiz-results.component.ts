@@ -215,7 +215,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         console.log(data);
       }
     });
-    this.countdown.stop();
+    if (this.countdown) {
+      this.countdown.stop();
+    }
   }
 
   public async startQuiz(): Promise<void> {
@@ -396,7 +398,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
         break;
       case MessageProtocol.Stop:
-        this.countdown.stop();
+        if (this.countdown) {
+          this.countdown.stop();
+        }
         break;
       case MessageProtocol.Removed:
         const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
