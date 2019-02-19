@@ -54,6 +54,8 @@ export class QuizService {
     this._readingConfirmationRequested = value;
   }
 
+  private _isInEditMode = false;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
@@ -77,7 +79,10 @@ export class QuizService {
   public persist(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.create(DbTable.Quiz, this.quiz.name, this.quiz).subscribe();
-      this.quizApiService.putSavedQuiz(this.quiz).subscribe();
+
+      if (this._isInEditMode) {
+        this.quizApiService.putSavedQuiz(this.quiz).subscribe();
+      }
     }
   }
 
@@ -225,6 +230,7 @@ export class QuizService {
       this.quiz = new QuizEntity(quiz);
       this.isOwner = true;
       this.updateOwnerState();
+      this._isInEditMode = true;
     });
   }
 
