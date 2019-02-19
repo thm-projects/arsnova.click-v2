@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../../lib/available-question-types';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
+import { StorageKey } from '../../../../../lib/enums/enums';
 import { QuestionType } from '../../../../../lib/enums/QuestionType';
 import { getQuestionForType } from '../../../../../lib/QuizValidator';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -61,7 +62,7 @@ export class QuestiontypeComponent {
       }));
     }));
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public isActiveQuestionType(type: string): boolean {

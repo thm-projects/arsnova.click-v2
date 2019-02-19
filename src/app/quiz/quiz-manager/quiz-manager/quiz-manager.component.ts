@@ -8,6 +8,7 @@ import { DefaultAnswerEntity } from '../../../../lib/entities/answer/DefaultAnsw
 import { ABCDSingleChoiceQuestionEntity } from '../../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { TrueFalseSingleChoiceQuestionEntity } from '../../../../lib/entities/question/TrueFalseSingleChoiceQuestionEntity';
 import { YesNoSingleChoiceQuestionEntity } from '../../../../lib/entities/question/YesNoSingleChoiceQuestionEntity';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { FooterbarElement } from '../../../../lib/footerbar-element/footerbar-element';
 import { getQuestionForType } from '../../../../lib/QuizValidator';
@@ -59,17 +60,15 @@ export class QuizManagerComponent implements OnDestroy {
     ]);
 
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(() => {
-      console.log('start quiz button: isActive', this.quizService.isValid(), this.connectionService.serverAvailable);
       this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
     }));
-    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     this.footerBarService.footerElemStartQuiz.onClickCallback = (self: FooterbarElement) => {
       if (!self.isActive) {
         return;
       }
       this.quizApiService.setQuiz(this.quizService.quiz).subscribe(updatedQuiz => {
-        sessionStorage.setItem('token', updatedQuiz.adminToken);
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       });
     };

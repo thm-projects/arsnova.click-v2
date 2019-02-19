@@ -47,6 +47,18 @@
   <div class="form-row">
     <div class="form-group col-12 col-sm">
       <label class="w-100">
+        <span>Private Key</span>
+        <input type="text"
+               class="form-control"
+               placeholder="Private Key Token"
+               name="privateKey"
+               [(ngModel)]="privateKey"/>
+      </label>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-12 col-sm">
+      <label class="w-100">
         <span>User Authorizations</span>
         <select [(ngModel)]="userAuthorizations"
                 name="userAuthorizations"

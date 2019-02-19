@@ -215,7 +215,6 @@ export class QuizOverviewComponent implements OnInit {
 
   private async openLobby(session: QuizEntity): Promise<any> {
     this.quizApiService.setQuiz(session).subscribe((updatedQuiz) => {
-      sessionStorage.setItem('token', updatedQuiz.adminToken);
       this.router.navigate(['/quiz', 'flow']);
     });
   }

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
+import { StorageKey } from '../../../../../lib/enums/enums';
 import { QuestionType } from '../../../../../lib/enums/QuestionType';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -58,7 +59,7 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
       }));
     }));
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public ngOnDestroy(): void {}

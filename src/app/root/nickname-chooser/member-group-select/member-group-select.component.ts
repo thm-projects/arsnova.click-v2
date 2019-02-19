@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
@@ -54,12 +55,12 @@ export class MemberGroupSelectComponent {
         this._memberGroups = this.quizService.quiz.sessionConfig.nicks.memberGroups;
       }
     });
-    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public addToGroup(groupName): void {
     if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.setItem('memberGroup', groupName);
+      sessionStorage.setItem(StorageKey.CurrentMemberGroupName, groupName);
       this.router.navigate([
         '/nicks', (this.quizService.quiz.sessionConfig.nicks.selectedNicks.length ? 'select' : 'input'),
       ]);

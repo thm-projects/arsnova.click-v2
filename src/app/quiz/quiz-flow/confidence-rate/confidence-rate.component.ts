@@ -2,6 +2,7 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -43,7 +44,7 @@ export class ConfidenceRateComponent {
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;

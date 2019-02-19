@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbTable } from '../../../lib/enums/enums';
+import { DbTable, StorageKey } from '../../../lib/enums/enums';
 import { StatusProtocol } from '../../../lib/enums/Message';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
@@ -34,7 +34,7 @@ export class QuizService {
 
   set quiz(value: QuizEntity) {
     if (value) {
-      sessionStorage.setItem('currentQuizName', value.name);
+      sessionStorage.setItem(StorageKey.CurrentQuizName, value.name);
       // noinspection SuspiciousInstanceOfGuard
       if (!(value instanceof QuizEntity)) {
         value = new QuizEntity(value);
@@ -77,6 +77,7 @@ export class QuizService {
   public persist(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.create(DbTable.Quiz, this.quiz.name, this.quiz).subscribe();
+      this.quizApiService.putSavedQuiz(this.quiz).subscribe();
     }
   }
 
@@ -239,7 +240,7 @@ export class QuizService {
     if (isPlatformBrowser(this.platformId)) {
       this.footerBarService.footerElemExport.onClickCallback = async () => {
         const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this._quiz.name}/${localStorage.getItem(
-          'privateKey')}/${this._quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
+          StorageKey.PrivateKey)}/${this._quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
         window.open(link);
       };
     }

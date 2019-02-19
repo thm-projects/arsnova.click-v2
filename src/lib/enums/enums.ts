@@ -45,10 +45,22 @@ export enum Project {
 }
 
 export enum StorageKey {
-  PrivateKey   = 'PrivateKey', //
-  Language     = 'Language', //
-  QuizTheme    = 'QuizTheme', //
-  DefaultTheme = 'DefaultTheme', //
+  PrivateKey             = 'PrivateKey', //
+  LoginToken             = 'LoginToken', //
+  CasToken               = 'CasToken', //
+  CurrentQuizName        = 'CurrentQuizName', //
+  CurrentNickName        = 'CurrentNickName', //
+  CurrentMemberGroupName = 'CurrentMemberGroupName', //
+  Language               = 'Language', //
+  QuizTheme              = 'QuizTheme', //
+  DefaultTheme           = 'DefaultTheme', //
+  ChunkError             = 'ChunkError', //
+}
+
+export enum DbState {
+  Initialized, //
+  Revalidate, //
+  Destroy, //
 }
 
 export enum DbName {

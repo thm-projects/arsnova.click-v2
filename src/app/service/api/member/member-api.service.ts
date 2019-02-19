@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../../lib/default.settings';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 
 @Injectable({
@@ -53,20 +54,21 @@ export class MemberApiService {
   }
 
   public putMember(member: MemberEntity): Observable<IMessage> {
-    return this.http.put<IMessage>(this._putMemberUrl, { member }, { headers: { authorization: sessionStorage.getItem('token') } });
+    return this.http.put<IMessage>(this._putMemberUrl, { member }, { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
   }
 
   public putResponse(response: any): Observable<IMessage> {
-    return this.http.put<IMessage>(this._putResponseUrl, { response }, { headers: { authorization: sessionStorage.getItem('token') } });
+    return this.http.put<IMessage>(this._putResponseUrl, { response }, { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
   }
 
   public deleteMember(quizName, nickName): Observable<IMessage> {
     return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${quizName}/${nickName}`,
-      { headers: { authorization: sessionStorage.getItem('token') } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
   }
 
   public getMembers(quizname: string): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getMembersUrl}/${quizname}`, { headers: { authorization: sessionStorage.getItem('token') } });
+    return this.http.get<IMessage>(`${this._getMembersUrl}/${quizname}`,
+      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) || localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getAvailableNames(quizName: string): Observable<Array<string>> {
@@ -75,11 +77,12 @@ export class MemberApiService {
 
   public putConfidenceValue(confidenceValue: number): Observable<IMessage> {
     return this.http.put<IMessage>(`${this._putConfidenceValueUrl}`, { confidenceValue },
-      { headers: { authorization: sessionStorage.getItem('token') } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
   }
 
   public putReadingConfirmationValue(): Observable<IMessage> {
-    return this.http.put<IMessage>(`${this._putReadingConfirmationValueUrl}`, {}, { headers: { authorization: sessionStorage.getItem('token') } });
+    return this.http.put<IMessage>(`${this._putReadingConfirmationValueUrl}`, {},
+      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
   }
 
   public generateMemberToken(name, quizName): Observable<string> {

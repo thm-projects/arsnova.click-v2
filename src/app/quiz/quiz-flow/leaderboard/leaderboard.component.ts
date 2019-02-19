@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
@@ -77,7 +78,7 @@ export class LeaderboardComponent implements OnDestroy {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
@@ -181,7 +182,7 @@ export class LeaderboardComponent implements OnDestroy {
           break;
         case MessageProtocol.Removed:
           if (isPlatformBrowser(this.platformId)) {
-            const existingNickname = sessionStorage.getItem('nick');
+            const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
             if (existingNickname === data.payload.name) {
               this.router.navigate(['/']);
             }

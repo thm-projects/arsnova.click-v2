@@ -3,6 +3,7 @@ import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
+import { StorageKey } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 // tslint:disable-next-line:max-line-length
 import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
@@ -75,9 +76,9 @@ export class RootComponent implements OnInit, AfterViewInit {
       if (err.originalStack && err.originalStack.indexOf('Error: Loading chunk') >= 0) {
         // Check if is the first time the error happend
         console.error('loading chunk failed');
-        if (sessionStorage.getItem('lastChunkError') !== err.originalStack) {
+        if (sessionStorage.getItem(StorageKey.ChunkError) !== err.originalStack) {
           // Save the last error to avoid an infinite reload loop if the chunk really does not exists after reload
-          sessionStorage.setItem('lastChunkError', err.originalStack);
+          sessionStorage.setItem(StorageKey.ChunkError, err.originalStack);
           console.error('no previous reload found, so forcing reload now');
           location.reload(true);
         } else {

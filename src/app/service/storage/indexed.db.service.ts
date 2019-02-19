@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject, Observable, throwError as observableThrowError } from 'rxjs';
-import { DbName, DbTable, StorageKey } from '../../../lib/enums/enums';
+import { DbName, DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
 
 interface ISchema {
   name: DbTable;
@@ -11,7 +11,7 @@ interface ISchema {
 
 @Injectable()
 export class IndexedDbService {
-  get stateNotifier(): BehaviorSubject<string> {
+  get stateNotifier(): BehaviorSubject<DbState> {
     return this._stateNotifier;
   }
 
@@ -38,7 +38,7 @@ export class IndexedDbService {
   }
 
   private _indexedDB: any;
-  private readonly _stateNotifier = new BehaviorSubject<string>(null);
+  private readonly _stateNotifier = new BehaviorSubject<DbState>(null);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
@@ -53,7 +53,7 @@ export class IndexedDbService {
       this._dbName = dbName;
       this._dbInstance = null;
       this._isInitialized = false;
-      this.stateNotifier.next('destroy');
+      this.stateNotifier.next(DbState.Destroy);
     } else {
       console.error('Error: invalid dbName');
     }

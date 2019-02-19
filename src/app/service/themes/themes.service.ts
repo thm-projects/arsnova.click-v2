@@ -2,7 +2,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { themes } from '../../../lib/available-themes';
 import { DefaultSettings } from '../../../lib/default.settings';
-import { DbTable, StorageKey } from '../../../lib/enums/enums';
+import { DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { ITheme } from '../../../lib/interfaces/ITheme';
 import { ThemesApiService } from '../api/themes/themes-api.service';
@@ -34,7 +34,7 @@ export class ThemesService {
     private i18nService: I18nService,
   ) {
     this.storageService.stateNotifier.subscribe(val => {
-      if (val === 'initialized') {
+      if (val === DbState.Initialized) {
         this.initTheme();
       }
     });

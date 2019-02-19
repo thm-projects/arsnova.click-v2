@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
+import { StorageKey } from '../../../../../lib/enums/enums';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
@@ -95,7 +96,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
         this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText);
       }));
 
-      this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+      this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
     }
   }
 

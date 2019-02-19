@@ -1,10 +1,14 @@
-import { isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
 import { StatusProtocol } from '../../../lib/enums/Message';
 import { UserRole } from '../../../lib/enums/UserRole';
 import { ILoginSerialized } from '../../../lib/interfaces/ILoginSerialized';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
+import { QuizService } from '../quiz/quiz.service';
+import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable()
@@ -26,7 +30,10 @@ export class UserService {
       this._username = this._staticLoginTokenContent.name;
       this.persistTokens();
     }
-    this.storageService.switchDb(this._username);
+    if (isPlatformBrowser(this.platformId)) {
+      console.log('switching db', this.username, value);
+      this.storageService.switchDb(this._username).subscribe();
+    }
     this._isLoggedIn = value;
     this._loginNotifier.emit(value);
   }
@@ -61,12 +68,46 @@ export class UserService {
     return this._staticLoginToken;
   }
 
+  private _tmpRemoteQuizData: Array<any> = [];
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private authorizeApiService: AuthorizeApiService,
     private storageService: StorageService,
+    private indexedDbService: IndexedDbService,
     private jwtHelper: JwtHelperService,
+    private quizService: QuizService,
   ) {
+
+    this.storageService.stateNotifier.subscribe((type) => {
+      if (type === DbState.Initialized && !this.username) {
+        console.log('firing revalidate 1', DbState[type]);
+        this.indexedDbService.stateNotifier.next(DbState.Revalidate);
+      }
+      if (type !== DbState.Initialized || this.indexedDbService.dbName !== this.username) {
+        return;
+      }
+
+      if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
+        this.storageService.create(DbTable.Config, StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey).subscribe();
+        localStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
+
+        if (this._tmpRemoteQuizData.length) {
+          this.storageService.getAllQuiznames().then(quiznames => {
+
+            this._tmpRemoteQuizData.forEach(quiz => {
+              this.quizService.quiz = new QuizEntity(quiz);
+              this.quizService.persist();
+            });
+            this.indexedDbService.stateNotifier.next(DbState.Revalidate);
+          });
+        } else {
+          this.indexedDbService.stateNotifier.next(DbState.Revalidate);
+        }
+      } else {
+        this.indexedDbService.stateNotifier.next(DbState.Revalidate);
+      }
+    });
   }
 
   public loadConfig(): boolean {
@@ -75,8 +116,8 @@ export class UserService {
       return this.isLoggedIn;
     }
 
-    this._staticLoginToken = sessionStorage.getItem('userToken');
-    this._casTicket = sessionStorage.getItem('castoken');
+    this._staticLoginToken = sessionStorage.getItem(StorageKey.LoginToken);
+    this._casTicket = sessionStorage.getItem(StorageKey.CasToken);
 
     if (!this._staticLoginToken) {
       this.isLoggedIn = false;
@@ -129,6 +170,7 @@ export class UserService {
 
       if (data.status === StatusProtocol.Success) {
         this._staticLoginToken = data.payload.token;
+        this._tmpRemoteQuizData = data.payload.quizzes;
         this._username = username;
         this.isLoggedIn = true;
         resolve(true);
@@ -150,6 +192,10 @@ export class UserService {
       return false;
     }
 
+    if (!this.staticLoginTokenContent.userAuthorizations) {
+      return false;
+    }
+
     if (Array.isArray(authorization)) {
       return authorization.some(auth => {
         return this.staticLoginTokenContent.userAuthorizations.find(value => value === auth);
@@ -164,11 +210,11 @@ export class UserService {
       return;
     }
 
-    sessionStorage.removeItem('userToken');
+    sessionStorage.removeItem(StorageKey.LoginToken);
   }
 
   private persistTokens(): void {
-    sessionStorage.setItem('userToken', this._staticLoginToken);
+    sessionStorage.setItem(StorageKey.LoginToken, this._staticLoginToken);
   }
 
   private rotl(n, s): number {

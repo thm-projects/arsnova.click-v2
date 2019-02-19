@@ -72,7 +72,6 @@ export class AvailableQuizzesComponent implements IModal {
 
           this.quizApiService.setQuiz(this.quizService.quiz).subscribe((updatedQuiz) => {
             this.quizService.quiz = new QuizEntity(updatedQuiz);
-            sessionStorage.setItem('token', updatedQuiz.adminToken);
             this.router.navigate(['/quiz', 'flow']);
           }, () => {}, () => {
             this.next();

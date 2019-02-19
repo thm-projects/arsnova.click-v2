@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
+import { StorageKey } from '../../../lib/enums/enums';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { MemberApiService } from '../api/member/member-api.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
@@ -28,7 +29,7 @@ export class AttendeeService {
 
   set ownNick(value: string) {
     this._ownNick = value;
-    sessionStorage.setItem('nick', value);
+    sessionStorage.setItem(StorageKey.CurrentNickName, value);
   }
 
   constructor(
@@ -126,7 +127,7 @@ export class AttendeeService {
   }
 
   private loadData(): void {
-    this._ownNick = sessionStorage.getItem('nick');
+    this._ownNick = sessionStorage.getItem(StorageKey.CurrentNickName);
   }
 
   private getMember(nickname: string): MemberEntity {

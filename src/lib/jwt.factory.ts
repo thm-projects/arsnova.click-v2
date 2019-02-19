@@ -1,4 +1,5 @@
 import { isPlatformServer } from '@angular/common';
+import { StorageKey } from './enums/enums';
 
 export function jwtOptionsFactory(platformId): any {
   return {
@@ -7,7 +8,7 @@ export function jwtOptionsFactory(platformId): any {
         return null;
       }
 
-      return sessionStorage.getItem('token');
+      return sessionStorage.getItem(StorageKey.LoginToken);
     },
   };
 }

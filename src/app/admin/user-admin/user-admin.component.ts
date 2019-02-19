@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DbTable, StorageKey } from '../../../lib/enums/enums';
 import { AddUserComponent } from '../../modals/add-user/add-user.component';
 import { AdminService } from '../../service/api/admin/admin.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { UserService } from '../../service/user/user.service';
 
 @Component({
@@ -19,10 +21,12 @@ export class UserAdminComponent implements OnInit {
 
   private _deletingElements: Array<number> = [];
 
-  constructor(private userService: UserService,
-              private footerBarService: FooterBarService,
-              private adminService: AdminService,
-              private ngbModal: NgbModal,
+  constructor(
+    private userService: UserService,
+    private footerBarService: FooterBarService,
+    private adminService: AdminService,
+    private ngbModal: NgbModal,
+    private storageService: StorageService,
   ) {
     this.updateFooterElements();
   }
@@ -60,6 +64,7 @@ export class UserAdminComponent implements OnInit {
   public editElem(index: number): void {
     const ref = this.ngbModal.open(AddUserComponent);
     ref.componentInstance.name = (this._data[index] as any).name;
+    ref.componentInstance.privateKey = (this._data[index] as any).privateKey;
     ref.componentInstance.gitlabToken = (this._data[index] as any).gitlabToken;
     ref.componentInstance.userAuthorizations = (this._data[index] as any).userAuthorizations;
 
@@ -70,9 +75,15 @@ export class UserAdminComponent implements OnInit {
 
       this.adminService.updateUser(value).subscribe(() => {
         (this._data[index] as any).name = value.name;
+        (this._data[index] as any).privateKey = value.privateKey;
         (this._data[index] as any).passwordHash = value.passwordHash;
         (this._data[index] as any).gitlabToken = value.gitlabToken;
         (this._data[index] as any).userAuthorizations = value.userAuthorizations;
+
+        if (value.name === this.userService.staticLoginTokenContent.name) {
+          localStorage.setItem(StorageKey.PrivateKey, value.privateKey);
+          this.storageService.create(DbTable.Config, StorageKey.PrivateKey, value.privateKey).subscribe();
+        }
       });
     }).catch(() => {});
   }

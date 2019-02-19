@@ -2,6 +2,7 @@ import { Component, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
@@ -67,7 +68,7 @@ export class MemberGroupManagerComponent implements OnDestroy {
       this._autoJoinToGroup = this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup;
     }));
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public ngOnDestroy(): void {

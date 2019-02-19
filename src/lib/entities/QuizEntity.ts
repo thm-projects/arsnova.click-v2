@@ -14,7 +14,6 @@ export class QuizEntity {
   public expiry: Date;
   public currentStartTimestamp: number;
   public memberGroups: Array<MemberGroupEntity>;
-  public adminToken: string;
   public visibility: Array<QuizVisibility>;
   public description: string;
 
@@ -27,7 +26,6 @@ export class QuizEntity {
     this.expiry = props.expiry;
     this.currentStartTimestamp = props.currentStartTimestamp;
     this.memberGroups = props.memberGroups;
-    this.adminToken = props.adminToken;
   }
 
   public addQuestion(question: AbstractQuestionEntity, index: number = -1): AbstractQuestionEntity {

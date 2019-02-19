@@ -1,7 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { DbName, DbTable, StorageKey } from '../../../lib/enums/enums';
+import { DbName, DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
 import { IndexedDbService } from './indexed.db.service';
 
 @Injectable({
@@ -61,34 +61,15 @@ export class StorageService {
     return this.indexedDbService.all(table);
   }
 
-  public switchDb(username: string): void {
+  public switchDb(username: string): Observable<void> {
     if (username === this.indexedDbService.dbName) {
-      return;
+      return of(null);
     }
 
-    this.initDb(username || DbName.Default);
+    return this.initDb(username || DbName.Default);
   }
 
-  private initDb(dbName): void {
-    this.indexedDbService.setName(dbName);
-    this.indexedDbService.create([
-      { name: DbTable.Config }, {
-        name: DbTable.Quiz,
-      },
-    ]).subscribe(() => {}, () => {}, () => {
-      this.read(DbTable.Config, StorageKey.PrivateKey).subscribe(val => {
-        if (!val) {
-          val = this.generatePrivateKey();
-          this.create(DbTable.Config, StorageKey.PrivateKey, val).subscribe();
-        }
-        localStorage.setItem('privateKey', val);
-        this.indexedDbService.isInitialized = true;
-        this.indexedDbService.stateNotifier.next('initialized');
-      });
-    });
-  }
-
-  private generatePrivateKey(length?: number): string {
+  public generatePrivateKey(length?: number): string {
     const arr = new Uint8Array((length || 40) / 2);
 
     if (isPlatformBrowser(this.platformId)) {
@@ -96,6 +77,35 @@ export class StorageService {
     }
 
     return Array.from(arr, this.dec2hex).join('');
+  }
+
+  private initDb(dbName): Observable<void> {
+    this.indexedDbService.setName(dbName);
+
+    const obs = this.indexedDbService.create([
+      { name: DbTable.Config }, {
+        name: DbTable.Quiz,
+      },
+    ]);
+
+    obs.subscribe(() => {
+    }, () => {}, () => {
+      this.read(DbTable.Config, StorageKey.PrivateKey).subscribe(val => {
+        if (!val) {
+          val = this.generatePrivateKey();
+          this.create(DbTable.Config, StorageKey.PrivateKey, val).subscribe(() => {}, () => {}, () => {
+            this.indexedDbService.isInitialized = true;
+            this.indexedDbService.stateNotifier.next(DbState.Initialized);
+          });
+        } else {
+          this.indexedDbService.isInitialized = true;
+          this.indexedDbService.stateNotifier.next(DbState.Initialized);
+        }
+        localStorage.setItem(StorageKey.PrivateKey, val);
+      });
+    });
+
+    return obs;
   }
 
   private dec2hex(dec): string {

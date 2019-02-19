@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -51,9 +52,9 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
 
     const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
 
-    sessionStorage.setItem('token', token);
+    sessionStorage.setItem(StorageKey.LoginToken, token);
 
-    this.putMember(nickname, sessionStorage.getItem('memberGroup')).then(() => {
+    this.putMember(nickname, sessionStorage.getItem(StorageKey.CurrentMemberGroupName)).then(() => {
       this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {

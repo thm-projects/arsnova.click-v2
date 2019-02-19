@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserRole } from '../../../lib/enums/UserRole';
+import { StorageService } from '../../service/storage/storage.service';
 
 @Component({
   selector: 'app-add-user',
@@ -54,7 +55,19 @@ export class AddUserComponent implements OnInit {
     return this._isSubmitting;
   }
 
-  constructor(private ngbModal: NgbActiveModal) { }
+  private _privateKey: string;
+
+  get privateKey(): string {
+    return this._privateKey;
+  }
+
+  set privateKey(value: string) {
+    this._privateKey = value;
+  }
+
+  constructor(private ngbModal: NgbActiveModal, private storageService: StorageService) {
+    this.privateKey = storageService.generatePrivateKey();
+  }
 
   public ngOnInit(): void {
   }
@@ -73,6 +86,7 @@ export class AddUserComponent implements OnInit {
 
     this.ngbModal.close({
       name: this.name,
+      privateKey: this.privateKey,
       password: this.password,
       gitlabToken: this.gitlabToken,
       userAuthorizations: this.userAuthorizations,
@@ -81,10 +95,5 @@ export class AddUserComponent implements OnInit {
 
   public dismiss(): void {
     this.ngbModal.dismiss();
-  }
-
-  public hasUserRole(role: string): boolean {
-    console.log(this.userAuthorizations.indexOf(role) > -1);
-    return this.userAuthorizations.indexOf(role) > -1;
   }
 }

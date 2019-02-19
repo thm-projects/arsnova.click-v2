@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IAvailableNicks } from 'arsnova-click-v2-types/dist/common';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { NickApiService } from '../../../service/api/nick/nick-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -49,7 +50,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemBack, this.footerBarService.footerElemBlockRudeNicknames, this.footerBarService.footerElemEnableCasLogin,
     ]);
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public filterForKeyword(event: Event): void {

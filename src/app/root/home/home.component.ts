@@ -10,7 +10,7 @@ import { AbstractAnswerEntity } from '../../../lib/entities/answer/AbstractAnswe
 import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
 import { ABCDSingleChoiceQuestionEntity } from '../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbTable, Language, StorageKey } from '../../../lib/enums/enums';
+import { DbState, DbTable, Language, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
@@ -139,12 +139,16 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
 
     this._subscriptions.push(this.storageService.stateNotifier.subscribe(state => {
-      if (state === 'destroy') {
+      if (state === DbState.Destroy) {
         this._subscriptions.forEach(sub => sub.unsubscribe());
         return;
       }
 
-      if (state === 'initialized') {
+      if (state === DbState.Initialized) {
+        this.cleanUpSessionStorage();
+      }
+
+      if (state === DbState.Revalidate) {
         this.cleanUpSessionStorage();
         this.storageService.getAllQuiznames().then(quizNames => {
           this._ownQuizzes = quizNames;
@@ -165,7 +169,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this._routerSubscription = this.route.params.subscribe(params => {
       this._subscriptions.push(this.storageService.stateNotifier.subscribe(async val => {
-        if (val === 'initialized') {
+        if (val === DbState.Initialized) {
           if (!Object.keys(params).length || !params.themeId || !params.languageId) {
             const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
 
@@ -280,7 +284,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    sessionStorage.setItem('currentQuizName', this.enteredSessionName);
+    sessionStorage.setItem(StorageKey.CurrentQuizName, this.enteredSessionName);
     this.router.navigate(['/quiz', 'manager', 'overview']);
   }
 
@@ -289,12 +293,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    sessionStorage.setItem('currentQuizName', this.enteredSessionName);
+    sessionStorage.setItem(StorageKey.CurrentQuizName, this.enteredSessionName);
     this.runQuiz(['/quiz', 'manager', 'overview']);
   }
 
   public joinQuiz(): void {
-    sessionStorage.setItem('currentQuizName', this.enteredSessionName);
+    sessionStorage.setItem(StorageKey.CurrentQuizName, this.enteredSessionName);
   }
 
   public async runQuiz(routingTarget: Array<string>): Promise<void> {
@@ -357,7 +361,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.quizService.quiz = new QuizEntity(questionGroup);
       this.quizService.persist();
 
-      sessionStorage.setItem('token', modifiedQuestionGroup.adminToken);
       this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
       this.quizService.isOwner = true;
 
@@ -472,9 +475,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.attendeeService.cleanUp();
     this.quizService.cleanUp();
     this.connectionService.cleanUp();
-    sessionStorage.removeItem('currentQuizName');
-    sessionStorage.removeItem('nick');
-    sessionStorage.removeItem('token');
+    sessionStorage.removeItem(StorageKey.CurrentQuizName);
+    sessionStorage.removeItem(StorageKey.CurrentNickName);
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.delete(DbTable.Config, StorageKey.QuizTheme).subscribe();
     }

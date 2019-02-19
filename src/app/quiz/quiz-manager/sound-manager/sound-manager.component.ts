@@ -5,6 +5,7 @@ import { ISong } from 'arsnova-click-v2-types/dist/common';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { MusicSessionConfigurationEntity } from '../../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 
@@ -69,7 +70,7 @@ export class SoundManagerComponent implements OnDestroy {
       this.setCountdownRunningSongs();
     }));
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public selectSound(target: 'lobby' | 'countdownRunning' | 'countdownEnd', event: Event): void {

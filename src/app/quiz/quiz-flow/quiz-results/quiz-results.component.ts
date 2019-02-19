@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
-import { NumberType } from '../../../../lib/enums/enums';
+import { NumberType, StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizState } from '../../../../lib/enums/QuizState';
@@ -55,7 +55,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     headerLabelService.headerLabel = 'component.liveResults.title';
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
@@ -399,7 +399,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.countdown.stop();
         break;
       case MessageProtocol.Removed:
-        const existingNickname = sessionStorage.getItem('nick');
+        const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
         if (existingNickname === data.payload.name) {
           this.router.navigate(['/']);
         }

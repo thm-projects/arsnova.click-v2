@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
+import { StorageKey } from '../../../../../lib/enums/enums';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
@@ -57,7 +58,7 @@ export class QuizManagerDetailsOverviewComponent {
       }));
     }));
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem('currentQuizName'));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public trackDetailsTarget(link: string): void {

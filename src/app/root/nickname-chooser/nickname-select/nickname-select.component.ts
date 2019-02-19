@@ -2,6 +2,7 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
@@ -59,13 +60,13 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
 
     const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
 
-    sessionStorage.setItem('token', token);
+    sessionStorage.setItem(StorageKey.LoginToken, token);
 
     const promise = new Promise(async (resolve, reject) => {
       this.memberApiService.putMember(new MemberEntity({
         currentQuizName: this.quizService.quiz.name,
         name: nickname,
-        groupName: sessionStorage.getItem('memberGroup'),
+        groupName: sessionStorage.getItem(StorageKey.CurrentMemberGroupName),
         ticket: this.userService.casTicket,
       })).subscribe((data: IMessage) => {
         if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
