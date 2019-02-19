@@ -1,10 +1,10 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { ITheme } from 'arsnova-click-v2-types/dist/common';
+import { themes } from '../../../lib/available-themes';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { DbTable, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
-import { themes } from '../../shared/availableThemes';
+import { ITheme } from '../../../lib/interfaces/ITheme';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { I18nService } from '../i18n/i18n.service';

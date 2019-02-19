@@ -4,7 +4,7 @@
      [id]="elem.id"
      role="listitem">
   <img [src]="getThemePreviewUrl(elem.id)"
-       [alt]="'Preview of theme ' + (elem.name | translate)"
+       [alt]="'theme-preview.' | translate:{theme: (elem.name | translate)}"
        class="imagePreviewFile pointer"
        (click)="change(elem.id)"
        (mouseenter)="preview(elem.id)"

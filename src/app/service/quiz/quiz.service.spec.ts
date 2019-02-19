@@ -3,11 +3,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
-import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
-import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { SingleChoiceQuestionEntity } from '../../../lib/entities/question/SingleChoiceQuestionEntity';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { SessionConfigurationEntity } from '../../../lib/entities/session-configuration/SessionConfigurationEntity';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
@@ -56,9 +56,9 @@ describe('QuizService', () => {
   beforeEach(async(inject([QuizService], (service: QuizService) => {
     service.quiz = new QuizEntity({
       name: 'test',
-      sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings.sessionConfig),
+      sessionConfig: new SessionConfigurationEntity(DefaultSettings.defaultQuizSettings.sessionConfig),
       questionList: [
-        new SingleChoiceQuestion({}),
+        new SingleChoiceQuestionEntity({}),
       ],
     });
     service.isOwner = true;
