@@ -195,7 +195,7 @@ export class QuizLobbyComponent implements OnDestroy {
       if (!this.attendeeService.attendees.length) {
         return;
       }
-      this.quizApiService.nextStep().subscribe((data: IMessage) => {
+      this.quizApiService.nextStep(this.quizService.quiz.name).subscribe((data: IMessage) => {
         this.quizService.readingConfirmationRequested = data.step === MessageProtocol.ReadingConfirmationRequested;
         this.router.navigate(['/quiz', 'flow', 'results']);
       });

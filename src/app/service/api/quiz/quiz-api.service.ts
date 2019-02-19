@@ -83,8 +83,9 @@ export class QuizApiService {
     });
   }
 
-  public nextStep(): Observable<IMessage> {
-    return this.http.post<IMessage>(this._postNextStepUrl, {}, { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+  public nextStep(quizName: string): Observable<IMessage> {
+    return this.http.post<IMessage>(`${this._postNextStepUrl}`, { quizName },
+      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public deleteQuiz(quiz: QuizEntity): Observable<IMessage> {

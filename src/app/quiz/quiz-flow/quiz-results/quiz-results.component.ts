@@ -221,7 +221,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public async startQuiz(): Promise<void> {
-    const startQuizData = await this.quizApiService.nextStep().toPromise();
+    const startQuizData = await this.quizApiService.nextStep(this.quizService.quiz.name).toPromise();
     if (startQuizData.status !== StatusProtocol.Success) {
       console.log(startQuizData);
       return;
