@@ -52,7 +52,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
 
     const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
 
-    sessionStorage.setItem(StorageKey.LoginToken, token);
+    sessionStorage.setItem(StorageKey.QuizToken, token);
 
     this.putMember(nickname, sessionStorage.getItem(StorageKey.CurrentMemberGroupName)).then(() => {
       this.attendeeService.ownNick = nickname;

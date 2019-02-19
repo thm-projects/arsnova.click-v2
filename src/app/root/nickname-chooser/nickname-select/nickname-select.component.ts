@@ -60,7 +60,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
 
     const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
 
-    sessionStorage.setItem(StorageKey.LoginToken, token);
+    sessionStorage.setItem(StorageKey.QuizToken, token);
 
     const promise = new Promise(async (resolve, reject) => {
       this.memberApiService.putMember(new MemberEntity({

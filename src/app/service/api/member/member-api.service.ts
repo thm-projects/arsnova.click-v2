@@ -54,21 +54,21 @@ export class MemberApiService {
   }
 
   public putMember(member: MemberEntity): Observable<IMessage> {
-    return this.http.put<IMessage>(this._putMemberUrl, { member }, { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
+    return this.http.put<IMessage>(this._putMemberUrl, { member }, { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } });
   }
 
   public putResponse(response: any): Observable<IMessage> {
-    return this.http.put<IMessage>(this._putResponseUrl, { response }, { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
+    return this.http.put<IMessage>(this._putResponseUrl, { response }, { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } });
   }
 
   public deleteMember(quizName, nickName): Observable<IMessage> {
     return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${quizName}/${nickName}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } });
   }
 
   public getMembers(quizname: string): Observable<IMessage> {
     return this.http.get<IMessage>(`${this._getMembersUrl}/${quizname}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) || localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getAvailableNames(quizName: string): Observable<Array<string>> {
@@ -77,12 +77,12 @@ export class MemberApiService {
 
   public putConfidenceValue(confidenceValue: number): Observable<IMessage> {
     return this.http.put<IMessage>(`${this._putConfidenceValueUrl}`, { confidenceValue },
-      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } });
   }
 
   public putReadingConfirmationValue(): Observable<IMessage> {
     return this.http.put<IMessage>(`${this._putReadingConfirmationValueUrl}`, {},
-      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } });
   }
 
   public generateMemberToken(name, quizName): Observable<string> {

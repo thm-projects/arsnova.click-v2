@@ -128,12 +128,12 @@ export class QuizApiService {
 
   public getQuizStartTime(): Observable<number> {
     return this.http.get<number>(`${this._getQuizStartTimeUrl}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) || localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getFreeMemberGroup(): Observable<IMessage> {
     return this.http.get<IMessage>(`${this._getFreeMemberGroupUrl}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.LoginToken) || localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public generateABCDQuiz(language: string, length: number): Observable<QuizEntity> {

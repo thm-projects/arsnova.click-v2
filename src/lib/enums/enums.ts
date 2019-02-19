@@ -47,6 +47,7 @@ export enum Project {
 export enum StorageKey {
   PrivateKey             = 'PrivateKey', //
   LoginToken             = 'LoginToken', //
+  QuizToken              = 'QuizToken', //
   CasToken               = 'CasToken', //
   CurrentQuizName        = 'CurrentQuizName', //
   CurrentNickName        = 'CurrentNickName', //
