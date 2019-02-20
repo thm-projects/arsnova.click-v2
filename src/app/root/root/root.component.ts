@@ -90,20 +90,6 @@ export class RootComponent implements OnInit, AfterViewInit {
       oldHandler(err);
     };
 
-    console.log('sw isenabled', this.swUpdate.isEnabled);
-    this.swUpdate.available.subscribe(event => {
-      console.log('current version is', event.current);
-      console.log('available version is', event.available);
-      console.log('event type is', event.type);
-      if (window.confirm('update?')) {
-        this.swUpdate.activateUpdate().then(() => document.location.reload());
-      }
-    });
-    this.swUpdate.activated.subscribe(event => {
-      console.log('previous version was', event.previous);
-      console.log('current version is', event.current);
-      console.log('event type is', event.type);
-    });
   }
 
   public ngOnInit(): void {
@@ -128,6 +114,29 @@ export class RootComponent implements OnInit, AfterViewInit {
         this._isLoading = false;
       }
     });
+
+    console.log('sw isenabled', this.swUpdate.isEnabled);
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.available.subscribe((evt) => {
+        console.log('service worker updated');
+        console.log('current version is', event.current);
+        console.log('available version is', event.available);
+        console.log('event type is', event.type);
+        if (window && window.confirm('update?')) {
+          this.swUpdate.activateUpdate().then(() => document.location.reload());
+        }
+      });
+      this.swUpdate.activated.subscribe(event => {
+        console.log('previous version was', event.previous);
+        console.log('current version is', event.current);
+        console.log('event type is', event.type);
+      });
+      this.swUpdate.checkForUpdate().then(() => {
+        // noop
+      }).catch((err) => {
+        console.error('error when checking for update', err);
+      });
+    }
   }
 
   public ngAfterViewInit(): void {
