@@ -134,7 +134,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     if (isPlatformServer(this.platformId)) {
-      console.log('homecomponent ngoninit - isserver');
       return;
     }
 
@@ -169,7 +168,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this._routerSubscription = this.route.params.subscribe(params => {
       this._subscriptions.push(this.storageService.stateNotifier.subscribe(async val => {
-        if (val === DbState.Initialized) {
+        if ([DbState.Initialized, DbState.Revalidate].includes(val)) {
           if (!Object.keys(params).length || !params.themeId || !params.languageId) {
             const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
 

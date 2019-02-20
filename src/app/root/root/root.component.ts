@@ -3,7 +3,7 @@ import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
-import { DeprecatedDb, DeprecatedKeys, StorageKey } from '../../../lib/enums/enums';
+import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 // tslint:disable-next-line:max-line-length
 import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
@@ -12,6 +12,7 @@ import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { NotificationService } from '../../service/notification/notification.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
@@ -62,35 +63,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     private storageService: StorageService,
     private userService: UserService,
     private swUpdate: SwUpdate,
-  ) {
-
-    /* Reload the page if the fetch of production chunks failed
-     * https://stackoverflow.com/a/49805926
-     */
-    // Keep the original error handler
-    const oldHandler = this.router.errorHandler;
-    // Replace route error handler
-    this.router.errorHandler = (err: any) => {
-      // Check if there is an error loading the chunk
-      console.error('error while loading route', err);
-      if (err.originalStack && err.originalStack.indexOf('Error: Loading chunk') >= 0) {
-        // Check if is the first time the error happend
-        console.error('loading chunk failed');
-        if (sessionStorage.getItem(StorageKey.ChunkError) !== err.originalStack) {
-          // Save the last error to avoid an infinite reload loop if the chunk really does not exists after reload
-          sessionStorage.setItem(StorageKey.ChunkError, err.originalStack);
-          console.error('no previous reload found, so forcing reload now');
-          location.reload(true);
-        } else {
-          // The chunk really does not exists after reload
-          console.error('We really don\'t find the chunk...');
-        }
-      }
-      // Run original handler
-      oldHandler(err);
-    };
-
-  }
+    private notificationService: NotificationService,
+  ) {}
 
   public ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -115,16 +89,13 @@ export class RootComponent implements OnInit, AfterViewInit {
       }
     });
 
-    console.log('sw isenabled', this.swUpdate.isEnabled);
     if (this.swUpdate.isEnabled) {
       this.swUpdate.available.subscribe((event) => {
-        console.log('service worker updated');
+        console.log('service worker update available');
         console.log('current version is', event.current);
         console.log('available version is', event.available);
         console.log('event type is', event.type);
-        if (window && window.confirm('update?')) {
-          this.swUpdate.activateUpdate().then(() => document.location.reload());
-        }
+        this.swUpdate.activateUpdate().then(() => document.location.reload());
       });
       this.swUpdate.activated.subscribe(event => {
         console.log('previous version was', event.previous);
