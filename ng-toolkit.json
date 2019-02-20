@@ -1,0 +1,7 @@
+{
+  "pwa": {
+    "project": "frontend",
+    "skipInstall": false,
+    "directory": "."
+  }
+}
