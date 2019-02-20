@@ -79,3 +79,12 @@ export enum TrackingCategoryType {
   ThemeChange, //
   ThemePreview, //
 }
+
+export enum DeprecatedKeys {
+  privateKey = 'privateKey', //
+  token      = 'token', //
+}
+
+export enum DeprecatedDb {
+  DEFAULT = 'DEFAULT', //
+}

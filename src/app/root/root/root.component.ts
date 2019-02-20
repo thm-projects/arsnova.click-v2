@@ -1,9 +1,9 @@
-import { isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
-import { StorageKey } from '../../../lib/enums/enums';
+import { DeprecatedDb, DeprecatedKeys, StorageKey } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 // tslint:disable-next-line:max-line-length
 import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
@@ -107,6 +107,16 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      Object.values(DeprecatedKeys).forEach(deprecatedKey => {
+        localStorage.removeItem(deprecatedKey);
+        sessionStorage.removeItem(deprecatedKey);
+      });
+      Object.values(DeprecatedDb).forEach(deprecatedDb => {
+        indexedDB.deleteDatabase(deprecatedDb).addEventListener('success', result => {});
+      });
+    }
+
     this.userService.loadConfig();
     this.translateService.onLangChange.subscribe(() => {
       this.initializeCookieConsent();
