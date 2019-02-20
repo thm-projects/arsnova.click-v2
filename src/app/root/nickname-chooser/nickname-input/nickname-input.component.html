@@ -1,6 +1,8 @@
 <div class="center-vertical d-flex justify-content-center flex-column">
   <div class="btn-group w-100">
     <input type="text"
+           autofocus
+           (keyup.enter)="joinQuiz()"
            class="rounded-left border-0 py-1 px-2 w-100"
            id="input-nickname"
            [placeholder]="'component.choose_nickname.enter_nickname_here' | translate"
