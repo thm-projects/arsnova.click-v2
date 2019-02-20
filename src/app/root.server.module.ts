@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ServerModule } from '@angular/platform-server';
+import { ServerModule, ServerTransferStateModule } from '@angular/platform-server';
 import { NgtPwaMockModule } from '@ng-toolkit/pwa';
 import { ModuleMapLoaderModule } from '@nguniversal/module-map-ngfactory-loader';
 
@@ -8,7 +8,7 @@ import { RootComponent } from './root/root/root.component';
 
 @NgModule({
   imports: [
-    NgtPwaMockModule, RootModule, ServerModule, ModuleMapLoaderModule,
+    NgtPwaMockModule, RootModule, ServerModule, ModuleMapLoaderModule, ServerTransferStateModule,
   ],
   providers: [
     // Add universal-only providers here

@@ -117,7 +117,7 @@ export class RootComponent implements OnInit, AfterViewInit {
 
     console.log('sw isenabled', this.swUpdate.isEnabled);
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe((evt) => {
+      this.swUpdate.available.subscribe((event) => {
         console.log('service worker updated');
         console.log('current version is', event.current);
         console.log('available version is', event.available);

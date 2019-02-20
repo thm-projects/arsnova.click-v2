@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { NgModule, PLATFORM_ID } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -101,6 +100,7 @@ export const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'frontend' }),
+    BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     ModalsModule,
     TranslateModule.forRoot({
