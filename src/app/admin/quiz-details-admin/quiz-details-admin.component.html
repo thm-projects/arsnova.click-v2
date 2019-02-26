@@ -1,0 +1,61 @@
+<div class="text-light">
+  <p class="card-text">Questions:</p>
+  <ul>
+    <li *ngFor="let question of data.questionList">
+      <span>Type: {{question.TYPE}}</span>
+      <p class="card-text">Answers:</p>
+      <ul>
+        <li *ngFor="let answers of question.answerOptionList">
+          <span>Answer Text: {{answers.answerText}}</span><br/>
+          <span>Is Correct: {{answers.isCorrect}}</span><br/>
+          <span>Type: {{answers.TYPE}}</span><br/>
+        </li>
+      </ul>
+      <span>Display Answer Text: {{question.displayAnswerText}}</span><br/>
+      <span>Multiple Selection Enabled: {{question.multipleSelectionEnabled}}</span><br/>
+      <span>Show One Answer Per Row: {{question.showOneAnswerPerRow}}</span><br/>
+      <span>Timer: {{question.timer}}</span><br/>
+      <span>Question Text: {{question.questionText}}</span>
+    </li>
+  </ul>
+  <p class="card-text">Music Config</p>
+  <p class="card-text">Lobby</p>
+  <ul>
+    <li>Enabled: {{data.sessionConfig?.music.enabled.lobby}}</li>
+    <li>Title: {{data.sessionConfig?.music.titleConfig.lobby}}</li>
+    <li>Volume: {{data.sessionConfig?.music.volumeConfig.lobby}}</li>
+  </ul>
+  <p class="card-text">Countdown Running</p>
+  <ul>
+    <li>Enabled: {{data.sessionConfig?.music.enabled.countdownRunning}}</li>
+    <li>Title: {{data.sessionConfig?.music.titleConfig.countdownRunning}}</li>
+    <li>Volume: {{data.sessionConfig?.music.volumeConfig.countdownRunning}}</li>
+  </ul>
+  <p class="card-text">Countdown End</p>
+  <ul>
+    <li>Enabled: {{data.sessionConfig?.music.enabled.countdownEnd}}</li>
+    <li>Title: {{data.sessionConfig?.music.titleConfig.countdownEnd}}</li>
+    <li>Volume: {{data.sessionConfig?.music.volumeConfig.countdownEnd}}</li>
+  </ul>
+  <p class="card-text">Nick Config</p>
+  <p>Member Groups:</p>
+  <ul>
+    <li *ngFor="let group of data.sessionConfig?.nicks.memberGroups">
+      <span>Name: {{group.name}}</span>
+    </li>
+  </ul>
+  <ul>
+    <li>Max Members Per Group: {{data.sessionConfig?.nicks.maxMembersPerGroup}}</li>
+    <li>Automatically join to Group: {{data.sessionConfig?.nicks.autoJoinToGroup}}</li>
+    <li>Selected Nicks: {{data.sessionConfig?.nicks.selectedNicks}}</li>
+    <li>Block Illegal Nicks: {{data.sessionConfig?.nicks.blockIllegalNicks}}</li>
+    <li>Restrict to CAS Login: {{data.sessionConfig?.nicks.restrictToCasLogin}}</li>
+  </ul>
+  <p class="card-text">Session Config</p>
+  <ul>
+    <li>Reading-Confirmation enabled: {{data.sessionConfig?.readingConfirmationEnabled}}</li>
+    <li>Confidence-Slider enabled: {{data.sessionConfig?.confidenceSliderEnabled}}</li>
+    <li>Show response progress: {{data.sessionConfig?.showResponseProgress}}</li>
+    <li>Theme: {{data.sessionConfig?.theme}}</li>
+  </ul>
+</div>

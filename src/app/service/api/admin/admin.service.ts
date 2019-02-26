@@ -13,6 +13,7 @@ export class AdminService {
   private _deleteQuizUrl: string;
   private _deleteUserUrl: string;
   private _putUserUrl: string;
+  private _getQuizUrl: string;
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.initUrls();
@@ -38,11 +39,16 @@ export class AdminService {
     return this.http.put<void>(this._putUserUrl, value, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
+  public getQuiz(quizname: string): Observable<object> {
+    return this.http.get(`${this._getQuizUrl}/${quizname}`, { headers: { authorization: this.userService.staticLoginToken } });
+  }
+
   private initUrls(): void {
     this._getAvailableUsersUrl = `${DefaultSettings.httpApiEndpoint}/admin/users`;
     this._deleteUserUrl = `${DefaultSettings.httpApiEndpoint}/admin/user`;
     this._putUserUrl = `${DefaultSettings.httpApiEndpoint}/admin/user`;
     this._getAvailableQuizzesUrl = `${DefaultSettings.httpApiEndpoint}/admin/quizzes`;
+    this._getQuizUrl = `${DefaultSettings.httpApiEndpoint}/admin/quiz`;
     this._deleteQuizUrl = `${DefaultSettings.httpApiEndpoint}/admin/quiz`;
   }
 }

@@ -1,23 +1,26 @@
-<div *ngFor="let quiz of data; let i = index"
-     class="card mx-sm-auto mx-5 my-3 w-100">
+<a *ngFor="let quiz of data; let i = index"
+   [routerLink]="['/admin', 'quiz', quiz.id]"
+   class="card mx-sm-auto mx-5 my-3 cursor-pointer text-dark nav-link p-0">
   <div class="card-body">
-    <div class="d-flex justify-content-end">
-      <fa-icon *ngIf="isDeletingElem(i)"
-               [icon]="'spinner'"
-               [spin]="true"></fa-icon>
-      <fa-icon *ngIf="!isDeletingElem(i)"
-               [icon]="'times'"
-               class="cursor-pointer"
-               (click)="deleteElem(i)"></fa-icon>
+    <div class="d-flex">
+      <p class="card-text">
+        <span>Name: </span>
+        <span>{{quiz.name}}</span>
+      </p>
+      <div class="ml-auto">
+        <fa-icon *ngIf="isDeletingElem(i)"
+                 [icon]="'spinner'"
+                 [spin]="true"></fa-icon>
+        <fa-icon *ngIf="!isDeletingElem(i)"
+                 [icon]="'times'"
+                 class="cursor-pointer"
+                 (click)="deleteElem($event, i)"></fa-icon>
+      </div>
     </div>
-    <p class="card-text">
-      <span>Name: </span>
-      <span>{{quiz.name}}</span>
-    </p>
     <p class="card-text"
        *ngIf="quiz.expiry">
       <span>Expiry: </span>
-      <span>{{quiz.expiry}}</span>
+      <span>{{quiz.expiry | date}}</span>
     </p>
     <p class="card-text"
        *ngIf="quiz.visibility">
@@ -25,72 +28,5 @@
       <span>{{quiz.visibility}}</span>
     </p>
     <p class="card-text">Is Active: {{isActiveQuiz(quiz)}}</p>
-    <ng-container>
-      <p class="card-text">Member Groups:</p>
-      <ul>
-        <li *ngFor="let group of quiz.memberGroups">
-          <span>Name: {{group.name}}</span>
-          <ul>
-            <li *ngFor="let member of group.members">
-              <span>Member Name: {{member}}</span>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <p class="card-text">Questions:</p>
-      <ul>
-        <li *ngFor="let question of quiz.questionList">
-          <span>Type: {{question.TYPE}}</span>
-          <p class="card-text">Answers:</p>
-          <ul>
-            <li *ngFor="let answers of question.answerOptionList">
-              <span>Answer Text: {{answers.answerText}}</span><br/>
-              <span>Is Correct: {{answers.isCorrect}}</span><br/>
-              <span>Type: {{answers.TYPE}}</span><br/>
-            </li>
-          </ul>
-          <span>Display Answer Text: {{question.displayAnswerText}}</span><br/>
-          <span>Multiple Selection Enabled: {{question.multipleSelectionEnabled}}</span><br/>
-          <span>Show One Answer Per Row: {{question.showOneAnswerPerRow}}</span><br/>
-          <span>Timer: {{question.timer}}</span><br/>
-          <span>Question Text: {{question.questionText}}</span>
-        </li>
-      </ul>
-      <p class="card-text">Music Config</p>
-      <p class="card-text">Lobby</p>
-      <ul>
-        <li>Enabled: {{quiz.sessionConfig.music.enabled.lobby}}</li>
-        <li>Title: {{quiz.sessionConfig.music.titleConfig.lobby}}</li>
-        <li>Volume: {{quiz.sessionConfig.music.volumeConfig.lobby}}</li>
-      </ul>
-      <p class="card-text">Countdown Running</p>
-      <ul>
-        <li>Enabled: {{quiz.sessionConfig.music.enabled.countdownRunning}}</li>
-        <li>Title: {{quiz.sessionConfig.music.titleConfig.countdownRunning}}</li>
-        <li>Volume: {{quiz.sessionConfig.music.volumeConfig.countdownRunning}}</li>
-      </ul>
-      <p class="card-text">Countdown End</p>
-      <ul>
-        <li>Enabled: {{quiz.sessionConfig.music.enabled.countdownEnd}}</li>
-        <li>Title: {{quiz.sessionConfig.music.titleConfig.countdownEnd}}</li>
-        <li>Volume: {{quiz.sessionConfig.music.volumeConfig.countdownEnd}}</li>
-      </ul>
-      <p class="card-text">Nick Config</p>
-      <ul>
-        <li>Member Groups: {{quiz.sessionConfig.nicks.memberGroups}}</li>
-        <li>Max Members Per Group: {{quiz.sessionConfig.nicks.maxMembersPerGroup}}</li>
-        <li>Automatically join to Group: {{quiz.sessionConfig.nicks.autoJoinToGroup}}</li>
-        <li>Selected Nicks: {{quiz.sessionConfig.nicks.selectedNicks}}</li>
-        <li>Block Illegal Nicks: {{quiz.sessionConfig.nicks.blockIllegalNicks}}</li>
-        <li>Restrict to CAS Login: {{quiz.sessionConfig.nicks.restrictToCasLogin}}</li>
-      </ul>
-      <p class="card-text">Session Config</p>
-      <ul>
-        <li>Reading-Confirmation enabled: {{quiz.sessionConfig.readingConfirmationEnabled}}</li>
-        <li>Confidence-Slider enabled: {{quiz.sessionConfig.confidenceSliderEnabled}}</li>
-        <li>Show response progress: {{quiz.sessionConfig.showResponseProgress}}</li>
-        <li>Theme: {{quiz.sessionConfig.theme}}</li>
-      </ul>
-    </ng-container>
   </div>
-</div>
+</a>

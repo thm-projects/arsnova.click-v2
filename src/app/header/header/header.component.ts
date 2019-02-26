@@ -25,8 +25,6 @@ export class HeaderComponent implements OnInit {
         return 'Beta';
       case 'staging.arsnova.click':
         return 'Staging';
-      case 'localhost':
-        return 'DEV';
       default:
         return '';
     }
