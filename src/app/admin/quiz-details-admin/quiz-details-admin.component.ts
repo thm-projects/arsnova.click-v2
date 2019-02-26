@@ -12,7 +12,7 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 export class QuizDetailsAdminComponent implements OnInit {
   private _quiz: QuizEntity;
 
-  get quiz(): object {
+  get quiz(): QuizEntity {
     return this._quiz;
   }
 
