@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { AdminService } from '../../service/api/admin/admin.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 
@@ -9,10 +10,10 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   styleUrls: ['./quiz-details-admin.component.scss'],
 })
 export class QuizDetailsAdminComponent implements OnInit {
-  private _data: object = {};
+  private _quiz: QuizEntity;
 
-  get data(): object {
-    return this._data;
+  get quiz(): object {
+    return this._quiz;
   }
 
   constructor(private footerBarService: FooterBarService, private adminService: AdminService, private activatedRoute: ActivatedRoute) {
@@ -22,7 +23,7 @@ export class QuizDetailsAdminComponent implements OnInit {
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.adminService.getQuiz(params.id).subscribe(data => {
-        this._data = data;
+        this._quiz = data;
       });
     });
   }

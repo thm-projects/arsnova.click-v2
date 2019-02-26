@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../../lib/default.settings';
+import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { UserService } from '../../user/user.service';
 
 @Injectable({
@@ -23,8 +24,8 @@ export class AdminService {
     return this.http.get<Array<object>>(this._getAvailableUsersUrl, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
-  public getAvailableQuizzes(): Observable<Array<object>> {
-    return this.http.get<Array<object>>(this._getAvailableQuizzesUrl, { headers: { authorization: this.userService.staticLoginToken } });
+  public getAvailableQuizzes(): Observable<Array<QuizEntity>> {
+    return this.http.get<Array<QuizEntity>>(this._getAvailableQuizzesUrl, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
   public deleteQuiz(quizName: string): Observable<void> {
@@ -39,8 +40,8 @@ export class AdminService {
     return this.http.put<void>(this._putUserUrl, value, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
-  public getQuiz(quizname: string): Observable<object> {
-    return this.http.get(`${this._getQuizUrl}/${quizname}`, { headers: { authorization: this.userService.staticLoginToken } });
+  public getQuiz(quizname: string): Observable<QuizEntity> {
+    return this.http.get<QuizEntity>(`${this._getQuizUrl}/${quizname}`, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
   private initUrls(): void {

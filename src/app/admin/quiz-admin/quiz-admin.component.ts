@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { AdminService } from '../../service/api/admin/admin.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -9,10 +10,10 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   styleUrls: ['./quiz-admin.component.scss'],
 })
 export class QuizAdminComponent implements OnInit {
-  private _data: Array<object>;
+  private _quizzes: Array<QuizEntity>;
 
-  get data(): Array<object> {
-    return this._data;
+  get quizzes(): Array<QuizEntity> {
+    return this._quizzes;
   }
 
   private _deletingElements: Array<number> = [];
@@ -23,7 +24,7 @@ export class QuizAdminComponent implements OnInit {
 
   public ngOnInit(): void {
     this.adminService.getAvailableQuizzes().subscribe(data => {
-      this._data = data;
+      this._quizzes = data;
     });
   }
 
@@ -40,9 +41,9 @@ export class QuizAdminComponent implements OnInit {
     $event.stopImmediatePropagation();
     $event.preventDefault();
     this._deletingElements.push(index);
-    this.adminService.deleteQuiz((this._data[index] as any).name || (this._data[index] as any).originalObject.name).subscribe(() => {
+    this.adminService.deleteQuiz((this._quizzes[index] as any).name || (this._quizzes[index] as any).originalObject.name).subscribe(() => {
       this._deletingElements.splice(this._deletingElements.indexOf(index), 1);
-      this._data.splice(index, 1);
+      this._quizzes.splice(index, 1);
     }, () => {
       this._deletingElements.splice(this._deletingElements.indexOf(index), 1);
     });
