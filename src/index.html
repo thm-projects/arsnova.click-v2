@@ -79,11 +79,36 @@
   </div>
 </div>
 
-<script async
-        defer
-        src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
-
 <script type="text/javascript">
+
+  function polyfillsLoaded() {
+    [Modernizr.audio,
+      Modernizr.blobconstructor,
+      Modernizr.classlist,
+      Modernizr.cors,
+      Modernizr.csscalc,
+      Modernizr.es5,
+      Modernizr.fileinput,
+      Modernizr.flexbox,
+      Modernizr.flexwrap,
+      Modernizr.fullscreen,
+      Modernizr.json,
+      Modernizr.localstorage,
+      Modernizr.promises,
+      Modernizr.serviceworker,
+      Modernizr.sessionstorage,
+      Modernizr.svg,
+      Modernizr.video,
+      Modernizr.websockets,
+      Modernizr.xhrresponsetypejson,
+      'indexedDB' in window,
+      'serviceWorker' in navigator,
+    ].forEach(function (test) {
+      if (!test) {
+        location.href = '/assets/static/unsupported.html';
+      }
+    });
+  }
 
   var _paq = _paq || [];
   _paq.push(['enableLinkTracking']);
@@ -99,22 +124,34 @@
     s.parentNode.insertBefore(g, s);
   })();
 
-  navigator.serviceWorker.register('/ngsw-worker.js').then(registration => {
-    addEventListener('fetch', event => {
-      event.respondWith((async () => {
-        if (event.request.mode === "navigate" &&
-          event.request.method === "GET" &&
-          registration.waiting &&
-          (await clients.matchAll()).length < 2
-        ) {
-          registration.waiting.postMessage('skipWaiting');
-          return new Response("", {headers: {"Refresh": "0"}});
-        }
-        return await caches.match(event.request) ||
-          fetch(event.request);
-      })());
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/ngsw-worker.js').then(registration => {
+      addEventListener('fetch', event => {
+        event.respondWith((async () => {
+          if (event.request.mode === "navigate" &&
+            event.request.method === "GET" &&
+            registration.waiting &&
+            (await clients.matchAll()).length < 2
+          ) {
+            registration.waiting.postMessage('skipWaiting');
+            return new Response("", {headers: {"Refresh": "0"}});
+          }
+          return await caches.match(event.request) ||
+            fetch(event.request);
+        })());
+      });
     });
-  });
+  }
 </script>
+
+<script async
+        defer
+        src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+
+<script src="/assets/static/modernizr.js"></script>
+
+<script crossorigin="anonymous"
+        src="https://polyfill.io/v3/polyfill.min.js?callback=polyfillsLoaded&flags=gated&features=default%2CArray.from%2CArray.isArray%2CArray.prototype.every%2CArray.prototype.entries%2CArray.prototype.filter%2CArray.prototype.find%2CArray.prototype.findIndex%2CArray.prototype.forEach%2CArray.prototype.includes%2CArray.prototype.indexOf%2CArray.prototype.keys%2CArray.prototype.map%2CArray.prototype.reduce%2CArray.prototype.some%2CAudioContext%2CBlob%2CDate.now%2CJSON%2CMap%2CNumber.parseFloat%2CNumber.parseInt%2CObject.assign%2CObject.entries%2CObject.keys%2CObject.values%2CPromise%2CSet%2CString.prototype.endsWith%2CString.prototype.includes%2CString.prototype.startsWith%2CString.prototype.trim%2CSymbol%2CSymbol.hasInstance%2CSymbol.isConcatSpreadable%2CSymbol.iterator%2CSymbol.match%2CSymbol.replace%2CSymbol.search%2CSymbol.species%2CSymbol.split%2CSymbol.toPrimitive%2CSymbol.toStringTag%2CSymbol.unscopables%2CWindow%2CXMLHttpRequest%2Cconsole%2Cconsole.log%2Cconsole.info%2Cdocument%2ClocalStorage"></script>
+
 </body>
 </html>

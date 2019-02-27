@@ -1,0 +1,77 @@
+<html>
+<head>
+  <title>arsnova.click</title>
+</head>
+<body>
+Your browser is unsupported!
+It is missing the following features:
+<ul id="list"></ul>
+
+<p>We are only supporting the following browsers:</p>
+<ul>
+  <li>Google Chrome (Desktop): v45</li>
+  <li>Mozilla Firefox (Desktop): v44</li>
+  <li>Edge (Desktop): v17</li>
+  <li>Safari (Desktop): v11.1</li>
+  <li>Opera (Desktop): v32</li>
+  <li>Google Chrome (Mobile): v71</li>
+  <li>Mozilla Firefox (Mobile): v64</li>
+  <li>Safari (Mobile): v11.4</li>
+</ul>
+
+<script>
+  var fn = function () {
+    var listNode = document.getElementById('list');
+    while (listNode.firstChild) {
+      listNode.removeChild(listNode.firstChild);
+    }
+    var list = [{label: 'Audio', value: Modernizr.audio},
+        {label: 'BlobConstructor', value: Modernizr.blobconstructor},
+        {label: 'IndexedDB', value: Modernizr.indexeddb},
+        {label: 'ClassList', value: Modernizr.classlist},
+        {label: 'CORS', value: Modernizr.cors},
+        {label: 'CSS-Calc', value: Modernizr.csscalc},
+        {label: 'es5', value: Modernizr.es5},
+        {label: 'FileInput', value: Modernizr.fileinput},
+        {label: 'Flexbox', value: Modernizr.flexbox},
+        {label: 'Flex-wrap', value: Modernizr.flexwrap},
+        {label: 'Fullscreen', value: Modernizr.fullscreen},
+        {label: 'JSON', value: Modernizr.json},
+        {label: 'LocalStorage', value: Modernizr.localstorage},
+        {label: 'Promises', value: Modernizr.promises},
+        {label: 'ServiceWorker', value: Modernizr.serviceworker},
+        {label: 'SessionStorage', value: Modernizr.sessionstorage},
+        {label: 'SVG', value: Modernizr.svg},
+        {label: 'Video', value: Modernizr.video},
+        {label: 'WebSockets', value: Modernizr.websockets},
+        {label: 'XHR-Response JSON', value: Modernizr.xhrresponsetypejson},
+      ]
+    ;
+
+    list.forEach(function (elem) {
+      if (elem.value) {
+        return;
+      }
+
+      var node = document.createElement('li');
+      node.innerText = elem.label;
+      node.className = 'failed';
+      console.log(elem);
+      document.getElementById('list').appendChild(node);
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', fn, false);
+  window.addEventListener('load', fn, false);
+  if ('attachEvent' in document) {
+    document.attachEvent("onreadystatechange", fn);
+  }
+  if ('attachEvent' in window) {
+    window.attachEvent("onload", fn);
+  }
+</script>
+
+<script src="/assets/static/modernizr.js"></script>
+
+</body>
+</html>

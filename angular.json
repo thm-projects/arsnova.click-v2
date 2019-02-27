@@ -32,6 +32,7 @@
               "src/assets/images",
               "src/assets/styles",
               "src/assets/jobs",
+              "src/assets/static",
               "src/assets/serverEndpoint.json",
               "src/assets/imageDerivates.json",
               "src/assets/themeData.json"
@@ -101,6 +102,7 @@
               "src/assets/images",
               "src/assets/styles",
               "src/assets/jobs",
+              "src/assets/static",
               "src/assets/serverEndpoint.json",
               "src/assets/imageDerivates.json",
               "src/assets/themeData.json"
