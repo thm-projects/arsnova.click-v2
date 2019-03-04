@@ -60,6 +60,10 @@ app.get('/api/*', (req, res) => {
   res.status(404).send('data requests are not supported');
 });
 
+app.get('/index.html', (req, res) => {
+  res.render(path.join(DIST_FOLDER, 'browser', 'index.html'), { req });
+});
+
 // Server static files from /browser
 app.get('*.*', express.static(path.join(DIST_FOLDER, 'browser')));
 
