@@ -59,7 +59,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
       this.ngbModal.dismissAll();
       this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent);
-      this._serverUnavailableModal.result.finally(() => this._isServerUnavailableModalOpen = false);
+      this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     }));
   }
 
