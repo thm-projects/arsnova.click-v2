@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
@@ -26,6 +26,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   public questionIndex: number;
   public questionText: string;
   private _subscriptions: Array<Subscription> = [];
+  private _serverUnavailableModal: NgbModalRef;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -48,10 +49,17 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
+        if (this._serverUnavailableModal) {
+          this._serverUnavailableModal.dismiss();
+        }
+        return;
+      } else if (!isConnected && this._serverUnavailableModal) {
         return;
       }
 
-      this.ngbModal.open(ServerUnavailableModalComponent);
+      this.ngbModal.dismissAll();
+      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent);
+      this._serverUnavailableModal.result.finally(() => this._isServerUnavailableModalOpen = false);
     }));
   }
 

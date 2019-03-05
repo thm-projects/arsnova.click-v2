@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
@@ -57,6 +57,7 @@ export class QuizLobbyComponent implements OnDestroy {
     return this._nickToRemove;
   }
 
+  private _serverUnavailableModal: NgbModalRef;
   private _reconnectTimeout: any;
   private _kickMemberModalRef: NgbActiveModal;
   // noinspection JSMismatchedCollectionQueryUpdate
@@ -97,12 +98,20 @@ export class QuizLobbyComponent implements OnDestroy {
         this.attendeeService.restoreMembers();
       }
     }));
+
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
+        if (this._serverUnavailableModal) {
+          this._serverUnavailableModal.dismiss();
+        }
+        return;
+      } else if (!isConnected && this._serverUnavailableModal) {
         return;
       }
 
-      this.ngbModal.open(ServerUnavailableModalComponent);
+      this.ngbModal.dismissAll();
+      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent);
+      this._serverUnavailableModal.result.finally(() => this._isServerUnavailableModalOpen = false);
     }));
 
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;

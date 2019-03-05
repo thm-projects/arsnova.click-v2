@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
@@ -59,23 +59,25 @@ export class LeaderboardComponent implements OnDestroy {
     return this._hasMultipleAnswersAvailable;
   }
 
+  private _serverUnavailableModal: NgbModalRef;
   private _name: string;
 
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              public attendeeService: AttendeeService,
-              public quizService: QuizService,
-              private sanitizer: DomSanitizer,
-              private footerBarService: FooterBarService,
-              private route: ActivatedRoute,
-              private headerLabelService: HeaderLabelService,
-              private router: Router,
-              private connectionService: ConnectionService,
-              private i18nService: I18nService,
-              private leaderboardApiService: LeaderboardApiService,
-              private ngbModal: NgbModal,
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public attendeeService: AttendeeService,
+    public quizService: QuizService,
+    private sanitizer: DomSanitizer,
+    private footerBarService: FooterBarService,
+    private route: ActivatedRoute,
+    private headerLabelService: HeaderLabelService,
+    private router: Router,
+    private connectionService: ConnectionService,
+    private i18nService: I18nService,
+    private leaderboardApiService: LeaderboardApiService,
+    private ngbModal: NgbModal,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
@@ -91,12 +93,20 @@ export class LeaderboardComponent implements OnDestroy {
       this.attendeeService.restoreMembers();
       this.addFooterElements();
     }));
+
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
+        if (this._serverUnavailableModal) {
+          this._serverUnavailableModal.dismiss();
+        }
+        return;
+      } else if (!isConnected && this._serverUnavailableModal) {
         return;
       }
 
-      this.ngbModal.open(ServerUnavailableModalComponent);
+      this.ngbModal.dismissAll();
+      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent);
+      this._serverUnavailableModal.result.finally(() => this._isServerUnavailableModalOpen = false);
     }));
   }
 

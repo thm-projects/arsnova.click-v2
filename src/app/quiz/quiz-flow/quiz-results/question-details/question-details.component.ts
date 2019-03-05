@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
@@ -52,6 +52,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     return this._answers;
   }
 
+  private _serverUnavailableModal: NgbModalRef;
   private _subscriptions: Array<Subscription> = [];
 
   constructor(
@@ -70,12 +71,20 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
     ]);
+
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
+        if (this._serverUnavailableModal) {
+          this._serverUnavailableModal.dismiss();
+        }
+        return;
+      } else if (!isConnected && this._serverUnavailableModal) {
         return;
       }
 
-      this.ngbModal.open(ServerUnavailableModalComponent);
+      this.ngbModal.dismissAll();
+      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent);
+      this._serverUnavailableModal.result.finally(() => this._isServerUnavailableModalOpen = false);
     }));
   }
 
