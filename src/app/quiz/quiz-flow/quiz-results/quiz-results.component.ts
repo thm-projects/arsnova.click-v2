@@ -83,12 +83,22 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     if (!this.quizService.quiz || typeof index === 'undefined' || index < 0 || index > this.quizService.quiz.questionList.length) {
       return;
     }
+    if (index === this.quizService.quiz.currentQuestionIndex && //
+        this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
+        this.quizService.readingConfirmationRequested) {
+      return;
+    }
 
     return ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
   }
 
   public showQuestionButton(index: number): boolean {
     if (!this.quizService.quiz || typeof index === 'undefined' || index < 0 || index > this.quizService.quiz.questionList.length) {
+      return;
+    }
+    if (index === this.quizService.quiz.currentQuestionIndex && //
+        this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
+        this.quizService.readingConfirmationRequested) {
       return;
     }
 
