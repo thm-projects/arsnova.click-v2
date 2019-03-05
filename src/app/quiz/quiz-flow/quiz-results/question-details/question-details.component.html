@@ -1,8 +1,9 @@
 <h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h2>
 
-<div [innerHTML]="sanitizeHTML(questionText)"></div>
+<div *ngIf="questionText"
+     [innerHTML]="sanitizeHTML(questionText)"></div>
 
-<hr/>
+<hr *ngIf="answers?.length"/>
 
 <div *ngFor="let elem of answers; let i = index">
   <p class="d-flex align-items-center">

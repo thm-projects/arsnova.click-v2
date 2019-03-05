@@ -110,11 +110,11 @@ export class VotingComponent implements OnDestroy {
   }
 
   public displayRangedButtons(): boolean {
-    return this.quizService.currentQuestion().TYPE === QuestionType.RangedQuestion;
+    return this.quizService && this.quizService.currentQuestion().TYPE === QuestionType.RangedQuestion;
   }
 
   public displayFreetextInput(): boolean {
-    return this.quizService.currentQuestion().TYPE === QuestionType.FreeTextQuestion;
+    return this.quizService && this.quizService.currentQuestion().TYPE === QuestionType.FreeTextQuestion;
   }
 
   public normalizeAnswerOptionIndex(index: number): string {
@@ -191,15 +191,6 @@ export class VotingComponent implements OnDestroy {
 
     this.questionTextService.changeMultiple(this.quizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
     this.questionTextService.change(this.quizService.currentQuestion().questionText);
-
-    this.quizApiService.getQuizStartTime().subscribe((startTime) => {
-      this.countdown = new Countdown(this.quizService.currentQuestion(), startTime);
-      this.countdown.onChange.subscribe((value) => {
-        if (!value || value < 1) {
-          this.sendResponses('results');
-        }
-      });
-    });
   }
 
   public ngOnDestroy(): void {
@@ -217,6 +208,16 @@ export class VotingComponent implements OnDestroy {
       switch (data.step) {
         case MessageProtocol.UpdatedResponse:
           this.attendeeService.modifyResponse(data.payload);
+          break;
+        case MessageProtocol.Countdown:
+          if (!this.countdown) {
+            this.countdown = new Countdown(data.payload.value);
+            this.countdown.onChange.subscribe((value) => {
+              if (!value || value < 1) {
+                this.sendResponses('results');
+              }
+            });
+          }
           break;
         case MessageProtocol.Reset:
           this.attendeeService.clearResponses();

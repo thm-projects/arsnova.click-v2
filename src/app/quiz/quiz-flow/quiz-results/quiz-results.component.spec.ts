@@ -138,7 +138,7 @@ describe('QuizResultsComponent', () => {
       currentQuizName: '',
       ticket: '',
     }));
-    component.countdown = new Countdown(quizService.currentQuestion(), new Date().getTime());
+    component.countdown = new Countdown(quizService.currentQuestion().timer);
 
     expect(component.countdown.isRunning).toBeTruthy();
     expect(component.showStopCountdownButton()).toBeTruthy();

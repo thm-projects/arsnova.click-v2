@@ -4,6 +4,7 @@ export enum StatusProtocol {
 }
 
 export enum MessageProtocol {
+  Countdown                    = 'Countdown', //
   Updated                      = 'Updated', //
   UpdatedResponse              = 'UpdatedResponse', //
   Added                        = 'Added', //

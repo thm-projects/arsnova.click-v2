@@ -282,10 +282,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
       const question = this.quizService.currentQuestion();
 
-      if (question.timer && (new Date().getTime() - question.timer * 1000 - currentStateData.payload.startTimestamp) < 0) {
-        this.countdown = new Countdown(question, currentStateData.payload.startTimestamp);
-      }
-
       this.generateAnswers(question);
       if (this.attendeeService.attendees.every(nick => {
         const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
@@ -367,6 +363,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         case MessageProtocol.Added:
           this.attendeeService.addMember(data.payload.member);
           break;
+        case MessageProtocol.Countdown:
+          if (!this.countdown) {
+            this.countdown = new Countdown(data.payload.value);
+          }
+          break;
         case MessageProtocol.Removed:
           this.attendeeService.removeMember(data.payload.name);
           break;
@@ -399,7 +400,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private handleMessagesForOwner(data: IMessage): void {
     switch (data.step) {
       case MessageProtocol.Start:
-        this.countdown = new Countdown(this.quizService.currentQuestion(), this.quizService.quiz.currentStartTimestamp);
+        this.countdown = null;
         break;
       default:
         return;
