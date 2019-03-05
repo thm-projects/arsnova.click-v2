@@ -114,6 +114,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  public isCorrectAnswer(index: number): boolean {
+    return this._question.answerOptionList[index].isCorrect;
+  }
+
   public ngOnDestroy(): void {
     this._subscriptions.forEach(sub => sub.unsubscribe());
   }

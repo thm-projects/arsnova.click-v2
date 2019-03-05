@@ -7,6 +7,7 @@
 <div *ngFor="let elem of answers; let i = index">
   <p class="d-flex align-items-center">
     <span>{{normalizeAnswerIndex(i)}}:&nbsp;</span>
+    <span *ngIf="isCorrectAnswer(i)">({{'component.liveResults.correct_answer' | translate}})&nbsp;</span>
     <span [innerHTML]="sanitizeHTML(elem)"></span>
   </p>
 </div>
