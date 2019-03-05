@@ -115,7 +115,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public isCorrectAnswer(index: number): boolean {
-    return this._question.answerOptionList[index].isCorrect;
+    return this._questionIndex < this.quizService.quiz.currentQuestionIndex && this._question.answerOptionList[index].isCorrect;
   }
 
   public ngOnDestroy(): void {
