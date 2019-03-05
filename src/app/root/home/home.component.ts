@@ -420,7 +420,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     const currentQuiz = new QuizEntity(await this.storageService.read(DbTable.Quiz, quizname).toPromise());
     this.canAddQuiz = false;
     this.canEditQuiz = true;
-    this.canStartQuiz = !this.settingsService.serverSettings.createQuizPasswordRequired && currentQuiz.isValid();
+    this.canStartQuiz = this.connectionService.serverAvailable && //
+                        (this.settingsService.serverSettings && !this.settingsService.serverSettings.createQuizPasswordRequired) && //
+                        currentQuiz.isValid();
     this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
   }
 
@@ -450,7 +452,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canStartQuiz = false;
         } else if (value.step === MessageProtocol.Available && value.payload.state === QuizState.Active) {
           this.canAddQuiz = false;
-          this.canJoinQuiz = true;
+          this.canJoinQuiz = this.connectionService.serverAvailable;
           this.passwordRequired = false;
           this.canStartQuiz = false;
           this._provideNickSelection = value.payload.provideNickSelection;

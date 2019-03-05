@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { MessageProtocol, StatusProtocol } from '../../../../../lib/enums/Message';
 import { IMessage } from '../../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { ServerUnavailableModalComponent } from '../../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -61,12 +63,20 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
+    private ngbModal: NgbModal,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
     ]);
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        return;
+      }
+
+      this.ngbModal.open(ServerUnavailableModalComponent);
+    }));
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -78,8 +88,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    await this.connectionService.initConnection();
-    this.handleMessages();
+    this.connectionService.initConnection().then(() => {
+      this.connectionService.connectToChannel(this.quizService.quiz.name);
+      this.handleMessages();
+    });
 
     this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {

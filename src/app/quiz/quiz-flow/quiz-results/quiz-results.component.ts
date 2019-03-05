@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
@@ -10,6 +11,7 @@ import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizState } from '../../../../lib/enums/QuizState';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -49,6 +51,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
     private quizApiService: QuizApiService,
+    private ngbModal: NgbModal,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
@@ -66,6 +69,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.initData();
       });
       this.addFooterElements();
+    }));
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        return;
+      }
+
+      this.ngbModal.open(ServerUnavailableModalComponent);
     }));
   }
 

@@ -38,6 +38,12 @@ export class ConnectionService {
     this._websocketAvailable = value;
   }
 
+  private _serverStatusEmitter = new EventEmitter<boolean>();
+
+  get serverStatusEmitter(): EventEmitter<boolean> {
+    return this._serverStatusEmitter;
+  }
+
   private _rtt = 0;
 
   get rtt(): number {
@@ -67,7 +73,7 @@ export class ConnectionService {
   }
 
   private _connectedChannel: string;
-  private lastTimeout = 500;
+  private lastTimeout = 1;
   private _isWebSocketAuthorized = false;
 
   constructor(
@@ -214,6 +220,7 @@ export class ConnectionService {
     this._socket.onopen = () => {
       this._websocketAvailable = true;
       this._serverAvailable = true;
+      this._serverStatusEmitter.emit(true);
       this.toggleFooterElemState(true);
       if (this._connectedChannel) {
         const name = this._connectedChannel;
@@ -235,13 +242,14 @@ export class ConnectionService {
     this._socket.onclose = () => {
       this._websocketAvailable = false;
       this._serverAvailable = false;
+      this._serverStatusEmitter.emit(false);
       this.toggleFooterElemState(false);
-      const timeout = this.lastTimeout * 2;
+      const timeout = this.lastTimeout >= 30 ? 30 : Math.round((this.lastTimeout * 2));
       this.lastTimeout = timeout;
-      console.log(`Socket connection dropped, waiting ${timeout}ms for reconnect`);
+      console.log(`Socket connection dropped, waiting ${timeout}s for reconnect`);
       setTimeout(() => {
         this.initWebsocket();
-      }, timeout);
+      }, timeout * 1000);
     };
   }
 

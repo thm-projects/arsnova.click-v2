@@ -71,6 +71,7 @@
     "marked": "git+https://github.com/trayhem/marked.git",
     "messageformat": "^2.0.5",
     "ngx-qrcode2": "^0.1.0",
+    "ngx-toastr": "^9.1.2",
     "ngx-translate-messageformat-compiler": "^4.4.0",
     "rxjs": "^6.3.3",
     "ts-loader": "^5.3.3",

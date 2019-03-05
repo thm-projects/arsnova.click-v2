@@ -1,10 +1,12 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -39,6 +41,7 @@ export class ConfidenceRateComponent {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
+    private ngbModal: NgbModal,
   ) {
 
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
@@ -51,6 +54,13 @@ export class ConfidenceRateComponent {
       }
 
       this.initData();
+    }));
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        return;
+      }
+
+      this.ngbModal.open(ServerUnavailableModalComponent);
     }));
   }
 

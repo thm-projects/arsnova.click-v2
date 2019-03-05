@@ -1,10 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -36,12 +38,21 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
+    private ngbModal: NgbModal,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
     headerLabelService.headerLabel = 'component.liveResults.reading_confirmation';
     this.questionIndex = quizService.quiz.currentQuestionIndex;
     this.footerBarService.replaceFooterElements([]);
+
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        return;
+      }
+
+      this.ngbModal.open(ServerUnavailableModalComponent);
+    }));
   }
 
   public sanitizeHTML(value: string): SafeHtml {

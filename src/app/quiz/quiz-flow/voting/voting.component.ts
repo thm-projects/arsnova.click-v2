@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
@@ -10,6 +11,7 @@ import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -71,6 +73,7 @@ export class VotingComponent implements OnDestroy {
     private router: Router,
     private quizApiService: QuizApiService,
     private memberApiService: MemberApiService,
+    private ngbModal: NgbModal,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
@@ -87,6 +90,13 @@ export class VotingComponent implements OnDestroy {
 
       this.initData();
       this.attendeeService.restoreMembers();
+    }));
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        return;
+      }
+
+      this.ngbModal.open(ServerUnavailableModalComponent);
     }));
   }
 

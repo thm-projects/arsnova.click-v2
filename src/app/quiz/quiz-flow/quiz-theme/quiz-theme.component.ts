@@ -1,5 +1,8 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
+import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { ThemesService } from '../../../service/themes/themes.service';
@@ -19,6 +22,8 @@ export class QuizThemeComponent implements OnDestroy {
     private footerBarService: FooterBarService,
     private quizService: QuizService,
     private themesService: ThemesService,
+    private connectionService: ConnectionService,
+    private ngbModal: NgbModal,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizThemeComponent.TYPE;
@@ -27,6 +32,14 @@ export class QuizThemeComponent implements OnDestroy {
     ]);
     if (isPlatformBrowser(this.platformId)) {
       this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
+
+      this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+        if (isConnected) {
+          return;
+        }
+
+        this.ngbModal.open(ServerUnavailableModalComponent);
+      }));
     }
   }
 

@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { Angulartics2Module } from 'angulartics2';
+import { ToastrModule } from 'ngx-toastr';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { environment } from '../environments/environment';
 import { jwtOptionsFactory } from '../lib/jwt.factory';
@@ -100,6 +102,8 @@ export const appRoutes: Routes = [
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'frontend' }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     ModalsModule,

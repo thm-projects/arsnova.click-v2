@@ -11,6 +11,7 @@ import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -75,6 +76,7 @@ export class QuizLobbyComponent implements OnDestroy {
     private trackingService: TrackingService,
     private memberApiService: MemberApiService,
     private quizApiService: QuizApiService,
+    private ngbModal: NgbModal,
   ) {
     console.log('lobby quiz initializing');
 
@@ -94,6 +96,13 @@ export class QuizLobbyComponent implements OnDestroy {
         this.handleNewAttendee();
         this.attendeeService.restoreMembers();
       }
+    }));
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        return;
+      }
+
+      this.ngbModal.open(ServerUnavailableModalComponent);
     }));
 
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;

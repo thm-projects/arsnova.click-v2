@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
@@ -10,6 +11,7 @@ import { MessageProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -62,18 +64,18 @@ export class LeaderboardComponent implements OnDestroy {
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private sanitizer: DomSanitizer,
-    private footerBarService: FooterBarService,
-    private route: ActivatedRoute,
-    private headerLabelService: HeaderLabelService,
-    private router: Router,
-    private connectionService: ConnectionService,
-    public attendeeService: AttendeeService,
-    private i18nService: I18nService,
-    private leaderboardApiService: LeaderboardApiService,
-    public quizService: QuizService,
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              public attendeeService: AttendeeService,
+              public quizService: QuizService,
+              private sanitizer: DomSanitizer,
+              private footerBarService: FooterBarService,
+              private route: ActivatedRoute,
+              private headerLabelService: HeaderLabelService,
+              private router: Router,
+              private connectionService: ConnectionService,
+              private i18nService: I18nService,
+              private leaderboardApiService: LeaderboardApiService,
+              private ngbModal: NgbModal,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
@@ -88,6 +90,13 @@ export class LeaderboardComponent implements OnDestroy {
       this.initData();
       this.attendeeService.restoreMembers();
       this.addFooterElements();
+    }));
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        return;
+      }
+
+      this.ngbModal.open(ServerUnavailableModalComponent);
     }));
   }
 

@@ -4,16 +4,17 @@ import { AddModeComponent } from './add-mode/add-mode.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { AvailableQuizzesComponent } from './available-quizzes/available-quizzes.component';
 import { QuizSaveComponent } from './quiz-save/quiz-save.component';
+import { ServerUnavailableModalComponent } from './server-unavailable-modal/server-unavailable-modal.component';
 
 @NgModule({
   imports: [
     SharedModule,
   ],
   declarations: [
-    AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent,
+    AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent,
   ],
-  entryComponents: [AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent],
-  exports: [AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent],
+  entryComponents: [AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent],
+  exports: [AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent],
 })
 export class ModalsModule {
 }
