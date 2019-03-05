@@ -6,6 +6,7 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
+          "/index.html",
           "/*.css",
           "/*.js"
         ]
