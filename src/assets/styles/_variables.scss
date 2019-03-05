@@ -1,0 +1,30 @@
+$secondary: #ececec;
+$light: #f5f5f5;
+
+@import "~bootstrap/scss/variables";
+
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+      "secondary": $gray-100,
+      "light": $light
+    )
+);
+
+$colors: map-merge(
+    $colors,
+      (
+      )
+);
+
+// Links
+$link-color: theme-color("dark");
+$link-decoration: none;
+$link-hover-color: theme-color("dark");
+$link-hover-decoration: none;
+
+$body-bg: transparent;
+
+$font: Roboto, Roboto-Regular, Helvetica, Arial, sans-serif !important;
+$corner-radius: 10px;
+$splash-screen-corner-radius: 10px;

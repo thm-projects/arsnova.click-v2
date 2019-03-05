@@ -3,6 +3,7 @@ import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
+import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 // tslint:disable-next-line:max-line-length
@@ -62,6 +63,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private storageService: StorageService,
     private userService: UserService,
     private swUpdate: SwUpdate,
+    private toastService: ToastrService,
   ) {}
 
   public ngOnInit(): void {
@@ -78,6 +80,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.userService.loadConfig();
     this.translateService.onLangChange.subscribe(() => {
       this.initializeCookieConsent();
+      this.initializeUpdateToastr();
     });
     this.router.events.subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
@@ -86,26 +89,6 @@ export class RootComponent implements OnInit, AfterViewInit {
         this._isLoading = false;
       }
     });
-
-    if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe((event) => {
-        console.log('service worker update available');
-        console.log('current version is', event.current);
-        console.log('available version is', event.available);
-        console.log('event type is', event.type);
-        this.swUpdate.activateUpdate().then(() => document.location.reload());
-      });
-      this.swUpdate.activated.subscribe(event => {
-        console.log('previous version was', event.previous);
-        console.log('current version is', event.current);
-        console.log('event type is', event.type);
-      });
-      this.swUpdate.checkForUpdate().then(() => {
-        // noop
-      }).catch((err) => {
-        console.error('error when checking for update', err);
-      });
-    }
   }
 
   public ngAfterViewInit(): void {
@@ -155,5 +138,42 @@ export class RootComponent implements OnInit, AfterViewInit {
         href: 'dataprivacy',
       },
     });
+  }
+
+  private initializeUpdateToastr(): void {
+    if (this.swUpdate.isEnabled) {
+      let swUpdateToast: ActiveToast<any>;
+
+      this.swUpdate.available.subscribe((event) => {
+        console.log('service worker update available');
+        console.log('current version is', event.current);
+        console.log('available version is', event.available);
+        console.log('event type is', event.type);
+
+        if (swUpdateToast) {
+          this.toastService.remove(swUpdateToast.toastId);
+        }
+
+        const message = this.translateService.instant('component.toasts.swupdate.message');
+        const title = this.translateService.instant('component.toasts.swupdate.title');
+        swUpdateToast = this.toastService.info(message, title, {
+          disableTimeOut: true,
+          toastClass: 'toast show',
+        });
+        swUpdateToast.onTap.subscribe(() => {
+          this.swUpdate.activateUpdate().then(() => document.location.reload());
+        });
+
+      });
+      this.swUpdate.activated.subscribe(event => {
+        console.log('previous version was', event.previous);
+        console.log('current version is', event.current);
+        console.log('event type is', event.type);
+      });
+      this.swUpdate.checkForUpdate().then(() => {
+      }).catch((err) => {
+        console.error('error when checking for update', err);
+      });
+    }
   }
 }
