@@ -141,39 +141,41 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private initializeUpdateToastr(): void {
-    if (this.swUpdate.isEnabled) {
-      let swUpdateToast: ActiveToast<any>;
-
-      this.swUpdate.available.subscribe((event) => {
-        console.log('service worker update available');
-        console.log('current version is', event.current);
-        console.log('available version is', event.available);
-        console.log('event type is', event.type);
-
-        if (swUpdateToast) {
-          this.toastService.remove(swUpdateToast.toastId);
-        }
-
-        const message = this.translateService.instant('component.toasts.swupdate.message');
-        const title = this.translateService.instant('component.toasts.swupdate.title');
-        swUpdateToast = this.toastService.info(message, title, {
-          disableTimeOut: true,
-          toastClass: 'toast show',
-        });
-        swUpdateToast.onTap.subscribe(() => {
-          this.swUpdate.activateUpdate().then(() => document.location.reload());
-        });
-
-      });
-      this.swUpdate.activated.subscribe(event => {
-        console.log('previous version was', event.previous);
-        console.log('current version is', event.current);
-        console.log('event type is', event.type);
-      });
-      this.swUpdate.checkForUpdate().then(() => {
-      }).catch((err) => {
-        console.error('error when checking for update', err);
-      });
+    if (!this.swUpdate.isEnabled) {
+      return;
     }
+
+    let swUpdateToast: ActiveToast<any>;
+
+    this.swUpdate.available.subscribe((event) => {
+      console.log('service worker update available');
+      console.log('current version is', event.current);
+      console.log('available version is', event.available);
+      console.log('event type is', event.type);
+
+      if (swUpdateToast) {
+        this.toastService.remove(swUpdateToast.toastId);
+      }
+
+      const message = this.translateService.instant('component.toasts.swupdate.message');
+      const title = this.translateService.instant('component.toasts.swupdate.title');
+      swUpdateToast = this.toastService.info(message, title, {
+        disableTimeOut: true,
+        toastClass: 'toast show',
+      });
+      swUpdateToast.onTap.subscribe(() => {
+        this.swUpdate.activateUpdate().then(() => document.location.reload());
+      });
+
+    });
+    this.swUpdate.activated.subscribe(event => {
+      console.log('previous version was', event.previous);
+      console.log('current version is', event.current);
+      console.log('event type is', event.type);
+    });
+    this.swUpdate.checkForUpdate().then(() => {
+    }).catch((err) => {
+      console.error('error when checking for update', err);
+    });
   }
 }
