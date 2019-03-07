@@ -10,9 +10,9 @@
            role="listitem">
 
         <button [id]="'translation_' + elem.tag"
-                class="btn btn-block pointer"
-                [class.btn-success]="i18nService.currentLanguage.toString().toUpperCase() === elem.tag"
-                [class.btn-light]="i18nService.currentLanguage.toString().toUpperCase() !== elem.tag"
+                class="btn btn-block cursor-pointer"
+                [class.btn-primary]="i18nService.currentLanguage.toString().toUpperCase() === elem.tag"
+                [class.btn-secondary]="i18nService.currentLanguage.toString().toUpperCase() !== elem.tag"
                 (click)="changeLanguage(elem.tag)">
           <span>{{elem.text}}</span>
 

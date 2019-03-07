@@ -1,0 +1,109 @@
+$primary: #00796B;
+$secondary: white;
+$invers: rebeccapurple;
+$light: #B2DFDB;
+$dark: black;
+$info: #00CCB9;
+$success: #006000;
+$warning: #FF9800;
+$error: #f44336;
+
+$primary_text_color: white;
+$secondary_text_color: #757575;
+
+$modal-content-bg: white;
+$modal-content-color: #000c19;
+$modal-header-border-color: none;
+
+$body-bg: #009688;
+$body-color: $primary_text_color;
+
+$text-muted: $secondary_text_color;
+
+$bg-pre: $secondary;
+
+$border-loader_wrapper-outer_spin: #3498db;
+$border-loader_wrapper-middle_spin: #e74c3c;
+$border-loader_wrapper-inner_spin: #f9c922;
+
+$progress-bg: transparent;
+
+$link-color: #c4fffa;
+$link-decoration: none;
+$link-hover-color: #cbf9f5;
+$link-hover-decoration: none;
+
+$font: Roboto, Roboto-Regular, Helvetica, Arial, sans-serif !important;
+$corner-radius: 10px;
+$splash-screen-corner-radius: 10px;
+
+@import "prebuild";
+
+$modal-footer-border-color: $border-color;
+
+$theme-colors: map-merge(
+    $theme-colors,
+    (
+      invers:$invers,
+    )
+);
+
+$colors: map-merge(
+    $colors,
+      (
+      )
+);
+
+$bg-footer: $light;
+$footer-color: $dark;
+
+$colorChangingBg: (
+  0: (fg: white, bg: black),
+  50: (fg: white, bg: black),
+  100: (fg: white, bg: black)
+);
+
+$colorChangingOwnNick: (
+  0: (fg: white, bg: $primary),
+  25: (fg: white, bg: $warning),
+  50: (fg: white, bg: $warning),
+  75: (fg: white, bg: $warning),
+  100: (fg: white, bg: $primary)
+);
+
+$colorChangingArs: (
+  0: (fg: white, bg: transparent),
+  25: (fg: #b22222, bg: transparent),
+  50: (fg: white, bg: transparent),
+  75: (fg: #ffd700, bg: transparent),
+  100: (fg: white, bg: transparent)
+);
+
+$colorChangingNova: (
+  0: (fg: #ffd700, bg: transparent),
+  25: (fg: white, bg: transparent),
+  50: (fg: #b22222, bg: transparent),
+  75: (fg: white, bg: transparent),
+  100: (fg: #ffd700, bg: transparent)
+);
+
+$colorChangingDot: (
+  0: (fg: white, bg: transparent),
+  25: (fg: #ffd700, bg: transparent),
+  50: (fg: white, bg: transparent),
+  75: (fg: #b22222, bg: transparent),
+  100: (fg: white, bg: transparent)
+);
+
+$colorChangingClick: (
+  0: (fg: #b22222, bg: transparent),
+  25: (fg: white, bg: transparent),
+  50: (fg: #ffd700, bg: transparent),
+  75: (fg: white, bg: transparent),
+  100: (fg: #b22222, bg: transparent)
+);
+
+$logo-bg: transparent;
+$logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova-logo-click": white);
+
+@import "postbuild";

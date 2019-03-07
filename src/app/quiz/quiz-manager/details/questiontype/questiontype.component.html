@@ -1,0 +1,25 @@
+<div class="row"
+     [attr.data-intro]="'view.question_type.description.type_wrapper' | translate"
+     [attr.aria-label]="'view.question_type.description.type_wrapper' | translate">
+  <div *ngFor="let elem of selectableQuestionTypes"
+       [id]="elem.id"
+       class="col-12 col-sm-6 mb-2"
+       [attr.aria-selected]="isActiveQuestionType(elem.id)">
+    <div class="card bg-transparent h-100">
+      <div class="card-header">
+        <span class="card-title">{{elem.translationName | translate}}</span>
+      </div>
+      <div class="card-body d-flex flex-column">
+        <p>{{elem.descriptionType | translate}}</p>
+        <button class="btn mt-auto"
+                [class.btn-light]="!isActiveQuestionType(elem.id)"
+                [class.btn-success]="isActiveQuestionType(elem.id)"
+                [disabled]="isActiveQuestionType(elem.id)"
+                (click)="morphToQuestionType(elem.id)">
+          <span *ngIf="!isActiveQuestionType(elem.id)">Select Type</span>
+          <span *ngIf="isActiveQuestionType(elem.id)">Current Type</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

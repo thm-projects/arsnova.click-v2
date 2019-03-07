@@ -9,29 +9,19 @@
   font-style: normal;
 }
 
-#markdownBarDiv {
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    overflow: hidden;
-    li {
-      flex: 1 0 calc(100% / 7);
-      text-align: center;
-      cursor: pointer;
-      &:hover {
-        opacity: 0.8;
-      }
-      &:active {
-        opacity: 0.5;
-      }
+ul {
+  li {
+    flex: 1 0 calc(100% / 7);
+    &:hover {
+      opacity: 0.8;
+    }
+    &:active {
+      opacity: 0.5;
     }
   }
+}
 
-  .latexIcon::before {
-    content: "\TeX";
-    font-family: "arsnova", serif;
-  }
+.latexIcon::before {
+  content: "\TeX";
+  font-family: "arsnova", serif;
 }

@@ -96,7 +96,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private quizService: QuizService,
     private router: Router,
     private themesService: ThemesService,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private i18nService: I18nService,
     private attendeeService: AttendeeService,
     private sanitizer: DomSanitizer,
@@ -166,7 +166,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this._routerSubscription = this.route.params.subscribe(params => {
+    this._routerSubscription = this.activatedRoute.params.subscribe(params => {
       this._subscriptions.push(this.storageService.stateNotifier.subscribe(async val => {
         if ([DbState.Initialized, DbState.Revalidate].includes(val)) {
           if (!Object.keys(params).length || !params.themeId || !params.languageId) {

@@ -11,21 +11,18 @@
                      [questionText]="questionText"></app-voting-question>
 
 <div *ngIf="displayAnswerButtons()"
-     id="answer-option-element-wrapper"
      class="d-flex justify-content-around align-items-center flex-wrap">
-  <div *ngFor="let elem of answers; let i = index"
-       [id]="i"
-       class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
-       [class.selected]="isSelected(i)"
-       (click)="toggleSelectAnswer(i)"
-       [style.flex-basis]="quizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
-    <p *ngIf="quizService.currentQuestion().displayAnswerText"
-       class="mb-0 markdown-answer"
-       [innerHTML]="sanitizeHTML(elem)"></p>
-    <p *ngIf="!quizService.currentQuestion().displayAnswerText"
-       class="mb-0"
-       [innerHTML]="normalizeAnswerOptionIndex(i)"></p>
-  </div>
+  <button *ngFor="let elem of answers; let i = index"
+          class="btn answer-option-element d-flex justify-content-center align-items-center rounded m-2 p-1 flex-grow-1 flex-shink-1"
+          [class.btn-secondary]="!isSelected(i)"
+          [class.btn-invers]="isSelected(i)"
+          (click)="toggleSelectAnswer(i)"
+          [style.flex-basis]="quizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
+    <span *ngIf="quizService.currentQuestion().displayAnswerText"
+          class="align-items-center d-flex h-100 mw-100 overflow-hidden"
+          [innerHTML]="sanitizeHTML(elem)"></span>
+    <span *ngIf="!quizService.currentQuestion().displayAnswerText">{{normalizeAnswerOptionIndex(i)}}</span>
+  </button>
 </div>
 
 <div *ngIf="displayRangedButtons()">
@@ -49,7 +46,7 @@
 </div>
 
 <button *ngIf="showSendResponseButton()"
-        class="btn btn-default w-100 my-5 pointer"
+        class="btn btn-info btn-block my-5"
         (click)="sendResponses()">
   <span>{{'component.voting.send' | translate}}</span>
   <fa-icon [icon]="'paper-plane'"></fa-icon>

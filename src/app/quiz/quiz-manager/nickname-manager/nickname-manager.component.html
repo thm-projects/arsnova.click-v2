@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row text-dark">
   <div class="col-12 nicknameFilter">
     <input type="text"
            class="rounded p-1 w-100 mb-3 form-control"
@@ -11,13 +11,13 @@
        [class.col-md-6]="hasSelectedCategory()">
     <div class="row">
       <div *ngFor="let cat of availableNickCategories()"
-           class="nickCategory pointer col-6"
+           class="nickCategory cursor-pointer col-6"
            [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
            [class.selectedCategory]="hasSelectedCategory(cat)"
            [class.col-sm-12]="hasSelectedCategory()"
            [class.col-sm-6]="!hasSelectedCategory()"
            (click)="toggleSelectedCategory(cat)">
-        <div class="nickCategoryText">
+        <div class="nickCategoryText bg-secondary cursor-pointer rounded p-2 m-1">
           <p class="mb-0"
              [innerHTML]="getCategoryTranslation(cat) | translate"></p>
           <p class="mb-0">({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
@@ -27,9 +27,9 @@
   </div>
   <div *ngIf="hasSelectedCategory()"
        class="col-12 col-sm-8 col-md-6">
-    <div class="nickNameWrapper pt-2 mt-2 mt-sm-0">
+    <div class="bg-secondary rounded pt-2 mt-2 mt-sm-0">
       <div class="mx-2">
-        <button class="btn btn-block pointer"
+        <button class="btn btn-block cursor-pointer"
                 [class.btn-warning]="hasSelectedAllNicks()"
                 [class.btn-success]="!hasSelectedAllNicks()"
                 (click)="toggleAllNicks()">
@@ -39,7 +39,7 @@
       </div>
       <div *ngFor="let nick of availableNicks[selectedCategory]"
            (click)="selectNick(nick)"
-           class="nickStyle nickName pointer"
+           class="nickStyle rounded p-2 m-2 cursor-pointer border-bottom"
            [class.selectedNickName]="hasSelectedNick(nick)">
       <span [innerHTML]="parseAvailableNick(nick)"
             class="nickName d-inline-block pb-1"></span>

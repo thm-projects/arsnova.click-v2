@@ -8,7 +8,7 @@
          style="height: calc(100vh - 200px);">
 
       <div *ngFor="let elem of (languageLoaderService.parsedLangData | unusedKeyFilter:unusedKeyFilter | filterKeys:filter | searchFilter:searchFilter | sort) | justafew:scrollPos"
-           class="px-2 py-2 pointer d-flex"
+           class="px-2 py-2 cursor-pointer d-flex"
            [class.bg-warning]="selectedKey === elem.key"
            (click)="selectKey(elem.key)">
         <fa-icon *ngIf="hasEmptyKeys(elem)"
@@ -17,7 +17,7 @@
         <span class="text-truncate"
               [title]="elem.key">{{elem.key}}</span>
         <fa-icon *ngIf="selectedKey === elem.key"
-                 class="ml-auto pointer"
+                 class="ml-auto cursor-pointer"
                  (click)="removeKey(elem.key)"
                  [icon]="'trash'"></fa-icon>
       </div>

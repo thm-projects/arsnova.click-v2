@@ -5,7 +5,7 @@
     <button type="button"
             aria-expanded="false"
             aria-controls="collapseExample"
-            class="btn btn-info btn_panel-switcher pointer"
+            class="btn btn-light btn_panel-switcher"
             (click)="openTab('panel-lobby')"
             data-target="#panel-lobby"
             data-toggle="collapse">
@@ -16,7 +16,7 @@
     <button type="button"
             aria-expanded="false"
             aria-controls="collapseExample"
-            class="btn btn-info btn_panel-switcher pointer"
+            class="btn btn-light btn_panel-switcher"
             (click)="openTab('panel-countdownRunning')"
             data-target="#panel-countdownRunning"
             data-toggle="collapse">
@@ -27,7 +27,7 @@
     <button type="button"
             aria-expanded="false"
             aria-controls="collapseExample"
-            class="btn btn-info btn_panel-switcher pointer"
+            class="btn btn-light btn_panel-switcher"
             (click)="openTab('panel-countdownEnd')"
             data-target="#panel-countdownEnd"
             data-toggle="collapse">
@@ -56,7 +56,7 @@
 <div class="col-12 mt-5">
   <div class="row">
     <div class="col-12 col-sm-6">
-      <p class="mb-0 mr-2 text-light align-self-center h-100 w-100 d-flex align-items-center justify-content-around"
+      <p class="mb-0 mr-2 align-self-center h-100 w-100 d-flex align-items-center justify-content-around"
          style="line-height: 1.2;">
         <span>
           <span>{{'plugins.sound.global_volume' | translate}}:&nbsp;</span>
@@ -71,7 +71,7 @@
     <div class="col-12 col-sm-6">
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label class="btn pointer mb-0 align-self-center"
+        <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="config?.volumeConfig.useGlobalVolume"
                [class.btn-danger]="!config?.volumeConfig.useGlobalVolume">
           <input type="checkbox"
@@ -99,7 +99,7 @@
       </div>
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label class="btn pointer mb-0 align-self-center"
+        <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="config?.enabled.lobby"
                [class.btn-danger]="!config?.enabled.lobby">
           <input id="toggle-lobby-music"
@@ -114,7 +114,7 @@
           <span *ngIf="config?.enabled.lobby">{{'plugins.sound.active' | translate}}</span>
           <span *ngIf="!config?.enabled.lobby">{{'plugins.sound.inactive' | translate}}</span>
         </label>
-        <p class="mb-0 d-flex align-items-center ml-5 text-light">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.lobby}} %</p>
+        <p class="mb-0 d-flex align-items-center ml-5">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.lobby}} %</p>
       </div>
       <div class="col-12 mt-5">
         <div class="row">
@@ -152,7 +152,7 @@
       </div>
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label class="btn pointer mb-0 align-self-center"
+        <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="config?.enabled.countdownRunning"
                [class.btn-danger]="!config?.enabled.countdownRunning">
           <input type="checkbox"
@@ -167,7 +167,7 @@
           <span *ngIf="config?.enabled.countdownRunning">{{'plugins.sound.active' | translate}}</span>
           <span *ngIf="!config?.enabled.countdownRunning">{{'plugins.sound.inactive' | translate}}</span>
         </label>
-        <p class="mb-0 d-flex align-items-center ml-5 text-light">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownRunning}} %</p>
+        <p class="mb-0 d-flex align-items-center ml-5">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownRunning}} %</p>
       </div>
       <div class="col-12 mt-5">
         <div class="row">
@@ -205,7 +205,7 @@
       </div>
       <div class="col-12 mb-2 d-flex"
            [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label class="btn pointer mb-0 align-self-center"
+        <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="config?.enabled.countdownEnd"
                [class.btn-danger]="!config?.enabled.countdownEnd">
           <input type="checkbox"
@@ -220,7 +220,7 @@
           <span *ngIf="config?.enabled.countdownEnd">{{'plugins.sound.active' | translate}}</span>
           <span *ngIf="!config?.enabled.countdownEnd">{{'plugins.sound.inactive' | translate}}</span>
         </label>
-        <p class="mb-0 d-flex align-items-center ml-5 text-light">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownEnd}} %</p>
+        <p class="mb-0 d-flex align-items-center ml-5">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownEnd}} %</p>
       </div>
       <div class="col-12 mt-5">
         <div class="row">

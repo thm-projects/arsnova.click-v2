@@ -1,4 +1,4 @@
-<h2 class="mb-5 text-light">{{'component.voting.confidence_level.title' | translate}}</h2>
+<h2 class="mb-5">{{'component.voting.confidence_level.title' | translate}}</h2>
 
 <div class="row">
   <div class="col-12">
@@ -16,7 +16,7 @@
   <div class="col-12">
     <button type="button"
             (click)="sendConfidence()"
-            class="btn btn-default mt-5 w-100 pointer">
+            class="btn btn-info btn-block mt-5">
       <fa-icon [icon]="'paper-plane'"></fa-icon>
       <span *ngIf="confidenceValue">{{"component.voting.send" | translate}}</span>
       <span *ngIf="!confidenceValue">{{"component.voting.abstention" | translate}}</span>

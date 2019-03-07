@@ -1,0 +1,84 @@
+@mixin keyframeBuilder($map) {
+  @each $index, $colorMap in $map {
+  "#{$index}%" {
+    background-color: map-get($colorMap, "bg");
+    color: map-get($colorMap, "fg");
+  }
+  }
+}
+
+.own-nick {
+  animation: colorChangingOwnNick 5s infinite;
+}
+
+.color-changing-ars {
+  animation-name: colorChangingArs;
+  animation-iteration-count: infinite;
+  animation-duration: 4s;
+}
+
+.color-changing-nova {
+  animation-name: colorChangingNova;
+  animation-iteration-count: infinite;
+  animation-duration: 4s;
+}
+
+.color-changing-dot {
+  animation-name: colorChangingDot;
+  animation-iteration-count: infinite;
+  animation-duration: 4s;
+}
+
+.color-changing-click {
+  animation-name: colorChangingClick;
+  animation-iteration-count: infinite;
+  animation-duration: 4s;
+}
+
+@keyframes colorChangingBg {
+  @include keyframeBuilder($colorChangingBg);
+}
+
+@-webkit-keyframes colorChangingBg {
+  @include keyframeBuilder($colorChangingBg);
+}
+
+@keyframes colorChangingOwnNick {
+  @include keyframeBuilder($colorChangingOwnNick);
+}
+
+@-webkit-keyframes colorChangingOwnNick {
+  @include keyframeBuilder($colorChangingOwnNick);
+}
+
+@keyframes colorChangingArs {
+  @include keyframeBuilder($colorChangingArs);
+}
+
+@-webkit-keyframes colorChangingArs {
+  @include keyframeBuilder($colorChangingArs);
+}
+
+@keyframes colorChangingNova {
+  @include keyframeBuilder($colorChangingNova);
+}
+
+@-webkit-keyframes colorChangingNova {
+  @include keyframeBuilder($colorChangingNova);
+}
+
+@keyframes colorChangingDot {
+  @include keyframeBuilder($colorChangingDot);
+}
+
+@-webkit-keyframes colorChangingDot {
+  @include keyframeBuilder($colorChangingDot);
+}
+
+@keyframes colorChangingClick {
+  @include keyframeBuilder($colorChangingClick);
+}
+
+@-webkit-keyframes colorChangingClick {
+  @include keyframeBuilder($colorChangingClick);
+}

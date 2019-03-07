@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
@@ -44,7 +45,6 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
     headerLabelService.headerLabel = 'component.liveResults.reading_confirmation';
-    this.questionIndex = quizService.quiz.currentQuestionIndex;
     this.footerBarService.replaceFooterElements([]);
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
@@ -68,15 +68,25 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
-      this.handleMessages();
-    });
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
+
+      this.connectionService.initConnection().then(() => {
+        this.connectionService.connectToChannel(this.quizService.quiz.name);
+        this.handleMessages();
+      });
+
+      this.attendeeService.restoreMembers();
+      this.questionIndex = this.quizService.quiz.currentQuestionIndex;
+      this.questionTextService.change(this.quizService.currentQuestion().questionText);
+    }));
 
     this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string) => {
       this.questionText = value;
     }));
-    this.questionTextService.change(this.quizService.currentQuestion().questionText);
   }
 
   public ngOnDestroy(): void {

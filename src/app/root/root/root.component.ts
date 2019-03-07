@@ -6,33 +6,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
-// tslint:disable-next-line:max-line-length
-import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/quiz-manager-details/quiz-manager-details-overview/quiz-manager-details-overview.component';
+import { IWindow } from '../../../lib/interfaces/IWindow';
+import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/details/details-overview/quiz-manager-details-overview.component';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
-import { ConnectionService } from '../../service/connection/connection.service';
-import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
-import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
-import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
-import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
-
-// Update global window.* object interface (https://stackoverflow.com/a/12709880/7992104)
-declare global {
-  interface IWindow {
-    cookieconsent?: {
-      initialise: Function
-    };
-  }
-}
-
-declare interface IServerTarget {
-  httpApiEndpoint: string;
-  httpLibEndpoint: string;
-  serverEndpoint: string;
-  wsApiEndpoint: string;
-}
 
 @Component({
   selector: 'app-root',
@@ -51,20 +30,22 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private connectionService: ConnectionService,
     public i18nService: I18nService, // Must be instantiated here to be available in all child components
-    private trackingService: TrackingService,
-    private footerBarService: FooterBarService,
-    private headerLabelService: HeaderLabelService,
-    private themesService: ThemesService,
     private translateService: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private storageService: StorageService,
     private userService: UserService,
     private swUpdate: SwUpdate,
     private toastService: ToastrService,
-  ) {}
+    private themeService: ThemesService,
+  ) {
+    this.themeService.themeChanged.subscribe(themeName => {
+      this.loadExternalStyles(`/${themeName}.css`).then(() => {
+      }).catch(reason => {
+        console.log('theme loading failed', reason, themeName, document.getElementById('theme-styles'));
+      });
+    });
+  }
 
   public ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -78,10 +59,12 @@ export class RootComponent implements OnInit, AfterViewInit {
     }
 
     this.userService.loadConfig();
+
     this.translateService.onLangChange.subscribe(() => {
       this.initializeCookieConsent();
       this.initializeUpdateToastr();
     });
+
     this.router.events.subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
         this._isLoading = true;
@@ -92,12 +75,12 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.router.events.subscribe((nav: any) => {
       if (nav instanceof NavigationEnd) {
-
-        if (isPlatformServer(this.platformId)) {
-          return;
-        }
 
         this.isInQuizManager = [QuizManagerComponent.TYPE, QuizManagerDetailsOverviewComponent.TYPE].includes(
           this.fetchChildComponent(this.activatedRoute).TYPE);
@@ -107,6 +90,27 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   private fetchChildComponent(route: ActivatedRoute): INamedType {
     return <INamedType>(route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component);
+  }
+
+  private loadExternalStyles(styleUrl: string): Promise<Event> {
+    return new Promise(resolve => {
+      const existingNode = document.getElementsByClassName('theme-styles');
+      if (existingNode.length) {
+        if ((existingNode.item(0) as HTMLLinkElement).href.includes(styleUrl)) {
+          return;
+        }
+      }
+
+      const styleElement = document.createElement('link') as HTMLLinkElement;
+      styleElement.classList.add('theme-styles');
+      styleElement.rel = 'stylesheet';
+      styleElement.href = styleUrl;
+      styleElement.onload = () => {
+        document.head.removeChild(existingNode.item(0));
+        resolve();
+      };
+      document.head.appendChild(styleElement);
+    });
   }
 
   private initializeCookieConsent(): void {

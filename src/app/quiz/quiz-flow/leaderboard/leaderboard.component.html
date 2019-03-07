@@ -1,11 +1,11 @@
 <div class="row">
   <h4 *ngIf="!leaderBoardCorrect.length"
-      class="col-12 mt-5 text-center text-light">
+      class="col-12 mt-5 text-center">
     <span>{{'component.leaderboard.no_attendee_correct' | translate}}</span>
   </h4>
 
   <h4 *ngIf="leaderBoardCorrect.length"
-      class="col-12 text-light">
+      class="col-12">
     <span *ngIf="isGlobalRanking">
       {{'component.leaderboard.title.all_questions' | translate }}
     </span>

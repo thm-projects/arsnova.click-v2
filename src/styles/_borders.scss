@@ -1,0 +1,9 @@
+$directions: ("left": left, "right": right, "top": top, "bottom": bottom);
+
+@each $color, $value in $theme-colors {
+  @each $directionKey, $directionValue in $directions {
+    .border-#{$directionValue}-#{$color} {
+      border-#{$directionValue}-color: $value !important;
+    }
+  }
+}

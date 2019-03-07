@@ -1,0 +1,140 @@
+<div id="quizManagerDetails">
+  <div class="btn-group btn-header mb-2 mb-sm-4 overflow-auto"
+       data-toggle="buttons"
+       role="navigation"
+       [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
+    <button type="button"
+            class="btn btn-light"
+            (click)="trackDetailsTarget('question-text')"
+            [routerLink]="['/quiz', 'manager', questionIndex, 'questionText']">
+      <span class="d-none d-sm-block">{{'component.quiz_manager.details.question_text.long' | translate}}</span>
+      <span class="d-block d-sm-none">{{'component.quiz_manager.details.question_text.short' | translate}}</span>
+    </button>
+    <button type="button"
+            class="btn btn-light"
+            (click)="trackDetailsTarget('answeroptions')"
+            [routerLink]="['/quiz', 'manager', questionIndex, 'answeroptions']">
+      <span class="d-none d-sm-block">{{'component.quiz_manager.details.answeroptions.long' | translate}}</span>
+      <span class="d-block d-sm-none">{{'component.quiz_manager.details.answeroptions.short' | translate}}</span>
+    </button>
+    <button type="button"
+            class="btn btn-light"
+            (click)="trackDetailsTarget('question-timer')"
+            [routerLink]="['/quiz', 'manager', questionIndex, 'countdown']">
+      <span class="d-none d-sm-block">{{'component.quiz_manager.details.timer.long' | translate}}</span>
+      <span class="d-block d-sm-none">{{'component.quiz_manager.details.timer.short' | translate}}</span>
+    </button>
+    <button type="button"
+            class="btn btn-light"
+            (click)="trackDetailsTarget('question-type')"
+            [routerLink]="['/quiz', 'manager', questionIndex, 'questionType']">
+      <span class="d-none d-sm-block">{{'component.quiz_manager.details.question_type.long' | translate}}</span>
+      <span class="d-block d-sm-none">{{'component.quiz_manager.details.question_type.short' | translate}}</span>
+    </button>
+  </div>
+
+  <div role="listitem"
+       [attr.data-intro]="'component.quiz_summary.description.question_item' | translate">
+    <div class="mb-2 question">
+      <h4>
+        <span>{{'component.quiz_summary.question' | translate}}&nbsp;{{questionIndex + 1}}</span>:
+      </h4>
+      <p class="mb-0">
+        <span [innerHTML]="'component.quiz_summary.text' | translate"></span>:&nbsp;
+        <span *ngIf="question?.questionText"
+              class="break-word"
+              [innerHTML]="question?.questionText"></span>
+        <span *ngIf="!question?.questionText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
+      </p>
+      <p class="mb-0">
+        {{'component.quiz_summary.type' | translate}}:&nbsp;{{question?.translationReferrer() | translate}}
+      </p>
+    </div>
+    <div class="mb-2 answers">
+      <div>
+        <h4><span [innerHTML]="'component.quiz_summary.answer' | translate"></span>:&nbsp;</h4>
+      </div>
+      <div role="list">
+        <div *ngIf="question?.TYPE === 'RangedQuestion'">
+          <p role="listitem"
+             class="mb-0">
+            <span [innerHTML]="'component.answeroptions.ranged_question.correct_value' | translate"></span>:&nbsp;
+            <span [innerHTML]="question?.correctValue"></span>
+          </p>
+          <p role="listitem"
+             class="mb-0">
+            <span [innerHTML]="'component.answeroptions.ranged_question.min_range' | translate"></span>:&nbsp;
+            <span [innerHTML]="question?.rangeMin"></span>
+          </p>
+          <p role="listitem"
+             class="mb-0">
+            <span [innerHTML]="'component.answeroptions.ranged_question.max_range' | translate"></span>:&nbsp;
+            <span [innerHTML]="question?.rangeMax"></span>
+          </p>
+        </div>
+        <div *ngIf="question?.TYPE === 'FreeTextQuestion'">
+          <p *ngIf="question?.answerOptionList[0]?.answerText"
+             class="mb-0"
+             role="listitem"
+             [innerHTML]="question?.answerOptionList[0]?.answerText"></p>
+          <p *ngIf="!question?.answerOptionList[0]?.answerText"
+             class="mb-0"
+             role="listitem">
+            {{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}
+          </p>
+        </div>
+        <div *ngIf="!['RangedQuestion', 'FreeTextQuestion'].includes(question?.TYPE)">
+          <p *ngFor="let answer of question?.answerOptionList; let i = index;"
+             class="mb-0"
+             role="listitem">
+            <span>{{'component.quiz_summary.answer' | translate}}&nbsp;{{i+1}}</span>
+            <span *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question?.TYPE)">
+              <span *ngIf="answer.isCorrect">({{'component.quiz_summary.correct' | translate}})</span>
+              <span *ngIf="!answer.isCorrect">({{'component.quiz_summary.wrong' | translate}})</span>
+            </span>
+            <span>:&nbsp;</span>
+            <span *ngIf="answer.answerText"
+                  [innerHTML]="answer.answerText"></span>
+            <span *ngIf="!answer.answerText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
+          </p>
+          <p *ngIf="!question?.answerOptionList.length"
+             class="mb-0">
+            {{'component.quiz_summary.validation_errors.reasons.no_answers_defined' | translate}}
+          </p>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="question?.TYPE === 'FreeTextQuestion'"
+         class="mb-2 answers">
+      <h4>{{'component.quiz_summary.answer_configuration' | translate}}:&nbsp;</h4>
+      <p *ngFor="let config of question?.answerOptionList[0]?.getConfig()"
+         class="mb-0">
+        <span>{{config.configTitle | translate}}</span>:&nbsp;
+        <span>{{config.configEnabledString | translate}}</span>
+      </p>
+    </div>
+    <div class="mb-2 timer">
+      <h4>{{'component.quiz_summary.timer' | translate}}:</h4>
+      <p>{{question?.timer}}&nbsp;{{ 'component.timer.second' | translate:{COUNT: question?.timer} }}</p>
+    </div>
+    <div class="mb-2 validation">
+      <h4>
+        <span>{{'component.quiz_summary.validation' | translate}}:&nbsp;</span>
+        <span class="text-success"
+              *ngIf="question?.isValid()">{{'component.quiz_summary.question_successful' | translate}}</span>
+        <span class="text-danger"
+              *ngIf="!question?.isValid()">{{'component.quiz_summary.question_failed' | translate}}</span>
+      </h4>
+      <ul *ngIf="!question?.isValid()"
+          id="quizSummaryValidationErrors"
+          [attr.data-intro]="'component.quiz_summary.description.validation_errors' | translate"
+          [attr.aria-label]="'component.quiz_summary.description.validation_errors' | translate">
+        <li *ngFor="let validationError of question?.getValidationStackTrace()">
+          <span *ngIf="validationError.occurredAt?.type === 'question'">{{'component.quiz_summary.validation_errors.types.question' | translate}}:&nbsp;</span>
+          <span *ngIf="validationError.occurredAt?.type === 'answerOption'">{{'component.quiz_summary.validation_errors.types.answerOption' | translate}}:&nbsp;</span>
+          <span>{{validationError.reason | translate}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

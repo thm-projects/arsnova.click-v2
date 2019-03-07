@@ -8,8 +8,10 @@
   {{'component.nickname-select.no-nicks-available' | translate}}
 </h4>
 
-<div *ngFor="let elem of nicks"
-     (click)="joinQuiz(elem)">
-  <div class="nickName rounded pointer my-2 p-2"
-       [innerHTML]="parseAvailableNick(elem)"></div>
+<div class="d-flex justify-content-around flex-column flex-sm-row flex-wrap">
+  <button *ngFor="let elem of nicks"
+          (click)="joinQuiz(elem)"
+          class="btn btn-secondary rounded flex-grow-1 m-1">
+    <span [innerHTML]="parseAvailableNick(elem)"></span>
+  </button>
 </div>

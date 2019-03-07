@@ -1,4 +1,4 @@
-<div class="progress my-2 position-relative"
+<div class="progress my-2 position-relative text-dark"
      style="height: 2rem;">
   <div *ngIf="base && percent"
        class="progress-bar bg-info overflow-hidden"
@@ -8,12 +8,12 @@
        aria-valuemin="0"
        aria-valuemax="100"></div>
   <div *ngIf="base"
-       class="align-self-center"
-       style="position: absolute; left: 10px;">{{'component.liveResults.reading_confirmation' | translate}}
+       class="align-self-center position-absolute"
+       style="left: 10px;">{{'component.liveResults.reading_confirmation' | translate}}
   </div>
   <div *ngIf="base"
-       class="align-self-center"
-       style="position: absolute; right: 10px;">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}
+       class="align-self-center position-absolute"
+       style="right: 10px;">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}
   </div>
   <div *ngIf="!base"
        class="w-100 d-flex align-items-center justify-content-center">

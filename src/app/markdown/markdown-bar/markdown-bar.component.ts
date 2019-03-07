@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { QuestiontextComponent } from '../../quiz/quiz-manager/quiz-manager-details/questiontext/questiontext.component';
+import { QuestiontextComponent } from '../../quiz/quiz-manager/details/questiontext/questiontext.component';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
 class MarkdownBarElement {

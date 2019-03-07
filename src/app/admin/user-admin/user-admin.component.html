@@ -1,10 +1,10 @@
-<button class="btn btn-info"
+<button class="btn btn-light"
         (click)="showAddUserModal()">
   Add User
 </button>
 
 <div *ngFor="let user of data; let i = index"
-     class="card mx-sm-auto mx-5 my-3 w-100">
+     class="card mx-sm-auto mx-5 my-3 w-100 text-dark">
   <div class="card-body">
     <div class="d-flex justify-content-end">
       <fa-icon *ngIf="!isDeletingElem(i)"

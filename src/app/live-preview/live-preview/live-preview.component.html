@@ -12,7 +12,7 @@
       <div id="answer-option-element-wrapper"
            class="d-flex justify-content-around align-items-center flex-wrap">
         <div *ngFor="let elem of dataSource; let i = index"
-             class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 pointer"
+             class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer"
              [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
           <p *ngIf="question.displayAnswerText"
              class="mb-0 markdown-answer"
@@ -41,7 +41,7 @@
 
 
 <ng-template #notAvailableTmpl>
-  <h3 class="text-light text-center d-flex align-items-center server-not-available-label mb-0">
+  <h3 class="text-center d-flex align-items-center server-not-available-label mb-0">
     {{'plugins.splashscreen.error.error_messages.no_preview_available' | translate}}
   </h3>
 </ng-template>

@@ -63,7 +63,7 @@ export class MemberApiService {
 
   public deleteMember(quizName, nickName): Observable<IMessage> {
     return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${quizName}/${nickName}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } });
+      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getMembers(quizname: string): Observable<IMessage> {

@@ -1,0 +1,71 @@
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/code";
+@import "~bootstrap/scss/grid";
+// @import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/input-group";
+@import "~bootstrap/scss/custom-forms";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/card";
+// @import "~bootstrap/scss/breadcrumb";
+// @import "~bootstrap/scss/pagination";
+// @import "~bootstrap/scss/badge";
+// @import "~bootstrap/scss/jumbotron";
+// @import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/media";
+@import "~bootstrap/scss/list-group";
+@import "~bootstrap/scss/close";
+// @import "~bootstrap/scss/toasts";
+@import "~bootstrap/scss/modal";
+// @import "~bootstrap/scss/tooltip";
+// @import "~bootstrap/scss/popover";
+// @import "~bootstrap/scss/carousel";
+// @import "~bootstrap/scss/spinners";
+@import "~bootstrap/scss/utilities";
+// @import "~bootstrap/scss/print";
+// @import "~intro.js/introjs.css";
+// @import "~intro.js/themes/introjs-nassim.css";
+@import '~ngx-toastr/toastr-bs4-alert';
+@import "../borders";
+@import "loader";
+@import "keyframes";
+
+body {
+  font-family: $font;
+  @include transitionEffect();
+}
+
+pre {
+  background: $bg-pre;
+  padding: 1rem;
+  border-radius: 10px;
+}
+
+.progress {
+  border: 1px solid $gray-200;
+}
+
+.navbar-footer {
+  background-color: $bg-footer;
+  color: $footer-color;
+  @include transitionEffect();
+}
+
+#logo-image {
+  background-color: $logo-bg;
+
+  @each $selector, $colorCode in $logo-fg {
+    #{$selector} {
+      fill: $colorCode;
+    }
+  }
+}

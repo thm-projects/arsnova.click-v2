@@ -37,7 +37,7 @@ export class FrontendPage {
   }
 
   public getAvailableQuizzesDialogCloseButton(): ElementFinder {
-    return element(by.css('.close.pointer'));
+    return element(by.css('.close.cursor-pointer'));
   }
 
   public clearLocalStorage(): void {

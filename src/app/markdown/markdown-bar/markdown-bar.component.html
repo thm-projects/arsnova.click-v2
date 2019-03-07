@@ -1,9 +1,8 @@
-<div id="markdownBarDiv"
-     class="markdown-box">
-  <ul>
+<div class="">
+  <ul class="list-unstyled m-0 p-0 d-flex flex-wrap overflow-hidden btn-group">
     <li *ngFor="let elem of allDisplayedMarkdownBarElements"
         [id]="elem.id"
-        class="button-markdown button-purple"
+        class="btn btn-warning cursor-pointer"
         data-toggle="tooltip"
         data-placement="bottom"
         [title]="elem.titleRef | translate"

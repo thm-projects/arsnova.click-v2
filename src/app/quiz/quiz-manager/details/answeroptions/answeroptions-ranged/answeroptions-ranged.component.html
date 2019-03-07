@@ -1,0 +1,43 @@
+<div class="row"
+     [attr.data-intro]="'component.answeroptions.description.range_area' | translate"
+     [attr.aria-label]="'component.answeroptions.description.range_area' | translate">
+  <div class="col-12 mb-5"
+       [attr.data-intro]="'component.answeroptions.description.min_range' | translate">
+    <h3>{{'component.answeroptions.ranged_question.min_range' | translate}}</h3>
+    <input type="number"
+           [attr.aria-label]="'component.answeroptions.description.min_range' | translate"
+           class="border-0 rounded p-2 w-100"
+           step="any"
+           min="0"
+           [value]="minRange"
+           (input)="updateMinRange($event)"
+           (propertychange)="updateMinRange($event)"
+           [placeholder]="'component.answeroptions.ranged_question.min_range' | translate"/>
+  </div>
+  <div class="col-12 mb-5"
+       [attr.data-intro]="'component.answeroptions.description.correct_value' | translate">
+    <h3>{{'component.answeroptions.ranged_question.correct_value' | translate}}</h3>
+    <input type="number"
+           [attr.aria-label]="'component.answeroptions.description.correct_value' | translate"
+           class="border-0 rounded p-2 w-100"
+           step="any"
+           min="0"
+           [value]="correctValue"
+           (input)="updateCorrectValue($event)"
+           (propertychange)="updateCorrectValue($event)"
+           [placeholder]="'component.answeroptions.ranged_question.min_range' | translate"/>
+  </div>
+  <div class="col-12 mb-5"
+       [attr.data-intro]="'component.answeroptions.description.max_range' | translate">
+    <h3>{{'component.answeroptions.ranged_question.max_range' | translate}}</h3>
+    <input type="number"
+           [attr.aria-label]="'component.answeroptions.description.max_range' | translate"
+           class="border-0 rounded p-2 w-100"
+           step="any"
+           min="0"
+           [value]="maxRange"
+           (input)="updateMaxRange($event)"
+           (propertychange)="updateMaxRange($event)"
+           [placeholder]="'component.answeroptions.ranged_question.max_range' | translate"/>
+  </div>
+</div>

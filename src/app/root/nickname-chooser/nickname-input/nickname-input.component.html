@@ -9,11 +9,14 @@
            [attr.data-intro]="'component.choose_nickname.description.nickname_input' | translate"
            [attr.aria-label]="'component.choose_nickname.description.nickname_input' | translate"
            maxlength="20"/>
-    <button class="btn btn-success pointer text-nowrap"
-            (click)="joinQuiz()"
-            [innerHTML]="'component.name_management.join_session' | translate"></button>
+    <button class="btn btn-success text-nowrap"
+            (click)="joinQuiz()">
+      <span>{{'component.name_management.join_session' | translate}}</span>
+    </button>
   </div>
   <div *ngIf="failedLoginReason"
-       class="failedLogin p-5 m-5 text-center text-uppercase"
-       [innerHTML]="failedLoginReason | translate"></div>
+       class="border border-danger rounded p-5 m-5 text-center text-uppercase"
+       style="border-width: 3px;">
+    <span>{{failedLoginReason | translate}}</span>
+  </div>
 </div>

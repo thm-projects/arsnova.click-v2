@@ -1,8 +1,8 @@
-<div class="row d-flex flex-wrap mb-md-2 text-light">
+<div class="row d-flex flex-wrap mb-md-2">
 
   <div class="d-flex col-12 col-md mb-3 mb-md-0 text-nowrap">
     <span class="d-inline-flex mx-md-2 align-items-center">Current Project:</span>
-    <select class="border-0 bg-transparent text-light"
+    <select class="border-0 bg-transparent text-secondary"
             (change)="setProject($event.target.value)">
       <option [value]="projectLoaderService.projects.Frontend">Frontend
       </option>
@@ -31,12 +31,12 @@
   <div class="col-12 col-md mb-3 mb-md-0">
     <div *ngIf="this.projectLoaderService.connected"
          class="btn-group ml-md-auto">
-      <button class="btn btn-secondary pointer"
+      <button class="btn btn-secondary"
               [disabled]="!this.languageLoaderService.changedData"
               [title]="!this.userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''"
               (click)="updateData()"><span>Save Changes</span>
       </button>
-      <button class="btn btn-secondary pointer"
+      <button class="btn btn-secondary"
               (click)="modalOrganizerService.addKey()">
         <span>Add Key</span>
       </button>
@@ -45,9 +45,9 @@
 </div>
 
 <div *ngIf="this.projectLoaderService.connected;else loading"
-     class="row mh-100 text-light">
+     class="row mh-100">
   <div class="d-flex sticky-top col-12 mb-2">
-    <div class="bg-white d-flex w-100 py-1">
+    <div class="bg-secondary d-flex w-100 py-1">
       <select class="border-0 bg-transparent mr-2"
               (change)="changeFilter($event.target.value)">
         <option [value]="filters.None"
@@ -105,5 +105,5 @@
   </div>
 </div>
 
-<ng-template #unauthorized><h4 class="text-danger text-center mt-5 bg-white d-flex justify-content-center py-3 mx-auto rounded">Not authorized to view this project</h4></ng-template>
-<ng-template #loading><h4 class="text-light text-center mt-5">Loading...</h4></ng-template>
+<ng-template #unauthorized><h4 class="text-danger text-center mt-5 bg-secondary d-flex justify-content-center py-3 mx-auto rounded">Not authorized to view this project</h4></ng-template>
+<ng-template #loading><h4 class="text-center mt-5">Loading...</h4></ng-template>

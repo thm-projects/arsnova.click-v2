@@ -1,8 +1,8 @@
-<div class="session-management row"
+<div class="row"
      [class.center-vertical]="!sessions.length">
   <div class="col-12">
     <h2 *ngIf="sessions.length === 0"
-        class="text-center text-light"
+        class="text-center"
         [innerHTML]="'component.name_management.no_sessions' | translate"></h2>
   </div>
   <div class="col-12">
@@ -15,7 +15,7 @@
       <div class="col"
            *ngIf="isAuthorizedToSaveQuiz()">
         <button type="button"
-                class="btn btn-default btn-block pointer"
+                class="btn btn-secondary btn-block cursor-pointer"
                 data-toggle="tooltip"
                 [title]="'component.name_management.save_session' | translate"
                 [disabled]="!elem.isValid() || !connectionService.serverAvailable"
@@ -29,7 +29,7 @@
       </div>
       <div class="col">
         <button type="button"
-                class="btn btn-default btn-block pointer"
+                class="btn btn-secondary btn-block cursor-pointer"
                 data-toggle="tooltip"
                 [title]="'component.name_management.start_session' | translate"
                 [disabled]="!elem.isValid() || !connectionService.serverAvailable"
@@ -40,7 +40,7 @@
       </div>
       <div class="col">
         <button type="button"
-                class="btn btn-default btn-block pointer"
+                class="btn btn-secondary btn-block cursor-pointer"
                 data-toggle="tooltip"
                 [title]="'component.name_management.edit_session' | translate"
                 (click)="editQuiz(i)"
@@ -49,7 +49,7 @@
         </button>
       </div>
       <div class="col">
-        <button class="btn btn-default btn-block pointer"
+        <button class="btn btn-secondary btn-block cursor-pointer"
                 data-toggle="tooltip"
                 [title]="'component.name_management.export' | translate"
                 (click)="exportQuiz(i)"
@@ -59,7 +59,7 @@
       </div>
       <div class="col">
         <button type="button"
-                class="btn btn-default btn-block pointer"
+                class="btn btn-secondary btn-block"
                 data-toggle="tooltip"
                 [title]="'component.name_management.delete_session' | translate"
                 [disabled]="!connectionService.serverAvailable"

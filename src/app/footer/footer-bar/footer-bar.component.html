@@ -9,9 +9,9 @@
          accept="application/json"
          multiple="multiple"/>
   <div *ngFor="let elem of footerBarService.footerElements"
-       class="footerElement px-2 px-sm-1 py-sm-2 pointer d-flex align-items-center justify-content-center justify-content-sm-start"
-       [class.success]="elem.selectable && elem.isActive"
-       [class.error]="elem.selectable && !elem.isActive"
+       class="footerElement px-2 px-sm-1 py-sm-2 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start"
+       [class.text-success]="elem.selectable && elem.isActive"
+       [class.text-danger]="elem.selectable && !elem.isActive"
        [id]="elem.id"
        [routerLink]="getLinkTarget(elem)"
        [queryParams]="getQueryParams(elem)"

@@ -1,4 +1,4 @@
-@import "../../../assets/styles/vendor";
+@import "prebuild";
 
 .container-fluid {
   @include media-breakpoint-only(xs) {

@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { themes } from '../../../lib/available-themes';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
@@ -13,6 +13,8 @@ import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class ThemesService {
+  public readonly themeChanged: EventEmitter<string> = new EventEmitter<string>();
+
   private _themes: Array<ITheme> = themes;
 
   get themes(): Array<ITheme> {
@@ -64,6 +66,7 @@ export class ThemesService {
     }
     if (themeDataset !== usedTheme) {
       this._currentTheme = usedTheme;
+      this.themeChanged.emit(this._currentTheme);
       document.getElementsByTagName('html').item(0).dataset['theme'] = usedTheme;
       this.reloadLinkNodes(usedTheme);
     }
@@ -77,6 +80,8 @@ export class ThemesService {
     if (!theme) {
       theme = this._currentTheme;
     }
+
+    this.themeChanged.emit(theme);
 
     this.themesApiService.getLinkImages(theme).subscribe(data => {
       data.forEach((elem) => {
