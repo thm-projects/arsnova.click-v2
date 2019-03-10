@@ -1,7 +1,34 @@
-<div *ngFor="let duplicateQuiz of fileUploadService.duplicateQuizzes; let i = index">
+<div class="d-flex flex-column"
+     *ngFor="let duplicateQuiz of fileUploadService.duplicateQuizzes">
   <h4>{{'component.quiz_rename.rename' | translate:{NAME: duplicateQuiz.quizName} }}</h4>
   <button *ngFor="let renameRecommendation of duplicateQuiz.renameRecommendation"
           (click)="sendRecommendation(duplicateQuiz, renameRecommendation)"
           class="btn btn-secondary rounded p-2 my-2 rename-recommendation">{{renameRecommendation}}
   </button>
+  <div class="mt-2">
+    <p>{{'component.quiz_rename.custom.title' | translate}}</p>
+    <label class="d-block">
+      <input type="text"
+             class="p-2 border-0 w-100 rounded ng-touched"
+             [(ngModel)]="quizName"
+             (keyup)="checkIsQuizNameAvailable()"
+             [placeholder]="'component.quiz_rename.custom.input' | translate"/>
+      <ng-container *ngIf="quizName.length > 3">
+        <ng-container *ngIf="isQuiznameAvailable">
+          <p>{{'component.quiz_rename.custom.available' | translate}}</p>
+          <button class="btn btn-secondary"
+                  (click)="sendQuizName(duplicateQuiz)">
+            <span>{{'component.quiz_rename.custom.select-quiz' | translate}}</span>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="!isQuiznameAvailable">
+          <p *ngIf="isQueringQuizname">{{'component.quiz_rename.custom.please-wait' | translate}}</p>
+          <ng-container *ngIf="!isQueringQuizname">
+            <p *ngIf="isQuiznameMalformed">{{'component.quiz_rename.custom.malformed' | translate}}</p>
+            <p *ngIf="!isQuiznameMalformed">{{'component.quiz_rename.custom.already-taken' | translate}}</p>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </label>
+  </div>
 </div>

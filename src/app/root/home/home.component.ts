@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
+import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AbstractAnswerEntity } from '../../../lib/entities/answer/AbstractAnswerEntity';
 import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
@@ -407,7 +408,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.selectQuizAsExisting(quizName);
     } else if (quizName.toLowerCase() === 'demo quiz') {
       this.selectQuizAsDemoQuiz();
-    } else if (this.checkABCDOrdering(quizName.toLowerCase())) {
+    } else if (checkABCDOrdering(quizName)) {
       this.selectQuizAsAbcdQuiz();
     } else {
       if (quizName.length > 3) {
@@ -481,20 +482,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.delete(DbTable.Config, StorageKey.QuizTheme).subscribe();
     }
-  }
-
-  private checkABCDOrdering(name: string): boolean {
-    let ordered = true;
-    if (!name || name.length < 2 || name.charAt(0) !== 'a') {
-      return false;
-    }
-    for (let i = 1; i < name.length; i++) {
-      if (name.charCodeAt(i) !== name.charCodeAt(i - 1) + 1) {
-        ordered = false;
-        break;
-      }
-    }
-    return ordered;
   }
 
   private async addDemoQuiz(): Promise<QuizEntity> {
