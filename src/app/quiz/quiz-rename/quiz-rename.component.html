@@ -3,7 +3,7 @@
   <h4>{{'component.quiz_rename.rename' | translate:{NAME: duplicateQuiz.quizName} }}</h4>
   <button *ngFor="let renameRecommendation of duplicateQuiz.renameRecommendation"
           (click)="sendRecommendation(duplicateQuiz, renameRecommendation)"
-          class="btn btn-secondary rounded p-2 my-2 rename-recommendation text-break">{{renameRecommendation}}
+          class="btn btn-secondary rounded p-2 my-2 rename-recommendation text-break text-left">{{renameRecommendation}}
   </button>
   <div class="mt-2">
     <p>{{'component.quiz_rename.custom.title' | translate}}</p>
