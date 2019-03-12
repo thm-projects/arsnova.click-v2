@@ -15,6 +15,9 @@ const quizRoutes: Routes = [
     path: 'rename',
     component: QuizRenameComponent,
   }, {
+    path: 'create/:name',
+    component: QuizRenameComponent,
+  }, {
     path: 'public',
     component: QuizPublicComponent,
   }, {

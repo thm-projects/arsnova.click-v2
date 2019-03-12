@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { MessageProtocol } from '../../../lib/enums/Message';
+import { QuizState } from '../../../lib/enums/QuizState';
 import { IDuplicateQuiz } from '../../../lib/interfaces/quizzes/IDuplicateQuiz';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -24,6 +25,7 @@ export class QuizRenameComponent implements OnInit {
     public readonly fileUploadService: FileUploadService,
     private readonly footerBarService: FooterBarService,
     private readonly router: Router,
+    private readonly route: ActivatedRoute,
     private readonly quizApiService: QuizApiService,
   ) {
     this.footerBarService.TYPE_REFERENCE = QuizRenameComponent.TYPE;
@@ -67,8 +69,23 @@ export class QuizRenameComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (!this.fileUploadService.renameFilesQueue) {
-      this.router.navigate(['/']);
-    }
+    this.route.params.subscribe(param => {
+      if ((!param || !param.name) && (!this.fileUploadService.renameFilesQueue || !this.fileUploadService.renameFilesQueue.getAll(
+        'uploadFiles[]').length)) {
+        this.router.navigate(['/']);
+        return;
+      }
+
+      this.quizApiService.getQuiz(param.name).subscribe((data) => {
+        if (data.step !== MessageProtocol.AlreadyTaken && //
+            ![QuizState.Active, QuizState.Running, QuizState.Finished].includes(data.payload.state)) {
+          return;
+        }
+
+        const blob = new Blob([JSON.stringify(data.payload.quiz)], { type: 'application/json' });
+        this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, param.name);
+        this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
+      });
+    });
   }
 }
