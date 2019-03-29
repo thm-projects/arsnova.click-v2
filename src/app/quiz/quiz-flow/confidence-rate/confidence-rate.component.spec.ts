@@ -4,6 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { Subscription } from 'rxjs';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -93,7 +94,7 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
   }));
 
   it('#sendConfidence', async(() => {
-    spyOn(component, 'sendConfidence').and.callFake(() => {});
+    spyOn(component, 'sendConfidence').and.callFake(() => new Promise<Subscription>(resolve => resolve()));
 
     component.sendConfidence();
 

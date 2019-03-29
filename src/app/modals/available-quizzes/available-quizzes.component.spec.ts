@@ -133,7 +133,7 @@ describe('AvailableQuizzesComponent', () => {
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
       spyOn(component, 'next').and.callThrough();
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => resolve()));
 
       component.editQuiz(quiz);
 

@@ -1,9 +1,10 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
@@ -99,7 +100,7 @@ describe('QuizLobbyComponent', () => {
     const modalContent = '<div></div>';
     const nickToRemove = 'TestNick';
 
-    spyOn(modalService, 'open').and.callFake(() => {});
+    spyOn(modalService, 'open').and.callFake(() => ({} as NgbModalRef));
 
     component.openKickMemberModal(modalContent, nickToRemove);
 
@@ -111,7 +112,7 @@ describe('QuizLobbyComponent', () => {
     const nickToRemove = 'TestNick';
 
     component['_ownsQuiz'] = true;
-    spyOn(modalService, 'open').and.returnValue({ close: () => {} });
+    spyOn(modalService, 'open').and.returnValue({ close: () => {} } as NgbModalRef);
     spyOn(component, 'kickMember').and.callThrough();
 
     component.openKickMemberModal(modalContent, nickToRemove);
@@ -149,7 +150,7 @@ describe('QuizLobbyComponent', () => {
   it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>TestMarkup</span></div>';
 
-    spyOn(sanitizer, 'sanitize').and.callFake(() => {});
+    spyOn(sanitizer, 'sanitize').and.callFake((context: SecurityContext, value: string) => value);
     component.sanitizeHTML(markup);
     expect(sanitizer.sanitize).toHaveBeenCalled();
   }));
@@ -158,7 +159,7 @@ describe('QuizLobbyComponent', () => {
     const nicknameDefault = 'TestNickname';
     const nicknameEmoji = ':+1:';
 
-    spyOn(component, 'sanitizeHTML').and.callFake(() => {});
+    spyOn(component, 'sanitizeHTML').and.callFake((value: string) => value as SafeHtml);
 
     component.parseNickname(nicknameDefault);
     expect(component.sanitizeHTML).toHaveBeenCalledTimes(0);

@@ -1,7 +1,8 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -90,7 +91,7 @@ describe('LeaderboardComponent', () => {
   it('#sanitizeHTML', async(inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>TestMarkup</span></div>';
 
-    spyOn(sanitizer, 'sanitize').and.callFake(() => {});
+    spyOn(sanitizer, 'sanitize').and.callFake((context: SecurityContext, value: string) => value);
     component.sanitizeHTML(markup);
     expect(sanitizer.sanitize).toHaveBeenCalled();
   })));
@@ -99,7 +100,7 @@ describe('LeaderboardComponent', () => {
     const nicknameDefault = 'TestNickname';
     const nicknameEmoji = ':+1:';
 
-    spyOn(component, 'sanitizeHTML').and.callFake(() => {});
+    spyOn(component, 'sanitizeHTML').and.callFake((value: string) => value as SafeHtml);
 
     component.parseNickname(nicknameDefault);
     expect(component.sanitizeHTML).toHaveBeenCalledTimes(0);

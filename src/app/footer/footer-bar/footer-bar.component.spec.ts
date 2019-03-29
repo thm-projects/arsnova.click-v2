@@ -92,10 +92,8 @@ describe('FooterBarComponent', () => {
 
   it('#toggleSetting', (inject([FooterBarService, TrackingService], (footerBarService: FooterBarService, trackingService: TrackingService) => {
     const elem = footerBarService.footerElemAbout;
-    spyOn(elem, 'onClickCallback').and.callFake(() => {});
     spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
     component.toggleSetting(elem);
-    expect(elem.onClickCallback).toHaveBeenCalled();
     expect(trackingService.trackClickEvent).toHaveBeenCalled();
   })));
 

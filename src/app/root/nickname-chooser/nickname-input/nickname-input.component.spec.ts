@@ -92,7 +92,7 @@ describe('NicknameInputComponent', () => {
   describe('#joinQuiz', () => {
 
     it('should join the quiz', async(inject([Router], (router: Router) => {
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.joinQuiz();
 

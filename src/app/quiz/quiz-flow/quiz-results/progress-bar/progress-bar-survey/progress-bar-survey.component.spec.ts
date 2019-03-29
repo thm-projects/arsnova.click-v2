@@ -1,5 +1,5 @@
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SharedModule } from '../../../../../shared/shared.module';
 
 import { ProgressBarSurveyComponent } from './progress-bar-survey.component';
@@ -37,7 +37,7 @@ describe('ProgressBarSurveyComponent', () => {
   it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>TestMarkup</span></div>';
 
-    spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(() => {});
+    spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake((value: string) => value as SafeHtml);
     component.sanitizeHTML(markup);
     expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
   }));

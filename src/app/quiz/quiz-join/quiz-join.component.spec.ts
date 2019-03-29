@@ -118,7 +118,7 @@ describe('QuizJoinComponent', () => {
     };
 
     spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-    spyOn(router, 'navigate').and.callFake(() => {});
+    spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
     component.ngOnInit();
     expect(router.navigate).toHaveBeenCalledWith(['/']);
@@ -136,7 +136,7 @@ describe('QuizJoinComponent', () => {
       };
 
       spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.ngOnInit();
       expect(casService.casLoginRequired).toBeTruthy();
@@ -157,7 +157,7 @@ describe('QuizJoinComponent', () => {
       };
 
       spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.ngOnInit();
       expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'memberGroup']);
@@ -175,7 +175,7 @@ describe('QuizJoinComponent', () => {
       };
 
       spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.ngOnInit();
       expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
@@ -197,7 +197,7 @@ describe('QuizJoinComponent', () => {
       };
 
       spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.ngOnInit();
       expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'select']);

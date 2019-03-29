@@ -145,7 +145,7 @@ describe('QuizOverviewComponent', () => {
 
       const quizName = 'validtestquiz';
 
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.startQuiz(0).then(() => {
         expect(quizService.quiz).toEqual(jasmine.objectContaining(validQuiz));
@@ -157,7 +157,7 @@ describe('QuizOverviewComponent', () => {
   describe('#editQuiz', () => {
 
     it('should redirect to the quiz manager', inject([QuizService, Router], (quizService: QuizService, router: Router) => {
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.editQuiz(0);
 

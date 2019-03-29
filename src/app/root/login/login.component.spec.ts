@@ -36,9 +36,7 @@ describe('LoginComponent', () => {
         }), SharedModule, FormsModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useFactory: (
-              createTranslateLoader
-            ),
+            useFactory: (createTranslateLoader),
             deps: [HttpClient],
           },
           compiler: {
@@ -78,7 +76,7 @@ describe('LoginComponent', () => {
       const username = 'testuser';
       const password = 'testpassword';
 
-      spyOn(component, 'login').and.callFake(() => {});
+      spyOn(component, 'login').and.callFake(() => new Promise<void>(resolve => resolve()));
       component['username'] = username;
       component['password'] = password;
 
@@ -92,7 +90,7 @@ describe('LoginComponent', () => {
       const username = '';
       const password = '';
 
-      spyOn(component, 'login').and.callFake(() => {});
+      spyOn(component, 'login').and.callFake(() => new Promise<void>(resolve => resolve()));
       component['username'] = username;
       component['password'] = password;
 
@@ -106,7 +104,7 @@ describe('LoginComponent', () => {
       const username = 'testuser';
       const password = 'testpassword';
 
-      spyOn(component, 'login').and.callFake(() => {});
+      spyOn(component, 'login').and.callFake(() => new Promise<void>(resolve => resolve()));
       component['username'] = username;
       component['password'] = password;
 
@@ -126,7 +124,7 @@ describe('LoginComponent', () => {
         component['username'] = username;
         component['password'] = password;
         spyOn(userService, 'authenticateThroughLogin').and.returnValue(new Promise(resolve => resolve(true)));
-        spyOn(router, 'navigateByUrl').and.callFake(() => {});
+        spyOn(router, 'navigateByUrl').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
         await component.login();
         expect(component['_authorizationFailed']).toBeFalsy();
@@ -142,7 +140,7 @@ describe('LoginComponent', () => {
         component['username'] = username;
         component['password'] = password;
         spyOn(userService, 'authenticateThroughLogin').and.returnValue(new Promise(resolve => resolve(false)));
-        spyOn(router, 'navigateByUrl').and.callFake(() => {});
+        spyOn(router, 'navigateByUrl').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
         await component.login();
         expect(component['_authorizationFailed']).toBeTruthy();

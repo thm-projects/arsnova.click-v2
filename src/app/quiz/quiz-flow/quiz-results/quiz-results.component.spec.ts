@@ -179,7 +179,7 @@ describe('QuizResultsComponent', () => {
   }));
 
   it(`#modifyVisibleQuestion`, inject([QuestionTextService], async (questionTextService: QuestionTextService) => {
-    spyOn(questionTextService, 'changeMultiple').and.callFake(() => {});
+    spyOn(questionTextService, 'changeMultiple').and.callFake(() => new Promise<void>(resolve => resolve()));
 
     await component.modifyVisibleQuestion(component.selectedQuestionIndex);
     expect(questionTextService.changeMultiple).toHaveBeenCalled();

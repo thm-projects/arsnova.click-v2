@@ -2,7 +2,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../../lib/translation.factory';
@@ -73,7 +73,7 @@ describe('HeaderComponent', () => {
       const modalContent = 'testcontent';
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
-      spyOn(modalService, 'open').and.callFake(() => {});
+      spyOn(modalService, 'open').and.callFake(() => ({} as NgbModalRef));
       spyOn(connectionService, 'calculateRTT').and.callFake(() => {});
 
       component.openConnectionQualityModal(modalContent);

@@ -84,7 +84,7 @@ describe('MemberGroupSelectComponent', () => {
 
     it('should add an attendee to a free member group', async(inject([Router, StorageService], (router: Router, storageService: StorageService) => {
       spyOn(component, 'addToGroup').and.callThrough();
-      spyOn(router, 'navigate').and.callFake(() => {});
+      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
       component.addToGroup('testGroup');
       expect(component.addToGroup).not.toThrowError();
