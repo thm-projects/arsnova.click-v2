@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserEntity } from '../../../lib/entities/UserEntity';
 import { DbTable, StorageKey } from '../../../lib/enums/enums';
 import { AddUserComponent } from '../../modals/add-user/add-user.component';
 import { AdminService } from '../../service/api/admin/admin.service';
@@ -19,7 +20,7 @@ export class UserAdminComponent implements OnInit {
     return this._data;
   }
 
-  private _deletingElements: Array<number> = [];
+  private _deletingElements: Array<string> = [];
 
   constructor(
     private userService: UserService,
@@ -37,17 +38,17 @@ export class UserAdminComponent implements OnInit {
     });
   }
 
-  public isDeletingElem(index: number): boolean {
-    return this._deletingElements.indexOf(index) > -1;
+  public isDeletingElem(user: UserEntity): boolean {
+    return this._deletingElements.indexOf(user.name) > -1;
   }
 
-  public deleteElem(index: number): void {
-    this._deletingElements.push(index);
-    this.adminService.deleteUser((this._data[index] as any).username).subscribe(() => {
-      this._deletingElements.splice(this._deletingElements.indexOf(index), 1);
-      this._data.splice(index, 1);
-    }, () => {
-      this._deletingElements.splice(this._deletingElements.indexOf(index), 1);
+  public deleteElem(user: UserEntity): void {
+    this._deletingElements.push(user.name);
+    this.adminService.deleteUser(user.name).subscribe(() => {
+      this._deletingElements.splice(this._deletingElements.indexOf(user.name), 1);
+      this._data.splice(this._data.indexOf(user), 1);
+    }, error => {
+      console.error(error);
     });
   }
 
@@ -61,24 +62,24 @@ export class UserAdminComponent implements OnInit {
     }).catch(() => {});
   }
 
-  public editElem(index: number): void {
+  public editElem(user: UserEntity): void {
     const ref = this.ngbModal.open(AddUserComponent);
-    ref.componentInstance.name = (this._data[index] as any).name;
-    ref.componentInstance.privateKey = (this._data[index] as any).privateKey;
-    ref.componentInstance.gitlabToken = (this._data[index] as any).gitlabToken;
-    ref.componentInstance.userAuthorizations = (this._data[index] as any).userAuthorizations;
+    ref.componentInstance.name = user.name;
+    ref.componentInstance.privateKey = user.privateKey;
+    ref.componentInstance.gitlabToken = user.gitlabToken;
+    ref.componentInstance.userAuthorizations = user.userAuthorizations;
 
     ref.result.then(value => {
-      value.originalUser = (this._data[index] as any).name;
+      value.originalUser = user.name;
       value.passwordHash = this.userService.hashPassword(value.name, value.password);
       delete value.password;
 
       this.adminService.updateUser(value).subscribe(() => {
-        (this._data[index] as any).name = value.name;
-        (this._data[index] as any).privateKey = value.privateKey;
-        (this._data[index] as any).passwordHash = value.passwordHash;
-        (this._data[index] as any).gitlabToken = value.gitlabToken;
-        (this._data[index] as any).userAuthorizations = value.userAuthorizations;
+        user.name = value.name;
+        user.privateKey = value.privateKey;
+        user.passwordHash = value.passwordHash;
+        user.gitlabToken = value.gitlabToken;
+        user.userAuthorizations = value.userAuthorizations;
 
         if (value.name === this.userService.staticLoginTokenContent.name) {
           localStorage.setItem(StorageKey.PrivateKey, value.privateKey);

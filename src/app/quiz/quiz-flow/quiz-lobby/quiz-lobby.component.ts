@@ -256,6 +256,9 @@ export class QuizLobbyComponent implements OnDestroy {
         case MessageProtocol.Start:
           this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
           break;
+        case MessageProtocol.Closed:
+          this.router.navigate(['/']);
+          break;
       }
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
@@ -292,9 +295,6 @@ export class QuizLobbyComponent implements OnDestroy {
             this.router.navigate(['/']);
           }
         }
-        break;
-      case MessageProtocol.Closed:
-        this.router.navigate(['/']);
         break;
     }
   }

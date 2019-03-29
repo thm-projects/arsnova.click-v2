@@ -1,37 +1,45 @@
-<button class="btn btn-light"
-        (click)="showAddUserModal()">
-  Add User
-</button>
-
-<div *ngFor="let user of data; let i = index"
-     class="card mx-sm-auto mx-5 my-3 w-100 text-dark">
-  <div class="card-body">
-    <div class="d-flex justify-content-end">
-      <fa-icon *ngIf="!isDeletingElem(i)"
-               class="cursor-pointer mr-2"
-               (click)="editElem(i)"
-               [icon]="'edit'"></fa-icon>
-      <fa-icon *ngIf="isDeletingElem(i)"
-               [icon]="'spinner'"
-               [spin]="true"></fa-icon>
-      <fa-icon *ngIf="!isDeletingElem(i)"
-               [icon]="'times'"
-               class="cursor-pointer"
-               (click)="deleteElem(i)"></fa-icon>
-    </div>
-    <p class="card-text mb-0">Username: {{user.name}}</p>
-    <p class="card-text mb-0">
-      <span>Gitlab Token:&nbsp;</span>
-      <span *ngIf="!user.gitlabToken">No Gitlab access token set</span>
-      <span>{{user.gitlabToken}}</span>
-    </p>
-    <p class="card-text mb-0">
-      <span>Password-Hash:</span><br/>
-      <span>{{user.passwordHash}}</span>
-    </p>
-    <p class="card-text mb-0">User Authorizations:</p>
-    <ul>
-      <li *ngFor="let auth of user.userAuthorizations">{{auth}}</li>
-    </ul>
+<div class="row">
+  <div class="col-12">
+    <button class="btn btn-light"
+            (click)="showAddUserModal()">
+      Add User
+    </button>
   </div>
+
+  <div *ngFor="let user of data"
+       class="col-12">
+    <div class="card my-3 text-dark">
+      <div class="card-body">
+        <div class="d-flex justify-content-end">
+          <fa-icon *ngIf="isDeletingElem(user)"
+                   [icon]="'spinner'"
+                   [spin]="true"></fa-icon>
+          <div *ngIf="!isDeletingElem(user)"
+               class="d-flex">
+            <fa-icon [icon]="'times'"
+                     class="cursor-pointer"
+                     (click)="deleteElem(user)"></fa-icon>
+            <fa-icon [icon]="'edit'"
+                     class="cursor-pointer ml-3"
+                     (click)="editElem(user)"></fa-icon>
+          </div>
+        </div>
+        <p class="card-text mb-0">Username: {{user.name}}</p>
+        <p class="card-text mb-0">
+          <span>Gitlab Token:&nbsp;</span>
+          <span *ngIf="!user.gitlabToken">No Gitlab access token set</span>
+          <span>{{user.gitlabToken}}</span>
+        </p>
+        <p class="card-text mb-0">
+          <span>Password-Hash:</span><br/>
+          <span>{{user.passwordHash}}</span>
+        </p>
+        <p class="card-text mb-0">User Authorizations:</p>
+        <ul>
+          <li *ngFor="let auth of user.userAuthorizations">{{auth}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
 </div>

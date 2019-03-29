@@ -15,6 +15,7 @@ export class AdminService {
   private _deleteUserUrl: string;
   private _putUserUrl: string;
   private _getQuizUrl: string;
+  private _postQuizDeactivateUrl: string;
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.initUrls();
@@ -44,6 +45,10 @@ export class AdminService {
     return this.http.get<QuizEntity>(`${this._getQuizUrl}/${quizname}`, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
+  public deactivateQuiz(quizname: string): Observable<void> {
+    return this.http.post<void>(`${this._postQuizDeactivateUrl}`, { quizname }, { headers: { authorization: this.userService.staticLoginToken } });
+  }
+
   private initUrls(): void {
     this._getAvailableUsersUrl = `${DefaultSettings.httpApiEndpoint}/admin/users`;
     this._deleteUserUrl = `${DefaultSettings.httpApiEndpoint}/admin/user`;
@@ -51,5 +56,6 @@ export class AdminService {
     this._getAvailableQuizzesUrl = `${DefaultSettings.httpApiEndpoint}/admin/quizzes`;
     this._getQuizUrl = `${DefaultSettings.httpApiEndpoint}/admin/quiz`;
     this._deleteQuizUrl = `${DefaultSettings.httpApiEndpoint}/admin/quiz`;
+    this._postQuizDeactivateUrl = `${DefaultSettings.httpApiEndpoint}/admin/quiz`;
   }
 }

@@ -68,7 +68,10 @@ export class ConfidenceRateComponent {
       }
 
       this.ngbModal.dismissAll();
-      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent);
+      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent, {
+        keyboard: false,
+        backdrop: 'static',
+      });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     }));
   }

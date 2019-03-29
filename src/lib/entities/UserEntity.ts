@@ -6,6 +6,7 @@ export class UserEntity {
   public name: string;
   public passwordHash: string;
   public gitlabToken: string;
+  public privateKey: string;
 
   constructor(props) {
     this.token = props.token;
@@ -13,5 +14,6 @@ export class UserEntity {
     this.name = props.name;
     this.passwordHash = props.passwordHash;
     this.gitlabToken = props.gitlabToken;
+    this.privateKey = props.privateKey;
   }
 }

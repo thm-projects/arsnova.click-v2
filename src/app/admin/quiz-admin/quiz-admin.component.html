@@ -1,32 +1,83 @@
-<a *ngFor="let quiz of quizzes; let i = index"
-   [routerLink]="['/admin', 'quiz', quiz.id]"
-   class="card mx-sm-auto mx-5 my-3 cursor-pointer text-dark nav-link p-0 text-dark">
-  <div class="card-body">
-    <div class="d-flex">
-      <p class="card-text">
-        <span>Name: </span>
-        <span>{{quiz.name}}</span>
-      </p>
-      <div class="ml-auto">
-        <fa-icon *ngIf="isDeletingElem(i)"
-                 [icon]="'spinner'"
-                 [spin]="true"></fa-icon>
-        <fa-icon *ngIf="!isDeletingElem(i)"
-                 [icon]="'times'"
-                 class="cursor-pointer"
-                 (click)="deleteElem($event, i)"></fa-icon>
+<div class="row">
+  <div class="col-12 col-sm-auto">
+    <label class="mb-0">
+      <input type="checkbox"
+             [(ngModel)]="filterDemoQuiz"/>
+      <span class="ml-2">Show Demo Quizzes</span>
+    </label>
+  </div>
+  <div class="col-12 col-sm-auto">
+    <label class="mb-0">
+      <input type="checkbox"
+             [(ngModel)]="filterAbcdQuiz"/>
+      <span class="ml-2">Show ABCD Quizzes</span>
+    </label>
+  </div>
+  <div class="col-12 col-sm-auto">
+    <label class="mb-0">
+      <input type="checkbox"
+             [(ngModel)]="filterActiveQuiz"/>
+      <span class="ml-2">Show only active Quizzes</span>
+    </label>
+  </div>
+  <div class="col-12 mt-2">
+    <input class="form-control"
+           type="text"
+           [(ngModel)]="filterQuizName"
+           placeholder="Search for quiz name"/>
+  </div>
+</div>
+
+<div *ngIf="quizzes | quizAdminFilter:{filterDemoQuiz: filterDemoQuiz, filterAbcdQuiz: filterAbcdQuiz, filterQuizName: filterQuizName, filterActiveQuiz: filterActiveQuiz} as results"
+     class="row">
+  <div *ngIf="!results.length"
+       class="col-12">
+    <h5 class="mt-5 mb-0 text-center">No quiz could be matched to your filter</h5>
+  </div>
+  <div *ngFor="let quiz of results"
+       class="col-12">
+    <div class="card my-3 text-dark p-0">
+      <div class="card-body">
+        <div class="d-flex">
+          <p class="card-text">
+            <span>Name: </span>
+            <span>{{quiz.name}}</span>
+          </p>
+          <div class="ml-auto">
+            <fa-icon *ngIf="isDeletingElem(quiz)"
+                     [icon]="'spinner'"
+                     [spin]="true"></fa-icon>
+            <div *ngIf="!isDeletingElem(quiz)"
+                 class="d-flex">
+              <fa-icon [icon]="'times'"
+                       class="cursor-pointer"
+                       (click)="deleteElem($event, quiz)"></fa-icon>
+              <a class="nav-link text-dark p-0 ml-3"
+                 [routerLink]="['/admin', 'quiz', quiz.id]">
+                <fa-icon class="cursor-pointer"
+                         [icon]="'edit'"></fa-icon>
+              </a>
+            </div>
+          </div>
+        </div>
+        <p class="card-text"
+           *ngIf="quiz.expiry">
+          <span>Expiry: </span>
+          <span>{{quiz.expiry | date}}</span>
+        </p>
+        <p class="card-text"
+           *ngIf="quiz.visibility">
+          <span>Visibility: </span>
+          <span>{{quiz.visibility}}</span>
+        </p>
+        <p class="card-text">
+          <span>Is Active: {{isActiveQuiz(quiz)}}</span>
+          <button *ngIf="isActiveQuiz(quiz)"
+                  (click)="deactivateQuiz(quiz)"
+                  class="badge badge-primary ml-2">Deactivate Quiz
+          </button>
+        </p>
       </div>
     </div>
-    <p class="card-text"
-       *ngIf="quiz.expiry">
-      <span>Expiry: </span>
-      <span>{{quiz.expiry | date}}</span>
-    </p>
-    <p class="card-text"
-       *ngIf="quiz.visibility">
-      <span>Visibility: </span>
-      <span>{{quiz.visibility}}</span>
-    </p>
-    <p class="card-text">Is Active: {{isActiveQuiz(quiz)}}</p>
   </div>
-</a>
+</div>

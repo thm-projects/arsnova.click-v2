@@ -1,4 +1,4 @@
-<div>
+<div class="text-break">
   <p class="card-text">Questions:</p>
   <ul>
     <li *ngFor="let question of quiz?.questionList">
@@ -41,13 +41,13 @@
   <p>Member Groups:</p>
   <ul>
     <li *ngFor="let group of quiz?.sessionConfig.nicks.memberGroups">
-      <span>Name: {{group.name}}</span>
+      <span>Name: {{group}}</span>
     </li>
   </ul>
   <ul>
     <li>Max Members Per Group: {{quiz?.sessionConfig.nicks.maxMembersPerGroup}}</li>
     <li>Automatically join to Group: {{quiz?.sessionConfig.nicks.autoJoinToGroup}}</li>
-    <li>Selected Nicks: {{quiz?.sessionConfig.nicks.selectedNicks}}</li>
+    <li>Selected Nicks: {{quiz?.sessionConfig.nicks.selectedNicks.join(', ')}}</li>
     <li>Block Illegal Nicks: {{quiz?.sessionConfig.nicks.blockIllegalNicks}}</li>
     <li>Restrict to CAS Login: {{quiz?.sessionConfig.nicks.restrictToCasLogin}}</li>
   </ul>

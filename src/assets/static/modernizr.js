@@ -42,7 +42,7 @@
     // can go in here as configuration.
     _config: {
       'classPrefix': '',
-      'enableClasses': true,
+      'enableClasses': false,
       'enableJSClass': true,
       'usePrefixes': true
     },

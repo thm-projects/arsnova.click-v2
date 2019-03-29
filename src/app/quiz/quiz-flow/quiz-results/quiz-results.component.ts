@@ -401,6 +401,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           this.quizService.quiz.currentQuestionIndex = -1;
           this.router.navigate(['/quiz', 'flow', 'lobby']);
           break;
+        case MessageProtocol.Closed:
+          this.router.navigate(['/']);
+          break;
       }
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
     });
@@ -423,9 +426,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         break;
       case MessageProtocol.ReadingConfirmationRequested:
         this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
-        break;
-      case MessageProtocol.Closed:
-        this.router.navigate(['/']);
         break;
       case MessageProtocol.Stop:
         if (this.countdown) {

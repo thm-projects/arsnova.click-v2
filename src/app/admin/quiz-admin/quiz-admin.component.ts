@@ -10,13 +10,18 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   styleUrls: ['./quiz-admin.component.scss'],
 })
 export class QuizAdminComponent implements OnInit {
+  public filterDemoQuiz: boolean;
+  public filterAbcdQuiz: boolean;
+  public filterActiveQuiz: boolean;
+  public filterQuizName: string;
+
   private _quizzes: Array<QuizEntity>;
 
   get quizzes(): Array<QuizEntity> {
     return this._quizzes;
   }
 
-  private _deletingElements: Array<number> = [];
+  private _deletingElements: Array<string> = [];
 
   constructor(private footerBarService: FooterBarService, private adminService: AdminService) {
     this.updateFooterElements();
@@ -28,24 +33,30 @@ export class QuizAdminComponent implements OnInit {
     });
   }
 
-  public isActiveQuiz(quiz): boolean {
+  public isActiveQuiz(quiz: QuizEntity): boolean {
     return [QuizState.Active, QuizState.Finished, QuizState.Running].includes(quiz.state);
   }
 
-  public isDeletingElem(index: number): boolean {
-    return this._deletingElements.indexOf(index) > -1;
+  public deactivateQuiz(quiz: QuizEntity): void {
+    this.adminService.deactivateQuiz(quiz.name).subscribe(() => {
+      quiz.state = QuizState.Inactive;
+    }, error => console.error(error));
   }
 
-  public deleteElem($event: Event, index: number): void {
+  public isDeletingElem(quiz: QuizEntity): boolean {
+    return this._deletingElements.indexOf(quiz.name) > -1;
+  }
+
+  public deleteElem($event: Event, quiz: QuizEntity): void {
     $event.stopPropagation();
     $event.stopImmediatePropagation();
     $event.preventDefault();
-    this._deletingElements.push(index);
-    this.adminService.deleteQuiz((this._quizzes[index] as any).name || (this._quizzes[index] as any).originalObject.name).subscribe(() => {
-      this._deletingElements.splice(this._deletingElements.indexOf(index), 1);
-      this._quizzes.splice(index, 1);
-    }, () => {
-      this._deletingElements.splice(this._deletingElements.indexOf(index), 1);
+    this._deletingElements.push(quiz.name);
+    this.adminService.deleteQuiz(quiz.name).subscribe(() => {
+      this._deletingElements.splice(this._deletingElements.indexOf(quiz.name), 1);
+      this._quizzes.splice(this._quizzes.indexOf(quiz), 1);
+    }, (error) => {
+      console.error(error);
     });
   }
 

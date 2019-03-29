@@ -134,15 +134,6 @@ describe('QuizJoinComponent', () => {
           provideNickSelection: false,
         },
       };
-      const lobbyStatusData = {
-        status: StatusProtocol.Success,
-        step: MessageProtocol.Available,
-        payload: {
-          quiz: {
-            originalObject: quizService.quiz,
-          },
-        },
-      };
 
       spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
       spyOn(router, 'navigate').and.callFake(() => {});
@@ -164,15 +155,6 @@ describe('QuizJoinComponent', () => {
           provideNickSelection: false,
         },
       };
-      const lobbyStatusData = {
-        status: StatusProtocol.Success,
-        step: MessageProtocol.Available,
-        payload: {
-          quiz: {
-            originalObject: customQuiz,
-          },
-        },
-      };
 
       spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
       spyOn(router, 'navigate').and.callFake(() => {});
@@ -189,15 +171,6 @@ describe('QuizJoinComponent', () => {
         payload: {
           authorizeViaCas: true,
           provideNickSelection: false,
-        },
-      };
-      const lobbyStatusData = {
-        status: StatusProtocol.Success,
-        step: MessageProtocol.Available,
-        payload: {
-          quiz: {
-            originalObject: quizService.quiz,
-          },
         },
       };
 
@@ -220,15 +193,6 @@ describe('QuizJoinComponent', () => {
         payload: {
           authorizeViaCas: true,
           provideNickSelection: true,
-        },
-      };
-      const lobbyStatusData = {
-        status: StatusProtocol.Success,
-        step: MessageProtocol.Available,
-        payload: {
-          quiz: {
-            originalObject: customQuiz,
-          },
         },
       };
 

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { PipesModule } from '../pipes/pipes.module';
 import { SharedModule } from '../shared/shared.module';
 import { AdminOverviewComponent } from './admin-overview/admin-overview.component';
 import { QuizAdminComponent } from './quiz-admin/quiz-admin.component';
@@ -25,7 +26,7 @@ const routes: Routes = [
 @NgModule({
   declarations: [UserAdminComponent, QuizAdminComponent, AdminOverviewComponent, QuizDetailsAdminComponent],
   imports: [
-    SharedModule, RouterModule.forChild(routes),
+    SharedModule, RouterModule.forChild(routes), PipesModule,
   ],
 })
 export class AdminModule {
