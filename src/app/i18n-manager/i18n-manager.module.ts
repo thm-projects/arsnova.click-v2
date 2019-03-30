@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { PipesModule } from '../pipes/pipes.module';
 import { LanguageLoaderService } from '../service/language-loader/language-loader.service';
 import { ModalOrganizerService } from '../service/modal-organizer/modal-organizer.service';
@@ -17,7 +18,7 @@ const i18nManagerRoutes: Routes = [
 
 @NgModule({
   imports: [
-    SharedModule, PipesModule, RouterModule.forChild(i18nManagerRoutes),
+    SharedModule, PipesModule, RouterModule.forChild(i18nManagerRoutes), InfiniteScrollModule,
   ],
   declarations: [I18nManagerOverviewComponent, KeyOutputComponent],
   providers: [

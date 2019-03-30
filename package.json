@@ -69,6 +69,7 @@
     "intro.js": "^2.9.3",
     "marked": "git+https://github.com/trayhem/marked.git",
     "messageformat": "^2.1.0",
+    "ngx-infinite-scroll": "^7.1.0",
     "ngx-qrcode2": "^0.1.0",
     "ngx-toastr": "^9.2.0",
     "ngx-translate-messageformat-compiler": "^4.4.0",

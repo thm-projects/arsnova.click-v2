@@ -1,13 +1,6 @@
 @import "prebuild";
 
 .container-fluid {
-  @include media-breakpoint-only(xs) {
-    min-height: 90vh;
-  }
-  @include media-breakpoint-up(sm) {
-    height: 90vh;
-  }
-
   .container {
     &#content-container {
       @include media-breakpoint-down(xs) {

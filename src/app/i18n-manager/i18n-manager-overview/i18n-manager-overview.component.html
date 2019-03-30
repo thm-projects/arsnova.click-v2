@@ -45,8 +45,8 @@
 </div>
 
 <div *ngIf="this.projectLoaderService.connected;else loading"
-     class="row mh-100">
-  <div class="d-flex sticky-top col-12 mb-2">
+     class="row">
+  <div class="d-flex sticky-top col-12 my-2">
     <div class="bg-secondary d-flex w-100 py-1">
       <select class="border-0 bg-transparent mr-2"
               (change)="changeFilter($event.target.value)">
@@ -88,7 +88,8 @@
                     [searchFilter]="searchFilter"
                     (changeEmitter)="dataChanged($event)"></app-key-output>
   </div>
-  <div class="col-12 col-sm-6 d-flex flex-column"
+  <div class="col-12 col-sm-6 d-flex flex-column h-100 sticky-top"
+       style="top: 50px;"
        *ngIf="!!selectedKey">
     <p class="mb-0 text-center text-warning"
        *ngIf="isUnusedKey()">This key is currently unused!</p>

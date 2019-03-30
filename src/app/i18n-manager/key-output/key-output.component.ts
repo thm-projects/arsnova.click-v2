@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Filter } from '../../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
@@ -7,12 +7,14 @@ import { ProjectLoaderService } from '../../service/project-loader/project-loade
   selector: 'app-key-output',
   templateUrl: './key-output.component.html',
   styleUrls: ['./key-output.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeyOutputComponent {
   public static readonly TYPE = 'KeyOutputComponent';
 
-  public scrollPos = 0;
-  public readonly Math = Math;
+  public readonly throttle = 0;
+  public readonly scrollDistance = 4;
+  public visibleData = 20;
 
   @Input() public filter = Filter.None;
   @Input() public searchFilter = '';
@@ -31,15 +33,7 @@ export class KeyOutputComponent {
 
   @Output() private changeEmitter = new EventEmitter<Object>();
 
-  constructor(public projectLoaderService: ProjectLoaderService, public languageLoaderService: LanguageLoaderService) {
-  }
-
-  public scrollHandler(event: Event): void {
-    const pos = (<HTMLElement>event.target).scrollTop;
-
-    if (this.scrollPos !== Math.floor(pos / 40)) {
-      this.scrollPos = Math.floor(pos / 40);
-    }
+  constructor(public projectLoaderService: ProjectLoaderService, public languageLoaderService: LanguageLoaderService, private cd: ChangeDetectorRef) {
   }
 
   public selectKey(key: string): void {
@@ -67,4 +61,8 @@ export class KeyOutputComponent {
     return Object.keys(dataNode).sort();
   }
 
+  public onScrollDown(): void {
+    this.visibleData += 20;
+    this.cd.markForCheck();
+  }
 }
