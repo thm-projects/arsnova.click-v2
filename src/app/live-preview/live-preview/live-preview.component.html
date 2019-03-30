@@ -15,10 +15,10 @@
              class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer"
              [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
           <p *ngIf="question.displayAnswerText"
-             class="mb-0 markdown-answer"
+             class="mb-0 markdown-answer text-dark"
              [innerHTML]="sanitizeHTML(elem)"></p>
           <p *ngIf="!question.displayAnswerText"
-             class="mb-0">{{normalizeAnswerOptionIndex(i)}}</p>
+             class="mb-0 text-dark">{{normalizeAnswerOptionIndex(i)}}</p>
         </div>
       </div>
     </ng-container>
