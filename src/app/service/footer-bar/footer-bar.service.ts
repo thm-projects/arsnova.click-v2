@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { IndexedDbService } from '../storage/indexed.db.service';
@@ -166,7 +167,7 @@ export class FooterBarService {
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.about',
-    linkTarget: ['/', 'info', 'about'],
+    linkTarget: ['/', 'info', environment.infoAboutTabEnabled ? 'about' : 'tos'],
   }, function (): void {
 
   });

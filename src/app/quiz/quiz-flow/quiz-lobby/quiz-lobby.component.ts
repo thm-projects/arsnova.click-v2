@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
@@ -193,18 +194,25 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   private addFooterElementsAsOwner(): void {
-    this.footerBarService.replaceFooterElements([
+    const footerElements = [
       this.footerBarService.footerElemEditQuiz,
       this.footerBarService.footerElemStartQuiz,
-      this.footerBarService.footerElemReadingConfirmation,
       this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemQRCode,
       this.footerBarService.footerElemResponseProgress,
-      this.footerBarService.footerElemConfidenceSlider,
-    ]);
+    ];
+    if (environment.readingConfirmationEnabled) {
+      footerElements.splice(2, 0, this.footerBarService.footerElemReadingConfirmation);
+    }
+    if (environment.confidenceSliderEnabled) {
+      footerElements.push(this.footerBarService.footerElemConfidenceSlider);
+    }
+    this.footerBarService.replaceFooterElements(footerElements);
+
     if (isPlatformBrowser(this.platformId)) {
       this.qrCodeContent = `${document.location.origin}/quiz/${encodeURIComponent(this.quizService.quiz.name.toLowerCase())}`;
     }
+
     this.addFooterElemClickCallbacksAsOwner();
   }
 
@@ -214,7 +222,9 @@ export class QuizLobbyComponent implements OnDestroy {
         return;
       }
       this.quizApiService.nextStep(this.quizService.quiz.name).subscribe((data: IMessage) => {
-        this.quizService.readingConfirmationRequested = data.step === MessageProtocol.ReadingConfirmationRequested;
+        this.quizService.readingConfirmationRequested = environment.readingConfirmationEnabled ? data.step
+                                                                                                 === MessageProtocol.ReadingConfirmationRequested
+                                                                                               : false;
         this.router.navigate(['/quiz', 'flow', 'results']);
       });
     };
@@ -286,7 +296,11 @@ export class QuizLobbyComponent implements OnDestroy {
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
       case MessageProtocol.ReadingConfirmationRequested:
-        this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        if (environment.readingConfirmationEnabled) {
+          this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        } else {
+          this.router.navigate(['/quiz', 'flow', 'voting']);
+        }
         break;
       case MessageProtocol.Removed:
         if (isPlatformBrowser(this.platformId)) {

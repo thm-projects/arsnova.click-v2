@@ -1,10 +1,10 @@
 export const environment = {
   production: true,
-  readingConfirmationEnabled: true,
-  confidenceSliderEnabled: true,
-  infoAboutTabEnabled: true,
-  infoProjectTabEnabled: true,
-  infoBackendApiEnabled: true,
+  readingConfirmationEnabled: false,
+  confidenceSliderEnabled: false,
+  infoAboutTabEnabled: false,
+  infoProjectTabEnabled: false,
+  infoBackendApiEnabled: false,
 };
 
 export enum DEVICE_TYPES {

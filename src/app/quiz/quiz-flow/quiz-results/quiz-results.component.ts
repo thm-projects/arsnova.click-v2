@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
@@ -152,7 +153,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public showConfidenceRate(questionIndex: number): boolean {
-    if (!this.quizService.quiz) {
+    if (!environment.confidenceSliderEnabled || !this.quizService.quiz) {
       return;
     }
 
@@ -259,7 +260,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     const question = this.quizService.currentQuestion();
     this.generateAnswers(question);
 
-    if (startQuizData.step === MessageProtocol.ReadingConfirmationRequested) {
+    if (environment.readingConfirmationEnabled && startQuizData.step === MessageProtocol.ReadingConfirmationRequested) {
       this.quizService.readingConfirmationRequested = true;
       return;
     }
@@ -327,11 +328,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           footerElems.push(this.footerBarService.footerElemLeaderboard);
         }
       } else {
-        footerElems.push(...[
-          this.footerBarService.footerElemReadingConfirmation,
-          this.footerBarService.footerElemConfidenceSlider,
-          this.footerBarService.footerElemResponseProgress,
-        ]);
+        if (environment.readingConfirmationEnabled) {
+          footerElems.splice(2, 0, this.footerBarService.footerElemReadingConfirmation);
+        }
+        if (environment.confidenceSliderEnabled) {
+          footerElems.push(this.footerBarService.footerElemConfidenceSlider);
+        }
+        footerElems.push(this.footerBarService.footerElemResponseProgress);
       }
       this.footerBarService.footerElemBack.onClickCallback = async () => {
         await this.quizApiService.resetQuiz(this.quizService.quiz).toPromise();
@@ -425,7 +428,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
       case MessageProtocol.ReadingConfirmationRequested:
-        this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        if (environment.readingConfirmationEnabled) {
+          this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        } else {
+          this.router.navigate(['/quiz', 'flow', 'voting']);
+        }
         break;
       case MessageProtocol.Stop:
         if (this.countdown) {

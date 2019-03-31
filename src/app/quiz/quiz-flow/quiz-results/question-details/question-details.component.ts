@@ -3,6 +3,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { MessageProtocol, StatusProtocol } from '../../../../../lib/enums/Message';
@@ -181,7 +182,11 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
       case MessageProtocol.ReadingConfirmationRequested:
-        this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        if (environment.readingConfirmationEnabled) {
+          this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        } else {
+          this.router.navigate(['/quiz', 'flow', 'voting']);
+        }
         break;
     }
   }

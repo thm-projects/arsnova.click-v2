@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -15,21 +16,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class InfoComponent implements OnInit, OnDestroy {
   public static TYPE = 'InfoComponent';
   public currentData: string;
-  public readonly infoButtons = [
-    {
-      id: 'about',
-      i18nRef: 'region.footer.footer_bar.about',
-    }, {
-      id: 'tos',
-      i18nRef: 'region.footer.footer_bar.tos',
-    }, {
-      id: 'imprint',
-      i18nRef: 'region.footer.footer_bar.imprint',
-    }, {
-      id: 'dataprivacy',
-      i18nRef: 'region.footer.footer_bar.dataprivacy',
-    },
-  ];
+  public readonly infoButtons = [];
   private _routerSubscription: Subscription;
 
   constructor(
@@ -50,6 +37,26 @@ export class InfoComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
+    ]);
+
+    if (environment.infoAboutTabEnabled) {
+      this.infoButtons.push({
+        id: 'about',
+        i18nRef: 'region.footer.footer_bar.about',
+      });
+    }
+
+    this.infoButtons.push(...[
+      {
+        id: 'tos',
+        i18nRef: 'region.footer.footer_bar.tos',
+      }, {
+        id: 'imprint',
+        i18nRef: 'region.footer.footer_bar.imprint',
+      }, {
+        id: 'dataprivacy',
+        i18nRef: 'region.footer.footer_bar.dataprivacy',
+      },
     ]);
   }
 
@@ -72,5 +79,14 @@ export class InfoComponent implements OnInit, OnDestroy {
 
   public openApiDocsWindow(): void {
     window.open(`${DefaultSettings.httpApiEndpoint}/api-docs/`);
+  }
+
+  public isExternalLinkEnabled(linkName: string): boolean {
+    switch (linkName) {
+      case 'projectBlog':
+        return environment.infoProjectTabEnabled;
+      case 'backendApi':
+        return environment.infoBackendApiEnabled;
+    }
   }
 }

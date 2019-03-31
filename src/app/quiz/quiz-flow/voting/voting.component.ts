@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
 import { SurveyQuestionEntity } from '../../../../lib/entities/question/SurveyQuestionEntity';
@@ -169,7 +170,10 @@ export class VotingComponent implements OnDestroy {
       this.countdown.stop();
     }
     this.router.navigate([
-      '/quiz', 'flow', route ? route : this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
+      '/quiz',
+      'flow',
+      route ? route : environment.confidenceSliderEnabled && this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate'
+                                                                                                                         : 'results',
     ]);
   }
 

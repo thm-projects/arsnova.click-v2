@@ -9,7 +9,6 @@ export const DefaultSettings = {
   httpLibEndpoint: environmentData.httpLibEndpoint,
   serverEndpoint: environmentData.serverEndpoint,
   wsApiEndpoint: environmentData.wsApiEndpoint,
-  jwtSecret: 'arsnova.click-v2',
   defaultQuizSettings: {
     answers: {
       answerText: '',

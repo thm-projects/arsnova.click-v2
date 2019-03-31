@@ -2,6 +2,7 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
@@ -125,7 +126,11 @@ export class ConfidenceRateComponent {
           this.attendeeService.modifyResponse(data.payload);
           break;
         case MessageProtocol.ReadingConfirmationRequested:
-          this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+          if (environment.readingConfirmationEnabled) {
+            this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+          } else {
+            this.router.navigate(['/quiz', 'flow', 'voting']);
+          }
           break;
         case MessageProtocol.Reset:
           this.attendeeService.clearResponses();
