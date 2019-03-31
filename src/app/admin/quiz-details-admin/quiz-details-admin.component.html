@@ -1,61 +1,140 @@
-<div class="text-break">
-  <p class="card-text">Questions:</p>
-  <ul>
-    <li *ngFor="let question of quiz?.questionList">
-      <span>Type: {{question.TYPE}}</span>
-      <p class="card-text">Answers:</p>
-      <ul>
-        <li *ngFor="let answers of question.answerOptionList">
-          <span>Answer Text: {{answers.answerText}}</span><br/>
-          <span>Is Correct: {{answers.isCorrect}}</span><br/>
-          <span>Type: {{answers.TYPE}}</span><br/>
-        </li>
-      </ul>
-      <span>Display Answer Text: {{question.displayAnswerText}}</span><br/>
-      <span>Multiple Selection Enabled: {{question.multipleSelectionEnabled}}</span><br/>
-      <span>Show One Answer Per Row: {{question.showOneAnswerPerRow}}</span><br/>
-      <span>Timer: {{question.timer}}</span><br/>
-      <span>Question Text: {{question.questionText}}</span>
-    </li>
-  </ul>
-  <p class="card-text">Music Config</p>
-  <p class="card-text">Lobby</p>
-  <ul>
-    <li>Enabled: {{quiz?.sessionConfig.music.enabled.lobby}}</li>
-    <li>Title: {{quiz?.sessionConfig.music.titleConfig.lobby}}</li>
-    <li>Volume: {{quiz?.sessionConfig.music.volumeConfig.lobby}}</li>
-  </ul>
-  <p class="card-text">Countdown Running</p>
-  <ul>
-    <li>Enabled: {{quiz?.sessionConfig.music.enabled.countdownRunning}}</li>
-    <li>Title: {{quiz?.sessionConfig.music.titleConfig.countdownRunning}}</li>
-    <li>Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownRunning}}</li>
-  </ul>
-  <p class="card-text">Countdown End</p>
-  <ul>
-    <li>Enabled: {{quiz?.sessionConfig.music.enabled.countdownEnd}}</li>
-    <li>Title: {{quiz?.sessionConfig.music.titleConfig.countdownEnd}}</li>
-    <li>Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownEnd}}</li>
-  </ul>
-  <p class="card-text">Nick Config</p>
-  <p>Member Groups:</p>
-  <ul>
-    <li *ngFor="let group of quiz?.sessionConfig.nicks.memberGroups">
-      <span>Name: {{group}}</span>
-    </li>
-  </ul>
-  <ul>
-    <li>Max Members Per Group: {{quiz?.sessionConfig.nicks.maxMembersPerGroup}}</li>
-    <li>Automatically join to Group: {{quiz?.sessionConfig.nicks.autoJoinToGroup}}</li>
-    <li>Selected Nicks: {{quiz?.sessionConfig.nicks.selectedNicks.join(', ')}}</li>
-    <li>Block Illegal Nicks: {{quiz?.sessionConfig.nicks.blockIllegalNicks}}</li>
-    <li>Restrict to CAS Login: {{quiz?.sessionConfig.nicks.restrictToCasLogin}}</li>
-  </ul>
-  <p class="card-text">Session Config</p>
-  <ul>
-    <li>Reading-Confirmation enabled: {{quiz?.sessionConfig.readingConfirmationEnabled}}</li>
-    <li>Confidence-Slider enabled: {{quiz?.sessionConfig.confidenceSliderEnabled}}</li>
-    <li>Show response progress: {{quiz?.sessionConfig.showResponseProgress}}</li>
-    <li>Theme: {{quiz?.sessionConfig.theme}}</li>
-  </ul>
+<div class="btn-group mb-3 text-nowrap w-100 overflow-auto">
+  <button class="btn"
+          [class.btn-light]="!isSelected('general')"
+          [class.btn-primary]="isSelected('general')"
+          (click)="select('general')">General
+  </button>
+  <button class="btn"
+          [class.btn-light]="!isSelected('questions')"
+          [class.btn-primary]="isSelected('questions')"
+          (click)="select('questions')">Questions & Answers
+  </button>
+  <button class="btn"
+          [class.btn-light]="!isSelected('music')"
+          [class.btn-primary]="isSelected('music')"
+          (click)="select('music')">Music
+  </button>
+  <button class="btn"
+          [class.btn-light]="!isSelected('nicknames')"
+          [class.btn-primary]="isSelected('nicknames')"
+          (click)="select('nicknames')">Nicknames
+  </button>
+</div>
+
+<div *ngIf="isSelected('general')"
+     class="text-break">
+  <h5 class="card-text">General Config</h5>
+
+  <div class="card text-dark">
+    <div class="card-body">
+      <p class="card-text mb-0">Reading-Confirmation enabled: {{quiz?.sessionConfig.readingConfirmationEnabled}}</p>
+      <p class="card-text mb-0">Confidence-Slider enabled: {{quiz?.sessionConfig.confidenceSliderEnabled}}</p>
+      <p class="card-text mb-0">Show response progress: {{quiz?.sessionConfig.showResponseProgress}}</p>
+      <p class="card-text mb-0">Theme: {{quiz?.sessionConfig.theme}}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isSelected('questions')"
+     class="text-break">
+  <h5 class="card-text">Questions &amp; Answers</h5>
+
+  <p *ngIf="!quiz?.questionList.length">No questions added</p>
+  <div *ngFor="let question of quiz?.questionList"
+       class="card text-dark mb-3">
+    <div class="card-header"><h6 class="mb-0">Type: {{question.TYPE}}</h6></div>
+    <div class="card-body">
+
+      <p class="card-text mb-0">Question Text: {{question.questionText}}</p>
+      <p class="card-text mb-0">Timer: {{question.timer}}</p>
+
+      <hr/>
+
+      <p *ngIf="isSet(question.displayAnswerText)"
+         class="card-text mb-0">Display Answer Text: {{question.displayAnswerText}}</p>
+      <p *ngIf="isSet(question.multipleSelectionEnabled)"
+         class="card-text mb-0">Multiple Selection Enabled: {{question.multipleSelectionEnabled}}</p>
+      <p *ngIf="isSet(question.showOneAnswerPerRow)"
+         class="card-text mb-0">Show One Answer Per Row: {{question.showOneAnswerPerRow}}</p>
+
+      <hr/>
+
+      <p class="card-text mb-0">Answers:</p>
+      <p *ngIf="!question.answerOptionList.length">No answers added</p>
+      <div class="form-row">
+
+        <div *ngFor="let answers of question.answerOptionList"
+             class="my-1 col-12 col-sm-6">
+          <div class="p-2 border border-primary rounded">
+            <p class="card-text mb-0">Type: {{answers.TYPE}}</p>
+            <p class="card-text mb-0">Answer Text: {{answers.answerText}}</p>
+            <p class="card-text mb-0">Is Correct: {{answers.isCorrect}}</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="isSelected('music')"
+     class="text-break">
+  <h5 class="card-text">Music Config</h5>
+
+  <div class="card text-dark mb-3">
+    <div class="card-header"><h6 class="mb-0">Lobby</h6></div>
+    <div class="card-body">
+      <p class="card-text mb-0">Enabled: {{quiz?.sessionConfig.music.enabled.lobby}}</p>
+      <p class="card-text mb-0">Title: {{quiz?.sessionConfig.music.titleConfig.lobby}}</p>
+      <p class="card-text mb-0">Volume: {{quiz?.sessionConfig.music.volumeConfig.lobby}}</p>
+    </div>
+  </div>
+
+  <div class="card text-dark mb-3">
+    <div class="card-header"><h6 class="mb-0">Countdown Running</h6></div>
+    <div class="card-body">
+      <p class="card-text mb-0">Enabled: {{quiz?.sessionConfig.music.enabled.countdownRunning}}</p>
+      <p class="card-text mb-0">Title: {{quiz?.sessionConfig.music.titleConfig.countdownRunning}}</p>
+      <p class="card-text mb-0">Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownRunning}}</p>
+    </div>
+  </div>
+
+  <div class="card text-dark mb-3">
+    <div class="card-header"><h6 class="mb-0">Countdown End</h6></div>
+    <div class="card-body">
+      <p class="card-text mb-0">Enabled: {{quiz?.sessionConfig.music.enabled.countdownEnd}}</p>
+      <p class="card-text mb-0">Title: {{quiz?.sessionConfig.music.titleConfig.countdownEnd}}</p>
+      <p class="card-text mb-0">Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownEnd}}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isSelected('nicknames')"
+     class="text-break">
+  <h5 class="card-text">Nick Config</h5>
+
+  <div class="card text-dark">
+    <div class="card-body">
+      <p class="card-text mb-0">Max Members Per Group: {{quiz?.sessionConfig.nicks.maxMembersPerGroup}}</p>
+      <p class="card-text mb-0">Automatically join to Group: {{quiz?.sessionConfig.nicks.autoJoinToGroup}}</p>
+      <p class="card-text mb-0">Block Illegal Nicks: {{quiz?.sessionConfig.nicks.blockIllegalNicks}}</p>
+      <p class="card-text mb-0">Restrict to CAS Login: {{quiz?.sessionConfig.nicks.restrictToCasLogin}}</p>
+
+      <hr/>
+
+      <p class="card-text mb-0">Selected Nicks:</p>
+      <p class="mb-0">
+        <span *ngIf="!quiz?.sessionConfig.nicks.selectedNicks.length">None selected</span>
+        <span>{{quiz?.sessionConfig.nicks.selectedNicks.join(', ')}}</span>
+      </p>
+
+      <hr/>
+
+      <p class="mb-0">Member Groups:</p>
+      <p class="mb-0">{{quiz?.sessionConfig.nicks.memberGroups.join(', ')}}</p>
+
+    </div>
+  </div>
 </div>

@@ -16,6 +16,8 @@ export class QuizDetailsAdminComponent implements OnInit {
     return this._quiz;
   }
 
+  private _isSelected = 'general';
+
   constructor(private footerBarService: FooterBarService, private adminService: AdminService, private activatedRoute: ActivatedRoute) {
     this.updateFooterElements();
   }
@@ -26,6 +28,18 @@ export class QuizDetailsAdminComponent implements OnInit {
         this._quiz = data;
       });
     });
+  }
+
+  public isSelected(type: string): boolean {
+    return this._isSelected === type;
+  }
+
+  public select(type: string): void {
+    this._isSelected = type;
+  }
+
+  public isSet(value: any): boolean {
+    return !['undefined', 'null'].includes(typeof value);
   }
 
   private updateFooterElements(): void {
