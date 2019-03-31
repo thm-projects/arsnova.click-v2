@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
@@ -57,6 +58,12 @@ export class LeaderboardComponent implements OnDestroy {
 
   get hasMultipleAnswersAvailable(): boolean {
     return this._hasMultipleAnswersAvailable;
+  }
+
+  private _ownResponse: { index: number, element: ILeaderBoardItem, closestOpponent: ILeaderBoardItem };
+
+  get ownResponse(): { index: number; element: ILeaderBoardItem; closestOpponent: ILeaderBoardItem } {
+    return this._ownResponse;
   }
 
   private _serverUnavailableModal: NgbModalRef;
@@ -149,6 +156,10 @@ export class LeaderboardComponent implements OnDestroy {
     return this.i18nService.formatNumber(this.roundResponseTime(responseTime, 2));
   }
 
+  public hasOwnResponse(): boolean {
+    return Object.keys(this._ownResponse || {}).length > 0;
+  }
+
   private initData(): void {
     this.route.params.subscribe(params => {
 
@@ -173,8 +184,9 @@ export class LeaderboardComponent implements OnDestroy {
         this._hasMultipleAnswersAvailable = questionType === QuestionType.MultipleChoiceQuestion;
       }
 
-      this.leaderboardApiService.getLeaderboardData(this._name, this.questionIndex).subscribe(lederboardData => {
+      this.leaderboardApiService.getLeaderboardData(this._name, environment.leaderboardAmount, this.questionIndex).subscribe(lederboardData => {
         this._leaderBoardCorrect = lederboardData.payload.correctResponses;
+        this._ownResponse = lederboardData.payload.ownResponse;
         this._memberGroupResults = lederboardData.payload.memberGroupResults;
 
         this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {

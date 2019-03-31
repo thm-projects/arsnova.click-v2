@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
+  leaderboardAmount: 5,
   readingConfirmationEnabled: true,
   confidenceSliderEnabled: true,
   infoAboutTabEnabled: true,

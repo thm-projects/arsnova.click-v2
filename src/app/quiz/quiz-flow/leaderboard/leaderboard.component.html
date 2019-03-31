@@ -17,7 +17,7 @@
   <ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length > 1;else attendeeView">
     <ng-container *ngFor="let group of memberGroupResults">
       <div class="col-12 col-sm-6">
-        <div class="leaderboard-item rounded p-2 my-2 ">
+        <div class="bg-secondary rounded p-2 my-2 ">
           <h6 class="text-center mb-0">{{'component.leaderboard.team-result.name' | translate:{TEAM_NAME: group.name} }}</h6>
           <hr/>
           <p>{{'component.leaderboard.team-result.overall-response-time' | translate:{RESPONSE_TIME: formatResponseTime(group.responseTime)} }}</p>
@@ -33,7 +33,7 @@
   <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
        [class.col-12]="!i"
        [class.col-sm-6]="!!i">
-    <div class="leaderboard-item rounded p-2 my-2"
+    <div class="bg-secondary rounded p-2 my-2"
          [class.own-nick]="!i || attendeeService.isOwnNick(attendee.name)"
          [class.text-center]="!i">
       <fa-icon *ngIf="!i"
@@ -45,4 +45,10 @@
       <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
     </div>
   </div>
+
+  <h5 *ngIf="hasOwnResponse()"
+      class="mb-0 mt-5 text-center">
+    <span>{{'component.leaderboard.own-rank.own-data' | translate:{INDEX: ownResponse.index + 1, SCORE: ownResponse.element.score} }}</span>
+    <span *ngIf="ownResponse.closestOpponent">{{'component.leaderboard.own-rank.closest-opponent' | translate:{NAME: ownResponse.closestOpponent.name, SCORE: ownResponse.closestOpponent.score} }}</span>
+  </h5>
 </ng-template>

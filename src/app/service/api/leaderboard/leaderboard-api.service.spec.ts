@@ -1,5 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
+import { environment } from '../../../../environments/environment';
 
 import { LeaderboardApiService } from './leaderboard-api.service';
 
@@ -29,7 +30,7 @@ describe('LeaderboardApiService', () => {
     const quizName = 'test';
     const questionIndex = 0;
 
-    service.getLeaderboardData(quizName, questionIndex).subscribe();
+    service.getLeaderboardData(quizName, environment.leaderboardAmount, questionIndex).subscribe();
     backend.expectOne(service.LEADERBOARD_GET_DATA_URL(quizName, questionIndex));
 
     expect(service).toBeTruthy();

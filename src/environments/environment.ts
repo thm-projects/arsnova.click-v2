@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  leaderboardAmount: 5,
   readingConfirmationEnabled: false,
   confidenceSliderEnabled: false,
   infoAboutTabEnabled: false,
