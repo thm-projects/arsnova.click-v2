@@ -5,19 +5,19 @@
        [id]="elem.id"
        class="col-12 col-sm-6 mb-2"
        [attr.aria-selected]="isActiveQuestionType(elem.id)">
-    <div class="card bg-transparent h-100">
+    <div class="card bg-secondary text-dark h-100">
       <div class="card-header">
         <span class="card-title">{{elem.translationName | translate}}</span>
       </div>
       <div class="card-body d-flex flex-column">
-        <p>{{elem.descriptionType | translate}}</p>
+        <p class="mb-3">{{elem.descriptionType | translate}}</p>
         <button class="btn mt-auto"
                 [class.btn-light]="!isActiveQuestionType(elem.id)"
                 [class.btn-success]="isActiveQuestionType(elem.id)"
                 [disabled]="isActiveQuestionType(elem.id)"
                 (click)="morphToQuestionType(elem.id)">
-          <span *ngIf="!isActiveQuestionType(elem.id)">Select Type</span>
-          <span *ngIf="isActiveQuestionType(elem.id)">Current Type</span>
+          <span *ngIf="!isActiveQuestionType(elem.id)">{{'view.question_type.select-type' | translate}}Select Type</span>
+          <span *ngIf="isActiveQuestionType(elem.id)">{{'view.question_type.current-type' | translate}}Current Type</span>
         </button>
       </div>
     </div>

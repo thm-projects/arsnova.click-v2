@@ -90,6 +90,9 @@ export class HeaderComponent implements OnInit {
 
     this.modalService.open(content);
     this.connectionService.calculateRTT();
+    if (!this.connectionService.websocketAvailable) {
+      this.connectionService.initWebsocket();
+    }
   }
 
   private sanitizeStyle(value: string): SafeStyle {

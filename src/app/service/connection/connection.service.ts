@@ -198,20 +198,7 @@ export class ConnectionService {
     this._connectedChannel = null;
   }
 
-  private calculateConnectionSpeedIndicator(): void {
-    if (this._rtt > 800) {
-      this._lowSpeed = true;
-      this._mediumSpeed = false;
-    } else if (this._rtt > 300) {
-      this._lowSpeed = false;
-      this._mediumSpeed = true;
-    } else {
-      this._lowSpeed = false;
-      this._mediumSpeed = false;
-    }
-  }
-
-  private initWebsocket(): void {
+  public initWebsocket(): void {
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -251,6 +238,19 @@ export class ConnectionService {
         this.initWebsocket();
       }, timeout * 1000);
     };
+  }
+
+  private calculateConnectionSpeedIndicator(): void {
+    if (this._rtt > 800) {
+      this._lowSpeed = true;
+      this._mediumSpeed = false;
+    } else if (this._rtt > 300) {
+      this._lowSpeed = false;
+      this._mediumSpeed = true;
+    } else {
+      this._lowSpeed = false;
+      this._mediumSpeed = false;
+    }
   }
 
   private parseActiveQuizzes(val): void {

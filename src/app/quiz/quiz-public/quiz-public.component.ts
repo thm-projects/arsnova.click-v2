@@ -44,4 +44,18 @@ export class QuizPublicComponent {
     this.quizApiService.setQuizAsPrivate(this.availablePublicQuizzes[index])
     .subscribe(() => this.availablePublicQuizzes.splice(index, 1));
   }
+
+  public copyQuiz(inputElement: HTMLInputElement): void {
+    inputElement.select();
+    document.execCommand('copy');
+    inputElement.setSelectionRange(0, 0);
+  }
+
+  public getQuizLink(index: number): string {
+    return encodeURI(`${location.origin}/quiz/create/${this.availablePublicQuizzes[index].name}`);
+  }
+
+  public getTranslationForYesNo(value: boolean): string {
+    return value ? 'global.yes' : 'global.no';
+  }
 }

@@ -60,6 +60,10 @@ export class QuizAdminComponent implements OnInit {
     });
   }
 
+  public getAmountOfAnswers(quiz: QuizEntity): number {
+    return quiz.questionList.map(question => question.answerOptionList.length).reduce((previousValue, currentValue) => previousValue + currentValue);
+  }
+
   private updateFooterElements(): void {
     const footerElements = [
       this.footerBarService.footerElemBack,

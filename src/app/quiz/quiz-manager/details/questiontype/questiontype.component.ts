@@ -45,7 +45,7 @@ export class QuestiontypeComponent {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames,
+      this.footerBarService.footerElemBack,
     ]);
 
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {

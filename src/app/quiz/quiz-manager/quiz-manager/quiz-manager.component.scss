@@ -1,7 +1,12 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
 #quizSummaryHeader {
   &.overflow-active {
     position: absolute;
   }
+
   position: relative;
   overflow: hidden;
 
@@ -72,5 +77,13 @@
   }
   &:after {
     content: ' ';
+  }
+}
+
+.btn-header {
+  .btn {
+    @include media-breakpoint-up(sm) {
+      @include border-radius();
+    }
   }
 }

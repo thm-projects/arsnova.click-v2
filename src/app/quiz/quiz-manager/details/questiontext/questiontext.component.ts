@@ -38,7 +38,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames,
+      this.footerBarService.footerElemBack,
     ]);
   }
 

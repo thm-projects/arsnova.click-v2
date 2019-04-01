@@ -20,6 +20,7 @@ import {
   faCaretUp,
   faCheck,
   faCode,
+  faCopy,
   faDownload,
   faEdit,
   faExclamationTriangle,
@@ -118,6 +119,7 @@ library.add(faItalic);
 library.add(faTrophy);
 library.add(faBan);
 library.add(faSave);
+library.add(faCopy);
 
 @NgModule({
   imports: [

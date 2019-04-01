@@ -55,3 +55,13 @@ img[alt*="emoji_"] {
 *:-ms-input-placeholder {
   opacity: 1;
 }
+
+.btn-header {
+  @include media-breakpoint-only(xs) {
+    margin-left: -15px;
+    margin-right: -15px;
+    .btn {
+      border-radius: 0;
+    }
+  }
+}

@@ -1,19 +1,16 @@
 <div class="row">
   <div class="col-12 col-lg-6">
     <h2 class="mt-4 mt-md-0">{{'component.quiz_manager.available_questions_title' | translate}}</h2>
-    <div class="overflow-auto available-questions-view-frame">
 
-      <div class="btn-group flex-lg-column d-lg-flex text-nowrap"
-           id="available_questions_wrapper"
-           [attr.data-intro]="'component.quiz_manager.description.available_questions' | translate">
+    <div class="btn-group btn-header mb-2 mb-sm-0 overflow-auto d-flex flex-grow-1 text-nowrap flex-sm-wrap"
+         [attr.data-intro]="'component.quiz_manager.description.available_questions' | translate">
 
-        <button *ngFor="let elem of selectableQuestionTypes"
-                class="btn btn-light mr-2 mr-lg-0 px-lg-2 py-lg-2 mb-lg-2 rounded cursor-pointer d-flex justify-content-center justify-content-lg-start align-items-center"
-                (click)="addQuestion(elem.id)"
-                [attr.data-intro]="elem.descriptionType | translate">
-          {{elem.translationName | translate}}
-        </button>
-      </div>
+      <button *ngFor="let elem of selectableQuestionTypes"
+              class="btn btn-light mb-sm-2 w-100 text-left"
+              (click)="addQuestion(elem.id)"
+              [attr.data-intro]="elem.descriptionType | translate">
+        {{elem.translationName | translate}}
+      </button>
     </div>
   </div>
   <div class="col-12 col-lg-6">

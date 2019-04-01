@@ -76,7 +76,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
     headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemNicknames,
+      this.footerBarService.footerElemBack,
     ]);
   }
 

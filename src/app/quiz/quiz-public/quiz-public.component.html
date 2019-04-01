@@ -28,8 +28,23 @@
         <p class="card-text mb-0">{{'component.public-quizzes.features' | translate}}</p>
         <ul>
           <li>{{'component.public-quizzes.number-of-questions' | translate}}&nbsp;{{quiz.questionList.length}}</li>
-          <li>{{'component.public-quizzes.cas-required' | translate}}&nbsp;{{quiz.sessionConfig.nicks.restrictToCasLogin}}</li>
+          <li>{{'component.public-quizzes.cas-required' | translate}}&nbsp;{{getTranslationForYesNo(quiz.sessionConfig.nicks.restrictToCasLogin) | translate}}</li>
         </ul>
+        <label class="input-group">
+          <input type="text"
+                 class="form-control"
+                 readonly
+                 #quizLinkInput
+                 [value]="getQuizLink(i)"/>
+          <div class="input-group-append">
+            <button class="btn btn-primary">
+              <fa-icon class="cursor-pointer"
+                       [title]="'component.public-quizzes.copy' | translate"
+                       [icon]="'copy'"
+                       (click)="copyQuiz(quizLinkInput)"></fa-icon>
+            </button>
+          </div>
+        </label>
       </div>
     </div>
   </div>
