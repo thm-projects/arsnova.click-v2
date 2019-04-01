@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../../lib/default.settings';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
+import { IAdminQuiz } from '../../../../lib/interfaces/quizzes/IAdminQuiz';
 import { UserService } from '../../user/user.service';
 
 @Injectable({
@@ -25,8 +26,8 @@ export class AdminService {
     return this.http.get<Array<object>>(this._getAvailableUsersUrl, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
-  public getAvailableQuizzes(): Observable<Array<QuizEntity>> {
-    return this.http.get<Array<QuizEntity>>(this._getAvailableQuizzesUrl, { headers: { authorization: this.userService.staticLoginToken } });
+  public getAvailableQuizzes(): Observable<Array<IAdminQuiz>> {
+    return this.http.get<Array<IAdminQuiz>>(this._getAvailableQuizzesUrl, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
   public deleteQuiz(quizName: string): Observable<void> {

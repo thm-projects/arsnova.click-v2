@@ -16,8 +16,8 @@
                 [class.btn-success]="isActiveQuestionType(elem.id)"
                 [disabled]="isActiveQuestionType(elem.id)"
                 (click)="morphToQuestionType(elem.id)">
-          <span *ngIf="!isActiveQuestionType(elem.id)">{{'view.question_type.select-type' | translate}}Select Type</span>
-          <span *ngIf="isActiveQuestionType(elem.id)">{{'view.question_type.current-type' | translate}}Current Type</span>
+          <span *ngIf="!isActiveQuestionType(elem.id)">{{'view.question_type.select-type' | translate}}</span>
+          <span *ngIf="isActiveQuestionType(elem.id)">{{'view.question_type.current-type' | translate}}</span>
         </button>
       </div>
     </div>

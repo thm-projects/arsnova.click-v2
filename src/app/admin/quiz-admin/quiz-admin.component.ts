@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { QuizState } from '../../../lib/enums/QuizState';
+import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
 import { AdminService } from '../../service/api/admin/admin.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 
@@ -15,9 +15,9 @@ export class QuizAdminComponent implements OnInit {
   public filterActiveQuiz: boolean;
   public filterQuizName: string;
 
-  private _quizzes: Array<QuizEntity>;
+  private _quizzes: Array<IAdminQuiz>;
 
-  get quizzes(): Array<QuizEntity> {
+  get quizzes(): Array<IAdminQuiz> {
     return this._quizzes;
   }
 
@@ -33,21 +33,21 @@ export class QuizAdminComponent implements OnInit {
     });
   }
 
-  public isActiveQuiz(quiz: QuizEntity): boolean {
+  public isActiveQuiz(quiz: IAdminQuiz): boolean {
     return [QuizState.Active, QuizState.Finished, QuizState.Running].includes(quiz.state);
   }
 
-  public deactivateQuiz(quiz: QuizEntity): void {
+  public deactivateQuiz(quiz: IAdminQuiz): void {
     this.adminService.deactivateQuiz(quiz.name).subscribe(() => {
       quiz.state = QuizState.Inactive;
     }, error => console.error(error));
   }
 
-  public isDeletingElem(quiz: QuizEntity): boolean {
+  public isDeletingElem(quiz: IAdminQuiz): boolean {
     return this._deletingElements.indexOf(quiz.name) > -1;
   }
 
-  public deleteElem($event: Event, quiz: QuizEntity): void {
+  public deleteElem($event: Event, quiz: IAdminQuiz): void {
     $event.stopPropagation();
     $event.stopImmediatePropagation();
     $event.preventDefault();
@@ -58,10 +58,6 @@ export class QuizAdminComponent implements OnInit {
     }, (error) => {
       console.error(error);
     });
-  }
-
-  public getAmountOfAnswers(quiz: QuizEntity): number {
-    return quiz.questionList.map(question => question.answerOptionList.length).reduce((previousValue, currentValue) => previousValue + currentValue);
   }
 
   private updateFooterElements(): void {
