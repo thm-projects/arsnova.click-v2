@@ -44,18 +44,6 @@ img[alt*="emoji_"] {
   width: 24px;
 }
 
-*::-webkit-input-placeholder {
-  opacity: 1;
-}
-
-*:-moz-placeholder, *::-moz-placeholder {
-  opacity: 1;
-}
-
-*:-ms-input-placeholder {
-  opacity: 1;
-}
-
 @include media-breakpoint-only(xs) {
   .btn-header {
     width: calc(100% + 30px);

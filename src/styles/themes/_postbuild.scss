@@ -69,3 +69,23 @@ pre {
     }
   }
 }
+
+*::placeholder {
+  opacity: 1;
+  color: $footer-color;
+}
+
+*::-webkit-input-placeholder {
+  opacity: 1;
+  color: $footer-color;
+}
+
+*:-moz-placeholder, *::-moz-placeholder {
+  opacity: 1;
+  color: $footer-color;
+}
+
+*:-ms-input-placeholder {
+  opacity: 1;
+  color: $footer-color;
+}
