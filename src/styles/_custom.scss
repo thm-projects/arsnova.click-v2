@@ -56,8 +56,9 @@ img[alt*="emoji_"] {
   opacity: 1;
 }
 
-.btn-header {
-  @include media-breakpoint-only(xs) {
+@include media-breakpoint-only(xs) {
+  .btn-header {
+    width: calc(100% + 30px);
     margin-left: -15px;
     margin-right: -15px;
     .btn {
