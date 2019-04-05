@@ -9,4 +9,5 @@ export interface IAdminQuiz {
   visibility: QuizVisibility;
   questionAmount: number;
   answerAmount: number;
+  memberAmount: number;
 }

@@ -78,6 +78,11 @@
           <span>Number of Answers: </span>
           <span>{{quiz.answerAmount}}</span>
         </p>
+        <p *ngIf="isActiveQuiz(quiz)"
+           class="card-text">
+          <span>Number of Attendees: </span>
+          <span>{{quiz.memberAmount?.length || 0}}</span>
+        </p>
         <p class="card-text">
           <span>Is Active: {{isActiveQuiz(quiz)}}</span>
           <button *ngIf="isActiveQuiz(quiz)"
