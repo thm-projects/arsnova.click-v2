@@ -81,30 +81,37 @@ export class UserService {
 
     this.storageService.stateNotifier.subscribe((type) => {
       if (type === DbState.Initialized && !this.username) {
-        console.log('firing revalidate 1', DbState[type]);
+        console.log('db is initialized, but no user was set', DbState[type]);
         this.indexedDbService.stateNotifier.next(DbState.Revalidate);
       }
       if (type !== DbState.Initialized || this.indexedDbService.dbName !== this.username) {
+        console.log('local db is not initialized or initialized with other user');
         return;
       }
 
       if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
+        console.log('having static token content with private key');
         this.storageService.create(DbTable.Config, StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey).subscribe();
         localStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
 
         if (this._tmpRemoteQuizData.length) {
+          console.log('having remote quiz data');
           this.storageService.getAllQuiznames().then(quiznames => {
+            console.log('received response from storage service and looping through remote quizzes');
 
             this._tmpRemoteQuizData.forEach(quiz => {
               this.quizService.quiz = new QuizEntity(quiz);
               this.quizService.persist();
+              console.log('persisting remote quiz to local db', quiz.name);
             });
             this.indexedDbService.stateNotifier.next(DbState.Revalidate);
           });
         } else {
+          console.log('not received remote quiz data');
           this.indexedDbService.stateNotifier.next(DbState.Revalidate);
         }
       } else {
+        console.log('not received any static login token content');
         this.indexedDbService.stateNotifier.next(DbState.Revalidate);
       }
     });
