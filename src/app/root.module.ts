@@ -100,6 +100,7 @@ export const appRoutes: Routes = [
     HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent,
   ],
   imports: [
+    BrowserModule.withServerTransition({ appId: 'frontend' }),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
