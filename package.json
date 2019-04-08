@@ -55,7 +55,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.1",
     "@ng-bootstrap/ng-bootstrap": "^4.1.0",
     "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
-    "@ng-toolkit/pwa": "^1.1.51",
+    "@angular/pwa": "^0.13.8",
     "@nguniversal/express-engine": "^7.1.1",
     "@nguniversal/module-map-ngfactory-loader": "^7.1.1",
     "@ngx-translate/core": "^11.0.1",
