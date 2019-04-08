@@ -165,7 +165,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       const title = this.translateService.instant('component.toasts.swupdate.title');
       swUpdateToast = this.toastService.info(message, title, {
         disableTimeOut: true,
-        toastClass: 'toast show',
+        toastClass: 'toast show ngx-toastr',
       });
       swUpdateToast.onTap.subscribe(() => {
         this.swUpdate.activateUpdate().then(() => document.location.reload());
