@@ -133,6 +133,14 @@
 </script>
 
 <script type="text/javascript">
+  navigator.serviceWorker.getRegistrations().then(
+    function (registrations) {
+      for (let registration of registrations) {
+        registration.unregister();
+      }
+    });
+
+  /*
   navigator.serviceWorker.register('/ngsw-worker.js').then(registration => {
     addEventListener('fetch', event => {
       event.respondWith((async () => {
@@ -149,6 +157,7 @@
       })());
     });
   });
+   */
 </script>
 
 <script async

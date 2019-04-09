@@ -3,7 +3,6 @@ import { NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
@@ -103,8 +102,7 @@ export const appRoutes: Routes = [
     BrowserModule.withServerTransition({ appId: 'frontend' }),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    BrowserTransferStateModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: true }),
+    BrowserTransferStateModule, // ServiceWorkerModule.register('/ngsw-worker.js', { enabled: true }),
     ModalsModule,
     TranslateModule.forRoot({
       loader: {
