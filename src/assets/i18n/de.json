@@ -514,7 +514,7 @@
       "no-current-teams": "Kein Team bisher hinzugefügt"
     },
     "login": {
-      "title": "Bitte gebe deine Zugangsdaten ein",
+      "title": "Bitte gib deine Zugangsdaten ein",
       "login": "Einloggen",
       "authorization_failed": "Authentifkation fehlgeschlagen"
     },
@@ -555,15 +555,15 @@
       "new-demo-quiz": "Erstelle ein neues Demo Quiz",
       "new-abcd-quiz": "Erstelle ein neues ABCD Quiz",
       "view-public": "Klicke hier um aus einer Liste von {amount, plural, =0{keinem} one{einem} other{amount}} öffentlichen quiz zu wählen!",
-      "view-all-public": "... oder sieh dir deine eigenen öffentlichen quizze an!",
-      "view-own-public": "Klicke hier um deine eigenen öffentlichen quizze anzusehen!"
+      "view-all-public": "... oder sieh dir deine eigenen veröffentlichten Quizze an!",
+      "view-own-public": "Klicke hier um deine eigenen veröffentlichten Quizze anzusehen!"
     },
     "public-quizzes": {
       "own": {
         "title": "Deine veröffentlichten Quizze",
         "remove": "Löschen"
       },
-      "title": "Veröffentlichte Quizzes deiner Mitspieler",
+      "title": "Veröffentlichte Quizze deiner Mitspieler",
       "none-available": "Keines verfügbar",
       "number-of-questions": "Anzahl Quizfragen:",
       "cas-required": "CAS Login erforderlich:",
