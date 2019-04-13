@@ -42,7 +42,7 @@ export class SoundManagerComponent implements OnDestroy {
     return this._config;
   }
 
-  // noinspection JSMismatchedCollectionQueryUpdate
+  private _selected = 'lobby';
   private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
@@ -68,6 +68,7 @@ export class SoundManagerComponent implements OnDestroy {
       this.setLobbySongs();
       this.setRandomKey();
       this.setCountdownRunningSongs();
+      this.setCountdownEndSongs();
     }));
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
@@ -83,20 +84,17 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   public openTab(id: string): void {
-    // TODO: Workaround because Bootstrap v4 Beta carousel not working! (02.10.2017)
-    if (isPlatformBrowser(this.platformId)) {
-      const tabs = document.getElementsByClassName('collapse');
-      for (let i = 0; i < tabs.length; i++) {
-        tabs.item(i).classList.remove('show');
-      }
-      document.getElementById(id).classList.add('show');
-    }
-    this.toggleMusicPreview(<'lobby' | 'countdownRunning' | 'countdownEnd'>id.replace('panel-', ''));
+    this._selected = id;
+  }
+
+  public isSelected(elem: string): boolean {
+    return this._selected === elem;
   }
 
   public ngOnDestroy(): void {
     this.quizService.quiz.sessionConfig.music = this._config;
     this.quizService.persist();
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   private initConfig(): void {

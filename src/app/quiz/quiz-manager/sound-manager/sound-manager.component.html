@@ -1,39 +1,26 @@
-<div class="btn-group"
-     data-toggle="buttons"
+<div class="btn-group btn-header mb-3 text-nowrap overflow-auto d-flex flex-grow-1"
      role="group">
-  <div class="btn-group active">
-    <button type="button"
-            aria-expanded="false"
-            aria-controls="collapseExample"
-            class="btn btn-light btn_panel-switcher"
-            (click)="openTab('panel-lobby')"
-            data-target="#panel-lobby"
-            data-toggle="collapse">
-      <span>{{'plugins.sound.lobby_music' | translate}}</span>
-    </button>
-  </div>
-  <div class="btn-group">
-    <button type="button"
-            aria-expanded="false"
-            aria-controls="collapseExample"
-            class="btn btn-light btn_panel-switcher"
-            (click)="openTab('panel-countdownRunning')"
-            data-target="#panel-countdownRunning"
-            data-toggle="collapse">
-      <span>{{'plugins.sound.running_music' | translate}}</span>
-    </button>
-  </div>
-  <div class="btn-group">
-    <button type="button"
-            aria-expanded="false"
-            aria-controls="collapseExample"
-            class="btn btn-light btn_panel-switcher"
-            (click)="openTab('panel-countdownEnd')"
-            data-target="#panel-countdownEnd"
-            data-toggle="collapse">
-      <span>{{'plugins.sound.finish_music' | translate}}</span>
-    </button>
-  </div>
+  <button type="button"
+          class="btn"
+          [class.btn-primary]="isSelected('lobby')"
+          [class.btn-light]="!isSelected('lobby')"
+          (click)="openTab('lobby')">
+    <span>{{'plugins.sound.lobby_music' | translate}}</span>
+  </button>
+  <button type="button"
+          class="btn"
+          [class.btn-primary]="isSelected('countdownRunning')"
+          [class.btn-light]="!isSelected('countdownRunning')"
+          (click)="openTab('countdownRunning')">
+    <span>{{'plugins.sound.running_music' | translate}}</span>
+  </button>
+  <button type="button"
+          class="btn"
+          [class.btn-primary]="isSelected('countdownEnd')"
+          [class.btn-light]="!isSelected('countdownEnd')"
+          (click)="openTab('countdownEnd')">
+    <span>{{'plugins.sound.finish_music' | translate}}</span>
+  </button>
 </div>
 
 <datalist id="tickmarks">
@@ -53,57 +40,55 @@
           label="100%">
 </datalist>
 
-<div class="col-12 mt-5">
-  <div class="row">
-    <div class="col-12 col-sm-6">
-      <p class="mb-0 mr-2 align-self-center h-100 w-100 d-flex align-items-center justify-content-around"
-         style="line-height: 1.2;">
-        <span>
-          <span>{{'plugins.sound.global_volume' | translate}}:&nbsp;</span>
-          <span>{{config?.volumeConfig.global}}&nbsp;&#37;</span>
-        </span>
-        <input type="range"
-               list="tickmarks"
-               (input)="setGlobalVolume($event)"
-               [value]="config?.volumeConfig.global">
-      </p>
-    </div>
-    <div class="col-12 col-sm-6">
-      <div class="col-12 mb-2 d-flex"
-           [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
-        <label class="btn cursor-pointer mb-0 align-self-center"
-               [class.btn-success]="config?.volumeConfig.useGlobalVolume"
-               [class.btn-danger]="!config?.volumeConfig.useGlobalVolume">
-          <input type="checkbox"
-                 class="d-none"
-                 id="toggle-global-volume"
-                 [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
-                 autocomplete="off"
-                 role="switch"
-                 [checked]="config?.volumeConfig.useGlobalVolume"
-                 (change)="config?.volumeConfig.useGlobalVolume = !config?.volumeConfig.useGlobalVolume"
-                 [title]="'component.answeroptions.multiple_selection_survey' | translate">
-          <span *ngIf="config?.volumeConfig.useGlobalVolume">{{'plugins.sound.activated' | translate}}</span>
-          <span *ngIf="!config?.volumeConfig.useGlobalVolume">{{'plugins.sound.deactivated' | translate}}</span>
+<div class="text-break mb-4 mt-2">
+  <h5 class="card-text">{{'plugins.sound.global_volume' | translate}}</h5>
+
+  <div class="card text-dark">
+    <div class="card-body">
+
+      <div class="d-flex align-items-center">
+        <div class="d-flex">
+          <label class="btn cursor-pointer mb-0 align-self-center"
+                 [class.btn-success]="config?.volumeConfig.useGlobalVolume"
+                 [class.btn-danger]="!config?.volumeConfig.useGlobalVolume">
+            <input type="checkbox"
+                   class="d-none"
+                   id="toggle-global-volume"
+                   [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
+                   autocomplete="off"
+                   role="switch"
+                   [checked]="config?.volumeConfig.useGlobalVolume"
+                   (change)="config?.volumeConfig.useGlobalVolume = !config?.volumeConfig.useGlobalVolume"
+                   [title]="'component.answeroptions.multiple_selection_survey' | translate">
+            <span *ngIf="config?.volumeConfig.useGlobalVolume">{{'plugins.sound.activated' | translate}}</span>
+            <span *ngIf="!config?.volumeConfig.useGlobalVolume">{{'plugins.sound.deactivated' | translate}}</span>
+          </label>
+        </div>
+
+        <label class="mb-0 ml-3 d-flex">
+          <span class="mr-2">{{config?.volumeConfig.global}}&nbsp;&#37;</span>
+          <input type="range"
+                 list="tickmarks"
+                 class="align-self-center"
+                 (input)="setGlobalVolume($event)"
+                 [value]="config?.volumeConfig.global">
         </label>
       </div>
     </div>
   </div>
 </div>
-<div class="collapse show"
-     id="panel-lobby">
-  <div class="card card-body border-0 mt-5">
-    <div class="row">
-      <div class="col-12">
-        <h3>{{'plugins.sound.lobby_music_detailed' | translate }}</h3>
-      </div>
-      <div class="col-12 mb-2 d-flex"
-           [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
+
+<div *ngIf="isSelected('lobby')"
+     class="text-break">
+  <h5 class="card-text">{{'plugins.sound.lobby_music_detailed' | translate }}</h5>
+
+  <div class="card text-dark">
+    <div class="card-body">
+      <p class="card-text">
         <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="config?.enabled.lobby"
                [class.btn-danger]="!config?.enabled.lobby">
-          <input id="toggle-lobby-music"
-                 type="checkbox"
+          <input type="checkbox"
                  class="d-none"
                  [attr.aria-label]="'Activate/Deactivate Lobby Music Button'"
                  autocomplete="off"
@@ -114,50 +99,40 @@
           <span *ngIf="config?.enabled.lobby">{{'plugins.sound.active' | translate}}</span>
           <span *ngIf="!config?.enabled.lobby">{{'plugins.sound.inactive' | translate}}</span>
         </label>
-        <p class="mb-0 d-flex align-items-center ml-5">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.lobby}} %</p>
-      </div>
-      <div class="col-12 mt-5">
-        <div class="row">
-          <div class="col-12 col-sm-6">
-            <select id="lobbySoundSelect"
-                    class="rounded"
-                    (change)="selectSound('lobby', $event)"
-                    title="soundSelect">
-              <option *ngFor="let elem of lobbySongs"
-                      [selected]="config?.titleConfig?.lobby === elem.id"
-                      [value]="elem.id">{{elem.text}}
-              </option>
-            </select>
-          </div>
-          <div class="col-12 col-sm-6">
-            <!--suppress JSValidateTypes -->
-            <app-audio-player [src]="config?.titleConfig?.lobby"
-                              [target]="'lobby'"
-                              id="player-lobby"
-                              [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.lobby"
-                              (volumeChange)="config?.volumeConfig.lobby = $event"></app-audio-player>
-          </div>
-        </div>
-      </div>
+        <span class="ml-3">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.lobby}} %</span>
+      </p>
+
+      <select class="custom-select mt-4 mb-3"
+              (change)="selectSound('lobby', $event)"
+              title="soundSelect">
+        <option *ngFor="let elem of lobbySongs"
+                [selected]="config?.titleConfig?.lobby === elem.id"
+                [value]="elem.id">{{elem.text}}
+        </option>
+      </select>
+
+      <!--suppress JSValidateTypes -->
+      <app-audio-player [src]="config?.titleConfig?.lobby"
+                        [target]="'lobby'"
+                        [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.lobby"
+                        (volumeChange)="config?.volumeConfig.lobby = $event"></app-audio-player>
+
     </div>
   </div>
 </div>
-<div class="collapse"
-     id="panel-countdownRunning"
-     role="tabpanel">
-  <div class="card card-body border-0 mt-5">
-    <div class="row">
-      <div class="col-12">
-        <h3>{{'plugins.sound.running_music_detailed' | translate }}</h3>
-      </div>
-      <div class="col-12 mb-2 d-flex"
-           [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
+
+<div *ngIf="isSelected('countdownRunning')"
+     class="text-break">
+  <h5 class="card-text">{{'plugins.sound.running_music_detailed' | translate }}</h5>
+
+  <div class="card text-dark">
+    <div class="card-body">
+      <p class="card-text">
         <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="config?.enabled.countdownRunning"
                [class.btn-danger]="!config?.enabled.countdownRunning">
           <input type="checkbox"
                  class="d-none"
-                 id="toggle-countdown-running-music"
                  [attr.aria-label]="'Activate/Deactivate Countdown Running Button'"
                  autocomplete="off"
                  role="switch"
@@ -167,50 +142,40 @@
           <span *ngIf="config?.enabled.countdownRunning">{{'plugins.sound.active' | translate}}</span>
           <span *ngIf="!config?.enabled.countdownRunning">{{'plugins.sound.inactive' | translate}}</span>
         </label>
-        <p class="mb-0 d-flex align-items-center ml-5">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownRunning}} %</p>
-      </div>
-      <div class="col-12 mt-5">
-        <div class="row">
-          <div class="col-12 col-sm-6">
-            <select id="countdownRunningSelect"
-                    class="rounded"
-                    (change)="selectSound('countdownRunning', $event)"
-                    title="soundSelect">
-              <option *ngFor="let elem of countdownRunningSounds"
-                      [selected]="config?.titleConfig?.countdownRunning === elem.id"
-                      [value]="elem.id">{{elem.text}}
-              </option>
-            </select>
-          </div>
-          <div class="col-12 col-sm-6">
-            <!--suppress JSValidateTypes -->
-            <app-audio-player [src]="config?.titleConfig?.countdownRunning"
-                              [target]="'countdownRunning'"
-                              id="player-countdown-running"
-                              [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.countdownRunning"
-                              (volumeChange)="config?.volumeConfig.countdownRunning = $event"></app-audio-player>
-          </div>
-        </div>
-      </div>
+        <span class="ml-3">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownRunning}} %</span>
+      </p>
+
+      <select class="custom-select mt-4 mb-3"
+              (change)="selectSound('countdownRunning', $event)"
+              title="soundSelect">
+        <option *ngFor="let elem of countdownRunningSounds"
+                [selected]="config?.titleConfig?.countdownRunning === elem.id"
+                [value]="elem.id">{{elem.text}}
+        </option>
+      </select>
+
+      <!--suppress JSValidateTypes -->
+      <app-audio-player [src]="config?.titleConfig?.countdownRunning"
+                        [target]="'countdownRunning'"
+                        [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.countdownRunning"
+                        (volumeChange)="config?.volumeConfig.countdownRunning = $event"></app-audio-player>
+
     </div>
   </div>
 </div>
-<div class="collapse"
-     id="panel-countdownEnd"
-     role="tabpanel">
-  <div class="card card-body border-0 mt-5">
-    <div class="row">
-      <div class="col-12">
-        <h3>{{'plugins.sound.finish_music_detailed' | translate }}</h3>
-      </div>
-      <div class="col-12 mb-2 d-flex"
-           [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
+
+<div *ngIf="isSelected('countdownEnd')"
+     class="text-break">
+  <h5 class="card-text">{{'plugins.sound.finish_music_detailed' | translate }}</h5>
+
+  <div class="card text-dark">
+    <div class="card-body">
+      <p class="card-text">
         <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="config?.enabled.countdownEnd"
                [class.btn-danger]="!config?.enabled.countdownEnd">
           <input type="checkbox"
                  class="d-none"
-                 id="toggle-countdown-end-music"
                  [attr.aria-label]="'Activate/Deactivate Countdown End Button'"
                  autocomplete="off"
                  role="switch"
@@ -220,31 +185,24 @@
           <span *ngIf="config?.enabled.countdownEnd">{{'plugins.sound.active' | translate}}</span>
           <span *ngIf="!config?.enabled.countdownEnd">{{'plugins.sound.inactive' | translate}}</span>
         </label>
-        <p class="mb-0 d-flex align-items-center ml-5">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownEnd}} %</p>
-      </div>
-      <div class="col-12 mt-5">
-        <div class="row">
-          <div class="col-12 col-sm-6">
-            <select id="countdownEndSelect"
-                    class="rounded"
-                    (change)="selectSound('countdownEnd', $event)"
-                    title="soundSelect">
-              <option *ngFor="let elem of countdownEndSounds"
-                      [selected]="config?.titleConfig.countdownEnd === elem.id"
-                      [value]="elem.id">{{elem.text}}
-              </option>
-            </select>
-          </div>
-          <div class="col-12 col-sm-6">
-            <!--suppress JSValidateTypes -->
-            <app-audio-player [src]="config?.titleConfig.countdownEnd"
-                              [target]="'countdownEnd'"
-                              id="player-countdown-end"
-                              [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.countdownEnd"
-                              (volumeChange)="config?.volumeConfig.countdownEnd = $event"></app-audio-player>
-          </div>
-        </div>
-      </div>
+        <span class="ml-3">{{'plugins.sound.volume' | translate}}: {{config?.volumeConfig.countdownEnd}} %</span>
+      </p>
+
+      <select class="custom-select mt-4 mb-3"
+              (change)="selectSound('countdownRunning', $event)"
+              title="soundSelect">
+        <option *ngFor="let elem of countdownEndSounds"
+                [selected]="config?.titleConfig?.countdownEnd === elem.id"
+                [value]="elem.id">{{elem.text}}
+        </option>
+      </select>
+
+      <!--suppress JSValidateTypes -->
+      <app-audio-player [src]="config?.titleConfig.countdownEnd"
+                        [target]="'countdownEnd'"
+                        [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.countdownEnd"
+                        (volumeChange)="config?.volumeConfig.countdownEnd = $event"></app-audio-player>
+
     </div>
   </div>
 </div>
