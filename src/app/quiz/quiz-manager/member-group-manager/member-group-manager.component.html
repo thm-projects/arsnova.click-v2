@@ -36,10 +36,9 @@
       </div>
     </div>
 
-
-    <div class="input-group">
+    <div class="input-group input-group-sm">
       <input type="text"
-             class="form-control"
+             class="form-control mb-2 mb-sm-0"
              [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
              (keyup.enter)="addMemberGroup()"
              [(ngModel)]="memberGroupName"
@@ -47,7 +46,7 @@
              aria-describedby="add-member-group">
 
       <div class="input-group-append">
-        <button class="btn-success cursor-pointer"
+        <button class="btn btn-success"
                 id="add-member-group"
                 (click)="addMemberGroup()"
                 [class.disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length"
@@ -57,8 +56,10 @@
       </div>
     </div>
 
-    <h6 class="mt-4">{{'component.membergroup-manager.current-teams' | translate}}</h6>
+    <h6 class="mt-3">{{'component.membergroup-manager.current-teams' | translate}}</h6>
+
     <p *ngIf="!memberGroups.length">{{'component.membergroup-manager.no-current-teams' | translate}}</p>
+
     <ul *ngFor="let group of memberGroups"
         class="list-unstyled">
       <li class="border-bottom p-2">

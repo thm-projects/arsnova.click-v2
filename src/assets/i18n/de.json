@@ -235,7 +235,7 @@
       "no_selectable_nick_available": {}
     },
     "name_management": {
-      "enter_quiz_name": "Quiznamen oder PIN eingeben …",
+      "enter_quiz_name": "Gib hier den Quiznamen ein …",
       "join_session": "Mach mit beim Quiz!",
       "start_session": "Quiz starten",
       "edit_session": "Quiz bearbeiten",
@@ -554,7 +554,7 @@
       "use": "Verwende {name}",
       "new-demo-quiz": "Erstelle ein neues Demo Quiz",
       "new-abcd-quiz": "Erstelle ein neues ABCD Quiz",
-      "view-public": "Klicke hier um aus einer Liste von {amount, plural, =0{keinem} one{einem} other{amount}} öffentlichen quiz zu wählen!",
+      "view-public": "Klicke hier um aus einer Liste von {amount, plural, =0{keinem} one{einem} other{amount}} veröffentlichten Quiz zu wählen!",
       "view-all-public": "... oder sieh dir deine eigenen veröffentlichten Quizze an!",
       "view-own-public": "Klicke hier um deine eigenen veröffentlichten Quizze anzusehen!"
     },

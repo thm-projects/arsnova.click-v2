@@ -7,7 +7,7 @@
     class="text-center">{{'component.public-quizzes.none-available' | translate}}</h5>
 
 <div class="row">
-  <div class="col-sm-6"
+  <div class="col-md-6"
        *ngFor="let quiz of availablePublicQuizzes; let i = index">
     <div class="card mb-2 text-dark">
       <div class="card-body">
@@ -30,7 +30,7 @@
           <li>{{'component.public-quizzes.number-of-questions' | translate}}&nbsp;{{quiz.questionList.length}}</li>
           <li>{{'component.public-quizzes.cas-required' | translate}}&nbsp;{{getTranslationForYesNo(quiz.sessionConfig.nicks.restrictToCasLogin) | translate}}</li>
         </ul>
-        <label class="input-group">
+        <div class="input-group">
           <input type="text"
                  class="form-control"
                  readonly
@@ -44,7 +44,7 @@
                        (click)="copyQuiz(quizLinkInput)"></fa-icon>
             </button>
           </div>
-        </label>
+        </div>
       </div>
     </div>
   </div>
