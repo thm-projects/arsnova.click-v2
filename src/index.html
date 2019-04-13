@@ -86,7 +86,8 @@
 <script type="text/javascript">
 
   function polyfillsLoaded() {
-    [Modernizr.audio,
+    [
+      Modernizr.audio,
       Modernizr.blobconstructor,
       Modernizr.classlist,
       Modernizr.cors,
@@ -95,18 +96,15 @@
       Modernizr.fileinput,
       Modernizr.flexbox,
       Modernizr.flexwrap,
-      Modernizr.fullscreen,
       Modernizr.json,
       Modernizr.localstorage,
       Modernizr.promises,
-      Modernizr.serviceworker,
       Modernizr.sessionstorage,
       Modernizr.svg,
       Modernizr.video,
       Modernizr.websockets,
       Modernizr.xhrresponsetypejson,
       'indexedDB' in window,
-      'serviceWorker' in navigator,
     ].forEach(function (test) {
       if (!test) {
         location.href = '/assets/static/unsupported.html';

@@ -5,6 +5,10 @@ import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-eleme
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { IndexedDbService } from '../storage/indexed.db.service';
 
+declare class Modernizr {
+  public static fullscreen: boolean;
+}
+
 interface IFsDocument extends HTMLDocument {
   mozFullScreenElement?: Element;
   msFullscreenElement?: Element;
@@ -393,7 +397,14 @@ export class FooterBarService {
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
+    this.removeUnsupportedElements(elements);
     this._footerElements = elements;
   }
 
+  private removeUnsupportedElements(elements: Array<IFooterBarElement>): void {
+    const fullscreenIndex = elements.indexOf(this.footerElemFullscreen);
+    if (fullscreenIndex > -1 && !Modernizr.fullscreen) {
+      elements.splice(fullscreenIndex, 1);
+    }
+  }
 }
