@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
@@ -13,11 +13,13 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss'],
 })
-export class InfoComponent implements OnInit, OnDestroy {
+export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   public static TYPE = 'InfoComponent';
   public currentData: string;
   public readonly infoButtons = [];
   private _routerSubscription: Subscription;
+
+  @ViewChild('buttonHeader') private buttonHeader: ElementRef;
 
   constructor(
     private footerBarService: FooterBarService,
@@ -63,6 +65,16 @@ export class InfoComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._routerSubscription = this.route.data.subscribe(data => {
       this.currentData = data.content;
+    });
+  }
+
+  public ngAfterViewInit(): void {
+    this.buttonHeader.nativeElement.childNodes.forEach(val => {
+      if (!val || !val.classList || !val.classList.contains('btn-primary')) {
+        return;
+      }
+
+      this.buttonHeader.nativeElement.scrollLeft = val.offsetLeft - 20;
     });
   }
 
