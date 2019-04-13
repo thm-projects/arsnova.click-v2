@@ -10,6 +10,14 @@
   }
 }
 
+.selectedNickName {
+  text-decoration: underline;
+
+  .nickName {
+    border-bottom: 1px solid;
+  }
+}
+
 .selectedCategory {
   text-decoration: underline;
   @include media-breakpoint-up(md) {
@@ -20,7 +28,7 @@
       border-top: 10px solid transparent;
       border-right: 10px solid white;
       border-bottom: 10px solid transparent;
-      right: 0;
+      right: -15px;
       top: 35%;
       position: absolute;
     }

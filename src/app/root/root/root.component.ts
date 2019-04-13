@@ -6,7 +6,6 @@ import { ToastrService } from 'ngx-toastr';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 import { IWindow } from '../../../lib/interfaces/IWindow';
-import { QuizManagerDetailsOverviewComponent } from '../../quiz/quiz-manager/details/details-overview/quiz-manager-details-overview.component';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { I18nService } from '../../service/i18n/i18n.service';
 import { ThemesService } from '../../service/themes/themes.service';
@@ -80,8 +79,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.router.events.subscribe((nav: any) => {
       if (nav instanceof NavigationEnd) {
 
-        this.isInQuizManager = [QuizManagerComponent.TYPE, QuizManagerDetailsOverviewComponent.TYPE].includes(
-          this.fetchChildComponent(this.activatedRoute).TYPE);
+        this.isInQuizManager = [QuizManagerComponent.TYPE].includes(this.fetchChildComponent(this.activatedRoute).TYPE);
       }
     });
   }

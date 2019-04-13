@@ -29,7 +29,12 @@ export class QuizRenameComponent implements OnInit {
     private readonly quizApiService: QuizApiService,
   ) {
     this.footerBarService.TYPE_REFERENCE = QuizRenameComponent.TYPE;
-    this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
+
+    if (history.length > 2) {
+      this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
+    } else {
+      this.footerBarService.replaceFooterElements([this.footerBarService.footerElemHome]);
+    }
   }
 
   public sendRecommendation(duplicateQuiz: IDuplicateQuiz, renameRecommendation: string): void {

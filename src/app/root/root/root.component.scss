@@ -10,10 +10,10 @@
         top: 20vh;
       }
       @include media-breakpoint-up(md) {
-        height: 90vh;
+        min-height: 90vh;
       }
       @include media-breakpoint-only(sm) {
-        height: 70vh;
+        min-height: 70vh;
       }
       @include media-breakpoint-only(md) {
         max-width: calc(#{map_get($container-max-widths, md)} - 20vw);

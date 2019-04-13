@@ -406,5 +406,10 @@ export class FooterBarService {
     if (fullscreenIndex > -1 && !Modernizr.fullscreen) {
       elements.splice(fullscreenIndex, 1);
     }
+
+    const backIndex = elements.indexOf(this.footerElemBack);
+    if (backIndex && history.length < 2) {
+      elements.splice(backIndex, 1);
+    }
   }
 }

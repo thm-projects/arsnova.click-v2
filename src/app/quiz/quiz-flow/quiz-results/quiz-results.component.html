@@ -95,7 +95,7 @@
                     [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownRunning"></app-audio-player>
 
   <app-audio-player
-    *ngIf="!countdown?.isRunning && !countdown?.remainingTime && !quizService.readingConfirmationRequested && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownEnd"
+    *ngIf="countdown?.hasFinished && !quizService.readingConfirmationRequested && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownEnd"
     [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd"
     [autostart]="true"
     [loop]="false"

@@ -9,6 +9,12 @@ export class Countdown {
     return this._isRunning;
   }
 
+  private _hasFinished: boolean;
+
+  get hasFinished(): boolean {
+    return this._hasFinished;
+  }
+
   private _remainingTime: number;
 
   get remainingTime(): number {
@@ -32,8 +38,15 @@ export class Countdown {
     this._interval = setInterval(() => {
 
       this._remainingTime--;
+
+      if (this._remainingTime === 0) {
+        this._hasFinished = true;
+      }
+
       if (this._remainingTime <= 0) {
-        this.stop();
+        clearInterval(this._interval);
+        this._remainingTime = 0;
+        this._isRunning = false;
       }
 
       this.onChange.next(this._remainingTime);
@@ -44,5 +57,6 @@ export class Countdown {
     clearInterval(this._interval);
     this._remainingTime = 0;
     this._isRunning = false;
+    this._hasFinished = true;
   }
 }

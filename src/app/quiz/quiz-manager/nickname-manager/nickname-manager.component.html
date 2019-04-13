@@ -9,7 +9,7 @@
   <div class="col-12 nickCategoryWrapper"
        [class.col-sm-4]="hasSelectedCategory()"
        [class.col-md-6]="hasSelectedCategory()">
-    <div class="row">
+    <div class="row no-gutters">
       <div *ngFor="let cat of availableNickCategories()"
            class="nickCategory cursor-pointer col-6"
            [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
