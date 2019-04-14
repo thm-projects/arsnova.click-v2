@@ -1,4 +1,4 @@
 export enum QuizVisibility {
-  Account = 'Account', //
-  Any     = 'Any', //
+  Account = 'enum.quiz-visibility.account', //
+  Any     = 'enum.quiz-visibility.any', //
 }

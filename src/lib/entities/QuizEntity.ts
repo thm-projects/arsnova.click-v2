@@ -14,7 +14,7 @@ export class QuizEntity {
   public expiry: Date;
   public currentStartTimestamp: number;
   public memberGroups: Array<MemberGroupEntity>;
-  public visibility: Array<QuizVisibility>;
+  public visibility: QuizVisibility;
   public description: string;
 
   constructor(props) {

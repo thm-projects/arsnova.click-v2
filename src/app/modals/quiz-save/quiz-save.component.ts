@@ -8,9 +8,10 @@ import { QuizVisibility } from '../../../lib/enums/QuizVisibility';
   styleUrls: ['./quiz-save.component.scss'],
 })
 export class QuizSaveComponent {
-  public quizVisibility: QuizVisibility = QuizVisibility.Account;
+  public quizVisibility: string;
   public expiry: string;
   public description: string;
+  public noExpiry: boolean;
 
   private _isSubmitting: boolean;
 
@@ -33,14 +34,14 @@ export class QuizSaveComponent {
   public save(): void {
     this._isSubmitting = true;
 
-    if (!this.quizVisibility || !this.expiry) {
+    if (!this.quizVisibility || (!this.expiry && !this.noExpiry)) {
       this._isSubmitting = false;
       return;
     }
 
     this.activeModal.close({
-      visibility: this.quizVisibility,
-      expiry: this.expiry,
+      visibility: Object.entries(QuizVisibility).find(value => value[1] === this.quizVisibility)[0],
+      expiry: this.noExpiry ? null : this.expiry,
       description: this.description,
     });
   }

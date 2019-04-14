@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
@@ -17,7 +17,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   styleUrls: ['./questiontype.component.scss'],
 }) //
 @AutoUnsubscribe('_subscriptions')
-export class QuestiontypeComponent {
+export class QuestiontypeComponent implements OnDestroy {
   public static TYPE = 'QuestiontypeComponent';
 
   private _selectableQuestionTypes = availableQuestionTypes;
@@ -59,6 +59,7 @@ export class QuestiontypeComponent {
           this._question = this.quizService.quiz.questionList[this._questionIndex];
         }
         this._questionType = this._question.TYPE;
+        this._selectableQuestionTypes = this._selectableQuestionTypes.sort((a) => a.id === this._questionType ? -1 : 0);
       }));
     }));
 
@@ -67,6 +68,10 @@ export class QuestiontypeComponent {
 
   public isActiveQuestionType(type: string): boolean {
     return type === this._questionType;
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public morphToQuestionType(type: QuestionType): void {

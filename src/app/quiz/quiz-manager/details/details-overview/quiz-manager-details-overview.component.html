@@ -118,8 +118,7 @@
       <p>{{question?.timer}}&nbsp;{{ 'component.timer.second' | translate:{COUNT: question?.timer} }}</p>
     </div>
     <div class="mb-2 validation">
-      <h4>
-        <span>{{'component.quiz_summary.validation' | translate}}:&nbsp;</span>
+      <h4 class="bg-secondary p-2 rounded text-center">
         <span class="text-success"
               *ngIf="question?.isValid()">{{'component.quiz_summary.question_successful' | translate}}</span>
         <span class="text-danger"

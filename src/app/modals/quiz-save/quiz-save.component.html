@@ -12,12 +12,19 @@
     <div class="form-group col-12">
       <label class="d-block">
         <span>{{'component.quiz-save.access-allowed-for' | translate}}</span>
-        <select [(ngModel)]="quizVisibility"
+        <select (change)="quizVisibility = quizVisibilitySelect.value"
+                #quizVisibilitySelect
                 name="quizVisibility"
-                class="form-control">
+                class="custom-select">
+          <option selected
+                  disabled
+                  [value]="null"
+                  hidden>{{'global.please-select' | translate}}
+          </option>
           <option *ngFor="let option of getQuizVisibility()"
+                  [value]="option"
                   [selected]="quizVisibility === option">
-            {{option}}
+            {{option | translate}}
           </option>
         </select>
       </label>
@@ -30,20 +37,31 @@
         <span>{{'component.quiz-save.description' | translate}}</span>
         <textarea class="form-control"
                   name="description"
-                  placeholder="description"
+                  [placeholder]="'component.quiz-save.description' | translate"
                   [(ngModel)]="description"></textarea>
       </label>
     </div>
   </div>
   <div class="form-row">
-    <div class="form-group col-12">
+    <div class="col-12">
       <label class="d-block">
         <span>{{'component.quiz-save.expiry' | translate}}</span>
         <input type="date"
+               [disabled]="noExpiry"
                class="form-control"
                name="expiry"
-               placeholder="expiry"
                [(ngModel)]="expiry"/>
+      </label>
+    </div>
+
+    <div class="col-12">
+      <label class="mb-0 d-flex align-items-center cursor-pointer">
+        <span class="checkbox-wrapper">
+          <input type="checkbox"
+                 [(ngModel)]="noExpiry"/>
+          <span class="checkmark bg-white border rounded checked-dark border-dark"></span>
+        </span>
+        <span class="text-truncate">No Expiry</span>
       </label>
     </div>
   </div>
