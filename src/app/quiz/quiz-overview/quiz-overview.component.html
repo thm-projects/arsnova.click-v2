@@ -1,79 +1,79 @@
-<div class="row"
-     [class.center-vertical]="!sessions.length">
-  <div class="col-12">
-    <h2 *ngIf="sessions.length === 0"
-        class="text-center"
-        [innerHTML]="'component.name_management.no_sessions' | translate"></h2>
-  </div>
-  <div class="col-12">
-    <div *ngFor="let elem of sessions; let i = index"
-         [id]="elem.name"
-         class="row">
-      <div class="col-12">
-        <p class="name-name">{{elem.name}}</p>
-      </div>
-      <div class="col"
-           *ngIf="isAuthorizedToSaveQuiz()">
-        <button type="button"
-                class="btn btn-secondary btn-block cursor-pointer"
-                data-toggle="tooltip"
-                [title]="'component.name_management.save_session' | translate"
-                [disabled]="!elem.isValid() || !connectionService.serverAvailable"
-                (click)="saveQuiz(i)"
-                data-animation="false">
-          <fa-icon [icon]="'check'"
-                   *ngIf="isSaved(i)"></fa-icon>
-          <fa-icon [icon]="'save'"
-                   *ngIf="!isSaved(i)"></fa-icon>
-        </button>
-      </div>
-      <div class="col">
-        <button type="button"
-                class="btn btn-secondary btn-block cursor-pointer"
-                data-toggle="tooltip"
-                [title]="'component.name_management.start_session' | translate"
-                [disabled]="!elem.isValid() || !connectionService.serverAvailable"
-                (click)="startQuiz(i)"
-                data-animation="false">
-          <fa-icon [icon]="'paper-plane'"></fa-icon>
-        </button>
-      </div>
-      <div class="col">
-        <button type="button"
-                class="btn btn-secondary btn-block cursor-pointer"
-                data-toggle="tooltip"
-                [title]="'component.name_management.edit_session' | translate"
-                (click)="editQuiz(i)"
-                data-animation="false">
-          <fa-icon [icon]="'edit'"></fa-icon>
-        </button>
-      </div>
-      <div class="col">
-        <button class="btn btn-secondary btn-block cursor-pointer"
-                data-toggle="tooltip"
-                [title]="'component.name_management.export' | translate"
-                (click)="exportQuiz(i)"
-                data-animation="false">
-          <fa-icon [icon]="'download'"></fa-icon>
-        </button>
-      </div>
-      <div class="col">
-        <button type="button"
-                class="btn btn-secondary btn-block"
-                data-toggle="tooltip"
-                [title]="'component.name_management.delete_session' | translate"
-                [disabled]="!connectionService.serverAvailable"
-                (click)="deleteQuiz(i)"
-                data-animation="false">
-          <fa-icon [icon]="'trash'"></fa-icon>
-        </button>
-      </div>
-      <hr *ngIf="i < sessions.length - 1"/>
-    </div>
+<h2 *ngIf="sessions.length === 0"
+    class="text-center">{{'component.name_management.no_sessions' | translate}}</h2>
 
-    <h5 *ngIf="publicQuizAmount > 0"
-        class="text-center mt-5 pt-5">
-      <a [routerLink]="['/quiz', 'public']">{{'component.name_management.public-quizzes' | translate:{amount: publicQuizAmount} }}</a>
-    </h5>
+<div class="row">
+  <div *ngFor="let elem of sessions; let i = index"
+       class="col-12 col-lg-6">
+    <div class="card mb-3 text-dark p-0">
+
+      <div class="card-header">
+        <h6 class="mb-0">{{elem.name}}</h6>
+      </div>
+
+      <div class="card-body text-break">
+        <p class="card-text">
+          <span *ngIf="elem.isValid()"
+                class="text-success">
+            {{'component.quiz_summary.question_group_successful' | translate}}
+          </span>
+          <span *ngIf="!elem.isValid()"
+                class="text-danger">
+            {{'component.quiz_summary.question_group_failed' | translate}}
+          </span>
+        </p>
+      </div>
+
+      <div class="card-footer">
+
+        <div class="d-flex justify-content-around">
+          <ng-container *ngIf="elem.isValid() && connectionService.serverAvailable">
+
+            <button (click)="saveQuiz(i)"
+                    *ngIf="isAuthorizedToSaveQuiz()"
+                    [title]="'component.name_management.save_session' | translate"
+                    class="btn btn-secondary">
+              <fa-icon *ngIf="isSaved(i)"
+                       [icon]="'check'"></fa-icon>
+              <fa-icon *ngIf="!isSaved(i)"
+                       [icon]="'save'"></fa-icon>
+            </button>
+
+            <button (click)="startQuiz(i)"
+                    [title]="'component.name_management.start_session' | translate"
+                    class="btn btn-secondary">
+              <fa-icon [icon]="'paper-plane'"></fa-icon>
+            </button>
+
+          </ng-container>
+
+          <button (click)="editQuiz(i)"
+                  [title]="'component.name_management.edit_session' | translate"
+                  class="btn btn-secondary">
+            <fa-icon [icon]="'edit'"></fa-icon>
+          </button>
+
+          <button (click)="exportQuiz(i)"
+                  [title]="'component.name_management.export' | translate"
+                  class="btn btn-secondary">
+            <fa-icon [icon]="'download'"></fa-icon>
+          </button>
+
+          <ng-container *ngIf="connectionService.serverAvailable">
+            <button (click)="deleteQuiz(i)"
+                    [title]="'component.name_management.delete_session' | translate"
+                    class="btn btn-secondary">
+              <fa-icon [icon]="'trash'"></fa-icon>
+            </button>
+          </ng-container>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>
+
+<h5 *ngIf="publicQuizAmount > 0"
+    class="text-center mt-5 pt-5">
+  <a [routerLink]="['/quiz', 'public']">{{'component.name_management.public-quizzes' | translate:{amount: publicQuizAmount} }}</a>
+</h5>
+
