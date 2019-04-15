@@ -178,7 +178,7 @@ export class QuizOverviewComponent implements OnInit {
     });
 
     this.modalService.open(QuizSaveComponent).result.catch(() => {}).then(val => {
-      if (!val || new Date(val.expiry).getTime() <= new Date().getTime()) {
+      if (!val || (val.expiry && new Date(val.expiry).getTime() <= new Date().getTime())) {
         return;
       }
 
