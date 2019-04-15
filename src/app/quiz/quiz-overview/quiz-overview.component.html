@@ -1,5 +1,7 @@
-<h2 *ngIf="sessions.length === 0"
-    class="text-center">{{'component.name_management.no_sessions' | translate}}</h2>
+<div class="center-vertical d-flex justify-content-center">
+  <h2 *ngIf="sessions.length === 0"
+      class="text-center">{{'component.name_management.no_sessions' | translate}}</h2>
+</div>
 
 <div class="row">
   <div *ngFor="let elem of sessions; let i = index"
