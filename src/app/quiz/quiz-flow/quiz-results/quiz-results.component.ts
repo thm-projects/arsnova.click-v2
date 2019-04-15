@@ -349,10 +349,14 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.footerBarService.footerElemFullscreen,
       ];
       if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
-        if (this.quizService.quiz.questionList.every(
-          question => [QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question.TYPE))) {
-          footerElems.push(this.footerBarService.footerElemExport);
-        } else {
+        if (this.quizService.quiz.questionList.some(question => [
+          QuestionType.FreeTextQuestion,
+          QuestionType.MultipleChoiceQuestion,
+          QuestionType.RangedQuestion,
+          QuestionType.SingleChoiceQuestion,
+          QuestionType.TrueFalseSingleChoiceQuestion,
+          QuestionType.YesNoSingleChoiceQuestion,
+        ].includes(question.TYPE))) {
           footerElems.push(this.footerBarService.footerElemLeaderboard);
         }
       }
