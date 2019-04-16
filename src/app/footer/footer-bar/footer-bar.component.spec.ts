@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -101,29 +100,5 @@ describe('FooterBarComponent', () => {
     spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
     component.fileChange({ target: { files: [{ name: 'testFile' }] } });
     expect(fileUploadService.uploadFile).toHaveBeenCalled();
-  })));
-
-  it('#moveLeft', (inject([FooterBarService], (footerBarService: FooterBarService) => {
-    component['_footerElements'] = [
-      ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
-    ];
-    component.footerElemIndex = 2;
-    component.moveLeft();
-    expect(component.footerElemIndex).toEqual(1);
-    component.moveLeft();
-    expect(component.footerElemIndex).toEqual(1);
-  })));
-
-  it('#moveRight', (inject([FooterBarService], (footerBarService: FooterBarService) => {
-    component['_footerElements'] = [
-      ...Object.keys(footerBarService).map(t => footerBarService[t] instanceof FooterbarElement ? footerBarService[t] : false),
-    ];
-    component.footerElemIndex = 1;
-    component.moveRight();
-    expect(component.footerElemIndex).toEqual(2);
-    for (let i = 0; i < footerBarService.footerElements.length; i++) {
-      component.moveRight();
-    }
-    expect(component.footerElemIndex).toEqual(footerBarService.footerElements.length - 1);
   })));
 });
