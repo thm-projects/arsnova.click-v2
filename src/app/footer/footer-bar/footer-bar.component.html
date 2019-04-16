@@ -1,41 +1,29 @@
 <nav *ngIf="footerBarService.footerElements.length"
-     id="navbar-footer-container"
+     [class.collapsed]="collapsedNavbar"
      class="nav navbar-footer flex-nowrap flex-sm-column justify-content-sm-start p-1 mb-2 mb-sm-0"
+     id="navbar-footer-container"
      role="navigation">
-  <input class="d-none"
-         id="upload-session"
-         type="file"
-         (change)="fileChange($event)"
+  <input (change)="fileChange($event)"
          accept="application/json"
-         multiple="multiple"/>
-  <div *ngFor="let elem of footerBarService.footerElements"
-       class="footerElement px-2 px-sm-1 py-sm-2 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start"
-       [class.text-success]="elem.selectable && elem.isActive"
-       [class.text-danger]="elem.selectable && !elem.isActive"
-       [id]="elem.id"
-       [routerLink]="getLinkTarget(elem)"
-       [queryParams]="getQueryParams(elem)"
-       [title]="elem.textName | translate"
+         class="d-none"
+         id="upload-session"
+         multiple="multiple"
+         type="file"/>
+  <div (click)="toggleSetting(elem)"
+       *ngFor="let elem of footerBarService.footerElements"
        [attr.data-intro]="elem.showIntro ? (elem.introTranslate | translate) : null"
-       (click)="toggleSetting(elem)">
+       [class.text-danger]="elem.selectable && !elem.isActive"
+       [class.text-success]="elem.selectable && elem.isActive"
+       [id]="elem.id"
+       [queryParams]="getQueryParams(elem)"
+       [routerLink]="getLinkTarget(elem)"
+       [title]="elem.textName | translate"
+       class="footerElement px-2 px-sm-1 py-sm-2 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
     <p class="footerElemIcon mb-0">
       <fa-icon [icon]="elem.iconClass"
                aria-hidden="true"></fa-icon>
     </p>
-    <p class="footerElemText text-truncate text-left mb-0 ml-2 d-md-block"><span [class]="elem.textClass"
-                                                                                 [innerHTML]="elem.textName | translate"></span></p>
+    <p class="footerElemText text-truncate text-left mb-0 ml-2"><span [class]="elem.textClass"
+                                                                      [innerHTML]="elem.textName | translate"></span></p>
   </div>
 </nav>
-
-<span class="d-none position-absolute justify-content-center align-items-center"
-      id="footer-move-left"
-      [style.visibility]="footerElemIndex === 1 ? 'hidden' : 'visible'"
-      (click)="moveLeft()">
-        <fa-icon [icon]="'caret-left'"></fa-icon>
-</span>
-<span class="d-none position-absolute justify-content-center align-items-center"
-      id="footer-move-right"
-      [style.visibility]="hideRight() ? 'hidden' : 'visible'"
-      (click)="moveRight()">
-        <fa-icon [icon]="'caret-right'"></fa-icon>
-</span>

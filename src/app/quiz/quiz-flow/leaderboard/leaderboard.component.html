@@ -17,11 +17,11 @@
   <ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length > 1;else attendeeView">
     <ng-container *ngFor="let group of memberGroupResults">
       <div class="col-12 col-sm-6">
-        <div class="bg-secondary rounded p-2 my-2 ">
+        <div class="bg-secondary text-dark rounded p-2 my-2 ">
           <h6 class="text-center mb-0">{{'component.leaderboard.team-result.name' | translate:{TEAM_NAME: group.name} }}</h6>
           <hr/>
-          <p>{{'component.leaderboard.team-result.overall-response-time' | translate:{RESPONSE_TIME: formatResponseTime(group.responseTime)} }}</p>
-          <p>{{'component.leaderboard.team-result.score' | translate:{SCORE: group.score} }}</p>
+          <p>{{'component.leaderboard.team-result.overall-response-time' | translate:{RESPONSE_TIME: formatResponseTime(group.responseTime)} }}</p>
+          <p>{{'component.leaderboard.team-result.score' | translate:{SCORE: group.score} }}</p>
         </div>
       </div>
     </ng-container>
@@ -33,15 +33,15 @@
   <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
        [class.col-12]="!i"
        [class.col-sm-6]="!!i">
-    <div class="bg-secondary rounded p-2 my-2"
-         [class.own-nick]="!i || attendeeService.isOwnNick(attendee.name)"
-         [class.text-center]="!i">
+    <div [class.own-nick]="!i || attendeeService.isOwnNick(attendee.name)"
+         [class.text-center]="!i"
+         class="bg-secondary text-dark rounded p-2 my-2">
       <fa-icon *ngIf="!i"
-               class="mr-2"
-               [icon]="'trophy'"></fa-icon>
+               [icon]="'trophy'"
+               class="mr-2"></fa-icon>
       <span *ngIf="i">{{i + 1}}.&nbsp;</span>
-      <span><span class="d-inline-flex"
-                  [innerHTML]="parseNickname(attendee.name)"></span>&nbsp;-&nbsp;</span>
+      <span><span [innerHTML]="parseNickname(attendee.name)"
+                  class="d-inline-flex"></span>&nbsp;-&nbsp;</span>
       <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
     </div>
   </div>

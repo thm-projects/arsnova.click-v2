@@ -9,75 +9,69 @@
   }
 }
 
-#footer-move-left,
-#footer-move-right {
-  width: 50px;
-  height: 50px;
-  top: 0;
-  color: #fff;
-  font-size: 3rem;
-  z-index: 1040;
-}
+@mixin navbarFooterSMView() {
+  position: absolute;
+  max-width: 20vw;
 
-#footer-move-left {
-  border-right: 1px dashed;
-}
+  .footerElement {
+    .footerElemText {
+      display: none;
+    }
+  }
+  &:hover {
+    @include showFooterElements;
+  }
 
-#footer-move-right {
-  border-left: 1px dashed;
-  right: 0;
+  @include border-right-radius($border-radius);
+
+  .footerElement {
+    flex-grow: 0;
+
+    .footerElemText {
+      flex-shrink: 0;
+      max-width: calc(20vw - 36px);
+    }
+  }
 }
 
 .navbar-footer {
   left: 0;
   z-index: 1040;
 
-  @include media-breakpoint-only(sm) {
-    position: absolute;
-    max-width: 20vw;
-
-    .footerElement {
-      .footerElemText {
-        display: none;
-      }
-    }
-    &:hover {
-      @include showFooterElements;
-    }
-  }
-  @include media-breakpoint-up(md) {
-    opacity: 0.95;
-    max-width: 20vw;
-  }
-
-  @include media-breakpoint-down(xs) {
+  @include media-breakpoint-only(xs) {
     min-height: 50px;
     width: 100%;
     overflow-y: hidden;
     overflow-x: auto;
     position: relative;
   }
-  @include media-breakpoint-up(sm) {
+
+  @include media-breakpoint-only(sm) {
+    @include navbarFooterSMView();
+  }
+
+  @include media-breakpoint-up(md) {
     @include border-right-radius($border-radius);
+    opacity: 0.95;
+    max-width: 20vw;
   }
 
   .footerElement {
     flex-shrink: 0;
 
-    @include media-breakpoint-down(xs) {
+    @include media-breakpoint-only(xs) {
       flex-grow: 1;
 
       .footerElemText {
+        display: block;
         line-height: 40px;
       }
     }
-    @include media-breakpoint-up(sm) {
-      flex-grow: 0;
+  }
 
-      .footerElemText {
-        flex-shrink: 0;
-        max-width: calc(20vw - 36px);
-      }
+  &.collapsed {
+    @include media-breakpoint-up(sm) {
+      @include navbarFooterSMView();
     }
   }
 }

@@ -1,6 +1,14 @@
-import { isPlatformServer } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { INamedType } from '../../../lib/interfaces/interfaces';
+import { ConfidenceRateComponent } from '../../quiz/quiz-flow/confidence-rate/confidence-rate.component';
+import { LeaderboardComponent } from '../../quiz/quiz-flow/leaderboard/leaderboard.component';
+import { QuizLobbyComponent } from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import { QuizResultsComponent } from '../../quiz/quiz-flow/quiz-results/quiz-results.component';
+import { QuizThemeComponent } from '../../quiz/quiz-flow/quiz-theme/quiz-theme.component';
+import { ReadingConfirmationComponent } from '../../quiz/quiz-flow/reading-confirmation/reading-confirmation.component';
+import { VotingComponent } from '../../quiz/quiz-flow/voting/voting.component';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -11,28 +19,10 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   templateUrl: './footer-bar.component.html',
   styleUrls: ['./footer-bar.component.scss'],
 })
-export class FooterBarComponent {
+export class FooterBarComponent implements OnInit {
   public static TYPE = 'FooterBarComponent';
 
-  private _footerElemIndex = 1;
-
-  get footerElemIndex(): number {
-    return this._footerElemIndex;
-  }
-
-  set footerElemIndex(value: number) {
-    this._footerElemIndex = value;
-  }
-
-  private _hasRightScrollElement = false;
-
-  get hasRightScrollElement(): boolean {
-    return this._hasRightScrollElement;
-  }
-
-  set hasRightScrollElement(value: boolean) {
-    this._hasRightScrollElement = value;
-  }
+  private collapsedNavbar: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -40,6 +30,8 @@ export class FooterBarComponent {
     private quizService: QuizService,
     private trackingService: TrackingService,
     private fileUploadService: FileUploadService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
   }
 
@@ -56,6 +48,7 @@ export class FooterBarComponent {
   public toggleSetting(elem: IFooterBarElement): void {
     this.quizService.toggleSetting(elem);
     elem.onClickCallback(elem);
+
     this.trackingService.trackClickEvent({
       action: this.footerBarService.TYPE_REFERENCE,
       label: `footer-${elem.id}`,
@@ -79,67 +72,28 @@ export class FooterBarComponent {
     this.fileUploadService.uploadFile(formData);
   }
 
-  public moveLeft(): void {
-    if (isPlatformServer(this.platformId) || this.footerElemIndex === 1) {
-      return;
-    }
+  public ngOnInit(): void {
 
-    const navbarFooter = document.getElementById('navbar-footer-container');
-    if (!navbarFooter) {
-      this.footerElemIndex--;
-      return;
-    }
+    this.detectCurrentRoute();
 
-    this.footerElemIndex--;
-    if (this.footerElemIndex === 1) {
-      navbarFooter.scrollLeft = 0;
-    } else {
-      const child = navbarFooter.children.item(this.footerElemIndex);
-      const childWidth = child.clientWidth;
-      navbarFooter.scrollLeft -= (childWidth);
-    }
+    this.router.events.subscribe((nav: any) => {
+      this.detectCurrentRoute();
+    });
   }
 
-  public moveRight(): void {
-    if (isPlatformServer(this.platformId) || this.footerElemIndex === this.footerBarService.footerElements.length - 1) {
-      return;
-    }
-
-    const navbarFooter = document.getElementById('navbar-footer-container');
-    if (!navbarFooter) {
-      this.footerElemIndex++;
-      return;
-    }
-
-    const child = navbarFooter.children.item(this.footerElemIndex);
-
-    if (this.footerElemIndex === 1) {
-      const childWidth = child.clientWidth;
-      const leftButtonWidth = document.getElementById('footer-move-left').clientWidth;
-      navbarFooter.scrollLeft += (childWidth - leftButtonWidth);
-    } else {
-      navbarFooter.scrollLeft += child.clientWidth;
-    }
-    this.footerElemIndex++;
+  private detectCurrentRoute(): void {
+    this.collapsedNavbar = [
+      QuizLobbyComponent.TYPE,
+      QuizResultsComponent.TYPE,
+      VotingComponent.TYPE,
+      LeaderboardComponent.TYPE,
+      ReadingConfirmationComponent.TYPE,
+      ConfidenceRateComponent.TYPE,
+      QuizThemeComponent.TYPE,
+    ].includes(this.fetchChildComponent(this.activatedRoute).TYPE);
   }
 
-  public hideRight(): boolean {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-
-    if (!this.footerBarService.footerElements || this.footerBarService.footerElements.length < 2) {
-      return true;
-    }
-
-    const navbarFooter = document.getElementById('navbar-footer-container');
-    if (!navbarFooter) {
-      return false;
-    }
-
-    const children = navbarFooter.children;
-    const lastChildRight = Math.round(children[children.length - 1].getBoundingClientRect().right);
-    const containerRight = Math.round(navbarFooter.getBoundingClientRect().right);
-    return lastChildRight === containerRight;
+  private fetchChildComponent(route: ActivatedRoute): INamedType {
+    return <INamedType>(route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component);
   }
 }
