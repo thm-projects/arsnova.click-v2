@@ -1,53 +1,55 @@
 <div *ngIf="countdown && countdown.isRunning"
-     id="countdown-header"
-     class="overflow-hidden mb-3 d-flex">
+     class="overflow-hidden mb-3 d-flex"
+     id="countdown-header">
   <div class="ml-auto">
     <span>{{countdown.remainingTime}}</span>
     <fa-icon [icon]="'hourglass'"></fa-icon>
   </div>
 </div>
 
-<app-voting-question [showQuestion]="!quizService.quiz?.sessionConfig?.readingConfirmationEnabled"
-                     [questionText]="questionText"></app-voting-question>
+<app-voting-question [questionText]="questionText"
+                     [showQuestion]="!quizService.quiz?.sessionConfig?.readingConfirmationEnabled"></app-voting-question>
 
 <div *ngIf="displayAnswerButtons()"
      class="d-flex justify-content-around align-items-center flex-wrap">
-  <button *ngFor="let elem of answers; let i = index"
-          class="btn answer-option-element d-flex justify-content-center align-items-center rounded m-2 p-1 flex-grow-1 flex-shink-1"
-          [class.btn-secondary]="!isSelected(i)"
+  <button (click)="toggleSelectAnswer(i)"
+          *ngFor="let elem of answers; let i = index"
           [class.btn-invers]="isSelected(i)"
-          (click)="toggleSelectAnswer(i)"
-          [style.flex-basis]="quizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'">
+          [class.btn-secondary]="!isSelected(i)"
+          [style.flex-basis]="quizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'"
+          class="btn answer-option-element d-flex justify-content-center align-items-center rounded m-2 p-1 flex-grow-1 flex-shink-1">
     <span *ngIf="quizService.currentQuestion().displayAnswerText"
-          class="align-items-center d-flex h-100 mw-100 overflow-hidden"
-          [innerHTML]="sanitizeHTML(elem)"></span>
+          [innerHTML]="sanitizeHTML(elem)"
+          class="align-items-center d-flex h-100 mw-100 overflow-hidden"></span>
     <span *ngIf="!quizService.currentQuestion().displayAnswerText">{{normalizeAnswerOptionIndex(i)}}</span>
   </button>
 </div>
 
-<div *ngIf="displayRangedButtons()">
-  <input type="number"
-         autofocus
-         [placeholder]="'component.voting.ranged_question.title' | translate"
-         (input)="parseNumberInput($event)"
+<div *ngIf="displayRangedButtons()"
+     class="mt-5">
+  <input (input)="parseNumberInput($event)"
          (keyup.enter)="sendResponses()"
          (propertyChange)="parseNumberInput($event)"
-         class="w-100 px-2 py-1 rounded border-0"/>
+         [placeholder]="'component.voting.ranged_question.title' | translate"
+         autofocus
+         class="w-100 px-2 py-1 rounded border-0"
+         type="number"/>
 </div>
 
-<div *ngIf="displayFreetextInput()">
-  <input type="text"
-         autofocus
-         [placeholder]="'component.voting.free_text_question.title' | translate"
-         (input)="parseTextInput($event)"
+<div *ngIf="displayFreetextInput()"
+     class="mt-5">
+  <input (input)="parseTextInput($event)"
          (keyup.enter)="sendResponses()"
          (propertyChange)="parseTextInput($event)"
-         class="w-100 px-2 py-1 rounded border-0"/>
+         [placeholder]="'component.voting.free_text_question.title' | translate"
+         autofocus
+         class="w-100 px-2 py-1 rounded border-0"
+         type="text"/>
 </div>
 
-<button *ngIf="showSendResponseButton()"
-        class="btn btn-info btn-block my-5"
-        (click)="sendResponses()">
+<button (click)="sendResponses()"
+        *ngIf="showSendResponseButton()"
+        class="btn btn-info btn-block my-5">
   <span>{{'component.voting.send' | translate}}</span>
   <fa-icon [icon]="'paper-plane'"></fa-icon>
 </button>

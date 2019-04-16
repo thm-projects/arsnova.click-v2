@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 @Component({
@@ -8,17 +8,14 @@ import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 })
 export class ProgressBarSurveyComponent {
   public static TYPE = 'ProgressBarSurveyComponent';
-  private absolute: number;
-  private label: string;
-  private normalizedAnswerIndex: string;
 
-  @Input()
-  set attendeeData(value: any) {
+  @Input() set attendeeData(value: any) {
     this.percent = value.percent;
     this.base = value.base;
     this.absolute = value.absolute;
     this.label = value.label;
     this.normalizedAnswerIndex = String.fromCharCode(65 + value.answerIndex);
+    this.cd.markForCheck();
   }
 
   private _percent: number;
@@ -41,7 +38,11 @@ export class ProgressBarSurveyComponent {
     this._base = value;
   }
 
-  constructor(private sanitizer: DomSanitizer) {
+  private absolute: number;
+  private label: string;
+  private normalizedAnswerIndex: string;
+
+  constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) {
   }
 
   public sanitizeStyle(value: string | number): SafeStyle {

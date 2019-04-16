@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
+import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { SurveyQuestionEntity } from '../../../../lib/entities/question/SurveyQuestionEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
@@ -59,6 +60,7 @@ export class VotingComponent implements OnDestroy {
     return this._selectedAnswers;
   }
 
+  private _currentQuestion: AbstractQuestionEntity;
   private _serverUnavailableModal: NgbModalRef;
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];
@@ -90,6 +92,7 @@ export class VotingComponent implements OnDestroy {
         return;
       }
 
+      this._currentQuestion = this.quizService.currentQuestion();
       this.initData();
       this.attendeeService.restoreMembers();
     }));
@@ -123,11 +126,11 @@ export class VotingComponent implements OnDestroy {
   }
 
   public displayRangedButtons(): boolean {
-    return this.quizService && this.quizService.currentQuestion().TYPE === QuestionType.RangedQuestion;
+    return this._currentQuestion && this._currentQuestion.TYPE === QuestionType.RangedQuestion;
   }
 
   public displayFreetextInput(): boolean {
-    return this.quizService && this.quizService.currentQuestion().TYPE === QuestionType.FreeTextQuestion;
+    return this._currentQuestion && this._currentQuestion.TYPE === QuestionType.FreeTextQuestion;
   }
 
   public normalizeAnswerOptionIndex(index: number): string {
@@ -181,7 +184,7 @@ export class VotingComponent implements OnDestroy {
   }
 
   public initData(): void {
-    switch (this.quizService.currentQuestion().TYPE) {
+    switch (this._currentQuestion.TYPE) {
       case QuestionType.FreeTextQuestion:
         this._selectedAnswers = '';
         break;
@@ -205,8 +208,8 @@ export class VotingComponent implements OnDestroy {
       }
     }));
 
-    this.questionTextService.changeMultiple(this.quizService.currentQuestion().answerOptionList.map(answer => answer.answerText));
-    this.questionTextService.change(this.quizService.currentQuestion().questionText);
+    this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText));
+    this.questionTextService.change(this._currentQuestion.questionText);
   }
 
   public ngOnDestroy(): void {
@@ -260,8 +263,7 @@ export class VotingComponent implements OnDestroy {
   }
 
   private toggleSelectedAnswers(): boolean {
-    const question = this.quizService.currentQuestion();
-    if (question.TYPE === QuestionType.SurveyQuestion && !(question as SurveyQuestionEntity).multipleSelectionEnabled) {
+    if (this._currentQuestion.TYPE === QuestionType.SurveyQuestion && !(this._currentQuestion as SurveyQuestionEntity).multipleSelectionEnabled) {
       return true;
     }
 
@@ -270,7 +272,7 @@ export class VotingComponent implements OnDestroy {
       QuestionType.TrueFalseSingleChoiceQuestion,
       QuestionType.ABCDSingleChoiceQuestion,
       QuestionType.YesNoSingleChoiceQuestion,
-    ].includes(question.TYPE);
+    ].includes(this._currentQuestion.TYPE);
   }
 
 }

@@ -1,23 +1,22 @@
 <div class="mt-5">
-  <div class="row"
+  <div [attr.aria-label]="'component.timer.description' | translate"
        [attr.data-intro]="'component.timer.description' | translate"
-       [attr.aria-label]="'component.timer.description' | translate">
+       class="row">
     <div class="col-12">
-      <div class="input-group justify-content-center align-items-center">
-        <fa-icon [icon]="'hourglass'"
-                 class="mr-3"></fa-icon>
-        <input type="number"
-               class="border-0 rounded"
+      <label class="input-group justify-content-center align-items-center">
+        <fa-icon [icon]="'hourglass'"></fa-icon>
+        <input (input)="updateCountdown($event)"
+               (propertyChange)="updateCountdown($event)"
+               [attr.aria-valuetext]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
                [min]="minCountdownValue"
                [title]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
                [value]="countdown"
-               (input)="updateCountdown($event)"
-               (propertyChange)="updateCountdown($event)"
-               [attr.aria-valuetext]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"/>
-        <span class="text-center ml-3">
-            {{ 'component.timer.second' | translate:{COUNT: countdown} }}
-          </span>
-      </div>
+               class="border-0 rounded mx-3"
+               type="number"/>
+        <span>
+          {{ 'component.timer.second' | translate:{COUNT: countdown} }}
+        </span>
+      </label>
     </div>
     <div *ngIf="countdown"
          class="col-6 offset-2">

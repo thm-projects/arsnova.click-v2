@@ -15,7 +15,7 @@ export abstract class AbstractQuestionEntity {
 
   protected constructor(data) {
     this.questionText = data.questionText ? data.questionText : this.questionText;
-    this.timer = data.timer ? data.timer : this.timer;
+    this.timer = typeof data.timer === 'number' ? data.timer : this.timer;
     this.displayAnswerText = typeof data.displayAnswerText !== 'undefined' ? data.displayAnswerText : this.displayAnswerText;
 
     if (data.answerOptionList) {
@@ -51,7 +51,7 @@ export abstract class AbstractQuestionEntity {
     const questionTextWithoutMarkdownChars = this.getQuestionTextWithoutMarkdownChars().length;
 
     // hard coded checkup values are ugly, but the schema import seems to be messed up here...
-    return answerOptionListValid && questionTextWithoutMarkdownChars > 4 && questionTextWithoutMarkdownChars < 50001 && this.timer >= 0;
+    return answerOptionListValid && questionTextWithoutMarkdownChars > 4 && questionTextWithoutMarkdownChars < 50001 && this.timer >= -1;
   }
 
   public getQuestionTextWithoutMarkdownChars(): string {
@@ -74,7 +74,7 @@ export abstract class AbstractQuestionEntity {
         reason: 'component.quiz_summary.validation_errors.reasons.question_text_too_long',
       });
     }
-    if (this.timer < 1) {
+    if (this.timer < -1) {
       result.push({
         occurredAt: { type: 'question' },
         reason: 'component.quiz_summary.validation_errors.reasons.timer_too_small',

@@ -4,16 +4,16 @@
   </div>
 
   <div class="container-fluid d-flex flex-column flex-sm-row flex-sm-wrap position-relative p-0">
-    <div class="row flex-sm-nowrap mx-0 mx-md-0"
-         [class.mx-sm-auto]="isInQuizManager">
+    <div [class.mx-sm-auto]="isInQuizManager"
+         class="row flex-sm-nowrap mx-0 mx-md-0">
       <div class="footer-bar-wrapper flex-grow-0 flex-shrink-0 p-0 w-100">
         <app-footer-bar></app-footer-bar>
         <app-additional-data *ngIf="isInQuizManager"></app-additional-data>
       </div>
     </div>
 
-    <main id="content-container"
-          class="container mb-4">
+    <main class="container pb-4"
+          id="content-container">
       <router-outlet></router-outlet>
     </main>
   </div>

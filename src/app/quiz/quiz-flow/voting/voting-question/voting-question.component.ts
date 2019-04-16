@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Component({
   selector: 'app-voting-question',
   templateUrl: './voting-question.component.html',
-  styleUrls: ['./voting-question.component.css'],
+  styleUrls: ['./voting-question.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VotingQuestionComponent {

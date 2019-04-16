@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { ApplicationRef, EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
@@ -63,6 +63,7 @@ export class QuizService {
     private storageService: StorageService,
     private settingsService: SettingsService,
     private quizApiService: QuizApiService,
+    private appRef: ApplicationRef,
   ) {
   }
 
@@ -195,28 +196,36 @@ export class QuizService {
     this.quiz.sessionConfig.nicks.selectedNicks.splice(index, 1);
   }
 
-  public restoreSettings(quizName: string): void {
-    this.quizApiService.getQuiz(quizName).subscribe(response => {
-      this.quiz = response.payload.quiz;
-      this.isOwner = false;
+  public restoreSettings(quizName: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.quizApiService.getQuiz(quizName).subscribe(response => {
+        this.quiz = response.payload.quiz;
+        this.isOwner = false;
+        resolve();
+      });
     });
   }
 
-  public loadDataToPlay(quizName: string): void {
-    this.storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
-      if (!quiz) {
-        this.restoreSettings(quizName);
-        return;
-      }
-
-      this.quizApiService.getQuiz(quizName).subscribe(response => {
-        if (!response.payload.quiz) {
-          throw new Error(`No valid quiz found in quizStatus: ${JSON.stringify(response)}`);
+  public loadDataToPlay(quizName: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
+        console.log('QuizService: loadDataToPlay finished', quiz, quizName);
+        if (!quiz) {
+          this.restoreSettings(quizName).then(() => resolve());
+          return;
         }
 
-        this.quiz = response.payload.quiz;
-        this.isOwner = true;
-        this.updateOwnerState();
+        this.quizApiService.getQuiz(quizName).subscribe(response => {
+          if (!response.payload.quiz) {
+            reject();
+            throw new Error(`No valid quiz found in quizStatus: ${JSON.stringify(response)}`);
+          }
+
+          this.quiz = response.payload.quiz;
+          this.isOwner = true;
+          this.updateOwnerState();
+          resolve();
+        });
       });
     });
   }

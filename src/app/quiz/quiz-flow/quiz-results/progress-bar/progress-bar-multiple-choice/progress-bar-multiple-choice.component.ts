@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 @Component({
@@ -8,21 +8,16 @@ import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 })
 export class ProgressBarMultipleChoiceComponent {
   public static TYPE = 'ProgressBarMultipleChoiceComponent';
-  private absolute: number;
-  private label: string;
-  private normalizedAnswerIndex: string;
-  private progressbarCssClass: string;
 
-  @Input()
-  set attendeeData(value: any) {
+  @Input() set attendeeData(value: any) {
     this.percent = value.percent;
     this.base = value.base;
     this.absolute = value.absolute;
     this.label = value.label;
     this.normalizedAnswerIndex = String.fromCharCode(65 + value.answerIndex);
-    this.progressbarCssClass = typeof value.isCorrect === 'undefined' ? 'default' :
-      value.isCorrect === -1 ? 'danger' :
-        value.isCorrect === 0 ? 'warning' : 'success';
+    this.progressbarCssClass = typeof value.isCorrect === 'undefined' ? 'default' : value.isCorrect === -1 ? 'danger' : value.isCorrect === 0
+                                                                                                                        ? 'warning' : 'success';
+    this.cd.markForCheck();
   }
 
   private _percent: number;
@@ -45,7 +40,12 @@ export class ProgressBarMultipleChoiceComponent {
     this._base = value;
   }
 
-  constructor(private sanitizer: DomSanitizer) {
+  private absolute: number;
+  private label: string;
+  private normalizedAnswerIndex: string;
+  private progressbarCssClass: string;
+
+  constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) {
   }
 
   public sanitizeStyle(value: string | number): SafeStyle {

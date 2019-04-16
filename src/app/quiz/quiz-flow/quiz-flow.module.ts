@@ -7,13 +7,13 @@ import { SharedModule } from '../../shared/shared.module';
 import { ThemesModule } from '../../themes/themes.module';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
+import { QuizFlowSharedModule } from './quiz-flow-shared.module';
 import { QuizLobbyComponent } from './quiz-lobby/quiz-lobby.component';
 import { QuestionDetailsComponent } from './quiz-results/question-details/question-details.component';
 import { QuizResultsComponent } from './quiz-results/quiz-results.component';
 import { QuizResultsModule } from './quiz-results/quiz-results.module';
 import { QuizThemeComponent } from './quiz-theme/quiz-theme.component';
 import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
-import { VotingQuestionComponent } from './voting/voting-question/voting-question.component';
 import { VotingComponent } from './voting/voting.component';
 
 export const quizFlowRoutes: Routes = [
@@ -63,16 +63,10 @@ export const quizFlowRoutes: Routes = [
 
 @NgModule({
   imports: [
-    MarkdownModule, SharedModule, ThemesModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, NgxQRCodeModule,
+    MarkdownModule, SharedModule, ThemesModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, NgxQRCodeModule, QuizFlowSharedModule,
   ],
   declarations: [
-    QuizLobbyComponent,
-    VotingComponent,
-    LeaderboardComponent,
-    QuizThemeComponent,
-    ReadingConfirmationComponent,
-    ConfidenceRateComponent,
-    VotingQuestionComponent,
+    QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent, ReadingConfirmationComponent, ConfidenceRateComponent,
   ],
 })
 export class QuizFlowModule {

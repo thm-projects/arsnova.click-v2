@@ -16,7 +16,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
 @AutoUnsubscribe('_subscriptions')
 export class CountdownComponent implements OnInit, OnDestroy {
   public static TYPE = 'CountdownComponent';
-  public minCountdownValue = 10;
+  public minCountdownValue = 0;
 
   private _parsedHours = '0';
 

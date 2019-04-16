@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { HeaderModule } from '../../../header/header.module';
 import { SharedModule } from '../../../shared/shared.module';
+import { QuizFlowSharedModule } from '../quiz-flow-shared.module';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { ProgressBarModule } from './progress-bar/progress-bar.module';
 import { QuestionDetailsComponent } from './question-details/question-details.component';
@@ -9,7 +10,7 @@ import { ReadingConfirmationProgressComponent } from './reading-confirmation-pro
 
 @NgModule({
   imports: [
-    SharedModule, ProgressBarModule, HeaderModule,
+    SharedModule, ProgressBarModule, HeaderModule, QuizFlowSharedModule,
   ],
   declarations: [QuizResultsComponent, ConfidenceRateComponent, ReadingConfirmationProgressComponent, QuestionDetailsComponent],
   exports: [QuizResultsComponent],

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 @Component({
@@ -8,19 +8,15 @@ import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 })
 export class ProgressBarFreetextComponent {
   public static TYPE = 'ProgressBarFreetextComponent';
-  private absolute: number;
-  private label: string;
-  private progressbarCssClass: string;
 
-  @Input()
-  set attendeeData(value: any) {
+  @Input() set attendeeData(value: any) {
     this.percent = value.percent;
     this.base = value.base;
     this.absolute = value.absolute;
     this.label = value.label;
-    this.progressbarCssClass = typeof value.isCorrect === 'undefined' ? 'default' :
-      value.isCorrect === -1 ? 'danger' :
-        value.isCorrect === 0 ? 'warning' : 'success';
+    this.progressbarCssClass = typeof value.isCorrect === 'undefined' ? 'default' : value.isCorrect === -1 ? 'danger' : value.isCorrect === 0
+                                                                                                                        ? 'warning' : 'success';
+    this.cd.markForCheck();
   }
 
   private _percent: number;
@@ -43,7 +39,11 @@ export class ProgressBarFreetextComponent {
     this._base = value;
   }
 
-  constructor(private sanitizer: DomSanitizer) {
+  private absolute: number;
+  private label: string;
+  private progressbarCssClass: string;
+
+  constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) {
   }
 
   public sanitizeStyle(value: string | number): SafeStyle {
