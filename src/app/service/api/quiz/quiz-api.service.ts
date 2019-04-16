@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { DefaultSettings } from '../../../../lib/default.settings';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
@@ -76,6 +77,13 @@ export class QuizApiService {
   }
 
   public setQuiz(quiz: QuizEntity): Observable<QuizEntity> {
+    if (!environment.readingConfirmationEnabled) {
+      quiz.sessionConfig.readingConfirmationEnabled = false;
+    }
+    if (!environment.confidenceSliderEnabled) {
+      quiz.sessionConfig.confidenceSliderEnabled = false;
+    }
+
     return this.http.put<QuizEntity>(this._putQuizUrl, { quiz }, {
       headers: {
         authorization: localStorage.getItem(StorageKey.PrivateKey),

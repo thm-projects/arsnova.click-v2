@@ -1,18 +1,18 @@
 <div *ngFor="let answer of data; let i = index">
-  <app-progress-bar-single-choice *ngIf="question.TYPE === 'SingleChoiceQuestion'"
+  <app-progress-bar-single-choice *ngIf="question?.TYPE === 'SingleChoiceQuestion'"
                                   [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
-  <app-progress-bar-single-choice *ngIf="question.TYPE === 'YesNoSingleChoiceQuestion'"
+  <app-progress-bar-single-choice *ngIf="question?.TYPE === 'YesNoSingleChoiceQuestion'"
                                   [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
-  <app-progress-bar-single-choice *ngIf="question.TYPE === 'TrueFalseSingleChoiceQuestion'"
+  <app-progress-bar-single-choice *ngIf="question?.TYPE === 'TrueFalseSingleChoiceQuestion'"
                                   [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
-  <app-progress-bar-multiple-choice *ngIf="question.TYPE === 'MultipleChoiceQuestion'"
+  <app-progress-bar-multiple-choice *ngIf="question?.TYPE === 'MultipleChoiceQuestion'"
                                     [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-multiple-choice>
-  <app-progress-bar-survey *ngIf="question.TYPE === 'SurveyQuestion'"
+  <app-progress-bar-survey *ngIf="question?.TYPE === 'SurveyQuestion'"
                            [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-survey>
-  <app-progress-bar-survey *ngIf="question.TYPE === 'ABCDSingleChoiceQuestion'"
+  <app-progress-bar-survey *ngIf="question?.TYPE === 'ABCDSingleChoiceQuestion'"
                            [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-survey>
-  <app-progress-bar-ranged *ngIf="question.TYPE === 'RangedQuestion'"
+  <app-progress-bar-ranged *ngIf="question?.TYPE === 'RangedQuestion'"
                            [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-ranged>
-  <app-progress-bar-freetext *ngIf="question.TYPE === 'FreeTextQuestion'"
+  <app-progress-bar-freetext *ngIf="question?.TYPE === 'FreeTextQuestion'"
                              [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-freetext>
 </div>
