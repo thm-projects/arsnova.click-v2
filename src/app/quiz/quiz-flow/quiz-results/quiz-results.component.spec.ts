@@ -6,7 +6,6 @@ import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService }
 import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { Attendee } from '../../../../lib/attendee/attendee';
-import { Countdown } from '../../../../lib/countdown/countdown';
 import { Language } from '../../../../lib/enums/enums';
 import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -123,7 +122,7 @@ describe('QuizResultsComponent', () => {
       ticket: '',
     }));
 
-    expect(component.showStopQuizButton()).toBeTruthy();
+    expect(component.showStopQuizButton).toBeTruthy();
   }));
 
   it(`#showStopCountdownButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
@@ -138,17 +137,17 @@ describe('QuizResultsComponent', () => {
       currentQuizName: '',
       ticket: '',
     }));
-    component.countdown = new Countdown(quizService.currentQuestion().timer);
+    component.countdown = quizService.currentQuestion().timer;
 
-    expect(component.countdown.isRunning).toBeTruthy();
-    expect(component.showStopCountdownButton()).toBeTruthy();
+    expect(component.countdown).toBeTruthy();
+    expect(component.showStopCountdownButton).toBeTruthy();
   }));
 
   it(`#showStartQuizButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     quizService['_isOwner'] = true;
     quizService.readingConfirmationRequested = true;
 
-    expect(component.showStartQuizButton()).toBeTruthy();
+    expect(component.showStartQuizButton).toBeTruthy();
   }));
 
   it(`#hideProgressbarCssStyle`, inject([QuizService], (quizService: QuizService) => {
