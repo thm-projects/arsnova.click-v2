@@ -150,7 +150,7 @@ export class QuizOverviewComponent implements OnInit {
 
     this.quizApiService.deleteQuiz(this.sessions[index]).subscribe((response: IMessage) => {
       if (response.status !== StatusProtocol.Success) {
-        console.log(response);
+        console.log('QuizOverviewComponent: DeleteQuiz failed', response);
       } else {
         const sessionName = this.sessions[index].name;
         this.sessions.splice(index, 1);

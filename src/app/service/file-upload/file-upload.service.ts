@@ -70,7 +70,7 @@ export class FileUploadService {
         });
       }
     }, error => {
-      console.log(error);
+      console.log('FileUploadService: PostQuizUpload failed', error);
     });
   }
 }

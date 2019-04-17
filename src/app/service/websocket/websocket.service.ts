@@ -33,11 +33,11 @@ export class WebsocketService {
     const observer = {
       next: (data: Object) => {
         if (socket.readyState === WebSocket.OPEN) {
-          console.log('websocketservice - sending message', data);
+          console.log('WebsocketService: sending message', data);
           socket.send(JSON.stringify(data));
           this.connectionEmitter.emit(true);
         } else if (socket.readyState === WebSocket.CONNECTING) {
-          console.log('websocketservice - waiting 500ms for connection');
+          console.log('WebsocketService: waiting 500ms for connection');
           setTimeout(() => (observer.next(data)), 500);
         } else if ([WebSocket.CLOSING, WebSocket.CLOSED].includes(socket.readyState)) {
           this.connectionEmitter.emit(false);

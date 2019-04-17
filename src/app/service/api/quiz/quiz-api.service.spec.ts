@@ -103,7 +103,7 @@ describe('QuizApiService', () => {
       state: true,
     };
 
-    service.postQuizSettingsUpdate(quizSettingsUpdateData).subscribe();
+    service.postQuizSettingsUpdate({ name: quizName } as QuizEntity, quizSettingsUpdateData).subscribe();
     backend.expectOne(service.postQuizSettingsUpdateUrl).flush({});
 
     expect(service).toBeTruthy();

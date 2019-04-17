@@ -31,7 +31,7 @@ export class UserService {
       this.persistTokens();
     }
     if (isPlatformBrowser(this.platformId)) {
-      console.log('switching db', this.username, value);
+      console.log('UserService: switching db', this.username, value);
       this.storageService.switchDb(this._username).subscribe();
     }
     this._isLoggedIn = value;
@@ -81,37 +81,38 @@ export class UserService {
 
     this.storageService.stateNotifier.subscribe((type) => {
       if (type === DbState.Initialized && !this.username) {
-        console.log('db is initialized, but no user was set', DbState[type]);
+        console.log('UserService: db is initialized, but no user was set', DbState[type]);
         this.indexedDbService.stateNotifier.next(DbState.Revalidate);
       }
       if (type !== DbState.Initialized || this.indexedDbService.dbName !== this.username) {
-        console.log('local db is not initialized or initialized with other user - found user', this.indexedDbService.dbName, this.username);
+        console.log('UserService: local db is not initialized or initialized with other user - found user', this.indexedDbService.dbName,
+          this.username);
         return;
       }
 
       if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
-        console.log('having static token content with private key');
+        console.log('UserService: having static token content with private key');
         this.storageService.create(DbTable.Config, StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey).subscribe();
         localStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
 
         if (this._tmpRemoteQuizData.length) {
-          console.log('having remote quiz data');
+          console.log('UserService: having remote quiz data');
           this.storageService.getAllQuiznames().then(quiznames => {
-            console.log('received response from storage service and looping through remote quizzes');
+            console.log('UserService: received response from storage service and looping through remote quizzes');
 
             this._tmpRemoteQuizData.forEach(quiz => {
               this.quizService.quiz = new QuizEntity(quiz);
               this.quizService.persist();
-              console.log('persisting remote quiz to local db', quiz.name);
+              console.log('UserService: persisting remote quiz to local db', quiz.name);
             });
             this.indexedDbService.stateNotifier.next(DbState.Revalidate);
           });
         } else {
-          console.log('not received remote quiz data');
+          console.log('UserService: not received remote quiz data');
           this.indexedDbService.stateNotifier.next(DbState.Revalidate);
         }
       } else {
-        console.log('not received any static login token content');
+        console.log('UserService: not received any static login token content');
         this.indexedDbService.stateNotifier.next(DbState.Revalidate);
       }
     });

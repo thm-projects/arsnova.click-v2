@@ -8,13 +8,14 @@ export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase
 
     const request = db.open(dbName, 1);
     request.onupgradeneeded = () => {
-      console.log('Datenbank angelegt', dbName, Object.keys(DbTable));
+      console.log('AbstractIndexedDbAdapter: Added database', dbName, Object.keys(DbTable));
       this.storage = request.result;
 
       Object.keys(DbTable).forEach(dbtablesKey => {
-        console.log('checking if store exists', dbtablesKey, 'result:', this.storage.objectStoreNames.contains(dbtablesKey));
+        console.log('AbstractIndexedDbAdapter: checking if store exists', dbtablesKey, 'result:',
+          this.storage.objectStoreNames.contains(dbtablesKey));
         if (!this.storage.objectStoreNames.contains(dbtablesKey)) {
-          console.log('creating store', dbtablesKey);
+          console.log('AbstractIndexedDbAdapter: creating store', dbtablesKey);
           this.storage.createObjectStore(dbtablesKey, {
             keyPath: 'key',
             autoIncrement: true,
@@ -24,7 +25,7 @@ export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase
     };
     request.onsuccess = () => {
       this.storage = request.result;
-      console.log('Datenbank geöffnet');
+      console.log('AbstractIndexedDbAdapter: Database opened');
     };
   }
 

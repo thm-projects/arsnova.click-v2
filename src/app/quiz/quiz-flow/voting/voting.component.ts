@@ -215,7 +215,7 @@ export class VotingComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.memberApiService.putResponse(this._selectedAnswers).subscribe((data: IMessage) => {
       if (data.status !== StatusProtocol.Success) {
-        console.log(data);
+        console.log('VotingComponent: PutResponse failed', data);
       }
     });
 

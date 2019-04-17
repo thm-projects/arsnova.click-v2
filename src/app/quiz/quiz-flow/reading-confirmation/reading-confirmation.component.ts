@@ -112,7 +112,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'voting']);
           break;
         case MessageProtocol.UpdatedResponse:
-          console.log('modify response data for nickname in reading confirmation view', data.payload.nickname);
+          console.log('ReadingConfirmationComponent: modifying response data for nickname', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload);
           break;
         case MessageProtocol.Reset:

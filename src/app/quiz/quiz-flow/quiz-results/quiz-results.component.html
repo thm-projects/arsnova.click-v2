@@ -58,9 +58,9 @@
 </div>
 
 <div class="question">
-  <h2 *ngIf="quizService.quiz && quizService.quiz.questionList.length"
+  <h5 *ngIf="quizService.quiz && quizService.quiz.questionList.length"
       class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} /
-    {{quizService.quiz.questionList.length}}</h2>
+    {{quizService.quiz.questionList.length}}</h5>
 
   <app-voting-question [questionText]="questionText"
                        [showQuestion]="quizService.quiz?.sessionConfig?.readingConfirmationEnabled && !!countdown"></app-voting-question>

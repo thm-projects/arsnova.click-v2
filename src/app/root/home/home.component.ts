@@ -385,7 +385,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       } else if (error === MessageProtocol.InsufficientPermissions) {
         this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
       } else {
-        console.log(error);
+        console.log('HomeComponent: SetQuiz failed', error);
       }
     });
   }

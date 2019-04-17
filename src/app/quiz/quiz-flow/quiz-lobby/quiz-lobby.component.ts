@@ -80,7 +80,7 @@ export class QuizLobbyComponent implements OnDestroy {
     private quizApiService: QuizApiService,
     private ngbModal: NgbModal,
   ) {
-    console.log('lobby quiz initializing');
+    console.log('QuizLobbyComponent: quiz initializing');
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
@@ -89,7 +89,7 @@ export class QuizLobbyComponent implements OnDestroy {
       }
 
       if (this.quizService.isOwner) {
-        console.log('quiz in lobby set', this.quizService.quiz);
+        console.log('QuizLobbyComponent: quiz for owner initialized', this.quizService.quiz);
         this.handleNewQuiz(this.quizService.quiz);
         this.attendeeService.restoreMembers().then(() => {
           this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
@@ -168,7 +168,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   private handleNewQuiz(quiz: QuizEntity): void {
-    console.log('lobby quiz initialized', quiz);
+    console.log('QuizLobbyComponent: quiz initialized', quiz);
     if (!quiz) {
       return;
     }
@@ -176,7 +176,7 @@ export class QuizLobbyComponent implements OnDestroy {
     this.headerLabelService.headerLabel = this.quizService.quiz.name;
 
     this.connectionService.initConnection().then(() => {
-      console.log('connection in lobby initialized');
+      console.log('QuizLobbyComponent: connection initialized');
       this.connectionService.connectToChannel(this.quizService.quiz.name);
       this.handleMessages();
     });
@@ -317,7 +317,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   private handleNewAttendee(): void {
-    console.log('lobby quiz status initialized', this.quizService.quiz);
+    console.log('QuizLobbyComponent: quiz status for attendee initialized', this.quizService.quiz);
 
     this.headerLabelService.headerLabel = this.quizService.quiz.name;
 

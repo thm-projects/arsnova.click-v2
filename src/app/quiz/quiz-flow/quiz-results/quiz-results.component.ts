@@ -242,7 +242,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public stopQuiz(): void {
     this.quizApiService.stopQuiz(this.quizService.quiz).subscribe(data => {
       if (data.status !== StatusProtocol.Success) {
-        console.log(data);
+        console.log('QuizResultsComponent: StopQuiz failed', data);
       }
     });
     if (this.countdown) {
@@ -254,7 +254,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public async startQuiz(): Promise<void> {
     const startQuizData = await this.quizApiService.nextStep(this.quizService.quiz.name).toPromise();
     if (startQuizData.status !== StatusProtocol.Success) {
-      console.log(startQuizData);
+      console.log('QuizResultsComponent: NextStep failed', startQuizData);
       return;
     }
 
@@ -315,18 +315,18 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
           return typeof val === 'number' ? val > -1 : val.length > 0;
         })) {
-          console.log('Stopping countdown in the quiz results since all attendees have answered the current question');
+          console.log('QuizResultsComponent: Stopping countdown since all attendees have answered the current question');
           this.countdown = 0;
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
                                      > this.quizService.quiz.currentQuestionIndex + 1;
 
         } else if (currentStateData.payload.readingConfirmationRequested) {
-          console.log('Stopping countdown since reading confirmation is requested');
+          console.log('QuizResultsComponent: Stopping countdown since reading confirmation is requested');
           this.countdown = 0;
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
                                      > this.quizService.quiz.currentQuestionIndex + 1;
         } else {
-          console.log('Countdown is proceeding');
+          console.log('QuizResultsComponent: Countdown is proceeding');
         }
       }
 

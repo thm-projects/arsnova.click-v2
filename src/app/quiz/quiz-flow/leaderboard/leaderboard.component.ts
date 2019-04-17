@@ -206,7 +206,7 @@ export class LeaderboardComponent implements OnDestroy {
           this.router.navigate(['/quiz', 'flow', 'voting']);
           break;
         case MessageProtocol.UpdatedResponse:
-          console.log('modify response data for nickname in leaderboard view', data.payload.nickname);
+          console.log('LeaderboardComponent: modify response data for nickname', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload);
           break;
         case MessageProtocol.Reset:

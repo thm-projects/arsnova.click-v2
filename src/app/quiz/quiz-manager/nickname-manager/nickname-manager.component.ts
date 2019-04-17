@@ -168,7 +168,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this.nickApiService.getPredefinedNicks().subscribe(data => {
       this.availableNicks = data;
     }, error => {
-      console.log(error);
+      console.log('NicknameManagerComponent: GetPredefinedNicks failed', error);
     });
   }
 

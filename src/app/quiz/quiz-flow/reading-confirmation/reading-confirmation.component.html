@@ -1,9 +1,9 @@
-<h2 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h2>
+<h5 class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h5>
 
 <p [innerHTML]="sanitizeHTML(questionText)"></p>
 
-<button class="btn btn-light btn-block mt-5"
-        (click)="confirmReading()">
+<button (click)="confirmReading()"
+        class="btn btn-light btn-block mt-5">
   <fa-icon [icon]="'paper-plane'"></fa-icon>
   {{'component.liveResults.confirm_read' | translate}}
 </button>

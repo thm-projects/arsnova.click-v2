@@ -122,7 +122,7 @@ export class ConfidenceRateComponent {
           this.router.navigate(['/quiz', 'flow', 'results']);
           break;
         case MessageProtocol.UpdatedResponse:
-          console.log('modify response data for nickname in confidence rate view', data.payload.nickname);
+          console.log('ConfidenceRateComponent: modify response data for nickname', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload);
           break;
         case MessageProtocol.ReadingConfirmationRequested:

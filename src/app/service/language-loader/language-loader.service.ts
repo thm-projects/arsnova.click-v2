@@ -56,7 +56,7 @@ export class LanguageLoaderService {
   public updateProject(): void {
     this.i18nManagerService.postUpdateLangForProject(this.projectLoaderService.currentProject, this.parsedLangData).subscribe((response: any) => {
       if (response.status !== StatusProtocol.Success) {
-        console.log(response);
+        console.log('LanguageLoaderService: PostUpdateLangForProject failed', response);
         return;
       }
       this._changedData = false;

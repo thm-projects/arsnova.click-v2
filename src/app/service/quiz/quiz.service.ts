@@ -146,15 +146,15 @@ export class QuizService {
   }
 
   public toggleSettingByName(target: string, state: boolean | string): void {
-    this.quizApiService.postQuizSettingsUpdate({
+    this.quizApiService.postQuizSettingsUpdate(this.quiz, {
       target: target,
       state: state,
     }).subscribe(data => {
       if (data.status !== StatusProtocol.Success) {
-        console.log(data);
+        console.log('QuizService: PostQuizSettingsUpdate failed', data);
       }
     }, error => {
-      console.log(error);
+      console.log('QuizService: PostQuizSettingsUpdate failed', error);
     });
   }
 
@@ -208,6 +208,12 @@ export class QuizService {
 
   public loadDataToPlay(quizName: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
+      if (this.quiz) {
+        console.log('QuizService: loadDataToPlay aborted. Data already present', this.quiz, quizName);
+        resolve(true);
+        return;
+      }
+
       this.storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
         console.log('QuizService: loadDataToPlay finished', quiz, quizName);
         if (!quiz) {
@@ -240,6 +246,7 @@ export class QuizService {
       this.isOwner = true;
       this.updateOwnerState();
       this._isInEditMode = true;
+      console.log('QuizService: loadDataToEdit finished', quiz, quizName);
     });
   }
 

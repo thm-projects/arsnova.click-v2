@@ -111,9 +111,11 @@ export class QuizApiService {
       { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
-  public postQuizSettingsUpdate(settings: object): Observable<IMessage> {
-    return this.http.post<IMessage>(`${this._postQuizSettingsUpdateUrl}`, { settings },
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+  public postQuizSettingsUpdate(quiz: QuizEntity, settings: object): Observable<IMessage> {
+    return this.http.post<IMessage>(`${this._postQuizSettingsUpdateUrl}`, {
+      quizName: quiz.name,
+      settings,
+    }, { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getQuizSettings(quizName: string): Observable<IMessage> {

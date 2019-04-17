@@ -17,7 +17,7 @@ interface IFsDocument extends HTMLDocument {
 }
 
 export function isFullScreen(): boolean {
-  const fsDoc = <IFsDocument> document;
+  const fsDoc = <IFsDocument>document;
 
   return !!((fsDoc as any).fullscreenElement || fsDoc.mozFullScreenElement || (fsDoc as any).webkitFullscreenElement || fsDoc.msFullscreenElement);
 }
@@ -28,10 +28,10 @@ interface IFsDocumentElement extends HTMLElement {
 }
 
 export function toggleFullScreen(): void {
-  const fsDoc = <IFsDocument> document;
+  const fsDoc = <IFsDocument>document;
 
   if (!isFullScreen()) {
-    const fsDocElem = <IFsDocumentElement> document.documentElement;
+    const fsDocElem = <IFsDocumentElement>document.documentElement;
 
     if (fsDocElem.requestFullscreen) {
       (fsDocElem as any).requestFullscreen();
@@ -244,7 +244,7 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.description.back',
     linkTarget: null,
   }, function (): void {
-    console.log('going back');
+    console.log('footerElemBack: going back');
     history.back();
   });
   public footerElemStartQuiz: IFooterBarElement = new FooterbarElement({

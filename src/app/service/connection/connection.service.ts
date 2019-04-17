@@ -97,7 +97,7 @@ export class ConnectionService {
 
   public sendMessage(message: IMessage): void {
     if (!this._websocketAvailable) {
-      console.log('connectionservice - websocket not available, waiting 500ms');
+      console.log('ConnectionService: websocket not available, waiting 500ms');
       setTimeout(() => {
         this.sendMessage(message);
       }, 500);
@@ -153,15 +153,15 @@ export class ConnectionService {
       this.disconnectFromChannel();
     }
 
-    console.log('connecting to channel', name);
+    console.log('ConnectionService: connecting to channel', name);
     if (!this._socket) {
-      console.error('cannot connect to channel since no socket was found');
+      console.error('ConnectionService: cannot connect to channel since no socket was found');
       return;
     }
 
     if (!this._websocketAvailable) {
       setTimeout(() => {
-        console.log('connectionservice - websocket not available, waiting 500ms');
+        console.log('ConnectionService: websocket not available, waiting 500ms');
         this.connectToChannel(name);
       }, 500);
       return;
@@ -181,13 +181,13 @@ export class ConnectionService {
     }
 
     if (!this._socket) {
-      console.error('cannot disconnect from channel since no socket was found');
+      console.error('ConnectionService: cannot disconnect from channel since no socket was found');
       return;
     }
 
     if (!this._websocketAvailable) {
       setTimeout(() => {
-        console.log('connectionservice - websocket not available, waiting 500ms');
+        console.log('ConnectionService: websocket not available, waiting 500ms');
         this.disconnectFromChannel();
       }, 500);
       return;
@@ -233,7 +233,7 @@ export class ConnectionService {
       this.toggleFooterElemState(false);
       const timeout = this.lastTimeout >= 30 ? 30 : Math.round((this.lastTimeout * 2));
       this.lastTimeout = timeout;
-      console.log(`Socket connection dropped, waiting ${timeout}s for reconnect`);
+      console.log(`ConnectionService: Socket connection dropped, waiting ${timeout}s for reconnect`);
       setTimeout(() => {
         this.initWebsocket();
       }, timeout * 1000);

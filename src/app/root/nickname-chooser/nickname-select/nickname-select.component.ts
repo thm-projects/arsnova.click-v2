@@ -82,7 +82,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
-      console.log(err);
+      console.log('NicknameSelectComponent: PutMember failed', err);
     });
   }
 

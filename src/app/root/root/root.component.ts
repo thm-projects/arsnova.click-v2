@@ -39,7 +39,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.themeService.themeChanged.subscribe(themeName => {
       this.loadExternalStyles(`/${themeName}.css`).then(() => {
       }).catch(reason => {
-        console.log('theme loading failed', reason, themeName, document.getElementById('theme-styles'));
+        console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
       });
     });
   }
@@ -149,10 +149,10 @@ export class RootComponent implements OnInit, AfterViewInit {
      let swUpdateToast: ActiveToast<any>;
 
      this.swUpdate.available.subscribe((event) => {
-     console.log('service worker update available');
-     console.log('current version is', event.current);
-     console.log('available version is', event.available);
-     console.log('event type is', event.type);
+     console.log('RootComponent: service worker update available');
+     console.log('RootComponent: current version is', event.current);
+     console.log('RootComponent: available version is', event.available);
+     console.log('RootComponent: event type is', event.type);
 
      if (swUpdateToast) {
      this.toastService.remove(swUpdateToast.toastId);
@@ -170,13 +170,13 @@ export class RootComponent implements OnInit, AfterViewInit {
 
      });
      this.swUpdate.activated.subscribe(event => {
-     console.log('previous version was', event.previous);
-     console.log('current version is', event.current);
-     console.log('event type is', event.type);
+     console.log('RootComponent: previous version was', event.previous);
+     console.log('RootComponent: current version is', event.current);
+     console.log('RootComponent: event type is', event.type);
      });
      this.swUpdate.checkForUpdate().then(() => {
      }).catch((err) => {
-     console.error('error when checking for update', err);
+     console.error('RootComponent: error while checking for update', err);
      });
      */
   }
