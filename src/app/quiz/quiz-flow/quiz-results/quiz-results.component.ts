@@ -20,6 +20,7 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { I18nService } from '../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
+import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-confirm.component';
 
 @Component({
   selector: 'app-quiz-results',
@@ -359,9 +360,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         footerElems.push(this.footerBarService.footerElemResponseProgress);
       }
       this.footerBarService.footerElemBack.onClickCallback = async () => {
-        this.quizApiService.resetQuiz(this.quizService.quiz).subscribe(() => {
-          this.quizService.quiz.currentQuestionIndex = -1;
-        });
+        this.ngbModal.open(ToLobbyConfirmComponent).result.then(() => {
+          this.quizApiService.resetQuiz(this.quizService.quiz).subscribe(() => {
+            this.quizService.quiz.currentQuestionIndex = -1;
+          });
+        }).catch(() => {});
       };
     } else {
       footerElems = [

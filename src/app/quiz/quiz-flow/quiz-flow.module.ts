@@ -8,6 +8,7 @@ import { ThemesModule } from '../../themes/themes.module';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { QuizFlowSharedModule } from './quiz-flow-shared.module';
+import { EditModeConfirmComponent } from './quiz-lobby/modals/edit-mode-confirm/edit-mode-confirm.component';
 import { QuizLobbyComponent } from './quiz-lobby/quiz-lobby.component';
 import { QuestionDetailsComponent } from './quiz-results/question-details/question-details.component';
 import { QuizResultsComponent } from './quiz-results/quiz-results.component';
@@ -65,8 +66,15 @@ export const quizFlowRoutes: Routes = [
   imports: [
     MarkdownModule, SharedModule, ThemesModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, NgxQRCodeModule, QuizFlowSharedModule,
   ],
+  bootstrap: [EditModeConfirmComponent],
   declarations: [
-    QuizLobbyComponent, VotingComponent, LeaderboardComponent, QuizThemeComponent, ReadingConfirmationComponent, ConfidenceRateComponent,
+    QuizLobbyComponent,
+    VotingComponent,
+    LeaderboardComponent,
+    QuizThemeComponent,
+    ReadingConfirmationComponent,
+    ConfidenceRateComponent,
+    EditModeConfirmComponent,
   ],
 })
 export class QuizFlowModule {

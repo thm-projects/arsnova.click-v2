@@ -22,6 +22,7 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
+import { EditModeConfirmComponent } from './modals/edit-mode-confirm/edit-mode-confirm.component';
 
 @Component({
   selector: 'app-quiz-lobby',
@@ -239,10 +240,12 @@ export class QuizLobbyComponent implements OnDestroy {
       }
     };
     this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
-      this.quizService.close();
-      this.attendeeService.cleanUp();
-      this.connectionService.cleanUp();
-      this.router.navigate(['/quiz', 'manager', 'overview']);
+      this.ngbModal.open(EditModeConfirmComponent).result.then(() => {
+        this.quizService.close();
+        this.attendeeService.cleanUp();
+        this.connectionService.cleanUp();
+        this.router.navigate(['/quiz', 'manager', 'overview']);
+      }).catch(() => {});
     };
   }
 

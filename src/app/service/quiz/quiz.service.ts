@@ -196,30 +196,25 @@ export class QuizService {
     this.quiz.sessionConfig.nicks.selectedNicks.splice(index, 1);
   }
 
-  public restoreSettings(quizName: string): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      this.quizApiService.getQuiz(quizName).subscribe(response => {
-        this.quiz = response.payload.quiz;
-        this.isOwner = false;
-        resolve();
-      });
-    });
-  }
-
   public loadDataToPlay(quizName: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      if (this.quiz) {
-        console.log('QuizService: loadDataToPlay aborted. Data already present', this.quiz, quizName);
-        resolve(true);
-        return;
-      }
+      /*
+       * TODO Refactoring
+       * The requests can be prevented if this.quiz is set.
+       * But in this case the state (questonIndex, ...) must be updated via socket.
+       */
 
       this.storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
+
         console.log('QuizService: loadDataToPlay finished', quiz, quizName);
         if (!quiz) {
+          this.isOwner = false;
           this.restoreSettings(quizName).then(() => resolve());
           return;
         }
+
+        this.isOwner = true;
+        this.updateOwnerState();
 
         this.quizApiService.getQuiz(quizName).subscribe(response => {
           if (!response.payload.quiz) {
@@ -228,8 +223,6 @@ export class QuizService {
           }
 
           this.quiz = response.payload.quiz;
-          this.isOwner = true;
-          this.updateOwnerState();
           resolve();
         });
       });
@@ -247,6 +240,15 @@ export class QuizService {
       this.updateOwnerState();
       this._isInEditMode = true;
       console.log('QuizService: loadDataToEdit finished', quiz, quizName);
+    });
+  }
+
+  private restoreSettings(quizName: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.quizApiService.getQuiz(quizName).subscribe(response => {
+        this.quiz = response.payload.quiz;
+        resolve();
+      });
     });
   }
 

@@ -1,0 +1,12 @@
+<div class="modal-header">
+  <h5 class="mb-0">{{'plugins.splashscreen.edit_session_confirmation.title' | translate}}</h5>
+</div>
+<div class="modal-body">
+  <p class="mb-0">{{'plugins.splashscreen.edit_session_confirmation.text' | translate}}</p>
+</div>
+<div class="modal-footer">
+  <button (click)="abort()"
+          class="btn btn-secondary">{{'global.abort' | translate}}</button>
+  <button (click)="confirm()"
+          class="btn btn-danger ml-auto">{{'plugins.splashscreen.edit_session_confirmation.continue' | translate}}</button>
+</div>

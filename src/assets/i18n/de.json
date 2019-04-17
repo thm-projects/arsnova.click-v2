@@ -7,6 +7,7 @@
     "arsnova_slogan": "Quiz-App für MINT",
     "yes": "Ja",
     "no": "Nein",
+    "abort": "Abbrechen",
     "close_window": "Fenster schließen",
     "cookie_consent": {
       "message": "arsnova.click verwendet Cookies.",
@@ -639,10 +640,18 @@
         }
       },
       "question_and_answer": {},
-      "edit_session_confirmation": {},
+      "edit_session_confirmation": {
+        "title": "Quiz bearbeiten?",
+        "text": "Alle Teilnehmenden werden vom Quiz abgemeldet.",
+        "continue": "Fortfahren?"
+      },
       "remove_question_confirmation": {},
       "reminder_leaderboard_data": {},
-      "return_to_lobby": {}
+      "return_to_lobby": {
+        "title": "Warnung",
+        "text": "Wenn du zur Quiz-Lobby zurückkehrst, werden alle bereits durchgeführten Quizrunden zurückgesetzt.",
+        "continue": "Fortfahren?"
+      }
     }
   },
   "lib": {

@@ -837,7 +837,7 @@
       },
       "edit_session_confirmation": {
         "title": "Do you want to edit the quiz?",
-        "text": "All attendees will be removed and the leaderboard will be deleted.",
+        "text": "All attendees will be removed from the quiz.",
         "continue": "Continue?"
       },
       "remove_question_confirmation": {
