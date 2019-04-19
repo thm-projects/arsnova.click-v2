@@ -67,7 +67,7 @@
                 [class.btn-secondary]="canJoinQuiz"
                 [disabled]="!canJoinQuiz"
                 [routerLink]="['/quiz', enteredSessionName]"
-                class="btn btn-block">
+                class="btn btn-block px-1">
           <fa-icon [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.name_management.join_session' | translate}}</span>
         </button>
@@ -76,34 +76,34 @@
                 [class.btn-outline-secondary]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
                 [class.btn-secondary]="canStartQuiz && (!passwordRequired || serverPassword.length)"
                 [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
-                class="btn btn-success btn-block"
+                class="btn btn-success btn-block px-1"
                 id="startSession">
           <fa-icon [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.name_management.start_session' | translate}}</span>
         </button>
       </div>
       <div class="col-6 col-create-session p-0">
-        <ng-container *ngIf="!enteredSessionNameInput.value.length">
+        <ng-container *ngIf="!enteredSessionName.length">
           <button (click)="enteredSessionNameInput.focus()"
-                  class="btn btn-block btn-secondary">
+                  class="btn btn-block btn-secondary px-1">
             <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
             <fa-icon [icon]="'edit'"></fa-icon>
           </button>
         </ng-container>
-        <ng-container *ngIf="enteredSessionNameInput.value.length">
+        <ng-container *ngIf="enteredSessionName.length">
           <button (click)="handleClick('addSession') && addQuiz()"
                   *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
                   [class.btn-outline-secondary]="!canAddQuiz || !connectionService.serverAvailable"
                   [class.btn-secondary]="canAddQuiz && connectionService.serverAvailable"
                   [disabled]="!canAddQuiz || !connectionService.serverAvailable"
-                  class="btn btn-block"
+                  class="btn btn-block px-1"
                   id="addSession">
             <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
             <fa-icon [icon]="'edit'"></fa-icon>
           </button>
           <button (click)="handleClick('editSession') && editQuiz()"
                   *ngIf="canEditQuiz"
-                  class="btn btn-secondary btn-block"
+                  class="btn btn-secondary btn-block px-1"
                   id="editSession">
             <span class="mr-1">{{'component.name_management.edit_session' | translate}}</span>
             <fa-icon [icon]="'edit'"></fa-icon>
@@ -113,20 +113,18 @@
                   [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
                   [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
                   [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                  class="btn btn-block"
+                  class="btn btn-block px-1"
                   id="runDemoQuizSession">
-            <span class="mr-1">{{'component.name_management.create_demo_session' | translate}}</span>
-            <fa-icon [icon]="'paper-plane'"></fa-icon>
+            <span>{{'component.name_management.create_demo_session' | translate}}</span>
           </button>
           <button (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
                   *ngIf="isAddingABCDQuiz"
                   [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
                   [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
                   [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                  class="btn btn-block"
+                  class="btn btn-block px-1"
                   id="runABCDQuizSession">
-            <span class="mr-1">{{'component.name_management.create_abcd_session' | translate}}</span>
-            <fa-icon [icon]="'paper-plane'"></fa-icon>
+            <span>{{'component.name_management.create_abcd_session' | translate}}</span>
           </button>
         </ng-container>
       </div>
@@ -136,25 +134,25 @@
        class="col-12 mt-5">
     <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
   </div>
-  <div *ngIf="!isShowingQuiznameDatalist"
-       class="col-12 text-center mt-5"
-       id="demo-quiz-description">
-    <p [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"></p>
-    <p>
-      <a *ngIf="publicQuizAmount > 0"
-         [routerLink]="['/quiz', 'public']">{{'component.home.view-public' | translate:{amount: publicQuizAmount} }}
-      </a>
-      <a *ngIf="ownPublicQuizAmount > 0"
-         [routerLink]="['/quiz', 'public', 'own']">
-        <span *ngIf="publicQuizAmount > 0"><br/>{{'component.home.view-all-public' | translate}}</span>
-        <span *ngIf="publicQuizAmount === 0">{{'component.home.view-own-public' | translate}}</span>
-      </a>
-    </p>
-  </div>
-  <div *ngIf="!isShowingQuiznameDatalist"
-       class="col-12 mb-5 mt-2 justify-content-center d-flex mathjax-container">
-    <ng-container *ngTemplateOutlet="thmschroedelCoop"></ng-container>
-  </div>
+  <ng-container *ngIf="!isShowingQuiznameDatalist">
+    <div class="col-12 text-center mt-5"
+         id="demo-quiz-description">
+      <p [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"></p>
+      <p>
+        <a *ngIf="publicQuizAmount > 0"
+           [routerLink]="['/quiz', 'public']">{{'component.home.view-public' | translate:{amount: publicQuizAmount} }}
+        </a>
+        <a *ngIf="ownPublicQuizAmount > 0"
+           [routerLink]="['/quiz', 'public', 'own']">
+          <span *ngIf="publicQuizAmount > 0"><br/>{{'component.home.view-all-public' | translate}}</span>
+          <span *ngIf="publicQuizAmount === 0">{{'component.home.view-own-public' | translate}}</span>
+        </a>
+      </p>
+    </div>
+    <div class="col-12 mb-5 mt-2 justify-content-center d-flex mathjax-container">
+      <ng-container *ngTemplateOutlet="thmschroedelCoop"></ng-container>
+    </div>
+  </ng-container>
 </div>
 
 <ng-template #thmschroedelCoop>

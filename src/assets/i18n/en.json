@@ -314,7 +314,7 @@
       "start_session": "Start the quiz",
       "edit_session": "Edit the quiz",
       "create_session": "Make a new one!",
-      "create_demo_session": "Start demo quiz!",
+      "create_demo_session": "Start demo quiz",
       "quiz_management": "Stored Quizzes",
       "session_management": "Quizzes",
       "delete_session": "Delete quiz",
@@ -332,7 +332,7 @@
         "addNewHashtag": "Create a new quiz",
         "splashscreen_description": "List of all valid and invalid quizzes in your browser"
       },
-      "create_abcd_session": "Start ABCD quiz!",
+      "create_abcd_session": "Start ABCD quiz",
       "enter_server_password": "Enter the server password here",
       "public-quizzes": "Looking for more? Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
       "save_session": "Save Quiz"
