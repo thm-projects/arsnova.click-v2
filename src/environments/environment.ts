@@ -6,8 +6,8 @@
 export const environment = {
   production: false,
   leaderboardAmount: 5,
-  readingConfirmationEnabled: false,
-  confidenceSliderEnabled: false,
+  readingConfirmationEnabled: true,
+  confidenceSliderEnabled: true,
   infoAboutTabEnabled: false,
   infoProjectTabEnabled: false,
   infoBackendApiEnabled: false,
