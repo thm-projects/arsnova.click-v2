@@ -1,8 +1,11 @@
-<div *ngIf="countdown && countdown.isRunning"
+<div *ngIf="quizService?.currentQuestion()?.timer > 0"
      class="overflow-hidden mb-3 d-flex"
      id="countdown-header">
   <div class="ml-auto">
-    <span>{{countdown.remainingTime}}</span>
+    <span *ngIf="countdown && countdown.isRunning">{{countdown.remainingTime}}</span>
+    <fa-icon *ngIf="!countdown || !countdown.isRunning"
+             [icon]="'spinner'"
+             [spin]="true"></fa-icon>
     <fa-icon [icon]="'hourglass'"></fa-icon>
   </div>
 </div>
