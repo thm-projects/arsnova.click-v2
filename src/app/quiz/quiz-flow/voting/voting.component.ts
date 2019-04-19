@@ -150,7 +150,7 @@ export class VotingComponent implements OnDestroy {
   }
 
   public isNumber(value: any): boolean {
-    return +value === value;
+    return +value === value && value !== -1;
   }
 
   public showSendResponseButton(): boolean {
