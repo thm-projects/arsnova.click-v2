@@ -6,7 +6,8 @@
     <fa-icon *ngIf="!countdown || !countdown.isRunning"
              [icon]="'spinner'"
              [spin]="true"></fa-icon>
-    <fa-icon [icon]="'hourglass'"></fa-icon>
+    <fa-icon [icon]="'hourglass'"
+             class="ml-2"></fa-icon>
   </div>
 </div>
 
@@ -14,13 +15,16 @@
                      [showQuestion]="!quizService.quiz?.sessionConfig?.readingConfirmationEnabled"></app-voting-question>
 
 <div *ngIf="displayAnswerButtons()"
+     [class.mb-5]="showSendResponseButton()"
      class="d-flex justify-content-around align-items-center flex-wrap">
   <button (click)="toggleSelectAnswer(i)"
           *ngFor="let elem of answers; let i = index"
           [class.btn-invers]="isSelected(i)"
           [class.btn-secondary]="!isSelected(i)"
+          [class.m-2]="!quizService.currentQuestion().showOneAnswerPerRow"
+          [class.my-2]="quizService.currentQuestion().showOneAnswerPerRow"
           [style.flex-basis]="quizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'"
-          class="btn answer-option-element d-flex justify-content-center align-items-center rounded m-2 p-1 flex-grow-1 flex-shink-1">
+          class="btn answer-option-element d-flex justify-content-center align-items-center rounded p-1 flex-grow-1 flex-shink-1">
     <span *ngIf="quizService.currentQuestion().displayAnswerText"
           [innerHTML]="sanitizeHTML(elem)"
           class="align-items-center d-flex h-100 mw-100 overflow-hidden"></span>
@@ -50,9 +54,11 @@
          type="text"/>
 </div>
 
-<button (click)="sendResponses()"
-        *ngIf="showSendResponseButton()"
-        class="btn btn-info btn-block my-5">
-  <span>{{'component.voting.send' | translate}}</span>
-  <fa-icon [icon]="'paper-plane'"></fa-icon>
-</button>
+<div *ngIf="showSendResponseButton()"
+     class="position-fixed fixed-bottom py-2 d-flex bg-primary">
+  <button (click)="sendResponses()"
+          class="btn btn-info btn-lg mx-3 px-sm-5 mx-sm-auto flex-grow-1 flex-sm-grow-0">
+    <span class="mr-2">{{'component.voting.send' | translate}}</span>
+    <fa-icon [icon]="'paper-plane'"></fa-icon>
+  </button>
+</div>
