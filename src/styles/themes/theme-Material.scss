@@ -107,3 +107,7 @@ $logo-bg: transparent;
 $logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova-logo-click": white);
 
 @import "postbuild";
+
+.btn-secondary {
+  border-color: #d3d3d3;
+}

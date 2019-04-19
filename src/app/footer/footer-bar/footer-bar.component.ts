@@ -5,6 +5,7 @@ import { INamedType } from '../../../lib/interfaces/interfaces';
 import { ConfidenceRateComponent } from '../../quiz/quiz-flow/confidence-rate/confidence-rate.component';
 import { LeaderboardComponent } from '../../quiz/quiz-flow/leaderboard/leaderboard.component';
 import { QuizLobbyComponent } from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
+import { QuestionDetailsComponent } from '../../quiz/quiz-flow/quiz-results/question-details/question-details.component';
 import { QuizResultsComponent } from '../../quiz/quiz-flow/quiz-results/quiz-results.component';
 import { QuizThemeComponent } from '../../quiz/quiz-flow/quiz-theme/quiz-theme.component';
 import { ReadingConfirmationComponent } from '../../quiz/quiz-flow/reading-confirmation/reading-confirmation.component';
@@ -90,6 +91,7 @@ export class FooterBarComponent implements OnInit {
       ReadingConfirmationComponent.TYPE,
       ConfidenceRateComponent.TYPE,
       QuizThemeComponent.TYPE,
+      QuestionDetailsComponent.TYPE,
     ].includes(this.fetchChildComponent(this.activatedRoute).TYPE);
   }
 

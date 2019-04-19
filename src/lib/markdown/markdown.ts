@@ -1,6 +1,14 @@
 import * as highlight from 'highlight.js';
 import * as marked from 'marked';
 
+function createElementFromHTML(htmlString): Node {
+  const div = document.createElement('div');
+  div.innerHTML = htmlString.trim();
+
+  // Change this to div.childNodes to support multiple top-level nodes
+  return div.firstChild;
+}
+
 export function parseGithubFlavoredMarkdown(value: string): string {
   const renderer = new marked.Renderer();
   renderer.paragraph = (text) => `${text}\n`;
@@ -69,10 +77,20 @@ function postMarkdownRenderer(value: string): string {
     });
   }
 
-  const imgMatch = value.match(/<img.*">/g);
+  const imgMatch = value.match(/<img (?!src=".*emoji.*").+?(?=>)>/g);
   if (imgMatch) {
     imgMatch.forEach(token => {
-      value = value.replace(token, token.replace('<img ', '<img class=\'mw-100\' '));
+      const imgNode: HTMLImageElement = createElementFromHTML(token) as HTMLImageElement;
+      imgNode.classList.add(...['thumbnail', 'cursor-zoom-in']);
+
+      const anchorNode = document.createElement<'a'>('a');
+      anchorNode.href = imgNode.src;
+      anchorNode.target = null;
+      anchorNode.classList.add(...['highslide', 'd-flex', 'd-sm-block', 'justify-content-center']);
+      anchorNode.setAttribute('onclick', 'hs.expand(this);return false;');
+      anchorNode.appendChild(imgNode);
+
+      value = value.replace(token, anchorNode.outerHTML);
     });
   }
 

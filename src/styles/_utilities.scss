@@ -6,6 +6,12 @@
   cursor: not-allowed !important;
 }
 
+//noinspection CssOverwrittenProperties
+.cursor-zoom-in {
+  cursor: pointer !important; /* IE fallback */
+  cursor: zoom-in !important;
+}
+
 @mixin placeholder-align-center {
   text-align: center;
   padding: 1.5rem 0;
@@ -17,12 +23,15 @@
   &::-webkit-input-placeholder {
     @include placeholder-align-center;
   }
+
   &:-moz-placeholder {
     @include placeholder-align-center;
   }
+
   &::-moz-placeholder {
     @include placeholder-align-center;
   }
+
   &:-ms-input-placeholder {
     @include placeholder-align-center;
   }
@@ -33,6 +42,7 @@ fa-icon {
     &:hover {
       color: lighten(#000, 50%)
     }
+
     &:active {
       color: lighten(#000, 40%)
     }
@@ -45,6 +55,7 @@ fa-icon {
       color: lighten(#0a5561, 5%)
     }
   }
+
   &:active {
     .card-img-top {
       color: lighten(#0a5561, 6%)

@@ -34,6 +34,7 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets/fonts",
+              "src/assets/js",
               "src/assets/i18n",
               "src/assets/images",
               "src/assets/jobs",
@@ -150,6 +151,7 @@
             "scripts": [],
             "assets": [
               "src/assets/fonts",
+              "src/assets/js",
               "src/assets/i18n",
               "src/assets/images",
               "src/assets/styles",

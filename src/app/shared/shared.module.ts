@@ -62,6 +62,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { createTranslateLoader } from '../../lib/translation.factory';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
@@ -133,7 +134,7 @@ library.add(faCopy);
         provide: TranslateCompiler,
         useClass: TranslateMessageFormatCompiler,
       },
-    }), NgbModule, RouterModule,
+    }), NgbModule, RouterModule, AngularSvgIconModule,
   ],
   exports: [
     FormsModule,
@@ -146,6 +147,7 @@ library.add(faCopy);
     RouterModule,
     AudioPlayerComponent,
     GamificationAnimationComponent,
+    AngularSvgIconModule,
   ],
   providers: [],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent],
