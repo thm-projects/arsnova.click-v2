@@ -33,6 +33,7 @@
 </div>
 
 <div *ngIf="displayRangedButtons()"
+     [class.mb-5]="showSendResponseButton()"
      class="mt-5">
   <input (input)="parseNumberInput($event)"
          (keyup.enter)="sendResponses()"
@@ -44,6 +45,7 @@
 </div>
 
 <div *ngIf="displayFreetextInput()"
+     [class.mb-5]="showSendResponseButton()"
      class="mt-5">
   <input (input)="parseTextInput($event)"
          (keyup.enter)="sendResponses()"
