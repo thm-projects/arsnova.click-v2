@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
+import { StorageKey } from '../../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../../lib/enums/Message';
 import { IMessage } from '../../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../../lib/interfaces/entities/Member/IMemberSerialized';
@@ -101,10 +102,6 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
-      this.handleMessages();
-    });
 
     this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
@@ -115,6 +112,14 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     }));
     this.route.params.subscribe(async params => {
       this._questionIndex = +params['questionIndex'];
+
+      await this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+
+      this.connectionService.initConnection().then(() => {
+        this.connectionService.connectToChannel(this.quizService.quiz.name);
+        this.handleMessages();
+      });
+
       if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
         this.router.navigate(['/quiz', 'flow', 'results']);
         return;
@@ -128,7 +133,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public isCorrectAnswer(index: number): boolean {
-    return this._questionIndex < this.quizService.quiz.currentQuestionIndex && this._question.answerOptionList[index].isCorrect;
+    return (this._questionIndex < this.quizService.quiz.currentQuestionIndex || this.quizService.quiz.currentStartTimestamp)
+           && this._question.answerOptionList[index].isCorrect;
   }
 
   public ngOnDestroy(): void {

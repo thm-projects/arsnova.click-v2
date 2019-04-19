@@ -3,12 +3,22 @@
 <div *ngIf="questionText"
      [innerHTML]="sanitizeHTML(questionText)"></div>
 
-<hr *ngIf="answers?.length"/>
+<hr/>
 
-<div *ngFor="let elem of answers; let i = index">
-  <p class="d-flex align-items-center">
+<ng-container *ngIf="answers?.length === 1; else defaultAnswerView">
+  <h5>{{'component.answeroptions.free_text_question.title' | translate}} {{answers[0]}}</h5>
+</ng-container>
+
+<ng-container *ngIf="!answers?.length">
+  <h5>{{'component.answeroptions.ranged_question.min_range' | translate}}: {{quizService?.quiz?.questionList[questionIndex]?.rangeMin}}</h5>
+  <h5>{{'component.answeroptions.ranged_question.correct_value' | translate}}: {{quizService?.quiz?.questionList[questionIndex]?.correctValue}}</h5>
+  <h5>{{'component.answeroptions.ranged_question.max_range' | translate}}: {{quizService?.quiz?.questionList[questionIndex]?.rangeMax}}</h5>
+</ng-container>
+
+<ng-template #defaultAnswerView>
+  <h5 *ngFor="let elem of answers; let i = index">
     <span>{{normalizeAnswerIndex(i)}}:&nbsp;</span>
     <span *ngIf="isCorrectAnswer(i)">({{'component.liveResults.correct_answer' | translate}})&nbsp;</span>
     <span [innerHTML]="sanitizeHTML(elem)"></span>
-  </p>
-</div>
+  </h5>
+</ng-template>
