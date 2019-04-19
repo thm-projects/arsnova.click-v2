@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
 import { DefaultSettings } from '../../../../lib/default.settings';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
@@ -62,6 +63,10 @@ export class MemberApiService {
   }
 
   public deleteMember(quizName, nickName): Observable<IMessage> {
+    if (!quizName || !nickName || !quizName.length || !nickName.length || nickName === 'null') {
+      return of(null);
+    }
+
     return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${quizName}/${nickName}`,
       { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
   }

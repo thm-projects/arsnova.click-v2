@@ -103,7 +103,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
+    this._subscriptions.push(this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Inactive:
           setTimeout(this.handleMessages.bind(this), 500);
@@ -135,7 +135,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
           });
           break;
       }
-    });
+    }));
   }
 
 }

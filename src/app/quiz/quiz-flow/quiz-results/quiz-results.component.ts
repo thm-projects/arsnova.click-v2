@@ -387,7 +387,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
+    this._subscriptions.push(this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.AllPlayers:
           data.payload.members.forEach((elem: IMemberSerialized) => {
@@ -437,7 +437,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
 
       this.cd.markForCheck();
-    });
+    }));
   }
 
   private handleMessagesForOwner(data: IMessage): void {

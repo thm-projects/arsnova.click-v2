@@ -62,7 +62,6 @@ export class QuizLobbyComponent implements OnDestroy {
     private quizApiService: QuizApiService,
     private ngbModal: NgbModal,
   ) {
-    console.log('QuizLobbyComponent: quiz initializing');
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
@@ -144,6 +143,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
     this.footerBarService.footerElemBack.restoreClickCallback();
     clearTimeout(this._reconnectTimeout);
@@ -217,6 +217,7 @@ export class QuizLobbyComponent implements OnDestroy {
       const promise = this.attendeeService.attendees.length ? this.ngbModal.open(EditModeConfirmComponent).result : new Promise<any>(
         resolve => resolve());
       promise.then(() => {
+        this._subscriptions.forEach(sub => sub.unsubscribe());
         this.quizService.close();
         this.attendeeService.cleanUp();
         this.connectionService.cleanUp();
@@ -226,7 +227,7 @@ export class QuizLobbyComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
+    this._subscriptions.push(this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.Inactive:
           this._reconnectTimeout = setTimeout(this.handleMessages.bind(this), 500);
@@ -253,7 +254,7 @@ export class QuizLobbyComponent implements OnDestroy {
           break;
       }
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
-    });
+    }));
   }
 
   private handleMessagesForOwner(data: IMessage): void {

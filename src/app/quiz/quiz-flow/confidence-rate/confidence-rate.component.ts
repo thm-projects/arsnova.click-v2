@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./confidence-rate.component.scss'],
 }) //
 @AutoUnsubscribe('_subscriptions')
-export class ConfidenceRateComponent {
+export class ConfidenceRateComponent implements OnDestroy {
   public static TYPE = 'ConfidenceRateComponent';
 
   private _confidenceValue = 100;
@@ -84,6 +84,10 @@ export class ConfidenceRateComponent {
     });
   }
 
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
+  }
+
   public getConfidenceLevelTranslation(): string {
     if (this.confidenceValue === 100) {
       return 'component.voting.confidence_level.very_sure';
@@ -109,7 +113,7 @@ export class ConfidenceRateComponent {
   }
 
   private handleMessages(): void {
-    this.connectionService.dataEmitter.subscribe((data: IMessage) => {
+    this._subscriptions.push(this.connectionService.dataEmitter.subscribe((data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.NextQuestion:
           this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
@@ -147,7 +151,7 @@ export class ConfidenceRateComponent {
           this.router.navigate(['/']);
           break;
       }
-    });
+    }));
   }
 
 }

@@ -149,7 +149,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
         payload: { quizName: this.quizService.quiz.name },
       });
     }
-    this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
+    this._subscriptions.push(this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
       switch (data.step) {
         case MessageProtocol.AllPlayers:
           data.payload.members.forEach((elem: IMemberSerialized) => {
@@ -175,7 +175,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
           break;
       }
       this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
-    });
+    }));
   }
 
   private handleMessagesForOwner(data: IMessage): void {
