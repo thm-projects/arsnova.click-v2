@@ -536,7 +536,7 @@
       "demo_quiz": {
         "title": {
           "2": "Gib »ABCD« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiznamen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuche arsnova.eu und lerne, wie du Quizze im Unterricht einsetzen kannst."
+          "3": "Besuche den <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/'>Projektblog</a> und lerne, wie du Quizze im Unterricht einsetzen kannst."
         }
       },
       "name_input": {}
