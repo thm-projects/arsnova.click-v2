@@ -7,58 +7,47 @@
     </ng-container>
     <div *ngFor="let elem of attendeeService.attendees"
          class="my-1 col-sm-4 col-md-3">
-      <div [id]="elem.id"
-           (click)="openKickMemberModal(removeMemberModal, elem.name)"
-           class="member-wrapper rounded h-100 d-flex align-items-center justify-content-center"
+      <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
            [class.cursor-pointer]="quizService.isOwner"
            [class.own-nick]="attendeeService.isOwnNick(elem.name)"
+           [id]="elem.id"
+           [style.background-color]="'#' + sanitizeHTML(elem.colorCode)"
            [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-           [style.background-color]="'#' + sanitizeHTML(elem.colorCode)">
-        <p class="mb-0 p-2 break-word"
-           [innerHTML]="parseNickname(elem.name)"></p>
+           class="member-wrapper rounded h-100 d-flex align-items-center justify-content-center">
+        <p [innerHTML]="parseNickname(elem.name)"
+           class="mb-0 p-2 break-word"></p>
       </div>
     </div>
   </ng-container>
 </div>
 
 <app-audio-player *ngIf="quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby"
-                  [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.lobby"
                   [autostart]="true"
-                  [target]="'lobby'"
-                  [src]="quizService.quiz.sessionConfig.music.titleConfig.lobby"></app-audio-player>
-
-<div class="qrCodeContent position-absolute justify-content-center align-items-center p-3 flex-column bg-white rounded"
-     [class.d-flex]="showQrCode"
-     [class.d-none]="!showQrCode">
-  <ngx-qrcode [qrc-value]="qrCodeContent"
-              qrc-errorCorrectionLevel="L"
-              qrc-element-type="img"
-              class="">
-  </ngx-qrcode>
-  <h6 class="mb-0">{{qrCodeContent}}</h6>
-</div>
+                  [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.lobby"
+                  [src]="quizService.quiz.sessionConfig.music.titleConfig.lobby"
+                  [target]="'lobby'"></app-audio-player>
 
 <ng-template #attendeesByGroup>
-  <div class="col-12 col-sm-6"
-       *ngFor="let group of attendeeService.getMemberGroups()">
+  <div *ngFor="let group of attendeeService.getMemberGroups()"
+       class="col-12 col-sm-6">
     <div class="pb-4">
       <h4>Team {{group}}</h4>
       <ng-container *ngIf="!attendeeService.getMembersOfGroup(group).length">
         <span class="attendee-text">{{'component.lobby.waiting_for_players' | translate}}</span>
       </ng-container>
-      <div *ngFor="let elem of attendeeService.getMembersOfGroup(group)"
-           (click)="openKickMemberModal(removeMemberModal, elem.name)"
+      <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
+           *ngFor="let elem of attendeeService.getMembersOfGroup(group)"
            [class.cursor-pointer]="quizService.isOwner"
            class="d-inline-flex mw-100 mr-3">
-        <fa-icon [icon]="'users'"
+        <fa-icon [class.own-nick]="attendeeService.isOwnNick(elem.name)"
+                 [icon]="'users'"
                  [id]="elem.id"
-                 class="member-wrapper rounded px-1 py-1 fa-2x"
-                 [class.own-nick]="attendeeService.isOwnNick(elem.name)"
                  [style.background-color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-                 [style.color]="'#' + sanitizeHTML(elem.colorCode)">>
+                 [style.color]="'#' + sanitizeHTML(elem.colorCode)"
+                 class="member-wrapper rounded px-1 py-1 fa-2x">>
         </fa-icon>
-        <p class="ml-2 attendee-text text-truncate mb-0 align-self-center"
-           [innerHTML]="parseNickname(elem.name)"></p>
+        <p [innerHTML]="parseNickname(elem.name)"
+           class="ml-2 attendee-text text-truncate mb-0 align-self-center"></p>
       </div>
     </div>
   </div>
@@ -68,11 +57,11 @@
              let-c="close"
              let-d="dismiss">
   <div class="modal-header">
-    <button type="button"
+    <button (click)="d()"
+            aria-label="Close"
             class="close cursor-pointer"
             data-dismiss="modal"
-            aria-label="Close"
-            (click)="d()">
+            type="button">
       <span aria-hidden="true">&times;</span>
     </button>
 
@@ -84,17 +73,17 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button"
+    <button (click)="kickMember(nickToRemove)"
+            [innerHTML]="'global.yes' | translate"
             class="btn btn-danger mr-auto"
             data-dismiss="modal"
-            (click)="kickMember(nickToRemove)"
-            [innerHTML]="'global.yes' | translate"></button>
+            type="button"></button>
 
-    <button type="button"
+    <button (click)="d()"
+            [innerHTML]="'global.no' | translate"
             class="btn btn-info"
             data-dismiss="modal"
-            (click)="d()"
-            [innerHTML]="'global.no' | translate"></button>
+            type="button"></button>
 
   </div>
 </ng-template>

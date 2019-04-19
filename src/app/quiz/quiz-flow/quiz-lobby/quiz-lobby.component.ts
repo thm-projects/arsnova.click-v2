@@ -23,6 +23,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { EditModeConfirmComponent } from './modals/edit-mode-confirm/edit-mode-confirm.component';
+import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content.component';
 
 @Component({
   selector: 'app-quiz-lobby',
@@ -32,26 +33,6 @@ import { EditModeConfirmComponent } from './modals/edit-mode-confirm/edit-mode-c
 @AutoUnsubscribe('_subscriptions')
 export class QuizLobbyComponent implements OnDestroy {
   public static TYPE = 'QuizLobbyComponent';
-
-  private _showQrCode = false;
-
-  get showQrCode(): boolean {
-    return this._showQrCode;
-  }
-
-  set showQrCode(value: boolean) {
-    this._showQrCode = value;
-  }
-
-  private _qrCodeContent = '';
-
-  get qrCodeContent(): string {
-    return this._qrCodeContent;
-  }
-
-  set qrCodeContent(value: string) {
-    this._qrCodeContent = value;
-  }
 
   private _nickToRemove: string;
 
@@ -213,9 +194,6 @@ export class QuizLobbyComponent implements OnDestroy {
     }
     this.footerBarService.replaceFooterElements(footerElements);
 
-    if (isPlatformBrowser(this.platformId)) {
-      this.qrCodeContent = `${document.location.origin}/quiz/${encodeURIComponent(this.quizService.quiz.name.toLowerCase())}`;
-    }
 
     this.addFooterElemClickCallbacksAsOwner();
   }
@@ -233,14 +211,12 @@ export class QuizLobbyComponent implements OnDestroy {
       });
     };
     this.footerBarService.footerElemQRCode.onClickCallback = () => {
-      if (isPlatformBrowser(this.platformId)) {
-        const classList = document.getElementsByClassName('qrCodeContent').item(0).classList;
-        classList.toggle('d-none');
-        classList.toggle('d-flex');
-      }
+      this.ngbModal.open(QrCodeContentComponent, { centered: true });
     };
     this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
-      this.ngbModal.open(EditModeConfirmComponent).result.then(() => {
+      const promise = this.attendeeService.attendees.length ? this.ngbModal.open(EditModeConfirmComponent).result : new Promise<any>(
+        resolve => resolve());
+      promise.then(() => {
         this.quizService.close();
         this.attendeeService.cleanUp();
         this.connectionService.cleanUp();

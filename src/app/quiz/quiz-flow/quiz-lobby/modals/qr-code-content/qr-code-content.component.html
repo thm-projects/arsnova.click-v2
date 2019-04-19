@@ -1,0 +1,18 @@
+<div class="modal-header pb-0">
+  <button (click)="dismiss()"
+          aria-label="Close"
+          class="close cursor-pointer"
+          data-dismiss="modal"
+          type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body pt-0">
+  <div class="d-flex flex-column align-items-center qrCodeContent">
+    <ngx-qrcode [qrc-value]="qrCodeContent"
+                qrc-element-type="img"
+                qrc-errorCorrectionLevel="L">
+    </ngx-qrcode>
+    <h6 class="mb-0">{{qrCodeContent}}</h6>
+  </div>
+</div>

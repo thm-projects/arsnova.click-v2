@@ -18,7 +18,6 @@ body {
 }
 
 .qrCodeContent {
-  top: calc(50% - 25vh);
 
   img {
     height: 50vh !important;
@@ -49,6 +48,7 @@ img[alt*="emoji_"] {
     width: calc(100% + 30px);
     margin-left: -15px;
     margin-right: -15px;
+
     .btn {
       border-radius: 0;
     }
