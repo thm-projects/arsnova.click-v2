@@ -88,7 +88,7 @@
           "title": "Bedienungshandbuch?",
           "text": {
             "1": "Brauchst du nicht!",
-            "2": "Tipp einfach den Namen des Quiz ein. Die Buttons werden aktiviert, sobald du entweder den Namen eines freigeschalteten Quiz eingibst: \"Mach mit beim Quiz!\" oder ein Quiz mit dem eingegebenen Namen erstellen kannst: \"Mach ein neues Quiz!\".",
+            "2": "Tipp einfach den Namen des Quiz ein. Die Buttons werden aktiviert, sobald du entweder den Namen eines freigeschalteten Quiz eingibst: \"Mach mit!\" oder ein Quiz mit dem eingegebenen Namen erstellen kannst: \"Neues Quiz!\".",
             "3": "Folge dem Tutorial (Flagge in der Fußleiste) oder einfach deiner Intuition: schauen, klicken, quizzen."
           }
         }
@@ -238,10 +238,10 @@
     },
     "name_management": {
       "enter_quiz_name": "Gib hier den Quiznamen ein …",
-      "join_session": "Mach mit beim Quiz!",
+      "join_session": "Mach mit!",
       "start_session": "Quiz starten",
       "edit_session": "Quiz bearbeiten",
-      "create_session": "Mach ein neues Quiz!",
+      "create_session": "Neues Quiz!",
       "create_demo_session": "Starte »Demo Quiz«!",
       "quiz_management": "Quiz-Speicher",
       "session_management": "Quizze",
@@ -536,7 +536,7 @@
       "demo_quiz": {
         "title": {
           "2": "Gib »ABCD« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiznamen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuch arsnova.eu und lerne, wie du Quizze im Unterricht einsetzen kannst."
+          "3": "Besuche arsnova.eu und lerne, wie du Quizze im Unterricht einsetzen kannst."
         }
       },
       "name_input": {}

@@ -1,8 +1,8 @@
 <div class="row flex-column"
      id="landingPageContent">
-  <div class="col-12 text-center my-5 my-sm-5"
-       id="arsnova-click-description"
-       *ngIf="!isShowingQuiznameDatalist">
+  <div *ngIf="!isShowingQuiznameDatalist"
+       class="col-12 text-center my-5 my-sm-5"
+       id="arsnova-click-description">
     <h1 class="text-center header-label text-bold my-0">
       <span class="color-changing-ars logo-header-chars">a r s </span>
       <span class="color-changing-nova logo-header-chars">n o v a </span>
@@ -10,113 +10,112 @@
       <span class="color-changing-click logo-header-chars logo-header-margin-for-dot">c l i c k</span>
     </h1>
   </div>
-  <div class="col-md-10 col-lg-8 mx-auto"
-       [class.mt-sm-5]="!isShowingQuiznameDatalist">
-    <div class="row">
-      <div class="col-12 px-1 mb-2">
-        <input type="text"
-               id="name-input-field"
-               autocomplete="off"
-               spellcheck="false"
-               class="text-center w-100 border-0 input-field bg-warning"
-               [class.rounded]="!isShowingQuiznameDatalist"
-               [class.rounded-top]="isShowingQuiznameDatalist"
-               [(value)]="enteredSessionName"
+  <div [class.mt-sm-5]="!isShowingQuiznameDatalist"
+       class="col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+    <div class="row no-gutters">
+      <div class="col-12 mb-2">
+        <input (focus)="showQuiznameDatalist()"
                (input)="parseQuiznameInput($event)"
-               (focus)="showQuiznameDatalist()"
+               [(value)]="enteredSessionName"
+               [class.rounded-top]="isShowingQuiznameDatalist"
+               [class.rounded]="!isShowingQuiznameDatalist"
+               [placeholder]="'component.name_management.enter_quiz_name' | translate"
                [title]="'component.name_management.enter_quiz_name' | translate"
-               [placeholder]="'component.name_management.enter_quiz_name' | translate"/>
-        <span class="position-absolute text-light px-2 pb-1 rounded-right cursor-pointer"
-              id="collapse-quiz-name-datalist"
+               autocomplete="off"
+               class="text-center w-100 border-0 input-field bg-warning"
+               id="name-input-field"
+               spellcheck="false"
+               type="text"/>
+        <span (click)="hideQuiznameDatalist()"
               *ngIf="isShowingQuiznameDatalist"
-              (click)="hideQuiznameDatalist()">
+              class="position-absolute text-light px-2 pb-1 rounded-right cursor-pointer"
+              id="collapse-quiz-name-datalist">
       <fa-icon [icon]="'caret-up'"></fa-icon>
         </span>
         <div class="list-group d-none list-group-flush"
              id="name-input-data-list">
-          <span class="list-group-item list-group-item-action list-group-item-success text-capitalize cursor-pointer"
+          <span (click)="autoJoinToSession(quizname)"
                 *ngFor="let quizname of sharedService.activeQuizzes"
-                (click)="autoJoinToSession(quizname)">{{'component.home.join' | translate:{name: quizname} }}</span>
-          <span class="list-group-item list-group-item-action text-capitalize cursor-pointer"
+                class="list-group-item list-group-item-action list-group-item-success text-capitalize cursor-pointer">{{'component.home.join' | translate:{name: quizname} }}</span>
+          <span (click)="selectQuizByList(quizname)"
                 *ngFor="let quizname of ownQuizzes"
-                (click)="selectQuizByList(quizname)">{{'component.home.use' | translate:{name: quizname} }}</span>
-          <span class="list-group-item list-group-item-action cursor-pointer"
-                (click)="selectQuizByList('Demo Quiz')">{{'component.home.new-demo-quiz' | translate}}</span>
-          <span class="list-group-item list-group-item-action cursor-pointer"
-                (click)="selectQuizByList('ABCD')">{{'component.home.new-abcd-quiz' | translate}}</span>
+                class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</span>
+          <span (click)="selectQuizByList('Demo Quiz')"
+                class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-demo-quiz' | translate}}</span>
+          <span (click)="selectQuizByList('ABCD')"
+                class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-abcd-quiz' | translate}}</span>
         </div>
       </div>
       <div *ngIf="passwordRequired"
-           class="col-12 px-1">
-        <input type="password"
+           class="col-12">
+        <input (input)="setPassword($event)"
+               [placeholder]="'component.name_management.enter_server_password' | translate"
+               [title]="'component.name_management.enter_server_password' | translate"
+               autocomplete="off"
                class="text-center rounded w-100 mb-2 border-0 input-field"
                id="server-password-input-field"
-               autocomplete="off"
                spellcheck="false"
-               (input)="setPassword($event)"
-               [title]="'component.name_management.enter_server_password' | translate"
-               [placeholder]="'component.name_management.enter_server_password' | translate"/>
+               type="password"/>
       </div>
     </div>
-    <div class="row">
-      <div class="col-6 col-join-session px-1">
-        <button *ngIf="!canStartQuiz"
-                id="joinSession"
-                class="btn btn-block text-nowrap"
-                (click)="handleClick('joinSession') && joinQuiz()"
-                [class.btn-secondary]="canJoinQuiz"
+    <div class="row no-gutters">
+      <div class="col-6 col-join-session pr-1 pl-0">
+        <button (click)="handleClick('joinSession') && joinQuiz()"
+                *ngIf="!canStartQuiz"
                 [class.btn-outline-secondary]="!canJoinQuiz"
+                [class.btn-secondary]="canJoinQuiz"
+                [disabled]="!canJoinQuiz"
                 [routerLink]="['/quiz', enteredSessionName]"
-                [disabled]="!canJoinQuiz">
+                class="btn btn-block">
           <fa-icon [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.name_management.join_session' | translate}}</span>
         </button>
-        <button *ngIf="canStartQuiz"
-                id="startSession"
-                class="btn btn-success btn-block text-nowrap"
-                (click)="handleClick('startSession') && runQuiz(['/quiz', 'flow'])"
-                [class.btn-secondary]="canStartQuiz && (!passwordRequired || serverPassword.length)"
+        <button (click)="handleClick('startSession') && runQuiz(['/quiz', 'flow'])"
+                *ngIf="canStartQuiz"
                 [class.btn-outline-secondary]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
-                [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)">
+                [class.btn-secondary]="canStartQuiz && (!passwordRequired || serverPassword.length)"
+                [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
+                class="btn btn-success btn-block"
+                id="startSession">
           <fa-icon [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.name_management.start_session' | translate}}</span>
         </button>
       </div>
-      <div class="col-6 col-create-session px-1">
-        <button *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
-                id="addSession"
-                class="btn btn-block text-nowrap"
-                [class.btn-secondary]="canAddQuiz && connectionService.serverAvailable"
+      <div class="col-6 col-create-session p-0">
+        <button (click)="handleClick('addSession') && addQuiz()"
+                *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
                 [class.btn-outline-secondary]="!canAddQuiz || !connectionService.serverAvailable"
-                (click)="handleClick('addSession') && addQuiz()"
-                [disabled]="!canAddQuiz || !connectionService.serverAvailable">
+                [class.btn-secondary]="canAddQuiz && connectionService.serverAvailable"
+                [disabled]="!canAddQuiz || !connectionService.serverAvailable"
+                class="btn btn-block"
+                id="addSession">
           <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
           <fa-icon [icon]="'edit'"></fa-icon>
         </button>
-        <button *ngIf="canEditQuiz"
-                id="editSession"
-                class="btn btn-secondary btn-block text-nowrap"
-                (click)="handleClick('editSession') && editQuiz()">
+        <button (click)="handleClick('editSession') && editQuiz()"
+                *ngIf="canEditQuiz"
+                class="btn btn-secondary btn-block"
+                id="editSession">
           <span class="mr-1">{{'component.name_management.edit_session' | translate}}</span>
           <fa-icon [icon]="'edit'"></fa-icon>
         </button>
-        <button *ngIf="isAddingDemoQuiz"
-                id="runDemoQuizSession"
-                class="btn btn-block text-nowrap"
-                [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
+        <button (click)="handleClick('add-demo-quiz') && runQuiz(['/quiz', 'flow'])"
+                *ngIf="isAddingDemoQuiz"
                 [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                (click)="handleClick('add-demo-quiz') && runQuiz(['/quiz', 'flow'])"
-                [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable">
+                [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
+                [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
+                class="btn btn-block"
+                id="runDemoQuizSession">
           <span class="mr-1">{{'component.name_management.create_demo_session' | translate}}</span>
           <fa-icon [icon]="'paper-plane'"></fa-icon>
         </button>
-        <button *ngIf="isAddingABCDQuiz"
-                id="runABCDQuizSession"
-                class="btn btn-block text-nowrap"
-                [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
+        <button (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
+                *ngIf="isAddingABCDQuiz"
                 [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
-                [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable">
+                [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
+                [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
+                class="btn btn-block"
+                id="runABCDQuizSession">
           <span class="mr-1">{{'component.name_management.create_abcd_session' | translate}}</span>
           <fa-icon [icon]="'paper-plane'"></fa-icon>
         </button>
@@ -127,8 +126,8 @@
        class="col-12 mt-5">
     <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
   </div>
-  <div class="col-12 text-center mt-5"
-       *ngIf="!isShowingQuiznameDatalist"
+  <div *ngIf="!isShowingQuiznameDatalist"
+       class="col-12 text-center mt-5"
        id="demo-quiz-description">
     <p>{{'component.name_home.demo_quiz.title.3' | translate}}</p>
     <p>
@@ -137,13 +136,13 @@
       </a>
       <a *ngIf="ownPublicQuizAmount > 0"
          [routerLink]="['/quiz', 'public', 'own']">
-        <span *ngIf="publicQuizAmount > 0"><br/>{{'component.home.view-all-public' | translate}}</span>
-        <span *ngIf="publicQuizAmount === 0">{{'component.home.view-own-public' | translate}}</span>
+        <span *ngIf="publicQuizAmount > 0"><br/>{{'component.home.view-all-public' | translate}}</span>
+        <span *ngIf="publicQuizAmount === 0">{{'component.home.view-own-public' | translate}}</span>
       </a>
     </p>
   </div>
-  <div class="col-12 mb-5 mt-2 justify-content-center d-flex mathjax-container"
-       *ngIf="!isShowingQuiznameDatalist">
+  <div *ngIf="!isShowingQuiznameDatalist"
+       class="col-12 mb-5 mt-2 justify-content-center d-flex mathjax-container">
     <ng-container *ngTemplateOutlet="thmschroedelCoop"></ng-container>
   </div>
 </div>
@@ -151,17 +150,17 @@
 <ng-template #thmschroedelCoop>
   <div class="form-row mt-4 flex-sm-nowrap">
     <div class="col-12 col-sm-auto d-flex">
-      <img class="mx-auto align-self-center"
-           alt="Technische Hochschule Mittelhesen"
+      <img alt="Technische Hochschule Mittelhesen"
+           class="mx-auto align-self-center"
            src="/assets/images/external/thm-logo-negativ.png"
            style="height: 70px"/>
     </div>
     <div class="col-12 col-sm-auto d-flex">
-      <h6 class="mx-auto my-4 my-sm-0 align-self-center">{{'global.in-cooperation-with' | translate}}</h6>
+      <h6 class="mx-auto my-4 my-sm-0 align-self-center">{{'global.in-cooperation-with' | translate}}</h6>
     </div>
     <div class="col-12 col-sm-auto d-flex">
-      <img class="mx-auto bg-white align-self-center"
-           alt="Schroedel Aktuell"
+      <img alt="Schroedel Aktuell"
+           class="mx-auto bg-white align-self-center"
            src="/assets/images/external/schroedel-aktuell.png"
            style="height: 70px"/>
     </div>
@@ -169,18 +168,18 @@
 </ng-template>
 
 <ng-template #mathjaxExample3>
-  <svg xmlns:xlink="http://www.w3.org/1999/xlink"
-       height="6.176ex"
+  <svg height="6.176ex"
        viewBox="0 -1580.7 10538.3 2659.1"
        width="24.476ex"
-       xmlns="http://www.w3.org/2000/svg">
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
-      <path id="a"
-            d="m-123 694q0 8 5 14t15 6q10 0 15-8t8-19 13-27 27-27q11-7 11-18 0-9-7-15t-17-10-30-19-38-40q-14-15-22-15t-14 6-6 14 11 23 23 25 13 11h-171l-171 1q-1 1-3 3t-5 3-3 5-2 8q0 7 13 20h359q-24 38-24 59z"/>
-      <path id="b"
-            d="m34 159q0 109 86 196t186 87q56 0 88-24t33-63q0-29-19-49t-48-21q-19 0-30 10t-11 30 11 34 22 21 14 6h1q0 2-6 6t-21 8-34 4q-30 0-57-14-21-9-43-31-44-44-64-124t-21-116q0-46 26-69 22-24 58-24h4q112 0 185 85 9 10 12 10 4 0 13-9t10-14-9-15-29-28-45-30-64-25-80-11q-75 0-121 48t-47 122z"/>
-      <path id="c"
-            d="m202 508q-23 0-33 12t-11 27q0 10 6 30t21 47 45 51 71 35l32 5h12q33 0 39-1 63-11 105-53t60-93 17-111q0-95-47-217t-117-187q-81-75-179-75-100 0-150 78-31 46-31 92v11q0 117 87 211t193 95q61 0 92-31t41-67l3 11q20 83 20 137 0 88-41 124t-93 37q-78 0-121-64 41-6 41-40 0-25-18-44t-44-20zm228-202q0 66-29 94t-68 28q-63 0-111-46-25-28-39-59t-33-102q-18-72-18-105 0-95 100-95 12 0 18 1 77 13 124 90 15 25 35 84t21 110z"/>
+      <path d="m-123 694q0 8 5 14t15 6q10 0 15-8t8-19 13-27 27-27q11-7 11-18 0-9-7-15t-17-10-30-19-38-40q-14-15-22-15t-14 6-6 14 11 23 23 25 13 11h-171l-171 1q-1 1-3 3t-5 3-3 5-2 8q0 7 13 20h359q-24 38-24 59z"
+            id="a"/>
+      <path d="m34 159q0 109 86 196t186 87q56 0 88-24t33-63q0-29-19-49t-48-21q-19 0-30 10t-11 30 11 34 22 21 14 6h1q0 2-6 6t-21 8-34 4q-30 0-57-14-21-9-43-31-44-44-64-124t-21-116q0-46 26-69 22-24 58-24h4q112 0 185 85 9 10 12 10 4 0 13-9t10-14-9-15-29-28-45-30-64-25-80-11q-75 0-121 48t-47 122z"
+            id="b"/>
+      <path d="m202 508q-23 0-33 12t-11 27q0 10 6 30t21 47 45 51 71 35l32 5h12q33 0 39-1 63-11 105-53t60-93 17-111q0-95-47-217t-117-187q-81-75-179-75-100 0-150 78-31 46-31 92v11q0 117 87 211t193 95q61 0 92-31t41-67l3 11q20 83 20 137 0 88-41 124t-93 37q-78 0-121-64 41-6 41-40 0-25-18-44t-44-20zm228-202q0 66-29 94t-68 28q-63 0-111-46-25-28-39-59t-33-102q-18-72-18-105 0-95 100-95 12 0 18 1 77 13 124 90 15 25 35 84t21 110z"
+            id="c"/>
     </defs>
     <g stroke-width="0"
        transform="scale(1 -1)">
