@@ -12,7 +12,7 @@ export const DefaultSettings = {
   defaultQuizSettings: {
     answers: {
       answerText: '',
-      isCorrect: true,
+      isCorrect: false, // Must be false so that surveys are valid (check if isCorrect is false)
       configCaseSensitive: false,
       configTrimWhitespaces: false,
       configUseKeywords: false,
