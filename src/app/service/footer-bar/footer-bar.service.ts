@@ -146,7 +146,7 @@ export class FooterBarService {
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.fullscreen',
     linkTarget: null,
-    isActive: isPlatformBrowser(this.platformId) ? window.innerWidth === screen.width && window.innerHeight === screen.height : false,
+    isActive: isPlatformBrowser(this.platformId) ? window.outerWidth === screen.width && window.outerHeight === screen.height : false,
   }, function (): void {
     this.isActive = !this.isActive;
     setFullScreen(this.isActive);
