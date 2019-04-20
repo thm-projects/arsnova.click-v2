@@ -45,6 +45,7 @@ export enum Project {
 }
 
 export enum StorageKey {
+  CurrentQuestionIndex   = 'CurrentQuestionIndex', //
   PrivateKey             = 'PrivateKey', //
   LoginToken             = 'LoginToken', //
   QuizToken              = 'QuizToken', //

@@ -107,7 +107,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   public hideProgressbarCssStyle(): boolean {
     this.cd.markForCheck();
-    return this._selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex && !!this.countdown;
+    return typeof this.countdown === 'undefined' || (this.countdown > 0 && this._selectedQuestionIndex
+                                                     === this.quizService.quiz.currentQuestionIndex);
   }
 
   public showConfidenceRate(questionIndex: number): boolean {
@@ -207,7 +208,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this._selectedQuestionIndex = this.quizService.quiz.currentQuestionIndex;
+      const storedSelectedQuestionIndex = parseInt(sessionStorage.getItem(StorageKey.CurrentQuestionIndex), 10);
+      if (!isNaN(storedSelectedQuestionIndex)) {
+        this.modifyVisibleQuestion(storedSelectedQuestionIndex);
+        sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+      } else {
+        this.modifyVisibleQuestion(this.quizService.quiz.currentQuestionIndex);
+      }
       this.attendeeService.restoreMembers().then(() => {
         this.initData();
       });
@@ -236,6 +243,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    sessionStorage.setItem(StorageKey.CurrentQuestionIndex, String(this._selectedQuestionIndex));
     this.footerBarService.footerElemBack.restoreClickCallback();
     this._subscriptions.forEach(sub => sub.unsubscribe());
   }
@@ -299,9 +307,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
       const question = this.quizService.currentQuestion();
 
-      this.generateAnswers(question);
-
       if (!this.countdown) {
+        this.countdown = 0;
         if (question.timer === 0 && !currentStateData.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
           nick => nick.responses[this.quizService.quiz.currentQuestionIndex].responseTime === -1)) {
           this.showStartQuizButton = false;

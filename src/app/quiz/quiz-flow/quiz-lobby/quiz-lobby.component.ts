@@ -63,6 +63,7 @@ export class QuizLobbyComponent implements OnDestroy {
     private ngbModal: NgbModal,
   ) {
 
+    sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {

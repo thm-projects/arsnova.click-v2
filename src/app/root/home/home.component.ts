@@ -111,6 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     public sharedService: SharedService,
   ) {
 
+    sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
 
     headerLabelService.headerLabel = 'default';

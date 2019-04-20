@@ -61,6 +61,10 @@
   <button (click)="sendResponses()"
           class="btn btn-info btn-lg mx-3 px-sm-5 mx-sm-auto flex-grow-1 flex-sm-grow-0">
     <span class="mr-2">{{'component.voting.send' | translate}}</span>
-    <fa-icon [icon]="'paper-plane'"></fa-icon>
+    <fa-icon *ngIf="isSendingResponse"
+             [icon]="'spinner'"
+             [spin]="true"></fa-icon>
+    <fa-icon *ngIf="!isSendingResponse"
+             [icon]="'paper-plane'"></fa-icon>
   </button>
 </div>

@@ -11,7 +11,7 @@
     "dependency-check": "npx --ignore-existing madge --circular --extensions ts src",
     "ng": "ng",
     "start:SSR": "cd dist && node server",
-    "start:DEV": "ng serve --host 0.0.0.0 --port 4210 --disable-host-check --aot",
+    "start:DEV": "ng serve --host 192.168.2.101 --port 4210 --aot",
     "build:SSR": "npm run build:PROD:DEPLOY && npm run build:SERVER && npm run webpack:SERVER",
     "build:SERVER": "ng run frontend:server",
     "build:PROD": "ng build --prod",

@@ -87,7 +87,7 @@ function postMarkdownRenderer(value: string): string {
       anchorNode.href = imgNode.src;
       anchorNode.target = null;
       anchorNode.classList.add(...['highslide', 'd-flex', 'd-sm-block', 'justify-content-center']);
-      anchorNode.setAttribute('onclick', 'hs.expand(this);return false;');
+      anchorNode.setAttribute('onclick', 'return hs.expand(this);');
       anchorNode.appendChild(imgNode);
 
       value = value.replace(token, anchorNode.outerHTML);

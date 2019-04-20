@@ -31,6 +31,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 @AutoUnsubscribe('_subscriptions')
 export class VotingComponent implements OnDestroy {
   public static TYPE = 'VotingComponent';
+  public isSendingResponse: boolean;
 
   private _answers: Array<string> = [];
 
@@ -171,6 +172,8 @@ export class VotingComponent implements OnDestroy {
   }
 
   public sendResponses(route?: string): void {
+    this.isSendingResponse = true;
+
     if (this.countdown) {
       this.countdown.onChange.unsubscribe();
       this.countdown.stop();
