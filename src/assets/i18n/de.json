@@ -306,7 +306,7 @@
       "abort_countdown": "Countdown abbrechen",
       "confidence_grade": "Antwortsicherheit",
       "guessed_in_range": "Nicht korrekt geraten, aber akzeptabel",
-      "wrong_answer": "Falsche antwort",
+      "wrong_answer": "Falsche Antwort",
       "no_data": "Keine Daten verfügbar"
     },
     "lobby": {

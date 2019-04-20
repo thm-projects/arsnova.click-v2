@@ -1,20 +1,22 @@
 <div class="progress my-2 position-relative"
      style="height: 2rem;">
   <div *ngIf="base && percent"
-       [class]="('progress-bar overflow-hidden bg-' + progressbarCssClass)"
-       role="progressbar"
-       [style.width]="sanitizeStyle(percent)"
        [attr.aria-valuenow]="percent"
+       [class]="('progress-bar overflow-hidden bg-' + progressbarCssClass)"
+       [style.width]="sanitizeStyle(percent)"
+       aria-valuemax="100"
        aria-valuemin="0"
-       aria-valuemax="100"></div>
-  <div *ngIf="base"
-       class="d-flex align-self-center align-items-center position-absolute"
-       style="left: 10px;"><span [innerHTML]="sanitizeHTML(label)"></span>
-  </div>
-  <div *ngIf="base"
-       class="align-self-center position-absolute"
-       style="right: 10px;">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}
-  </div>
+       role="progressbar"></div>
+
+  <ng-container *ngIf="base">
+    <div class="d-flex align-self-center align-items-center position-absolute h-100"
+         style="left: 10px;"><span [innerHTML]="sanitizeHTML(label)"></span>
+    </div>
+    <div class="align-self-center position-absolute"
+         style="right: 10px;">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}
+    </div>
+  </ng-container>
+
   <div *ngIf="!base"
        class="w-100 d-flex align-items-center justify-content-center">
     <fa-icon [icon]="'spinner'"
