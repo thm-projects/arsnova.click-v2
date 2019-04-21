@@ -58,9 +58,6 @@ export class AttendeeService {
   }
 
   public cleanUp(): void {
-    if (this.quizService.quiz && this.ownNick) {
-      this.memberApiService.deleteMember(this.quizService.quiz.name, this.ownNick).subscribe();
-    }
     this.attendees = [];
     this.ownNick = null;
   }

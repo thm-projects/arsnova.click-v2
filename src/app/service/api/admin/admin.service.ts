@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../../lib/default.settings';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
+import { UserEntity } from '../../../../lib/entities/UserEntity';
 import { IAdminQuiz } from '../../../../lib/interfaces/quizzes/IAdminQuiz';
 import { UserService } from '../../user/user.service';
 
@@ -22,8 +23,8 @@ export class AdminService {
     this.initUrls();
   }
 
-  public getAvailableUsers(): Observable<Array<object>> {
-    return this.http.get<Array<object>>(this._getAvailableUsersUrl, { headers: { authorization: this.userService.staticLoginToken } });
+  public getAvailableUsers(): Observable<Array<UserEntity>> {
+    return this.http.get<Array<UserEntity>>(this._getAvailableUsersUrl, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
   public getAvailableQuizzes(): Observable<Array<IAdminQuiz>> {

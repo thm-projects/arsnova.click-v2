@@ -14,9 +14,9 @@ import { UserService } from '../../service/user/user.service';
   styleUrls: ['./user-admin.component.scss'],
 })
 export class UserAdminComponent implements OnInit {
-  private _data: Array<object>;
+  private _data: Array<UserEntity>;
 
-  get data(): Array<object> {
+  get data(): Array<UserEntity> {
     return this._data;
   }
 

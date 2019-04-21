@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-12">
-    <button class="btn btn-light"
-            (click)="showAddUserModal()">
+    <button (click)="showAddUserModal()"
+            class="btn btn-light">
       Add User
     </button>
   </div>
@@ -16,12 +16,12 @@
                    [spin]="true"></fa-icon>
           <div *ngIf="!isDeletingElem(user)"
                class="d-flex">
-            <fa-icon [icon]="'times'"
-                     class="cursor-pointer"
-                     (click)="deleteElem(user)"></fa-icon>
-            <fa-icon [icon]="'edit'"
-                     class="cursor-pointer ml-3"
-                     (click)="editElem(user)"></fa-icon>
+            <fa-icon (click)="deleteElem(user)"
+                     [icon]="'times'"
+                     class="cursor-pointer"></fa-icon>
+            <fa-icon (click)="editElem(user)"
+                     [icon]="'edit'"
+                     class="cursor-pointer ml-3"></fa-icon>
           </div>
         </div>
         <p class="card-text mb-0">Username: {{user.name}}</p>
@@ -33,6 +33,11 @@
         <p class="card-text mb-0">
           <span>Password-Hash:</span><br/>
           <span>{{user.passwordHash}}</span>
+        </p>
+        <p *ngIf="user.privateKey"
+           class="card-text mb-0">
+          <span>Private Key:</span><br/>
+          <span>{{user.privateKey}}</span>
         </p>
         <p class="card-text mb-0">User Authorizations:</p>
         <ul>
