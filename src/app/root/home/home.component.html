@@ -68,7 +68,11 @@
                 [disabled]="!canJoinQuiz"
                 [routerLink]="['/quiz', enteredSessionName]"
                 class="btn btn-block px-1">
-          <fa-icon [icon]="'thumbs-up'"></fa-icon>
+          <fa-icon *ngIf="isPerformingClick('joinSession')"
+                   [icon]="'spinner'"
+                   [spin]="true"></fa-icon>
+          <fa-icon *ngIf="!isPerformingClick('joinSession')"
+                   [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.name_management.join_session' | translate}}</span>
         </button>
         <button (click)="handleClick('startSession') && runQuiz(['/quiz', 'flow'])"
@@ -78,7 +82,11 @@
                 [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
                 class="btn btn-success btn-block px-1"
                 id="startSession">
-          <fa-icon [icon]="'thumbs-up'"></fa-icon>
+          <fa-icon *ngIf="isPerformingClick('startSession')"
+                   [icon]="'spinner'"
+                   [spin]="true"></fa-icon>
+          <fa-icon *ngIf="!isPerformingClick('startSession')"
+                   [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.name_management.start_session' | translate}}</span>
         </button>
       </div>
@@ -99,14 +107,22 @@
                   class="btn btn-block px-1"
                   id="addSession">
             <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
-            <fa-icon [icon]="'edit'"></fa-icon>
+            <fa-icon *ngIf="isPerformingClick('addSession')"
+                     [icon]="'spinner'"
+                     [spin]="true"></fa-icon>
+            <fa-icon *ngIf="!isPerformingClick('addSession')"
+                     [icon]="'edit'"></fa-icon>
           </button>
           <button (click)="handleClick('editSession') && editQuiz()"
                   *ngIf="canEditQuiz"
                   class="btn btn-secondary btn-block px-1"
                   id="editSession">
             <span class="mr-1">{{'component.name_management.edit_session' | translate}}</span>
-            <fa-icon [icon]="'edit'"></fa-icon>
+            <fa-icon *ngIf="isPerformingClick('editSession')"
+                     [icon]="'spinner'"
+                     [spin]="true"></fa-icon>
+            <fa-icon *ngIf="!isPerformingClick('editSession')"
+                     [icon]="'edit'"></fa-icon>
           </button>
           <button (click)="handleClick('add-demo-quiz') && runQuiz(['/quiz', 'flow'])"
                   *ngIf="isAddingDemoQuiz"
@@ -116,6 +132,10 @@
                   class="btn btn-block px-1"
                   id="runDemoQuizSession">
             <span>{{'component.name_management.create_demo_session' | translate}}</span>
+            <fa-icon *ngIf="isPerformingClick('add-demo-quiz')"
+                     [icon]="'spinner'"
+                     [spin]="true"
+                     class="ml-1"></fa-icon>
           </button>
           <button (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
                   *ngIf="isAddingABCDQuiz"
@@ -125,6 +145,10 @@
                   class="btn btn-block px-1"
                   id="runABCDQuizSession">
             <span>{{'component.name_management.create_abcd_session' | translate}}</span>
+            <fa-icon *ngIf="isPerformingClick('add-abcd-quiz')"
+                     [icon]="'spinner'"
+                     [spin]="true"
+                     class="ml-1"></fa-icon>
           </button>
         </ng-container>
       </div>

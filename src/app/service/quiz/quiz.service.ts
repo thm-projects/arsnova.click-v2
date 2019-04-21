@@ -198,11 +198,12 @@ export class QuizService {
 
   public loadDataToPlay(quizName: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
-      /*
-       * TODO Refactoring
-       * The requests can be prevented if this.quiz is set.
-       * But in this case the state (questonIndex, ...) must be updated via socket.
-       */
+      if (this.quiz) {
+        console.log('QuizService: aborting loadDataToPlay since the quiz is already present', quizName);
+        this.quizUpdateEmitter.emit(this.quiz);
+        resolve();
+        return;
+      }
 
       this.storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
 
@@ -214,7 +215,6 @@ export class QuizService {
         }
 
         this.isOwner = true;
-        this.updateOwnerState();
 
         this.quizApiService.getQuiz(quizName).subscribe(response => {
           if (!response.payload.quiz) {
@@ -223,6 +223,7 @@ export class QuizService {
           }
 
           this.quiz = response.payload.quiz;
+          this.updateOwnerState();
           resolve();
         });
       });
@@ -254,6 +255,7 @@ export class QuizService {
 
   private updateOwnerState(): void {
     if (!this._isOwner || !this.quiz) {
+      console.log('QuizService: Cannot update owner state.', this.isOwner, this.quiz);
       return;
     }
 

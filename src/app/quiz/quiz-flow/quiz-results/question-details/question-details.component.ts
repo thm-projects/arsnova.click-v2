@@ -190,6 +190,9 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
       case MessageProtocol.Start:
         this.router.navigate(['/quiz', 'flow', 'voting']);
         break;
+      case MessageProtocol.UpdatedSettings:
+        this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
+        break;
       case MessageProtocol.ReadingConfirmationRequested:
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);

@@ -89,7 +89,6 @@ export class LeaderboardComponent implements OnDestroy {
 
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
@@ -100,6 +99,8 @@ export class LeaderboardComponent implements OnDestroy {
       this.attendeeService.restoreMembers();
       this.addFooterElements();
     }));
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -208,6 +209,9 @@ export class LeaderboardComponent implements OnDestroy {
         case MessageProtocol.UpdatedResponse:
           console.log('LeaderboardComponent: modify response data for nickname', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload);
+          break;
+        case MessageProtocol.UpdatedSettings:
+          this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
           break;
         case MessageProtocol.Reset:
           this.attendeeService.clearResponses();

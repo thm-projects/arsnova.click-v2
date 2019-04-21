@@ -1,4 +1,4 @@
-<div *ngIf="!isLoading;else loadingSpinner">
+<div *ngIf="!(sharedService.isLoadingEmitter | async);else loadingSpinner">
   <div class="px-1 px-sm-4">
     <app-header></app-header>
   </div>
@@ -14,7 +14,8 @@
 
     <main class="container pb-4"
           id="content-container">
-      <router-outlet></router-outlet>
+      <router-outlet>
+      </router-outlet>
     </main>
   </div>
 </div>

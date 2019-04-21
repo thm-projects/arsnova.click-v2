@@ -83,6 +83,7 @@ export class FooterBarComponent implements OnInit {
   }
 
   private detectCurrentRoute(): void {
+    const currentComponent = this.fetchChildComponent(this.activatedRoute);
     this.collapsedNavbar = [
       QuizLobbyComponent.TYPE,
       QuizResultsComponent.TYPE,
@@ -92,7 +93,7 @@ export class FooterBarComponent implements OnInit {
       ConfidenceRateComponent.TYPE,
       QuizThemeComponent.TYPE,
       QuestionDetailsComponent.TYPE,
-    ].includes(this.fetchChildComponent(this.activatedRoute).TYPE);
+    ].includes(currentComponent ? currentComponent.TYPE : null);
   }
 
   private fetchChildComponent(route: ActivatedRoute): INamedType {

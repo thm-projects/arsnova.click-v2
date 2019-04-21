@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -20,6 +20,7 @@ import { ConnectionService } from '../../../service/connection/connection.servic
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
+import { SharedService } from '../../../service/shared/shared.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { EditModeConfirmComponent } from './modals/edit-mode-confirm/edit-mode-confirm.component';
@@ -31,7 +32,7 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
   styleUrls: ['./quiz-lobby.component.scss'],
 }) //
 @AutoUnsubscribe('_subscriptions')
-export class QuizLobbyComponent implements OnDestroy {
+export class QuizLobbyComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizLobbyComponent';
 
   private _nickToRemove: string;
@@ -61,15 +62,20 @@ export class QuizLobbyComponent implements OnDestroy {
     private memberApiService: MemberApiService,
     private quizApiService: QuizApiService,
     private ngbModal: NgbModal,
+    private sharedService: SharedService,
   ) {
-
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
+  }
+
+  public ngOnInit(): void {
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      console.log('QuizLobbyComponent: quizUpdateEmitter fired', quiz);
       if (!quiz) {
         return;
       }
 
+      this.sharedService.isLoadingEmitter.next(false);
       if (this.quizService.isOwner) {
         console.log('QuizLobbyComponent: quiz for owner initialized', this.quizService.quiz);
         this.handleNewQuiz(this.quizService.quiz);
@@ -81,6 +87,8 @@ export class QuizLobbyComponent implements OnDestroy {
         this.attendeeService.restoreMembers();
       }
     }));
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -99,8 +107,6 @@ export class QuizLobbyComponent implements OnDestroy {
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     }));
-
-    this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
   }
 
   public openKickMemberModal(content: string, name: string): void {
@@ -195,7 +201,6 @@ export class QuizLobbyComponent implements OnDestroy {
     }
     this.footerBarService.replaceFooterElements(footerElements);
 
-
     this.addFooterElemClickCallbacksAsOwner();
   }
 
@@ -278,6 +283,9 @@ export class QuizLobbyComponent implements OnDestroy {
     switch (data.step) {
       case MessageProtocol.Start:
         this.router.navigate(['/quiz', 'flow', 'voting']);
+        break;
+      case MessageProtocol.UpdatedSettings:
+        this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
         break;
       case MessageProtocol.ReadingConfirmationRequested:
         if (environment.readingConfirmationEnabled) {

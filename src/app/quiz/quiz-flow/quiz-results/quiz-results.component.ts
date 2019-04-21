@@ -71,10 +71,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.liveResults.title';
-
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-      this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
-    });
   }
 
   public showLeaderBoardButton(index: number): boolean {
@@ -222,6 +218,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
       this.cd.markForCheck();
     }));
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
+    });
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -481,6 +481,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     switch (data.step) {
       case MessageProtocol.Start:
         this.router.navigate(['/quiz', 'flow', 'voting']);
+        break;
+      case MessageProtocol.UpdatedSettings:
+        this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
         break;
       case MessageProtocol.ReadingConfirmationRequested:
         if (environment.readingConfirmationEnabled) {

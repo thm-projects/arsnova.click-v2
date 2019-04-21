@@ -49,7 +49,6 @@ export class ConfidenceRateComponent implements OnDestroy {
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
@@ -57,6 +56,8 @@ export class ConfidenceRateComponent implements OnDestroy {
 
       this.initData();
     }));
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -128,6 +129,9 @@ export class ConfidenceRateComponent implements OnDestroy {
         case MessageProtocol.UpdatedResponse:
           console.log('ConfidenceRateComponent: modify response data for nickname', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload);
+          break;
+        case MessageProtocol.UpdatedSettings:
+          this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
           break;
         case MessageProtocol.ReadingConfirmationRequested:
           if (environment.readingConfirmationEnabled) {

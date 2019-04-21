@@ -87,7 +87,6 @@ export class VotingComponent implements OnDestroy {
 
     this.footerBarService.replaceFooterElements([]);
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
@@ -97,6 +96,8 @@ export class VotingComponent implements OnDestroy {
       this.initData();
       this.attendeeService.restoreMembers();
     }));
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -230,6 +231,9 @@ export class VotingComponent implements OnDestroy {
       switch (data.step) {
         case MessageProtocol.UpdatedResponse:
           this.attendeeService.modifyResponse(data.payload);
+          break;
+        case MessageProtocol.UpdatedSettings:
+          this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
           break;
         case MessageProtocol.Countdown:
           if (!this.countdown) {

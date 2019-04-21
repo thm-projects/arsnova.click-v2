@@ -85,6 +85,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this._ownQuizzes;
   }
 
+  private _isPerformingClick: Array<string> = [];
   private _routerSubscription: Subscription;
   // noinspection JSMismatchedCollectionQueryUpdate
   private _subscriptions: Array<Subscription> = [];
@@ -257,6 +258,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       },
     };
 
+    if (!this._isPerformingClick.includes(id)) {
+      this._isPerformingClick.push(id);
+    }
+
     switch (id) {
       case 'joinSession':
         trackingParams.label = 'join-session';
@@ -328,6 +333,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     this.reserveQuiz(questionGroup, routingTarget);
+  }
+
+  public isPerformingClick(id: string): boolean {
+    return this._isPerformingClick.includes(id);
   }
 
   private updateFooterElements(isLoggedIn: boolean): void {

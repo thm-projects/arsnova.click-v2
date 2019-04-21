@@ -71,7 +71,6 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
@@ -86,6 +85,8 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
       this.questionIndex = this.quizService.quiz.currentQuestionIndex;
       this.questionTextService.change(this.quizService.currentQuestion().questionText);
     }));
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string) => {
       this.questionText = value;
@@ -114,6 +115,9 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
         case MessageProtocol.UpdatedResponse:
           console.log('ReadingConfirmationComponent: modifying response data for nickname', data.payload.nickname);
           this.attendeeService.modifyResponse(data.payload);
+          break;
+        case MessageProtocol.UpdatedSettings:
+          this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
           break;
         case MessageProtocol.Reset:
           this.attendeeService.clearResponses();

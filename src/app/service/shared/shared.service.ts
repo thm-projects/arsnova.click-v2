@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SharedService {
@@ -10,6 +11,12 @@ export class SharedService {
 
   set activeQuizzes(value: Array<string>) {
     this._activeQuizzes = value;
+  }
+
+  private _isLoadingEmitter = new BehaviorSubject<boolean>(true);
+
+  get isLoadingEmitter(): BehaviorSubject<boolean> {
+    return this._isLoadingEmitter;
   }
 
   constructor() { }

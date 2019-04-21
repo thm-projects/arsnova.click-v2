@@ -1,29 +1,29 @@
 <div class="available-quizzes-modal">
   <div class="modal-header">
     <h5 class="modal-title">{{'component.name_management.quiz_management' | translate}}</h5>
-    <button class="close cursor-pointer"
-            data-dismiss="modal"
+    <button (click)="dismiss()"
             aria-label="Close"
-            (click)="dismiss()">
+            class="close cursor-pointer"
+            data-dismiss="modal">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <div class="d-flex flex-wrap flex-column flex-sm-row justify-content-between justify-content-sm-start">
-      <button *ngFor="let elem of sessions"
-              class="btn text-nowrap d-inline mr-sm-2 my-1 px-4 py-2 available-quiz"
-              [class.btn-outline-success]="elem.isValid()"
+    <div class="d-flex flex-wrap flex-column flex-sm-row justify-content-between justify-content-sm-around">
+      <button (click)="elem.isValid() ? startQuiz(elem) : editQuiz(elem)"
+              *ngFor="let elem of sessions"
               [class.btn-outline-danger]="!elem.isValid()"
-              (click)="elem.isValid() ? startQuiz(elem) : editQuiz(elem)">
+              [class.btn-outline-success]="elem.isValid()"
+              class="btn d-inline mr-sm-2 my-1 px-4 py-2 available-quiz flex-sm-grow-1">
         {{elem.name}}
       </button>
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button"
+    <button (click)="abort()"
             class="btn btn-light"
             data-dismiss="modal"
-            (click)="abort()">{{'global.close_window' | translate}}
+            type="button">{{'global.close_window' | translate}}
     </button>
   </div>
 

@@ -8,6 +8,7 @@ import { INamedType } from '../../../lib/interfaces/interfaces';
 import { IWindow } from '../../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { SharedService } from '../../service/shared/shared.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { UserService } from '../../service/user/user.service';
 
@@ -20,15 +21,10 @@ export class RootComponent implements OnInit, AfterViewInit {
   public static TYPE = 'RootComponent';
   public isInQuizManager = false;
 
-  private _isLoading = true;
-
-  get isLoading(): boolean {
-    return this._isLoading;
-  }
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public i18nService: I18nService, // Must be instantiated here to be available in all child components
+    public sharedService: SharedService,
     private translateService: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -64,9 +60,9 @@ export class RootComponent implements OnInit, AfterViewInit {
 
     this.router.events.subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
-        this._isLoading = true;
+        this.sharedService.isLoadingEmitter.next(true);
       } else if (event instanceof RouteConfigLoadEnd) {
-        this._isLoading = false;
+        this.sharedService.isLoadingEmitter.next(false);
       }
     });
   }
