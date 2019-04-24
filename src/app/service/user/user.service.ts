@@ -7,6 +7,7 @@ import { StatusProtocol } from '../../../lib/enums/Message';
 import { UserRole } from '../../../lib/enums/UserRole';
 import { ILoginSerialized } from '../../../lib/interfaces/ILoginSerialized';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
+import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { QuizService } from '../quiz/quiz.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
@@ -77,6 +78,7 @@ export class UserService {
     private indexedDbService: IndexedDbService,
     private jwtHelper: JwtHelperService,
     private quizService: QuizService,
+    private quizApiService: QuizApiService,
   ) {
 
     this.storageService.stateNotifier.subscribe((type) => {
@@ -97,7 +99,15 @@ export class UserService {
 
         if (this._tmpRemoteQuizData.length) {
           console.log('UserService: having remote quiz data');
-          this.storageService.getAllQuiznames().then(quiznames => {
+          this.storageService.getAll(DbTable.Quiz).subscribe(localQuizzes => {
+            const onlyLocalQuizzes = localQuizzes.filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.name));
+            onlyLocalQuizzes.forEach(localQuiz => {
+              console.log('UserService: syncing local quiz data to server');
+              this.quizService.quiz = new QuizEntity(localQuiz);
+              this.quizService.persist();
+              this.quizApiService.putSavedQuiz(this.quizService.quiz).subscribe();
+            });
+
             console.log('UserService: received response from storage service and looping through remote quizzes');
 
             this._tmpRemoteQuizData.forEach(quiz => {
