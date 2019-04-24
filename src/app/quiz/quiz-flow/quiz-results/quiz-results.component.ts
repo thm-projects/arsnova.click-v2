@@ -33,10 +33,23 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizResultsComponent';
   public countdown: number;
   public answers: Array<string> = [];
-
   public showStartQuizButton: boolean;
   public showStopCountdownButton: boolean;
   public showStopQuizButton: boolean;
+  public isStarting: boolean;
+  public isStopping: boolean;
+  public isLoadingQuestionData: boolean;
+
+  private _hideProgressbarStyle = true;
+
+  get hideProgressbarStyle(): boolean {
+    return this._hideProgressbarStyle;
+  }
+
+  set hideProgressbarStyle(value: boolean) {
+    this._hideProgressbarStyle = value;
+    this.cd.markForCheck();
+  }
 
   private _selectedQuestionIndex: number;
 
@@ -99,12 +112,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     this.cd.markForCheck();
     return ![QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
-  }
-
-  public hideProgressbarCssStyle(): boolean {
-    this.cd.markForCheck();
-    return typeof this.countdown === 'undefined' || (this.countdown > 0 && this._selectedQuestionIndex
-                                                     === this.quizService.quiz.currentQuestionIndex);
   }
 
   public showConfidenceRate(questionIndex: number): boolean {
@@ -203,6 +210,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       if (!quiz) {
         return;
       }
+      this.hideProgressbarStyle = quiz.currentStartTimestamp > -1;
 
       const storedSelectedQuestionIndex = parseInt(sessionStorage.getItem(StorageKey.CurrentQuestionIndex), 10);
       if (!isNaN(storedSelectedQuestionIndex)) {
@@ -219,6 +227,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
+    this.isLoadingQuestionData = true;
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
     });
@@ -249,6 +258,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public stopQuiz(): void {
+    this.isStopping = true;
     this.quizApiService.stopQuiz(this.quizService.quiz).subscribe(data => {
       if (data.status !== StatusProtocol.Success) {
         console.log('QuizResultsComponent: StopQuiz failed', data);
@@ -258,12 +268,16 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this.countdown = 0;
     }
     this.cd.markForCheck();
+    this.isStopping = false;
   }
 
   public async startQuiz(): Promise<void> {
+    this.isStarting = true;
+    this.hideProgressbarStyle = true;
     const startQuizData = await this.quizApiService.nextStep(this.quizService.quiz.name).toPromise();
     if (startQuizData.status !== StatusProtocol.Success) {
       console.log('QuizResultsComponent: NextStep failed', startQuizData);
+      this.isStarting = false;
       return;
     }
 
@@ -285,6 +299,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     }
 
     this.cd.markForCheck();
+    this.isStarting = false;
   }
 
   private initData(): void {
@@ -306,6 +321,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
 
       const question = this.quizService.currentQuestion();
+
+      this.hideProgressbarStyle = currentStateData.payload.startTimestamp > -1;
 
       if (!this.countdown) {
         this.countdown = 0;
@@ -339,6 +356,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
 
       this.cd.markForCheck();
+      this.isLoadingQuestionData = false;
     });
   }
 
@@ -406,6 +424,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           break;
         case MessageProtocol.Countdown:
           this.countdown = data.payload.value;
+          this.hideProgressbarStyle = this.countdown > 0;
           break;
         case MessageProtocol.Removed:
           this.attendeeService.removeMember(data.payload.name);
@@ -418,6 +437,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
             return typeof val === 'number' ? val > -1 : val.length > 0;
           })) {
             this.countdown = 0;
+            this.hideProgressbarStyle = false;
             this.showStopQuizButton = false;
           }
           break;
@@ -430,6 +450,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           break;
         case MessageProtocol.Stop:
           this.countdown = 0;
+          this.hideProgressbarStyle = false;
           break;
         case MessageProtocol.Reset:
           this.attendeeService.clearResponses();

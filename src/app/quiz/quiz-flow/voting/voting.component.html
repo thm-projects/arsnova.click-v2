@@ -11,7 +11,13 @@
   </div>
 </div>
 
-<app-voting-question [questionText]="questionText"
+<h5 *ngIf="!questionText">
+  <span class="mr-1">{{'global.please-wait' | translate}}</span>
+  <fa-icon [icon]="'spinner'"
+           [spin]="true"></fa-icon>
+</h5>
+<app-voting-question *ngIf="questionText"
+                     [questionText]="questionText"
                      [showQuestion]="!quizService.quiz?.sessionConfig?.readingConfirmationEnabled"></app-voting-question>
 
 <div *ngIf="displayAnswerButtons()"

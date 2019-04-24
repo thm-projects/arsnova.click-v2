@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../../../../shared/shared.module';
+import { ProgressBarAnonymousComponent } from './progress-bar-anonymous/progress-bar-anonymous.component';
 import { ProgressBarFreetextComponent } from './progress-bar-freetext/progress-bar-freetext.component';
 import { ProgressBarMultipleChoiceComponent } from './progress-bar-multiple-choice/progress-bar-multiple-choice.component';
 import { ProgressBarRangedComponent } from './progress-bar-ranged/progress-bar-ranged.component';
@@ -18,6 +19,7 @@ import { ProgressBarComponent } from './progress-bar.component';
     ProgressBarRangedComponent,
     ProgressBarFreetextComponent,
     ProgressBarComponent,
+    ProgressBarAnonymousComponent,
   ],
   exports: [
     ProgressBarComponent,

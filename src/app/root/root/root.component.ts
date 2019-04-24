@@ -1,6 +1,6 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import { ActivatedRoute, ActivationStart, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
@@ -41,6 +41,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    console.log('root component on init');
     if (isPlatformBrowser(this.platformId)) {
       Object.values(DeprecatedKeys).forEach(deprecatedKey => {
         localStorage.removeItem(deprecatedKey);
@@ -59,9 +60,9 @@ export class RootComponent implements OnInit, AfterViewInit {
     });
 
     this.router.events.subscribe((event: any) => {
-      if (event instanceof RouteConfigLoadStart) {
+      if (event instanceof RouteConfigLoadStart || event instanceof ActivationStart) {
         this.sharedService.isLoadingEmitter.next(true);
-      } else if (event instanceof RouteConfigLoadEnd) {
+      } else if (event instanceof RouteConfigLoadEnd || event instanceof NavigationEnd) {
         this.sharedService.isLoadingEmitter.next(false);
       }
     });

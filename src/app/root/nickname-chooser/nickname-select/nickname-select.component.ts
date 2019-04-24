@@ -19,6 +19,7 @@ import { UserService } from '../../../service/user/user.service';
 })
 export class NicknameSelectComponent implements OnInit, OnDestroy {
   public static TYPE = 'NicknameSelectComponent';
+  public isLoggingIn: string;
 
   private _nicks: Array<string> = [];
 
@@ -53,6 +54,11 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   public async joinQuiz(nickname: any): Promise<void> {
+    if (this.isLoggingIn) {
+      return;
+    }
+
+    this.isLoggingIn = nickname;
     if (nickname.changingThisBreaksApplicationSecurity) {
       nickname = nickname.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
@@ -83,6 +89,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
       console.log('NicknameSelectComponent: PutMember failed', err);
+      this.isLoggingIn = null;
     });
   }
 

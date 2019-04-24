@@ -19,7 +19,7 @@ export class ProgressBarComponent {
   @Input() public data: Array<string>;
   @Input() public questionIndex: number;
   @Input() public question: AbstractQuestionEntity;
-  @Input() public hideProgressbarCssStyle: boolean;
+  @Input() public hideProgressbarCssStyle = true;
 
   constructor(
     private attendeeService: AttendeeService,
@@ -29,13 +29,17 @@ export class ProgressBarComponent {
   ) {
   }
 
-  public attendeeDataForAnswer(answerIndex: number): object {
+  public attendeeDataForAnswer(answerIndex: number = 0): object {
     if (!this.attendeeService.attendees.length || !this.quizService.quiz) {
-      console.error('No attendees or no quiz found in the progress-bar component. Aborting.');
       return {};
     }
 
     const question = this.quizService.quiz.questionList[this.questionIndex];
+
+    if (this.hideProgressbarCssStyle) {
+      return this.getAnonymousCorrectWrongResults(question);
+    }
+
     const result = {
       answerIndex: answerIndex,
       label: this.data[answerIndex],
@@ -53,11 +57,79 @@ export class ProgressBarComponent {
       this.updateResultSetForQuestions(result, question, answerIndex);
     }
 
-    if (this.hideProgressbarCssStyle) {
-      delete result.isCorrect;
-    }
-
     return result;
+  }
+
+  private getAnonymousCorrectWrongResults(question): object {
+    let { correct, wrong, neutral } = {
+      correct: 0,
+      wrong: 0,
+      neutral: 0,
+    };
+    let base = this.attendeeService.attendees.length;
+
+    this.attendeeService.attendees.forEach(value => {
+      if (typeof value.responses[this.questionIndex] === 'undefined' || value.responses[this.questionIndex].responseTime === -1) {
+        return false;
+      }
+      const responseValue: any = value.responses[this.questionIndex].value;
+      if (!responseValue || !String(responseValue).length || (Array.isArray(responseValue) && !responseValue.length)) {
+        return false;
+      }
+
+      if (question.TYPE === QuestionType.FreeTextQuestion) {
+        const answer = question.answerOptionList[0] = new FreeTextAnswerEntity(question.answerOptionList[0]);
+        if (answer.isCorrectInput(responseValue)) {
+          correct++;
+        } else {
+          wrong++;
+        }
+      } else if (question.TYPE === QuestionType.RangedQuestion) {
+        if (responseValue === question.correctValue || responseValue !== question.correctValue && responseValue >= question.rangeMin && responseValue
+            <= question.rangeMax) {
+          correct++;
+        } else {
+          wrong++;
+        }
+      } else if ([QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(question.TYPE)) {
+        neutral++;
+      } else {
+        const storedBase = base;
+        base--;
+        question.answerOptionList.forEach((answer, answerIndex) => {
+          if (answer.isCorrect) {
+            if ((<any>responseValue.indexOf(answerIndex)) > -1) {
+              correct++;
+              base++;
+            }
+          } else {
+            if ((<any>responseValue.indexOf(answerIndex)) > -1) {
+              wrong++;
+              base++;
+            }
+          }
+        });
+        if (storedBase === base - 1) {
+          base++;
+        }
+      }
+    });
+
+    return {
+      correct: {
+        absolute: correct,
+        percent: this.i18nService.formatNumber(correct / this.attendeeService.attendees.length, NumberType.Percent),
+      },
+      wrong: {
+        absolute: wrong,
+        percent: this.i18nService.formatNumber(wrong / this.attendeeService.attendees.length, NumberType.Percent),
+      },
+      neutral: {
+        absolute: neutral,
+        percent: this.i18nService.formatNumber(neutral / this.attendeeService.attendees.length, NumberType.Percent),
+      },
+      base,
+    };
   }
 
   private async updateResultSetForQuestions(result, question, answerIndex): Promise<void> {
@@ -81,6 +153,7 @@ export class ProgressBarComponent {
         return responseValue === answerIndex;
       }
     });
+
     if (answerIndex > question.answerOptionList.length - 1) {
       // Race condition with the Mathjax / Markdown parsing in the quiz results component
       result.isCorrect = null;
@@ -108,6 +181,7 @@ export class ProgressBarComponent {
         return responseValue < question.rangeMin || responseValue > question.rangeMax;
       }
     });
+
     result.isCorrect = result.label === 'component.liveResults.guessed_correct' ? 1 : result.label === 'component.liveResults.guessed_in_range' ? 0
                                                                                                                                                 : -1;
     result.label = this.translate.instant(`${result.label}`);
@@ -131,6 +205,7 @@ export class ProgressBarComponent {
         return !answer.isCorrectInput(responseValue);
       }
     });
+
     result.isCorrect = result.label === 'component.liveResults.correct_answer' ? 1 : -1;
     result.label = this.translate.instant(`${result.label}`);
     result.absolute = matches.length;

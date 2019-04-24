@@ -1,11 +1,10 @@
-<div *ngIf="countdown"
-     class="overflow-hidden mb-3 d-flex justify-content-between">
+<div class="overflow-hidden mb-3 d-flex justify-content-between">
   <h1>
     <fa-icon [icon]="'users'"></fa-icon>
-    <span>{{attendeeService.attendees.length}}</span>
+    <span class="ml-2">{{attendeeService.attendees.length}}</span>
   </h1>
-  <h1 *ngIf="countdown > -1">
-    <span>{{countdown}}</span>
+  <h1 *ngIf="countdown > 0">
+    <span class="mr-2">{{countdown}}</span>
     <fa-icon [icon]="'hourglass'"></fa-icon>
   </h1>
 </div>
@@ -34,7 +33,11 @@
         {{'component.liveResults.start_round' | translate}}
       </span>
 
-      <fa-icon [icon]="'paper-plane'"></fa-icon>
+      <fa-icon *ngIf="!isStarting"
+               [icon]="'paper-plane'"></fa-icon>
+      <fa-icon *ngIf="isStarting"
+               [icon]="'spinner'"
+               [spin]="true"></fa-icon>
     </button>
 
     <button (click)="stopQuiz()"
@@ -44,7 +47,11 @@
             class="mr-1">{{'component.liveResults.abort_countdown' | translate}}</span>
       <span *ngIf="showStopQuizButton"
             class="mr-1">{{'component.liveResults.abort_question' | translate}}</span>
-      <fa-icon [icon]="'ban'"></fa-icon>
+      <fa-icon *ngIf="!isStopping"
+               [icon]="'ban'"></fa-icon>
+      <fa-icon *ngIf="isStopping"
+               [icon]="'spinner'"
+               [spin]="true"></fa-icon>
     </button>
 
     <button (click)="modifyVisibleQuestion(i)"
@@ -58,9 +65,12 @@
 </div>
 
 <div class="question">
-  <h5 *ngIf="quizService.quiz && quizService.quiz.questionList.length"
-      class="question-title">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} /
-    {{quizService.quiz.questionList.length}}</h5>
+  <h5 *ngIf="quizService.quiz && quizService.quiz.questionList.length">
+    <span class="mr-1">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} / {{quizService.quiz.questionList.length}}</span>
+    <fa-icon *ngIf="isLoadingQuestionData"
+             [icon]="'spinner'"
+             [spin]="true"></fa-icon>
+  </h5>
 
   <app-voting-question [questionText]="questionText"
                        [showQuestion]="quizService.quiz?.sessionConfig?.readingConfirmationEnabled && !!countdown"></app-voting-question>
@@ -93,7 +103,7 @@
 
   <app-progress-bar *ngIf="showResponseProgress()"
                     [data]="answers"
-                    [hideProgressbarCssStyle]="hideProgressbarCssStyle()"
+                    [hideProgressbarCssStyle]="hideProgressbarStyle"
                     [questionIndex]="selectedQuestionIndex"
                     [question]="quizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
 </div>

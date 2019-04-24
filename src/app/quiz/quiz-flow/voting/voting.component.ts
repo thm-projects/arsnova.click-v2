@@ -81,6 +81,7 @@ export class VotingComponent implements OnDestroy {
     private ngbModal: NgbModal,
   ) {
 
+    sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.voting.title';

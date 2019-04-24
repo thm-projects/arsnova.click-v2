@@ -1,17 +1,22 @@
 <h4 *ngIf="isLoading"
     class="text-center text-warning center-vertical">
-  {{'global.please-wait' | translate}}
+  {{'global.please-wait' | translate}}
 </h4>
 
 <h4 *ngIf="!isLoading && !nicks.length"
     class="text-center text-danger center-vertical">
-  {{'component.nickname-select.no-nicks-available' | translate}}
+  {{'component.nickname-select.no-nicks-available' | translate}}
 </h4>
 
 <div class="d-flex justify-content-around flex-column flex-sm-row flex-wrap">
-  <button *ngFor="let elem of nicks"
-          (click)="joinQuiz(elem)"
+  <button (click)="joinQuiz(elem)"
+          *ngFor="let elem of nicks"
+          [disabled]="isLoggingIn && isLoggingIn !== elem"
           class="btn btn-secondary rounded flex-grow-1 m-1">
-    <span [innerHTML]="parseAvailableNick(elem)"></span>
+    <span [class.mr-1]="isLoggingIn === elem"
+          [innerHTML]="parseAvailableNick(elem)"></span>
+    <fa-icon *ngIf="isLoggingIn === elem"
+             [icon]="'spinner'"
+             [spin]="true"></fa-icon>
   </button>
 </div>

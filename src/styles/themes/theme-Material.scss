@@ -64,11 +64,8 @@ $colorChangingBg: (
 );
 
 $colorChangingOwnNick: (
-  0: (fg: white, bg: $primary),
-  25: (fg: white, bg: $warning),
-  50: (fg: white, bg: $warning),
-  75: (fg: white, bg: $warning),
-  100: (fg: white, bg: $primary)
+  0: (fg: white, bg: #a50101),
+  100: (fg: white, bg: $error)
 );
 
 $colorChangingArs: (

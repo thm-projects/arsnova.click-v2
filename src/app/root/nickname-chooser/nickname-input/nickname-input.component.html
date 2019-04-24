@@ -1,17 +1,22 @@
 <div class="center-vertical d-flex justify-content-center flex-column">
   <div class="btn-group w-100">
-    <input type="text"
+    <input (keyup.enter)="joinQuiz()"
+           [attr.aria-label]="'component.choose_nickname.description.nickname_input' | translate"
+           [attr.data-intro]="'component.choose_nickname.description.nickname_input' | translate"
+           [placeholder]="'component.choose_nickname.enter_nickname_here' | translate"
            autofocus
-           (keyup.enter)="joinQuiz()"
            class="rounded-left border-0 py-1 px-2 w-100"
            id="input-nickname"
-           [placeholder]="'component.choose_nickname.enter_nickname_here' | translate"
-           [attr.data-intro]="'component.choose_nickname.description.nickname_input' | translate"
-           [attr.aria-label]="'component.choose_nickname.description.nickname_input' | translate"
-           maxlength="20"/>
-    <button class="btn btn-success text-nowrap"
-            (click)="joinQuiz()">
-      <span>{{'component.name_management.join_session' | translate}}</span>
+           maxlength="20"
+           type="text"/>
+    <button (click)="joinQuiz()"
+            class="btn btn-success text-nowrap">
+      <span *ngIf="!isLoggingIn">{{'component.name_management.join_session' | translate}}</span>
+      <ng-container *ngIf="isLoggingIn">
+        <span class="mr-1">{{'global.please-wait' | translate}}</span>
+        <fa-icon [icon]="'spinner'"
+                 [spin]="true"></fa-icon>
+      </ng-container>
     </button>
   </div>
   <div *ngIf="failedLoginReason"

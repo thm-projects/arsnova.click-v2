@@ -17,6 +17,7 @@ import { UserService } from '../../../service/user/user.service';
 })
 export class NicknameInputComponent implements OnInit, OnDestroy {
   public static TYPE = 'NicknameInputComponent';
+  public isLoggingIn: boolean;
 
   private _failedLoginReason = '';
 
@@ -48,6 +49,8 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.isLoggingIn = true;
+
     const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
 
     const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
@@ -58,6 +61,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
+      this.isLoggingIn = false;
       switch (data.step) {
         case MessageProtocol.DuplicateLogin:
           this._failedLoginReason = 'plugins.splashscreen.error.error_messages.duplicate_user';
