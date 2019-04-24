@@ -153,7 +153,7 @@ describe('QuizResultsComponent', () => {
   it(`#hideProgressbarCssStyle`, inject([QuizService], (quizService: QuizService) => {
     quizService.readingConfirmationRequested = false;
     quizService.quiz.currentQuestionIndex = 0;
-    expect(component.hideProgressbarCssStyle()).toBeTruthy();
+    expect(component.hideProgressbarStyle).toBeTruthy();
   }));
 
   it(`#showConfidenceRate`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
