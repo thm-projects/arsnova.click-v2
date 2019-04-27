@@ -129,6 +129,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       this.connectionService.disconnectFromChannel();
     });
+
+    this.quizService.stopEditMode();
   }
 
   public sanitizeHTML(value: string): SafeHtml {

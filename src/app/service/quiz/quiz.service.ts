@@ -244,6 +244,10 @@ export class QuizService {
     });
   }
 
+  public stopEditMode(): void {
+    this._isInEditMode = false;
+  }
+
   private restoreSettings(quizName: string): Promise<boolean> {
     return new Promise<boolean>(resolve => {
       this.quizApiService.getQuiz(quizName).subscribe(response => {
