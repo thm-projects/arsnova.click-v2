@@ -42,7 +42,7 @@ export class ProgressBarComponent {
 
     const result = {
       answerIndex: answerIndex,
-      label: this.data[answerIndex],
+      label: [QuestionType.ABCDSingleChoiceQuestion].includes(question.TYPE) ? null : this.data[answerIndex],
       absolute: 0,
       base: this.attendeeService.attendees.length,
       percent: '0',

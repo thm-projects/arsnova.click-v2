@@ -10,7 +10,9 @@
 
   <ng-container *ngIf="base">
     <div class="d-flex align-self-center align-items-center position-absolute h-100"
-         style="left: 10px;">{{normalizedAnswerIndex}}:&nbsp;<span [innerHTML]="sanitizeHTML(label)"></span>
+         style="left: 10px;">
+      <span>{{normalizedAnswerIndex}}</span>
+      <span *ngIf="label">:&nbsp;<span [innerHTML]="sanitizeHTML(label)"></span></span>
     </div>
     <div class="align-self-center position-absolute"
          style="right: 10px;">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}
