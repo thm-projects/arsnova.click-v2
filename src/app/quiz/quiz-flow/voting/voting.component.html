@@ -11,14 +11,16 @@
   </div>
 </div>
 
-<h5 *ngIf="!questionText">
-  <span class="mr-1">{{'global.please-wait' | translate}}</span>
-  <fa-icon [icon]="'spinner'"
-           [spin]="true"></fa-icon>
-</h5>
-<app-voting-question *ngIf="questionText"
-                     [questionText]="questionText"
-                     [showQuestion]="!quizService.quiz?.sessionConfig?.readingConfirmationEnabled"></app-voting-question>
+<ng-container *ngIf="quizService?.currentQuestion()?.questionText && !quizService.quiz?.sessionConfig?.readingConfirmationEnabled">
+  <h5 *ngIf="!questionText">
+    <span class="mr-1">{{'global.please-wait' | translate}}</span>
+    <fa-icon [icon]="'spinner'"
+             [spin]="true"></fa-icon>
+  </h5>
+
+  <app-voting-question *ngIf="questionText"
+                       [questionText]="questionText"></app-voting-question>
+</ng-container>
 
 <div *ngIf="displayAnswerButtons()"
      [class.mb-5]="showSendResponseButton()"

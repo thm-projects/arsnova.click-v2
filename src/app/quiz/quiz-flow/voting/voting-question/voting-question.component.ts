@@ -8,17 +8,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VotingQuestionComponent {
-  private _showQuestion: boolean;
-
-  get showQuestion(): boolean {
-    return this._showQuestion;
-  }
-
-  @Input() set showQuestion(value: boolean) {
-    this._showQuestion = value;
-    this.cd.markForCheck();
-  }
-
   private _questionText: string;
 
   get questionText(): string {

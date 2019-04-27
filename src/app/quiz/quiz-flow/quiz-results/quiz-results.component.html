@@ -72,8 +72,8 @@
              [spin]="true"></fa-icon>
   </h5>
 
-  <app-voting-question [questionText]="questionText"
-                       [showQuestion]="quizService.quiz?.sessionConfig?.readingConfirmationEnabled && !!countdown"></app-voting-question>
+  <app-voting-question *ngIf="questionText && quizService?.currentQuestion()?.questionText && !quizService.quiz?.sessionConfig?.readingConfirmationEnabled && !!countdown"
+                       [questionText]="questionText"></app-voting-question>
 
   <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
        class="btn-group w-100">
