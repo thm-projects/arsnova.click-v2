@@ -177,7 +177,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   public showResponseProgress(): boolean {
     this.cd.markForCheck();
-    return this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress;
+    return (this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress) || //
+           (this.quizService.currentQuestion().timer && this.countdown === 0);
   }
 
   public getReadingConfirmationData(questionIndex: number): { base: number, absolute: number, percent: string } {
