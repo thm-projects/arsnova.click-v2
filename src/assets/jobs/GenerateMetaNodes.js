@@ -26,7 +26,6 @@ class GenerateMetaNodes {
 
   constructor() {
     this.pathToAssets = path.join(__dirname, '..');
-    this.baseUrl = 'http://localhost:4210';
   }
 
   generateDirectories() {
@@ -54,8 +53,8 @@ class GenerateMetaNodes {
 
   generateLinkImages() {
     themes.forEach(theme => {
-      const basePath = `${this.baseUrl}/assets/images/theme/${theme}`;
-      const manifestPath = `${this.baseUrl}/assets/meta/${theme}/manifest_%%LANG%%.json`;
+      const basePath = `/assets/images/theme/${theme}`;
+      const manifestPath = `/assets/meta/${theme}/manifest_%%LANG%%.json`;
 
       const result = [
         {
@@ -162,7 +161,7 @@ class GenerateMetaNodes {
 
         imageDerivates.forEach((derivate) => {
           manifest.icons.push({
-            src: `${this.baseUrl}/assets/images/theme/${theme}/logo_s${derivate}.png`,
+            src: `/assets/images/theme/${theme}/logo_s${derivate}.png`,
             sizes: derivate,
             type: 'image/png',
           });
@@ -182,9 +181,6 @@ const init = () => {
   } else {
     if (argv.baseDir) {
       generateMetaNodes.pathToAssets = argv.baseDir;
-    }
-    if (argv.baseUrl) {
-      generateMetaNodes.baseUrl = argv.baseUrl;
     }
 
     generateMetaNodes.generateDirectories();
