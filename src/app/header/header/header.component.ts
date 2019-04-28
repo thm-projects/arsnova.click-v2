@@ -6,6 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { UpdateCheckService } from '../../service/update-check/update-check.service';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,7 @@ export class HeaderComponent implements OnInit {
   public static TYPE = 'HeaderComponent';
 
   @Input() public showHeader = true;
+  public isCheckingForUpdates: boolean;
 
   private _origin: string = isPlatformBrowser(this.platformId) ? location.hostname : '';
 
@@ -46,14 +48,14 @@ export class HeaderComponent implements OnInit {
 
   private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private sanitizer: DomSanitizer,
-    private router: Router,
-    private modalService: NgbModal,
-    public headerLabelService: HeaderLabelService,
-    public connectionService: ConnectionService,
-    private trackingService: TrackingService,
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              public headerLabelService: HeaderLabelService,
+              public connectionService: ConnectionService,
+              private sanitizer: DomSanitizer,
+              private router: Router,
+              private modalService: NgbModal,
+              private trackingService: TrackingService,
+              private updateCheckService: UpdateCheckService,
   ) {
   }
 
@@ -93,6 +95,11 @@ export class HeaderComponent implements OnInit {
     if (!this.connectionService.websocketAvailable) {
       this.connectionService.initWebsocket();
     }
+  }
+
+  public checkForUpdates(): void {
+    this.isCheckingForUpdates = true;
+    this.updateCheckService.doCheck().catch(err => console.error(err)).finally(() => this.isCheckingForUpdates = false);
   }
 
   private sanitizeStyle(value: string): SafeStyle {

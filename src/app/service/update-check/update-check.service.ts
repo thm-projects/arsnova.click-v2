@@ -12,13 +12,16 @@ export class UpdateCheckService {
 
   constructor(private updates: SwUpdate, private translateService: TranslateService, private toastService: ToastrService) {
     if (updates.isEnabled) {
-      interval(6 * 60 * 60).subscribe(() => updates.checkForUpdate()
-      .then(() => console.log('checking for updates')));
+      interval(6 * 60 * 60).subscribe(() => this.doCheck().then(() => console.log('checking for updates')));
     }
   }
 
   public checkForUpdates(): void {
     this.updates.available.subscribe(event => this.promptUser(event));
+  }
+
+  public doCheck(): Promise<void> {
+    return this.updates.checkForUpdate();
   }
 
   private promptUser(availableEvent: UpdateAvailableEvent): void {
