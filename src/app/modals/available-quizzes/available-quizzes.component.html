@@ -14,8 +14,13 @@
               *ngFor="let elem of sessions"
               [class.btn-outline-danger]="!elem.isValid()"
               [class.btn-outline-success]="elem.isValid()"
+              [disabled]="startingQuiz"
               class="btn d-inline mr-sm-2 my-1 px-4 py-2 available-quiz flex-sm-grow-1">
-        {{elem.name}}
+        <span>{{elem.name}}</span>
+        <fa-icon *ngIf="startingQuiz === elem"
+                 [icon]="'spinner'"
+                 [spin]="true"
+                 class="ml-2"></fa-icon>
       </button>
     </div>
   </div>

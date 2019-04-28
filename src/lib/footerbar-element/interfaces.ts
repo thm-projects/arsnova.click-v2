@@ -11,4 +11,5 @@ export declare interface IFooterBarElement {
   onClickCallback?: Function;
   restoreClickCallback?: Function;
   isActive?: boolean;
+  isLoading?: boolean;
 }

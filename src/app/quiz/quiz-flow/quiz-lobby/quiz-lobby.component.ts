@@ -9,6 +9,7 @@ import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
+import { FooterbarElement } from '../../../../lib/footerbar-element/footerbar-element';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
@@ -205,15 +206,17 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   private addFooterElemClickCallbacksAsOwner(): void {
-    this.footerBarService.footerElemStartQuiz.onClickCallback = () => {
+    this.footerBarService.footerElemStartQuiz.onClickCallback = (self: FooterbarElement) => {
       if (!this.attendeeService.attendees.length) {
         return;
       }
+      self.isLoading = true;
       this.quizApiService.nextStep(this.quizService.quiz.name).subscribe((data: IMessage) => {
         this.quizService.readingConfirmationRequested = environment.readingConfirmationEnabled ? data.step
                                                                                                  === MessageProtocol.ReadingConfirmationRequested
                                                                                                : false;
         this.router.navigate(['/quiz', 'flow', 'results']);
+        self.isLoading = false;
       });
     };
     this.footerBarService.footerElemQRCode.onClickCallback = () => {

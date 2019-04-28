@@ -9,8 +9,8 @@ export const environment = {
   readingConfirmationEnabled: true,
   confidenceSliderEnabled: true,
   infoAboutTabEnabled: false,
-  infoProjectTabEnabled: false,
-  infoBackendApiEnabled: false,
+  infoProjectTabEnabled: true,
+  infoBackendApiEnabled: true,
 };
 
 export enum DEVICE_TYPES {

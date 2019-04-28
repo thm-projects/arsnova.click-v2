@@ -1,35 +1,35 @@
 <div>
-  <div class="btn-group btn-header mb-4 overflow-auto d-flex flex-grow-1"
+  <div #buttonHeader
+       [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate"
+       class="btn-group btn-header mb-4 overflow-auto d-flex flex-grow-1"
        data-toggle="buttons"
-       role="group"
-       #buttonHeader
-       [attr.aria-label]="'component.quiz_manager.details.aria.btn_group' | translate">
-    <button *ngFor="let elem of infoButtons"
-            type="button"
-            class="btn text-nowrap"
-            [class.btn-primary]="currentData === elem.id"
+       role="group">
+    <button (click)="toInfoContent(elem.id)"
+            *ngFor="let elem of infoButtons"
             [class.btn-light]="currentData !== elem.id"
-            (click)="toInfoContent(elem.id)"
-            [routerLink]="['/info', elem.id]">
+            [class.btn-primary]="currentData === elem.id"
+            [routerLink]="['/info', elem.id]"
+            class="btn text-nowrap"
+            type="button">
       <span>{{elem.i18nRef | translate}}</span>
     </button>
     <button *ngIf="isExternalLinkEnabled('projectBlog')"
-            type="button"
             class="btn btn-light text-nowrap"
-            onclick="window.open('https://arsnova.eu/blog');">
+            onclick="window.open('https://arsnova.thm.de/blog/arsnova-click/');"
+            type="button">
       <span>{{'region.footer.footer_bar.blog' | translate}}</span>
     </button>
-    <button *ngIf="isExternalLinkEnabled('backendApi')"
-            type="button"
+    <button (click)="openApiDocsWindow()"
+            *ngIf="isExternalLinkEnabled('backendApi')"
             class="btn btn-light text-nowrap"
-            (click)="openApiDocsWindow()">
+            type="button">
       <span>{{'region.footer.footer_bar.api-docs' | translate}}</span>
     </button>
   </div>
   <div *ngIf="currentData === 'about'"
        id="infoElement">
-    <h3 class="mb-2"
-        [innerHTML]="'region.footer.about.declaration' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.about.declaration' | translate"
+        class="mb-2"></h3>
     <p [innerHTML]="'region.footer.about.ars' | translate"></p>
     <p [innerHTML]="'region.footer.about.developed_by' | translate"></p>
     <p [innerHTML]="'region.footer.about.met_requirements' | translate"></p>
@@ -53,23 +53,23 @@
   </div>
   <div *ngIf="currentData === 'tos'"
        id="tosElement">
-    <h3 class="mb-2"
-        [innerHTML]="'global.arsnova_slogan' | translate"></h3>
+    <h3 [innerHTML]="'global.arsnova_slogan' | translate"
+        class="mb-2"></h3>
     <p [innerHTML]="'region.footer.tos.declaration' | translate"></p>
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.tos.license.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.tos.license.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.tos.license.text' | translate"></p>
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.tos.musicLicense.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.tos.musicLicense.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.tos.musicLicense.text' | translate"></p>
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.tos.warranty.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.tos.warranty.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.tos.warranty.text' | translate"></p>
   </div>
   <div *ngIf="currentData === 'imprint'"
        id="imprintElement">
-    <h3 class="mb-2"
-        [innerHTML]="'region.footer.imprint.provider.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.imprint.provider.title' | translate"
+        class="mb-2"></h3>
     <p [innerHTML]="'region.footer.imprint.provider.text.1' | translate"></p>
     <ul class="list list-unstyled">
       <li [innerHTML]="'region.footer.imprint.provider.text.2' | translate"></li>
@@ -95,32 +95,32 @@
   </div>
   <div *ngIf="currentData === 'dataprivacy'"
        id="dataprivacyElement">
-    <h3 class="mb-2"
-        [innerHTML]="'region.footer.data_privacy.scope' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.data_privacy.scope' | translate"
+        class="mb-2"></h3>
     <p [innerHTML]="'region.footer.data_privacy.declaration' | translate"></p>
 
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.data_privacy.app_data.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.data_privacy.app_data.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.data_privacy.app_data.text' | translate"></p>
 
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.data_privacy.access_data.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.data_privacy.access_data.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.data_privacy.access_data.text' | translate"></p>
 
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.data_privacy.logfiles.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.data_privacy.logfiles.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.data_privacy.logfiles.text' | translate"></p>
 
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.data_privacy.3rdparty.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.data_privacy.3rdparty.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.data_privacy.3rdparty.text' | translate"></p>
 
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.data_privacy.cookies.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.data_privacy.cookies.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.data_privacy.cookies.text' | translate"></p>
 
-    <h3 class="mb-2 mt-3"
-        [innerHTML]="'region.footer.data_privacy.piwik.title' | translate"></h3>
+    <h3 [innerHTML]="'region.footer.data_privacy.piwik.title' | translate"
+        class="mb-2 mt-3"></h3>
     <p [innerHTML]="'region.footer.data_privacy.piwik.text' | translate"></p>
   </div>
 </div>

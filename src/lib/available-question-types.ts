@@ -1,7 +1,7 @@
 import { QuestionType } from './enums/QuestionType';
 
 export declare interface IAvailableQuestionType {
-  id: string;
+  id: QuestionType;
   translationName: string;
   descriptionType: string;
 }

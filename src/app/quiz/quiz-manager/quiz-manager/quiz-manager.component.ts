@@ -68,8 +68,10 @@ export class QuizManagerComponent implements OnDestroy {
       if (!self.isActive) {
         return;
       }
+      self.isLoading = true;
       this.quizApiService.setQuiz(this.quizService.quiz).subscribe(updatedQuiz => {
         this.router.navigate(['/quiz', 'flow', 'lobby']);
+        self.isLoading = false;
       });
     };
   }

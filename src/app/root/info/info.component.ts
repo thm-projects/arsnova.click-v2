@@ -16,7 +16,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   public static TYPE = 'InfoComponent';
   public currentData: string;
-  public readonly infoButtons = [];
+  public readonly infoButtons: Array<{ id: string, i18nRef: string }> = [];
   private _routerSubscription: Subscription;
 
   @ViewChild('buttonHeader') private buttonHeader: ElementRef;
@@ -74,7 +74,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
         return;
       }
 
-      this.buttonHeader.nativeElement.scrollLeft = val.offsetLeft - 20;
+      this.buttonHeader.nativeElement.scrollLeft = val.offsetLeft - val.offsetWidth;
     });
   }
 

@@ -25,6 +25,7 @@ import { UserService } from '../../service/user/user.service';
 export class QuizOverviewComponent implements OnInit {
   public static TYPE = 'QuizOverviewComponent';
   public publicQuizAmount: number;
+  public isStartingQuiz: QuizEntity;
 
   private _sessions: Array<QuizEntity> = [];
 
@@ -65,7 +66,8 @@ export class QuizOverviewComponent implements OnInit {
     });
   }
 
-  public startQuiz(index: number): Promise<void> {
+  public startQuiz(elem: QuizEntity): Promise<void> {
+    this.isStartingQuiz = elem;
     return new Promise(async resolve => {
       if (isPlatformServer(this.platformId)) {
         resolve();
@@ -77,15 +79,15 @@ export class QuizOverviewComponent implements OnInit {
         label: `start-quiz`,
       });
 
-      const quizAvailable = await this.requestQuizStatus(this.sessions[index]);
+      const quizAvailable = await this.requestQuizStatus(elem);
       if (!quizAvailable) {
         resolve();
         return;
       }
 
-      this.quizService.quiz = this.sessions[index];
+      this.quizService.quiz = elem;
       this.quizService.isOwner = true;
-      await this.openLobby(this.sessions[index]);
+      await this.openLobby(elem);
 
       resolve();
     });

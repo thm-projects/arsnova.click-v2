@@ -26,6 +26,8 @@ export class AvailableQuizzesComponent implements IModal {
     return this._sessions;
   }
 
+  private startingQuiz: QuizEntity;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private activeModal: NgbActiveModal,
@@ -52,6 +54,7 @@ export class AvailableQuizzesComponent implements IModal {
   }
 
   public async startQuiz(session: QuizEntity): Promise<any> {
+    this.startingQuiz = session;
     return new Promise(async resolve => {
       this.trackingService.trackClickEvent({
         action: AvailableQuizzesComponent.TYPE,

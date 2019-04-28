@@ -74,16 +74,14 @@
 
   <div class="modal-footer">
     <button (click)="kickMember(nickToRemove)"
-            [innerHTML]="'global.yes' | translate"
             class="btn btn-danger mr-auto"
             data-dismiss="modal"
-            type="button"></button>
+            type="button">{{'global.yes' | translate}}</button>
 
     <button (click)="d()"
-            [innerHTML]="'global.no' | translate"
             class="btn btn-info"
             data-dismiss="modal"
-            type="button"></button>
+            type="button">{{'global.no' | translate}}</button>
 
   </div>
 </ng-template>
