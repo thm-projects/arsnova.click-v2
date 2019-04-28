@@ -1,5 +1,10 @@
 @import "prebuild";
 
+.quiz-list {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
 #landingPageContent {
 
   #arsnova-click-description {
@@ -25,10 +30,6 @@
   #server-password-input-field {
     height: 50px;
     line-height: 20px;
-  }
-
-  #demo-quiz-description {
-    margin-top: 10px;
   }
 
   .mathjax-container {

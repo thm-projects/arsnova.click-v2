@@ -1,54 +1,53 @@
 <div class="row">
-  <div class="col-12 col-md-6">
+  <div class="col-md-6">
     <div class="row">
       <div class="col-12">
-        <div *ngIf="canAddAnsweroptions()"
+        <div *ngIf="canAddAnsweroptions"
              class="row">
           <div class="col-12">
-            <button class="btn btn-secondary btn-block mb-2"
-                    data-step="2"
-                    (click)="addAnswer()"
+            <button (click)="addAnswer()"
+                    [attr.aria-label]="'component.answeroptions.description.default_answer_row' | translate"
                     [attr.data-intro]="'component.answeroptions.description.default_answer_row' | translate"
-                    [attr.aria-label]="'component.answeroptions.description.default_answer_row' | translate">
+                    class="btn btn-secondary btn-block mb-2"
+                    data-step="2">
               <span>{{'component.answeroptions.new_answer' | translate}}</span>
             </button>
           </div>
         </div>
-        <div *ngIf="canEditAnswer()"
-             class="row">
-          <div class="col-md-12"
+        <div class="row">
+          <div [attr.aria-label]="'component.answeroptions.description.added_answers' | translate"
                [attr.data-intro]="'component.answeroptions.description.added_answers' | translate"
-               [attr.aria-label]="'component.answeroptions.description.added_answers' | translate"
+               class="col-12"
                data-step="1"
                role="list">
             <div *ngFor="let elem of question.answerOptionList; let i = index"
                  class="btn-group mb-2 d-flex bg-secondary text-dark rounded">
-              <span *ngIf="canDeleteAnswer()"
-                    (click)="deleteAnswer(i)"
-                    class="delete-icon px-2 rounded-left">
-      <fa-icon [icon]="'trash'"
-               class="cursor-pointer h-100 d-flex align-items-center"></fa-icon>
+              <span (click)="deleteAnswer(i)"
+                    *ngIf="canDeleteAnswer"
+                    class="delete-icon px-2 rounded-left"><fa-icon [icon]="'trash'"
+                                                                   class="cursor-pointer h-100 d-flex align-items-center"></fa-icon>
               </span>
-              <input type="text"
-                     class="btn-block text-left p-2 border-0"
+              <input (input)="updateAnswerValue($event, i)"
+                     (propertychange)="updateAnswerValue($event, i)"
                      [class.rounded-right]="['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"
+                     [readOnly]="!canEditAnswer"
                      [value]="elem.answerText"
-                     (input)="updateAnswerValue($event, i)"
-                     (propertychange)="updateAnswerValue($event, i)">
+                     class="btn-block text-left p-2 border-0"
+                     type="text">
               <label *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"
-                     class="btn cursor-pointer mb-0"
+                     [class.btn-danger]="!elem.isCorrect"
                      [class.btn-success]="elem.isCorrect"
-                     [class.btn-danger]="!elem.isCorrect">
-                <input type="checkbox"
-                       class="d-none"
+                     class="btn cursor-pointer mb-0">
+                <input (change)="elem.isCorrect = !elem.isCorrect"
                        [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
-                       autocomplete="off"
-                       role="switch"
                        [checked]="elem.isCorrect"
-                       (change)="elem.isCorrect = !elem.isCorrect"
-                       [title]="'component.answeroptions.is_correct' | translate">
-                <span *ngIf="elem.isCorrect">{{'component.answeroptions.correct' | translate}}</span>
-                <span *ngIf="!elem.isCorrect">{{'component.answeroptions.wrong' | translate}}</span>
+                       [title]="'component.answeroptions.is_correct' | translate"
+                       autocomplete="off"
+                       class="d-none"
+                       role="switch"
+                       type="checkbox">
+                <span *ngIf="elem.isCorrect">{{'component.answeroptions.correct' | translate}}</span>
+                <span *ngIf="!elem.isCorrect">{{'component.answeroptions.wrong' | translate}}</span>
               </label>
             </div>
           </div>
@@ -56,80 +55,79 @@
       </div>
       <div class="col-12 my-4">
         <div class="row">
-          <div *ngIf="canShowAnswerContentOnButtons()"
-               class="col-12 mb-2 d-flex"
-               [attr.data-intro]="'component.answeroptions.description.show_answer_content_on_buttons' | translate">
-            <p class="mb-0 mr-2 align-self-center w-100"
-               style="line-height: 1.2;"
-               [innerHTML]="'component.answeroptions.show_answer_content_on_buttons' | translate"></p>
-            <label class="btn cursor-pointer mb-0 align-self-center"
+          <div *ngIf="canShowAnswerContentOnButtons"
+               [attr.data-intro]="'component.answeroptions.description.show_answer_content_on_buttons' | translate"
+               class="col-12 mb-2 d-flex">
+            <p [innerHTML]="'component.answeroptions.show_answer_content_on_buttons' | translate"
+               class="mb-0 mr-2 align-self-center w-100"
+               style="line-height: 1.2;"></p>
+            <label [class.btn-danger]="!question.displayAnswerText"
                    [class.btn-success]="question.displayAnswerText"
-                   [class.btn-danger]="!question.displayAnswerText">
-              <input type="checkbox"
-                     class="d-none"
+                   class="btn cursor-pointer mb-0 align-self-center">
+              <input (change)="toggleShowAnswerContentOnButtons()"
                      [attr.aria-label]="'component.answeroptions.description.show_answer_content_on_buttons' | translate"
-                     autocomplete="off"
-                     role="switch"
                      [checked]="question.displayAnswerText"
-                     (change)="toggleShowAnswerContentOnButtons()"
-                     [title]="'component.answeroptions.show_answer_content_on_buttons' | translate">
-              <span *ngIf="question.displayAnswerText">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
-              <span *ngIf="!question.displayAnswerText">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+                     [title]="'component.answeroptions.show_answer_content_on_buttons' | translate"
+                     autocomplete="off"
+                     class="d-none"
+                     role="switch"
+                     type="checkbox">
+              <span *ngIf="question.displayAnswerText">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!question.displayAnswerText">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
-          <div class="col-12 mb-2 d-flex"
-               [attr.data-intro]="'component.answeroptions.description.show_one_answer_per_row' | translate">
-            <p class="mb-0 mr-2 align-self-center w-100"
-               style="line-height: 1.2;"
-               [innerHTML]="'component.answeroptions.show_one_answer_per_row' | translate"></p>
-            <label class="btn cursor-pointer mb-0 align-self-center"
+          <div [attr.data-intro]="'component.answeroptions.description.show_one_answer_per_row' | translate"
+               class="col-12 mb-2 d-flex">
+            <p [innerHTML]="'component.answeroptions.show_one_answer_per_row' | translate"
+               class="mb-0 mr-2 align-self-center w-100"
+               style="line-height: 1.2;"></p>
+            <label [class.btn-danger]="!question.showOneAnswerPerRow"
                    [class.btn-success]="question.showOneAnswerPerRow"
-                   [class.btn-danger]="!question.showOneAnswerPerRow">
-              <input type="checkbox"
-                     class="d-none"
+                   class="btn cursor-pointer mb-0 align-self-center">
+              <input (change)="toggleShowOneAnswerPerRow()"
                      [attr.aria-label]="'component.answeroptions.description.show_one_answer_per_row' | translate"
-                     autocomplete="off"
-                     role="switch"
                      [checked]="question.showOneAnswerPerRow"
-                     (change)="toggleShowOneAnswerPerRow()"
-                     [title]="'component.answeroptions.show_one_answer_per_row' | translate">
-              <span *ngIf="question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
-              <span *ngIf="!question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+                     [title]="'component.answeroptions.show_one_answer_per_row' | translate"
+                     autocomplete="off"
+                     class="d-none"
+                     role="switch"
+                     type="checkbox">
+              <span *ngIf="question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
           <div *ngIf="question.TYPE === 'SurveyQuestion'"
-               class="col-12 mb-2 d-flex"
-               [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate">
+               [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate"
+               class="col-12 mb-2 d-flex">
             <p class="mb-0 mr-2 align-self-center w-100"
-               style="line-height: 1.2;"
-               [innerHTML]="'component.answeroptions.multiple_selection_survey' | translate"></p>
-            <label class="btn cursor-pointer mb-0 align-self-center"
+               style="line-height: 1.2;">
+              {{'component.answeroptions.multiple_selection_survey' | translate}}
+            </p>
+            <label [class.btn-danger]="!question.multipleSelectionEnabled"
                    [class.btn-success]="question.multipleSelectionEnabled"
-                   [class.btn-danger]="!question.multipleSelectionEnabled">
-              <input type="checkbox"
-                     class="d-none"
-                     id="config_multipleSelectionSurvey_switch"
+                   class="btn cursor-pointer mb-0 align-self-center">
+              <input (change)="toggleMultipleSelectionSurvey()"
                      [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
-                     autocomplete="off"
-                     role="switch"
                      [checked]="question.multipleSelectionEnabled"
-                     (change)="toggleMultipleSelectionSurvey()"
-                     [title]="'component.answeroptions.multiple_selection_survey' | translate">
-              <span *ngIf="question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
-              <span *ngIf="!question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+                     [title]="'component.answeroptions.multiple_selection_survey' | translate"
+                     autocomplete="off"
+                     class="d-none"
+                     role="switch"
+                     type="checkbox">
+              <span *ngIf="question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
         </div>
       </div>
-      <div *ngIf="canInjectEmojis()"
+      <div *ngIf="canInjectEmojis"
            class="col-12">
-        <p class="text-center"
-           id="emojiInfo"
-           [innerHTML]="'component.answeroptions.emoji_info' | translate"></p>
+        <p [innerHTML]="'component.answeroptions.emoji_info' | translate"
+           class="text-center"></p>
       </div>
     </div>
   </div>
-  <div class="col-12 col-md-6">
+  <div class="col-md-6">
     <div class="d-flex justify-content-center mt-5 mt-md-0">
       <app-live-preview
         [targetDevice]="DEVICE_TYPE.XS"

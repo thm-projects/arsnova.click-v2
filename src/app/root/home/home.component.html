@@ -17,7 +17,7 @@
         <input #enteredSessionNameInput
                (focus)="showQuiznameDatalist()"
                (input)="parseQuiznameInput($event)"
-               [(value)]="enteredSessionName"
+               [(ngModel)]="enteredSessionName"
                [class.rounded-top]="isShowingQuiznameDatalist"
                [class.rounded]="!isShowingQuiznameDatalist"
                [placeholder]="'component.name_management.enter_quiz_name' | translate"
@@ -30,22 +30,20 @@
         <span (click)="hideQuiznameDatalist()"
               *ngIf="isShowingQuiznameDatalist"
               class="position-absolute text-light px-2 pb-1 rounded-right cursor-pointer"
-              id="collapse-quiz-name-datalist">
-      <fa-icon [icon]="'caret-up'"></fa-icon>
-        </span>
-        <div class="list-group d-none list-group-flush"
-             id="name-input-data-list">
-          <span (click)="autoJoinToSession(quizname)"
-                *ngFor="let quizname of sharedService.activeQuizzes"
-                class="list-group-item list-group-item-action list-group-item-success text-capitalize cursor-pointer">{{'component.home.join' | translate:{name: quizname} }}</span>
-          <span (click)="selectQuizByList(quizname)"
-                *ngFor="let quizname of ownQuizzes"
-                class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</span>
-          <span (click)="selectQuizByList('Demo Quiz')"
-                class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-demo-quiz' | translate}}</span>
-          <span (click)="selectQuizByList('ABCD')"
-                class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-abcd-quiz' | translate}}</span>
-        </div>
+              id="collapse-quiz-name-datalist"><fa-icon [icon]="'caret-up'"></fa-icon></span>
+        <ul *ngIf="isShowingQuiznameDatalist"
+            class="list-group list-group-flush quiz-list">
+          <li (click)="autoJoinToSession(quizname)"
+              *ngFor="let quizname of sharedService.activeQuizzes | searchFilter:enteredSessionName"
+              class="list-group-item list-group-item-action list-group-item-success text-capitalize cursor-pointer">{{'component.home.join' | translate:{name: quizname} }}</li>
+          <li (click)="selectQuizByList(quizname)"
+              *ngFor="let quizname of ownQuizzes | searchFilter:enteredSessionName"
+              class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</li>
+          <li (click)="selectQuizByList('Demo Quiz')"
+              class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-demo-quiz' | translate}}</li>
+          <li (click)="selectQuizByList('ABCD')"
+              class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-abcd-quiz' | translate}}</li>
+        </ul>
       </div>
       <div *ngIf="passwordRequired"
            class="col-12">
@@ -159,8 +157,7 @@
     <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
   </div>
   <ng-container *ngIf="!isShowingQuiznameDatalist">
-    <div class="col-12 text-center mt-5"
-         id="demo-quiz-description">
+    <div class="col-12 text-center mt-5">
       <p [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"></p>
       <p>
         <a *ngIf="publicQuizAmount > 0"

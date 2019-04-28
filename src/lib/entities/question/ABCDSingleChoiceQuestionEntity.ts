@@ -1,4 +1,5 @@
 import { QuestionType } from '../../enums/QuestionType';
+import { DefaultAnswerEntity } from '../answer/DefaultAnswerEntity';
 import { SingleChoiceQuestionEntity } from './SingleChoiceQuestionEntity';
 
 export class ABCDSingleChoiceQuestionEntity extends SingleChoiceQuestionEntity {
@@ -21,11 +22,14 @@ export class ABCDSingleChoiceQuestionEntity extends SingleChoiceQuestionEntity {
   }
 
   public removeAnswerOption(): void {
-    throw Error('AnswerOptions cannot be modified for this type of Question!');
+    this.answerOptionList.splice(this.answerOptionList.length - 1, 1);
   }
 
   public addDefaultAnswerOption(): void {
-    throw Error('AnswerOptions cannot be modified for this type of Question!');
+    this.addAnswerOption(new DefaultAnswerEntity({
+      answerText: String.fromCharCode(65 + this.answerOptionList.length),
+      isCorrect: false,
+    }));
   }
 
 }

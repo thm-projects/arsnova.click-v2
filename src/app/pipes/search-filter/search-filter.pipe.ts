@@ -10,7 +10,13 @@ export class SearchFilterPipe implements PipeTransform {
     if (!args || !args.length) {
       return value;
     }
-    return value.filter(val => val.key.indexOf(args) > -1);
+    return value.filter(val => {
+      if (val.key) {
+        return val.key.indexOf(args) > -1;
+      }
+
+      return val.indexOf(args) > -1;
+    });
   }
 
 }

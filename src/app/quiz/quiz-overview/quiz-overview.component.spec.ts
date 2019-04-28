@@ -147,7 +147,7 @@ describe('QuizOverviewComponent', () => {
 
       spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
-      component.startQuiz(0).then(() => {
+      component.startQuiz(validQuiz).then(() => {
         expect(quizService.quiz).toEqual(jasmine.objectContaining(validQuiz));
         expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'flow']));
       });

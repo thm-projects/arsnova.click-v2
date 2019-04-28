@@ -15,6 +15,7 @@ import { createTranslateLoader } from '../lib/translation.factory';
 import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
 import { ModalsModule } from './modals/modals.module';
+import { PipesModule } from './pipes/pipes.module';
 import { HomeComponent } from './root/home/home.component';
 import { LanguageSwitcherComponent } from './root/language-switcher/language-switcher.component';
 import { LoginComponent } from './root/login/login.component';
@@ -131,6 +132,7 @@ export const appRoutes: Routes = [
         deps: [PLATFORM_ID],
       },
     }),
+    PipesModule,
   ],
   providers: [
     /* {

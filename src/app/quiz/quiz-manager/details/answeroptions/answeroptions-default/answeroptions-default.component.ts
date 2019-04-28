@@ -17,6 +17,11 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsDefaultComponent';
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+  public canAddAnsweroptions = false;
+  public canDeleteAnswer: boolean;
+  public canEditAnswer: boolean;
+  public canShowAnswerContentOnButtons: boolean;
+  public canInjectEmojis: boolean;
 
   private _question: AbstractChoiceQuestionEntity;
 
@@ -35,18 +40,13 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
-  public canAddAnsweroptions(): boolean {
-    return ![QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(
-      this._question.TYPE);
-  }
-
   public addAnswer(): void {
     this._question.addDefaultAnswerOption();
     this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
   }
 
   public deleteAnswer(index: number): void {
-    this._question.answerOptionList.splice(index, 1);
+    this._question.removeAnswerOption(index);
     this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
   }
 
@@ -71,6 +71,13 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
       this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
+
+      this.canAddAnsweroptions = ![QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion].includes(this._question.TYPE);
+      this.canDeleteAnswer = true;
+      this.canEditAnswer = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+      this.canShowAnswerContentOnButtons = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+      this.canInjectEmojis = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+
       this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
     });
   }
@@ -78,22 +85,6 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   public ngOnDestroy(): void {
     this.quizService.persist();
-  }
-
-  public canDeleteAnswer(): boolean {
-    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
-  }
-
-  public canEditAnswer(): boolean {
-    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
-  }
-
-  public canShowAnswerContentOnButtons(): boolean {
-    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
-  }
-
-  public canInjectEmojis(): boolean {
-    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
   }
 }
 

@@ -216,24 +216,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public showQuiznameDatalist(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const elem = document.getElementById('name-input-data-list');
-
-      if (elem) {
-        elem.classList.remove('d-none');
-      }
-    }
     this.isShowingQuiznameDatalist = true;
   }
 
   public hideQuiznameDatalist(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const elem = document.getElementById('name-input-data-list');
-
-      if (elem) {
-        elem.classList.add('d-none');
-      }
-    }
     this.isShowingQuiznameDatalist = false;
   }
 
