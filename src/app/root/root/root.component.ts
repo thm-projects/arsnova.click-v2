@@ -42,7 +42,6 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    console.log('root component on init');
     if (isPlatformBrowser(this.platformId)) {
       Object.values(DeprecatedKeys).forEach(deprecatedKey => {
         localStorage.removeItem(deprecatedKey);

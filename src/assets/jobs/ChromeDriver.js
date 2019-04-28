@@ -56,7 +56,11 @@ CDP(async function (client) {
     const url = urls[i];
     const urlSeparated = url.split('/');
     const imgPath = path.join(__dirname, '..', 'images', 'theme', urlSeparated[urlSeparated.length - 2], 'preview_' + urlSeparated[urlSeparated.length - 1] + '.' + format);
-    await runNavigation({Page, DOM, Emulation, client, url, imgPath});
+    try {
+      await runNavigation({Page, DOM, Emulation, client, url, imgPath});
+    } catch (ex) {
+      console.error(ex);
+    }
   }
   client.close();
 

@@ -72,10 +72,9 @@ generate_assets:
     - npm install
     - npm install -g angular-http-server
     - cd dist
-    - angular-http-server browser/ -p 4711 &
+    - angular-http-server --path browser/ -p 4711 &
     - cd browser/assets/jobs
     - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
-    - echo '127.0.0.1 localhost' >> /etc/hosts
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
