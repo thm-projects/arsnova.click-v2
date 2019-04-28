@@ -54,7 +54,7 @@ class GenerateMetaNodes {
   generateLinkImages() {
     themes.forEach(theme => {
       const basePath = `/assets/images/theme/${theme}`;
-      const manifestPath = `/assets/meta/${theme}/manifest_%%LANG%%.json`;
+      const manifestPath = `/manifest_${theme}_%%LANG%%.json`;
 
       const result = [
         {
@@ -146,14 +146,16 @@ class GenerateMetaNodes {
       const localizer = new mf(language);
       const descriptionMessageSrc = JSON.parse(fs.readFileSync(path.join(this.pathToAssets, 'i18n', `${language}.json`), 'UTF-8')).manifest.description;
       const descriptionMessage = localizer.compile(descriptionMessageSrc)();
+      const destinationPath = path.join(this.pathToAssets, '..');
+
       themes.forEach(theme => {
         const manifest = {
-          short_name: 'arsnovaClick',
+          short_name: 'arsnova.click',
           name: 'arsnova.click',
           description: descriptionMessage,
           background_color: themeData[theme].exportedAtRowStyle.bg,
           theme_color: themeData[theme].exportedAtRowStyle.bg,
-          start_url: '.',
+          start_url: '/',
           display: 'standalone',
           orientation: 'portrait',
           icons: [],
@@ -167,7 +169,7 @@ class GenerateMetaNodes {
           });
         });
 
-        fs.writeFileSync(`${this.pathToMetaData}/${theme}/manifest_${language}.json`, JSON.stringify(manifest));
+        fs.writeFileSync(path.join(destinationPath, `manifest_${theme}_${language}.json`), JSON.stringify(manifest));
       });
     });
   }
