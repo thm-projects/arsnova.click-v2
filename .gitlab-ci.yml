@@ -75,7 +75,7 @@ generate_assets:
     - angular-http-server browser/ -p 4711 &
     - cd browser/assets/jobs
     - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
-    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
+    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=<(echo hostname -f):4711 --root=true
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
   artifacts:
