@@ -73,6 +73,10 @@ export class RootComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    window.addEventListener('beforeinstallprompt', (event: BeforeInstallPromptEvent) => {
+      event.prompt();
+    });
+
     this.router.events.subscribe((nav: any) => {
       if (nav instanceof NavigationEnd) {
 
