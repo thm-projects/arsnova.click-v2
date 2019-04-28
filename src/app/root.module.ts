@@ -10,6 +10,7 @@ import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } fr
 import { Angulartics2Module } from 'angulartics2';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { environment } from '../environments/environment';
 import { jwtOptionsFactory } from '../lib/jwt.factory';
 import { RoutePreloader } from '../lib/route-preloader';
 import { createTranslateLoader } from '../lib/translation.factory';
@@ -105,7 +106,7 @@ export const appRoutes: Routes = [
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: true }),
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     ModalsModule,
     TranslateModule.forRoot({
       loader: {
