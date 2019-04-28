@@ -64,7 +64,6 @@ class GenerateMetaNodes {
           rel: 'manifest',
           id: 'link-manifest',
           href: `${manifestPath}`,
-          type: 'image/png',
         }, {
           tagName: 'link',
           className: 'theme-meta-data',
@@ -113,6 +112,14 @@ class GenerateMetaNodes {
         }, {
           tagName: 'link',
           className: 'theme-meta-data',
+          rel: 'apple-touch-icon',
+          href: `${basePath}/logo_s${derivate}.png`,
+          id: `link-apple-touch-${derivate}`,
+          sizes: derivate,
+          type: 'image/png',
+        }, {
+          tagName: 'link',
+          className: 'theme-meta-data',
           rel: 'apple-touch-icon-precomposed',
           href: `${basePath}/logo_s${derivate}.png`,
           id: `link-apple-touch-precomposed-${derivate}`,
@@ -147,7 +154,7 @@ class GenerateMetaNodes {
           description: descriptionMessage,
           background_color: themeData[theme].exportedAtRowStyle.bg,
           theme_color: themeData[theme].exportedAtRowStyle.bg,
-          start_url: `${this.baseUrl}`,
+          start_url: '.',
           display: 'standalone',
           orientation: 'portrait',
           icons: [],
