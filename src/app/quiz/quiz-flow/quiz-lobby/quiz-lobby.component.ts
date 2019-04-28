@@ -180,6 +180,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemBack,
     ]);
     this.footerBarService.footerElemBack.onClickCallback = async () => {
+      this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
       this.attendeeService.cleanUp();
       this.connectionService.cleanUp();
       this.router.navigate(['/']);
