@@ -2,6 +2,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { SwUpdate } from '@angular/service-worker';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -48,14 +49,16 @@ export class HeaderComponent implements OnInit {
 
   private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              public headerLabelService: HeaderLabelService,
-              public connectionService: ConnectionService,
-              private sanitizer: DomSanitizer,
-              private router: Router,
-              private modalService: NgbModal,
-              private trackingService: TrackingService,
-              private updateCheckService: UpdateCheckService,
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public headerLabelService: HeaderLabelService,
+    public connectionService: ConnectionService,
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    private modalService: NgbModal,
+    private trackingService: TrackingService,
+    private updateCheckService: UpdateCheckService,
+    private updates: SwUpdate,
   ) {
   }
 
@@ -99,7 +102,11 @@ export class HeaderComponent implements OnInit {
 
   public checkForUpdates(): void {
     this.isCheckingForUpdates = true;
-    this.updateCheckService.doCheck().catch(err => console.error(err)).finally(() => this.isCheckingForUpdates = false);
+    if (this.updates.isEnabled) {
+      this.updateCheckService.doCheck().catch(err => console.error(err)).finally(() => this.isCheckingForUpdates = false);
+    } else {
+      location.reload(true);
+    }
   }
 
   private sanitizeStyle(value: string): SafeStyle {
