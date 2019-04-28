@@ -38,7 +38,8 @@ CDP(async function (client) {
   await Emulation.setDeviceMetricsOverride(deviceMetrics);
   await Emulation.setVisibleSize({width: viewportWidth, height: viewportHeight});
 
-  const host = /localhost/.test(urls[0]) ?
+  const host = /127.0.0.1/.test(urls[0]) ?
+    '127.0.0.1' : /localhost/.test(urls[0]) ?
     'localhost' : /staging.arsnova.click/.test(urls[0]) ?
       'staging.arsnova.click' : /beta.arsnova.click/.test(urls[0]) ?
         'beta.arsnova.click' : /arsnova.click/.test(urls[0]) ?
