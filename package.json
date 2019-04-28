@@ -109,7 +109,7 @@
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "protractor": "^5.4.2",
-    "puppeteer": "^1.14.0",
+    "puppeteer": "^1.15.0",
     "purify-css": "~1.2.5",
     "sharp": "^0.21.3",
     "ts-node": "~7.0.1",
