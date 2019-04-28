@@ -1,8 +1,9 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
-import { ToastrService } from 'ngx-toastr';
+import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 import { IWindow } from '../../../lib/interfaces/IWindow';
@@ -28,7 +29,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     private translateService: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private userService: UserService, // private swUpdate: SwUpdate,
+    private userService: UserService,
+    private swUpdate: SwUpdate,
     private toastService: ToastrService,
     private themeService: ThemesService,
   ) {
@@ -138,43 +140,41 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private initializeUpdateToastr(): void {
-    /*
-     if (!this.swUpdate.isEnabled) {
-     return;
-     }
+    if (!this.swUpdate.isEnabled) {
+      return;
+    }
 
-     let swUpdateToast: ActiveToast<any>;
+    let swUpdateToast: ActiveToast<any>;
 
-     this.swUpdate.available.subscribe((event) => {
-     console.log('RootComponent: service worker update available');
-     console.log('RootComponent: current version is', event.current);
-     console.log('RootComponent: available version is', event.available);
-     console.log('RootComponent: event type is', event.type);
+    this.swUpdate.available.subscribe((event) => {
+      console.log('RootComponent: service worker update available');
+      console.log('RootComponent: current version is', event.current);
+      console.log('RootComponent: available version is', event.available);
+      console.log('RootComponent: event type is', event.type);
 
-     if (swUpdateToast) {
-     this.toastService.remove(swUpdateToast.toastId);
-     }
+      if (swUpdateToast) {
+        this.toastService.remove(swUpdateToast.toastId);
+      }
 
-     const message = this.translateService.instant('component.toasts.swupdate.message');
-     const title = this.translateService.instant('component.toasts.swupdate.title');
-     swUpdateToast = this.toastService.info(message, title, {
-     disableTimeOut: true,
-     toastClass: 'toast show ngx-toastr',
-     });
-     swUpdateToast.onTap.subscribe(() => {
-     this.swUpdate.activateUpdate().then(() => document.location.reload());
-     });
+      const message = this.translateService.instant('component.toasts.swupdate.message');
+      const title = this.translateService.instant('component.toasts.swupdate.title');
+      swUpdateToast = this.toastService.info(message, title, {
+        disableTimeOut: true,
+        toastClass: 'toast show ngx-toastr',
+      });
+      swUpdateToast.onTap.subscribe(() => {
+        this.swUpdate.activateUpdate().then(() => document.location.reload());
+      });
 
-     });
-     this.swUpdate.activated.subscribe(event => {
-     console.log('RootComponent: previous version was', event.previous);
-     console.log('RootComponent: current version is', event.current);
-     console.log('RootComponent: event type is', event.type);
-     });
-     this.swUpdate.checkForUpdate().then(() => {
-     }).catch((err) => {
-     console.error('RootComponent: error while checking for update', err);
-     });
-     */
+    });
+    this.swUpdate.activated.subscribe(event => {
+      console.log('RootComponent: previous version was', event.previous);
+      console.log('RootComponent: current version is', event.current);
+      console.log('RootComponent: event type is', event.type);
+    });
+    this.swUpdate.checkForUpdate().then(() => {
+    }).catch((err) => {
+      console.error('RootComponent: error while checking for update', err);
+    });
   }
 }
