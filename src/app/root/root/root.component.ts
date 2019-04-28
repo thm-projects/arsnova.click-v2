@@ -1,9 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
-import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 import { IWindow } from '../../../lib/interfaces/IWindow';
@@ -11,6 +9,7 @@ import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-
 import { I18nService } from '../../service/i18n/i18n.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { ThemesService } from '../../service/themes/themes.service';
+import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { UserService } from '../../service/user/user.service';
 
 @Component({
@@ -30,9 +29,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private swUpdate: SwUpdate,
-    private toastService: ToastrService,
     private themeService: ThemesService,
+    private updateCheckService: UpdateCheckService,
   ) {
     this.themeService.themeChanged.subscribe(themeName => {
       this.loadExternalStyles(`/${themeName}.css`).then(() => {
@@ -40,6 +38,7 @@ export class RootComponent implements OnInit, AfterViewInit {
         console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
       });
     });
+    this.updateCheckService.checkForUpdates();
   }
 
   public ngOnInit(): void {
@@ -58,7 +57,6 @@ export class RootComponent implements OnInit, AfterViewInit {
 
     this.translateService.onLangChange.subscribe(() => {
       this.initializeCookieConsent();
-      this.initializeUpdateToastr();
     });
 
     this.router.events.subscribe((event: any) => {
@@ -136,45 +134,6 @@ export class RootComponent implements OnInit, AfterViewInit {
         link: this.translateService.instant('global.cookie_consent.learn_more'),
         href: 'dataprivacy',
       },
-    });
-  }
-
-  private initializeUpdateToastr(): void {
-    if (!this.swUpdate.isEnabled) {
-      return;
-    }
-
-    let swUpdateToast: ActiveToast<any>;
-
-    this.swUpdate.available.subscribe((event) => {
-      console.log('RootComponent: service worker update available');
-      console.log('RootComponent: current version is', event.current);
-      console.log('RootComponent: available version is', event.available);
-      console.log('RootComponent: event type is', event.type);
-
-      if (swUpdateToast) {
-        this.toastService.remove(swUpdateToast.toastId);
-      }
-
-      const message = this.translateService.instant('component.toasts.swupdate.message');
-      const title = this.translateService.instant('component.toasts.swupdate.title');
-      swUpdateToast = this.toastService.info(message, title, {
-        disableTimeOut: true,
-        toastClass: 'toast show ngx-toastr',
-      });
-      swUpdateToast.onTap.subscribe(() => {
-        this.swUpdate.activateUpdate().then(() => document.location.reload());
-      });
-
-    });
-    this.swUpdate.activated.subscribe(event => {
-      console.log('RootComponent: previous version was', event.previous);
-      console.log('RootComponent: current version is', event.current);
-      console.log('RootComponent: event type is', event.type);
-    });
-    this.swUpdate.checkForUpdate().then(() => {
-    }).catch((err) => {
-      console.error('RootComponent: error while checking for update', err);
     });
   }
 }

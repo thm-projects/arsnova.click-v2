@@ -140,34 +140,6 @@
   })();
 </script>
 
-<script type="text/javascript">
-  navigator.serviceWorker.getRegistrations().then(
-    function (registrations) {
-      for (let registration of registrations) {
-        registration.unregister();
-      }
-    });
-
-  /*
-  navigator.serviceWorker.register('/ngsw-worker.js').then(registration => {
-    addEventListener('fetch', event => {
-      event.respondWith((async () => {
-        if (event.request.mode === "navigate" &&
-          event.request.method === "GET" &&
-          registration.waiting &&
-          (await clients.matchAll()).length < 2
-        ) {
-          registration.waiting.postMessage('skipWaiting');
-          return new Response("", {headers: {"Refresh": "0"}});
-        }
-        return await caches.match(event.request) ||
-          fetch(event.request);
-      })());
-    });
-  });
-   */
-</script>
-
 <script async
         defer
         src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>

@@ -39,6 +39,7 @@ import { IndexedDbService } from './service/storage/indexed.db.service';
 import { StorageService } from './service/storage/storage.service';
 import { ThemesService } from './service/themes/themes.service';
 import { TrackingService } from './service/tracking/tracking.service';
+import { UpdateCheckService } from './service/update-check/update-check.service';
 import { UserService } from './service/user/user.service';
 import { WebsocketService } from './service/websocket/websocket.service';
 import { SharedModule } from './shared/shared.module';
@@ -162,6 +163,7 @@ export const appRoutes: Routes = [
     ArsnovaClickAngulartics2Piwik,
     TrackingService,
     UserService,
+    UpdateCheckService,
     WebsocketService,
   ],
   exports: [TranslatePipe, TranslateModule],
