@@ -11,6 +11,7 @@ export class UpdateCheckService {
   private swUpdateToast: ActiveToast<any>;
 
   constructor(private updates: SwUpdate, private translateService: TranslateService, private toastService: ToastrService) {
+    console.log('UpdateCheckService: ServiceWorker status', updates, this);
     if (updates.isEnabled) {
       interval(6 * 60 * 60).subscribe(() => this.doCheck().then(() => console.log('checking for updates')));
     }
