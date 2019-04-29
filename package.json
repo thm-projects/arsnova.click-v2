@@ -15,7 +15,7 @@
     "build:SSR": "npm run build:PROD:DEPLOY && npm run build:SERVER && npm run webpack:SERVER",
     "build:SERVER": "ng run frontend:server",
     "build:PROD": "ng build --prod",
-    "build:PROD:DEPLOY": "npm run build:PROD && npm run purify && npm run compress",
+    "build:PROD:DEPLOY": "npm run build:PROD && npm run purify",
     "build:PROD-STATS": "ng build --prod --stats-json",
     "bundle-report": "webpack-bundle-analyzer dist/browser/stats.json",
     "webpack:SERVER": "webpack --config webpack.server.config.js --progress --colors",

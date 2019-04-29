@@ -78,7 +78,7 @@ generate_assets:
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
-    - cd ..
+    - cd ../..
     - npm run compress
   artifacts:
     paths:
