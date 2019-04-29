@@ -7,8 +7,7 @@
            class="w-100"
            (keyup.enter)="sendConfidence()"
            [value]="confidenceValue"
-           (input)="updateConficence($event)"
-           (propertyChange)="updateConficence($event)">
+           (input)="updateConficence($event)">
   </div>
   <div class="col-12">
     <p class="text-center mb-5">{{getConfidenceLevelTranslation() | translate}}</p>

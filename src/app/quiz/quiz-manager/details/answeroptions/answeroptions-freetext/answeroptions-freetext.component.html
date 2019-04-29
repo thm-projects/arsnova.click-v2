@@ -9,7 +9,6 @@
                     [attr.aria-label]="'component.answeroptions.description.free_text_question_text' | translate"
                     [attr.data-intro]="'component.answeroptions.description.free_text_question_text' | translate"
                     (input)="setMatchText($event)"
-                    (propertychange)="setMatchText($event)"
                     [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate">
             {{question.answerOptionList[0]?.answerText}}
           </textarea>
@@ -49,7 +48,6 @@
                     rows="1"
                     [attr.aria-label]="'component.answeroptions.description.check_answer' | translate"
                     (input)="setTestInput($event)"
-                    (propertychange)="setTestInput($event)"
                     [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate"></textarea>
         <div *ngIf="hasTestInput()"
              class="center-block mt-4 mb-0">

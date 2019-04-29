@@ -1,10 +1,11 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { QuestiontextComponent } from '../../quiz/quiz-manager/details/questiontext/questiontext.component';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
 class MarkdownBarElement {
-  private _customIcon: boolean;
+  private _iconClass: IconProp;
 
   get customIcon(): boolean {
     return this._customIcon;
@@ -22,25 +23,25 @@ class MarkdownBarElement {
     return this._titleRef;
   }
 
-  private _iconClass: string;
-
-  get iconClass(): string {
+  get iconClass(): IconProp {
     return this._iconClass;
   }
 
-  set iconClass(value: string) {
+  set iconClass(value: IconProp) {
     this._iconClass = value;
   }
 
-  private _iconClassToggled: string;
+  private _iconClassToggled: IconProp;
 
-  get iconClassToggled(): string {
+  get iconClassToggled(): IconProp {
     return this._iconClassToggled;
   }
 
-  set iconClassToggled(value: string) {
+  set iconClassToggled(value: IconProp) {
     this._iconClassToggled = value;
   }
+
+  private readonly _customIcon: boolean;
 
   private readonly _id: string;
   private readonly _titleRef: string;
@@ -152,34 +153,32 @@ export class MarkdownBarComponent implements OnInit, OnDestroy {
   }
 
   public connector(elem: MarkdownBarElement): void {
-    switch (elem.id) {
-      case 'showMoreMarkdownButton':
-        this.showHiddenMarkdownButtons = !this.showHiddenMarkdownButtons;
-        if (this.showHiddenMarkdownButtons) {
-          this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.concat(this.hiddenMarkdownBarElements);
-          this.trackingService.trackClickEvent({
-            action: QuestiontextComponent.TYPE,
-            label: `show-markdown-buttons`,
-          });
-        } else {
-          this.trackingService.trackClickEvent({
-            action: QuestiontextComponent.TYPE,
-            label: `hide-markdown-buttons`,
-          });
-          this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.filter((value) => {
-            return !value.hiddenByDefault;
-          });
-        }
-        this.flipIconClasses(ShowMoreMarkdownButton);
-        break;
-      default:
+    if (elem.id === 'showMoreMarkdownButton') {
+      this.showHiddenMarkdownButtons = !this.showHiddenMarkdownButtons;
+      if (this.showHiddenMarkdownButtons) {
+        this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.concat(this.hiddenMarkdownBarElements);
         this.trackingService.trackClickEvent({
           action: QuestiontextComponent.TYPE,
-          label: `markdown-button`,
-          customDimensions: {
-            dimension1: elem.id,
-          },
+          label: `show-markdown-buttons`,
         });
+      } else {
+        this.trackingService.trackClickEvent({
+          action: QuestiontextComponent.TYPE,
+          label: `hide-markdown-buttons`,
+        });
+        this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.filter((value) => {
+          return !value.hiddenByDefault;
+        });
+      }
+      this.flipIconClasses(ShowMoreMarkdownButton);
+    } else {
+      this.trackingService.trackClickEvent({
+        action: QuestiontextComponent.TYPE,
+        label: `markdown-button`,
+        customDimensions: {
+          dimension1: elem.id,
+        },
+      });
     }
     this.connectorEmitter.emit(elem.id);
   }

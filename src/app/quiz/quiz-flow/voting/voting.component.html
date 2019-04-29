@@ -45,7 +45,6 @@
      class="mt-5">
   <input (input)="parseNumberInput($event)"
          (keyup.enter)="sendResponses()"
-         (propertyChange)="parseNumberInput($event)"
          [placeholder]="'component.voting.ranged_question.title' | translate"
          autofocus
          class="w-100 px-2 py-1 rounded border-0"
@@ -57,7 +56,6 @@
      class="mt-5">
   <input (input)="parseTextInput($event)"
          (keyup.enter)="sendResponses()"
-         (propertyChange)="parseTextInput($event)"
          [placeholder]="'component.voting.free_text_question.title' | translate"
          autofocus
          class="w-100 px-2 py-1 rounded border-0"

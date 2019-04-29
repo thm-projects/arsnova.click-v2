@@ -116,7 +116,7 @@ class GenerateImages {
           roundY: Math.round((splittedDerivate[1] / (Math.PI * 2)))
         };
         const roundedCorners = Buffer.from(
-          `<svg><rect x="0" y="0" width="${size.width}" height="${size.height}" rx="${size.roundX}" ry="${size.roundY}"/></svg>`
+          `<svg><rect x="0" y="0" width="${size.width}" height="${size.height}" rx="${size.roundX}" ry="${size.roundY}"></rect></svg>`
         );
 
         const buffer = await sharp(source)

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -110,7 +110,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public openKickMemberModal(content: string, name: string): void {
+  public openKickMemberModal(content: TemplateRef<any>, name: string): void {
     if (!this.quizService.isOwner) {
       return;
     }

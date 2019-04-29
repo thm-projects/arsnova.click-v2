@@ -13,9 +13,9 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class LanguageSwitcherComponent {
   public static TYPE = 'LanguageSwitcherComponent';
 
-  private _availableLanguage: Array<Object> = [];
+  private _availableLanguage: Array<{ text: LanguageTranslation, tag: string }> = [];
 
-  get availableLanguage(): Array<Object> {
+  get availableLanguage(): Array<{ text: LanguageTranslation, tag: string }> {
     return this._availableLanguage;
   }
 

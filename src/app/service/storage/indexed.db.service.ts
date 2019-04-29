@@ -49,7 +49,7 @@ export class IndexedDbService {
   }
 
   public setName(dbName: string): void {
-    if (dbName.length > 0 && dbName !== undefined) {
+    if (typeof dbName !== 'undefined' && dbName.length > 0) {
       this._dbName = dbName;
       this._dbInstance = null;
       this._isInitialized = false;

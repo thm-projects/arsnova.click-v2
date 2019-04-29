@@ -11,7 +11,6 @@ export class AddModeComponent {
 
   public static readonly TYPE = 'AddModeComponent';
 
-  public dataMap;
   public key = '';
   public value = {};
   private scrollY = window.scrollY;

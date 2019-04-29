@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, Input, OnInit, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  public openConnectionQualityModal(content: string): void {
+  public openConnectionQualityModal(content: TemplateRef<any>): void {
     this.trackingService.trackClickEvent({
       action: 'ConnectionQualityModal',
       label: 'open-dialog',

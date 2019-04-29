@@ -1,3 +1,4 @@
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from './interfaces';
 
 export class FooterbarElement implements IFooterBarElement {
@@ -17,7 +18,7 @@ export class FooterbarElement implements IFooterBarElement {
     return this._id;
   }
 
-  get iconClass(): string {
+  get iconClass(): IconProp {
     return this._iconClass;
   }
 
@@ -77,7 +78,7 @@ export class FooterbarElement implements IFooterBarElement {
   private readonly _introTranslate: string;
   private _restoreOnClickCallback: Function;
   private readonly _id: string;
-  private readonly _iconClass: string;
+  private readonly _iconClass: IconProp;
   private readonly _textClass: string;
   private readonly _textName: string;
   private readonly _selectable: boolean;

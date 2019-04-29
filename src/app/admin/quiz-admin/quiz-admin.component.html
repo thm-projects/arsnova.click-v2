@@ -95,7 +95,7 @@
         <p *ngIf="isActiveQuiz(quiz)"
            class="card-text">
           <span>Number of Attendees: </span>
-          <span>{{quiz.memberAmount?.length || 0}}</span>
+          <span>{{quiz.memberAmount || 0}}</span>
         </p>
         <p class="card-text">
           <span>Is Active: {{isActiveQuiz(quiz)}}</span>

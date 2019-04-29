@@ -2,8 +2,9 @@
 
   <div class="d-flex col-12 col-md mb-3 mb-md-0 text-nowrap">
     <span class="d-inline-flex mx-md-2 align-items-center">Current Project:</span>
-    <select class="border-0 bg-transparent text-secondary"
-            (change)="setProject($event.target.value)">
+    <select #projectSelect
+            (change)="setProject(projectSelect.value)"
+            class="border-0 bg-transparent text-secondary">
       <option [value]="projectLoaderService.projects.Frontend">Frontend
       </option>
       <option [value]="projectLoaderService.projects.Backend">Backend
@@ -48,8 +49,9 @@
      class="row">
   <div class="d-flex sticky-top col-12 my-2">
     <div class="bg-secondary d-flex w-100 py-1">
-      <select class="border-0 bg-transparent mr-2"
-              (change)="changeFilter($event.target.value)">
+      <select #filterSelect
+              (change)="changeFilter(filterSelect.value)"
+              class="border-0 bg-transparent mr-2">
         <option [value]="filters.None"
                 [selected]="filter === filters.None">No Filter
         </option>

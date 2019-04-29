@@ -1,5 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TemplateRef } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -70,7 +71,7 @@ describe('HeaderComponent', () => {
 
   it('#openConnectionQualityModal', (inject([TrackingService, NgbModal, ConnectionService],
     (trackingService: TrackingService, modalService: NgbModal, connectionService: ConnectionService) => {
-      const modalContent = 'testcontent';
+      const modalContent = 'testcontent' as unknown as TemplateRef<any>;
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
       spyOn(modalService, 'open').and.callFake(() => ({} as NgbModalRef));

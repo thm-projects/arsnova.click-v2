@@ -138,16 +138,16 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this.languageLoaderService.updateProject();
   }
 
-  public changeFilter(filter: number): void {
-    this.filter = filter;
+  public changeFilter(filter: string | number): void {
+    this.filter = parseInt(String(filter), 10);
     this._selectedKey = null;
   }
 
-  public setProject(value: Project): void {
+  public setProject(value: Project | string): void {
     this._selectedKey = null;
     this._searchFilter = '';
     this.languageLoaderService.reset();
-    this.projectLoaderService.currentProject = value;
+    this.projectLoaderService.currentProject = value as Project;
 
     this.reloadLanguageData();
   }

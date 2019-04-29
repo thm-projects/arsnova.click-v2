@@ -3,8 +3,6 @@ import { IMemberSerialized } from '../interfaces/entities/Member/IMemberSerializ
 
 export class Attendee implements IMemberSerialized {
   public casProfile: ICasData;
-  public webSocket;
-  public webSocketAuthorization: number;
 
   private _responses: Array<IQuizResponse>;
 

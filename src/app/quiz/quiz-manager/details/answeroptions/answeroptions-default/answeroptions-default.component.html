@@ -28,7 +28,6 @@
                                                                    class="cursor-pointer h-100 d-flex align-items-center"></fa-icon>
               </span>
               <input (input)="updateAnswerValue($event, i)"
-                     (propertychange)="updateAnswerValue($event, i)"
                      [class.rounded-right]="['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"
                      [readOnly]="!canEditAnswer"
                      [value]="elem.answerText"

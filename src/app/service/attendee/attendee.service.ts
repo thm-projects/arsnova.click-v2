@@ -97,14 +97,6 @@ export class AttendeeService {
     });
   }
 
-  public getOwnNick(): MemberEntity {
-    return this.getMember(this.ownNick);
-  }
-
-  public getMemberByName(name: string): MemberEntity {
-    return this._attendees.find(member => member.name === name);
-  }
-
   public restoreMembers(): Promise<void> {
     return new Promise<void>(resolve => {
       this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {

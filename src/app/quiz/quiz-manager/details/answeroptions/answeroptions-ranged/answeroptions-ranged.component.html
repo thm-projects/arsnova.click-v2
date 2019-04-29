@@ -11,7 +11,6 @@
            min="0"
            [value]="minRange"
            (input)="updateMinRange($event)"
-           (propertychange)="updateMinRange($event)"
            [placeholder]="'component.answeroptions.ranged_question.min_range' | translate"/>
   </div>
   <div class="col-12 mb-5"
@@ -24,7 +23,6 @@
            min="0"
            [value]="correctValue"
            (input)="updateCorrectValue($event)"
-           (propertychange)="updateCorrectValue($event)"
            [placeholder]="'component.answeroptions.ranged_question.min_range' | translate"/>
   </div>
   <div class="col-12 mb-5"
@@ -37,7 +35,6 @@
            min="0"
            [value]="maxRange"
            (input)="updateMaxRange($event)"
-           (propertychange)="updateMaxRange($event)"
            [placeholder]="'component.answeroptions.ranged_question.max_range' | translate"/>
   </div>
 </div>

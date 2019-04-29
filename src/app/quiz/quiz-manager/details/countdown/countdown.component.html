@@ -6,7 +6,6 @@
       <label class="input-group justify-content-center align-items-center">
         <fa-icon [icon]="'hourglass'"></fa-icon>
         <input (input)="updateCountdown($event)"
-               (propertyChange)="updateCountdown($event)"
                [attr.aria-valuetext]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
                [min]="minCountdownValue"
                [title]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"

@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { QuizState } from '../../../lib/enums/QuizState';
+import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
 
 @Pipe({
   name: 'quizAdminFilter',
 })
 export class QuizAdminFilterPipe implements PipeTransform {
 
-  public transform(value: Array<QuizEntity>, args?: any): any {
+  public transform(value: Array<IAdminQuiz>, args?: any): Array<IAdminQuiz> {
     if (!value || !value.length || !args || !Object.keys(args).length) {
       return value;
     }

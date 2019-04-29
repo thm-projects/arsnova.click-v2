@@ -1,6 +1,6 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { SecurityContext } from '@angular/core';
+import { SecurityContext, TemplateRef } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -97,7 +97,7 @@ describe('QuizLobbyComponent', () => {
   }));
 
   it('#openKickMemberModal', inject([NgbModal], (modalService: NgbModal) => {
-    const modalContent = '<div></div>';
+    const modalContent = '<div></div>' as unknown as TemplateRef<any>;
     const nickToRemove = 'TestNick';
 
     spyOn(modalService, 'open').and.callFake(() => ({} as NgbModalRef));
@@ -108,7 +108,7 @@ describe('QuizLobbyComponent', () => {
   }));
 
   it('#kickMember', inject([NgbModal], (modalService: NgbModal) => {
-    const modalContent = '<div></div>';
+    const modalContent = '<div></div>' as unknown as TemplateRef<any>;
     const nickToRemove = 'TestNick';
 
     component['_ownsQuiz'] = true;

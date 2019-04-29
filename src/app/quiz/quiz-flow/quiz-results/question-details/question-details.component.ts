@@ -174,10 +174,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   private handleMessagesForOwner(data: IMessage): void {
-    switch (data.step) {
-      default:
-        return;
-    }
+    return;
   }
 
   private handleMessagesForAttendee(data: IMessage): void {

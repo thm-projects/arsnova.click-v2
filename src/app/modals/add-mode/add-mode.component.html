@@ -9,11 +9,12 @@
   </button>
 </div>
 <div class="modal-body">
-  <input type="text"
+  <input #addKeyInput
+         (keyup)="key = addKeyInput.value"
          class="w-100"
          id="add-key-input"
          [value]="key"
-         (keyup)="key = $event.target.value"
+         type="text"
          placeholder="Enter the Key here"/>
 
   <div *ngFor="let langKey of getKeys(languageLoaderService.languageTranslation)">

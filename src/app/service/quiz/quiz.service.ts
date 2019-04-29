@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { ApplicationRef, EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
@@ -63,7 +63,6 @@ export class QuizService {
     private storageService: StorageService,
     private settingsService: SettingsService,
     private quizApiService: QuizApiService,
-    private appRef: ApplicationRef,
   ) {
   }
 
