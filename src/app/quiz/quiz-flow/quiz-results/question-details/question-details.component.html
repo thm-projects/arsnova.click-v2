@@ -18,7 +18,7 @@
 <ng-template #defaultAnswerView>
   <h5 *ngFor="let elem of answers; let i = index">
     <span>{{normalizeAnswerIndex(i)}}:&nbsp;</span>
-    <span *ngIf="isCorrectAnswer(i)">({{'component.liveResults.correct_answer' | translate}})&nbsp;</span>
+    <span *ngIf="question.answerOptionList[i].isCorrect">({{'component.liveResults.correct_answer' | translate}})&nbsp;</span>
     <span [innerHTML]="sanitizeHTML(elem)"></span>
   </h5>
 </ng-template>
