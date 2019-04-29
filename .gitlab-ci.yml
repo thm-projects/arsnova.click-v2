@@ -79,7 +79,6 @@ generate_assets:
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
     - cd ../../../..
-    - npm run compress
   artifacts:
     paths:
       - dist
