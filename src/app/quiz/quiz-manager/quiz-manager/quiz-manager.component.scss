@@ -71,15 +71,6 @@
   }
 }
 
-.available-questions-view-frame {
-  &:before {
-    content: ' ';
-  }
-  &:after {
-    content: ' ';
-  }
-}
-
 .btn-header {
   .btn {
     @include media-breakpoint-up(sm) {

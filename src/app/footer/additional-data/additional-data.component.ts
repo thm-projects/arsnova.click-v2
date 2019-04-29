@@ -11,10 +11,6 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class AdditionalDataComponent {
   public static TYPE = 'AdditionalDataComponent';
 
-  get quizUrl(): string {
-    return this._quizUrl;
-  }
-
   private _isShowingMore: boolean = window.innerWidth >= 768;
 
   get isShowingMore(): boolean {
@@ -24,8 +20,6 @@ export class AdditionalDataComponent {
   set isShowingMore(value: boolean) {
     this._isShowingMore = value;
   }
-
-  private readonly _quizUrl: string;
 
   constructor(@Inject(DOCUMENT) readonly document, public quizService: QuizService, private trackingService: TrackingService) {
   }

@@ -204,12 +204,10 @@ describe('QuizResultsComponent', () => {
     const result = component.getConfidenceData(component.selectedQuestionIndex);
     expect(result.base).toEqual(1);
     expect(result.absolute).toEqual(1);
-    switch (i18nService.currentLanguage) {
-      case Language.DE:
-        expect(result.percent).toEqual('20\xa0%'); // \xa0: Non breaking space
-        break;
-      default:
-        expect(result.percent).toEqual('20%');
+    if (i18nService.currentLanguage === Language.DE) {
+      expect(result.percent).toEqual('20\xa0%');
+    } else {
+      expect(result.percent).toEqual('20%');
     }
   }));
 
@@ -259,12 +257,10 @@ describe('QuizResultsComponent', () => {
     const result = component.getReadingConfirmationData(component.selectedQuestionIndex);
     expect(result.base).toEqual(1);
     expect(result.absolute).toEqual(1);
-    switch (i18nService.currentLanguage) {
-      case Language.DE:
-        expect(result.percent).toEqual('100\xa0%'); // \xa0: Non breaking space
-        break;
-      default:
-        expect(result.percent).toEqual('100%');
+    if (i18nService.currentLanguage === Language.DE) {
+      expect(result.percent).toEqual('100\xa0%'); // \xa0: Non breaking space
+    } else {
+      expect(result.percent).toEqual('100%');
     }
   }));
 });
