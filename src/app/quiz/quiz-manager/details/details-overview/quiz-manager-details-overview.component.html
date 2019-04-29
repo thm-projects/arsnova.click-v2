@@ -115,7 +115,8 @@
     </div>
     <div class="mb-2 timer">
       <h4>{{'component.quiz_summary.timer' | translate}}:</h4>
-      <p>{{question?.timer}}&nbsp;{{ 'component.timer.second' | translate:{COUNT: question?.timer} }}</p>
+      <p *ngIf="question?.timer">{{question?.timer}}&nbsp;{{ 'component.timer.second' | translate:{COUNT: question?.timer} }}</p>
+      <p *ngIf="!question?.timer">{{ 'component.quiz_summary.no-timer' | translate }}</p>
     </div>
     <div class="mb-2 validation">
       <h4 class="bg-secondary p-2 rounded text-center">
