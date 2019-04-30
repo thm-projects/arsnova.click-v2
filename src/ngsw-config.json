@@ -35,6 +35,17 @@
         "maxAge": "0u",
         "strategy": "freshness"
       }
+    },
+    {
+      "name": "polyfill.io",
+      "urls": [
+        "https://polyfill.io"
+      ],
+      "cacheConfig": {
+        "maxSize": 0,
+        "maxAge": "0u",
+        "strategy": "freshness"
+      }
     }
   ]
 }
