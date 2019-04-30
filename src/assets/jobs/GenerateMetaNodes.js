@@ -99,7 +99,7 @@ class GenerateMetaNodes {
         },
       ];
 
-      imageDerivates.forEach(derivate => {
+      imageDerivates.logo.forEach(derivate => {
         result.push({
           tagName: 'link',
           className: 'theme-meta-data',
@@ -161,7 +161,7 @@ class GenerateMetaNodes {
           icons: [],
         };
 
-        imageDerivates.forEach((derivate) => {
+        imageDerivates.logo.forEach((derivate) => {
           manifest.icons.push({
             src: `/assets/images/theme/${theme}/logo_s${derivate}.png`,
             sizes: derivate,
