@@ -1,18 +1,29 @@
+const imagemin = require("imagemin");
+const imageminPngquant = require("imagemin-pngquant");
 const puppeteer = require('puppeteer');
 const path = require('path');
-const file = require('fs');
+const fs = require('fs');
 const argv = require('minimist')(process.argv.slice(2));
+const sharp = require("sharp");
 
 const urls = argv.urls ? JSON.parse(argv.urls) : [argv.url || 'https://www.google.com'];
 const format = argv.format === 'png' ? 'png' : 'jpeg';
 const viewportWidth = argv.viewportWidth || 1024;
-const viewportHeight = argv.viewportHeight || 768;
+const viewportHeight = argv.viewportHeight || 576;
 const delay = argv.delay || 0;
 const params = argv.root ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {};
+const derivates = require('../imageDerivates').frontendPreview;
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
 
 (async () => {
   const browser = await puppeteer.launch(params);
   const page = await browser.newPage();
+  await page.setViewport({width: viewportWidth, height: viewportHeight});
 
   const host = /localhost/.test(urls[0]) ?
     'localhost' : /staging.arsnova.click/.test(urls[0]) ?
@@ -31,13 +42,34 @@ const params = argv.root ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} 
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
     await page.goto(url, {waitUntil: 'networkidle0'});
-    console.log('navigated to ', url);
+    console.log('navigated to', url);
 
     const urlSeparated = url.split('/');
-    const themeImage = path.join(urlSeparated[urlSeparated.length - 2], 'preview_' + urlSeparated[urlSeparated.length - 1] + '.' + format);
-    const imgPath = path.join(__dirname, '..', 'images', 'theme', themeImage);
+    const fullPath = path.join(__dirname, '..', 'images', 'theme');
+    const themeName = urlSeparated[urlSeparated.length - 2];
+    const languageName = urlSeparated[urlSeparated.length - 1];
 
-    await page.screenshot({path: imgPath});
+    const data = await page.screenshot({type: format});
+
+    await asyncForEach(derivates, async (derivate) => {
+      const splittedDerivate = derivate.split('x');
+      const targetLogo = path.join(fullPath, themeName, `preview_${languageName}_s${derivate}.${format}`);
+      const size = {
+        width: parseInt(splittedDerivate[0], 10),
+        height: parseInt(splittedDerivate[1], 10),
+      };
+      const buffer = await sharp(data)
+      .resize(size.width, size.height)
+      .sharpen()
+      .png()
+      .toBuffer();
+
+      const minifiedBuffer = await imagemin.buffer(buffer, {
+        plugins: [imageminPngquant({quality: '65-80'})]
+      });
+
+      fs.writeFileSync(targetLogo, minifiedBuffer, 'binary');
+    });
   }
 
   await browser.close();

@@ -34,8 +34,12 @@ export class ThemesComponent implements OnDestroy {
     return this._currentTheme === id;
   }
 
-  public getThemePreviewUrl(id: string): string {
+  public getThemePreviewUrl(id: string): Array<string> {
     return this.themesApiService.THEMES_PREVIEW_GET_URL(id, this.translateService.currentLang);
+  }
+
+  public getFallbackPreviewUrl(id: string): string {
+    return this.themesApiService.getThemePreviewDefaultUrl(id, this.translateService.currentLang);
   }
 
   public change(id: string): void {

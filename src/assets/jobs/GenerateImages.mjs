@@ -79,17 +79,17 @@ class GenerateImages {
     });
 
     const chromeDriver = child_process.spawn(`node`, [
-      path.join('puppeteer.js'), `--urls=${JSON.stringify(params)}`, `${isRoot ? '--root=true' : ''}`
+      path.join('puppeteer.js'), `--urls=${JSON.stringify(params)}`, '--format=png', `${isRoot ? '--root=true' : ''}`
     ]);
 
     chromeDriver.stdout.on('data', (data) => {
-      console.log(`ChromeDriver: ${data.toString().replace('\n', '')}`);
+      console.log(`PreviewGenerator: ${data.toString().replace('\n', '')}`);
     });
     chromeDriver.stderr.on('data', (data) => {
-      console.log(`ChromeDriver (stderr): ${data.toString().replace('\n', '')}`);
+      console.log(`PreviewGenerator (stderr): ${data.toString().replace('\n', '')}`);
     });
     chromeDriver.on('exit', (code, signal) => {
-      console.log(`ChromeDriver: Done. Exit ${!!code ? 'code' : 'signal'} was: ${!!code ? code : signal}`);
+      console.log(`PreviewGenerator: Done. Exit ${!!code ? 'code' : 'signal'} was: ${!!code ? code : signal}`);
     });
 
   }
@@ -106,7 +106,7 @@ class GenerateImages {
     this.asyncForEach(Object.keys(themeData), async (themeName) => {
       const theme = themeData[themeName].quizNameRowStyle.bg;
 
-      await this.asyncForEach(derivates, async (derivate) => {
+      await this.asyncForEach(derivates.logo, async (derivate) => {
         const splittedDerivate = derivate.split('x');
         const targetLogo = path.join(this.pathToDestination, `${themeName}`, `logo_s${derivate}.png`);
         const size = {
