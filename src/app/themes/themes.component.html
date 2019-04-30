@@ -1,17 +1,14 @@
-<div *ngFor="let elem of themesService.themes"
-     class="d-flex align-items-center mb-2 flex-wrap flex-sm-nowrap"
-     role="listitem">
-  <picture>
-    <source *ngFor="let previewUrl of getThemePreviewUrl(elem.id)"
-            [srcset]="previewUrl"/>
-    <img
-      (click)="change(elem.id)"
-      (mouseenter)="preview(elem.id)"
-      (mouseleave)="restore()"
-      [alt]="elem.description | translate"
-      [src]="getFallbackPreviewUrl(elem.id)"
-      class="imagePreviewFile border border-secondary rounded cursor-pointer"/>
-    <span [innerHTML]="elem.description | translate"
-          class="text-light ml-sm-2"></span>
-  </picture>
-</div>
+<picture *ngFor="let elem of themesService.themes"
+         class="d-flex align-items-center mb-2 flex-wrap flex-sm-nowrap">
+  <source *ngFor="let previewUrl of getThemePreviewUrl(elem.id)"
+          [srcset]="previewUrl"/>
+  <img
+    (click)="change(elem.id)"
+    (mouseenter)="preview(elem.id)"
+    (mouseleave)="restore()"
+    [alt]="elem.description | translate"
+    [src]="getFallbackPreviewUrl(elem.id)"
+    class="imagePreviewFile border border-secondary rounded cursor-pointer"/>
+  <span [innerHTML]="elem.description | translate"
+        class="text-light ml-sm-2"></span>
+</picture>

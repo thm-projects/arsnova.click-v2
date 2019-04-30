@@ -30,10 +30,6 @@ export class ThemesComponent implements OnDestroy {
     this.themesService.updateCurrentlyUsedTheme();
   }
 
-  public isThemeSelected(id: string): boolean {
-    return this._currentTheme === id;
-  }
-
   public getThemePreviewUrl(id: string): Array<string> {
     return this.themesApiService.THEMES_PREVIEW_GET_URL(id, this.translateService.currentLang);
   }
