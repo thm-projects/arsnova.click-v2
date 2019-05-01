@@ -7,6 +7,7 @@ import { DbTable } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
+import { ConnectionService } from '../../service/connection/connection.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { StorageService } from '../../service/storage/storage.service';
@@ -28,15 +29,15 @@ export class AvailableQuizzesComponent implements IModal {
 
   private startingQuiz: QuizEntity;
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private activeModal: NgbActiveModal,
-    private router: Router,
-    private quizService: QuizService,
-    private trackingService: TrackingService,
-    private fileUploadService: FileUploadService,
-    private quizApiService: QuizApiService,
-    private storageService: StorageService,
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              public connectionService: ConnectionService,
+              private activeModal: NgbActiveModal,
+              private router: Router,
+              private quizService: QuizService,
+              private trackingService: TrackingService,
+              private fileUploadService: FileUploadService,
+              private quizApiService: QuizApiService,
+              private storageService: StorageService,
   ) {
     this.loadData();
   }
@@ -76,7 +77,7 @@ export class AvailableQuizzesComponent implements IModal {
           this.quizApiService.setQuiz(this.quizService.quiz).subscribe((updatedQuiz) => {
             this.quizService.quiz = new QuizEntity(updatedQuiz);
             this.router.navigate(['/quiz', 'flow']);
-          }, () => {}, () => {
+          }, () => this.startingQuiz = null, () => {
             this.next();
             resolve();
           });
@@ -90,7 +91,7 @@ export class AvailableQuizzesComponent implements IModal {
           this.next();
           resolve();
         }
-      });
+      }, () => this.startingQuiz = null);
     });
   }
 

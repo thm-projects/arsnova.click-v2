@@ -12,9 +12,22 @@
   }
 
   #collapse-quiz-name-datalist {
-    top: 0;
     right: 0;
     font-size: 2rem;
+    border-top-right-radius: $border-radius !important;
+  }
+
+  #remove-quiz-name {
+    left: 0;
+    font-size: 1.3rem;
+    border-top-left-radius: $border-radius !important;
+  }
+
+  #remove-quiz-name,
+  #collapse-quiz-name-datalist {
+    top: 0;
+    height: 50px;
+    width: 36px;
     background: rgba(0, 0, 0, 0.5);
 
     &:hover {
