@@ -90,7 +90,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public openApiDocsWindow(): void {
-    window.open(`${DefaultSettings.httpApiEndpoint}/api-docs/`);
+    window.open(`${DefaultSettings.httpApiEndpoint}/api-docs/`, '_blank', 'noopener noreferrer');
   }
 
   public isExternalLinkEnabled(linkName: string): boolean {

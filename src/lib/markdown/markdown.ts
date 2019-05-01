@@ -97,7 +97,7 @@ function postMarkdownRenderer(value: string): string {
   const linkMatch = value.match(/<a href=".*">/g);
   if (linkMatch) {
     linkMatch.forEach(token => {
-      value = value.replace(token, token.replace('<a ', '<a target=\'_blank\' '));
+      value = value.replace(token, token.replace('<a ', '<a rel=\'noopener noreferrer\' target=\'_blank\' '));
     });
   }
 

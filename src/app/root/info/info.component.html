@@ -15,7 +15,7 @@
     </button>
     <button *ngIf="isExternalLinkEnabled('projectBlog')"
             class="btn btn-light text-nowrap"
-            onclick="window.open('https://arsnova.thm.de/blog/arsnova-click/');"
+            onclick="window.open('https://arsnova.thm.de/blog/arsnova-click/', '_blank', 'noopener noreferrer');"
             type="button">
       <span>{{'region.footer.footer_bar.blog' | translate}}</span>
     </button>
