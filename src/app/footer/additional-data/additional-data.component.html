@@ -3,10 +3,10 @@
 
   <div class="row no-gutters">
 
-    <div class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
+    <div class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0 d-flex d-md-block">
       <div [attr.aria-label]="'component.quiz_summary.description.header' | translate"
            [attr.data-intro]="'component.quiz_summary.description.header' | translate"
-           class="element-wrapper d-flex flex-column bg-white text-dark px-2 py-2 mb-2">
+           class="element-wrapper d-flex flex-column bg-white text-dark px-2 py-2 mb-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.quiz_name' | translate}}</h5>
         <p class="mb-0 d-flex align-self-center align-items-end text-bold text-center"
            role="listitem">
@@ -15,10 +15,10 @@
       </div>
     </div>
 
-    <div class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
+    <div class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0 d-flex d-md-block">
       <div [attr.aria-label]="'component.quiz_summary.description.question_group_validation' | translate"
            [attr.data-intro]="'component.quiz_summary.description.question_group_validation' | translate"
-           class="element-wrapper d-flex flex-column bg-white text-dark px-2 py-2 mb-2">
+           class="element-wrapper d-flex flex-column bg-white text-dark px-2 py-2 mb-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.validation_question_group' | translate}}</h5>
         <p class="mb-0 d-flex align-self-center align-items-end text-bold text-center"
            role="listitem">
@@ -35,10 +35,10 @@
     </div>
 
     <div *ngIf="isShowingMore"
-         class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
+         class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0 d-flex d-md-block">
       <div [attr.aria-label]="'component.quiz_summary.description.session_url' | translate"
            [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
-           class="element-wrapper bg-white text-dark px-2 py-2 mb-2">
+           class="element-wrapper bg-white text-dark px-2 py-2 mb-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.quiz_url' | translate}}</h5>
         <p class="mb-0 text-wrap"
            role="listitem">
@@ -48,8 +48,8 @@
     </div>
 
     <div *ngIf="quizService.quiz?.sessionConfig.nicks.selectedNicks.length === 0 && isShowingMore"
-         class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
-      <div class="element-wrapper bg-white text-dark px-2 py-2 mb-2">
+         class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0 d-flex d-md-block">
+      <div class="element-wrapper bg-white text-dark px-2 py-2 mb-2 flex-grow-1 mw-100">
         <h5 class="text-center text-hyphenate">{{'component.quiz_summary.isRestrictingRudeNicks' | translate}}</h5>
         <p class="mb-0 text-center"
            role="listitem">
@@ -64,10 +64,10 @@
     </div>
 
     <div *ngIf="isShowingMore"
-         class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0">
+         class="col-6 col-md-12 mt-sm-2 mb-2 mb-sm-0 d-flex d-md-block">
       <div [attr.aria-label]="'component.quiz_summary.description.restrict_to_cas' | translate"
            [attr.data-intro]="'component.quiz_summary.description.restrict_to_cas' | translate"
-           class="element-wrapper bg-white text-dark px-2 py-2 mb-2">
+           class="element-wrapper bg-white text-dark px-2 py-2 mb-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.isRestrictingToCAS' | translate}}</h5>
         <p class="mb-0 text-center text-hyphenate"
            role="listitem">
@@ -85,8 +85,8 @@
          [class.col-12]="quizService.quiz?.sessionConfig.nicks.selectedNicks.length > 0"
          [class.col-6]="quizService.quiz?.sessionConfig.nicks.selectedNicks.length === 0"
          [class.col-md-12]="quizService.quiz?.sessionConfig.nicks.selectedNicks.length === 0"
-         class="mt-sm-2 mb-2 mb-sm-0 px-0">
-      <div class="element-wrapper bg-white text-dark px-2 py-2 mb-2">
+         class="mt-sm-2 mb-2 mb-sm-0 px-0 d-flex d-md-block">
+      <div class="element-wrapper bg-white text-dark px-2 py-2 mb-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.selected_nicks' | translate}}</h5>
 
         <p class="mb-0">
