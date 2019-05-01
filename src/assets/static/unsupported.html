@@ -40,7 +40,7 @@
     }
     var list = [{label: 'Audio', value: Modernizr.audio, required: false, linkRef: '#feat=audio'},
         {label: 'BlobConstructor', value: Modernizr.blobconstructor, required: false, linkRef: '#feat=blobbuilder'},
-        {label: 'IndexedDB', value: Modernizr.indexeddb, required: true, linkRef: '#feat=indexeddb'}, // TODO: Value resolves to a promise
+        {label: 'IndexedDB', value: 'indexedDB' in window, required: true, linkRef: '#feat=indexeddb'}, // TODO: Value resolves to a promise
         {label: 'ClassList', value: Modernizr.classlist, required: true, linkRef: '#feat=classlist'},
         {label: 'CORS', value: Modernizr.cors, required: true, linkRef: '#feat=cors'},
         {label: 'CSS-Calc', value: Modernizr.csscalc, required: true, linkRef: '#feat=calc'},
@@ -57,7 +57,7 @@
         {label: 'SVG', value: Modernizr.svg, required: true, linkRef: '#feat=svg'},
         {label: 'Video', value: Modernizr.video, required: false, linkRef: '#feat=video'},
         {label: 'WebSockets', value: Modernizr.websockets, required: true, linkRef: '#feat=websockets'},
-        {label: 'XHR-Response JSON', value: Modernizr.xhrresponsetypejson, required: true, linkRef: '#feat=xhr2'},
+        {label: 'XHR-Response', value: Modernizr.xhrresponsetype, required: true, linkRef: '#feat=xhr2'},
       ]
     ;
 
@@ -65,6 +65,8 @@
       if (elem.value) {
         return;
       }
+
+      console.log(elem);
 
       var node = document.createElement('li');
       node.innerHTML = elem.label + ' (<a target="_blank" href="https://caniuse.com/' + elem.linkRef + '">Details</a>)';
@@ -83,7 +85,8 @@
   }
 </script>
 
-<script src="/assets/static/modernizr.js"></script>
+<script crossorigin="anonymous"
+        src="/assets/js/modernizr/modernizr-custom.js"></script>
 
 </body>
 </html>

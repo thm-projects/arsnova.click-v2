@@ -12,6 +12,15 @@ import { ThemesService } from '../../service/themes/themes.service';
 import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { UserService } from '../../service/user/user.service';
 
+declare global {
+  // tslint:disable-next-line:interface-name
+  interface Window {
+    hs: any;
+  }
+}
+
+window.hs = window.hs || {};
+
 @Component({
   selector: 'app-root',
   templateUrl: './root.component.html',
@@ -34,6 +43,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   ) {
     this.themeService.themeChanged.subscribe(themeName => {
       this.loadExternalStyles(`/${themeName}.css`).then(() => {
+        this.initializeCookieConsent();
       }).catch(reason => {
         console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
       });
@@ -65,6 +75,14 @@ export class RootComponent implements OnInit, AfterViewInit {
         this.sharedService.isLoadingEmitter.next(false);
       }
     });
+
+    window.hs.graphicsDir = '/assets/js/highslide/graphics/';
+    window.hs.showCredits = false;
+    window.hs.expandCursor = null;
+    window.hs.restoreCursor = null;
+    window.hs.fullExpandOpacity = 0;
+    window.hs.maxHeight = 500;
+    window.hs.zIndexCounter = 1040;
   }
 
   public ngAfterViewInit(): void {
