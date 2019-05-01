@@ -41,7 +41,12 @@
               "src/assets/static",
               "src/assets/serverEndpoint.json",
               "src/assets/imageDerivates.json",
-              "src/assets/themeData.json"
+              "src/assets/themeData.json",
+              {
+                "glob": "robots.txt",
+                "input": "src/assets",
+                "output": "/"
+              }
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
