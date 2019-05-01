@@ -21,9 +21,9 @@ export class IndexedDbService {
     return this._dbName;
   }
 
-  private _dbInstance: any;
+  private _dbInstance: IDBOpenDBRequest;
 
-  set dbInstance(value: any) {
+  set dbInstance(value: IDBOpenDBRequest) {
     this._dbInstance = value;
   }
 
@@ -37,7 +37,7 @@ export class IndexedDbService {
     this._isInitialized = value;
   }
 
-  private _indexedDB: any;
+  private _indexedDB: IDBFactory;
   private readonly _stateNotifier = new BehaviorSubject<DbState>(null);
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {
@@ -74,7 +74,8 @@ export class IndexedDbService {
         };
         db.onerror = (e: any) => {
           db.close();
-          self.handleError('IndexedDB error: ' + e.target.errorCode);
+          console.error('IndexedDbService: Error in put() function');
+          self.handleError(e);
         };
       });
     });
@@ -95,7 +96,8 @@ export class IndexedDbService {
         };
         db.onerror = (e: any) => {
           db.close();
-          self.handleError('IndexedDB error: ' + e.target.errorCode);
+          console.error('IndexedDbService: Error in post() function');
+          self.handleError(e);
         };
       });
     });
@@ -117,7 +119,8 @@ export class IndexedDbService {
         };
         db.onerror = (e: any) => {
           db.close();
-          self.handleError('IndexedDB error: ' + e.target.errorCode);
+          console.error('IndexedDbService: Error in get() function', source, id, index);
+          self.handleError(e);
         };
       });
     });
@@ -148,7 +151,8 @@ export class IndexedDbService {
         };
         db.onerror = (e: any) => {
           db.close();
-          self.handleError('IndexedDB error: ' + e.target.errorCode);
+          console.error('IndexedDbService: Error in all() function');
+          self.handleError(e);
         };
       });
     });
@@ -170,7 +174,7 @@ export class IndexedDbService {
         };
         db.onerror = (e: any) => {
           db.close();
-          self.handleError('IndexedDB error: ' + e.target.errorCode);
+          self.handleError(e);
         };
       });
     });
@@ -193,7 +197,7 @@ export class IndexedDbService {
         };
         db.onerror = (e: any) => {
           db.close();
-          self.handleError('IndexedDB error: ' + e.target.errorCode);
+          self.handleError(e);
         };
       });
     });
@@ -201,17 +205,24 @@ export class IndexedDbService {
 
   public create(schema?: Array<ISchema>): Observable<any> {
     return Observable.create((observer: any) => {
-      const instance = this._indexedDB.open(this._dbName);
+      const instance = this._indexedDB.open(this._dbName, 1);
+      console.log('IndexedDbService: opening instance', instance, schema);
+
+      instance.onblocked = event => {
+        console.log('IndexedDbService: Db is currently blocked', event);
+      };
 
       instance.onupgradeneeded = () => {
         // The database did not previously exist, so create object stores and indexes.
         const db = instance.result;
+        console.log('IndexedDbService: onupgradeneeded called', db, schema);
 
         for (let i = 0; i < schema.length; i++) {
           const store = db.createObjectStore(schema[i].name, {
             keyPath: 'id',
             autoIncrement: true,
           });
+          console.log('IndexedDbService: Creating schema index', schema);
           store.createIndex('id_idx', 'id', { unique: true });
 
           if (schema[i].indexes !== undefined) {
@@ -233,11 +244,13 @@ export class IndexedDbService {
       };
 
       instance.onerror = () => {
+        console.error('IndexedDbService: Error in create() function');
         this.handleError(instance.error);
         observer.error(instance.error);
       };
 
       instance.onsuccess = () => {
+        console.log('IndexedDbService: Db created successfully');
         this._dbInstance = instance;
         observer.complete();
       };
@@ -263,7 +276,7 @@ export class IndexedDbService {
     });
   }
 
-  private handleError(msg: string): Observable<any> {
+  private handleError(msg: any): Observable<any> {
     console.error(msg);
     return observableThrowError(msg);
   }
@@ -283,7 +296,10 @@ export class IndexedDbService {
         observer.next(this._dbInstance.result);
         observer.complete();
       };
-      instance.onerror = () => this.handleError.call(this, instance.error);
+      instance.onerror = () => {
+        console.error('IndexedDbService: Error in open() function');
+        this.handleError(instance.error);
+      };
     });
   }
 }

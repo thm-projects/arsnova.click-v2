@@ -88,8 +88,12 @@ export class StorageService {
       },
     ]);
 
-    obs.subscribe(() => {
-    }, () => {}, () => {
+    obs.subscribe((val) => {
+      console.log('StorageService: IndexedDb created', val);
+    }, (error) => {
+      console.log('StorageService: IndexedDb errored', error);
+    }, () => {
+      console.log('StorageService: IndexedDb completed');
       this.read(DbTable.Config, StorageKey.PrivateKey).subscribe(val => {
         if (!val) {
           val = this.generatePrivateKey();

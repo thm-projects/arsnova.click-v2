@@ -87,8 +87,7 @@ export class UserService {
         this.indexedDbService.stateNotifier.next(DbState.Revalidate);
       }
       if (type !== DbState.Initialized || this.indexedDbService.dbName !== this.username) {
-        console.log('UserService: local db is not initialized or initialized with other user - found user', this.indexedDbService.dbName,
-          this.username);
+        console.log(`UserService: local db '${this.indexedDbService.dbName}' is not initialized or initialized with other user '${this.username}'`);
         return;
       }
 
