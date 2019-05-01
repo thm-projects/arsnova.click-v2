@@ -194,7 +194,13 @@ export class FooterBarService {
     selectable: false,
     showIntro: true,
     introTranslate: 'region.footer.footer_bar.description.nicknames',
-    linkTarget: ['/', 'quiz', 'manager', 'nicknames'],
+    linkTarget: (self) => {
+      if (!self.isActive) {
+        return;
+      }
+
+      return ['/', 'quiz', 'manager', 'nicknames'];
+    },
   }, function (): void {
 
   });
