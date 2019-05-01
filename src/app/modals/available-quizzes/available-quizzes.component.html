@@ -10,7 +10,7 @@
   </div>
   <div class="modal-body">
     <div class="d-flex flex-wrap flex-column flex-sm-row justify-content-between justify-content-sm-around">
-      <button (click)="elem.isValid() && connectionService.serverAvailable ? startQuiz(elem) : editQuiz(elem)"
+      <button (click)="connectionService.serverAvailable && elem.isValid() ? startQuiz(elem) : editQuiz(elem)"
               *ngFor="let elem of sessions"
               [class.btn-outline-danger]="!elem.isValid()"
               [class.btn-outline-success]="elem.isValid()"
