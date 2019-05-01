@@ -1,0 +1,6 @@
+User-agent: AdsBot-Google
+User-agent: Mediapartners-Google
+Disallow: /
+
+User-agent: *
+Allow: /
