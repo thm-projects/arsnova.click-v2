@@ -137,7 +137,6 @@ export class QuizManagerComponent implements OnDestroy {
         question = getQuestionForType(id);
     }
     this.quizService.quiz.addQuestion(question);
-    this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid();
     this.quizService.persist();
   }
 
@@ -177,7 +176,6 @@ export class QuizManagerComponent implements OnDestroy {
       label: `delete-question`,
     });
     this.quizService.quiz.removeQuestion(id);
-    this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid();
     this.quizService.persist();
   }
 
