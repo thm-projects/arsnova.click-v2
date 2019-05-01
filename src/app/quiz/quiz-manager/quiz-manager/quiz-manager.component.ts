@@ -62,6 +62,9 @@ export class QuizManagerComponent implements OnDestroy {
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(() => {
       this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
     }));
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(() => {
+      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
+    }));
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     this.footerBarService.footerElemStartQuiz.onClickCallback = (self: FooterbarElement) => {
