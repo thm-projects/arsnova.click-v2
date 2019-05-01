@@ -51,12 +51,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public publicQuizAmount: number;
   public ownPublicQuizAmount: number;
 
-  private _provideNickSelection = false;
-
-  get provideNickSelection(): boolean {
-    return this._provideNickSelection;
-  }
-
   private _serverPassword = '';
 
   get serverPassword(): string {
@@ -327,6 +321,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this._isPerformingClick.includes(id);
   }
 
+  public resetSessionName(): void {
+    this.enteredSessionName = '';
+    this.canJoinQuiz = false;
+    this.canAddQuiz = false;
+    this.canEditQuiz = false;
+    this.canStartQuiz = false;
+    this.passwordRequired = false;
+    this.isAddingDemoQuiz = false;
+    this.isAddingABCDQuiz = false;
+  }
+
   private updateFooterElements(isLoggedIn: boolean): void {
     const footerElements = [
       this.footerBarService.footerElemAbout,
@@ -454,7 +459,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canJoinQuiz = this.connectionService.serverAvailable;
           this.passwordRequired = false;
           this.canStartQuiz = false;
-          this._provideNickSelection = value.payload.provideNickSelection;
           this.casService.casLoginRequired = value.payload.authorizeViaCas;
           if (this.casService.casLoginRequired) {
             this.casService.quizName = quizName;
