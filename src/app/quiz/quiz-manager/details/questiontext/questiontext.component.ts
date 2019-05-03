@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../environments/environment';
@@ -18,10 +18,12 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
 @AutoUnsubscribe('_subscriptions')
 export class QuestiontextComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestiontextComponent';
+
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
-  private questionTextElement: HTMLTextAreaElement;
+
   private _questionIndex: number;
+  @ViewChild('questionText') private textarea: ElementRef;
 
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];
@@ -45,19 +47,32 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   public connector(markdownFeature: string): void {
     switch (markdownFeature) {
       case 'boldMarkdownButton':
-        this.wrapMarkdownSymbol('**');
-        break;
-      case 'underlineMarkdownButton':
-        this.wrapMarkdownSymbol('__');
+        if (!this.markdownAlreadyExistsAndAutoRemove('**', '**')) {
+          this.insertInQuestionText('**', '**');
+        }
         break;
       case 'strikeThroughMarkdownButton':
-        this.wrapMarkdownSymbol('~~');
+        if (!this.markdownAlreadyExistsAndAutoRemove('~~', '~~')) {
+          this.insertInQuestionText('~~', '~~');
+        }
         break;
       case 'italicMarkdownButton':
-        this.wrapMarkdownSymbol('*');
+        if (!this.markdownAlreadyExistsAndAutoRemove('*', '*')) {
+          this.insertInQuestionText('', '*');
+        }
         break;
       case 'headerMarkdownButton':
-        this.prependMarkdownSymbol('#', 6);
+        if (!this.markdownAlreadyExistsAndAutoRemove('### ', '')) {
+          if (this.markdownAlreadyExistsAndAutoRemove('## ', '')) {
+            this.insertInQuestionText('### ', '');
+          } else {
+            if (this.markdownAlreadyExistsAndAutoRemove('# ', '')) {
+              this.insertInQuestionText('## ', '');
+            } else {
+              this.insertInQuestionText('# ', '');
+            }
+          }
+        }
         break;
       case 'hyperlinkMarkdownButton':
         this.wrapWithLinkSymbol();
@@ -66,13 +81,27 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
         this.wrapWithImageSymbol();
         break;
       case 'codeMarkdownButton':
+        if (!this.markdownAlreadyExistsAndAutoRemove('```\n', '\n```')) {
+          this.insertInQuestionText('```\n', '\n```');
+        }
         break;
       case 'ulMarkdownButton':
+        if (!this.markdownAlreadyExistsAndAutoRemove('- ')) {
+          this.insertInQuestionText('- ');
+        }
         break;
       case 'latexMarkdownButton':
+        if (!this.markdownAlreadyExistsAndAutoRemove('$$', '$$')) {
+          if (!this.markdownAlreadyExistsAndAutoRemove('$', '$')) {
+            this.insertInQuestionText('$$', '$$');
+          }
+        } else {
+          this.insertInQuestionText('$', '$');
+        }
         break;
     }
 
+    this.questionTextService.change(this.textarea.nativeElement.value);
   }
 
   public fireEvent(event: Event): void {
@@ -85,103 +114,124 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     });
 
     if (isPlatformBrowser(this.platformId)) {
-      this.questionTextElement = <HTMLTextAreaElement>document.getElementById('questionText');
 
       this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
         if (!quiz) {
           return;
         }
 
-        this.questionTextElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
+        this.textarea.nativeElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
         this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText);
       }));
 
       this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+
+      const contentContainer = document.getElementById('content-container');
+
+      if (contentContainer) {
+        contentContainer.classList.remove('container');
+        contentContainer.classList.add('container-fluid');
+      }
     }
   }
 
   public ngOnDestroy(): void {
-    this.questionTextService.change(this.questionTextElement.value);
-    this.quizService.quiz.questionList[this._questionIndex].questionText = this.questionTextElement.value;
+    this.questionTextService.change(this.textarea.nativeElement.value);
+    this.quizService.quiz.questionList[this._questionIndex].questionText = this.textarea.nativeElement.value;
     this.quizService.persist();
+
+    if (isPlatformBrowser(this.platformId)) {
+      const contentContainer = document.getElementById('content-container');
+
+      if (contentContainer) {
+        contentContainer.classList.add('container');
+        contentContainer.classList.remove('container-fluid');
+      }
+    }
   }
 
   public computeQuestionTextInputHeight(): number {
     if (isPlatformBrowser(this.platformId)) {
-      return this.questionTextElement.scrollHeight;
+      return this.textarea.nativeElement.scrollHeight;
     }
-  }
-
-  private insertMarkupSymbol(symbol: string): void {
-    const selectionStart = this.questionTextElement.selectionStart;
-    const selectionEnd = this.questionTextElement.selectionEnd;
-    const pre = this.questionTextElement.value.substr(0, selectionStart);
-    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
-    const post = this.questionTextElement.value.substr(selectionEnd, this.questionTextElement.value.length);
-
-    this.questionTextElement.value = `${pre}${symbol}${selected}${symbol}${post}`;
-  }
-
-  private removeMarkupSymbol(length: number): void {
-    const selectionStart = this.questionTextElement.selectionStart;
-    const selectionEnd = this.questionTextElement.selectionEnd;
-    const pre = this.questionTextElement.value.substr(0, selectionStart - length);
-    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
-    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
-
-    this.questionTextElement.value = `${pre}${selected}${post}`;
-  }
-
-  private wrapMarkdownSymbol(symbol: string): void {
-    const symbolLength = symbol.length;
-    if (this.questionTextElement.value.substr(this.questionTextElement.selectionStart - symbolLength, symbolLength) === symbol) {
-      this.removeMarkupSymbol(symbolLength);
-    } else {
-      this.insertMarkupSymbol(symbol);
-    }
-  }
-
-  private prependMarkdownSymbol(symbol: string, maxSymbolCount: number): void {
-    const fullPre = this.questionTextElement.value.substring(0, this.questionTextElement.selectionStart);
-    const lineStart = fullPre.lastIndexOf('\n') + 1;
-    const pre = fullPre.substring(0, lineStart);
-    const selectionStart = this.questionTextElement.selectionStart;
-    const selectionEnd = this.questionTextElement.selectionEnd;
-    const currentSymbolCount = this.questionTextElement.value.substring(lineStart, selectionEnd).lastIndexOf(symbol) + 1;
-    const selected = this.questionTextElement.value.substring(selectionStart, this.questionTextElement.selectionEnd);
-    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
-    let symbolFinal = '';
-
-    for (let i = 0; i < currentSymbolCount; i++) {
-      symbolFinal += symbol;
-    }
-
-    if (maxSymbolCount - currentSymbolCount > 0) {
-      symbolFinal += symbol;
-    } else {
-      symbolFinal = symbolFinal.substr(0, 1);
-    }
-    symbolFinal = symbolFinal.replace(/ /g, '');
-    this.questionTextElement.value = `${pre}${symbolFinal} ${selected}${post}`;
   }
 
   private wrapWithLinkSymbol(): void {
-    const selectionStart = this.questionTextElement.selectionStart;
-    const selectionEnd = this.questionTextElement.selectionEnd;
-    const pre = this.questionTextElement.value.substr(0, selectionStart - length);
-    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
-    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
+    const selectionStart = this.textarea.nativeElement.selectionStart;
+    const selectionEnd = this.textarea.nativeElement.selectionEnd;
+    const pre = this.textarea.nativeElement.value.substr(0, selectionStart - length);
+    const selected = this.textarea.nativeElement.value.substring(selectionStart, selectionEnd);
+    const post = this.textarea.nativeElement.value.substr(selectionEnd + length, this.textarea.nativeElement.value.length);
 
-    this.questionTextElement.value = `${pre}[${selected}](${selected})${post}`;
+    this.textarea.nativeElement.value = `${pre}[${selected}](${selected})${post}`;
   }
 
   private wrapWithImageSymbol(): void {
-    const selectionStart = this.questionTextElement.selectionStart;
-    const selectionEnd = this.questionTextElement.selectionEnd;
-    const pre = this.questionTextElement.value.substr(0, selectionStart - length);
-    const selected = this.questionTextElement.value.substring(selectionStart, selectionEnd);
-    const post = this.questionTextElement.value.substr(selectionEnd + length, this.questionTextElement.value.length);
+    const selectionStart = this.textarea.nativeElement.selectionStart;
+    const selectionEnd = this.textarea.nativeElement.selectionEnd;
+    const pre = this.textarea.nativeElement.value.substr(0, selectionStart - length);
+    const selected = this.textarea.nativeElement.value.substring(selectionStart, selectionEnd);
+    const post = this.textarea.nativeElement.value.substr(selectionEnd + length, this.textarea.nativeElement.value.length);
 
-    this.questionTextElement.value = `${pre}![${selected}](${selected})${post}`;
+    this.textarea.nativeElement.value = `${pre}![${selected}](${selected})${post}`;
   }
+
+  private insertInQuestionText(textStart, textEnd?): void {
+    textEnd = typeof textEnd !== 'undefined' ? textEnd : '';
+
+    const scrollPos = this.textarea.nativeElement.scrollTop;
+    const strPosBegin = this.textarea.nativeElement.selectionStart;
+    const strPosEnd = this.textarea.nativeElement.selectionEnd;
+    const frontText = (this.textarea.nativeElement.value).substring(0, strPosBegin);
+    const backText = (this.textarea.nativeElement.value).substring(strPosEnd, this.textarea.nativeElement.value.length);
+    const selectedText = (this.textarea.nativeElement.value).substring(strPosBegin, strPosEnd);
+
+    this.textarea.nativeElement.value = frontText + textStart + selectedText + textEnd + backText;
+    this.textarea.nativeElement.selectionStart = strPosBegin + textStart.length;
+    this.textarea.nativeElement.selectionEnd = strPosEnd + textStart.length;
+    this.textarea.nativeElement.focus();
+    this.textarea.nativeElement.scrollTop = scrollPos;
+  }
+
+  private markdownAlreadyExistsAndAutoRemove(textStart, textEnd?): boolean {
+
+    // fix for IE / Edge: get dismissed focus back to retrieve selection values
+    this.textarea.nativeElement.focus();
+
+    const scrollPos = this.textarea.nativeElement.scrollTop;
+    const strPosBegin = this.textarea.nativeElement.selectionStart;
+    const strPosEnd = this.textarea.nativeElement.selectionEnd;
+
+    textEnd = typeof textEnd !== 'undefined' ? textEnd : '';
+    let textEndExists = false;
+    let textStartExists = false;
+
+    if (textEnd.length > 0) {
+      if ((this.textarea.nativeElement.value).substring(strPosEnd, strPosEnd + textEnd.length) === textEnd) {
+        textEndExists = true;
+      }
+    } else {
+      textEndExists = true;
+    }
+
+    if ((this.textarea.nativeElement.value).substring(strPosBegin - textStart.length, strPosBegin) === textStart) {
+      textStartExists = true;
+    }
+
+    if (textStartExists && textEndExists) {
+      const frontText = (this.textarea.nativeElement.value).substring(0, strPosBegin - textStart.length);
+      const middleText = (this.textarea.nativeElement.value).substring(strPosBegin, strPosEnd);
+      const backText = (this.textarea.nativeElement.value).substring(strPosEnd + textEnd.length, this.textarea.nativeElement.value.length);
+
+      this.textarea.nativeElement.value = frontText + middleText + backText;
+      this.textarea.nativeElement.selectionStart = strPosBegin - textStart.length;
+      this.textarea.nativeElement.selectionEnd = strPosEnd - (textEnd.length === 0 ? textStart.length : textEnd.length);
+      this.textarea.nativeElement.focus();
+      this.textarea.nativeElement.scrollTop = scrollPos;
+
+      return true;
+    }
+    return false;
+  }
+
 }

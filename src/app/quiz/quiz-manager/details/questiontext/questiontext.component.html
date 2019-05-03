@@ -1,15 +1,16 @@
-<div class="row justify-content-center">
-  <div class="col-12 col-md-6"
+<div class="row">
+  <div [attr.aria-label]="'plugins.markdown_bar.info_content' | translate"
        [attr.data-intro]="'plugins.markdown_bar.info_content' | translate"
-       [attr.aria-label]="'plugins.markdown_bar.info_content' | translate">
+       class="col-12 col-md-6">
     <app-markdown-bar (connectorEmitter)="connector($event)"></app-markdown-bar>
-    <textarea class="question-text-box textarea center-vertical"
-              [title]="'component.questions.enter_question_here' | translate"
+    <textarea #questionText
+              (keyup)="fireEvent($event)"
               [attr.aria-label]="'component.questions.enter_question_here' | translate"
-              id="questionText"
               [placeholder]="'component.questions.enter_question_here' | translate"
               [style.height]="computeQuestionTextInputHeight()"
-              (keyup)="fireEvent($event)">
+              [title]="'component.questions.enter_question_here' | translate"
+              class="question-text-box d-block w-100 rounded my-2 mb-md-0 p-2 border-0 no-outline"
+              id="questionText">
     </textarea>
   </div>
   <div class="col-12 col-md-6">

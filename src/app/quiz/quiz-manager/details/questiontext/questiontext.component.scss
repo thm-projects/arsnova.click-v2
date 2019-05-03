@@ -1,12 +1,6 @@
 .question-text-box {
-  display: block;
-  width: 100%;
-  border-radius: 10px;
-  margin: 10px 0;
-  padding: 10px;
-  border: none;
   resize: none;
-  outline: none;
+  height: calc(100% - 84px);
 }
 
 app-live-preview {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { QuestiontextComponent } from '../../quiz/quiz-manager/details/questiontext/questiontext.component';
@@ -6,6 +6,14 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 
 class MarkdownBarElement {
   private _iconClass: IconProp;
+
+  get iconClass(): IconProp {
+    return this._iconClass;
+  }
+
+  set iconClass(value: IconProp) {
+    this._iconClass = value;
+  }
 
   get customIcon(): boolean {
     return this._customIcon;
@@ -21,14 +29,6 @@ class MarkdownBarElement {
 
   get titleRef(): string {
     return this._titleRef;
-  }
-
-  get iconClass(): IconProp {
-    return this._iconClass;
-  }
-
-  set iconClass(value: IconProp) {
-    this._iconClass = value;
   }
 
   private _iconClassToggled: IconProp;
@@ -103,12 +103,6 @@ const LatexMarkdownButton = new MarkdownBarElement({
   customIcon: true,
   hiddenByDefault: true,
 });
-const UnderlineMarkdownButton = new MarkdownBarElement({
-  id: 'underlineMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.underline',
-  iconClass: 'underline',
-  hiddenByDefault: true,
-});
 const StrikeThroughMarkdownButton = new MarkdownBarElement({
   id: 'strikeThroughMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.strike_through',
@@ -128,74 +122,24 @@ const ItalicMarkdownButton = new MarkdownBarElement({
   templateUrl: './markdown-bar.component.html',
   styleUrls: ['./markdown-bar.component.scss'],
 })
-export class MarkdownBarComponent implements OnInit, OnDestroy {
+export class MarkdownBarComponent {
   public static TYPE = 'MarkdownBarComponent';
   public markdownBarElements = Array<MarkdownBarElement>();
-  public hiddenMarkdownBarElements = Array<MarkdownBarElement>();
-  public allDisplayedMarkdownBarElements = Array<MarkdownBarElement>();
   @Output() public connectorEmitter: EventEmitter<string> = new EventEmitter<string>();
-
-  private _showHiddenMarkdownButtons = false;
-
-  get showHiddenMarkdownButtons(): boolean {
-    return this._showHiddenMarkdownButtons;
-  }
-
-  set showHiddenMarkdownButtons(value: boolean) {
-    this._showHiddenMarkdownButtons = value;
-  }
 
   constructor(private translateService: TranslateService, private trackingService: TrackingService) {
     this.markdownBarElements.push(BoldMarkdownButton, HeaderMarkdownButton, HyperlinkMarkdownButton, UlMarkdownButton, CodeMarkdownButton,
-      ImageMarkdownButton, ShowMoreMarkdownButton);
-    this.hiddenMarkdownBarElements.push(LatexMarkdownButton, UnderlineMarkdownButton, StrikeThroughMarkdownButton, ItalicMarkdownButton);
-    this.allDisplayedMarkdownBarElements = this.markdownBarElements;
+      ImageMarkdownButton, LatexMarkdownButton, StrikeThroughMarkdownButton, ItalicMarkdownButton);
   }
 
   public connector(elem: MarkdownBarElement): void {
-    if (elem.id === 'showMoreMarkdownButton') {
-      this.showHiddenMarkdownButtons = !this.showHiddenMarkdownButtons;
-      if (this.showHiddenMarkdownButtons) {
-        this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.concat(this.hiddenMarkdownBarElements);
-        this.trackingService.trackClickEvent({
-          action: QuestiontextComponent.TYPE,
-          label: `show-markdown-buttons`,
-        });
-      } else {
-        this.trackingService.trackClickEvent({
-          action: QuestiontextComponent.TYPE,
-          label: `hide-markdown-buttons`,
-        });
-        this.allDisplayedMarkdownBarElements = this.allDisplayedMarkdownBarElements.filter((value) => {
-          return !value.hiddenByDefault;
-        });
-      }
-      this.flipIconClasses(ShowMoreMarkdownButton);
-    } else {
-      this.trackingService.trackClickEvent({
-        action: QuestiontextComponent.TYPE,
-        label: `markdown-button`,
-        customDimensions: {
-          dimension1: elem.id,
-        },
-      });
-    }
+    this.trackingService.trackClickEvent({
+      action: QuestiontextComponent.TYPE,
+      label: `markdown-button`,
+      customDimensions: {
+        dimension1: elem.id,
+      },
+    });
     this.connectorEmitter.emit(elem.id);
   }
-
-  public ngOnInit(): void {
-  }
-
-  public ngOnDestroy(): void {
-    if (this.showHiddenMarkdownButtons) {
-      this.flipIconClasses(ShowMoreMarkdownButton);
-    }
-  }
-
-  private flipIconClasses(elem: MarkdownBarElement): void {
-    const iconClass = elem.iconClass;
-    elem.iconClass = elem.iconClassToggled;
-    elem.iconClassToggled = iconClass;
-  }
-
 }

@@ -11,6 +11,7 @@ export class SurveyQuestionEntity extends AbstractChoiceQuestionEntity {
   constructor(props) {
     super(props);
     this.multipleSelectionEnabled = props.multipleSelectionEnabled;
+    this.answerOptionList.forEach(answer => answer.isCorrect = false);
   }
 
   public isValid(): boolean {
