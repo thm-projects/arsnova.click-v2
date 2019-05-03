@@ -25,6 +25,17 @@
   ],
   "dataGroups": [
     {
+      "name": "styles",
+      "urls": [
+        "**/*.css"
+      ],
+      "cacheConfig": {
+        "maxSize": 0,
+        "maxAge": "0u",
+        "strategy": "freshness"
+      }
+    },
+    {
       "name": "api",
       "urls": [
         "/api",
@@ -39,7 +50,7 @@
     {
       "name": "polyfill.io",
       "urls": [
-        "https://polyfill.io"
+        "https://polyfill.io/**"
       ],
       "cacheConfig": {
         "maxSize": 0,
