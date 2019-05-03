@@ -20,6 +20,11 @@ export class QuizTypeSelectModalComponent {
   constructor(private activeModal: NgbActiveModal) { }
 
   public close(id: QuestionType): void {
+    if (!id) {
+      this.dismiss();
+      return;
+    }
+
     this.activeModal.close(id);
   }
 

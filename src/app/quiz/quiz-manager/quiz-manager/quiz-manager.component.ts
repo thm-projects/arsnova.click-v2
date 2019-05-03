@@ -196,6 +196,12 @@ export class QuizManagerComponent implements OnDestroy {
 
   public openQuestionTypeModal(): void {
     const instance = this.modalService.open(QuizTypeSelectModalComponent, { size: ('lg') });
-    instance.result.catch(() => {}).then(id => this.addQuestion(id));
+    instance.result.catch(() => {}).then(id => {
+      if (!id) {
+        return;
+      }
+
+      this.addQuestion(id);
+    });
   }
 }
