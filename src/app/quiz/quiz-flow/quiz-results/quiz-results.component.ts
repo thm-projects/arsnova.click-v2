@@ -295,7 +295,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
       this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard, this.footerBarService.footerElemFullscreen,
+        this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard,
       ]);
     }
 
@@ -367,7 +367,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     if (this.quizService.isOwner) {
       footerElems = [
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
+        this.footerBarService.footerElemBack,
       ];
       if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
         if (this.quizService.quiz.questionList.every(

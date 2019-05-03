@@ -236,14 +236,14 @@ export class LeaderboardComponent implements OnDestroy {
   }
 
   private addFooterElements(): void {
-    if (this.quizService.isOwner) {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen, this.footerBarService.footerElemExport,
-      ]);
-    } else {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
-      ]);
+    const footerElements = [
+      this.footerBarService.footerElemBack,
+    ];
+
+    if (this.quizService.isOwner && this._isGlobalRanking) {
+      footerElements.push(this.footerBarService.footerElemExport);
     }
+
+    this.footerBarService.replaceFooterElements(footerElements);
   }
 }

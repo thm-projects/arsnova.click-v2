@@ -55,7 +55,6 @@ export class QuizOverviewComponent implements OnInit {
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemImport,
     ]);
 

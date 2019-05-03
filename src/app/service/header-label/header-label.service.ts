@@ -4,6 +4,8 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class HeaderLabelService {
+  public isUnavailableModalOpen: boolean;
+
   private _headerLabel = 'default';
 
   get headerLabel(): string {
@@ -21,9 +23,6 @@ export class HeaderLabelService {
     }
   }
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private translateService: TranslateService,
-  ) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService) {
   }
 }

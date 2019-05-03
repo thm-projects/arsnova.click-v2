@@ -36,7 +36,6 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);

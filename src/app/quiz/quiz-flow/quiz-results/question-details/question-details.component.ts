@@ -71,7 +71,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
 
     this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
     footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemBack,
     ]);
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {

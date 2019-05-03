@@ -29,7 +29,6 @@ export class ThemeSwitcherComponent {
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
-      this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);

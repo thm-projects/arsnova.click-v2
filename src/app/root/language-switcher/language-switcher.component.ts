@@ -31,7 +31,6 @@ export class LanguageSwitcherComponent {
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemHashtagManagement,
       this.footerBarService.footerElemImport,
     ]);

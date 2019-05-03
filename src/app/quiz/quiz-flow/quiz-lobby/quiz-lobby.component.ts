@@ -191,7 +191,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     const footerElements = [
       this.footerBarService.footerElemEditQuiz,
       this.footerBarService.footerElemStartQuiz,
-      this.footerBarService.footerElemFullscreen,
       this.footerBarService.footerElemQRCode,
       this.footerBarService.footerElemResponseProgress,
     ];
