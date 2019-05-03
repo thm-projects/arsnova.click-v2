@@ -162,6 +162,7 @@
     "header": {
       "connection_status": {
         "title": "Verbindung",
+        "disconnected": "Du bist gerade nicht verbunden. Du kannst nur mit Internetverbindung einem Quiz beitreten oder ein neues Quiz erstellen!",
         "websocket_status": {
           "connected": "Verbunden",
           "not_connected": "Nicht verbunden"

@@ -1,9 +1,11 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, Input, OnInit, PLATFORM_ID, TemplateRef } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
+import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
@@ -13,8 +15,9 @@ import { UpdateCheckService } from '../../service/update-check/update-check.serv
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-})
-export class HeaderComponent implements OnInit {
+}) //
+@AutoUnsubscribe('_subscriptions')
+export class HeaderComponent implements OnInit, OnDestroy {
   public static TYPE = 'HeaderComponent';
 
   @Input() public showHeader = true;
@@ -49,6 +52,10 @@ export class HeaderComponent implements OnInit {
 
   private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
 
+  private _subscriptions: Array<Subscription> = [];
+
+  @ViewChild('connectionIndicatorPopover') private connectionIndicatorPopover: NgbPopover;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public headerLabelService: HeaderLabelService,
@@ -77,6 +84,18 @@ export class HeaderComponent implements OnInit {
         this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
       }
     });
+
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(() => {
+      if (this.connectionService.serverAvailable) {
+        this.connectionIndicatorPopover.close();
+      } else {
+        this.connectionIndicatorPopover.open();
+      }
+    }));
+  }
+
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   public openConnectionQualityModal(content: TemplateRef<any>): void {

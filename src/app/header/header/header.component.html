@@ -14,13 +14,13 @@
            class="text-center header-label"></div>
     </div>
   </div>
-  <div class="text-right d-flex align-items-center cursor-pointer"
-       id="connectionQualityHeader"
-       role="dialog">
-    <svg (click)="openConnectionQualityModal(connectionQualityModal)"
+  <div class="text-right d-flex align-items-center cursor-pointer p-0">
+    <svg #connectionIndicatorPopover="ngbPopover"
+         (click)="openConnectionQualityModal(connectionQualityModal)"
+         [ngbPopover]="'region.header.connection_status.disconnected' | translate"
          [style.fill]="generateConnectionQualityColor()"
          height="50px"
-         id="connectionQualityImage"
+         triggers="manual"
          version="1.1"
          viewBox="0 0 128 128"
          width="50px"
@@ -50,7 +50,8 @@
 
 <ng-template #connectionQualityModal
              let-c="close"
-             let-d="dismiss">
+             let-d="dismiss"
+             role="dialog">
   <div class="modal-header">
     <h5 [innerHTML]="'region.header.connection_status.title' | translate"
         class="modal-title"
@@ -127,7 +128,4 @@
             data-dismiss="modal"
             type="button"></button>
   </div>
-</ng-template>
-
-<ng-template #arsnovaclicklogo>
 </ng-template>

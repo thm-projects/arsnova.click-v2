@@ -178,6 +178,7 @@
     "header": {
       "connection_status": {
         "title": "Connection status",
+        "disconnected": "You are offline. Creating and joining quizzes is only online possible!",
         "websocket_status": {
           "connected": "Connected",
           "not_connected": "Disconnected"
