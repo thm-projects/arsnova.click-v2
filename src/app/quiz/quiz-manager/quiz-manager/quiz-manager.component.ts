@@ -1,5 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
@@ -18,6 +19,7 @@ import { FooterBarService } from '../../../service/footer-bar/footer-bar.service
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
+import { QuizTypeSelectModalComponent } from './quiz-type-select-modal/quiz-type-select-modal.component';
 
 @Component({
   selector: 'app-quiz-manager',
@@ -38,14 +40,15 @@ export class QuizManagerComponent implements OnDestroy {
   private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
+    public quizService: QuizService,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private router: Router,
     private translateService: TranslateService,
-    public quizService: QuizService,
     private trackingService: TrackingService,
     private quizApiService: QuizApiService,
     private connectionService: ConnectionService,
+    private modalService: NgbModal,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
@@ -189,5 +192,10 @@ export class QuizManagerComponent implements OnDestroy {
       action: QuizManagerComponent.TYPE,
       label: `edit-question`,
     });
+  }
+
+  public openQuestionTypeModal(): void {
+    const instance = this.modalService.open(QuizTypeSelectModalComponent, { size: ('lg') });
+    instance.result.catch(() => {}).then(id => this.addQuestion(id));
   }
 }

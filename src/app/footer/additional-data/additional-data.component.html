@@ -89,15 +89,13 @@
       <div class="element-wrapper bg-white text-dark px-2 py-2 mb-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.selected_nicks' | translate}}</h5>
 
-        <p class="mb-0">
-          <span *ngIf="!quizService.quiz?.sessionConfig.nicks.selectedNicks.length">
-            {{'component.quiz_summary.no_selected_nicks' | translate}}
-          </span>
-
-          <span *ngIf="quizService.quiz?.sessionConfig.nicks.selectedNicks.length">
-            {{'component.quiz_summary.selected_nicks' | translate}}&#58;&nbsp;
-            {{quizService.quiz?.sessionConfig.nicks.selectedNicks.length}}
-          </span>
+        <p *ngIf="!quizService.quiz?.sessionConfig.nicks.selectedNicks.length"
+           class="mb-0 text-center">
+          {{'component.quiz_summary.no_selected_nicks' | translate}}
+        </p>
+        <p *ngIf="quizService.quiz?.sessionConfig.nicks.selectedNicks.length"
+           class="mb-0">
+          {{'component.quiz_summary.selected_nicks' | translate}}&#58;&nbsp;{{quizService.quiz?.sessionConfig.nicks.selectedNicks.length}}
         </p>
 
         <p [innerHTML]="quizService.quiz?.sessionConfig.nicks.selectedNicks.join(', ')"

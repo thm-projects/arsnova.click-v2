@@ -37,6 +37,8 @@ $font: Roboto, Roboto-Regular, Helvetica, Arial, sans-serif !important;
 $corner-radius: 10px;
 $splash-screen-corner-radius: 10px;
 
+$small-font-size: 60%;
+
 @import "prebuild";
 
 $modal-footer-border-color: $border-color;
@@ -102,6 +104,8 @@ $colorChangingClick: (
 
 $logo-bg: transparent;
 $logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova-logo-click": white);
+
+$popover-body-color: 'inherit';
 
 @import "postbuild";
 

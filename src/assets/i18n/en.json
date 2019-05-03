@@ -472,6 +472,8 @@
     "quiz_manager": {
       "title": "Quiz Manager",
       "available_questions_title": "Available questions",
+      "available-questions-filter": "Filter for your question",
+      "select-available-question": "Select now your question",
       "added_questions_title": "Created questions",
       "no_added_questions": "You haven't added any questions yet.",
       "details": {

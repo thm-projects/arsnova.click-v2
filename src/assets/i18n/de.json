@@ -361,6 +361,8 @@
     "quiz_manager": {
       "title": "Quiz-Manager",
       "available_questions_title": "Vorlagen",
+      "available-questions-filter": "Filtere nach deiner Vorlage",
+      "select-available-question": "Wähle jetzt deine Vorlage",
       "added_questions_title": "Quizfragen",
       "no_added_questions": "Wähle zunächst eine Vorlage …",
       "details": {

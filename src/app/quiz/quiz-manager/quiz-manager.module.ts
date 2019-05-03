@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { FooterModule } from '../../footer/footer.module';
 import { LivePreviewModule } from '../../live-preview/live-preview.module';
 import { MarkdownModule } from '../../markdown/markdown.module';
+import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AnsweroptionsComponent } from './details/answeroptions/answeroptions.component';
 import { CountdownComponent } from './details/countdown/countdown.component';
@@ -15,6 +16,7 @@ import { QuizManagerDetailsModule } from './details/quiz-manager-details.module'
 import { MemberGroupManagerComponent } from './member-group-manager/member-group-manager.component';
 import { NicknameManagerComponent } from './nickname-manager/nickname-manager.component';
 import { QuizManagerComponent } from './quiz-manager/quiz-manager.component';
+import { QuizTypeSelectModalComponent } from './quiz-manager/quiz-type-select-modal/quiz-type-select-modal.component';
 import { SoundManagerComponent } from './sound-manager/sound-manager.component';
 
 const quizManagerRoutes: Routes = [
@@ -68,11 +70,19 @@ const quizManagerRoutes: Routes = [
 
 @NgModule({
   imports: [
-    FooterModule, FormsModule, SharedModule, QuizManagerDetailsModule, MarkdownModule, LivePreviewModule, RouterModule.forChild(quizManagerRoutes),
+    FooterModule,
+    FormsModule,
+    SharedModule,
+    QuizManagerDetailsModule,
+    MarkdownModule,
+    LivePreviewModule,
+    RouterModule.forChild(quizManagerRoutes),
+    PipesModule,
   ],
   declarations: [
-    QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent, MemberGroupManagerComponent,
+    QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent, MemberGroupManagerComponent, QuizTypeSelectModalComponent,
   ],
+  entryComponents: [QuizTypeSelectModalComponent],
 })
 export class QuizManagerModule {
 }

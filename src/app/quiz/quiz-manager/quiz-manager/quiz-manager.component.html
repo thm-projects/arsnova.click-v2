@@ -1,57 +1,64 @@
-<div class="row">
-  <div class="col-12 col-lg-6">
-    <h2 class="mt-4 mt-md-0">{{'component.quiz_manager.available_questions_title' | translate}}</h2>
+<button (click)="openQuestionTypeModal()"
+        class="btn btn-light btn-shadow my-4 mt-md-0">
+  <span>{{'component.quiz_manager.select-available-question' | translate}}</span>
+</button>
 
-    <div [attr.data-intro]="'component.quiz_manager.description.available_questions' | translate"
-         class="btn-group btn-header mb-2 mb-sm-0 overflow-auto d-flex flex-grow-1 text-nowrap flex-sm-wrap">
+<h2 class="d-flex align-items-center">
+  <span>{{'component.quiz_manager.added_questions_title' | translate}}</span>
+  <small>
+    <fa-icon [icon]="'info-circle'"
+             class="ml-2"
+             container="body"
+             ngbPopover="{{'component.quiz_manager.description.added_questions' | translate}}"
+             popoverClass="text-dark"
+             popoverTitle="{{'component.quiz_manager.added_questions_title' | translate}}"></fa-icon>
+  </small>
+</h2>
 
-      <button (click)="addQuestion(elem.id)"
-              *ngFor="let elem of selectableQuestionTypes"
-              [attr.data-intro]="elem.descriptionType | translate"
-              class="btn btn-light mb-sm-2 w-100 text-left">
-        {{elem.translationName | translate}}
-      </button>
-    </div>
-  </div>
-  <div class="col-12 col-lg-6">
-    <h2 class="mt-4 mt-lg-0">{{'component.quiz_manager.added_questions_title' | translate}}</h2>
-    <h4 *ngIf="!quizService.quiz?.questionList.length">{{'component.quiz_manager.no_added_questions' | translate}}</h4>
-    <div class="row">
-      <div class="col-12">
-        <ul [attr.data-intro]="'component.quiz_manager.description.added_questions' | translate"
-            id="added_questions_wrapper">
-          <li *ngFor="let elem of quizService.quiz?.questionList; let i = index;"
-              class="btn btn-outline-secondary d-flex flex-shrink-0 justify-content-center align-items-center px-2 py-2 mb-2 rounded">
-            <span>{{elem.translationReferrer() | translate}}</span>
-            <span *ngIf="!elem.isValid()"
-                  [title]="'component.quiz_summary.question_failed' | translate"
-                  class="text-warning ml-2">
-        <fa-icon [icon]="'exclamation-triangle'"></fa-icon>
-            </span>
-            <span class="questionButtonOptions text-right">
-              <span (click)="moveQuestionUp(i)"
-                    *ngIf="i"
-                    class="cursor-pointer mr-2">
-      <fa-icon [icon]="'arrow-up'"></fa-icon>
-              </span>
-              <span (click)="moveQuestionDown(i)"
-                    *ngIf="i !== quizService.quiz?.questionList.length - 1"
-                    class="cursor-pointer mr-2">
-      <fa-icon [icon]="'arrow-down'"></fa-icon>
-              </span>
-              <span (click)="trackEditQuestion()"
-                    [routerLink]="['/quiz', 'manager', i,  'overview']"
-                    class="cursor-pointer mr-2">
-      <fa-icon [icon]="'edit'"></fa-icon>
-              </span>
-              <span (click)="deleteQuestion(i)"
-                    class="cursor-pointer">
-      <fa-icon [icon]="'trash'"></fa-icon>
-              </span>
-            </span>
-          </li>
-        </ul>
+<h4 *ngIf="!quizService.quiz?.questionList.length">{{'component.quiz_manager.no_added_questions' | translate}}</h4>
+
+<ul class="list-unstyled">
+
+  <li *ngFor="let elem of quizService.quiz?.questionList; let i = index;"
+      class="btn btn-outline-secondary btn-block text-left">
+
+    <div class="form-row">
+
+      <div class="col-12 col-sm-auto">
+        <span>{{elem.translationReferrer() | translate}}</span>
+
+        <fa-icon *ngIf="!elem.isValid()"
+                 [icon]="'exclamation-triangle'"
+                 [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
+                 class="text-warning ml-2"></fa-icon>
       </div>
+
+      <div class="col-12 col-sm-auto ml-sm-auto mt-2 mt-sm-0">
+        <fa-icon (click)="moveQuestionUp(i)"
+                 *ngIf="i"
+                 [icon]="'arrow-up'"
+                 class="cursor-pointer mx-4 mx-md-2"
+                 role="button"></fa-icon>
+
+        <fa-icon (click)="moveQuestionDown(i)"
+                 *ngIf="i !== quizService.quiz?.questionList.length - 1"
+                 [icon]="'arrow-down'"
+                 class="cursor-pointer mx-4 mx-md-2"
+                 role="button"></fa-icon>
+
+        <fa-icon (click)="trackEditQuestion()"
+                 [icon]="'edit'"
+                 [routerLink]="['/quiz', 'manager', i,  'overview']"
+                 class="cursor-pointer mx-4 mx-md-2"
+                 role="button"></fa-icon>
+
+        <fa-icon (click)="deleteQuestion(i)"
+                 [icon]="'trash'"
+                 class="cursor-pointer mx-4 mx-md-2"
+                 role="button"></fa-icon>
+
+      </div>
+
     </div>
-  </div>
-</div>
+  </li>
+</ul>
