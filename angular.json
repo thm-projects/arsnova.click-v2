@@ -55,7 +55,6 @@
             },
             "styles": [
               "src/styles/styles.scss",
-              "src/assets/js/highslide/highslide.css",
               {
                 "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
                 "bundleName": "theme-arsnova-dot-click-contrast",
@@ -103,7 +102,6 @@
               }
             ],
             "scripts": [
-              "src/assets/js/highslide/highslide.js"
             ]
           },
           "configurations": {

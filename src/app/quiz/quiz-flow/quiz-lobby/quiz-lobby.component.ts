@@ -189,10 +189,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   private addFooterElementsAsOwner(): void {
     const footerElements = [
-      this.footerBarService.footerElemEditQuiz,
-      this.footerBarService.footerElemStartQuiz,
-      this.footerBarService.footerElemQRCode,
-      this.footerBarService.footerElemResponseProgress,
+      this.footerBarService.footerElemEditQuiz, this.footerBarService.footerElemStartQuiz, this.footerBarService.footerElemQRCode,
     ];
     if (environment.readingConfirmationEnabled) {
       footerElements.splice(2, 0, this.footerBarService.footerElemReadingConfirmation);

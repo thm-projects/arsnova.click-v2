@@ -383,7 +383,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         if (environment.confidenceSliderEnabled) {
           footerElems.push(this.footerBarService.footerElemConfidenceSlider);
         }
-        footerElems.push(this.footerBarService.footerElemResponseProgress);
       }
       this.footerBarService.footerElemBack.onClickCallback = async () => {
         this.ngbModal.open(ToLobbyConfirmComponent).result.then(() => {
@@ -393,11 +392,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         }).catch(() => {});
       };
     } else {
-      footerElems = [
-        this.footerBarService.footerElemFullscreen,
-      ];
-      if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
-        if (this.quizService.quiz.questionList.some(question => [
+      footerElems = [];
+      if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1 && this.quizService.quiz.questionList.some(
+        question => [
           QuestionType.FreeTextQuestion,
           QuestionType.MultipleChoiceQuestion,
           QuestionType.RangedQuestion,
@@ -405,8 +402,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
           QuestionType.TrueFalseSingleChoiceQuestion,
           QuestionType.YesNoSingleChoiceQuestion,
         ].includes(question.TYPE))) {
-          footerElems.push(this.footerBarService.footerElemLeaderboard);
-        }
+        footerElems.push(this.footerBarService.footerElemLeaderboard);
       }
     }
     this.footerBarService.replaceFooterElements(footerElems);
@@ -481,8 +477,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.showStartQuizButton = this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
         break;
       case MessageProtocol.Countdown:
-        this.showStartQuizButton = false;
-
         this.showStopCountdownButton = data.payload.value > 0;
         this.showStartQuizButton = !data.payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
         break;

@@ -81,7 +81,7 @@ function postMarkdownRenderer(value: string): string {
   if (imgMatch) {
     imgMatch.forEach(token => {
       const imgNode: HTMLImageElement = createElementFromHTML(token) as HTMLImageElement;
-      imgNode.classList.add(...['thumbnail', 'cursor-zoom-in']);
+      imgNode.classList.add(...['thumbnail', 'cursor-zoom-in', 'img-fluid']);
 
       const anchorNode = document.createElement<'a'>('a');
       anchorNode.href = imgNode.src;

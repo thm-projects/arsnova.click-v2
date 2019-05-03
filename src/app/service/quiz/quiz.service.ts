@@ -263,7 +263,6 @@ export class QuizService {
     }
 
     this.footerBarService.footerElemReadingConfirmation.isActive = !!this.quiz.sessionConfig.readingConfirmationEnabled;
-    this.footerBarService.footerElemResponseProgress.isActive = !!this.quiz.sessionConfig.showResponseProgress;
     this.footerBarService.footerElemConfidenceSlider.isActive = !!this.quiz.sessionConfig.confidenceSliderEnabled;
 
     if (isPlatformBrowser(this.platformId)) {
