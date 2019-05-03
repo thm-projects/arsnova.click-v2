@@ -87,7 +87,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public showLeaderBoardButton(index: number): boolean {
-    if (!this.quizService.quiz || typeof index === 'undefined' || index < 0 || index > this.quizService.quiz.questionList.length) {
+    if (this.countdown > 0 || !this.quizService.quiz || typeof index === 'undefined' || index < 0 || index
+        > this.quizService.quiz.questionList.length) {
       return;
     }
     if (index === this.quizService.quiz.currentQuestionIndex && //
@@ -101,7 +102,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public showQuestionButton(index: number): boolean {
-    if (!this.quizService.quiz || typeof index === 'undefined' || index < 0 || index > this.quizService.quiz.questionList.length) {
+    if (this.countdown > 0 || !this.quizService.quiz || typeof index === 'undefined' || index < 0 || index
+        > this.quizService.quiz.questionList.length) {
       return;
     }
     if (index === this.quizService.quiz.currentQuestionIndex && //

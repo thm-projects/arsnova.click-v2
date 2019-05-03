@@ -12,7 +12,7 @@
 <div class="overflow-auto btn-header">
   <div class="my-3 btn-group">
     <button (click)="startQuiz()"
-            *ngIf="showStartQuizButton"
+            *ngIf="showStartQuizButton && !(showStopCountdownButton || showStopQuizButton)"
             [class.w-100]="quizService.getVisibleQuestions().length"
             class="btn btn-warning text-nowrap">
 
@@ -41,7 +41,7 @@
     </button>
 
     <button (click)="stopQuiz()"
-            *ngIf="showStopCountdownButton || showStopQuizButton"
+            *ngIf="!showStartQuizButton && (showStopCountdownButton || showStopQuizButton)"
             class="btn btn-warning text-nowrap">
       <span *ngIf="showStopCountdownButton"
             class="mr-1">{{'component.liveResults.abort_countdown' | translate}}</span>
@@ -56,8 +56,8 @@
 
     <button (click)="modifyVisibleQuestion(i)"
             *ngFor="let question of quizService.getVisibleQuestions(); let i = index"
-            [class.disabled]="i === selectedQuestionIndex"
-            [disabled]="i === selectedQuestionIndex"
+            [class.disabled]="i === selectedQuestionIndex || countdown > 0"
+            [disabled]="i === selectedQuestionIndex || countdown > 0"
             class="btn btn-info text-nowrap">
       <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
     </button>
