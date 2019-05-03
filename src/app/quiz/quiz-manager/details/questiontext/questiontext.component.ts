@@ -150,12 +150,6 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     }
   }
 
-  public computeQuestionTextInputHeight(): number {
-    if (isPlatformBrowser(this.platformId)) {
-      return this.textarea.nativeElement.scrollHeight;
-    }
-  }
-
   private wrapWithLinkSymbol(): void {
     const selectionStart = this.textarea.nativeElement.selectionStart;
     const selectionEnd = this.textarea.nativeElement.selectionEnd;

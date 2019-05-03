@@ -86,6 +86,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(() => {
+      if (!this.showHeader) {
+        return;
+      }
+
       if (this.connectionService.serverAvailable || this.headerLabelService.isUnavailableModalOpen) {
         this.connectionIndicatorPopover.close();
       } else {

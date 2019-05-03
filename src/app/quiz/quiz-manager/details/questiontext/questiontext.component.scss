@@ -1,6 +1,7 @@
 .question-text-box {
   resize: none;
   height: calc(100% - 84px);
+  min-height: 40vh;
 }
 
 app-live-preview {
