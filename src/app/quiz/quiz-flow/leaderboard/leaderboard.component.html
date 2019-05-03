@@ -1,21 +1,25 @@
-<div class="row">
-  <h4 *ngIf="!leaderBoardCorrect.length"
-      class="col-12 mt-5 text-center">
-    <span>{{'component.leaderboard.no_attendee_correct' | translate}}</span>
-  </h4>
-
-  <h4 *ngIf="leaderBoardCorrect.length"
-      class="col-12">
-    <span *ngIf="isGlobalRanking">
-      {{'component.leaderboard.title.all_questions' | translate }}
-    </span>
-    <span *ngIf="!isGlobalRanking">
+<h4>
+  <span *ngIf="isGlobalRanking">
+    {{'component.leaderboard.title.all_questions' | translate }}
+  </span>
+  <span *ngIf="!isGlobalRanking">
       {{'component.leaderboard.title.single_question' | translate:{QUESTION_ID: (questionIndex + 1)} }}
     </span>
-  </h4>
+</h4>
 
-  <ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length > 1;else attendeeView">
-    <ng-container *ngFor="let group of memberGroupResults">
+<h4 *ngIf="!leaderBoardCorrect.length"
+    class="mt-5 text-center">
+  <span *ngIf="!isLoadingData">{{'component.leaderboard.no_attendee_correct' | translate}}</span>
+  <ng-container *ngIf="isLoadingData">
+    <span class="mr-2">{{'global.please-wait' | translate}}</span>
+    <fa-icon [icon]="'spinner'"
+             [spin]="true"></fa-icon>
+  </ng-container>
+</h4>
+
+<ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length > 1;else attendeeView">
+  <ng-container *ngFor="let group of memberGroupResults">
+    <div class="row">
       <div class="col-12 col-sm-6">
         <div class="bg-secondary text-dark rounded p-2 my-2 ">
           <h6 class="text-center mb-0">{{'component.leaderboard.team-result.name' | translate:{TEAM_NAME: group.name} }}</h6>
@@ -24,10 +28,9 @@
           <p>{{'component.leaderboard.team-result.score' | translate:{SCORE: group.score} }}</p>
         </div>
       </div>
-    </ng-container>
+    </div>
   </ng-container>
-
-</div>
+</ng-container>
 
 <ng-template #attendeeView>
   <div *ngFor="let attendee of leaderBoardCorrect; let i = index"

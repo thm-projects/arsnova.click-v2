@@ -29,6 +29,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 @AutoUnsubscribe('_subscriptions')
 export class LeaderboardComponent implements OnDestroy {
   public static TYPE = 'LeaderboardComponent';
+  public isLoadingData = true;
 
   private _questionIndex: number;
 
@@ -68,7 +69,6 @@ export class LeaderboardComponent implements OnDestroy {
 
   private _serverUnavailableModal: NgbModalRef;
   private _name: string;
-
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];
 
@@ -196,6 +196,8 @@ export class LeaderboardComponent implements OnDestroy {
         this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
           return memberGroupResult.correctQuestions.length > 0;
         });
+
+        this.isLoadingData = false;
       });
     });
   }
