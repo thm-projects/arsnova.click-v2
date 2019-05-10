@@ -123,7 +123,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     }
 
     const matches = this.attendeeService.attendees.filter(value => {
-      return value.responses[questionIndex] ? value.responses[questionIndex].confidence : false;
+      return value.responses[questionIndex] ? value.responses[questionIndex].confidence > -1 : false;
     });
     const hasConfidenceSet = typeof this.quizService.quiz.sessionConfig.confidenceSliderEnabled !== 'undefined';
     const isConfidenceEnabled = typeof hasConfidenceSet ? this.quizService.quiz.sessionConfig.confidenceSliderEnabled : false;
@@ -163,7 +163,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public showReadingConfirmation(questionIndex: number): boolean {
-    if (!this.quizService.quiz) {
+    this.cd.markForCheck();
+    if (!environment.readingConfirmationEnabled || !this.quizService.quiz) {
       return;
     }
 
@@ -171,8 +172,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
     }).length;
     const readingConfirmationStatus = this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
-    const isReadingConfirmationEnabled = environment.readingConfirmationEnabled && //
-                                         typeof readingConfirmationStatus === 'undefined' ? false : readingConfirmationStatus;
+    const isReadingConfirmationEnabled = typeof readingConfirmationStatus === 'undefined' ? false : readingConfirmationStatus;
     this.cd.markForCheck();
     return matchCount > 0 || isReadingConfirmationEnabled;
   }
