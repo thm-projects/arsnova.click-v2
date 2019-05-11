@@ -126,7 +126,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public checkForUpdates(): void {
     this.isCheckingForUpdates = true;
     if (this.updates.isEnabled) {
-      this.updateCheckService.doCheck().catch(err => console.error(err)).finally(() => this.isCheckingForUpdates = false);
+
+      this.updateCheckService.doCheck().then(() => {
+        if ('storage' in navigator) {
+          navigator.storage.estimate().then((storage) => {
+            if (storage.quota >= storage.usage) {
+              location.reload(true);
+            }
+          });
+        } else {
+          location.reload(true);
+        }
+      }).catch(err => console.error(err)).finally(() => this.isCheckingForUpdates = false);
     } else {
       location.reload(true);
     }
