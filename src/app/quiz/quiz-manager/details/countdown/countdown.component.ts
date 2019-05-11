@@ -98,7 +98,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this._plainMinutes = parseInt(this._parsedMinutes, 10);
     this._plainSeconds = parseInt(this._parsedSeconds, 10);
 
-    this.quizService.quiz.questionList[this._questionIndex].timer = this.countdown;
+    this.quizService.quiz.questionList[this._questionIndex].timer = this.countdown || 0;
   }
 
   public ngOnInit(): void {
