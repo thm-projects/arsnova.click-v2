@@ -4,6 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
 import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../../lib/default.settings';
@@ -50,6 +51,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   public enteredSessionName = '';
   public publicQuizAmount: number;
   public ownPublicQuizAmount: number;
+  public canModifyQuiz: boolean = !environment.requireLoginToCreateQuiz;
+  public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
+  public canModifyOwnQuiz: boolean = !environment.requireLoginToCreateQuiz;
 
   private _serverPassword = '';
 
@@ -112,8 +116,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'default';
 
     this.updateFooterElements(this.userService.isLoggedIn);
+    this.canModifyQuiz = !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin);
+    this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz);
+
     this.userService.loginNotifier.subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
+      this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin));
+      this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
     });
 
     this.connectionService.initConnection().then(() => {
@@ -150,7 +159,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.cleanUpSessionStorage();
         this.storageService.getAllQuiznames().then(quizNames => {
           this._ownQuizzes = quizNames;
-          if (this._ownQuizzes.length) {
+
+          if (this._ownQuizzes.length && (!environment.requireLoginToCreateQuiz || (this.userService.isAuthorizedFor(UserRole.CreateQuiz)))) {
             this.modalService.open(AvailableQuizzesComponent);
           }
         });
@@ -338,22 +348,36 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
       this.footerBarService.footerElemFullscreen,
-      this.footerBarService.footerElemHashtagManagement,
-      this.footerBarService.footerElemImport,
     ];
 
+    if (!environment.requireLoginToCreateQuiz) {
+      footerElements.push(this.footerBarService.footerElemHashtagManagement);
+      footerElements.push(this.footerBarService.footerElemImport);
+    }
+
     if (isLoggedIn) {
+      if (environment.requireLoginToCreateQuiz) {
+        if (this.userService.isAuthorizedFor(UserRole.CreateQuiz)) {
+          footerElements.push(this.footerBarService.footerElemHashtagManagement);
+        }
+
+        if (this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
+          footerElements.push(this.footerBarService.footerElemImport);
+        }
+      }
+
       if (this.userService.isAuthorizedFor(UserRole.EditI18n)) {
         footerElements.push(this.footerBarService.footerElemEditI18n);
       }
+
       if (this.userService.isAuthorizedFor([UserRole.SuperAdmin])) {
         footerElements.push(this.footerBarService.footerElemAdmin);
       }
+
       footerElements.push(this.footerBarService.footerElemLogout);
 
     } else {
       footerElements.push(this.footerBarService.footerElemLogin);
-
     }
 
     this.footerBarService.replaceFooterElements(footerElements);

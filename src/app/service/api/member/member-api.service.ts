@@ -68,12 +68,12 @@ export class MemberApiService {
     }
 
     return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${quizName}/${nickName}`,
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getMembers(quizname: string): Observable<IMessage> {
     return this.http.get<IMessage>(`${this._getMembersUrl}/${quizname}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getAvailableNames(quizName: string): Observable<Array<string>> {

@@ -21,7 +21,7 @@ export class LeaderboardApiService {
     if (sessionStorage.getItem(StorageKey.QuizToken)) {
       headers.authorization = sessionStorage.getItem(StorageKey.QuizToken);
     } else {
-      headers.authorization = localStorage.getItem(StorageKey.PrivateKey);
+      headers.authorization = sessionStorage.getItem(StorageKey.PrivateKey);
     }
     return this.http.get<IMessage>(this.LEADERBOARD_GET_DATA_URL(quizName, amount, questionIndex), { headers });
   }

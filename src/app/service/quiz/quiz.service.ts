@@ -267,7 +267,7 @@ export class QuizService {
 
     if (isPlatformBrowser(this.platformId)) {
       this.footerBarService.footerElemExport.onClickCallback = async () => {
-        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this._quiz.name}/${localStorage.getItem(
+        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this._quiz.name}/${sessionStorage.getItem(
           StorageKey.PrivateKey)}/${this._quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
         window.open(link);
       };

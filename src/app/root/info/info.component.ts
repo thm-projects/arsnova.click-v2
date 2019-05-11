@@ -33,11 +33,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
     this.footerBarService.TYPE_REFERENCE = InfoComponent.TYPE;
 
     footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemHome,
-      this.footerBarService.footerElemTranslation,
-      this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemHashtagManagement,
-      this.footerBarService.footerElemImport,
+      this.footerBarService.footerElemHome, this.footerBarService.footerElemTranslation, this.footerBarService.footerElemTheme,
     ]);
 
     if (environment.infoAboutTabEnabled) {

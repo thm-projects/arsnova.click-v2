@@ -86,36 +86,36 @@ export class QuizApiService {
 
     return this.http.put<QuizEntity>(this._putQuizUrl, { quiz }, {
       headers: {
-        authorization: localStorage.getItem(StorageKey.PrivateKey),
+        authorization: sessionStorage.getItem(StorageKey.PrivateKey),
       },
     });
   }
 
   public nextStep(quizName: string): Observable<IMessage> {
     return this.http.post<IMessage>(`${this._postNextStepUrl}`, { quizName },
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public deleteQuiz(quiz: QuizEntity): Observable<IMessage> {
     return this.http.delete<IMessage>(`${this._deleteQuizUrl}/${quiz.name}`,
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public resetQuiz(quiz: QuizEntity): Observable<IMessage> {
     return this.http.post<IMessage>(`${this._postResetQuizUrl}/${quiz.name}`, {},
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public stopQuiz(quiz: QuizEntity): Observable<IMessage> {
     return this.http.post<IMessage>(`${this._postStopQuizUrl}`, { quizName: quiz.name },
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public postQuizSettingsUpdate(quiz: QuizEntity, settings: object): Observable<IMessage> {
     return this.http.post<IMessage>(`${this._postQuizSettingsUpdateUrl}`, {
       quizName: quiz.name,
       settings,
-    }, { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+    }, { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getQuizSettings(quizName: string): Observable<IMessage> {
@@ -124,26 +124,26 @@ export class QuizApiService {
 
   public postQuizUpload(formData: FormData): Observable<IMessage> {
     return this.http.post<IMessage>(`${this._postQuizUploadUrl}`, formData,
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getQuizStatus(quizName): Observable<IMessage> {
     return this.http.get<IMessage>(`${this._getQuizStatusUrl}${quizName ? '/' + quizName : ''}`,
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getQuiz(quizName: string): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getQuizUrl}/${quizName}`, { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+    return this.http.get<IMessage>(`${this._getQuizUrl}/${quizName}`, { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getQuizStartTime(): Observable<number> {
     return this.http.get<number>(`${this._getQuizStartTimeUrl}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getFreeMemberGroup(): Observable<IMessage> {
     return this.http.get<IMessage>(`${this._getFreeMemberGroupUrl}`,
-      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public generateABCDQuiz(language: string, length: number): Observable<QuizEntity> {
@@ -156,34 +156,34 @@ export class QuizApiService {
 
   public deleteActiveQuiz(quiz: QuizEntity): Observable<void> {
     return this.http.delete<void>(`${this._deleteActiveQuizUrl}/${quiz.name}`,
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public putSavedQuiz(quizEntity: QuizEntity): Observable<IMessage> {
     return this.http.put<IMessage>(`${this._putSaveQuizUrl}`, { quiz: quizEntity },
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getPublicQuizzes(): Observable<Array<QuizEntity>> {
-    return this.http.get<Array<QuizEntity>>(this._getPublicQuizzesUrl, { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+    return this.http.get<Array<QuizEntity>>(this._getPublicQuizzesUrl, { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getOwnPublicQuizzes(): Observable<Array<QuizEntity>> {
     return this.http.get<Array<QuizEntity>>(this._getOwnPublicQuizzesUrl,
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getPublicQuizAmount(): Observable<number> {
-    return this.http.get<number>(this._getPublicQuizAmountUrl, { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+    return this.http.get<number>(this._getPublicQuizAmountUrl, { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getOwnPublicQuizAmount(): Observable<number> {
-    return this.http.get<number>(this._getOwnPublicQuizAmountUrl, { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+    return this.http.get<number>(this._getOwnPublicQuizAmountUrl, { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public setQuizAsPrivate(quizEntity: QuizEntity): Observable<void> {
     return this.http.post<void>(this._setQuizAsPrivateUrl, { name: quizEntity.name },
-      { headers: { authorization: localStorage.getItem(StorageKey.PrivateKey) } });
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   private loadUrls(): void {

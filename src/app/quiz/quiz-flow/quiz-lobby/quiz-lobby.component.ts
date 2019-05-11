@@ -9,6 +9,7 @@ import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
+import { UserRole } from '../../../../lib/enums/UserRole';
 import { FooterbarElement } from '../../../../lib/footerbar-element/footerbar-element';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
@@ -24,6 +25,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
+import { UserService } from '../../../service/user/user.service';
 import { EditModeConfirmComponent } from './modals/edit-mode-confirm/edit-mode-confirm.component';
 import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content.component';
 
@@ -64,6 +66,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private ngbModal: NgbModal,
     private sharedService: SharedService,
+    private userService: UserService,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
@@ -189,14 +192,21 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   private addFooterElementsAsOwner(): void {
     const footerElements = [
-      this.footerBarService.footerElemEditQuiz, this.footerBarService.footerElemStartQuiz, this.footerBarService.footerElemQRCode,
+      this.footerBarService.footerElemStartQuiz, this.footerBarService.footerElemQRCode,
     ];
+
+    if (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
+      footerElements.splice(0, 0, this.footerBarService.footerElemEditQuiz);
+    }
+
     if (environment.readingConfirmationEnabled) {
       footerElements.splice(2, 0, this.footerBarService.footerElemReadingConfirmation);
     }
+
     if (environment.confidenceSliderEnabled) {
       footerElements.push(this.footerBarService.footerElemConfidenceSlider);
     }
+
     this.footerBarService.replaceFooterElements(footerElements);
 
     this.addFooterElemClickCallbacksAsOwner();

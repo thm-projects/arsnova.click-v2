@@ -55,7 +55,6 @@ export class QuizOverviewComponent implements OnInit {
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemImport,
     ]);
 
     headerLabelService.headerLabel = 'component.name_management.session_management';
@@ -197,6 +196,10 @@ export class QuizOverviewComponent implements OnInit {
 
   public isAuthorizedToSaveQuiz(): boolean {
     return this.userService.isAuthorizedFor([UserRole.CreateExpiredQuiz, UserRole.SuperAdmin]);
+  }
+
+  public isAuthorizedToModifyQuiz(): boolean {
+    return this.userService.isAuthorizedFor(UserRole.QuizAdmin);
   }
 
   private loadData(): void {

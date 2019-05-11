@@ -26,11 +26,7 @@ export class ThemeSwitcherComponent {
 
     this.footerBarService.TYPE_REFERENCE = ThemeSwitcherComponent.TYPE;
     footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemHome,
-      this.footerBarService.footerElemAbout,
-      this.footerBarService.footerElemTranslation,
-      this.footerBarService.footerElemHashtagManagement,
-      this.footerBarService.footerElemImport,
+      this.footerBarService.footerElemHome, this.footerBarService.footerElemAbout, this.footerBarService.footerElemTranslation,
     ]);
     headerLabelService.headerLabel = 'component.theme_switcher.set_theme';
     if (isPlatformBrowser(this.platformId)) {

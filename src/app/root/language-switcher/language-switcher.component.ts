@@ -28,11 +28,7 @@ export class LanguageSwitcherComponent {
 
     this.footerBarService.TYPE_REFERENCE = LanguageSwitcherComponent.TYPE;
     footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemHome,
-      this.footerBarService.footerElemAbout,
-      this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemHashtagManagement,
-      this.footerBarService.footerElemImport,
+      this.footerBarService.footerElemHome, this.footerBarService.footerElemAbout, this.footerBarService.footerElemTheme,
     ]);
     headerLabelService.headerLabel = 'component.translation.translations';
     Object.keys(Language).forEach((lang) => {

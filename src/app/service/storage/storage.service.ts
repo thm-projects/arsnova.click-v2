@@ -105,7 +105,7 @@ export class StorageService {
           this.indexedDbService.isInitialized = true;
           this.indexedDbService.stateNotifier.next(DbState.Initialized);
         }
-        localStorage.setItem(StorageKey.PrivateKey, val);
+        sessionStorage.setItem(StorageKey.PrivateKey, val);
       });
     });
 

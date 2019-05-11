@@ -24,6 +24,7 @@ export class UserService {
     if (!value) {
       this._casTicket = null;
       this._staticLoginToken = null;
+      this._staticLoginTokenContent = null;
       this._username = null;
       this.deleteTokens();
     } else {
@@ -94,7 +95,7 @@ export class UserService {
       if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
         console.log('UserService: having static token content with private key');
         this.storageService.create(DbTable.Config, StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey).subscribe();
-        localStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
+        sessionStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
 
         if (this._tmpRemoteQuizData.length) {
           console.log('UserService: having remote quiz data');
@@ -102,7 +103,7 @@ export class UserService {
             const onlyLocalQuizzes = localQuizzes.filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.name));
             onlyLocalQuizzes.forEach(localQuiz => {
               console.log('UserService: syncing local quiz data to server');
-              this.quizService.quiz = new QuizEntity(localQuiz);
+              this.quizService.quiz = new QuizEntity(localQuiz.value);
               this.quizService.persist();
               this.quizApiService.putSavedQuiz(this.quizService.quiz).subscribe();
             });

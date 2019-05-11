@@ -82,7 +82,7 @@ export class UserAdminComponent implements OnInit {
         user.userAuthorizations = value.userAuthorizations;
 
         if (value.name === this.userService.staticLoginTokenContent.name) {
-          localStorage.setItem(StorageKey.PrivateKey, value.privateKey);
+          sessionStorage.setItem(StorageKey.PrivateKey, value.privateKey);
           this.storageService.create(DbTable.Config, StorageKey.PrivateKey, value.privateKey).subscribe();
         }
       });
