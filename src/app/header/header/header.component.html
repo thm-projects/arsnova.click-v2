@@ -108,6 +108,12 @@
       </li>
     </ul>
 
+    <p class="text-muted">{{'region.header.connection_status.estimated-storage-quota.label' | translate}}:</p>
+    <p class="mb-3">
+      <span *ngIf="!storage.quota">{{'region.header.connection_status.estimated-storage-quota.not_available' | translate}}</span>
+      <span *ngIf="storage.quota">{{'region.header.connection_status.estimated-storage-quota.currently-used' | translate:{QUOTA: i18nService.formatNumber(storage.quota / 1024 / 1024), USAGE: i18nService.formatNumber(storage.usage / 1024 / 1024)} }}</span>
+    </p>
+
     <div>
       <button (click)="checkForUpdates()"
               [disabled]="!connectionService.serverAvailable"

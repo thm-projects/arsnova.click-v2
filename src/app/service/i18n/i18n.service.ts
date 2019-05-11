@@ -33,7 +33,7 @@ export class I18nService {
 
   public formatNumber(number: number, type: NumberType = NumberType.Decimal, locale?: string): string {
     if (isNaN(number)) {
-      throw new Error(`Unsupported number: ${number}. Type was ${type.toString()}`);
+      return String(number);
     }
 
     if (!locale) {

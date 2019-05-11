@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { I18nService } from '../../service/i18n/i18n.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UpdateCheckService } from '../../service/update-check/update-check.service';
 
@@ -19,7 +20,6 @@ import { UpdateCheckService } from '../../service/update-check/update-check.serv
 @AutoUnsubscribe('_subscriptions')
 export class HeaderComponent implements OnInit, OnDestroy {
   public static TYPE = 'HeaderComponent';
-
   @Input() public showHeader = true;
   public isCheckingForUpdates: boolean;
 
@@ -50,16 +50,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this._indexedDbAvailable;
   }
 
+  private _storage: StorageEstimate;
+
+  get storage(): StorageEstimate {
+    return this._storage;
+  }
+
   private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
-
   private _subscriptions: Array<Subscription> = [];
-
   @ViewChild('connectionIndicatorPopover') private connectionIndicatorPopover: NgbPopover;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public headerLabelService: HeaderLabelService,
     public connectionService: ConnectionService,
+    public i18nService: I18nService,
     private sanitizer: DomSanitizer,
     private router: Router,
     private modalService: NgbModal,
@@ -96,6 +101,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.connectionIndicatorPopover.open();
       }
     }));
+
+    new Promise((resolve, reject) => {
+      if ('storage' in navigator) {
+        navigator.storage.estimate().then(storage => {
+          this._storage = storage;
+          resolve();
+        }).catch(() => reject());
+      } else {
+        reject();
+      }
+    }).catch(() => {
+      this._storage = {
+        quota: 0,
+        usage: 0,
+      };
+    });
   }
 
   public ngOnDestroy(): void {
@@ -128,13 +149,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.updates.isEnabled) {
 
       this.updateCheckService.doCheck().then(() => {
-        if ('storage' in navigator) {
-          navigator.storage.estimate().then((storage) => {
-            if (storage.quota >= storage.usage) {
-              location.reload(true);
-            }
-          });
-        } else {
+        if (this._storage.quota >= this._storage.usage) {
           location.reload(true);
         }
       }).catch(err => console.error(err)).finally(() => this.isCheckingForUpdates = false);

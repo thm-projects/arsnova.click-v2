@@ -178,6 +178,11 @@
     "header": {
       "connection_status": {
         "title": "Connection status",
+        "estimated-storage-quota": {
+          "label": "Estimated storage quota",
+          "not_available": "Not available - Manual update check required!",
+          "currently-used": "Currently {USAGE}GiB of {QUOTA}GiB used"
+        },
         "disconnected": "You are offline. Creating and joining quizzes is only online possible!",
         "websocket_status": {
           "connected": "Connected",
