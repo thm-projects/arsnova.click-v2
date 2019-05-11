@@ -18,7 +18,11 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/assets/**"
+          "/assets/fonts/**",
+          "/assets/i18n/**",
+          "/assets/images/**",
+          "/assets/js/**",
+          "/assets/serverEndpoint.json"
         ]
       }
     }
