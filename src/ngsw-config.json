@@ -24,6 +24,8 @@
     },
     {
       "name": "assets-deferred",
+      "installMode": "lazy",
+      "updateMode": "lazy",
       "resources": {
         "urls": [
           "/assets/fonts/**",
