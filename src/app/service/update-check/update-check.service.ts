@@ -25,6 +25,10 @@ export class UpdateCheckService {
     return this.updates.checkForUpdate();
   }
 
+  public async clearCache(): Promise<Array<boolean>> {
+    return Promise.all((await window.caches.keys()).map(key => window.caches.delete(key)));
+  }
+
   private promptUser(availableEvent: UpdateAvailableEvent): void {
     console.log('RootComponent: service worker update available');
     console.log('RootComponent: current version is', availableEvent.current);
@@ -37,15 +41,20 @@ export class UpdateCheckService {
 
     const message = this.translateService.instant('component.toasts.swupdate.message');
     const title = this.translateService.instant('component.toasts.swupdate.title');
+
     this.swUpdateToast = this.toastService.info(message, title, {
       disableTimeOut: true,
       toastClass: 'toast show ngx-toastr',
     });
-    this.swUpdateToast.onTap.subscribe(() => {
-      this.updates.activateUpdate().then(() => document.location.reload(true));
+
+    this.swUpdateToast.onTap.subscribe(async () => {
+      this.clearCache().finally(() => {
+        this.updates.activateUpdate().then(() => document.location.reload(true));
+      });
     });
 
     console.log('updating to new version');
+
     this.updates.activated.subscribe(activatedEvent => {
       console.log('RootComponent: previous version was', activatedEvent.previous);
       console.log('RootComponent: current version is', activatedEvent.current);
