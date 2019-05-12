@@ -2,6 +2,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DbTable } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
@@ -199,7 +200,7 @@ export class QuizOverviewComponent implements OnInit {
   }
 
   public isAuthorizedToModifyQuiz(): boolean {
-    return this.userService.isAuthorizedFor(UserRole.QuizAdmin);
+    return !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin);
   }
 
   private loadData(): void {
