@@ -6,8 +6,8 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
+          "/assets/i18n/**",
           "/index.html",
-          "/*.css",
           "/*.js"
         ]
       }
@@ -18,48 +18,44 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
+          "/assets/js/**"
+        ]
+      }
+    },
+    {
+      "name": "assets-deferred",
+      "resources": {
+        "urls": [
           "/assets/fonts/**",
-          "/assets/i18n/**",
-          "/assets/images/**",
-          "/assets/js/**",
-          "/assets/serverEndpoint.json"
+          "/assets/images/**"
         ]
       }
     }
   ],
   "dataGroups": [
     {
-      "name": "styles",
-      "urls": [
-        "**/*.css"
-      ],
-      "cacheConfig": {
-        "maxSize": 0,
-        "maxAge": "0u",
-        "strategy": "freshness"
-      }
-    },
-    {
-      "name": "api",
+      "name": "api-freshness",
       "urls": [
         "/api",
-        "/backend"
-      ],
-      "cacheConfig": {
-        "maxSize": 0,
-        "maxAge": "0u",
-        "strategy": "freshness"
-      }
-    },
-    {
-      "name": "polyfill.io",
-      "urls": [
+        "/backend",
         "https://polyfill.io/**"
       ],
       "cacheConfig": {
-        "maxSize": 0,
-        "maxAge": "0u",
-        "strategy": "freshness"
+        "strategy": "freshness",
+        "maxSize": 100,
+        "maxAge": "3d",
+        "timeout": "10s"
+      }
+    },
+    {
+      "name": "api-performance",
+      "urls": [
+        "/*.css"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 100,
+        "maxAge": "3d"
       }
     }
   ]
