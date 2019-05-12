@@ -49,9 +49,11 @@
               [class.list-group-item-success]="canModifyQuiz"
               class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.join' | translate:{name: quizname} }}</li>
 
-          <li (click)="selectQuizByList(quizname)"
-              *ngFor="let quizname of ownQuizzes | searchFilter:enteredSessionName"
-              class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</li>
+          <ng-container *ngIf="canUsePublicQuizzes">
+            <li (click)="selectQuizByList(quizname)"
+                *ngFor="let quizname of ownQuizzes | searchFilter:enteredSessionName"
+                class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</li>
+          </ng-container>
 
           <ng-container *ngIf="canModifyQuiz">
             <li (click)="selectQuizByList('Demo Quiz')"

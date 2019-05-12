@@ -53,7 +53,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public ownPublicQuizAmount: number;
   public canModifyQuiz: boolean = !environment.requireLoginToCreateQuiz;
   public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
-  public canModifyOwnQuiz: boolean = !environment.requireLoginToCreateQuiz;
 
   private _serverPassword = '';
 
