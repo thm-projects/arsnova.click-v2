@@ -181,7 +181,7 @@
         "estimated-storage-quota": {
           "label": "Estimated storage quota",
           "not_available": "Not available - Manual update check required!",
-          "currently-used": "Currently {USAGE}GiB of {QUOTA}GiB used"
+          "currently-used": "Currently {USAGE}MiB of {QUOTA}MiB used"
         },
         "disconnected": "You are offline. Creating and joining quizzes is only online possible!",
         "websocket_status": {

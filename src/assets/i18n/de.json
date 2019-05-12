@@ -165,7 +165,7 @@
         "estimated-storage-quota": {
           "label": "Geschätzter Speicherplatz",
           "not_available": "Nicht verfügbar - Aktualisierungen müssen manuell gesucht werden!",
-          "currently-used": "Aktuell werden {USAGE}GiB von {QUOTA}GiB verwendet"
+          "currently-used": "Aktuell werden {USAGE}MiB von {QUOTA}MiB verwendet"
         },
         "disconnected": "Du bist gerade nicht verbunden. Du kannst nur mit Internetverbindung einem Quiz beitreten oder ein neues Quiz erstellen!",
         "websocket_status": {
