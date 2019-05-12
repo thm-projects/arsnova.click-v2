@@ -27,7 +27,7 @@
       "installMode": "lazy",
       "updateMode": "lazy",
       "resources": {
-        "urls": [
+        "files": [
           "/assets/fonts/**",
           "/assets/images/**"
         ]
