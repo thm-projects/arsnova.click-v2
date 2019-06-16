@@ -42,6 +42,7 @@
               "src/assets/serverEndpoint.json",
               "src/assets/imageDerivates.json",
               "src/assets/themeData.json",
+              "src/assets/piwik/piwik.js",
               {
                 "glob": "robots.txt",
                 "input": "src/assets",
@@ -122,6 +123,34 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "src/assets/piwik/piwik.js",
+                  "with": "src/assets/piwik/piwik.prod.js"
+                }
+              ]
+            },
+            "westermann": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "commonChunk": true,
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "src/ngsw-config.json",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.westermann.ts"
+                },
+                {
+                  "replace": "src/assets/piwik/piwik.js",
+                  "with": "src/assets/piwik/piwik.westermann.js"
                 }
               ]
             }
@@ -135,6 +164,9 @@
           "configurations": {
             "production": {
               "browserTarget": "frontend:build:production"
+            },
+            "westermann": {
+              "browserTarget": "frontend:build:westermann"
             }
           }
         },
