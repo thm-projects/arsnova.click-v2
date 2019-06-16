@@ -12,14 +12,16 @@ import { TrackingService } from '../service/tracking/tracking.service';
 })
 export class ThemesComponent implements OnDestroy {
   public static TYPE = 'ThemesComponent';
+
   @Output() public updateTheme = new EventEmitter<string>();
   @Output() public previewTheme = new EventEmitter<string>();
   @Output() public restoreTheme = new EventEmitter<string>();
+
   private _currentTheme: string;
 
   constructor(
-    private translateService: TranslateService,
     public themesService: ThemesService,
+    private translateService: TranslateService,
     private trackingService: TrackingService,
     private themesApiService: ThemesApiService,
   ) {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
 import { DefaultAnswerEntity } from '../../../../lib/entities/answer/DefaultAnswerEntity';
@@ -54,13 +55,17 @@ export class QuizManagerComponent implements OnDestroy {
 
     this.footerBarService.TYPE_REFERENCE = QuizManagerComponent.TYPE;
 
-    footerBarService.replaceFooterElements([
+    const footerElements = [
       this.footerBarService.footerElemHome,
       this.footerBarService.footerElemStartQuiz,
       this.footerBarService.footerElemNicknames,
       this.footerBarService.footerElemMemberGroup,
       this.footerBarService.footerElemSound,
-    ]);
+    ];
+    if (environment.forceQuizTheme) {
+      footerElements.push(this.footerBarService.footerElemTheme);
+    }
+    footerBarService.replaceFooterElements(footerElements);
 
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(() => {
       this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;

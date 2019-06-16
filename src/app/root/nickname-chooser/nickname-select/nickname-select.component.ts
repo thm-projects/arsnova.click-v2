@@ -89,6 +89,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
       console.log('NicknameSelectComponent: PutMember failed', err);
+      this.router.navigate(['/']);
       this.isLoggingIn = null;
     });
   }
@@ -106,9 +107,12 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     }
     this._isLoading = true;
-    this.memberApiService.getAvailableNames(this.quizService.quiz.name).subscribe(data => {
-      this._isLoading = false;
-      this._nicks = this._nicks.concat(data);
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.memberApiService.getAvailableNames(this.quizService.quiz.name).subscribe(data => {
+        this._isLoading = false;
+        this._nicks = this._nicks.concat(data);
+      });
     });
   }
 

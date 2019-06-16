@@ -62,6 +62,12 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
       this.isLoggingIn = false;
+
+      if (!data) {
+        this.router.navigate(['/']);
+        return;
+      }
+
       switch (data.step) {
         case MessageProtocol.DuplicateLogin:
           this._failedLoginReason = 'plugins.splashscreen.error.error_messages.duplicate_user';
@@ -79,6 +85,8 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     if (this.attendeeService.ownNick) {
       this.router.navigate(['/']);
     }
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public ngOnDestroy(): void {

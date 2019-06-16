@@ -7,6 +7,7 @@ export const environment = {
   infoProjectTabEnabled: true,
   infoBackendApiEnabled: true,
   requireLoginToCreateQuiz: false,
+  forceQuizTheme: false,
 };
 
 export enum DEVICE_TYPES {

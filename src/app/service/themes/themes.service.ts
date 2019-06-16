@@ -1,5 +1,6 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { themes } from '../../../lib/available-themes';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
@@ -47,17 +48,20 @@ export class ThemesService {
       return;
     }
 
-    const themeConfig = await Promise.all<any>(<any>[
-      this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise(),
-      this.storageService.read(DbTable.Config, StorageKey.QuizTheme).toPromise(),
-      new Promise(resolve => {
-        if (this.quizService.quiz && this.quizService.quiz.sessionConfig.theme) {
-          resolve(this.quizService.quiz.sessionConfig.theme);
-          return;
-        }
-        resolve('theme-Material');
-      }),
-    ]);
+    const themePromises: Array<Promise<any>> = [];
+    if (!environment.forceQuizTheme || !this.quizService.quiz) {
+      themePromises.push(this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise(),
+        this.storageService.read(DbTable.Config, StorageKey.QuizTheme).toPromise());
+    }
+    themePromises.push(new Promise(resolve => {
+      if (this.quizService.quiz && this.quizService.quiz.sessionConfig.theme) {
+        resolve(this.quizService.quiz.sessionConfig.theme);
+        return;
+      }
+      resolve(DefaultSettings.defaultQuizSettings.sessionConfig.theme);
+    }));
+
+    const themeConfig = await Promise.all(themePromises);
     const usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
