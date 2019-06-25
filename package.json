@@ -110,6 +110,7 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "karma-mocha-reporter": "^2.2.5",
     "karma-phantomjs-launcher": "^1.0.4",
+    "arsnova-click-v2-types": "git+https://git.thm.de/arsnova/arsnova-click-v2-types.git",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
     "protractor": "^5.4.2",
