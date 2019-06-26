@@ -53,7 +53,7 @@ build:
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
-    - npm install typescript@3.1.6
+    - npm install typescript@3.4.5
     - npm run build:PROD
   artifacts:
     paths:
