@@ -49,6 +49,7 @@ build:
     - master
   tags:
     - nodejs
+    - angular
   script:
     - echo $STAGING_SERVER_ENDPOINTS > src/assets/serverEndpoint.json
     - npm install
