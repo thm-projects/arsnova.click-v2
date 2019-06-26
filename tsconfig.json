@@ -1,35 +1,26 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "incremental": true,
     "baseUrl": "./",
-    "downlevelIteration": true,
-    "importHelpers": true,
-    "module": "esnext",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "resolveJsonModule": true,
     "target": "es2015",
+    "module": "esnext",
     "typeRoots": [
       "node_modules/@types"
     ],
+    "importHelpers": true,
     "lib": [
-      "esnext",
+      "es2018",
       "dom"
     ],
-    "paths": {
-      "jobs": [
-        "dist/jobs"
-      ],
-      "core-js/es7/reflect": [
-        "./node_modules/core-js/proposals/reflect-metadata"
-      ],
-      "core-js/es6/*": [
-        "./node_modules/core-js/es/*"
-      ]
-    }
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   }
 }

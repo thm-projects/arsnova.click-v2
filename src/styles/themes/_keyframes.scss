@@ -1,9 +1,9 @@
 @mixin keyframeBuilder($map) {
   @each $index, $colorMap in $map {
-  "#{$index}%" {
-    background-color: map-get($colorMap, "bg");
-    color: map-get($colorMap, "fg");
-  }
+    #{$index}% {
+      background-color: map-get($colorMap, "bg");
+      color: map-get($colorMap, "fg");
+    }
   }
 }
 

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Router } from '@angular/router';
-import { Route } from '@angular/router/src/config';
-import { UrlSegment } from '@angular/router/src/url_tree';
+import { CanLoad, Route, Router, UrlSegment } from '@angular/router';
 import { UserRole } from '../../../lib/enums/UserRole';
 import { UserService } from '../user/user.service';
 

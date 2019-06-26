@@ -19,7 +19,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   public readonly infoButtons: Array<{ id: string, i18nRef: string }> = [];
   private _routerSubscription: Subscription;
 
-  @ViewChild('buttonHeader') private buttonHeader: ElementRef;
+  @ViewChild('buttonHeader', { static: true }) private buttonHeader: ElementRef;
 
   constructor(
     private footerBarService: FooterBarService,

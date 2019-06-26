@@ -23,7 +23,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
 
   private _questionIndex: number;
-  @ViewChild('questionText') private textarea: ElementRef;
+  @ViewChild('questionText', { static: true }) private textarea: ElementRef;
 
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];

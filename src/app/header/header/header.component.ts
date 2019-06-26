@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
   private _subscriptions: Array<Subscription> = [];
-  @ViewChild('connectionIndicatorPopover') private connectionIndicatorPopover: NgbPopover;
+  @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

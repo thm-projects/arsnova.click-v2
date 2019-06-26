@@ -50,29 +50,29 @@ export const appRoutes: Routes = [
   {
     path: 'admin',
     canLoad: [StaticLoginService],
-    loadChildren: () => import('app/admin/admin.module').then(m => m.AdminModule),
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
   }, {
     path: 'info',
-    loadChildren: () => import('app/root/info/info.module').then(m => m.InfoModule),
+    loadChildren: () => import('./root/info/info.module').then(m => m.InfoModule),
   }, {
     path: 'i18n-manager',
     canLoad: [StaticLoginService],
-    loadChildren: () => import('app/i18n-manager/i18n-manager.module').then(m => m.I18nManagerModule),
+    loadChildren: () => import('./i18n-manager/i18n-manager.module').then(m => m.I18nManagerModule),
   }, {
     path: 'quiz/manager',
-    loadChildren: () => import('app/quiz/quiz-manager/quiz-manager.module').then(m => m.QuizManagerModule),
+    loadChildren: () => import('./quiz/quiz-manager/quiz-manager.module').then(m => m.QuizManagerModule),
   }, {
     path: 'quiz/flow',
-    loadChildren: () => import('app/quiz/quiz-flow/quiz-flow.module').then(m => m.QuizFlowModule),
+    loadChildren: () => import('./quiz/quiz-flow/quiz-flow.module').then(m => m.QuizFlowModule),
     data: {
       preload: true,
     },
   }, {
     path: 'quiz',
-    loadChildren: () => import('app/quiz/quiz.module').then(m => m.QuizModule),
+    loadChildren: () => import('./quiz/quiz.module').then(m => m.QuizModule),
   }, {
     path: 'nicks',
-    loadChildren: () => import('app/root/nickname-chooser/nickname-chooser.module').then(m => m.NicknameChooserModule),
+    loadChildren: () => import('./root/nickname-chooser/nickname-chooser.module').then(m => m.NicknameChooserModule),
     data: {
       preload: true,
     },
