@@ -199,8 +199,37 @@ export class UserService {
     });
   }
 
+  public authenticateThroughLoginToken(tokenHash): Promise<boolean> {
+    return new Promise(async resolve => {
+
+      const data = await this.authorizeApiService.postAuthorizationForStaticLogin({
+        tokenHash,
+        token: this._staticLoginToken,
+      }).toPromise().catch(() => resolve(false));
+
+      if (!data) {
+        return;
+      }
+
+      if (data.status === StatusProtocol.Success) {
+        this._staticLoginToken = data.payload.token;
+        this._tmpRemoteQuizData = data.payload.quizzes;
+        this._username = data.payload.username;
+        this.isLoggedIn = true;
+        resolve(true);
+      } else {
+        this.isLoggedIn = false;
+        resolve(false);
+      }
+    });
+  }
+
   public hashPassword(username: string, password: string): string {
     return this.sha1(`${username}|${password}`);
+  }
+
+  public hashToken(token: string): string {
+    return this.sha1(token);
   }
 
   public isAuthorizedFor(authorization: Array<UserRole>): boolean;

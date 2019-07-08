@@ -1,33 +1,57 @@
 <ng-container *ngIf="!isLoading">
-  <h4 class="text-center mb-5 mt-sm-5">{{'component.login.title' | translate}}</h4>
+  <h4 class="text-center mb-5 mt-sm-5">{{'component.login.title' | translate}}</h4>
 
-  <div class="input-group input-group-sm">
+  <div *ngIf="hasUsernamePasswordLogin"
+       class="input-group input-group-sm">
 
-    <input type="text"
+    <input (keydown.enter)="login()"
+           [(ngModel)]="username"
+           [placeholder]="'component.login.username' | translate"
            class="form-control"
            name="username"
-           placeholder="Username"
-           (keypress)="trySubmit($event)"
-           [(ngModel)]="username"/>
+           type="text"/>
 
-    <input type="password"
+    <input (keydown.enter)="login()"
+           [(ngModel)]="password"
+           [placeholder]="'component.login.password' | translate"
            class="form-control my-2 my-sm-0"
            name="password"
-           placeholder="Password"
-           (keypress)="trySubmit($event)"
-           [(ngModel)]="password"/>
+           type="password"/>
 
     <div class="input-group-append">
 
-      <button class="btn btn-light"
-              (click)="login()">{{'component.login.login' | translate}}
+      <button (click)="login()"
+              class="btn btn-light">{{'component.login.login' | translate}}
       </button>
 
     </div>
   </div>
 
+  <ng-container *ngIf="hasTokenLogin">
+
+    <h6 *ngIf="hasMultipleLoginMethods"
+        class="mt-5">{{'component.login.login-via-token' | translate}}</h6>
+
+    <div class="input-group input-group-sm">
+
+      <input (keydown.enter)="login()"
+             [(ngModel)]="token"
+             [placeholder]="'component.login.token' | translate"
+             class="form-control my-2 my-sm-0"
+             name="token"
+             type="password"/>
+
+      <div class="input-group-append">
+
+        <button (click)="login()"
+                class="btn btn-light">{{'component.login.login' | translate}}
+        </button>
+
+      </div>
+    </div>
+  </ng-container>
 
   <h4 *ngIf="authorizationFailed"
-      class="text-danger text-center mt-5">{{'component.login.authorization_failed' | translate}}
+      class="text-danger text-center mt-5">{{'component.login.authorization_failed' | translate}}
   </h4>
 </ng-container>

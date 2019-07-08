@@ -1,3 +1,7 @@
+export enum LoginMechanism {
+  UsernamePassword, Token
+}
+
 export enum Filter {
   None, //
   Unused, //

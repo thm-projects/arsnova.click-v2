@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { LoginMechanism } from '../../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { UserService } from '../../service/user/user.service';
@@ -13,6 +15,10 @@ export class LoginComponent implements OnInit {
   public static readonly TYPE = 'LoginComponent';
   public username = '';
   public password = '';
+  public token = '';
+  public hasUsernamePasswordLogin: boolean = environment.loginMechanism.includes(LoginMechanism.UsernamePassword);
+  public hasTokenLogin: boolean = environment.loginMechanism.includes(LoginMechanism.Token);
+  public hasMultipleLoginMethods: boolean = environment.loginMechanism.length > 1;
 
   private _authorizationFailed = false;
 
@@ -53,21 +59,21 @@ export class LoginComponent implements OnInit {
 
   public async login(): Promise<void> {
     this._authorizationFailed = false;
-    if (this.username && this.password) {
+    let isLoggedIn = false;
+
+    if (this.hasTokenLogin && this.token) {
+      const tokenHash = this.userService.hashToken(this.token);
+      isLoggedIn = await this.userService.authenticateThroughLoginToken(tokenHash);
+
+    } else if (this.hasUsernamePasswordLogin && this.username && this.password) {
       const passwordHash = this.userService.hashPassword(this.username, this.password);
-      const isLoggedIn = await this.userService.authenticateThroughLogin(this.username.toLowerCase(), passwordHash);
-
-      if (isLoggedIn) {
-        this.router.navigateByUrl(this.return);
-      } else {
-        this._authorizationFailed = true;
-      }
+      isLoggedIn = await this.userService.authenticateThroughLogin(this.username.toLowerCase(), passwordHash);
     }
-  }
 
-  public trySubmit(event): void {
-    if (event.keyCode === 13 && this.username && this.password) {
-      this.login();
+    if (isLoggedIn) {
+      this.router.navigateByUrl(this.return);
+    } else {
+      this._authorizationFailed = true;
     }
   }
 }

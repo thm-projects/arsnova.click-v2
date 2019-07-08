@@ -70,50 +70,6 @@ describe('LoginComponent', () => {
     expect(LoginComponent.TYPE).toEqual('LoginComponent');
   });
 
-  describe('#trySubmit', () => {
-    it('should submit the login request if the username and password have been given and the enter key was pressed', () => {
-      const event = { keyCode: 13 };
-      const username = 'testuser';
-      const password = 'testpassword';
-
-      spyOn(component, 'login').and.callFake(() => new Promise<void>(resolve => resolve()));
-      component['username'] = username;
-      component['password'] = password;
-
-      component.trySubmit(event);
-
-      expect(component.login).toHaveBeenCalled();
-    });
-
-    it('should not submit the login if the username or password fields are emtpy', () => {
-      const event = { keyCode: 13 };
-      const username = '';
-      const password = '';
-
-      spyOn(component, 'login').and.callFake(() => new Promise<void>(resolve => resolve()));
-      component['username'] = username;
-      component['password'] = password;
-
-      component.trySubmit(event);
-
-      expect(component.login).not.toHaveBeenCalled();
-    });
-
-    it('should not submit the login if any key except the enter key is pressed', () => {
-      const event = { keyCode: 42 };
-      const username = 'testuser';
-      const password = 'testpassword';
-
-      spyOn(component, 'login').and.callFake(() => new Promise<void>(resolve => resolve()));
-      component['username'] = username;
-      component['password'] = password;
-
-      component.trySubmit(event);
-
-      expect(component.login).not.toHaveBeenCalled();
-    });
-  });
-
   describe('#login', () => {
     it('should submit the login request if the username and password are valid',
       inject([UserService, Router], async (userService: UserService, router: Router) => {

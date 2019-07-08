@@ -3,7 +3,10 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-export const environment = {
+import { LoginMechanism } from '../lib/enums/enums';
+import { IEnvironment } from '../lib/interfaces/IEnvironment';
+
+export const environment: IEnvironment = {
   production: false,
   leaderboardAmount: 5,
   readingConfirmationEnabled: false,
@@ -13,6 +16,7 @@ export const environment = {
   infoBackendApiEnabled: false,
   requireLoginToCreateQuiz: true,
   forceQuizTheme: false,
+  loginMechanism: [LoginMechanism.UsernamePassword, LoginMechanism.Token],
 };
 
 export enum DEVICE_TYPES {
