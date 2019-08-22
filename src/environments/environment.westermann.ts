@@ -7,7 +7,7 @@ export const environment: IEnvironment = {
   serverEndpoint: 'https://test01.ars.sbzo.de',
   httpApiEndpoint: 'https://test01.ars.sbzo.de/api/v1',
   httpLibEndpoint: 'https://test01.ars.sbzo.de/lib',
-  stompEndpoint: 'wss://test01.ars.sbzo.de/rabbitmq',
+  stompEndpoint: 'wss://test01.ars.sbzo.de/rabbitmq/ws',
   leaderboardAmount: 5,
   readingConfirmationEnabled: false,
   confidenceSliderEnabled: false,

@@ -16,9 +16,9 @@ const rxStompConfig: InjectableRxStompConfig = {
 };
 
 if (!environment.production) {
-  rxStompConfig.debug = (msg: string): void => {
-    console.log(new Date(), msg);
-  };
 }
+rxStompConfig.debug = (msg: string): void => {
+  console.log(new Date(), msg);
+};
 
 export default rxStompConfig;
