@@ -2,10 +2,10 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
-import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -26,7 +26,8 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
   public questionIndex: number;
   public questionText: string;
-  private _subscriptions: Array<Subscription> = [];
+  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _messageSubscriptions: Array<string> = [];
   private _serverUnavailableModal: NgbModalRef;
 
   constructor(
@@ -40,12 +41,19 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
-    private ngbModal: NgbModal,
+    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
     headerLabelService.headerLabel = 'component.liveResults.reading_confirmation';
     this.footerBarService.replaceFooterElements([]);
+  }
+
+  public sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+  }
+
+  public ngOnInit(): void {
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -64,29 +72,20 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     }));
-  }
 
-  public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
-  }
-
-  public ngOnInit(): void {
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
       }
-
-      this.connectionService.initConnection().then(() => {
-        this.connectionService.connectToChannel(this.quizService.quiz.name);
-        this.handleMessages();
-      });
 
       this.attendeeService.restoreMembers();
       this.questionIndex = this.quizService.quiz.currentQuestionIndex;
       this.questionTextService.change(this.quizService.currentQuestion().questionText);
     }));
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.handleMessages();
+    });
 
     this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string) => {
       this.questionText = value;
@@ -95,6 +94,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 
   public confirmReading(): void {
@@ -104,42 +104,29 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages(): void {
-    this._subscriptions.push(this.connectionService.dataEmitter.subscribe((data: IMessage) => {
-      switch (data.step) {
-        case MessageProtocol.Inactive:
-          setTimeout(this.handleMessages.bind(this), 500);
-          break;
-        case MessageProtocol.Start:
-          this.router.navigate(['/quiz', 'flow', 'voting']);
-          break;
-        case MessageProtocol.UpdatedResponse:
-          console.log('ReadingConfirmationComponent: modifying response data for nickname', data.payload.nickname);
-          this.attendeeService.modifyResponse(data.payload);
-          break;
-        case MessageProtocol.UpdatedSettings:
-          this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
-          break;
-        case MessageProtocol.Reset:
-          this.attendeeService.clearResponses();
-          this.quizService.quiz.currentQuestionIndex = -1;
-          this.router.navigate(['/quiz', 'flow', 'lobby']);
-          break;
-        case MessageProtocol.Closed:
-          this.router.navigate(['/']);
-          break;
-        case MessageProtocol.Added:
-          this.attendeeService.addMember(data.payload.member);
-          break;
-        case MessageProtocol.Removed:
-          this.attendeeService.removeMember(data.payload.name);
-          break;
-        case MessageProtocol.AllPlayers:
-          data.payload.members.forEach((elem: IMemberSerialized) => {
-            this.attendeeService.addMember(elem);
-          });
-          break;
-      }
-    }));
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.router.navigate(['/quiz', 'flow', 'voting']);
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
+        console.log('ReadingConfirmationComponent: modifying response data for nickname', payload.nickname);
+        this.attendeeService.modifyResponse(payload);
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
+        this.quizService.quiz.sessionConfig = payload.sessionConfig;
+      }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        this.attendeeService.clearResponses();
+        this.quizService.quiz.currentQuestionIndex = -1;
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.router.navigate(['/']);
+      }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+        this.attendeeService.addMember(payload.member);
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        this.attendeeService.removeMember(payload.name);
+      }), this.messageQueue.subscribe(MessageProtocol.AllPlayers, payload => {
+        payload.members.forEach((elem: IMemberSerialized) => {
+          this.attendeeService.addMember(elem);
+        });
+      }),
+    ]);
   }
-
 }

@@ -112,19 +112,13 @@ export class ThemesService {
       });
     }
 
-    this.connectionService.initConnection().then(() => {
-      if (!this.connectionService.socket) {
-        return;
-      }
-
-      this.connectionService.dataEmitter.subscribe(data => {
-        if (data.status === StatusProtocol.Success && data.step === MessageProtocol.UpdatedSettings) {
-          this.quizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
-          if (data.payload.target === 'theme') {
-            this.updateCurrentlyUsedTheme();
-          }
+    this.connectionService.dataEmitter.subscribe(data => {
+      if (data.status === StatusProtocol.Success && data.step === MessageProtocol.UpdatedSettings) {
+        this.quizService.quiz.sessionConfig[data.payload.target] = data.payload.state;
+        if (data.payload.target === 'theme') {
+          this.updateCurrentlyUsedTheme();
         }
-      });
+      }
     });
   }
 

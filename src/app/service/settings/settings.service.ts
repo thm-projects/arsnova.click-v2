@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { IServerSettings } from 'arsnova-click-v2-types/dist/common';
 import { ConnectionService } from '../connection/connection.service';
-import { StorageService } from '../storage/storage.service';
+import { SharedService } from '../shared/shared.service';
 
 @Injectable()
 export class SettingsService {
@@ -12,7 +12,7 @@ export class SettingsService {
     return this._serverSettings;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private connectionService: ConnectionService, private storageService: StorageService) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private connectionService: ConnectionService, private sharedService: SharedService) {
     if (isPlatformBrowser(this.platformId)) {
       this.initServerSettings();
     }
@@ -26,6 +26,7 @@ export class SettingsService {
     }
 
     this._serverSettings = data.serverConfig;
+    this.sharedService.activeQuizzes = data.activeQuizzes;
 
     // Workaround required because JSON serializes Infinity to null which is then deserialized to NaN by EcmaScript
     if (this._serverSettings.limitActiveQuizzes === null) {

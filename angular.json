@@ -130,6 +130,30 @@
                 }
               ]
             },
+            "thmStaging": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "commonChunk": true,
+              "buildOptimizer": true,
+              "serviceWorker": true,
+              "ngswConfigPath": "src/ngsw-config.json",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.thm.staging.ts"
+                },
+                {
+                  "replace": "src/assets/piwik/piwik.js",
+                  "with": "src/assets/piwik/piwik.prod.js"
+                }
+              ]
+            },
             "westermann": {
               "optimization": true,
               "outputHashing": "all",
@@ -164,6 +188,9 @@
           "configurations": {
             "production": {
               "browserTarget": "frontend:build:production"
+            },
+            "thmStaging": {
+              "browserTarget": "frontend:build:thmStaging"
             },
             "westermann": {
               "browserTarget": "frontend:build:westermann"

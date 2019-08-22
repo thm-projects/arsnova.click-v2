@@ -2,6 +2,11 @@ import { LoginMechanism } from '../enums/enums';
 
 export interface IEnvironment {
   production: boolean;
+  ssrEndpoint: string;
+  serverEndpoint: string;
+  httpApiEndpoint: string;
+  httpLibEndpoint: string;
+  stompEndpoint: string;
   leaderboardAmount: number;
   readingConfirmationEnabled: boolean;
   confidenceSliderEnabled: boolean;

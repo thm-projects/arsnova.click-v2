@@ -20,8 +20,6 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
-import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { ConfidenceRateComponent } from './confidence-rate.component';
 
@@ -57,10 +55,7 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, HeaderLabelService, FooterBarService, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
-        }, SharedService, SettingsService, MemberApiService,
+        }, HeaderLabelService, FooterBarService, SharedService, SettingsService, MemberApiService,
       ],
       declarations: [ConfidenceRateComponent],
     }).compileComponents();

@@ -12,16 +12,11 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
-import { HeaderLabelService } from '../../../service/header-label/header-label.service';
-import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
-import { SettingsService } from '../../../service/settings/settings.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
-import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../shared/shared.module';
 
 import { VotingComponent } from './voting.component';
@@ -58,9 +53,6 @@ describe('VotingComponent', () => {
         }, FooterBarService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, QuestionTextService, HeaderLabelService, SettingsService, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, MemberApiService, QuizApiService,
       ],
       declarations: [VotingComponent],

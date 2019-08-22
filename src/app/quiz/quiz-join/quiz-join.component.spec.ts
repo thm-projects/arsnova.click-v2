@@ -26,8 +26,6 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesMockService } from '../../service/themes/themes.mock.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { UserService } from '../../service/user/user.service';
-import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../service/websocket/websocket.service';
 import { SharedModule } from '../../shared/shared.module';
 
 import { QuizJoinComponent } from './quiz-join.component';
@@ -81,9 +79,6 @@ describe('QuizJoinComponent', () => {
         }, UserService, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, {
           provide: ActivatedRoute,
           useClass: MockRouter,

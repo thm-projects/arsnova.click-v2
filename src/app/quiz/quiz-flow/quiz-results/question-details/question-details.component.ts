@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../../lib/enums/enums';
-import { MessageProtocol, StatusProtocol } from '../../../../../lib/enums/Message';
-import { IMessage } from '../../../../../lib/interfaces/communication/IMessage';
+import { MessageProtocol } from '../../../../../lib/enums/Message';
 import { IMemberSerialized } from '../../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { ServerUnavailableModalComponent } from '../../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
@@ -55,7 +55,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _serverUnavailableModal: NgbModalRef;
-  private _subscriptions: Array<Subscription> = [];
+  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -66,13 +67,31 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
-    private ngbModal: NgbModal,
+    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
     ]);
+  }
+
+  public sanitizeHTML(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+  }
+
+  public normalizeAnswerIndex(index: number): string {
+    return String.fromCharCode(65 + index);
+  }
+
+  public async ngOnInit(): Promise<void> {
+    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+      if (Array.isArray(value)) {
+        this._answers = value;
+      } else {
+        this._questionText = value;
+      }
+    }));
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -91,108 +110,76 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     }));
-  }
 
-  public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
-  }
-
-  public normalizeAnswerIndex(index: number): string {
-    return String.fromCharCode(65 + index);
-  }
-
-  public async ngOnInit(): Promise<void> {
-
-    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
-      if (Array.isArray(value)) {
-        this._answers = value;
-      } else {
-        this._questionText = value;
-      }
-    }));
-    this.route.params.subscribe(async params => {
+    this.route.params.subscribe(params => {
       this._questionIndex = +params['questionIndex'];
 
-      await this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+      this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+        if (!quiz) {
+          return;
+        }
 
-      this.connectionService.initConnection().then(() => {
-        this.connectionService.connectToChannel(this.quizService.quiz.name);
+        if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
+          this.router.navigate(['/quiz', 'flow', 'results']);
+          return;
+        }
+        if (this.quizService.quiz) {
+          this._question = this.quizService.quiz.questionList[this._questionIndex];
+          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+          this.questionTextService.change(this._question.questionText);
+        }
+      }));
+
+      this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
         this.handleMessages();
       });
-
-      if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
-        this.router.navigate(['/quiz', 'flow', 'results']);
-        return;
-      }
-      if (this.quizService.quiz) {
-        this._question = this.quizService.quiz.questionList[this._questionIndex];
-      }
-      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
-      this.questionTextService.change(this._question.questionText);
     });
   }
 
   public ngOnDestroy(): void {
     this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 
   private handleMessages(): void {
-    if (!this.attendeeService.attendees.length) {
-      this.connectionService.sendMessage({
-        status: StatusProtocol.Success,
-        step: MessageProtocol.GetPlayers,
-        payload: { quizName: this.quizService.quiz.name },
-      });
-    }
-    this._subscriptions.push(this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
-      switch (data.step) {
-        case MessageProtocol.AllPlayers:
-          data.payload.members.forEach((elem: IMemberSerialized) => {
-            this.attendeeService.addMember(elem);
-          });
-          break;
-        case MessageProtocol.UpdatedResponse:
-          this.attendeeService.modifyResponse(data.payload);
-          break;
-        case MessageProtocol.NextQuestion:
-          this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
-          break;
-        case MessageProtocol.Start:
-          this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
-          break;
-        case MessageProtocol.Reset:
-          this.attendeeService.clearResponses();
-          this.quizService.quiz.currentQuestionIndex = -1;
-          this.router.navigate(['/quiz', 'flow', 'lobby']);
-          break;
-        case MessageProtocol.Closed:
-          this.router.navigate(['/']);
-          break;
-      }
-      this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
-    }));
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.AllPlayers, payload => {
+        payload.members.forEach((elem: IMemberSerialized) => {
+          this.attendeeService.addMember(elem);
+        });
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
+        this.attendeeService.modifyResponse(payload);
+      }), this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
+        this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+      }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
+      }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        this.attendeeService.clearResponses();
+        this.quizService.quiz.currentQuestionIndex = -1;
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.router.navigate(['/']);
+      }),
+    ]);
+
+    this.quizService.isOwner ? this.handleMessagesForOwner() : this.handleMessagesForAttendee();
   }
 
-  private handleMessagesForOwner(data: IMessage): void {
-    return;
-  }
+  private handleMessagesForOwner(): void {}
 
-  private handleMessagesForAttendee(data: IMessage): void {
-    switch (data.step) {
-      case MessageProtocol.Start:
+  private handleMessagesForAttendee(): void {
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.router.navigate(['/quiz', 'flow', 'voting']);
-        break;
-      case MessageProtocol.UpdatedSettings:
-        this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
-        break;
-      case MessageProtocol.ReadingConfirmationRequested:
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
+        this.quizService.quiz.sessionConfig = payload.sessionConfig;
+      }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         } else {
           this.router.navigate(['/quiz', 'flow', 'voting']);
         }
-        break;
-    }
+      }),
+    ]);
   }
-
 }

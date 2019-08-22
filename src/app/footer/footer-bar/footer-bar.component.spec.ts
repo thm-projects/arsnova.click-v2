@@ -19,8 +19,6 @@ import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
-import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../service/websocket/websocket.service';
 import { SharedModule } from '../../shared/shared.module';
 
 import { FooterBarComponent } from './footer-bar.component';
@@ -54,9 +52,6 @@ describe('FooterBarComponent', () => {
         }, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, {
           provide: TrackingService,
           useClass: TrackingMockService,

@@ -2,5 +2,4 @@
   "serverEndpoint": "http://localhost:9876",
   "httpApiEndpoint": "http://localhost:9876/api/v1",
   "httpLibEndpoint": "http://localhost:9876/lib",
-  "wsApiEndpoint": "ws://localhost:9876"
 }

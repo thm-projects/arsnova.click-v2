@@ -39,7 +39,10 @@
       "name": "api-freshness",
       "urls": [
         "/api",
+        "/lib",
         "/backend",
+        "/rabbitmq",
+        "/rabbitmq-mgmt",
         "https://polyfill.io/**"
       ],
       "cacheConfig": {

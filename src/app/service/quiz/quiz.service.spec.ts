@@ -18,8 +18,6 @@ import { SharedService } from '../shared/shared.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
-import { WebsocketMockService } from '../websocket/websocket.mock.service';
-import { WebsocketService } from '../websocket/websocket.service';
 import { QuizService } from './quiz.service';
 
 describe('QuizService', () => {
@@ -43,9 +41,6 @@ describe('QuizService', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
-        }, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, SettingsService, TranslateService, FooterBarService, QuizService,

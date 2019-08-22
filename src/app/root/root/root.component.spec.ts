@@ -28,8 +28,6 @@ import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
-import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../service/websocket/websocket.service';
 import { SharedModule } from '../../shared/shared.module';
 import { RootComponent } from './root.component';
 
@@ -65,9 +63,6 @@ describe('RootComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, SharedService, I18nService, FileUploadService, {
           provide: QuizService,
           useClass: QuizMockService,

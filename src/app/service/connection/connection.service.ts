@@ -1,22 +1,17 @@
 import { isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { RxStompState } from '@stomp/rx-stomp';
+import { ReplaySubject } from 'rxjs';
+import { MessageProtocol } from '../../../lib/enums/Message';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SharedService } from '../shared/shared.service';
-import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable()
 export class ConnectionService {
-  public readonly dataEmitter: EventEmitter<IMessage> = new EventEmitter<IMessage>();
-
-  private _socket: WebSocket;
-
-  get socket(): WebSocket | any {
-    return this._socket;
-  }
+  public readonly dataEmitter: ReplaySubject<IMessage> = new ReplaySubject<IMessage>();
 
   private _serverAvailable: boolean;
 
@@ -72,38 +67,19 @@ export class ConnectionService {
     this._pending = value;
   }
 
-  private _connectedChannel: string;
-  private lastTimeout = 1;
   private _isWebSocketAuthorized = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private websocketService: WebsocketService,
     private sharedService: SharedService,
     private statisticsApiService: StatisticsApiService,
-    private footerBarService: FooterBarService,
+    private footerBarService: FooterBarService, private rxStompService: RxStompService,
   ) {
     this.initWebsocket();
-    this.dataEmitter.subscribe((data: IMessage) => {
-      if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Connected && data.payload.activeQuizzes) {
-        this.parseActiveQuizzes(data);
-      }
-    });
   }
 
   public cleanUp(): void {
     this._isWebSocketAuthorized = false;
-  }
-
-  public sendMessage(message: IMessage): void {
-    if (!this._websocketAvailable) {
-      console.log('ConnectionService: websocket not available, waiting 500ms');
-      setTimeout(() => {
-        this.sendMessage(message);
-      }, 500);
-      return;
-    }
-    this._socket.send(JSON.stringify(message));
   }
 
   public initConnection(overrideCurrentState?: boolean): Promise<any> {
@@ -145,99 +121,44 @@ export class ConnectionService {
     });
   }
 
-  public connectToChannel(name: string): void {
-    if (this._connectedChannel === name) {
-      return;
-    }
-    if (this._connectedChannel) {
-      this.disconnectFromChannel();
-    }
-
-    console.log('ConnectionService: connecting to channel', name);
-    if (!this._socket) {
-      console.error('ConnectionService: cannot connect to channel since no socket was found');
-      return;
-    }
-
-    if (!this._websocketAvailable) {
-      setTimeout(() => {
-        console.log('ConnectionService: websocket not available, waiting 500ms');
-        this.connectToChannel(name);
-      }, 500);
-      return;
-    }
-    this.sendMessage({
-      step: MessageProtocol.Connect,
-      payload: {
-        name,
-      },
-    });
-    this._connectedChannel = name;
-  }
-
-  public disconnectFromChannel(): void {
-    if (!this._connectedChannel) {
-      return;
-    }
-
-    if (!this._socket) {
-      console.error('ConnectionService: cannot disconnect from channel since no socket was found');
-      return;
-    }
-
-    if (!this._websocketAvailable) {
-      setTimeout(() => {
-        console.log('ConnectionService: websocket not available, waiting 500ms');
-        this.disconnectFromChannel();
-      }, 500);
-      return;
-    }
-    this.sendMessage({
-      step: MessageProtocol.Disconnect,
-    });
-    this._connectedChannel = null;
-  }
-
   public initWebsocket(): void {
     if (isPlatformServer(this.platformId)) {
       return;
     }
 
-    this._socket = new WebSocket(DefaultSettings.wsApiEndpoint);
-    this._socket.onopen = () => {
-      this._websocketAvailable = true;
-      this._serverAvailable = true;
-      this._serverStatusEmitter.emit(true);
-      this.toggleFooterElemState(true);
-      if (this._connectedChannel) {
-        const name = this._connectedChannel;
-        this._connectedChannel = null;
-        this.connectToChannel(name);
-      }
-    };
-    this._socket.onmessage = data => {
+    this.rxStompService.watch(encodeURI(`/exchange/global`)).subscribe(message => {
+      console.log('Message in global channel received', message);
       try {
-        const parsedData = JSON.parse(data.data);
-        this.dataEmitter.emit(parsedData);
+        const parsedMessage = JSON.parse(message.body);
+        switch (parsedMessage.step) {
+          case MessageProtocol.SetActive:
+            this.sharedService.activeQuizzes.push(parsedMessage.payload.quizName);
+            break;
+          case MessageProtocol.SetInactive:
+            this.sharedService.activeQuizzes.splice(this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName), 1);
+            break;
+        }
       } catch (ex) {
-        console.error(ex);
+        console.error('Invalid message received', ex);
       }
-    };
-    this._socket.onerror = err => {
-      console.error(err);
-    };
-    this._socket.onclose = () => {
-      this._websocketAvailable = false;
-      this._serverAvailable = false;
-      this._serverStatusEmitter.emit(false);
-      this.toggleFooterElemState(false);
-      const timeout = this.lastTimeout >= 30 ? 30 : Math.round((this.lastTimeout * 2));
-      this.lastTimeout = timeout;
-      console.log(`ConnectionService: Socket connection dropped, waiting ${timeout}s for reconnect`);
-      setTimeout(() => {
-        this.initWebsocket();
-      }, timeout * 1000);
-    };
+    });
+
+    this.rxStompService.connectionState$.subscribe(value => {
+      switch (value) {
+        case RxStompState.OPEN:
+          this._websocketAvailable = true;
+          this._serverAvailable = true;
+          this._serverStatusEmitter.emit(true);
+          this.toggleFooterElemState(true);
+          break;
+        case RxStompState.CLOSED:
+          this._websocketAvailable = false;
+          this._serverAvailable = false;
+          this._serverStatusEmitter.emit(false);
+          this.toggleFooterElemState(false);
+          break;
+      }
+    });
   }
 
   private calculateConnectionSpeedIndicator(): void {
@@ -250,12 +171,6 @@ export class ConnectionService {
     } else {
       this._lowSpeed = false;
       this._mediumSpeed = false;
-    }
-  }
-
-  private parseActiveQuizzes(val): void {
-    if (val.payload && val.payload.activeQuizzes) {
-      this.sharedService.activeQuizzes = [...val.payload.activeQuizzes];
     }
   }
 

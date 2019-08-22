@@ -18,6 +18,7 @@ import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { UserRole } from '../../../lib/enums/UserRole';
 import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
+import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -106,7 +107,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private userService: UserService,
     public connectionService: ConnectionService,
-    public sharedService: SharedService,
+    public sharedService: SharedService, public memberApiService: MemberApiService,
   ) {
 
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
@@ -122,14 +123,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.updateFooterElements(isLoggedIn);
       this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin));
       this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
-    });
-
-    this.connectionService.initConnection().then(() => {
-      if (!this.connectionService.socket) {
-        return;
-      }
-
-      this.connectionService.disconnectFromChannel();
     });
 
     this.quizService.stopEditMode();
@@ -501,6 +494,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private cleanUpSessionStorage(): void {
+    if (this.quizService.quiz && this.attendeeService.ownNick) {
+      this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
+    }
     this.attendeeService.cleanUp();
     this.quizService.cleanUp();
     this.connectionService.cleanUp();

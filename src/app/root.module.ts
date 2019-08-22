@@ -7,7 +7,9 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { Angulartics2Module } from 'angulartics2';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { environment } from '../environments/environment';
@@ -23,6 +25,7 @@ import { LanguageSwitcherComponent } from './root/language-switcher/language-swi
 import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
+import rxStompConfig from './rx-stomp.config';
 import { AttendeeService } from './service/attendee/attendee.service';
 import { ConnectionService } from './service/connection/connection.service';
 import { FileUploadService } from './service/file-upload/file-upload.service';
@@ -41,7 +44,6 @@ import { ThemesService } from './service/themes/themes.service';
 import { TrackingService } from './service/tracking/tracking.service';
 import { UpdateCheckService } from './service/update-check/update-check.service';
 import { UserService } from './service/user/user.service';
-import { WebsocketService } from './service/websocket/websocket.service';
 import { SharedModule } from './shared/shared.module';
 import { ArsnovaClickAngulartics2Piwik } from './shared/tracking/ArsnovaClickAngulartics2Piwik';
 import { ThemesModule } from './themes/themes.module';
@@ -143,6 +145,14 @@ export const appRoutes: Routes = [
      provide: ErrorHandler,
      useClass: GlobalErrorHandler,
      }, */
+    {
+      provide: InjectableRxStompConfig,
+      useValue: rxStompConfig,
+    }, {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig],
+    }, SimpleMQ,
     RoutePreloader,
     IndexedDbService,
     StorageService,
@@ -164,7 +174,6 @@ export const appRoutes: Routes = [
     TrackingService,
     UserService,
     UpdateCheckService,
-    WebsocketService,
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

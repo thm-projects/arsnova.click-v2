@@ -51,16 +51,18 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this._subscriptions.push(this.route.params.subscribe(params => {
+      this.route.params.subscribe(params => {
         this._questionIndex = +params['questionIndex'];
         if (this.quizService.quiz) {
           this._question = this.quizService.quiz.questionList[this._questionIndex];
         }
-      }));
+      });
     }));
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
-  public ngOnDestroy(): void {}
+  public ngOnDestroy(): void {
+    this._subscriptions.forEach(sub => sub.unsubscribe());
+  }
 }

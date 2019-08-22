@@ -1,8 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
@@ -29,7 +30,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./voting.component.scss'],
 }) //
 @AutoUnsubscribe('_subscriptions')
-export class VotingComponent implements OnDestroy {
+export class VotingComponent implements OnInit, OnDestroy {
   public static TYPE = 'VotingComponent';
   public isSendingResponse: boolean;
 
@@ -65,6 +66,7 @@ export class VotingComponent implements OnDestroy {
   private _serverUnavailableModal: NgbModalRef;
   // noinspection JSMismatchedCollectionQueryUpdate
   private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -78,45 +80,14 @@ export class VotingComponent implements OnDestroy {
     private router: Router,
     private quizApiService: QuizApiService,
     private memberApiService: MemberApiService,
-    private ngbModal: NgbModal,
+    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
-
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.voting.title';
 
     this.footerBarService.replaceFooterElements([]);
-
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (!quiz) {
-        return;
-      }
-
-      this._currentQuestion = this.quizService.currentQuestion();
-      this.initData();
-      this.attendeeService.restoreMembers();
-    }));
-
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
-
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
-      if (isConnected) {
-        if (this._serverUnavailableModal) {
-          this._serverUnavailableModal.dismiss();
-        }
-        return;
-      } else if (!isConnected && this._serverUnavailableModal) {
-        return;
-      }
-
-      this.ngbModal.dismissAll();
-      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent, {
-        keyboard: false,
-        backdrop: 'static',
-      });
-      this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -199,22 +170,52 @@ export class VotingComponent implements OnDestroy {
       default:
         this._selectedAnswers = [];
     }
+  }
 
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
+  public ngOnInit(): void {
+
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
+
+      this._currentQuestion = this.quizService.currentQuestion();
+      this.initData();
+      this.attendeeService.restoreMembers();
+
+      this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+        if (Array.isArray(value)) {
+          this._answers = value;
+        } else {
+          this._questionText = value;
+        }
+      }));
+
+      this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText));
+      this.questionTextService.change(this._currentQuestion.questionText);
+    }));
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
     });
 
-    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
-      if (Array.isArray(value)) {
-        this._answers = value;
-      } else {
-        this._questionText = value;
+    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+      if (isConnected) {
+        if (this._serverUnavailableModal) {
+          this._serverUnavailableModal.dismiss();
+        }
+        return;
+      } else if (!isConnected && this._serverUnavailableModal) {
+        return;
       }
-    }));
 
-    this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText));
-    this.questionTextService.change(this._currentQuestion.questionText);
+      this.ngbModal.dismissAll();
+      this._serverUnavailableModal = this.ngbModal.open(ServerUnavailableModalComponent, {
+        keyboard: false,
+        backdrop: 'static',
+      });
+      this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
+    }));
   }
 
   public ngOnDestroy(): void {
@@ -225,49 +226,42 @@ export class VotingComponent implements OnDestroy {
     });
 
     this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 
   private handleMessages(): void {
-    this._subscriptions.push(this.connectionService.dataEmitter.subscribe((data: IMessage) => {
-      switch (data.step) {
-        case MessageProtocol.UpdatedResponse:
-          this.attendeeService.modifyResponse(data.payload);
-          break;
-        case MessageProtocol.UpdatedSettings:
-          this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
-          break;
-        case MessageProtocol.Countdown:
-          if (!this.countdown) {
-            this.countdown = new Countdown(data.payload.value);
-            this.countdown.onChange.subscribe((value) => {
-              if (!value || value < 1) {
-                this.sendResponses('results');
-              }
-            });
-          }
-          break;
-        case MessageProtocol.Reset:
-          this.attendeeService.clearResponses();
-          this.quizService.quiz.currentQuestionIndex = -1;
-          this.router.navigate(['/quiz', 'flow', 'lobby']);
-          break;
-        case MessageProtocol.Closed:
-          this.router.navigate(['/']);
-          break;
-        case MessageProtocol.Removed:
-          if (isPlatformBrowser(this.platformId)) {
-            const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
-            if (existingNickname === data.payload.name) {
-              this.router.navigate(['/']);
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
+        this.attendeeService.modifyResponse(payload);
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
+        this.quizService.quiz.sessionConfig = payload.sessionConfig;
+      }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        if (!this.countdown) {
+          this.countdown = new Countdown(payload.value);
+          this.countdown.onChange.subscribe((value) => {
+            if (!value || value < 1) {
+              this.sendResponses('results');
             }
+          });
+        }
+      }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        this.attendeeService.clearResponses();
+        this.quizService.quiz.currentQuestionIndex = -1;
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.router.navigate(['/']);
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        if (isPlatformBrowser(this.platformId)) {
+          const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
+          if (existingNickname === payload.name) {
+            this.router.navigate(['/']);
           }
-          break;
-        case MessageProtocol.Stop:
-          this._selectedAnswers = [];
-          this.router.navigate(['/quiz', 'flow', 'results']);
-          break;
-      }
-    }));
+        }
+      }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
+        this._selectedAnswers = [];
+        this.router.navigate(['/quiz', 'flow', 'results']);
+      }),
+    ]);
   }
 
   private toggleSelectedAnswers(): boolean {

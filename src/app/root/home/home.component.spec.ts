@@ -35,8 +35,6 @@ import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
-import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../service/websocket/websocket.service';
 import { SharedModule } from '../../shared/shared.module';
 
 import { HomeComponent } from './home.component';
@@ -76,9 +74,6 @@ describe('HomeComponent', () => {
         }, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, SharedService, HeaderLabelService, {
           provide: QuizService,
           useClass: QuizMockService,

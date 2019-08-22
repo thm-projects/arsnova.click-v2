@@ -23,8 +23,6 @@ import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
-import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../shared/shared.module';
 
 import { NicknameSelectComponent } from './nickname-select.component';
@@ -64,9 +62,6 @@ describe('NicknameSelectComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, SharedService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,

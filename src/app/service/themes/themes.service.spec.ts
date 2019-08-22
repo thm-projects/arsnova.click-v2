@@ -20,8 +20,6 @@ import { SharedService } from '../shared/shared.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
-import { WebsocketMockService } from '../websocket/websocket.mock.service';
-import { WebsocketService } from '../websocket/websocket.service';
 
 import { ThemesService } from './themes.service';
 
@@ -67,9 +65,6 @@ describe('ThemesService', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, SharedService, ThemesService,
       ],
     });

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
@@ -9,7 +10,6 @@ import { NumberType, StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizState } from '../../../../lib/enums/QuizState';
-import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
@@ -41,6 +41,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public isLoadingQuestionData: boolean;
 
   private _hideProgressbarStyle = true;
+  private readonly _messageSubscriptions: Array<string> = [];
 
   get hideProgressbarStyle(): boolean {
     return this._hideProgressbarStyle;
@@ -78,7 +79,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private quizApiService: QuizApiService,
     private ngbModal: NgbModal,
-    private cd: ChangeDetectorRef,
+    private cd: ChangeDetectorRef, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
@@ -232,6 +233,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     this.isLoadingQuestionData = true;
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.handleMessages();
       this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
     });
 
@@ -258,6 +260,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     sessionStorage.setItem(StorageKey.CurrentQuestionIndex, String(this._selectedQuestionIndex));
     this.footerBarService.footerElemBack.restoreClickCallback();
     this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 
   public stopQuiz(): void {
@@ -306,11 +309,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   private initData(): void {
-
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
-      this.handleMessages();
-    });
 
     this.quizApiService.getQuizStatus(this.quizService.quiz.name).toPromise().then(currentStateData => {
       if (currentStateData.status !== StatusProtocol.Success) {
@@ -411,112 +409,98 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages(): void {
-    this._subscriptions.push(this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
-      switch (data.step) {
-        case MessageProtocol.AllPlayers:
-          data.payload.members.forEach((elem: IMemberSerialized) => {
-            this.attendeeService.addMember(elem);
-          });
-          break;
-        case MessageProtocol.Added:
-          this.attendeeService.addMember(data.payload.member);
-          break;
-        case MessageProtocol.Countdown:
-          this.countdown = data.payload.value;
-          this.hideProgressbarStyle = this.countdown > 0;
-          break;
-        case MessageProtocol.Removed:
-          this.attendeeService.removeMember(data.payload.name);
-          break;
-        case MessageProtocol.UpdatedResponse:
-          this.attendeeService.modifyResponse(data.payload);
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.AllPlayers, payload => {
+        payload.members.forEach((elem: IMemberSerialized) => {
+          this.attendeeService.addMember(elem);
+        });
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+        this.attendeeService.addMember(payload.member);
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        this.countdown = payload.value;
+        this.hideProgressbarStyle = this.countdown > 0;
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        this.attendeeService.removeMember(payload.name);
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
+        this.attendeeService.modifyResponse(payload);
 
-          if (this.attendeeService.attendees.every(nick => {
-            const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
-            return typeof val === 'number' ? val > -1 : val.length > 0;
-          })) {
-            this.countdown = 0;
-            this.hideProgressbarStyle = false;
-            this.showStopQuizButton = false;
-          }
-          break;
-        case MessageProtocol.NextQuestion:
-          this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
-          this._selectedQuestionIndex = data.payload.nextQuestionIndex;
-          break;
-        case MessageProtocol.Start:
-          this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
-          break;
-        case MessageProtocol.Stop:
+        if (this.attendeeService.attendees.every(nick => {
+          const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+          return typeof val === 'number' ? val > -1 : val.length > 0;
+        })) {
           this.countdown = 0;
           this.hideProgressbarStyle = false;
-          break;
-        case MessageProtocol.Reset:
-          this.attendeeService.clearResponses();
-          this.quizService.quiz.currentQuestionIndex = -1;
-          this.router.navigate(['/quiz', 'flow', 'lobby']);
-          break;
-        case MessageProtocol.Closed:
-          this.router.navigate(['/']);
-          break;
-      }
+          this.showStopQuizButton = false;
+        }
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
+        this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+        this._selectedQuestionIndex = payload.nextQuestionIndex;
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
+        this.countdown = 0;
+        this.hideProgressbarStyle = false;
+        this.cd.markForCheck();
+      }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        this.attendeeService.clearResponses();
+        this.quizService.quiz.currentQuestionIndex = -1;
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.router.navigate(['/']);
+      }),
+    ]);
 
-      this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
-
-      this.cd.markForCheck();
-    }));
+    this.quizService.isOwner ? this.handleMessagesForOwner() : this.handleMessagesForAttendee();
   }
 
-  private handleMessagesForOwner(data: IMessage): void {
-    switch (data.step) {
-      case MessageProtocol.Start:
+  private handleMessagesForOwner(): void {
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.showStartQuizButton = false;
         this.showStopQuizButton = this.quizService.currentQuestion().timer === 0;
-        break;
-      case MessageProtocol.Stop:
+      }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
         this.showStopCountdownButton = false;
         this.showStopQuizButton = false;
         this.showStartQuizButton = this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
-        break;
-      case MessageProtocol.Countdown:
-        this.showStopCountdownButton = data.payload.value > 0;
-        this.showStartQuizButton = !data.payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
-        break;
-      case MessageProtocol.UpdatedResponse:
+      }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        this.showStopCountdownButton = payload.value > 0;
+        this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex
                                    + 1;
-        break;
-      case MessageProtocol.ReadingConfirmationRequested:
+      }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         this.showStartQuizButton = true;
         this.showStopQuizButton = false;
-        break;
-      default:
-        return;
-    }
+      }),
+    ]);
   }
 
-  private handleMessagesForAttendee(data: IMessage): void {
-    switch (data.step) {
-      case MessageProtocol.Start:
+  private handleMessagesForAttendee(): void {
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.router.navigate(['/quiz', 'flow', 'voting']);
-        break;
-      case MessageProtocol.UpdatedSettings:
-        this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
-        break;
-      case MessageProtocol.ReadingConfirmationRequested:
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
+        this.quizService.quiz.sessionConfig = payload.sessionConfig;
+      }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         } else {
           this.router.navigate(['/quiz', 'flow', 'voting']);
         }
-        break;
-      case MessageProtocol.Removed:
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
         const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
-        if (existingNickname === data.payload.name) {
+        if (existingNickname === payload.name) {
           this.router.navigate(['/']);
         }
-        break;
-    }
+      }),
+    ]);
   }
 
   private generateAnswers(question: AbstractQuestionEntity): void {

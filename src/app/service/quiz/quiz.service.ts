@@ -1,6 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { ReplaySubject } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
@@ -14,7 +15,7 @@ import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class QuizService {
-  public readonly quizUpdateEmitter: EventEmitter<QuizEntity> = new EventEmitter(true);
+  public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
   private _isOwner = false;
 
@@ -41,7 +42,7 @@ export class QuizService {
       }
     }
     this._quiz = value;
-    this.quizUpdateEmitter.emit(value);
+    this.quizUpdateEmitter.next(value);
   }
 
   private _readingConfirmationRequested = false;
@@ -199,7 +200,6 @@ export class QuizService {
     return new Promise<boolean>((resolve, reject) => {
       if (this.quiz) {
         console.log('QuizService: aborting loadDataToPlay since the quiz is already present', quizName);
-        this.quizUpdateEmitter.emit(this.quiz);
         resolve();
         return;
       }

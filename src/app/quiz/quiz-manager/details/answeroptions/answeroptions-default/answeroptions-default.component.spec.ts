@@ -21,8 +21,6 @@ import { SettingsService } from '../../../../../service/settings/settings.servic
 import { SharedService } from '../../../../../service/shared/shared.service';
 import { TrackingMockService } from '../../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../../service/tracking/tracking.service';
-import { WebsocketMockService } from '../../../../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../../../shared/shared.module';
 
 import { AnsweroptionsDefaultComponent } from './answeroptions-default.component';
@@ -68,9 +66,6 @@ const providers: Array<any> = [
   }, FooterBarService, SettingsService, {
     provide: ConnectionService,
     useClass: ConnectionMockService,
-  }, {
-    provide: WebsocketService,
-    useClass: WebsocketMockService,
   }, SharedService, HeaderLabelService, QuestionTextService, {
     provide: TrackingService,
     useClass: TrackingMockService,

@@ -16,8 +16,6 @@ import { SharedService } from '../shared/shared.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
-import { WebsocketMockService } from '../websocket/websocket.mock.service';
-import { WebsocketService } from '../websocket/websocket.service';
 
 import { AttendeeService } from './attendee.service';
 
@@ -42,9 +40,6 @@ describe('AttendeeService', () => {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
-        }, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, SettingsService, TranslateService, {

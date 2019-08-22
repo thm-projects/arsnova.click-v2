@@ -29,8 +29,6 @@ import { ThemesMockService } from '../../../service/themes/themes.mock.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
-import { WebsocketMockService } from '../../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../shared/shared.module';
 
 import { QuizLobbyComponent } from './quiz-lobby.component';
@@ -64,9 +62,6 @@ describe('QuizLobbyComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, SharedService, {
           provide: QuizService,
           useClass: QuizMockService,

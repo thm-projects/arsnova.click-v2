@@ -14,8 +14,6 @@ import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../../service/settings/settings.service';
 import { SharedService } from '../../../../../service/shared/shared.service';
-import { WebsocketMockService } from '../../../../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../../../../service/websocket/websocket.service';
 
 import { AnsweroptionsRangedComponent } from './answeroptions-ranged.component';
 
@@ -55,9 +53,6 @@ describe('AnsweroptionsRangedComponent', () => {
         }, HeaderLabelService, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, {
           provide: ActivatedRoute,
           useClass: MockRouter,

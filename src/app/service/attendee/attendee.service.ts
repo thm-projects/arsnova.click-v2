@@ -107,9 +107,7 @@ export class AttendeeService {
         this._attendees = data.payload.members.map((attendee) => {
           return new Attendee(attendee);
         });
-        if (this._attendees.length) {
-          this.footerBarService.footerElemStartQuiz.isActive = true;
-        }
+        this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
         resolve();
       });
     });

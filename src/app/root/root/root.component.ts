@@ -2,11 +2,18 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
+import { Subscription } from 'rxjs';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
+import { StatusProtocol } from '../../../lib/enums/Message';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 import { IWindow } from '../../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
+import { ConnectionService } from '../../service/connection/connection.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { UpdateCheckService } from '../../service/update-check/update-check.service';
@@ -20,6 +27,7 @@ import { UserService } from '../../service/user/user.service';
 export class RootComponent implements OnInit, AfterViewInit {
   public static TYPE = 'RootComponent';
   public isInQuizManager = false;
+  private _stompSubscription: Subscription;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -31,6 +39,10 @@ export class RootComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private themeService: ThemesService,
     private updateCheckService: UpdateCheckService,
+    private rxStompService: RxStompService,
+    private quizService: QuizService,
+    private connectionService: ConnectionService,
+    private messageQueue: SimpleMQ,
   ) {
     this.themeService.themeChanged.subscribe(themeName => {
       this.loadExternalStyles(`/${themeName}.css`).then(() => {
@@ -65,6 +77,41 @@ export class RootComponent implements OnInit, AfterViewInit {
       } else if (event instanceof RouteConfigLoadEnd || event instanceof NavigationEnd) {
         this.sharedService.isLoadingEmitter.next(false);
       }
+    });
+
+    this.quizService.quizUpdateEmitter.subscribe((quiz: QuizEntity) => {
+      if (this._stompSubscription) {
+        this._stompSubscription.unsubscribe();
+      }
+
+      if (!quiz) {
+        return;
+      }
+
+      this._stompSubscription = this.rxStompService.watch(`/exchange/quiz_${encodeURI(quiz.name)}`).subscribe(message => {
+        console.log('Message in quiz channel received', message);
+        try {
+          const parsedMessage = JSON.parse(message.body);
+          if (parsedMessage.status !== StatusProtocol.Success || !parsedMessage.step) {
+            this.messageQueue.publish('error', parsedMessage);
+          } else {
+            if (typeof parsedMessage.payload === 'undefined') {
+              parsedMessage.payload = {};
+            }
+            this.messageQueue.publish(parsedMessage.step, parsedMessage.payload);
+          }
+        } catch (e) {
+          console.error('Invalid message in quiz channel', e.message);
+        }
+      });
+    });
+  }
+
+  public onSendMessage(): void {
+    const message = `Message generated at ${new Date}`;
+    this.rxStompService.publish({
+      destination: '/topic/demo',
+      body: message,
     });
   }
 

@@ -1,6 +1,7 @@
-import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
@@ -21,7 +22,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./confidence-rate.component.scss'],
 }) //
 @AutoUnsubscribe('_subscriptions')
-export class ConfidenceRateComponent implements OnDestroy {
+export class ConfidenceRateComponent implements OnInit, OnDestroy {
   public static TYPE = 'ConfidenceRateComponent';
 
   private _confidenceValue = 100;
@@ -32,7 +33,8 @@ export class ConfidenceRateComponent implements OnDestroy {
 
   private _serverUnavailableModal: NgbModalRef;
   // noinspection JSMismatchedCollectionQueryUpdate
-  private _subscriptions: Array<Subscription> = [];
+  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
     public quizService: QuizService,
@@ -43,21 +45,22 @@ export class ConfidenceRateComponent implements OnDestroy {
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
     private memberApiService: MemberApiService,
-    private ngbModal: NgbModal,
+    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
-
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
+  }
 
+  public ngOnInit(): void {
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
         return;
       }
-
-      this.initData();
     }));
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.handleMessages();
+    });
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -78,15 +81,9 @@ export class ConfidenceRateComponent implements OnDestroy {
     }));
   }
 
-  public initData(): void {
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
-      this.handleMessages();
-    });
-  }
-
   public ngOnDestroy(): void {
     this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 
   public getConfidenceLevelTranslation(): string {
@@ -114,48 +111,37 @@ export class ConfidenceRateComponent implements OnDestroy {
   }
 
   private handleMessages(): void {
-    this._subscriptions.push(this.connectionService.dataEmitter.subscribe((data: IMessage) => {
-      switch (data.step) {
-        case MessageProtocol.NextQuestion:
-          this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
-          break;
-        case MessageProtocol.Start:
-          this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
+        this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+      }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
+        this.router.navigate(['/quiz', 'flow', 'voting']);
+      }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
+        this.router.navigate(['/quiz', 'flow', 'results']);
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
+        console.log('ConfidenceRateComponent: modify response data for nickname', payload.nickname);
+        this.attendeeService.modifyResponse(payload);
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
+        this.quizService.quiz.sessionConfig = payload.sessionConfig;
+      }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        if (environment.readingConfirmationEnabled) {
+          this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
+        } else {
           this.router.navigate(['/quiz', 'flow', 'voting']);
-          break;
-        case MessageProtocol.Stop:
-          this.router.navigate(['/quiz', 'flow', 'results']);
-          break;
-        case MessageProtocol.UpdatedResponse:
-          console.log('ConfidenceRateComponent: modify response data for nickname', data.payload.nickname);
-          this.attendeeService.modifyResponse(data.payload);
-          break;
-        case MessageProtocol.UpdatedSettings:
-          this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
-          break;
-        case MessageProtocol.ReadingConfirmationRequested:
-          if (environment.readingConfirmationEnabled) {
-            this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
-          } else {
-            this.router.navigate(['/quiz', 'flow', 'voting']);
-          }
-          break;
-        case MessageProtocol.Reset:
-          this.attendeeService.clearResponses();
-          this.quizService.quiz.currentQuestionIndex = -1;
-          this.router.navigate(['/quiz', 'flow', 'lobby']);
-          break;
-        case MessageProtocol.Added:
-          this.attendeeService.addMember(data.payload.member);
-          break;
-        case MessageProtocol.Removed:
-          this.attendeeService.removeMember(data.payload.name);
-          break;
-        case MessageProtocol.Closed:
-          this.router.navigate(['/']);
-          break;
-      }
-    }));
+        }
+      }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        this.attendeeService.clearResponses();
+        this.quizService.quiz.currentQuestionIndex = -1;
+        this.router.navigate(['/quiz', 'flow', 'lobby']);
+      }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+        this.attendeeService.addMember(payload.member);
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        this.attendeeService.removeMember(payload.name);
+      }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.router.navigate(['/']);
+      }),
+    ]);
   }
 
 }

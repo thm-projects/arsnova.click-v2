@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { QRCodeModule } from 'angularx-qrcode';
 import { MarkdownModule } from '../../markdown/markdown.module';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -65,7 +65,7 @@ export const quizFlowRoutes: Routes = [
 
 @NgModule({
   imports: [
-    MarkdownModule, SharedModule, ThemesModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, NgxQRCodeModule, QuizFlowSharedModule,
+    MarkdownModule, SharedModule, ThemesModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, QRCodeModule, QuizFlowSharedModule,
   ],
   bootstrap: [EditModeConfirmComponent, QrCodeContentComponent],
   declarations: [

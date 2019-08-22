@@ -8,6 +8,11 @@ import { IEnvironment } from '../lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: false,
+  ssrEndpoint: 'http://192.168.2.106:4000',
+  serverEndpoint: 'http://192.168.2.106:3010',
+  httpApiEndpoint: 'http://192.168.2.106:3010/api/v1',
+  httpLibEndpoint: 'http://192.168.2.106:3010/lib',
+  stompEndpoint: 'ws://127.0.0.1:15674/ws',
   leaderboardAmount: 5,
   readingConfirmationEnabled: false,
   confidenceSliderEnabled: false,

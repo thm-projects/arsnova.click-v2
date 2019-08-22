@@ -1,7 +1,0 @@
-{
-  "ssrEndpoint": "http://192.168.2.101:4000",
-  "serverEndpoint": "http://192.168.2.101:3010",
-  "httpApiEndpoint": "http://192.168.2.101:3010/api/v1",
-  "httpLibEndpoint": "http://192.168.2.101:3010/lib",
-  "wsApiEndpoint": "ws://192.168.2.101:3010"
-}

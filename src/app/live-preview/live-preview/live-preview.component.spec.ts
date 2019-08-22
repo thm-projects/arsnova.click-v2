@@ -20,8 +20,6 @@ import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
-import { WebsocketMockService } from '../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../service/websocket/websocket.service';
 
 import { LivePreviewComponent } from './live-preview.component';
 
@@ -51,9 +49,6 @@ describe('LivePreviewComponent', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, FooterBarService, SharedService, SettingsService, HeaderLabelService, {
           provide: TrackingService,
           useClass: TrackingMockService,

@@ -9,10 +9,10 @@
 </div>
 <div class="modal-body pt-0">
   <div class="d-flex flex-column align-items-center qrCodeContent">
-    <ngx-qrcode [qrc-value]="qrCodeContent"
-                qrc-element-type="img"
-                qrc-errorCorrectionLevel="L">
-    </ngx-qrcode>
+    <qrcode [level]="'M'"
+            [qrdata]="qrCodeContent"
+            [size]="512"
+            class="px-3 pb-4"></qrcode>
     <h6 class="mb-0 text-break text-center">{{qrCodeContent}}</h6>
   </div>
 </div>

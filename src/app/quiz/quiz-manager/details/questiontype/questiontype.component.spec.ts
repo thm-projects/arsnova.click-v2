@@ -18,8 +18,6 @@ import { SharedService } from '../../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
-import { WebsocketMockService } from '../../../../service/websocket/websocket.mock.service';
-import { WebsocketService } from '../../../../service/websocket/websocket.service';
 import { SharedModule } from '../../../../shared/shared.module';
 
 import { QuestiontypeComponent } from './questiontype.component';
@@ -63,9 +61,6 @@ describe('QuestiontypeComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: WebsocketService,
-          useClass: WebsocketMockService,
         }, {
           provide: ActivatedRoute,
           useClass: MockRouter,

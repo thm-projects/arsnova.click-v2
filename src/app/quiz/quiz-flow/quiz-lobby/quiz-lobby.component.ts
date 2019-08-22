@@ -3,6 +3,7 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, Tem
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
@@ -44,6 +45,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     return this._nickToRemove;
   }
 
+  private readonly _messageSubscriptions: Array<string> = [];
   private _serverUnavailableModal: NgbModalRef;
   private _reconnectTimeout: any;
   private _kickMemberModalRef: NgbActiveModal;
@@ -66,7 +68,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private ngbModal: NgbModal,
     private sharedService: SharedService,
-    private userService: UserService,
+    private userService: UserService, private messageQueue: SimpleMQ,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
@@ -83,16 +85,16 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       if (this.quizService.isOwner) {
         console.log('QuizLobbyComponent: quiz for owner initialized', this.quizService.quiz);
         this.handleNewQuiz(this.quizService.quiz);
-        this.attendeeService.restoreMembers().then(() => {
-          this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
-        });
+        this.attendeeService.restoreMembers();
       } else {
         this.handleNewAttendee();
         this.attendeeService.restoreMembers();
       }
     }));
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.handleMessages();
+    });
 
     this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
       if (isConnected) {
@@ -155,6 +157,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
     this.footerBarService.footerElemBack.restoreClickCallback();
     clearTimeout(this._reconnectTimeout);
@@ -167,12 +170,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     }
 
     this.headerLabelService.headerLabel = this.quizService.quiz.name;
-
-    this.connectionService.initConnection().then(() => {
-      console.log('QuizLobbyComponent: connection initialized');
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
-      this.handleMessages();
-    });
 
     this.trackingService.trackConversionEvent({ action: QuizLobbyComponent.TYPE });
     this.addFooterElementsAsOwner();
@@ -234,6 +231,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         resolve => resolve());
       promise.then(() => {
         this._subscriptions.forEach(sub => sub.unsubscribe());
+        this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
         this.quizService.close();
         this.attendeeService.cleanUp();
         this.connectionService.cleanUp();
@@ -243,87 +241,65 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages(): void {
-    this._subscriptions.push(this.connectionService.dataEmitter.subscribe(async (data: IMessage) => {
-      switch (data.step) {
-        case MessageProtocol.Inactive:
-          this._reconnectTimeout = setTimeout(this.handleMessages.bind(this), 500);
-          break;
-        case MessageProtocol.AllPlayers:
-          data.payload.members.forEach((elem: IMemberSerialized) => {
-            this.attendeeService.addMember(elem);
-          });
-          break;
-        case MessageProtocol.Added:
-          this.attendeeService.addMember(data.payload.member);
-          break;
-        case MessageProtocol.Removed:
-          this.attendeeService.removeMember(data.payload.name);
-          break;
-        case MessageProtocol.NextQuestion:
-          this.quizService.quiz.currentQuestionIndex = data.payload.nextQuestionIndex;
-          break;
-        case MessageProtocol.Start:
-          this.quizService.quiz.currentStartTimestamp = data.payload.currentStartTimestamp;
-          break;
-        case MessageProtocol.Closed:
-          this.router.navigate(['/']);
-          break;
-      }
-      this.quizService.isOwner ? this.handleMessagesForOwner(data) : this.handleMessagesForAttendee(data);
-    }));
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.AllPlayers, payload => {
+        payload.members.forEach((elem: IMemberSerialized) => {
+          this.attendeeService.addMember(elem);
+        });
+      }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+        this.attendeeService.addMember(payload.member);
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        this.attendeeService.removeMember(payload.name);
+      }), this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
+        this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+      }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
+      }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.router.navigate(['/']);
+      }),
+    ]);
+    this.quizService.isOwner ? this.handleMessagesForOwner() : this.handleMessagesForAttendee();
   }
 
-  private handleMessagesForOwner(data: IMessage): void {
-    switch (data.step) {
-      case MessageProtocol.AllPlayers:
+  private handleMessagesForOwner(): void {
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.AllPlayers, payload => {
         this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
-        break;
-      case MessageProtocol.Added:
+      }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
         this.footerBarService.footerElemStartQuiz.isActive = true;
-        break;
-      case MessageProtocol.Removed:
-        if (!this.attendeeService.attendees.length) {
-          this.footerBarService.footerElemStartQuiz.isActive = false;
-        }
-        break;
-    }
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
+      }),
+    ]);
   }
 
-  private handleMessagesForAttendee(data: IMessage): void {
-    switch (data.step) {
-      case MessageProtocol.Start:
+  private handleMessagesForAttendee(): void {
+    this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.router.navigate(['/quiz', 'flow', 'voting']);
-        break;
-      case MessageProtocol.UpdatedSettings:
-        this.quizService.quiz.sessionConfig = data.payload.sessionConfig;
-        break;
-      case MessageProtocol.ReadingConfirmationRequested:
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
+        this.quizService.quiz.sessionConfig = payload.sessionConfig;
+      }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         } else {
           this.router.navigate(['/quiz', 'flow', 'voting']);
         }
-        break;
-      case MessageProtocol.Removed:
+      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
         if (isPlatformBrowser(this.platformId)) {
           const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
-          if (existingNickname === data.payload.name) {
+          if (existingNickname === payload.name) {
             this.router.navigate(['/']);
           }
         }
-        break;
-    }
+      }),
+    ]);
   }
 
   private handleNewAttendee(): void {
     console.log('QuizLobbyComponent: quiz status for attendee initialized', this.quizService.quiz);
 
     this.headerLabelService.headerLabel = this.quizService.quiz.name;
-
-    this.connectionService.initConnection().then(() => {
-      this.connectionService.connectToChannel(this.quizService.quiz.name);
-      this.handleMessages();
-    });
 
     this.addFooterElementsAsAttendee();
   }

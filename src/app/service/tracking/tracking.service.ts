@@ -31,15 +31,19 @@ export class TrackingService {
   }
 
   public trackEvent({ category, action, label, value, customDimensions = {} }: ITrackEvent): void {
-    this.angulartics2Piwik.setUserProperties(customDimensions);
-    this.angulartics2.eventTrack.next({
-      action,
-      properties: {
-        category: TrackingCategoryType[category].toLowerCase(),
-        label,
-        value,
-      },
-    });
+    try {
+      this.angulartics2Piwik.setUserProperties(customDimensions);
+      this.angulartics2.eventTrack.next({
+        action,
+        properties: {
+          category: TrackingCategoryType[category].toLowerCase(),
+          label,
+          value,
+        },
+      });
+    } catch (ex) {
+      console.error(ex.message);
+    }
   }
 
   public trackConversionEvent({ action, label = '' }: ITrackConversionEvent): void {

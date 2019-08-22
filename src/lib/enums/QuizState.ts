@@ -1,6 +1,6 @@
 export enum QuizState {
-  Inactive, //
-  Active, //
-  Running, //
-  Finished, //
+  Inactive = 'Inactive', //
+  Active   = 'Active', //
+  Running  = 'Running', //
+  Finished = 'Finished', //
 }

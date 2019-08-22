@@ -1,14 +1,11 @@
-declare var require: any;
-
-const environmentData = require(`../assets/serverEndpoint.json`);
+import { environment } from '../environments/environment';
 
 export const DefaultSettings = {
   siteId: 'arsnova.click-v2',
-  ssrEndpoint: environmentData.ssrEndpoint,
-  httpApiEndpoint: environmentData.httpApiEndpoint,
-  httpLibEndpoint: environmentData.httpLibEndpoint,
-  serverEndpoint: environmentData.serverEndpoint,
-  wsApiEndpoint: environmentData.wsApiEndpoint,
+  ssrEndpoint: environment.ssrEndpoint,
+  httpApiEndpoint: environment.httpApiEndpoint,
+  httpLibEndpoint: environment.httpLibEndpoint,
+  serverEndpoint: environment.serverEndpoint,
   defaultQuizSettings: {
     answers: {
       answerText: '',
