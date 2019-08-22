@@ -28,6 +28,6 @@ export const getQuestionForType = (type: QuestionType, data = {}): AbstractQuest
     case QuestionType.SurveyQuestion:
       return new SurveyQuestionEntity(data);
     default:
-      throw new Error(`Cannot built question with type: ${type}`);
+      throw new Error(`Cannot build question with type: ${type}`);
   }
 };

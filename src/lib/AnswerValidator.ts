@@ -10,6 +10,6 @@ export const getAnswerForType = (type: AnswerType, data?: object): AbstractAnswe
     case AnswerType.FreeTextAnswerOption:
       return new FreeTextAnswerEntity(data);
     default:
-      throw new Error(`Cannot built answer with type: ${type}`);
+      throw new Error(`Cannot build answer with type: ${type}`);
   }
 };
