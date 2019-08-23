@@ -9,7 +9,7 @@ import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AttendeeService {
   private _attendees: Array<MemberEntity> = [];
 
@@ -85,15 +85,15 @@ export class AttendeeService {
     return name === this._ownNick;
   }
 
-  public modifyResponse(payload: { nickname: string, update: { [key: string]: any } }): void {
+  public modifyResponse(payload: { nickname: string, questionIndex: number, update: { [key: string]: any } }): void {
     const member = this.getMember(payload.nickname);
     if (!member) {
-      console.error('Cannot add member response. Member not found', payload.nickname);
+      console.error('AttendeeService: Cannot add member response. Member not found', payload.nickname);
       return;
     }
 
     Object.keys(payload.update).forEach(updateKey => {
-      member.responses[this.quizService.quiz.currentQuestionIndex][updateKey] = payload.update[updateKey];
+      member.responses[payload.questionIndex][updateKey] = payload.update[updateKey];
     });
   }
 
@@ -115,6 +115,13 @@ export class AttendeeService {
 
   private loadData(): void {
     this._ownNick = sessionStorage.getItem(StorageKey.CurrentNickName);
+    this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      if (!quiz) {
+        return;
+      }
+
+      this.restoreMembers();
+    });
   }
 
   private getMember(nickname: string): MemberEntity {

@@ -78,7 +78,6 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.attendeeService.restoreMembers();
       this.questionIndex = this.quizService.quiz.currentQuestionIndex;
       this.questionTextService.change(this.quizService.currentQuestion().questionText);
     }));
@@ -105,6 +104,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
   private handleMessages(): void {
     this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
+        this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+        sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+      }),
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {

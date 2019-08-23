@@ -24,5 +24,8 @@ export class HeaderLabelService {
   }
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService) {
+    this.translateService.onLangChange.subscribe(() => {
+      this.headerLabel = this._headerLabel;
+    });
   }
 }

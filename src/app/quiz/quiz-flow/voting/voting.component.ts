@@ -147,10 +147,6 @@ export class VotingComponent implements OnInit, OnDestroy {
   public sendResponses(route?: string): void {
     this.isSendingResponse = true;
 
-    if (this.countdown) {
-      this.countdown.onChange.unsubscribe();
-      this.countdown.stop();
-    }
     this.router.navigate([
       '/quiz',
       'flow',
@@ -181,7 +177,6 @@ export class VotingComponent implements OnInit, OnDestroy {
 
       this._currentQuestion = this.quizService.currentQuestion();
       this.initData();
-      this.attendeeService.restoreMembers();
 
       this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
         if (Array.isArray(value)) {
@@ -224,6 +219,11 @@ export class VotingComponent implements OnInit, OnDestroy {
         console.log('VotingComponent: PutResponse failed', data);
       }
     });
+
+    if (this.countdown) {
+      this.countdown.onChange.unsubscribe();
+      this.countdown.stop();
+    }
 
     this._subscriptions.forEach(sub => sub.unsubscribe());
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));

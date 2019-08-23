@@ -180,8 +180,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
   public showResponseProgress(): boolean {
     this.cd.markForCheck();
+    const currentQuestion = this.quizService.currentQuestion();
     return (this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress) || //
-           (this.quizService.currentQuestion().timer && this.countdown === 0);
+           (currentQuestion && currentQuestion.timer && this.countdown === 0);
   }
 
   public getReadingConfirmationData(questionIndex: number): { base: number, absolute: number, percent: string } {
@@ -210,12 +211,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(async quiz => {
       if (!quiz) {
         return;
       }
-      this.hideProgressbarStyle = quiz.currentStartTimestamp > -1;
-
       const storedSelectedQuestionIndex = parseInt(sessionStorage.getItem(StorageKey.CurrentQuestionIndex), 10);
       if (!isNaN(storedSelectedQuestionIndex)) {
         this.modifyVisibleQuestion(storedSelectedQuestionIndex);
@@ -223,11 +222,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       } else {
         this.modifyVisibleQuestion(this.quizService.quiz.currentQuestionIndex);
       }
-      this.attendeeService.restoreMembers().then(() => {
-        this.initData();
-      });
-      this.addFooterElements();
 
+      await this.initData();
+
+      this.addFooterElements();
       this.cd.markForCheck();
     }));
 
@@ -308,32 +306,34 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     this.isStarting = false;
   }
 
-  private initData(): void {
+  private initData(): Promise<void> {
 
-    this.quizApiService.getQuizStatus(this.quizService.quiz.name).toPromise().then(currentStateData => {
+    return this.quizApiService.getQuizStatus(this.quizService.quiz.name).toPromise().then(currentStateData => {
       if (currentStateData.status !== StatusProtocol.Success) {
         this.router.navigate(['/']);
+        return;
       }
 
       if (currentStateData.payload.state === QuizState.Active) {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
+        return;
       }
 
       const question = this.quizService.currentQuestion();
-
-      this.hideProgressbarStyle = currentStateData.payload.startTimestamp > -1;
 
       if (!this.countdown) {
         this.countdown = 0;
         if (question.timer === 0 && !currentStateData.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
           nick => nick.responses[this.quizService.quiz.currentQuestionIndex].responseTime === -1)) {
           this.showStartQuizButton = false;
+          this.hideProgressbarStyle = false;
           this.showStopQuizButton = this.quizService.isOwner;
         } else {
           this.showStartQuizButton = this.quizService.isOwner && //
                                      this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+          this.hideProgressbarStyle = false;
         }
 
       } else {
@@ -343,16 +343,19 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         })) {
           console.log('QuizResultsComponent: Stopping countdown since all attendees have answered the current question');
           this.countdown = 0;
+          this.hideProgressbarStyle = false;
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
                                      > this.quizService.quiz.currentQuestionIndex + 1;
 
         } else if (currentStateData.payload.readingConfirmationRequested) {
           console.log('QuizResultsComponent: Stopping countdown since reading confirmation is requested');
           this.countdown = 0;
+          this.hideProgressbarStyle = false;
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
                                      > this.quizService.quiz.currentQuestionIndex + 1;
         } else {
           console.log('QuizResultsComponent: Countdown is proceeding');
+          this.hideProgressbarStyle = currentStateData.payload.startTimestamp > -1;
         }
       }
 
@@ -427,15 +430,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         this.attendeeService.modifyResponse(payload);
-
-        if (this.attendeeService.attendees.every(nick => {
-          const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
-          return typeof val === 'number' ? val > -1 : val.length > 0;
-        })) {
-          this.countdown = 0;
-          this.hideProgressbarStyle = false;
-          this.showStopQuizButton = false;
-        }
+        console.log('QuizResultsComponent: modify response data for nickname', payload.nickname);
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;

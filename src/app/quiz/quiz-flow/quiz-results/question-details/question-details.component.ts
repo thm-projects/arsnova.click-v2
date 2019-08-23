@@ -151,6 +151,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
         this.attendeeService.modifyResponse(payload);
       }), this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+        sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {

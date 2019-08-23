@@ -114,6 +114,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+        sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
         this.router.navigate(['/quiz', 'flow', 'voting']);

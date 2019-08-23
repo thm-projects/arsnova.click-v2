@@ -85,11 +85,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       if (this.quizService.isOwner) {
         console.log('QuizLobbyComponent: quiz for owner initialized', this.quizService.quiz);
         this.handleNewQuiz(this.quizService.quiz);
-        this.attendeeService.restoreMembers();
       } else {
         this.handleNewAttendee();
-        this.attendeeService.restoreMembers();
       }
+      this.attendeeService.restoreMembers();
     }));
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
@@ -230,8 +229,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       const promise = this.attendeeService.attendees.length ? this.ngbModal.open(EditModeConfirmComponent).result : new Promise<any>(
         resolve => resolve());
       promise.then(() => {
-        this._subscriptions.forEach(sub => sub.unsubscribe());
-        this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
         this.quizService.close();
         this.attendeeService.cleanUp();
         this.connectionService.cleanUp();
@@ -252,6 +249,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.attendeeService.removeMember(payload.name);
       }), this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+        sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {

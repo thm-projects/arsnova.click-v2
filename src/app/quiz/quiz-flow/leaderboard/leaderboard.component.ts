@@ -98,7 +98,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
 
       this._name = this.quizService.quiz.name;
       this.initData();
-      this.attendeeService.restoreMembers();
       this.addFooterElements();
     }));
 
@@ -204,6 +203,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
 
   private handleMessages(): void {
     this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
+        this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
+        sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+      }),
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
