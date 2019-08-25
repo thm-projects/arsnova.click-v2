@@ -120,7 +120,7 @@ build-westermann:
       - beta
 
 generate_assets-westermann:
-  stage: generate_assets-westermann
+  stage: assets-westermann
   only:
     - master
   tags:
