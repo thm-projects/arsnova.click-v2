@@ -152,7 +152,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.storageService.getAllQuiznames().then(quizNames => {
           this._ownQuizzes = quizNames;
 
-          if (this._ownQuizzes.length && (!environment.requireLoginToCreateQuiz || (this.userService.isAuthorizedFor(UserRole.CreateQuiz)))) {
+          if (this._ownQuizzes.length && (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz))) {
             this.modalService.open(AvailableQuizzesComponent);
           }
         });
