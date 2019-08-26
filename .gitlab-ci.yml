@@ -117,7 +117,7 @@ build-beta:
     - npm run build:WESTERMANN
   artifacts:
     paths:
-      - beta
+      - dist
 
 generate_assets-beta:
   stage: assets-beta
@@ -132,7 +132,7 @@ generate_assets-beta:
     - apt-get -y install --allow-unauthenticated gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
     - npm install
     - npm install -g angular-http-server
-    - cd beta
+    - cd dist
     - angular-http-server --path browser/ --silent -p 4711 &
     - cd browser/assets/jobs
     - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
@@ -143,7 +143,7 @@ generate_assets-beta:
     - npm run compress
   artifacts:
     paths:
-      - beta
+      - dist
 
 deploy-beta:
   stage: deploy-beta
@@ -159,5 +159,5 @@ deploy-beta:
     - mkdir ~/.ssh
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
-    - rsync -rltgoDqv --delete -e "ssh" beta/* "$BETA_FRONTEND_SCP_URL"
+    - rsync -rltgoDqv --delete -e "ssh" dist/* "$BETA_FRONTEND_SCP_URL"
     - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2-beta/frontend/deploy.touch'
