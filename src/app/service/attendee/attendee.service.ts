@@ -109,6 +109,8 @@ export class AttendeeService {
         });
         this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
         resolve();
+      }, () => {
+        setTimeout(() => this.restoreMembers().then(() => resolve()), 1000);
       });
     });
   }
@@ -120,7 +122,7 @@ export class AttendeeService {
         return;
       }
 
-      this.restoreMembers();
+      setTimeout(() => this.restoreMembers(), 1000);
     });
   }
 

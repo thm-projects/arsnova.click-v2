@@ -64,7 +64,7 @@
           </button>
 
           <button (click)="deleteQuiz(i)"
-                  *ngIf="connectionService.serverAvailable && isAuthorizedToModifyQuiz()"
+                  [disabled]="!connectionService.serverAvailable"
                   [title]="'component.name_management.delete_session' | translate"
                   class="btn btn-secondary">
             <fa-icon [icon]="'trash'"></fa-icon>

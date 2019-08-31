@@ -88,7 +88,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       } else {
         this.handleNewAttendee();
       }
-      this.attendeeService.restoreMembers();
     }));
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
