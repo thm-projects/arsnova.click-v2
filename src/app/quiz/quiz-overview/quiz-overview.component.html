@@ -1,6 +1,14 @@
-<div *ngIf="sessions.length === 0"
-     class="center-vertical d-flex justify-content-center">
-  <h2 class="text-center">{{'component.name_management.no_sessions' | translate}}</h2>
+<div [class.center-vertical]="!sessions.length"
+     class="d-flex flex-column justify-content-center">
+  <h2 *ngIf="!sessions.length"
+      class="text-center">{{'component.name_management.no_sessions' | translate}}</h2>
+
+  <h5 *ngIf="publicQuizAmount > 0"
+      [class.mt-5]="!sessions.length"
+      [class.pt-5]="!sessions.length"
+      class="text-center mb-5 pb-5">
+    <a [routerLink]="['/quiz', 'public']">{{'component.name_management.public-quizzes' | translate:{amount: publicQuizAmount} }}</a>
+  </h5>
 </div>
 
 <div class="row">
@@ -75,9 +83,3 @@
     </div>
   </div>
 </div>
-
-<h5 *ngIf="publicQuizAmount > 0"
-    class="text-center mt-5 pt-5">
-  <a [routerLink]="['/quiz', 'public']">{{'component.name_management.public-quizzes' | translate:{amount: publicQuizAmount} }}</a>
-</h5>
-

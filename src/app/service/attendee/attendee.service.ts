@@ -122,6 +122,8 @@ export class AttendeeService {
         return;
       }
 
+      console.log('AttendeeService#loadData', 'quiz set', quiz);
+
       setTimeout(() => this.restoreMembers(), 1000);
     });
   }

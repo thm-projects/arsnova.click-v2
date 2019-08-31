@@ -3,11 +3,11 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { IDuplicateQuiz } from 'arsnova-click-v2-types/dist/common';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbState } from '../../../lib/enums/enums';
+import { DbState, DbTable } from '../../../lib/enums/enums';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
-import { QuizService } from '../quiz/quiz.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class FileUploadService {
@@ -26,8 +26,9 @@ export class FileUploadService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-    private quizService: QuizService,
-    private quizApiService: QuizApiService, private indexedDbService: IndexedDbService,
+    private storageService: StorageService,
+    private quizApiService: QuizApiService,
+    private indexedDbService: IndexedDbService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this._renameFilesQueue = new FormData();
@@ -51,13 +52,14 @@ export class FileUploadService {
 
       if (data.payload.quizData.length) {
         data.payload.quizData.forEach(quizData => {
-          this.quizService.quiz = new QuizEntity(quizData.quiz);
-          this.quizService.persist();
-          this.quizService.quiz = null;
+          const quiz = new QuizEntity(quizData.quiz);
+          this.storageService.create(DbTable.Quiz, quiz.name, quiz).subscribe();
+          this.quizApiService.putSavedQuiz(quiz).subscribe();
         });
 
         if (!data.payload.duplicateQuizzes.length) {
           this.indexedDbService.stateNotifier.next(DbState.Revalidate);
+          this.router.navigate(['/']);
         }
       }
 

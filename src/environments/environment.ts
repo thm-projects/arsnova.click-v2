@@ -24,8 +24,8 @@ export const environment: IEnvironment = {
   infoAboutTabEnabled: false,
   infoProjectTabEnabled: false,
   infoBackendApiEnabled: false,
-  requireLoginToCreateQuiz: false,
-  forceQuizTheme: false,
+  requireLoginToCreateQuiz: true,
+  forceQuizTheme: true,
   loginMechanism: [LoginMechanism.UsernamePassword, LoginMechanism.Token],
 };
 
