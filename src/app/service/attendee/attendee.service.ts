@@ -3,6 +3,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../lib/enums/enums';
+import { QuizState } from '../../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { MemberApiService } from '../api/member/member-api.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
@@ -97,7 +98,7 @@ export class AttendeeService {
     });
   }
 
-  public restoreMembers(): Promise<void> {
+  private restoreMembers(): Promise<void> {
     return new Promise<void>(resolve => {
       this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {
         if (!data || !data.payload) {
@@ -109,8 +110,6 @@ export class AttendeeService {
         });
         this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
         resolve();
-      }, () => {
-        setTimeout(() => this.restoreMembers().then(() => resolve()), 1000);
       });
     });
   }
@@ -121,10 +120,13 @@ export class AttendeeService {
       if (!quiz) {
         return;
       }
+      if (quiz.state === QuizState.Inactive) {
+        this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
+        return;
+      }
 
       console.log('AttendeeService#loadData', 'quiz set', quiz);
-
-      setTimeout(() => this.restoreMembers(), 1000);
+      this.restoreMembers();
     });
   }
 

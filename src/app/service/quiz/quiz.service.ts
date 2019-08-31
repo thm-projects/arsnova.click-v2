@@ -78,12 +78,26 @@ export class QuizService {
   }
 
   public persist(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.storageService.create(DbTable.Quiz, this.quiz.name, this.quiz).subscribe();
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
-      if (this._isInEditMode) {
-        this.quizApiService.putSavedQuiz(this.quiz).subscribe();
-      }
+    this.storageService.create(DbTable.Quiz, this.quiz.name, this.quiz).subscribe();
+
+    if (this._isInEditMode) {
+      this.quizApiService.putSavedQuiz(this.quiz).subscribe();
+    }
+  }
+
+  public persistQuiz(quiz: QuizEntity): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
+    this.storageService.create(DbTable.Quiz, quiz.name, quiz).subscribe();
+
+    if (this._isInEditMode) {
+      this.quizApiService.putSavedQuiz(quiz).subscribe();
     }
   }
 

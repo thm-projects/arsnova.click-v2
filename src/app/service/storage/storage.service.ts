@@ -97,15 +97,16 @@ export class StorageService {
       this.read(DbTable.Config, StorageKey.PrivateKey).subscribe(val => {
         if (!val) {
           val = this.generatePrivateKey();
+          sessionStorage.setItem(StorageKey.PrivateKey, val);
           this.create(DbTable.Config, StorageKey.PrivateKey, val).subscribe(() => {}, () => {}, () => {
             this.indexedDbService.isInitialized = true;
             this.indexedDbService.stateNotifier.next(DbState.Initialized);
           });
         } else {
+          sessionStorage.setItem(StorageKey.PrivateKey, val);
           this.indexedDbService.isInitialized = true;
           this.indexedDbService.stateNotifier.next(DbState.Initialized);
         }
-        sessionStorage.setItem(StorageKey.PrivateKey, val);
       });
     });
 

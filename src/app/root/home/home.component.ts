@@ -106,8 +106,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private storageService: StorageService,
     private userService: UserService,
-    public connectionService: ConnectionService,
-    public sharedService: SharedService, public memberApiService: MemberApiService,
+    public connectionService: ConnectionService, public sharedService: SharedService, public memberApiService: MemberApiService,
   ) {
 
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
@@ -379,8 +378,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private async reserveQuiz(questionGroup: QuizEntity, routingTarget: Array<string>): Promise<void> {
     this.quizApiService.setQuiz(questionGroup).subscribe(modifiedQuestionGroup => {
-      this.quizService.quiz = new QuizEntity(questionGroup);
-      this.quizService.persist();
+      this.quizService.persistQuiz(new QuizEntity(questionGroup));
 
       this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
       this.quizService.isOwner = true;

@@ -103,16 +103,13 @@ export class UserService {
             const onlyLocalQuizzes = localQuizzes.filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.name));
             onlyLocalQuizzes.forEach(localQuiz => {
               console.log('UserService: syncing local quiz data to server');
-              this.quizService.quiz = new QuizEntity(localQuiz.value);
-              this.quizService.persist();
-              this.quizApiService.putSavedQuiz(this.quizService.quiz).subscribe();
+              this.quizService.persistQuiz(new QuizEntity(localQuiz.value));
             });
 
             console.log('UserService: received response from storage service and looping through remote quizzes');
 
             this._tmpRemoteQuizData.forEach(quiz => {
-              this.quizService.quiz = new QuizEntity(quiz);
-              this.quizService.persist();
+              this.quizService.persistQuiz(new QuizEntity(quiz));
               console.log('UserService: persisting remote quiz to local db', quiz.name);
             });
             this.indexedDbService.stateNotifier.next(DbState.Revalidate);
