@@ -11,6 +11,7 @@ export const environment: IEnvironment = {
     endpoint: 'wss://staging.arsnova.click/rabbitmq/ws',
     user: 'guest',
     password: 'guest',
+    vhost: '/',
   },
   leaderboardAmount: 5,
   readingConfirmationEnabled: false,

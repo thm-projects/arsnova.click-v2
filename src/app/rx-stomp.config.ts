@@ -7,6 +7,7 @@ const rxStompConfig: InjectableRxStompConfig = {
   connectHeaders: {
     login: environment.stompConfig.user,
     passcode: environment.stompConfig.password,
+    host: environment.stompConfig.vhost,
   },
 
   heartbeatIncoming: 0,

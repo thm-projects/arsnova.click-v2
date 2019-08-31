@@ -16,6 +16,7 @@ export const environment: IEnvironment = {
     endpoint: 'ws://127.0.0.1:15674/ws',
     user: 'guest',
     password: 'guest',
+    vhost: '/',
   },
   leaderboardAmount: 5,
   readingConfirmationEnabled: false,

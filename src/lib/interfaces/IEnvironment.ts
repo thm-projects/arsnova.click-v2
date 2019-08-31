@@ -7,7 +7,7 @@ export interface IEnvironment {
   httpApiEndpoint: string;
   httpLibEndpoint: string;
   stompConfig: {
-    endpoint: string, user: string, password: string,
+    endpoint: string, user: string, password: string, vhost: string,
   };
   leaderboardAmount: number;
   readingConfirmationEnabled: boolean;
