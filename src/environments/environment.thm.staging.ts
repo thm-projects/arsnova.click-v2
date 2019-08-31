@@ -7,7 +7,11 @@ export const environment: IEnvironment = {
   serverEndpoint: 'https://staging.arsnova.click/backend',
   httpApiEndpoint: 'https://staging.arsnova.click/backend/api/v1',
   httpLibEndpoint: 'https://staging.arsnova.click/backend/lib',
-  stompEndpoint: 'wss://staging.arsnova.click/rabbitmq/ws',
+  stompConfig: {
+    endpoint: 'wss://staging.arsnova.click/rabbitmq/ws',
+    user: 'guest',
+    password: 'guest',
+  },
   leaderboardAmount: 5,
   readingConfirmationEnabled: false,
   confidenceSliderEnabled: false,

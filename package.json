@@ -21,6 +21,7 @@
     "prebuild:PROD": "npm run clean",
     "build:PROD": "ng build --prod",
     "build:STAGING_THM": "ng build --configuration=thmStaging",
+    "build:BETA_THM": "ng build --configuration=thmBeta",
     "build:WESTERMANN": "ng build --configuration=westermann",
     "build:PROD:DEPLOY": "npm run build:PROD && npm run purify",
     "build:PROD-STATS": "ng build --prod --stats-json",

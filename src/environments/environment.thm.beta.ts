@@ -3,14 +3,14 @@ import { IEnvironment } from '../lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: true,
-  ssrEndpoint: 'https://test01.ars.sbzo.de',
-  serverEndpoint: 'https://test01.ars.sbzo.de',
-  httpApiEndpoint: 'https://test01.ars.sbzo.de/api/v1',
-  httpLibEndpoint: 'https://test01.ars.sbzo.de/lib',
+  ssrEndpoint: 'https://beta.arsnova.click/backend',
+  serverEndpoint: 'https://beta.arsnova.click/backend',
+  httpApiEndpoint: 'https://beta.arsnova.click/backend/api/v1',
+  httpLibEndpoint: 'https://beta.arsnova.click/backend/lib',
   stompConfig: {
-    endpoint: 'wss://test01.ars.sbzo.de/rabbitmq/ws',
-    user: 'guest',
-    password: 'guest',
+    endpoint: 'wss://beta.arsnova.click/rabbitmq/ws',
+    user: 'beta',
+    password: 'beta',
   },
   leaderboardAmount: 5,
   readingConfirmationEnabled: false,

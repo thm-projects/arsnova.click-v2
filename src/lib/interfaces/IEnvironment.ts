@@ -6,7 +6,9 @@ export interface IEnvironment {
   serverEndpoint: string;
   httpApiEndpoint: string;
   httpLibEndpoint: string;
-  stompEndpoint: string;
+  stompConfig: {
+    endpoint: string, user: string, password: string,
+  };
   leaderboardAmount: number;
   readingConfirmationEnabled: boolean;
   confidenceSliderEnabled: boolean;

@@ -2,11 +2,11 @@ import { InjectableRxStompConfig } from '@stomp/ng2-stompjs';
 import { environment } from '../environments/environment';
 
 const rxStompConfig: InjectableRxStompConfig = {
-  brokerURL: environment.stompEndpoint,
+  brokerURL: environment.stompConfig.endpoint,
 
   connectHeaders: {
-    login: 'guest',
-    passcode: 'guest',
+    login: environment.stompConfig.user,
+    passcode: environment.stompConfig.password,
   },
 
   heartbeatIncoming: 0,
