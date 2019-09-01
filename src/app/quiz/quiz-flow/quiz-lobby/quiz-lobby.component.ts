@@ -10,6 +10,7 @@ import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
+import { QuizState } from '../../../../lib/enums/QuizState';
 import { UserRole } from '../../../../lib/enums/UserRole';
 import { FooterbarElement } from '../../../../lib/footerbar-element/footerbar-element';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
@@ -78,6 +79,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       console.log('QuizLobbyComponent: quizUpdateEmitter fired', quiz);
       if (!quiz) {
+        return;
+      }
+
+      if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.router.navigate(['/']);
         return;
       }
 

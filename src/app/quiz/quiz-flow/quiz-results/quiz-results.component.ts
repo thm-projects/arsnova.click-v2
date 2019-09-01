@@ -215,6 +215,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       if (!quiz) {
         return;
       }
+
+      if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.router.navigate(['/']);
+        return;
+      }
+
       const storedSelectedQuestionIndex = parseInt(sessionStorage.getItem(StorageKey.CurrentQuestionIndex), 10);
       if (!isNaN(storedSelectedQuestionIndex)) {
         this.modifyVisibleQuestion(storedSelectedQuestionIndex);

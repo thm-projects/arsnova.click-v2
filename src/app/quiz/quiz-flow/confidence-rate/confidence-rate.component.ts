@@ -7,6 +7,7 @@ import { environment } from '../../../../environments/environment';
 import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
+import { QuizState } from '../../../../lib/enums/QuizState';
 import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -54,6 +55,11 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
+        return;
+      }
+
+      if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.router.navigate(['/']);
         return;
       }
     }));

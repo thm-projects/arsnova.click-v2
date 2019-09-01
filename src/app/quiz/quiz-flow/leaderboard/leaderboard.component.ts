@@ -11,6 +11,7 @@ import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
+import { QuizState } from '../../../../lib/enums/QuizState';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
@@ -93,6 +94,11 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
+        return;
+      }
+
+      if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.router.navigate(['/']);
         return;
       }
 

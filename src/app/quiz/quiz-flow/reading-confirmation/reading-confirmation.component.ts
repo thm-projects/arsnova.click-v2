@@ -6,6 +6,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
+import { QuizState } from '../../../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -75,6 +76,11 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
     this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
       if (!quiz) {
+        return;
+      }
+
+      if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.router.navigate(['/']);
         return;
       }
 
