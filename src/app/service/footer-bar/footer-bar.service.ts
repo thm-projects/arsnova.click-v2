@@ -408,13 +408,13 @@ export class FooterBarService {
   }
 
   private removeUnsupportedElements(elements: Array<IFooterBarElement>): void {
-    const fullscreenIndex = elements.indexOf(this.footerElemFullscreen);
+    const fullscreenIndex = elements.findIndex(elem => elem.id === this.footerElemFullscreen.id);
     if (fullscreenIndex > -1 && !Modernizr.fullscreen) {
       elements.splice(fullscreenIndex, 1);
     }
 
-    const backIndex = elements.indexOf(this.footerElemBack);
-    if (backIndex && history.length < 2) {
+    const backIndex = elements.findIndex(elem => elem.id === this.footerElemBack.id);
+    if (backIndex > -1 && history.length < 2) {
       elements.splice(backIndex, 1);
     }
   }
