@@ -51,9 +51,9 @@ export class QuizAdminComponent implements OnInit {
     $event.stopPropagation();
     $event.stopImmediatePropagation();
     $event.preventDefault();
-    this._deletingElements.push(quiz.name);
+    const index = this._deletingElements.push(quiz.name) - 1;
     this.adminService.deleteQuiz(quiz.name).subscribe(() => {
-      this._deletingElements.splice(this._deletingElements.indexOf(quiz.name), 1);
+      this._deletingElements.splice(index, 1);
       this._quizzes.splice(this._quizzes.indexOf(quiz), 1);
     }, (error) => {
       console.error(error);

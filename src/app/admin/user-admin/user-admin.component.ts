@@ -43,9 +43,9 @@ export class UserAdminComponent implements OnInit {
   }
 
   public deleteElem(user: UserEntity): void {
-    this._deletingElements.push(user.name);
+    const index = this._deletingElements.push(user.name) - 1;
     this.adminService.deleteUser(user.name).subscribe(() => {
-      this._deletingElements.splice(this._deletingElements.indexOf(user.name), 1);
+      this._deletingElements.splice(index, 1);
       this._data.splice(this._data.indexOf(user), 1);
     }, error => {
       console.error(error);
