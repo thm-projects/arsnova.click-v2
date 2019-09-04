@@ -84,11 +84,18 @@ export class QuizOverviewComponent implements OnInit {
         return;
       }
 
-      this.quizService.quiz = elem;
-      this.quizService.isOwner = true;
-      await this.openLobby(elem);
+      this.quizApiService.putSavedQuiz(elem).subscribe(async () => {
+        this.quizService.quiz = elem;
+        this.quizService.isOwner = true;
+        this.quizService.persist();
 
-      resolve();
+        this.quizApiService.setQuiz(this.quizService.quiz).subscribe((updatedQuiz) => {
+          this.quizService.quiz = new QuizEntity(updatedQuiz);
+          this.router.navigate(['/quiz', 'flow']);
+        }, () => {}, () => {
+          resolve();
+        });
+      });
     });
   }
 
