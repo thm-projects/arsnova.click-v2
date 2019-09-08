@@ -103,8 +103,8 @@ export class UserService {
 
         if (this._tmpRemoteQuizData.length) {
           console.log('UserService: having remote quiz data');
-          this.storageService.getAll(DbTable.Quiz).subscribe(localQuizzes => {
-            const onlyLocalQuizzes = localQuizzes.filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.name));
+          this.storageService.getAll<QuizEntity>(DbTable.Quiz).subscribe(localQuizzes => {
+            const onlyLocalQuizzes = localQuizzes.filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.value.name));
             onlyLocalQuizzes.forEach(localQuiz => {
               console.log('UserService: syncing local quiz data to server');
               this.quizService.persistQuiz(new QuizEntity(localQuiz.value));
