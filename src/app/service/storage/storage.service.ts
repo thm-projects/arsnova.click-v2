@@ -53,7 +53,7 @@ export class StorageService {
     return (await this.indexedDbService.all(DbTable.Quiz).toPromise()).map(value => value.id);
   }
 
-  public getAll(table: DbTable): Observable<any> {
+  public getAll<T>(table: DbTable): Observable<Array<{ id: string, value: T }>> {
     if (isPlatformServer(this.platformId)) {
       return of(null);
     }
@@ -116,7 +116,6 @@ export class StorageService {
   private dec2hex(dec): string {
     return ('0' + dec.toString(16)).substr(-2);
   }
-
 
   private formatKey(key: string | StorageKey): string {
     return key.toString().toLowerCase();

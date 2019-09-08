@@ -521,6 +521,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.delete(DbTable.Config, StorageKey.QuizTheme).subscribe();
     }
+    if (!environment.persistQuizzes && !this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
+      this.storageService.getAll<QuizEntity>(DbTable.Quiz).subscribe(quizDbData => {
+        quizDbData.forEach(quizData => {
+          this.quizApiService.deleteQuiz(quizData.value).subscribe(() => {
+            this.storageService.delete(DbTable.Quiz, quizData.id).subscribe();
+          }, () => {
+            this.storageService.delete(DbTable.Quiz, quizData.id).subscribe();
+          });
+        });
+      });
+    }
   }
 
   private async addDemoQuiz(): Promise<QuizEntity> {

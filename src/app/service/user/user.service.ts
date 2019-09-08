@@ -34,10 +34,14 @@ export class UserService {
     }
     if (isPlatformBrowser(this.platformId)) {
       console.log('UserService: switching db', this.username, value);
-      this.storageService.switchDb(this._username).subscribe();
+      this.storageService.switchDb(this._username).subscribe(() => {
+        this._isLoggedIn = value;
+        this._loginNotifier.emit(value);
+      });
+    } else {
+      this._isLoggedIn = value;
+      this._loginNotifier.emit(value);
     }
-    this._isLoggedIn = value;
-    this._loginNotifier.emit(value);
   }
 
   private _staticLoginTokenContent: ILoginSerialized;

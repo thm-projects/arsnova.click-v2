@@ -20,4 +20,5 @@ export interface IEnvironment {
   showPublicQuizzes: boolean;
   forceQuizTheme: boolean;
   loginMechanism: Array<LoginMechanism>;
+  persistQuizzes: boolean;
 }

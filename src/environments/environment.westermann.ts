@@ -24,6 +24,7 @@ export const environment: IEnvironment = {
   loginMechanism: [LoginMechanism.UsernamePassword, LoginMechanism.Token],
   showJoinableQuizzes: false,
   showPublicQuizzes: false,
+  persistQuizzes: false,
 };
 
 export enum DEVICE_TYPES {

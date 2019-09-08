@@ -126,7 +126,7 @@ export class IndexedDbService {
     });
   }
 
-  public all(source: DbTable, filter?: string): Observable<any[]> {
+  public all(source: DbTable, filter?: string): Observable<{ id: string, value: any }[]> {
     const self = this;
 
     return Observable.create((observer: any) => {
