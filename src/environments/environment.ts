@@ -13,9 +13,9 @@ export const environment: IEnvironment = {
   httpApiEndpoint: 'http://192.168.2.106:3010/api/v1',
   httpLibEndpoint: 'http://192.168.2.106:3010/lib',
   stompConfig: {
-    endpoint: 'ws://127.0.0.1:15674/ws',
-    user: 'guest',
-    password: 'guest',
+    endpoint: 'ws://192.168.2.106:15674/ws',
+    user: 'admin',
+    password: 'test',
     vhost: '/',
   },
   leaderboardAmount: 5,
