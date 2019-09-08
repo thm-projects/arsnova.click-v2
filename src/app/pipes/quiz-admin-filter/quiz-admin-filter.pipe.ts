@@ -5,6 +5,7 @@ import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
 
 @Pipe({
   name: 'quizAdminFilter',
+  pure: false,
 })
 export class QuizAdminFilterPipe implements PipeTransform {
 

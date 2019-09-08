@@ -261,16 +261,7 @@ export class QuizService {
     this._isInEditMode = false;
   }
 
-  private restoreSettings(quizName: string): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
-      this.quizApiService.getQuiz(quizName).subscribe(response => {
-        this.quiz = response.payload.quiz;
-        resolve();
-      });
-    });
-  }
-
-  private updateOwnerState(): void {
+  public updateOwnerState(): void {
     if (!this._isOwner || !this.quiz) {
       console.log('QuizService: Cannot update owner state.', this.isOwner, this.quiz);
       return;
@@ -288,5 +279,14 @@ export class QuizService {
     }
 
     this.updateFooterElementsState();
+  }
+
+  private restoreSettings(quizName: string): Promise<boolean> {
+    return new Promise<boolean>(resolve => {
+      this.quizApiService.getQuiz(quizName).subscribe(response => {
+        this.quiz = response.payload.quiz;
+        resolve();
+      });
+    });
   }
 }

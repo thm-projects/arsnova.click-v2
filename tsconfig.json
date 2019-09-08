@@ -17,6 +17,7 @@
     "importHelpers": true,
     "lib": [
       "es2018",
+      "es6",
       "dom"
     ],
     "resolveJsonModule": true,

@@ -24,7 +24,7 @@ export class QuizSaveComponent {
   }
 
   public getQuizVisibility(): Array<string> {
-    return Object.values(QuizVisibility);
+    return [QuizVisibility.Any];
   }
 
   public dismiss(): void {

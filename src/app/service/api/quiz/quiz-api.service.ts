@@ -12,6 +12,7 @@ import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
 })
 export class QuizApiService {
   private _getFreeMemberGroupUrl: string;
+  private _getFullQuizStatusDataUrl: string;
 
   get getFreeMemberGroupUrl(): string {
     return this._getFreeMemberGroupUrl;
@@ -57,6 +58,7 @@ export class QuizApiService {
     return this._getQuizStatusUrl;
   }
 
+  private _initQuizInstanceUrl: string;
   private _getQuizUrl: string;
   private _setQuizAsPrivateUrl: string;
   private _getOwnPublicQuizzesUrl: string;
@@ -132,6 +134,11 @@ export class QuizApiService {
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
+  public getFullQuizStatusData(quizName): Observable<IMessage> {
+    return this.http.get<IMessage>(`${this._getFullQuizStatusDataUrl}${quizName ? '/' + quizName : ''}`,
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
+  }
+
   public getQuiz(quizName: string): Observable<IMessage> {
     return this.http.get<IMessage>(`${this._getQuizUrl}/${quizName}`, { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
@@ -186,6 +193,15 @@ export class QuizApiService {
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
+  public initQuizInstance(name: string): Observable<IMessage> {
+    return this.http.post<IMessage>(this._initQuizInstanceUrl, { name }, {
+      headers: {
+        'X-Access-Token': sessionStorage.getItem(StorageKey.LoginToken),
+        authorization: sessionStorage.getItem(StorageKey.PrivateKey),
+      },
+    });
+  }
+
   private loadUrls(): void {
     this._putQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz`;
     this._putSaveQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/save`;
@@ -198,6 +214,7 @@ export class QuizApiService {
     this._postQuizUploadUrl = `${DefaultSettings.httpApiEndpoint}/quiz/upload`;
     this._getQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/quiz`;
     this._getQuizStatusUrl = `${DefaultSettings.httpApiEndpoint}/quiz/status`;
+    this._getFullQuizStatusDataUrl = `${DefaultSettings.httpApiEndpoint}/quiz/full-status`;
     this._getQuizStartTimeUrl = `${DefaultSettings.httpApiEndpoint}/quiz/start-time`;
     this._getFreeMemberGroupUrl = `${DefaultSettings.httpApiEndpoint}/quiz/member-group`;
     this._getAbcdQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/generate/abcd`;
@@ -208,5 +225,6 @@ export class QuizApiService {
     this._getOwnPublicQuizzesUrl = `${DefaultSettings.httpApiEndpoint}/quiz/public/own`;
     this._getOwnPublicQuizAmountUrl = `${DefaultSettings.httpApiEndpoint}/quiz/public/amount/own`;
     this._deleteActiveQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/active`;
+    this._initQuizInstanceUrl = `${DefaultSettings.httpApiEndpoint}/quiz/public/init`;
   }
 }

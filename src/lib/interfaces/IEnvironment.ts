@@ -16,6 +16,8 @@ export interface IEnvironment {
   infoProjectTabEnabled: boolean;
   infoBackendApiEnabled: boolean;
   requireLoginToCreateQuiz: boolean;
+  showJoinableQuizzes: boolean;
+  showPublicQuizzes: boolean;
   forceQuizTheme: boolean;
   loginMechanism: Array<LoginMechanism>;
 }

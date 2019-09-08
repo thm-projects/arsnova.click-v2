@@ -589,7 +589,8 @@
       "cas-required": "CAS Login erforderlich:",
       "features": "Features:",
       "name": "Name:",
-      "play": "Starten"
+      "play": "Starten",
+      "copy": "Kopieren"
     },
     "quiz-save": {
       "access-allowed-for": "Zugriff auf dieses Quiz erlauben für:",

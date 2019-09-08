@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -27,6 +27,7 @@ import { UserService } from '../../service/user/user.service';
 export class RootComponent implements OnInit, AfterViewInit {
   public static TYPE = 'RootComponent';
   public isInQuizManager = false;
+  public isLoading = true;
   private _stompSubscription: Subscription;
 
   constructor(
@@ -42,7 +43,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private rxStompService: RxStompService,
     private quizService: QuizService,
     private connectionService: ConnectionService,
-    private messageQueue: SimpleMQ,
+    private messageQueue: SimpleMQ, private cdRef: ChangeDetectorRef,
   ) {
     this.themeService.themeChanged.subscribe(themeName => {
       this.loadExternalStyles(`/${themeName}.css`).then(() => {
@@ -52,6 +53,9 @@ export class RootComponent implements OnInit, AfterViewInit {
       });
     });
     this.updateCheckService.checkForUpdates();
+    this.sharedService.isLoadingEmitter.subscribe(isLoading => {
+      setTimeout(() => this.isLoading = isLoading);
+    });
   }
 
   public ngOnInit(): void {

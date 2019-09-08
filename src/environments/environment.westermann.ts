@@ -22,6 +22,8 @@ export const environment: IEnvironment = {
   requireLoginToCreateQuiz: true,
   forceQuizTheme: true,
   loginMechanism: [LoginMechanism.UsernamePassword, LoginMechanism.Token],
+  showJoinableQuizzes: false,
+  showPublicQuizzes: false,
 };
 
 export enum DEVICE_TYPES {

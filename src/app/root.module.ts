@@ -43,6 +43,7 @@ import { StorageService } from './service/storage/storage.service';
 import { ThemesService } from './service/themes/themes.service';
 import { TrackingService } from './service/tracking/tracking.service';
 import { UpdateCheckService } from './service/update-check/update-check.service';
+import { UserRoleGuardService } from './service/user-role-guard/user-role-guard.service';
 import { UserService } from './service/user/user.service';
 import { SharedModule } from './shared/shared.module';
 import { ArsnovaClickAngulartics2Piwik } from './shared/tracking/ArsnovaClickAngulartics2Piwik';
@@ -173,7 +174,7 @@ export const appRoutes: Routes = [
     ArsnovaClickAngulartics2Piwik,
     TrackingService,
     UserService,
-    UpdateCheckService,
+    UpdateCheckService, UserRoleGuardService,
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

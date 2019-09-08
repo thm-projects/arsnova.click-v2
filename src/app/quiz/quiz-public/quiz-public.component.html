@@ -28,7 +28,6 @@
         <p class="card-text mb-0">{{'component.public-quizzes.features' | translate}}</p>
         <ul>
           <li>{{'component.public-quizzes.number-of-questions' | translate}}&nbsp;{{quiz.questionList.length}}</li>
-          <li>{{'component.public-quizzes.cas-required' | translate}}&nbsp;{{getTranslationForYesNo(quiz.sessionConfig.nicks.restrictToCasLogin) | translate}}</li>
         </ul>
         <div class="input-group">
           <input type="text"
@@ -37,11 +36,11 @@
                  #quizLinkInput
                  [value]="getQuizLink(i)"/>
           <div class="input-group-append">
-            <button class="btn btn-primary">
-              <fa-icon class="cursor-pointer"
-                       [title]="'component.public-quizzes.copy' | translate"
-                       [icon]="'copy'"
-                       (click)="copyQuiz(quizLinkInput)"></fa-icon>
+            <button (click)="copyQuiz(quizLinkInput)"
+                    [title]="'component.public-quizzes.copy' | translate"
+                    class="btn btn-primary">
+              <fa-icon [icon]="'copy'"
+                       class="cursor-pointer"></fa-icon>
             </button>
           </div>
         </div>

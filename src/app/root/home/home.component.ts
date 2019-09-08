@@ -54,6 +54,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   public ownPublicQuizAmount: number;
   public canModifyQuiz: boolean = !environment.requireLoginToCreateQuiz;
   public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
+  public showJoinableQuizzes: boolean = environment.showJoinableQuizzes;
+  public isQueryingQuizState: boolean;
 
   private _serverPassword = '';
 
@@ -106,7 +108,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private storageService: StorageService,
     private userService: UserService,
-    public connectionService: ConnectionService, public sharedService: SharedService, public memberApiService: MemberApiService,
+    public connectionService: ConnectionService,
+    public sharedService: SharedService,
+    public memberApiService: MemberApiService,
   ) {
 
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
@@ -116,7 +120,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.updateFooterElements(this.userService.isLoggedIn);
     this.canModifyQuiz = !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin);
-    this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz);
+    this.canUsePublicQuizzes = (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin))
+                               && !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz);
 
     this.userService.loginNotifier.subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
@@ -151,18 +156,21 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.storageService.getAllQuiznames().then(quizNames => {
           this._ownQuizzes = quizNames;
 
-          if (this._ownQuizzes.length && (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz))) {
+          if (this._ownQuizzes.length && //
+              environment.showJoinableQuizzes && //
+              (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz))) {
             this.modalService.open(AvailableQuizzesComponent);
           }
         });
 
-        this.quizApiService.getPublicQuizAmount().subscribe(val => {
-          this.publicQuizAmount = val;
-        });
-
-        this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
-          this.ownPublicQuizAmount = val;
-        });
+        if (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
+          this.quizApiService.getPublicQuizAmount().subscribe(val => {
+            this.publicQuizAmount = val;
+          });
+          this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
+            this.ownPublicQuizAmount = val;
+          });
+        }
       }
     }));
 
@@ -211,7 +219,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public showQuiznameDatalist(): void {
-    this.isShowingQuiznameDatalist = true;
+    if (environment.showJoinableQuizzes) {
+      this.isShowingQuiznameDatalist = true;
+    }
   }
 
   public hideQuiznameDatalist(): void {
@@ -224,6 +234,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public parseQuiznameInput(event: any): void {
+    this.isQueryingQuizState = true;
     this.selectQuizByName(event.target.value.trim());
   }
 
@@ -341,13 +352,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemFullscreen,
     ];
 
-    if (!environment.requireLoginToCreateQuiz) {
+    if (!environment.requireLoginToCreateQuiz && (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin))) {
       footerElements.push(this.footerBarService.footerElemHashtagManagement);
       footerElements.push(this.footerBarService.footerElemImport);
     }
 
     if (isLoggedIn) {
-      if (environment.requireLoginToCreateQuiz) {
+      if (environment.requireLoginToCreateQuiz && (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin))) {
         if (this.userService.isAuthorizedFor(UserRole.CreateQuiz)) {
           footerElements.push(this.footerBarService.footerElemHashtagManagement);
         }
@@ -432,6 +443,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     } else {
       if (quizName.length > 3) {
         this.selectQuizAsDefaultQuiz(quizName);
+      } else {
+        this.isQueryingQuizState = false;
       }
     }
   }
@@ -444,6 +457,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                         (this.settingsService.serverSettings && !this.settingsService.serverSettings.createQuizPasswordRequired) && //
                         currentQuiz.isValid();
     this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
+    this.isQueryingQuizState = false;
   }
 
   private selectQuizAsDemoQuiz(): void {
@@ -452,6 +466,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.canEditQuiz = false;
     this.canStartQuiz = false;
     this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+    this.isQueryingQuizState = false;
   }
 
   private selectQuizAsAbcdQuiz(): void {
@@ -460,10 +475,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.canEditQuiz = false;
     this.canStartQuiz = false;
     this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
+    this.isQueryingQuizState = false;
   }
 
   private selectQuizAsDefaultQuiz(quizName: string): void {
     this.quizApiService.getQuizStatus(quizName).subscribe(value => {
+      this.isQueryingQuizState = false;
+
       if (value.status === StatusProtocol.Success) {
         if (value.step === MessageProtocol.AlreadyTaken || (value.payload.state && value.payload.state !== QuizState.Active)) {
           this.canAddQuiz = false;

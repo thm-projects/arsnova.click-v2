@@ -126,22 +126,7 @@ export class ConnectionService {
       return;
     }
 
-    this.rxStompService.watch(encodeURI(`/exchange/global`)).subscribe(message => {
-      console.log('Message in global channel received', message);
-      try {
-        const parsedMessage = JSON.parse(message.body);
-        switch (parsedMessage.step) {
-          case MessageProtocol.SetActive:
-            this.sharedService.activeQuizzes.push(parsedMessage.payload.quizName);
-            break;
-          case MessageProtocol.SetInactive:
-            this.sharedService.activeQuizzes.splice(this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName), 1);
-            break;
-        }
-      } catch (ex) {
-        console.error('Invalid message received', ex);
-      }
-    });
+    this.connectToGlobalChannel();
 
     this.rxStompService.connectionState$.subscribe(value => {
       switch (value) {
@@ -178,7 +163,25 @@ export class ConnectionService {
     this.footerBarService.footerElemLeaderboard.isActive = isActive;
     this.footerBarService.footerElemImport.isActive = isActive;
     this.footerBarService.footerElemLogin.isActive = isActive;
-    this.footerBarService.footerElemStartQuiz.isActive = isActive;
     this.footerBarService.footerElemAdmin.isActive = isActive;
+  }
+
+  private connectToGlobalChannel(): void {
+    this.rxStompService.watch(encodeURI(`/exchange/global`)).subscribe(message => {
+      console.log('Message in global channel received', message);
+      try {
+        const parsedMessage = JSON.parse(message.body);
+        switch (parsedMessage.step) {
+          case MessageProtocol.SetActive:
+            this.sharedService.activeQuizzes.push(parsedMessage.payload.quizName);
+            break;
+          case MessageProtocol.SetInactive:
+            this.sharedService.activeQuizzes.splice(this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName), 1);
+            break;
+        }
+      } catch (ex) {
+        console.error('Invalid message received', ex);
+      }
+    });
   }
 }

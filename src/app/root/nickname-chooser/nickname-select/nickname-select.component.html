@@ -1,9 +1,4 @@
-<h4 *ngIf="isLoading"
-    class="text-center text-warning center-vertical">
-  {{'global.please-wait' | translate}}
-</h4>
-
-<h4 *ngIf="!isLoading && !nicks.length"
+<h4 *ngIf="!nicks.length"
     class="text-center text-danger center-vertical">
   {{'component.nickname-select.no-nicks-available' | translate}}
 </h4>

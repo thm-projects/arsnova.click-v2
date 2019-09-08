@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
 import { AdminService } from '../../service/api/admin/admin.service';
@@ -8,14 +8,15 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   selector: 'app-quiz-admin',
   templateUrl: './quiz-admin.component.html',
   styleUrls: ['./quiz-admin.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizAdminComponent implements OnInit {
-  public filterDemoQuiz: boolean;
-  public filterAbcdQuiz: boolean;
-  public filterActiveQuiz: boolean;
-  public filterQuizName: string;
+  public filterDemoQuiz = false;
+  public filterAbcdQuiz = false;
+  public filterActiveQuiz = false;
+  public filterQuizName = '';
 
-  private _quizzes: Array<IAdminQuiz>;
+  private _quizzes: Array<IAdminQuiz> = [];
 
   get quizzes(): Array<IAdminQuiz> {
     return this._quizzes;
@@ -23,13 +24,14 @@ export class QuizAdminComponent implements OnInit {
 
   private _deletingElements: Array<string> = [];
 
-  constructor(private footerBarService: FooterBarService, private adminService: AdminService) {
+  constructor(private footerBarService: FooterBarService, private adminService: AdminService, private cdRef: ChangeDetectorRef) {
     this.updateFooterElements();
   }
 
   public ngOnInit(): void {
     this.adminService.getAvailableQuizzes().subscribe(data => {
       this._quizzes = data;
+      this.cdRef.markForCheck();
     });
   }
 
@@ -40,6 +42,7 @@ export class QuizAdminComponent implements OnInit {
   public deactivateQuiz(quiz: IAdminQuiz): void {
     this.adminService.deactivateQuiz(quiz.name).subscribe(() => {
       quiz.state = QuizState.Inactive;
+      this.cdRef.markForCheck();
     }, error => console.error(error));
   }
 
@@ -48,13 +51,14 @@ export class QuizAdminComponent implements OnInit {
   }
 
   public deleteElem($event: Event, quiz: IAdminQuiz): void {
-    $event.stopPropagation();
-    $event.stopImmediatePropagation();
-    $event.preventDefault();
     const index = this._deletingElements.push(quiz.name) - 1;
     this.adminService.deleteQuiz(quiz.name).subscribe(() => {
       this._deletingElements.splice(index, 1);
-      this._quizzes.splice(this._quizzes.indexOf(quiz), 1);
+      const quizIndex = this._quizzes.findIndex(q => q.name === quiz.name);
+      if (quizIndex > -1) {
+        this._quizzes.splice(quizIndex, 1);
+      }
+      this.cdRef.markForCheck();
     }, (error) => {
       console.error(error);
     });
@@ -66,5 +70,6 @@ export class QuizAdminComponent implements OnInit {
     ];
 
     this.footerBarService.replaceFooterElements(footerElements);
+    this.cdRef.markForCheck();
   }
 }

@@ -1,6 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
@@ -27,11 +28,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     return this._nicks;
   }
 
-  private _isLoading: boolean;
-
-  get isLoading(): boolean {
-    return this._isLoading;
-  }
+  private _messageSubscriptions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -41,7 +38,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private quizService: QuizService,
-    private memberApiService: MemberApiService,
+    private memberApiService: MemberApiService, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
@@ -106,11 +103,11 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     if (this.attendeeService.ownNick) {
       this.router.navigate(['/']);
     }
-    this._isLoading = true;
+
+    this.handleMessages();
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.memberApiService.getAvailableNames(this.quizService.quiz.name).subscribe(data => {
-        this._isLoading = false;
         this._nicks = this._nicks.concat(data);
       });
     });
@@ -118,6 +115,12 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.footerBarService.footerElemBack.restoreClickCallback();
+    this._messageSubscriptions.forEach(sub => this.messageQueue.unsubscribe(sub));
   }
 
+  private handleMessages(): void {
+    this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+      this.attendeeService.addMember(payload.member);
+    }));
+  }
 }

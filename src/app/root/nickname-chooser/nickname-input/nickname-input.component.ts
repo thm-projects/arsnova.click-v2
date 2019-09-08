@@ -1,6 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
@@ -25,6 +26,8 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     return this._failedLoginReason;
   }
 
+  private _messageSubscriptions: Array<string> = [];
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
@@ -32,7 +35,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private quizService: QuizService,
-    private memberApiService: MemberApiService,
+    private memberApiService: MemberApiService, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -86,11 +89,15 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     }
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    this.handleMessages();
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+    });
   }
 
   public ngOnDestroy(): void {
     this.footerBarService.footerElemBack.restoreClickCallback();
+    this._messageSubscriptions.forEach(sub => this.messageQueue.unsubscribe(sub));
   }
 
   private putMember(name, groupName): Promise<void> {
@@ -113,6 +120,12 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
         });
       });
     });
+  }
+
+  private handleMessages(): void {
+    this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+      this.attendeeService.addMember(payload.member);
+    }));
   }
 
 }

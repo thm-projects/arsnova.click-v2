@@ -4,6 +4,7 @@ import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
+import { SharedService } from '../../service/shared/shared.service';
 import { ThemesService } from '../../service/themes/themes.service';
 
 @Component({
@@ -14,14 +15,13 @@ import { ThemesService } from '../../service/themes/themes.service';
 export class QuizJoinComponent implements OnInit {
   public static TYPE = 'QuizJoinComponent';
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private route: ActivatedRoute,
-    private router: Router,
-    private casService: CasLoginService,
-    public quizService: QuizService,
-    private themesService: ThemesService,
-    private quizApiService: QuizApiService,
+  constructor(public quizService: QuizService,
+              @Inject(PLATFORM_ID) private platformId: Object,
+              private route: ActivatedRoute,
+              private router: Router,
+              private casService: CasLoginService,
+              private themesService: ThemesService,
+              private quizApiService: QuizApiService, private sharedService: SharedService,
   ) {
   }
 
@@ -29,42 +29,41 @@ export class QuizJoinComponent implements OnInit {
     this.route.queryParams.subscribe(queryParams => {
       this.casService.ticket = queryParams.ticket;
     });
-
     this.route.params.subscribe(params => {
-      const quizname = params.quizName;
-      this.quizApiService.getQuizStatus(quizname).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData, quizname));
+      if (!params || !params.quizName) {
+        this.router.navigate(['/']);
+        return;
+      }
+
+      this.sharedService.isLoadingEmitter.next(true);
+      this.quizApiService.getFullQuizStatusData(params.quizName).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
     });
   }
 
-  private resolveQuizStatusData(quizStatusData, quizname): void {
+  private resolveQuizStatusData(quizStatusData): void {
     if (quizStatusData.status !== StatusProtocol.Success || quizStatusData.step !== MessageProtocol.Available) {
       this.router.navigate(['/']);
       return;
     }
 
-    this.casService.casLoginRequired = quizStatusData.payload.authorizeViaCas;
+    this.quizService.quiz = quizStatusData.payload.quiz.quiz;
+    this.quizService.isOwner = false;
+
+    this.casService.casLoginRequired = quizStatusData.payload.status.authorizeViaCas;
     if (this.casService.casLoginRequired) {
-      this.casService.quizName = quizname;
+      this.casService.quizName = this.quizService.quiz.name;
     }
 
-    this.resolveLobbyStatusData(quizStatusData, quizname);
-  }
+    this.themesService.updateCurrentlyUsedTheme();
+    this.sharedService.isLoadingEmitter.next(false);
 
-  private resolveLobbyStatusData(quizStatusData, quizname): void {
-    this.quizApiService.getQuiz(quizname).subscribe(quizData => {
-      this.quizService.quiz = quizData.payload.quiz;
-      this.quizService.isOwner = false;
-      this.themesService.updateCurrentlyUsedTheme();
+    if (this.quizService.quiz.sessionConfig.nicks.memberGroups.length > 1) {
+      this.router.navigate(['/nicks', 'memberGroup']);
 
-      if (quizData.payload.quiz.sessionConfig.nicks.memberGroups.length > 1) {
-        this.router.navigate(['/nicks', 'memberGroup']);
-
-      } else {
-        this.router.navigate([
-          '/nicks', (quizStatusData.payload.provideNickSelection ? 'select' : 'input'),
-        ]);
-
-      }
-    });
+    } else {
+      this.router.navigate([
+        '/nicks', (quizStatusData.payload.status.provideNickSelection ? 'select' : 'input'),
+      ]);
+    }
   }
 }

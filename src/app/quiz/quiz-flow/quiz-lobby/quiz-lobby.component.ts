@@ -68,8 +68,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private memberApiService: MemberApiService,
     private quizApiService: QuizApiService,
     private ngbModal: NgbModal,
-    private sharedService: SharedService,
-    private userService: UserService, private messageQueue: SimpleMQ,
+    private sharedService: SharedService, private userService: UserService, private messageQueue: SimpleMQ,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
@@ -192,6 +191,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   private addFooterElementsAsOwner(): void {
+    this.footerBarService.footerElemStartQuiz.isActive = false;
+
     const footerElements = [
       this.footerBarService.footerElemStartQuiz, this.footerBarService.footerElemQRCode,
     ];

@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
+import { UserRoleGuardService } from '../service/user-role-guard/user-role-guard.service';
 import { SharedModule } from '../shared/shared.module';
+import { QuizDuplicateComponent } from './quiz-duplicate/quiz-duplicate.component';
 import { QuizJoinComponent } from './quiz-join/quiz-join.component';
 import { QuizOverviewComponent } from './quiz-overview/quiz-overview.component';
 import { QuizPublicComponent } from './quiz-public/quiz-public.component';
@@ -16,7 +18,8 @@ const quizRoutes: Routes = [
     component: QuizRenameComponent,
   }, {
     path: 'create/:name',
-    component: QuizRenameComponent,
+    component: QuizDuplicateComponent,
+    canActivate: [UserRoleGuardService],
   }, {
     path: 'public',
     component: QuizPublicComponent,
@@ -34,7 +37,7 @@ const quizRoutes: Routes = [
     SharedModule, RouterModule.forChild(quizRoutes),
   ],
   declarations: [
-    QuizOverviewComponent, QuizRenameComponent, QuizJoinComponent, QuizPublicComponent,
+    QuizOverviewComponent, QuizRenameComponent, QuizJoinComponent, QuizPublicComponent, QuizDuplicateComponent,
   ],
 })
 export class QuizModule {

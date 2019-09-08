@@ -16,7 +16,7 @@
       <div class="col-12 mb-2">
         <span (click)="resetSessionName()"
               *ngIf="enteredSessionName"
-              [class.rounded-left]="!isShowingQuiznameDatalist"
+              [class.rounded-left]="showJoinableQuizzes && !isShowingQuiznameDatalist"
               class="position-absolute text-light px-2 cursor-pointer d-flex flex-column justify-content-center align-items-center"
               id="remove-quiz-name">
           <fa-icon [icon]="'times'"
@@ -26,8 +26,8 @@
                (focus)="showQuiznameDatalist()"
                (input)="parseQuiznameInput($event)"
                [(ngModel)]="enteredSessionName"
-               [class.rounded-top]="isShowingQuiznameDatalist"
-               [class.rounded]="!isShowingQuiznameDatalist"
+               [class.rounded-top]="showJoinableQuizzes && isShowingQuiznameDatalist"
+               [class.rounded]="!showJoinableQuizzes || !isShowingQuiznameDatalist"
                [placeholder]="'component.name_management.enter_quiz_name' | translate"
                [title]="'component.name_management.enter_quiz_name' | translate"
                autocomplete="off"
@@ -36,13 +36,13 @@
                spellcheck="false"
                type="text"/>
         <span (click)="hideQuiznameDatalist()"
-              *ngIf="isShowingQuiznameDatalist"
+              *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
               class="position-absolute text-light px-2 cursor-pointer d-flex justify-content-center align-items-center"
               id="collapse-quiz-name-datalist">
           <fa-icon [icon]="'caret-up'"
                    class="d-flex"></fa-icon>
         </span>
-        <ul *ngIf="isShowingQuiznameDatalist"
+        <ul *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
             class="list-group list-group-flush quiz-list">
           <li (click)="autoJoinToSession(quizname)"
               *ngFor="let quizname of sharedService.activeQuizzes | searchFilter:enteredSessionName"
@@ -77,10 +77,19 @@
     </div>
     <div class="row no-gutters">
       <div [class.col-12]="!canModifyQuiz"
+           [class.pr-1]="!canModifyQuiz"
            [class.col-6]="canModifyQuiz"
-           class="col-join-session pr-1 pl-0">
+           class="col-join-session pl-0">
+
+        <button *ngIf="isQueryingQuizState"
+                class="btn btn-block btn-outline-secondary px-1"
+                disabled>
+          <fa-icon icon="spinner"
+                   spin></fa-icon>
+        </button>
+
         <button (click)="handleClick('joinSession') && joinQuiz()"
-                *ngIf="!canStartQuiz"
+                *ngIf="!isQueryingQuizState && !canStartQuiz"
                 [class.btn-outline-secondary]="!canJoinQuiz"
                 [class.btn-secondary]="canJoinQuiz"
                 [disabled]="!canJoinQuiz"
@@ -93,8 +102,9 @@
                    [icon]="'thumbs-up'"></fa-icon>
           <span class="ml-1">{{'component.name_management.join_session' | translate}}</span>
         </button>
+
         <button (click)="handleClick('startSession') && runQuiz(['/quiz', 'flow'])"
-                *ngIf="canStartQuiz"
+                *ngIf="!isQueryingQuizState && canStartQuiz"
                 [class.btn-outline-secondary]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
                 [class.btn-secondary]="canStartQuiz && (!passwordRequired || serverPassword.length)"
                 [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
@@ -108,7 +118,7 @@
           <span class="ml-1">{{'component.name_management.start_session' | translate}}</span>
         </button>
       </div>
-      <div *ngIf="canModifyQuiz"
+      <div *ngIf="!isQueryingQuizState && canModifyQuiz"
            class="col-6 col-create-session p-0">
         <ng-container *ngIf="!enteredSessionName.length">
           <button (click)="enteredSessionNameInput.focus()"

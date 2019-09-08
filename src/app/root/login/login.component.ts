@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { LoginMechanism } from '../../../lib/enums/enums';
+import { DbState, LoginMechanism } from '../../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { UserService } from '../../service/user/user.service';
 
 @Component({
@@ -39,7 +40,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
-    private footerBarService: FooterBarService,
+    private footerBarService: FooterBarService, private indexedDbService: IndexedDbService,
   ) {
     this.userService.logout();
     this.headerLabelService.headerLabel = 'component.login.login';
@@ -53,7 +54,7 @@ export class LoginComponent implements OnInit {
         return;
       }
       this._isLoading = false;
-      this.return = params['return'] || '/';
+      this.return = decodeURI(params['return'] || '%2F');
     });
   }
 
@@ -71,7 +72,11 @@ export class LoginComponent implements OnInit {
     }
 
     if (isLoggedIn) {
-      this.router.navigateByUrl(this.return);
+      this.indexedDbService.stateNotifier.subscribe(value => {
+        if (value === DbState.Initialized) {
+          this.router.navigateByUrl(this.return);
+        }
+      });
     } else {
       this._authorizationFailed = true;
     }

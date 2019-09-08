@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable()
 export class SharedService {
@@ -13,12 +13,14 @@ export class SharedService {
     this._activeQuizzes = value;
   }
 
-  private _isLoadingEmitter = new BehaviorSubject<boolean>(true);
+  private _isLoadingEmitter = new ReplaySubject<boolean>(1);
 
-  get isLoadingEmitter(): BehaviorSubject<boolean> {
+  get isLoadingEmitter(): ReplaySubject<boolean> {
     return this._isLoadingEmitter;
   }
 
-  constructor() { }
+  constructor() {
+    this._isLoadingEmitter.next(true);
+  }
 
 }
