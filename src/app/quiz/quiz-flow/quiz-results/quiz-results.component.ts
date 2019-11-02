@@ -38,9 +38,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public isStarting: boolean;
   public isStopping: boolean;
   public isLoadingQuestionData: boolean;
+  public playCountdownEndSound: boolean;
 
   private _hideProgressbarStyle = true;
-  public playCountdownEndSound: boolean;
 
   get hideProgressbarStyle(): boolean {
     return this._hideProgressbarStyle;
@@ -77,7 +77,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
-    private quizApiService: QuizApiService, private ngbModal: NgbModal, private cd: ChangeDetectorRef, private messageQueue: SimpleMQ,
+    private quizApiService: QuizApiService,
+    private ngbModal: NgbModal,
+    private cd: ChangeDetectorRef,
+    private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
