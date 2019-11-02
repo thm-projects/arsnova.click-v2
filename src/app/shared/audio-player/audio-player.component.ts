@@ -12,6 +12,10 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
 
   private _autostart: boolean;
 
+  get autostart(): boolean {
+    return this._autostart;
+  }
+
   @Input() set autostart(value: boolean) {
     this._autostart = value;
     this.audioElement.autoplay = value;
@@ -74,8 +78,13 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     return this._volume;
   }
 
-  private readonly audioElement = new Audio();
   private _isPlaying = false;
+
+  get isPlaying(): boolean {
+    return this._isPlaying;
+  }
+
+  private readonly audioElement = new Audio();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private filesApiService: FilesApiService) {
   }

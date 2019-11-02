@@ -1,14 +1,14 @@
 <div class="btn-toolbar flex-grow-1 flex-nowrap">
 
-  <div *ngIf="!_autostart"
+  <div *ngIf="!autostart"
        class="btn-group d-flex align-items-center">
 
-    <button *ngIf="!_isPlaying"
+    <button *ngIf="!isPlaying"
             class="btn btn-secondary"
             (click)="playMusic()">
       <fa-icon [icon]="'play'"></fa-icon>
     </button>
-    <button *ngIf="_isPlaying"
+    <button *ngIf="isPlaying"
             class="btn btn-secondary"
             (click)="pauseMusic()">
       <fa-icon [icon]="'pause'"></fa-icon>
