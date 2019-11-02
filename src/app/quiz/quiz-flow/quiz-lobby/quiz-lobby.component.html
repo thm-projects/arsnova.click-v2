@@ -21,11 +21,12 @@
   </ng-container>
 </div>
 
-<app-audio-player *ngIf="quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby"
-                  [autostart]="true"
-                  [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.lobby"
-                  [src]="quizService.quiz.sessionConfig.music.titleConfig.lobby"
-                  [target]="'lobby'"></app-audio-player>
+<ng-container *ngIf="quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby">
+  <app-audio-player [autostart]="true"
+                    [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.lobby"
+                    [src]="quizService.quiz.sessionConfig.music.titleConfig.lobby"
+                    [target]="'lobby'"></app-audio-player>
+</ng-container>
 
 <ng-template #attendeesByGroup>
   <div *ngFor="let group of attendeeService.getMemberGroups()"

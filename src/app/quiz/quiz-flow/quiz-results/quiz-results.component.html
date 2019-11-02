@@ -112,22 +112,25 @@
   </div>
 </ng-container>
 
-<div *ngIf="quizService.isOwner">
-  <app-audio-player *ngIf="countdown && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownRunning"
-                    [autostart]="true"
-                    [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning"
-                    [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownRunning"
-                    [target]="'countdownRunning'"></app-audio-player>
+<ng-container *ngIf="quizService.isOwner">
+  <ng-container *ngIf="countdown && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownRunning">
+    <app-audio-player [autostart]="true"
+                      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning"
+                      [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownRunning"
+                      [target]="'countdownRunning'"></app-audio-player>
+  </ng-container>
 
-  <app-audio-player
-    *ngIf="countdown === 0 && !quizService.readingConfirmationRequested && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownEnd"
-    [autostart]="true"
-    [loop]="false"
-    [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd"
-    [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownEnd"
-    [target]="'countdownEnd'"></app-audio-player>
+  <ng-container *ngIf="countdown === 0 && !quizService.readingConfirmationRequested && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownEnd">
+    <app-audio-player
+      [autostart]="true"
+      [loop]="false"
+      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd"
+      [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownEnd"
+      [target]="'countdownEnd'"></app-audio-player>
+  </ng-container>
 
-  <app-gamification-animation *ngIf="countdown"
-                              [countdownValue]="countdown"></app-gamification-animation>
-</div>
+  <ng-container *ngIf="countdown">
+    <app-gamification-animation [countdownValue]="countdown"></app-gamification-animation>
+  </ng-container>
+</ng-container>
 
