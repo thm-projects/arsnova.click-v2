@@ -1,9 +1,9 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, EventEmitter, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
 import { DbTable, StorageKey } from '../../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -15,14 +15,14 @@ import { ThemesService } from '../../service/themes/themes.service';
   selector: 'app-theme-switcher',
   templateUrl: './theme-switcher.component.html',
   styleUrls: ['./theme-switcher.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions') //
-export class ThemeSwitcherComponent implements OnDestroy {
+})
+export class ThemeSwitcherComponent implements OnInit, OnDestroy {
   public static TYPE = 'ThemeSwitcherComponent';
 
   private previewThemeBackup: string;
-  private _subscriptions: Array<Subscription> = [];
   private _themeChangedEmitter = new EventEmitter<string>();
+
+  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -42,13 +42,6 @@ export class ThemeSwitcherComponent implements OnDestroy {
       this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
     }
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(() => {
-      this._subscriptions.push(this._themeChangedEmitter.subscribe((themeId) => {
-        this.quizService.quiz.sessionConfig.theme = themeId;
-        this.quizService.persist();
-      }));
-    }));
-
     let footerElements;
     if (environment.forceQuizTheme && sessionStorage.getItem(StorageKey.CurrentQuizName)) {
       this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
@@ -65,18 +58,30 @@ export class ThemeSwitcherComponent implements OnDestroy {
     footerBarService.replaceFooterElements(footerElements);
   }
 
+  public ngOnInit(): void {
+    const themeChanged$ = this._themeChangedEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy));
+
+    this.quizService.quizUpdateEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy), switchMapTo(themeChanged$)).subscribe(themeId => {
+      this.quizService.quiz.sessionConfig.theme = themeId;
+      this.quizService.persist();
+    });
+  }
+
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
     this.footerBarService.footerElemBack.restoreClickCallback();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public updateTheme(id: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      document.getElementsByTagName('html').item(0).dataset['theme'] = id;
-      this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
-      this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this.previewThemeBackup).subscribe();
-      this._themeChangedEmitter.emit(id);
+    if (isPlatformServer(this.platformId)) {
+      return;
     }
+
+    document.getElementsByTagName('html').item(0).dataset['theme'] = id;
+    this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
+    this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this.previewThemeBackup).subscribe();
+    this._themeChangedEmitter.emit(id);
   }
 
   public previewTheme(id): void {
@@ -86,15 +91,16 @@ export class ThemeSwitcherComponent implements OnDestroy {
   }
 
   public restoreTheme(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
-      if (themeDataset !== this.previewThemeBackup) {
-        document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
-        this.themesService.reloadLinkNodes(this.previewThemeBackup);
-        return;
-      }
+    const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
+
+    if (themeDataset !== this.previewThemeBackup) {
+      document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
+      this.themesService.reloadLinkNodes(this.previewThemeBackup);
+      return;
     }
   }
-
 }

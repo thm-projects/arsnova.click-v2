@@ -5,12 +5,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ILeaderBoardItem } from 'arsnova-click-v2-types/dist/common';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
-import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizState } from '../../../../lib/enums/QuizState';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
@@ -26,13 +25,13 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-leaderboard',
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class LeaderboardComponent implements OnInit, OnDestroy {
   public static TYPE = 'LeaderboardComponent';
   public isLoadingData = true;
 
   private _questionIndex: number;
+  private readonly _destroy = new Subject();
 
   get questionIndex(): number {
     return this._questionIndex;
@@ -56,12 +55,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     return this._isGlobalRanking;
   }
 
-  private _hasMultipleAnswersAvailable: boolean;
-
-  get hasMultipleAnswersAvailable(): boolean {
-    return this._hasMultipleAnswersAvailable;
-  }
-
   private _ownResponse: { index: number, element: ILeaderBoardItem, closestOpponent: ILeaderBoardItem };
 
   get ownResponse(): { index: number; element: ILeaderBoardItem; closestOpponent: ILeaderBoardItem } {
@@ -70,8 +63,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
 
   private _serverUnavailableModal: NgbModalRef;
   private _name: string;
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
   private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
@@ -92,7 +83,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }
@@ -105,13 +96,13 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       this._name = this.quizService.quiz.name;
       this.initData();
       this.addFooterElements();
-    }));
+    });
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
     });
 
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
           this._serverUnavailableModal.dismiss();
@@ -127,12 +118,13 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
+    });
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public sanitizeHTML(value: string): SafeHtml {
@@ -175,7 +167,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   }
 
   private initData(): void {
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntil(this._destroy)).subscribe(params => {
 
       this._questionIndex = +params['questionIndex'];
       this._isGlobalRanking = isNaN(this._questionIndex);
@@ -188,9 +180,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         }
       } else {
         this.headerLabelService.headerLabel = 'component.leaderboard.header';
-
-        const questionType = this.quizService.quiz.questionList[this.questionIndex].TYPE;
-        this._hasMultipleAnswersAvailable = questionType === QuestionType.MultipleChoiceQuestion;
       }
 
       this.leaderboardApiService.getLeaderboardData(this._name, environment.leaderboardAmount, this.questionIndex).subscribe(lederboardData => {

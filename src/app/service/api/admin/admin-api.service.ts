@@ -10,7 +10,7 @@ import { UserService } from '../../user/user.service';
 @Injectable({
   providedIn: 'root',
 })
-export class AdminService {
+export class AdminApiService {
   private _getAvailableUsersUrl: string;
   private _getAvailableQuizzesUrl: string;
   private _deleteQuizUrl: string;

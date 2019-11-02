@@ -1,6 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { IAvailableNicks } from 'arsnova-click-v2-types/dist/common';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { NickApiService } from '../../../service/api/nick/nick-api.service';
@@ -16,6 +18,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'NicknameManagerComponent';
 
   private _availableNicks: IAvailableNicks;
+  private readonly _destroy = new Subject();
 
   get availableNicks(): IAvailableNicks {
     return this._availableNicks;
@@ -74,7 +77,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
   public availableNickCategories(): Array<string> {
@@ -165,7 +168,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.nickApiService.getPredefinedNicks().subscribe(data => {
+    this.nickApiService.getPredefinedNicks().pipe(takeUntil(this._destroy)).subscribe(data => {
       this.availableNicks = data;
     }, error => {
       console.log('NicknameManagerComponent: GetPredefinedNicks failed', error);
@@ -174,6 +177,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.quizService.persist();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public getCategoryTranslation(cat: string): string {

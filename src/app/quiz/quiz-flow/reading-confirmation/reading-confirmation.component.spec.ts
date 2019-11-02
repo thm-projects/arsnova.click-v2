@@ -1,7 +1,8 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -78,9 +79,9 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
   it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>TestMarkup</span></div>';
 
-    spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake((value: string) => value as SafeHtml);
+    spyOn(sanitizer, 'sanitize').and.callFake((ctx: SecurityContext, value: string) => value as string);
     component.sanitizeHTML(markup);
-    expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
+    expect(sanitizer.sanitize).toHaveBeenCalled();
   }));
 
   it('#confirmReading', async(inject([Router], (router: Router) => {

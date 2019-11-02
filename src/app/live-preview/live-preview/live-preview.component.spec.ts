@@ -91,8 +91,8 @@ describe('LivePreviewComponent', () => {
 
   it('#sanitizeHTML', async(inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>Test</span></div>';
-    spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callThrough();
+    spyOn(sanitizer, 'sanitize').and.callThrough();
     component.sanitizeHTML(markup);
-    expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalledWith(markup);
+    expect(sanitizer.sanitize).toHaveBeenCalledWith(markup);
   })));
 });

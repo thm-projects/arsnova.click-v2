@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { AdminService } from '../../service/api/admin/admin.service';
+import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 
 @Component({
@@ -18,13 +18,13 @@ export class QuizDetailsAdminComponent implements OnInit {
 
   private _isSelected = 'general';
 
-  constructor(private footerBarService: FooterBarService, private adminService: AdminService, private activatedRoute: ActivatedRoute) {
+  constructor(private footerBarService: FooterBarService, private adminApiService: AdminApiService, private activatedRoute: ActivatedRoute) {
     this.updateFooterElements();
   }
 
   public ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
-      this.adminService.getQuiz(params.id).subscribe(data => {
+      this.adminApiService.getQuiz(params.id).subscribe(data => {
         this._quiz = data;
       });
     });

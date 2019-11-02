@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
-import { AdminService } from '../../service/api/admin/admin.service';
+import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 
 @Component({
@@ -24,12 +24,12 @@ export class QuizAdminComponent implements OnInit {
 
   private _deletingElements: Array<string> = [];
 
-  constructor(private footerBarService: FooterBarService, private adminService: AdminService, private cdRef: ChangeDetectorRef) {
+  constructor(private footerBarService: FooterBarService, private adminApiService: AdminApiService, private cdRef: ChangeDetectorRef) {
     this.updateFooterElements();
   }
 
   public ngOnInit(): void {
-    this.adminService.getAvailableQuizzes().subscribe(data => {
+    this.adminApiService.getAvailableQuizzes().subscribe(data => {
       this._quizzes = data;
       this.cdRef.markForCheck();
     });
@@ -40,7 +40,7 @@ export class QuizAdminComponent implements OnInit {
   }
 
   public deactivateQuiz(quiz: IAdminQuiz): void {
-    this.adminService.deactivateQuiz(quiz.name).subscribe(() => {
+    this.adminApiService.deactivateQuiz(quiz.name).subscribe(() => {
       quiz.state = QuizState.Inactive;
       this.cdRef.markForCheck();
     }, error => console.error(error));
@@ -52,7 +52,7 @@ export class QuizAdminComponent implements OnInit {
 
   public deleteElem($event: Event, quiz: IAdminQuiz): void {
     const index = this._deletingElements.push(quiz.name) - 1;
-    this.adminService.deleteQuiz(quiz.name).subscribe(() => {
+    this.adminApiService.deleteQuiz(quiz.name).subscribe(() => {
       this._deletingElements.splice(index, 1);
       const quizIndex = this._quizzes.findIndex(q => q.name === quiz.name);
       if (quizIndex > -1) {

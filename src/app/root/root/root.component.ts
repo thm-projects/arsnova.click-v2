@@ -1,10 +1,11 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { StatusProtocol } from '../../../lib/enums/Message';
@@ -29,6 +30,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   public isInQuizManager = false;
   public isLoading = true;
   private _stompSubscription: Subscription;
+  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -42,10 +44,9 @@ export class RootComponent implements OnInit, AfterViewInit {
     private updateCheckService: UpdateCheckService,
     private rxStompService: RxStompService,
     private quizService: QuizService,
-    private connectionService: ConnectionService,
-    private messageQueue: SimpleMQ, private cdRef: ChangeDetectorRef,
+    private connectionService: ConnectionService, private messageQueue: SimpleMQ,
   ) {
-    this.themeService.themeChanged.subscribe(themeName => {
+    this.themeService.themeChanged.pipe(takeUntil(this._destroy)).subscribe(themeName => {
       this.loadExternalStyles(`/${themeName}.css`).then(() => {
         this.initializeCookieConsent();
       }).catch(reason => {
@@ -53,7 +54,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       });
     });
     this.updateCheckService.checkForUpdates();
-    this.sharedService.isLoadingEmitter.subscribe(isLoading => {
+    this.sharedService.isLoadingEmitter.pipe(takeUntil(this._destroy)).subscribe(isLoading => {
       setTimeout(() => this.isLoading = isLoading);
     });
   }
@@ -71,11 +72,11 @@ export class RootComponent implements OnInit, AfterViewInit {
 
     this.userService.loadConfig();
 
-    this.translateService.onLangChange.subscribe(() => {
+    this.translateService.onLangChange.pipe(takeUntil(this._destroy)).subscribe(() => {
       this.initializeCookieConsent();
     });
 
-    this.router.events.subscribe((event: any) => {
+    this.router.events.pipe(takeUntil(this._destroy)).subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
         this.sharedService.isLoadingEmitter.next(true);
       } else if (event instanceof RouteConfigLoadEnd || event instanceof NavigationEnd) {
@@ -83,7 +84,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.quizService.quizUpdateEmitter.subscribe((quiz: QuizEntity) => {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
       if (this._stompSubscription) {
         this._stompSubscription.unsubscribe();
       }
@@ -92,7 +93,8 @@ export class RootComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      this._stompSubscription = this.rxStompService.watch(`/exchange/quiz_${encodeURI(quiz.name)}`).subscribe(message => {
+      this._stompSubscription = this.rxStompService.watch(`/exchange/quiz_${encodeURI(quiz.name)}`).pipe(takeUntil(this._destroy))
+      .subscribe(message => {
         console.log('Message in quiz channel received', message);
         try {
           const parsedMessage = JSON.parse(message.body);
@@ -128,7 +130,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       event.prompt();
     });
 
-    this.router.events.subscribe((nav: any) => {
+    this.router.events.pipe(takeUntil(this._destroy)).subscribe((nav: any) => {
       if (nav instanceof NavigationEnd) {
 
         this.isInQuizManager = [QuizManagerComponent.TYPE].includes(this.fetchChildComponent(this.activatedRoute).TYPE);

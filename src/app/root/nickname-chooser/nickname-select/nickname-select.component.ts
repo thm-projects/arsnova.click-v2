@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -92,7 +92,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
   public parseAvailableNick(name: string): SafeHtml {

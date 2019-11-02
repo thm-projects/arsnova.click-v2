@@ -1,7 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../../lib/enums/enums';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -12,8 +12,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-countdown',
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class CountdownComponent implements OnInit, OnDestroy {
   public static TYPE = 'CountdownComponent';
   public minCountdownValue = 0;
@@ -63,8 +62,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   private _question: AbstractQuestionEntity;
 
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     private headerLabelService: HeaderLabelService,
@@ -102,19 +100,17 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (!quiz) {
+    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
+
+    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
+      if (!this.quizService.quiz || isNaN(questionIndex)) {
         return;
       }
 
-      this._subscriptions.push(this.route.params.subscribe(params => {
-        this._questionIndex = +params['questionIndex'];
-        if (this.quizService.quiz) {
-          this._question = this.quizService.quiz.questionList[this._questionIndex];
-        }
-        this.updateCountdown(this._question.timer);
-      }));
-    }));
+      this._questionIndex = questionIndex;
+      this._question = this.quizService.quiz.questionList[this._questionIndex];
+      this.updateCountdown(this._question.timer);
+    });
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
@@ -122,6 +118,8 @@ export class CountdownComponent implements OnInit, OnDestroy {
   @HostListener('window:beforeunload', ['$event'])
   public ngOnDestroy(): void {
     this.quizService.persist();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
 }

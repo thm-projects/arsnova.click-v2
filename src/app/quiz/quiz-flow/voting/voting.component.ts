@@ -1,12 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { Countdown } from '../../../../lib/countdown/countdown';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { SurveyQuestionEntity } from '../../../../lib/entities/question/SurveyQuestionEntity';
@@ -29,8 +29,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-voting',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class VotingComponent implements OnInit, OnDestroy {
   public static TYPE = 'VotingComponent';
   public isSendingResponse: boolean;
@@ -63,10 +62,9 @@ export class VotingComponent implements OnInit, OnDestroy {
     return this._selectedAnswers;
   }
 
+  private readonly _destroy = new Subject();
   private _currentQuestion: AbstractQuestionEntity;
   private _serverUnavailableModal: NgbModalRef;
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
   private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
@@ -80,8 +78,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private router: Router,
     private quizApiService: QuizApiService,
-    private memberApiService: MemberApiService,
-    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
@@ -92,7 +89,7 @@ export class VotingComponent implements OnInit, OnDestroy {
   }
 
   public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
   public displayAnswerButtons(): boolean {
@@ -149,10 +146,8 @@ export class VotingComponent implements OnInit, OnDestroy {
     this.isSendingResponse = true;
 
     this.router.navigate([
-      '/quiz',
-      'flow',
-      route ? route : environment.confidenceSliderEnabled && this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate'
-                                                                                                                         : 'results',
+      '/quiz', 'flow', route ? route : environment.confidenceSliderEnabled && //
+                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
     ]);
   }
 
@@ -171,7 +166,7 @@ export class VotingComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }
@@ -184,23 +179,23 @@ export class VotingComponent implements OnInit, OnDestroy {
       this._currentQuestion = this.quizService.currentQuestion();
       this.initData();
 
-      this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+      this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string | Array<string>) => {
         if (Array.isArray(value)) {
           this._answers = value;
         } else {
           this._questionText = value;
         }
-      }));
+      });
 
       this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText));
       this.questionTextService.change(this._currentQuestion.questionText);
-    }));
+    });
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
     });
 
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
           this._serverUnavailableModal.dismiss();
@@ -216,7 +211,7 @@ export class VotingComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
+    });
   }
 
   public ngOnDestroy(): void {
@@ -231,8 +226,9 @@ export class VotingComponent implements OnInit, OnDestroy {
       this.countdown.stop();
     }
 
-    this._subscriptions.forEach(sub => sub.unsubscribe());
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   private handleMessages(): void {

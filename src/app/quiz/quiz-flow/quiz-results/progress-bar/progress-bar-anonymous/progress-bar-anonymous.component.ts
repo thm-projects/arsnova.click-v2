@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { QuestionType } from '../../../../../../lib/enums/QuestionType';
 
@@ -37,7 +37,7 @@ export class ProgressBarAnonymousComponent {
 
   public sanitizeStyle(value: string | number): SafeStyle {
     value = value.toString().replace(/\s/g, '');
-    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 
   public isSurveyQuestion(): boolean {

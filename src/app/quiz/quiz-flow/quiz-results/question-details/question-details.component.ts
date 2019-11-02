@@ -1,11 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../../lib/enums/Message';
@@ -21,8 +21,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-question-details',
   templateUrl: './question-details.component.html',
   styleUrls: ['./question-details.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class QuestionDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestionDetailsComponent';
 
@@ -55,8 +54,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _serverUnavailableModal: NgbModalRef;
-  private readonly _subscriptions: Array<Subscription> = [];
   private readonly _messageSubscriptions: Array<string> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     private route: ActivatedRoute,
@@ -77,7 +76,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
   public normalizeAnswerIndex(index: number): string {
@@ -85,15 +84,15 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+    this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
         this._answers = value;
       } else {
         this._questionText = value;
       }
-    }));
+    });
 
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
           this._serverUnavailableModal.dismiss();
@@ -109,12 +108,12 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
+    });
 
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntil(this._destroy)).subscribe(params => {
       this._questionIndex = +params['questionIndex'];
 
-      this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+      this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
         if (!quiz) {
           return;
         }
@@ -128,7 +127,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
           this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
           this.questionTextService.change(this._question.questionText);
         }
-      }));
+      });
 
       this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
         this.handleMessages();
@@ -137,8 +136,9 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   private handleMessages(): void {

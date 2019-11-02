@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../../lib/enums/enums';
 import { QuestionType } from '../../../../../lib/enums/QuestionType';
@@ -13,8 +13,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-answeroptions',
   templateUrl: './answeroptions.component.html',
   styleUrls: ['./answeroptions.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class AnsweroptionsComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsComponent';
 
@@ -28,8 +27,7 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
 
   private _questionIndex: number;
 
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     private headerLabelService: HeaderLabelService,
@@ -37,32 +35,31 @@ export class AnsweroptionsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private footerBarService: FooterBarService,
   ) {
+    this.headerLabelService.headerLabel = 'component.quiz_manager.title';
 
     this.footerBarService.TYPE_REFERENCE = AnsweroptionsComponent.TYPE;
-    headerLabelService.headerLabel = 'component.quiz_manager.title';
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
     ]);
   }
 
   public ngOnInit(): void {
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (!quiz) {
+    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
+
+    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
+      if (!this.quizService.quiz || isNaN(questionIndex)) {
         return;
       }
 
-      this.route.params.subscribe(params => {
-        this._questionIndex = +params['questionIndex'];
-        if (this.quizService.quiz) {
-          this._question = this.quizService.quiz.questionList[this._questionIndex];
-        }
-      });
-    }));
+      this._questionIndex = questionIndex;
+      this._question = this.quizService.quiz.questionList[this._questionIndex];
+    });
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
   }
 }

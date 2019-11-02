@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
@@ -11,9 +11,8 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-member-group-manager',
   templateUrl: './member-group-manager.component.html',
   styleUrls: ['./member-group-manager.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
-export class MemberGroupManagerComponent implements OnDestroy {
+})
+export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'MemberGroupManagerComponent';
   public memberGroupName = '';
 
@@ -43,8 +42,7 @@ export class MemberGroupManagerComponent implements OnDestroy {
     this._autoJoinToGroup = value;
   }
 
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     private footerBarService: FooterBarService,
@@ -58,7 +56,11 @@ export class MemberGroupManagerComponent implements OnDestroy {
       this.footerBarService.footerElemBack,
     ]);
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+  }
+
+  public ngOnInit(): void {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }
@@ -66,9 +68,7 @@ export class MemberGroupManagerComponent implements OnDestroy {
       this._memberGroups = this.quizService.quiz.sessionConfig.nicks.memberGroups;
       this._maxMembersPerGroup = this.quizService.quiz.sessionConfig.nicks.maxMembersPerGroup;
       this._autoJoinToGroup = this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup;
-    }));
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    });
   }
 
   public ngOnDestroy(): void {
@@ -77,6 +77,9 @@ export class MemberGroupManagerComponent implements OnDestroy {
     this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup = this.autoJoinToGroup;
 
     this.quizService.persist();
+
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public addMemberGroup(): void {

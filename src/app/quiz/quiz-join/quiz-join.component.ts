@@ -1,5 +1,7 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
@@ -13,8 +15,9 @@ import { ThemesService } from '../../service/themes/themes.service';
   templateUrl: './quiz-join.component.html',
   styleUrls: ['./quiz-join.component.scss'],
 })
-export class QuizJoinComponent implements OnInit {
+export class QuizJoinComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizJoinComponent';
+  private readonly _destroy = new Subject();
 
   constructor(public quizService: QuizService,
               @Inject(PLATFORM_ID) private platformId: Object,
@@ -27,10 +30,10 @@ export class QuizJoinComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.route.queryParams.subscribe(queryParams => {
+    this.route.queryParams.pipe(takeUntil(this._destroy)).subscribe(queryParams => {
       this.casService.ticket = queryParams.ticket;
     });
-    this.route.params.subscribe(async params => {
+    this.route.params.pipe(takeUntil(this._destroy)).subscribe(async params => {
       if (!params || !params.quizName) {
         this.router.navigate(['/']);
         return;
@@ -42,6 +45,11 @@ export class QuizJoinComponent implements OnInit {
       }
       this.quizApiService.getFullQuizStatusData(params.quizName).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
     });
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   private resolveQuizStatusData(quizStatusData): void {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
@@ -71,6 +71,6 @@ export class GamificationAnimationComponent {
   }
 
   public sanitizeStyle(value: string): SafeStyle {
-    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 }

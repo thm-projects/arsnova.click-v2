@@ -10,9 +10,9 @@ import { IndexedDbService } from '../../storage/indexed.db.service';
 import { StorageService } from '../../storage/storage.service';
 import { UserService } from '../../user/user.service';
 
-import { AdminService } from './admin.service';
+import { AdminApiService } from './admin-api.service';
 
-describe('AdminService', () => {
+describe('AdminApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -31,7 +31,7 @@ describe('AdminService', () => {
   });
 
   it('should be created', () => {
-    const service: AdminService = TestBed.get(AdminService);
+    const service: AdminApiService = TestBed.get(AdminApiService);
     expect(service).toBeTruthy();
   });
 });

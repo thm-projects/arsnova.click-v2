@@ -1,9 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ISong } from 'arsnova-click-v2-types/dist/common';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { MusicSessionConfigurationEntity } from '../../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -13,9 +13,8 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-sound-manager',
   templateUrl: './sound-manager.component.html',
   styleUrls: ['./sound-manager.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
-export class SoundManagerComponent implements OnDestroy {
+})
+export class SoundManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'SoundManagerComponent';
 
   private _lobbySongs: Array<ISong> = [];
@@ -43,7 +42,7 @@ export class SoundManagerComponent implements OnDestroy {
   }
 
   private _selected = 'lobby';
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -57,8 +56,11 @@ export class SoundManagerComponent implements OnDestroy {
       this.footerBarService.footerElemBack,
     ]);
 
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+  }
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+  public ngOnInit(): void {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }
@@ -69,9 +71,7 @@ export class SoundManagerComponent implements OnDestroy {
       this.setRandomKey();
       this.setCountdownRunningSongs();
       this.setCountdownEndSongs();
-    }));
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    });
   }
 
   public selectSound(target: 'lobby' | 'countdownRunning' | 'countdownEnd', event: Event): void {
@@ -94,7 +94,8 @@ export class SoundManagerComponent implements OnDestroy {
   public ngOnDestroy(): void {
     this.quizService.quiz.sessionConfig.music = this._config;
     this.quizService.persist();
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   private initConfig(): void {

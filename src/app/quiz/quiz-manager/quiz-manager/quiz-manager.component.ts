@@ -1,10 +1,10 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
 import { DefaultAnswerEntity } from '../../../../lib/entities/answer/DefaultAnswerEntity';
 import { ABCDSingleChoiceQuestionEntity } from '../../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
@@ -26,9 +26,8 @@ import { QuizTypeSelectModalComponent } from './quiz-type-select-modal/quiz-type
   selector: 'app-quiz-manager',
   templateUrl: './quiz-manager.component.html',
   styleUrls: ['./quiz-manager.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
-export class QuizManagerComponent implements OnDestroy {
+})
+export class QuizManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizManagerComponent';
 
   private _selectableQuestionTypes = availableQuestionTypes;
@@ -37,8 +36,7 @@ export class QuizManagerComponent implements OnDestroy {
     return this._selectableQuestionTypes;
   }
 
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     public quizService: QuizService,
@@ -67,16 +65,6 @@ export class QuizManagerComponent implements OnDestroy {
     }
     footerBarService.replaceFooterElements(footerElements);
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(() => {
-      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
-    }));
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(() => {
-      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
-      this.footerBarService.footerElemNicknames.isActive = this.connectionService.serverAvailable;
-    }));
-    this.footerBarService.footerElemNicknames.isActive = this.connectionService.serverAvailable;
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
-
     this.footerBarService.footerElemStartQuiz.onClickCallback = (self: FooterbarElement) => {
       if (!self.isActive) {
         return;
@@ -89,8 +77,24 @@ export class QuizManagerComponent implements OnDestroy {
     };
   }
 
+  public ngOnInit(): void {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(() => {
+      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
+    });
+
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(() => {
+      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
+      this.footerBarService.footerElemNicknames.isActive = this.connectionService.serverAvailable;
+    });
+
+    this.footerBarService.footerElemNicknames.isActive = this.connectionService.serverAvailable;
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+  }
+
   public ngOnDestroy(): void {
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public addQuestion(id: QuestionType): void {

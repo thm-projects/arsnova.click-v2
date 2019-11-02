@@ -1,7 +1,7 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../../lib/available-question-types';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../../lib/enums/enums';
@@ -15,9 +15,8 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-questiontype',
   templateUrl: './questiontype.component.html',
   styleUrls: ['./questiontype.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
-export class QuestiontypeComponent implements OnDestroy {
+})
+export class QuestiontypeComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestiontypeComponent';
 
   private _selectableQuestionTypes = availableQuestionTypes;
@@ -30,8 +29,7 @@ export class QuestiontypeComponent implements OnDestroy {
   private _questionIndex: number;
   private _questionType: string;
 
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     private headerLabelService: HeaderLabelService,
@@ -48,22 +46,22 @@ export class QuestiontypeComponent implements OnDestroy {
       this.footerBarService.footerElemBack,
     ]);
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (!quiz) {
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+  }
+
+  public ngOnInit(): void {
+    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
+
+    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
+      if (!this.quizService.quiz || isNaN(questionIndex)) {
         return;
       }
 
-      this._subscriptions.push(this.route.params.subscribe(params => {
-        this._questionIndex = +params['questionIndex'];
-        if (this.quizService.quiz) {
-          this._question = this.quizService.quiz.questionList[this._questionIndex];
-        }
-        this._questionType = this._question.TYPE;
-        this._selectableQuestionTypes = this._selectableQuestionTypes.sort((a) => a.id === this._questionType ? -1 : 0);
-      }));
-    }));
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+      this._questionIndex = questionIndex;
+      this._question = this.quizService.quiz.questionList[this._questionIndex];
+      this._questionType = this._question.TYPE;
+      this._selectableQuestionTypes = this._selectableQuestionTypes.sort((a) => a.id === this._questionType ? -1 : 0);
+    });
   }
 
   public isActiveQuestionType(type: string): boolean {
@@ -71,12 +69,14 @@ export class QuestiontypeComponent implements OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public morphToQuestionType(type: QuestionType): void {
     this._question = getQuestionForType(type, this._question);
     this._questionType = type;
+
     this.quizService.quiz.removeQuestion(this._questionIndex);
     this.quizService.quiz.addQuestion(this._question, this._questionIndex);
     this.quizService.persist();

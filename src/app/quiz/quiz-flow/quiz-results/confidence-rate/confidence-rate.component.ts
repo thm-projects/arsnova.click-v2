@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { parseGithubFlavoredMarkdown } from '../../../../../lib/markdown/markdown';
 import { I18nService } from '../../../../service/i18n/i18n.service';
@@ -54,7 +54,7 @@ export class ConfidenceRateComponent {
 
   public sanitizeStyle(value: string): SafeStyle {
     value = value.replace(/\s/g, '');
-    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 
 }

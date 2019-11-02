@@ -3,7 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { UserEntity } from '../../../lib/entities/UserEntity';
 import { DbTable, StorageKey } from '../../../lib/enums/enums';
 import { AddUserComponent } from '../../modals/add-user/add-user.component';
-import { AdminService } from '../../service/api/admin/admin.service';
+import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { UserService } from '../../service/user/user.service';
@@ -24,8 +24,7 @@ export class UserAdminComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private footerBarService: FooterBarService,
-    private adminService: AdminService,
+    private footerBarService: FooterBarService, private adminApiService: AdminApiService,
     private ngbModal: NgbModal,
     private storageService: StorageService,
   ) {
@@ -33,7 +32,7 @@ export class UserAdminComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.adminService.getAvailableUsers().subscribe(data => {
+    this.adminApiService.getAvailableUsers().subscribe(data => {
       this._data = data;
     });
   }
@@ -44,7 +43,7 @@ export class UserAdminComponent implements OnInit {
 
   public deleteElem(user: UserEntity): void {
     const index = this._deletingElements.push(user.name) - 1;
-    this.adminService.deleteUser(user.name).subscribe(() => {
+    this.adminApiService.deleteUser(user.name).subscribe(() => {
       this._deletingElements.splice(index, 1);
       this._data.splice(this._data.indexOf(user), 1);
     }, error => {
@@ -56,7 +55,7 @@ export class UserAdminComponent implements OnInit {
     this.ngbModal.open(AddUserComponent).result.then(value => {
       value.passwordHash = this.userService.hashPassword(value.name, value.password);
       delete value.password;
-      this.adminService.updateUser(value).subscribe(() => {
+      this.adminApiService.updateUser(value).subscribe(() => {
         this._data.push(value);
       });
     }).catch(() => {});
@@ -74,7 +73,7 @@ export class UserAdminComponent implements OnInit {
       value.passwordHash = this.userService.hashPassword(value.name, value.password);
       delete value.password;
 
-      this.adminService.updateUser(value).subscribe(() => {
+      this.adminApiService.updateUser(value).subscribe(() => {
         user.name = value.name;
         user.privateKey = value.privateKey;
         user.passwordHash = value.passwordHash;

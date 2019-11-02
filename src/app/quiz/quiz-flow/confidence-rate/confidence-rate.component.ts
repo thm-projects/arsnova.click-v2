@@ -2,9 +2,9 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { QuizState } from '../../../../lib/enums/QuizState';
@@ -21,8 +21,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-confidence-rate',
   templateUrl: './confidence-rate.component.html',
   styleUrls: ['./confidence-rate.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class ConfidenceRateComponent implements OnInit, OnDestroy {
   public static TYPE = 'ConfidenceRateComponent';
 
@@ -33,8 +32,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   }
 
   private _serverUnavailableModal: NgbModalRef;
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
@@ -53,7 +51,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }
@@ -62,13 +60,13 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
         return;
       }
-    }));
+    });
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
     });
 
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
           this._serverUnavailableModal.dismiss();
@@ -84,11 +82,12 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
+    });
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 

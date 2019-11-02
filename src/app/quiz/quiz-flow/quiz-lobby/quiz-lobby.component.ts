@@ -4,9 +4,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
@@ -35,8 +35,7 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
   selector: 'app-quiz-lobby',
   templateUrl: './quiz-lobby.component.html',
   styleUrls: ['./quiz-lobby.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class QuizLobbyComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizLobbyComponent';
 
@@ -50,8 +49,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   private _serverUnavailableModal: NgbModalRef;
   private _reconnectTimeout: any;
   private _kickMemberModalRef: NgbActiveModal;
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -67,15 +65,14 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private trackingService: TrackingService,
     private memberApiService: MemberApiService,
     private quizApiService: QuizApiService,
-    private ngbModal: NgbModal,
-    private sharedService: SharedService, private userService: UserService, private messageQueue: SimpleMQ,
+    private ngbModal: NgbModal, private sharedService: SharedService, private userService: UserService, private messageQueue: SimpleMQ,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
   }
 
   public ngOnInit(): void {
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       console.log('QuizLobbyComponent: quizUpdateEmitter fired', quiz);
       if (!quiz) {
         return;
@@ -93,13 +90,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       } else {
         this.handleNewAttendee();
       }
-    }));
+    });
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
     });
 
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
           this._serverUnavailableModal.dismiss();
@@ -115,7 +112,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
+    });
   }
 
   public openKickMemberModal(content: TemplateRef<any>, name: string): void {
@@ -151,7 +148,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   public parseNickname(value: string): SafeHtml {
-
     if (value.match(/:[\w\+\-]+:/g)) {
       return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
     }
@@ -159,11 +155,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
     this.footerBarService.footerElemBack.restoreClickCallback();
     clearTimeout(this._reconnectTimeout);
+
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   private handleNewQuiz(quiz: QuizEntity): void {

@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../lib/AutoUnsubscribe';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { NumberType, StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
@@ -27,8 +27,7 @@ import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-conf
   templateUrl: './quiz-results.component.html',
   styleUrls: ['./quiz-results.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class QuizResultsComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizResultsComponent';
   public countdown: number;
@@ -41,7 +40,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public isLoadingQuestionData: boolean;
 
   private _hideProgressbarStyle = true;
-  private readonly _messageSubscriptions: Array<string> = [];
 
   get hideProgressbarStyle(): boolean {
     return this._hideProgressbarStyle;
@@ -64,9 +62,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return this._questionText;
   }
 
+  private readonly _messageSubscriptions: Array<string> = [];
   private _serverUnavailableModal: NgbModalRef;
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+
+  private readonly _destroy = new Subject();
 
   constructor(
     public quizService: QuizService,
@@ -78,8 +77,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
     private quizApiService: QuizApiService,
-    private ngbModal: NgbModal,
-    private cd: ChangeDetectorRef, private messageQueue: SimpleMQ,
+    private ngbModal: NgbModal, private cd: ChangeDetectorRef, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
@@ -203,15 +201,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string | Array<string>) => {
+    this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
         this.answers = value;
       } else {
         this._questionText = value;
       }
-    }));
+    });
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(async quiz => {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(async quiz => {
       if (!quiz) {
         return;
       }
@@ -233,7 +231,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
       this.addFooterElements();
       this.cd.markForCheck();
-    }));
+    });
 
     this.isLoadingQuestionData = true;
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
@@ -241,7 +239,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
     });
 
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
           this._serverUnavailableModal.dismiss();
@@ -257,14 +255,19 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
+    });
   }
 
   public ngOnDestroy(): void {
     sessionStorage.setItem(StorageKey.CurrentQuestionIndex, String(this._selectedQuestionIndex));
-    this.footerBarService.footerElemBack.restoreClickCallback();
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+
+    if (this.quizService.isOwner) {
+      this.footerBarService.footerElemBack.restoreClickCallback();
+    }
+
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public stopQuiz(): void {

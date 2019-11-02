@@ -1,11 +1,11 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
+import { of, Subject } from 'rxjs';
+import { distinctUntilChanged, filter, mergeMap, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
 import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { AbstractAnswerEntity } from '../../../lib/entities/answer/AbstractAnswerEntity';
@@ -38,8 +38,7 @@ import { UserService } from '../../service/user/user.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class HomeComponent implements OnInit, OnDestroy {
   public static TYPE = 'HomeComponent';
   public canJoinQuiz = false;
@@ -85,10 +84,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this._ownQuizzes;
   }
 
+  private readonly _destroy = new Subject();
   private _isPerformingClick: Array<string> = [];
-  private _routerSubscription: Subscription;
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private _subscriptions: Array<Subscription> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -123,17 +120,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.canUsePublicQuizzes = (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin))
                                && !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz);
 
-    this.userService.loginNotifier.subscribe(isLoggedIn => {
-      this.updateFooterElements(isLoggedIn);
-      this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin));
-      this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
-    });
-
     this.quizService.stopEditMode();
   }
 
   public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
   public ngOnInit(): void {
@@ -141,9 +132,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._subscriptions.push(this.storageService.stateNotifier.subscribe(state => {
+    this.userService.loginNotifier.pipe(takeUntil(this._destroy)).subscribe(isLoggedIn => {
+      this.updateFooterElements(isLoggedIn);
+      this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin));
+      this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
+    });
+
+    this.storageService.stateNotifier.pipe(takeUntil(this._destroy)).subscribe(state => {
       if (state === DbState.Destroy) {
-        this._subscriptions.forEach(sub => sub.unsubscribe());
         return;
       }
 
@@ -172,39 +168,37 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
         }
       }
-    }));
+    });
 
-    this._routerSubscription = this.activatedRoute.params.subscribe(params => {
-      this._subscriptions.push(this.storageService.stateNotifier.subscribe(async val => {
-        if ([DbState.Initialized, DbState.Revalidate].includes(val)) {
-          if (!Object.keys(params).length || !params.themeId || !params.languageId) {
-            const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
+    const params$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
 
-            if (theme) {
-              this.themesService.updateCurrentlyUsedTheme();
-              return;
-            }
+    this.storageService.stateNotifier.pipe(mergeMap(val => of(![DbState.Initialized, DbState.Revalidate].includes(val))), filter(val => !val),
+      distinctUntilChanged(), takeUntil(this._destroy), switchMapTo(params$)).subscribe(async params => {
 
-            await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, DefaultSettings.defaultQuizSettings.sessionConfig.theme)
-            .toPromise();
-            this.themesService.updateCurrentlyUsedTheme();
+      if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
+        const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
 
-            return;
-          }
-
-          await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, params.themeId).toPromise();
-          this.i18nService.setLanguage(<Language>params.languageId.toUpperCase());
+        if (theme) {
           this.themesService.updateCurrentlyUsedTheme();
+          return;
         }
-      }));
+
+        await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, DefaultSettings.defaultQuizSettings.sessionConfig.theme)
+        .toPromise();
+        this.themesService.updateCurrentlyUsedTheme();
+
+        return;
+      }
+
+      await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, params.get('themeId')).toPromise();
+      this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
+      this.themesService.updateCurrentlyUsedTheme();
     });
   }
 
   public ngOnDestroy(): void {
-    if (this._routerSubscription) {
-      this._routerSubscription.unsubscribe();
-    }
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public autoJoinToSession(quizname): void {
@@ -522,7 +516,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.storageService.delete(DbTable.Config, StorageKey.QuizTheme).subscribe();
     }
     if (!environment.persistQuizzes && !this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
-      this.storageService.getAll<QuizEntity>(DbTable.Quiz).subscribe(quizDbData => {
+      this.storageService.getAll<QuizEntity>(DbTable.Quiz).pipe(takeUntil(this._destroy)).subscribe(quizDbData => {
         quizDbData.forEach(quizData => {
           this.quizApiService.deleteQuiz(quizData.value).subscribe(() => {
             this.storageService.delete(DbTable.Quiz, quizData.id).subscribe();

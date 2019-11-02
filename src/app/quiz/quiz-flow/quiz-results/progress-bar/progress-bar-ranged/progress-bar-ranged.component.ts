@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 @Component({
@@ -48,10 +48,10 @@ export class ProgressBarRangedComponent {
 
   public sanitizeStyle(value: string | number): SafeStyle {
     value = value.toString().replace(/\s/g, '');
-    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 
   public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 }

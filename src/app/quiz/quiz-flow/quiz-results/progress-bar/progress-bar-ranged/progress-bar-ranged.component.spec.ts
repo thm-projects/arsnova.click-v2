@@ -1,5 +1,6 @@
+import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { SharedModule } from '../../../../../shared/shared.module';
 
 import { ProgressBarRangedComponent } from './progress-bar-ranged.component';
@@ -37,8 +38,8 @@ describe('ProgressBarRangedComponent', () => {
   it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>TestMarkup</span></div>';
 
-    spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake((value: string) => value as SafeHtml);
+    spyOn(sanitizer, 'sanitize').and.callFake((ctx: SecurityContext, value: string) => value as string);
     component.sanitizeHTML(markup);
-    expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
+    expect(sanitizer.sanitize).toHaveBeenCalled();
   }));
 });

@@ -1,11 +1,11 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from '../../../lib/AutoUnsubscribe';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
@@ -16,8 +16,7 @@ import { UpdateCheckService } from '../../service/update-check/update-check.serv
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class HeaderComponent implements OnInit, OnDestroy {
   public static TYPE = 'HeaderComponent';
   @Input() public showHeader = true;
@@ -57,8 +56,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
-  private _subscriptions: Array<Subscription> = [];
   @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
+
+  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -76,21 +76,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public generateConnectionQualityColor(): SafeStyle {
     const colorCode = this.connectionService.lowSpeed || //
-                      !this.indexedDbAvailable ? 'var(--danger)' : //
-                      this.connectionService.mediumSpeed ? 'var(--danger)' : //
-                      !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? 'var(--grey)' : 'var(--light)';
+                      !this.indexedDbAvailable ? '#dc3545' : //
+                      this.connectionService.mediumSpeed ? '#dc3545' : //
+                      !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? '#6c757d' : '#B2DFDB';
 
     return this.sanitizeStyle(colorCode);
   }
 
   public ngOnInit(): void {
-    this.router.events.subscribe((url: any) => {
-      if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.router.events.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe((url: any) => {
         this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
-      }
-    });
+      });
+    }
 
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(() => {
+    this.connectionService.serverStatusEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(() => {
       if (!this.showHeader) {
         return;
       }
@@ -100,7 +100,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       } else {
         this.connectionIndicatorPopover.open();
       }
-    }));
+    });
 
     new Promise((resolve, reject) => {
       if ('storage' in navigator) {
@@ -120,7 +120,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public openConnectionQualityModal(content: TemplateRef<any>): void {
@@ -166,7 +167,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
 
     value = value.replace(/\s/g, '');
-    return this.sanitizer.bypassSecurityTrustStyle(`${value}`);
+    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 
   private indexedDbSupported(): boolean {

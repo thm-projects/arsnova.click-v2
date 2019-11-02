@@ -1,9 +1,9 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../environments/environment';
-import { AutoUnsubscribe } from '../../../../../lib/AutoUnsubscribe';
 import { StorageKey } from '../../../../../lib/enums/enums';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -14,8 +14,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-questiontext',
   templateUrl: './questiontext.component.html',
   styleUrls: ['./questiontext.component.scss'],
-}) //
-@AutoUnsubscribe('_subscriptions')
+})
 export class QuestiontextComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestiontextComponent';
 
@@ -25,8 +24,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   private _questionIndex: number;
   @ViewChild('questionText', { static: true }) private textarea: ElementRef;
 
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -109,29 +107,30 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
+    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), takeUntil(this._destroy),
+      distinctUntilChanged());
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
+    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
+      if (!this.quizService.quiz || isNaN(questionIndex)) {
+        return;
+      }
+
+      this._questionIndex = questionIndex;
+      this.textarea.nativeElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
+      this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText);
     });
 
-    if (isPlatformBrowser(this.platformId)) {
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
-      this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
-        if (!quiz) {
-          return;
-        }
+    const contentContainer = document.getElementById('content-container');
 
-        this.textarea.nativeElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
-        this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText);
-      }));
-
-      this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
-
-      const contentContainer = document.getElementById('content-container');
-
-      if (contentContainer) {
-        contentContainer.classList.remove('container');
-        contentContainer.classList.add('container-fluid');
-      }
+    if (contentContainer) {
+      contentContainer.classList.remove('container');
+      contentContainer.classList.add('container-fluid');
     }
   }
 
@@ -139,6 +138,9 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     this.questionTextService.change(this.textarea.nativeElement.value);
     this.quizService.quiz.questionList[this._questionIndex].questionText = this.textarea.nativeElement.value;
     this.quizService.persist();
+
+    this._destroy.next();
+    this._destroy.complete();
 
     if (isPlatformBrowser(this.platformId)) {
       const contentContainer = document.getElementById('content-container');
