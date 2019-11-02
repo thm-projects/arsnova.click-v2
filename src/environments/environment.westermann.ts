@@ -25,6 +25,7 @@ export const environment: IEnvironment = {
   showJoinableQuizzes: false,
   showPublicQuizzes: false,
   persistQuizzes: false,
+  hasCooperationPartner: true,
 };
 
 export enum DEVICE_TYPES {

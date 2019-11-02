@@ -215,10 +215,12 @@
            src="/assets/images/external/thm-logo-negativ.png"
            style="height: 70px"/>
     </div>
-    <div class="col-12 col-sm-auto d-flex">
+    <div *ngIf="hasCooperationPartner"
+         class="col-12 col-sm-auto d-flex">
       <h6 class="mx-auto my-4 my-sm-0 align-self-center">{{'global.in-cooperation-with' | translate}}</h6>
     </div>
-    <div class="col-12 col-sm-auto d-flex">
+    <div *ngIf="hasCooperationPartner"
+         class="col-12 col-sm-auto d-flex">
       <img alt="Schroedel Aktuell"
            class="mx-auto bg-white align-self-center"
            src="/assets/images/external/schroedel-aktuell.png"

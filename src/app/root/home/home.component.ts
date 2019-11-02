@@ -54,6 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public canModifyQuiz: boolean = !environment.requireLoginToCreateQuiz;
   public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
   public showJoinableQuizzes: boolean = environment.showJoinableQuizzes;
+  public hasCooperationPartner: boolean = environment.hasCooperationPartner;
   public isQueryingQuizState: boolean;
 
   private _serverPassword = '';
