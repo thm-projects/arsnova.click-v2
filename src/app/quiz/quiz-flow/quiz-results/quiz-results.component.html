@@ -9,104 +9,108 @@
   </h1>
 </div>
 
-<div class="overflow-auto btn-header">
-  <div class="my-3 btn-group">
-    <button (click)="startQuiz()"
-            *ngIf="showStartQuizButton && !(showStopCountdownButton || showStopQuizButton)"
-            [class.w-100]="quizService.getVisibleQuestions().length"
-            class="btn btn-warning text-nowrap">
+<ng-container *ngIf="quizService.getVisibleQuestions() as visibleQuestions">
+  <div class="overflow-auto btn-header">
+    <div class="my-3 btn-group">
+      <button (click)="startQuiz()"
+              *ngIf="showStartQuizButton && !(showStopCountdownButton || showStopQuizButton)"
+              [class.w-100]="quizService.getVisibleQuestions().length"
+              class="btn btn-warning text-nowrap">
 
-      <ng-container *ngIf="quizService.quiz?.sessionConfig.readingConfirmationEnabled">
-        <span *ngIf="quizService.readingConfirmationRequested"
+        <ng-container *ngIf="quizService.quiz?.sessionConfig.readingConfirmationEnabled">
+          <span *ngIf="quizService.readingConfirmationRequested"
+                class="mr-1">
+            {{'component.liveResults.start_round' | translate}}
+          </span>
+
+          <span *ngIf="!quizService.readingConfirmationRequested"
+                class="mr-1">
+            {{'component.liveResults.show_question' | translate}}
+          </span>
+        </ng-container>
+
+        <span *ngIf="!quizService.quiz?.sessionConfig.readingConfirmationEnabled"
               class="mr-1">
           {{'component.liveResults.start_round' | translate}}
         </span>
 
-        <span *ngIf="!quizService.readingConfirmationRequested"
-              class="mr-1">
-          {{'component.liveResults.show_question' | translate}}
-        </span>
+        <fa-icon *ngIf="!isStarting"
+                 [icon]="'paper-plane'"></fa-icon>
+        <fa-icon *ngIf="isStarting"
+                 [icon]="'spinner'"
+                 [spin]="true"></fa-icon>
+      </button>
+
+      <button (click)="stopQuiz()"
+              *ngIf="!showStartQuizButton && (showStopCountdownButton || showStopQuizButton)"
+              class="btn btn-warning text-nowrap">
+        <span *ngIf="showStopCountdownButton"
+              class="mr-1">{{'component.liveResults.abort_countdown' | translate}}</span>
+        <span *ngIf="showStopQuizButton"
+              class="mr-1">{{'component.liveResults.abort_question' | translate}}</span>
+        <fa-icon *ngIf="!isStopping"
+                 [icon]="'ban'"></fa-icon>
+        <fa-icon *ngIf="isStopping"
+                 [icon]="'spinner'"
+                 [spin]="true"></fa-icon>
+      </button>
+
+      <ng-container *ngIf="visibleQuestions.length > 1">
+        <button (click)="modifyVisibleQuestion(i)"
+                *ngFor="let question of visibleQuestions; let i = index"
+                [class.disabled]="i === selectedQuestionIndex || countdown > 0"
+                [disabled]="i === selectedQuestionIndex || countdown > 0"
+                class="btn btn-info text-nowrap">
+          <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
+        </button>
       </ng-container>
-
-      <span *ngIf="!quizService.quiz?.sessionConfig.readingConfirmationEnabled"
-            class="mr-1">
-        {{'component.liveResults.start_round' | translate}}
-      </span>
-
-      <fa-icon *ngIf="!isStarting"
-               [icon]="'paper-plane'"></fa-icon>
-      <fa-icon *ngIf="isStarting"
-               [icon]="'spinner'"
-               [spin]="true"></fa-icon>
-    </button>
-
-    <button (click)="stopQuiz()"
-            *ngIf="!showStartQuizButton && (showStopCountdownButton || showStopQuizButton)"
-            class="btn btn-warning text-nowrap">
-      <span *ngIf="showStopCountdownButton"
-            class="mr-1">{{'component.liveResults.abort_countdown' | translate}}</span>
-      <span *ngIf="showStopQuizButton"
-            class="mr-1">{{'component.liveResults.abort_question' | translate}}</span>
-      <fa-icon *ngIf="!isStopping"
-               [icon]="'ban'"></fa-icon>
-      <fa-icon *ngIf="isStopping"
-               [icon]="'spinner'"
-               [spin]="true"></fa-icon>
-    </button>
-
-    <button (click)="modifyVisibleQuestion(i)"
-            *ngFor="let question of quizService.getVisibleQuestions(); let i = index"
-            [class.disabled]="i === selectedQuestionIndex || countdown > 0"
-            [disabled]="i === selectedQuestionIndex || countdown > 0"
-            class="btn btn-info text-nowrap">
-      <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
-    </button>
-  </div>
-</div>
-
-<div class="question">
-  <h5 *ngIf="quizService.quiz && quizService.quiz.questionList.length">
-    <span class="mr-1">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} / {{quizService.quiz.questionList.length}}</span>
-    <fa-icon *ngIf="isLoadingQuestionData"
-             [icon]="'spinner'"
-             [spin]="true"></fa-icon>
-  </h5>
-
-  <app-voting-question *ngIf="questionText && quizService?.currentQuestion()?.questionText && !quizService.quiz?.sessionConfig?.readingConfirmationEnabled && !!countdown"
-                       [questionText]="questionText"></app-voting-question>
-
-  <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
-       class="btn-group w-100">
-    <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
-            [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
-            class="btn btn-light w-100 cursor-pointer"
-            type="button">
-      <fa-icon [icon]="'trophy'"
-               class="mr-2"></fa-icon>
-      <span>{{'component.liveResults.ranking' | translate}}</span>
-    </button>
-    <button *ngIf="showQuestionButton(selectedQuestionIndex)"
-            [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
-            class="btn btn-light w-100 cursor-pointer"
-            type="button">
-      <fa-icon [icon]="'question'"
-               class="mr-2"></fa-icon>
-      <span>{{'component.liveResults.question' | translate}}</span>
-    </button>
+    </div>
   </div>
 
-  <app-reading-confirmation-progress *ngIf="showReadingConfirmation(selectedQuestionIndex)"
-                                     [data]="getReadingConfirmationData(selectedQuestionIndex)"></app-reading-confirmation-progress>
+  <div class="question">
+    <h5 *ngIf="quizService.quiz && visibleQuestions.length > 1 && quizService.quiz.questionList.length">
+      <span class="mr-1">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} / {{quizService.quiz.questionList.length}}</span>
+      <fa-icon *ngIf="isLoadingQuestionData"
+               [icon]="'spinner'"
+               [spin]="true"></fa-icon>
+    </h5>
 
-  <app-confidence-rate *ngIf="showConfidenceRate(selectedQuestionIndex)"
-                       [data]="getConfidenceData(selectedQuestionIndex)"></app-confidence-rate>
+    <app-voting-question *ngIf="questionText && quizService?.currentQuestion()?.questionText && !quizService.quiz?.sessionConfig?.readingConfirmationEnabled && !!countdown"
+                         [questionText]="questionText"></app-voting-question>
 
-  <app-progress-bar *ngIf="showResponseProgress()"
-                    [data]="answers"
-                    [hideProgressbarCssStyle]="hideProgressbarStyle"
-                    [questionIndex]="selectedQuestionIndex"
-                    [question]="quizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
-</div>
+    <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
+         class="btn-group w-100">
+      <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
+              [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
+              class="btn btn-light w-100 cursor-pointer"
+              type="button">
+        <fa-icon [icon]="'trophy'"
+                 class="mr-2"></fa-icon>
+        <span>{{'component.liveResults.ranking' | translate}}</span>
+      </button>
+      <button *ngIf="showQuestionButton(selectedQuestionIndex)"
+              [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
+              class="btn btn-light w-100 cursor-pointer"
+              type="button">
+        <fa-icon [icon]="'question'"
+                 class="mr-2"></fa-icon>
+        <span>{{'component.liveResults.question' | translate}}</span>
+      </button>
+    </div>
+
+    <app-reading-confirmation-progress *ngIf="showReadingConfirmation(selectedQuestionIndex)"
+                                       [data]="getReadingConfirmationData(selectedQuestionIndex)"></app-reading-confirmation-progress>
+
+    <app-confidence-rate *ngIf="showConfidenceRate(selectedQuestionIndex)"
+                         [data]="getConfidenceData(selectedQuestionIndex)"></app-confidence-rate>
+
+    <app-progress-bar *ngIf="showResponseProgress()"
+                      [data]="answers"
+                      [hideProgressbarCssStyle]="hideProgressbarStyle"
+                      [questionIndex]="selectedQuestionIndex"
+                      [question]="quizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
+  </div>
+</ng-container>
 
 <div *ngIf="quizService.isOwner">
   <app-audio-player *ngIf="countdown && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownRunning"
