@@ -40,6 +40,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   public isLoadingQuestionData: boolean;
 
   private _hideProgressbarStyle = true;
+  public playCountdownEndSound: boolean;
 
   get hideProgressbarStyle(): boolean {
     return this._hideProgressbarStyle;
@@ -278,6 +279,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     });
     if (this.countdown) {
       this.countdown = 0;
+      this.playEndSound();
     }
     this.cd.markForCheck();
     this.isStopping = false;
@@ -435,6 +437,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.countdown = payload.value;
         this.hideProgressbarStyle = this.countdown > 0;
+        if (!this.countdown) {
+          this.playEndSound();
+        }
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
         this.attendeeService.removeMember(payload.name);
@@ -452,6 +457,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
         this.countdown = 0;
+        this.playEndSound();
         this.hideProgressbarStyle = false;
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
@@ -521,5 +527,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return answer.answerText;
       }));
     }
+  }
+
+  private playEndSound(): void {
+    this.playCountdownEndSound = true;
   }
 }

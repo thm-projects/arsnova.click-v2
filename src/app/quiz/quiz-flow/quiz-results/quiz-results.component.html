@@ -120,7 +120,7 @@
                       [target]="'countdownRunning'"></app-audio-player>
   </ng-container>
 
-  <ng-container *ngIf="countdown === 0 && !quizService.readingConfirmationRequested && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownEnd">
+  <ng-container *ngIf="playCountdownEndSound">
     <app-audio-player
       [autostart]="true"
       [loop]="false"
