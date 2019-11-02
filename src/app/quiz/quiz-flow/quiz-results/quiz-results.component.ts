@@ -329,11 +329,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      const question = this.quizService.currentQuestion();
-
       if (!this.countdown) {
         this.countdown = 0;
-        if (question.timer === 0 && !currentStateData.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
+        const question = this.quizService.currentQuestion();
+        if (question && question.timer === 0 && !currentStateData.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
           nick => nick.responses[this.quizService.quiz.currentQuestionIndex].responseTime === -1)) {
           this.showStartQuizButton = false;
           this.hideProgressbarStyle = false;
