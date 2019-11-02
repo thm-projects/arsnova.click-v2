@@ -122,6 +122,8 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.footerBarService.footerElemBack.restoreClickCallback();
+
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy.next();
     this._destroy.complete();
@@ -230,6 +232,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     const footerElements = [
       this.footerBarService.footerElemBack,
     ];
+
+    this.footerBarService.footerElemBack.onClickCallback = () => {
+      this.router.navigate(['/quiz', 'flow', 'results']);
+    };
 
     if (this.quizService.isOwner && this._isGlobalRanking) {
       footerElements.push(this.footerBarService.footerElemExport);

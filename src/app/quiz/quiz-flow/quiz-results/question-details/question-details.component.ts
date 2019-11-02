@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../../lib/enums/enums';
@@ -65,8 +65,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
-    private footerBarService: FooterBarService,
-    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private footerBarService: FooterBarService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
@@ -110,28 +109,26 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     });
 
-    this.route.params.pipe(takeUntil(this._destroy)).subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
+    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
 
-      this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
-        if (!quiz) {
-          return;
-        }
+    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
+      if (!this.quizService.quiz || isNaN(questionIndex)) {
+        return;
+      }
 
-        if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
-          this.router.navigate(['/quiz', 'flow', 'results']);
-          return;
-        }
-        if (this.quizService.quiz) {
-          this._question = this.quizService.quiz.questionList[this._questionIndex];
-          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
-          this.questionTextService.change(this._question.questionText);
-        }
-      });
+      this._questionIndex = questionIndex;
+      if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
+        this.router.navigate(['/quiz', 'flow', 'results']);
+        return;
+      }
 
-      this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-        this.handleMessages();
-      });
+      this._question = this.quizService.quiz.questionList[this._questionIndex];
+      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+      this.questionTextService.change(this._question.questionText);
+    });
+
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.handleMessages();
     });
   }
 

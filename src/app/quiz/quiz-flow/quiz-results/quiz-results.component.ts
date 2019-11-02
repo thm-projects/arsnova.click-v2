@@ -76,8 +76,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
-    private quizApiService: QuizApiService,
-    private ngbModal: NgbModal, private cd: ChangeDetectorRef, private messageQueue: SimpleMQ,
+    private quizApiService: QuizApiService, private ngbModal: NgbModal, private cd: ChangeDetectorRef, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
@@ -227,9 +226,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
         this.modifyVisibleQuestion(this.quizService.quiz.currentQuestionIndex);
       }
 
+      this.addFooterElements();
       await this.initData();
 
-      this.addFooterElements();
       this.cd.markForCheck();
     });
 
@@ -348,6 +347,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       } else {
         if (this.attendeeService.attendees.every(nick => {
           const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+          if (!val) {
+            return true;
+          }
+
           return typeof val === 'number' ? val > -1 : val.length > 0;
         })) {
           console.log('QuizResultsComponent: Stopping countdown since all attendees have answered the current question');

@@ -81,7 +81,7 @@
     <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
          class="btn-group w-100">
       <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
-              [routerLink]="['/quiz', 'flow', 'leaderboard', selectedQuestionIndex]"
+              [routerLink]="['/quiz', 'flow', 'leaderboard', visibleQuestions.length > 1 ? selectedQuestionIndex : 'all']"
               class="btn btn-light w-100 cursor-pointer"
               type="button">
         <fa-icon [icon]="'trophy'"

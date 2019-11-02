@@ -7,7 +7,6 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { QuizEntity } from '../../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { QuizState } from '../../../../lib/enums/QuizState';
@@ -65,7 +64,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private trackingService: TrackingService,
     private memberApiService: MemberApiService,
     private quizApiService: QuizApiService,
-    private ngbModal: NgbModal, private sharedService: SharedService, private userService: UserService, private messageQueue: SimpleMQ,
+    private ngbModal: NgbModal,
+    private sharedService: SharedService,
+    private userService: UserService,
+    private messageQueue: SimpleMQ,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
@@ -86,7 +88,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       this.sharedService.isLoadingEmitter.next(false);
       if (this.quizService.isOwner) {
         console.log('QuizLobbyComponent: quiz for owner initialized', this.quizService.quiz);
-        this.handleNewQuiz(this.quizService.quiz);
+        this.handleNewQuiz();
       } else {
         this.handleNewAttendee();
       }
@@ -156,17 +158,22 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
-    this.footerBarService.footerElemStartQuiz.restoreClickCallback();
-    this.footerBarService.footerElemBack.restoreClickCallback();
+
+    if (this.quizService.isOwner) {
+      this.footerBarService.footerElemStartQuiz.restoreClickCallback();
+    } else {
+      this.footerBarService.footerElemBack.restoreClickCallback();
+    }
+
     clearTimeout(this._reconnectTimeout);
 
     this._destroy.next();
     this._destroy.complete();
   }
 
-  private handleNewQuiz(quiz: QuizEntity): void {
-    console.log('QuizLobbyComponent: quiz initialized', quiz);
-    if (!quiz) {
+  private handleNewQuiz(): void {
+    console.log('QuizLobbyComponent: quiz initialized', this.quizService.quiz);
+    if (!this.quizService.quiz) {
       return;
     }
 
@@ -189,7 +196,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   }
 
   private addFooterElementsAsOwner(): void {
-    this.footerBarService.footerElemStartQuiz.isActive = false;
+    this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
 
     const footerElements = [
       this.footerBarService.footerElemStartQuiz, this.footerBarService.footerElemQRCode,
