@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ISong } from 'arsnova-click-v2-types/dist/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { DefaultSettings } from '../../../../lib/default.settings';
 import { MusicSessionConfigurationEntity } from '../../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -66,6 +67,8 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
       }
 
       this._config = this.quizService.quiz.sessionConfig.music;
+      this.resetSongList();
+
       this.initConfig();
       this.setLobbySongs();
       this.setRandomKey();
@@ -92,16 +95,20 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.quizService.quiz.sessionConfig.music = this._config;
-    this.quizService.persist();
+    if (this.quizService.quiz) {
+      this.quizService.quiz.sessionConfig.music = this._config;
+      this.quizService.persist();
+    }
     this._destroy.next();
     this._destroy.complete();
   }
 
   private initConfig(): void {
-    this.config.titleConfig.lobby = this.config.titleConfig.lobby || 'Song0';
-    this.config.titleConfig.countdownRunning = this.config.titleConfig.countdownRunning || 'Song0';
-    this.config.titleConfig.countdownEnd = this.config.titleConfig.countdownEnd || 'Song0';
+    const defaultConfig = DefaultSettings.defaultQuizSettings.sessionConfig.music.titleConfig;
+
+    this.config.titleConfig.lobby = this.config.titleConfig.lobby || defaultConfig.lobby;
+    this.config.titleConfig.countdownRunning = defaultConfig.countdownRunning;
+    this.config.titleConfig.countdownEnd = defaultConfig.countdownEnd;
   }
 
   private setCountdownEndSongs(): void {
@@ -174,4 +181,9 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     }
   }
 
+  private resetSongList(): void {
+    this._lobbySongs.splice(0, this._lobbySongs.length);
+    this._countdownRunningSounds.splice(0, this._countdownRunningSounds.length);
+    this._countdownEndSounds.splice(0, this._countdownEndSounds.length);
+  }
 }

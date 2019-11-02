@@ -1,6 +1,6 @@
 <div class="btn-toolbar flex-grow-1 flex-nowrap">
 
-  <div *ngIf="!autostart"
+  <div *ngIf="!_autostart"
        class="btn-group d-flex align-items-center">
 
     <button *ngIf="!_isPlaying"
@@ -21,12 +21,7 @@
 
   </div>
 
-  <audio [id]="randomUUID"
-         [loop]="loop"
-         [autoplay]="autostart ? 'autoplay' : null"
-         [src]="getUrl()"></audio>
-
-  <div *ngIf="!autostart"
+  <div *ngIf="!_autostart"
        class="input-group flex-grow-1 align-items-center flex-nowrap">
     <input type="range"
            class="flex-grow-1"

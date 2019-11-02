@@ -1,5 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, EventEmitter, Inject, Input, Output, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, Input, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
 import { FilesApiService } from '../../service/api/files/files-api.service';
 
 @Component({
@@ -7,34 +6,51 @@ import { FilesApiService } from '../../service/api/files/files-api.service';
   templateUrl: './audio-player.component.html',
   styleUrls: ['./audio-player.component.scss'],
 })
-export class AudioPlayerComponent implements AfterViewInit {
+export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
   public static TYPE = 'AudioPlayerComponent';
-
   @Output() public volumeChange = new EventEmitter();
 
-  @Input() public autostart: boolean;
+  private _autostart: boolean;
+
+  @Input() set autostart(value: boolean) {
+    this._autostart = value;
+    this.audioElement.autoplay = value;
+  }
 
   private _target: 'lobby' | 'countdownRunning' | 'countdownEnd';
-  @Input()
-  set target(value: 'lobby' | 'countdownRunning' | 'countdownEnd') {
+
+  get target(): 'lobby' | 'countdownRunning' | 'countdownEnd' {
+    return this._target;
+  }
+
+  @Input() set target(value: 'lobby' | 'countdownRunning' | 'countdownEnd') {
     this._target = value;
+
+    this.stopMusic();
+    this.audioElement.src = this.getUrl();
   }
 
   private _original_volume: number;
-  @Input()
-  set original_volume(value: number) {
+
+  @Input() set original_volume(value: number) {
     this._original_volume = value;
     this._volume = this._original_volume;
-    if (this.getAudioElement()) {
-      this._audioElement.volume = this._volume / 100;
+    if (this.audioElement) {
+      this.audioElement.volume = this._volume / 100;
     }
   }
 
   private _src: string;
 
-  @Input()
-  set src(value: string) {
+  get src(): string {
+    return this._src;
+  }
+
+  @Input() set src(value: string) {
     this._src = value;
+
+    this.stopMusic();
+    this.audioElement.src = this.getUrl();
   }
 
   private _loop = true;
@@ -43,12 +59,13 @@ export class AudioPlayerComponent implements AfterViewInit {
     return this._loop;
   }
 
-  @Input()
-  set loop(value: boolean) {
+  @Input() set loop(value: boolean) {
     if (typeof value === 'undefined') {
       value = true;
     }
     this._loop = value ? true : null;
+
+    this.audioElement.loop = this.loop;
   }
 
   private _volume = 1;
@@ -57,19 +74,10 @@ export class AudioPlayerComponent implements AfterViewInit {
     return this._volume;
   }
 
-  private _randomUUID = `audio-player-${Math.random()}`;
-
-  get randomUUID(): string {
-    return this._randomUUID;
-  }
-
-  private _audioElement: HTMLAudioElement;
+  private readonly audioElement = new Audio();
   private _isPlaying = false;
 
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private filesApiService: FilesApiService,
-  ) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private filesApiService: FilesApiService) {
   }
 
   public getUrl(): string {
@@ -77,51 +85,40 @@ export class AudioPlayerComponent implements AfterViewInit {
   }
 
   public playMusic(): void {
-    this.getAudioElement();
-    if (this._audioElement.ended) {
-      this._audioElement.currentTime = 0;
+    if (this.audioElement.ended) {
+      this.audioElement.currentTime = 0;
     }
-    this._audioElement.play();
+    this.audioElement.play();
     this._isPlaying = true;
   }
 
   public pauseMusic(): void {
-    this.getAudioElement();
-    this._audioElement.pause();
+    this.audioElement.pause();
     this._isPlaying = false;
   }
 
   public stopMusic(): void {
-    this.getAudioElement();
-    this._audioElement.pause();
-    this._audioElement.currentTime = 0;
+    this.audioElement.pause();
+    this.audioElement.currentTime = 0;
     this._isPlaying = false;
   }
 
   public isStopped(): boolean {
-    if (!this.getAudioElement()) {
-      return true;
-    }
-    return (!this._audioElement.currentTime && this._audioElement.paused) || this._audioElement.ended;
+    return (!this.audioElement.currentTime && this.audioElement.paused) || this.audioElement.ended;
   }
 
   public emitVolumeChange($event): void {
     this._volume = parseInt((<HTMLInputElement>$event.target).value, 10);
     this.volumeChange.emit(this._volume);
-    this.getAudioElement();
-    this._audioElement.volume = this._volume / 100;
+    this.audioElement.volume = this._volume / 100;
   }
 
   public ngAfterViewInit(): void {
-    this.getAudioElement();
-    this._audioElement.volume = this._volume / 100;
+    this.audioElement.volume = this._volume / 100;
   }
 
-  private getAudioElement(): HTMLAudioElement {
-    if (isPlatformBrowser(this.platformId) && !this._audioElement) {
-      this._audioElement = <HTMLAudioElement>document.getElementById(this._randomUUID);
-    }
-    return this._audioElement;
+  public ngOnDestroy(): void {
+    this.stopMusic();
   }
 
 }
