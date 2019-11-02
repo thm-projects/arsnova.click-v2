@@ -177,21 +177,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
         const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
-
-        if (theme) {
-          this.themesService.updateCurrentlyUsedTheme();
-          return;
+        if (!theme) {
+          await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this.themesService.defaultTheme).toPromise();
         }
-
-        await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, DefaultSettings.defaultQuizSettings.sessionConfig.theme)
-        .toPromise();
-        this.themesService.updateCurrentlyUsedTheme();
-
-        return;
+      } else {
+        await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, params.get('themeId')).toPromise();
+        this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
       }
-
-      await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, params.get('themeId')).toPromise();
-      this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
       this.themesService.updateCurrentlyUsedTheme();
     });
   }

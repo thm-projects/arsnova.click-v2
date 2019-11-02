@@ -16,6 +16,10 @@ import { StorageService } from '../storage/storage.service';
 export class ThemesService {
   public readonly themeChanged: EventEmitter<string> = new EventEmitter<string>();
 
+  get defaultTheme(): string {
+    return this._defaultTheme;
+  }
+
   private _themes: Array<ITheme> = themes;
 
   get themes(): Array<ITheme> {
@@ -28,6 +32,8 @@ export class ThemesService {
     return this._currentTheme;
   }
 
+  private readonly _defaultTheme: string;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private quizService: QuizService,
@@ -36,6 +42,9 @@ export class ThemesService {
     private storageService: StorageService,
     private i18nService: I18nService,
   ) {
+    this._defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'theme-blackbeauty'
+                                                                                   : DefaultSettings.defaultQuizSettings.sessionConfig.theme;
+
     this.storageService.stateNotifier.subscribe(val => {
       if (val === DbState.Initialized) {
         this.initTheme();
@@ -58,7 +67,7 @@ export class ThemesService {
         resolve(this.quizService.quiz.sessionConfig.theme);
         return;
       }
-      resolve(DefaultSettings.defaultQuizSettings.sessionConfig.theme);
+      resolve(this._defaultTheme);
     }));
 
     const themeConfig = await Promise.all(themePromises);
@@ -107,7 +116,7 @@ export class ThemesService {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).subscribe(val => {
         if (!val) {
-          this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, DefaultSettings.defaultQuizSettings.sessionConfig.theme).subscribe();
+          this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this._defaultTheme).subscribe();
         }
       });
     }
