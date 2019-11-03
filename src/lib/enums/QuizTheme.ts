@@ -1,7 +1,7 @@
 export enum QuizTheme {
   ArsnovaDotClickContrast = 'arsnova-dot-click-contrast', //
   Material                = 'Material', //
-  Blackbauty              = 'blackbeauty', //
+  Blackbeauty             = 'blackbeauty', //
   DecentBlue              = 'decent-blue', //
   Elegant                 = 'elegant', //
   GreyBlueLime            = 'GreyBlue-Lime', //

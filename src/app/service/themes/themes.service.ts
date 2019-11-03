@@ -40,7 +40,7 @@ export class ThemesService {
     private storageService: StorageService,
     private i18nService: I18nService,
   ) {
-    this._defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? QuizTheme.Blackbauty : environment.availableQuizThemes[0];
+    this._defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? QuizTheme.Blackbeauty : environment.availableQuizThemes[0];
 
     this.storageService.stateNotifier.subscribe(val => {
       if (val === DbState.Initialized) {

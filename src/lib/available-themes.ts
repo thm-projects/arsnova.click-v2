@@ -16,7 +16,7 @@ export const themes: Array<ITheme> = [
     name: 'component.theme_switcher.themes.black_beauty.name',
     preview: 'component.theme_switcher.themes.black_beauty.preview',
     description: 'component.theme_switcher.themes.black_beauty.description',
-    id: QuizTheme.Blackbauty,
+    id: QuizTheme.Blackbeauty,
   }, {
     name: 'component.theme_switcher.themes.elegant.name',
     preview: 'component.theme_switcher.themes.elegant.preview',

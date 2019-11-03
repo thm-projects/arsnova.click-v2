@@ -28,8 +28,7 @@ export const environment: IEnvironment = {
   persistQuizzes: true,
   availableQuizThemes: [
     QuizTheme.ArsnovaDotClickContrast,
-    QuizTheme.Material,
-    QuizTheme.Blackbauty,
+    QuizTheme.Material, QuizTheme.Blackbeauty,
     QuizTheme.DecentBlue,
     QuizTheme.Elegant,
     QuizTheme.GreyBlueLime,

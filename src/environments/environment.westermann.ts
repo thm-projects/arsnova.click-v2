@@ -26,7 +26,7 @@ export const environment: IEnvironment = {
   showJoinableQuizzes: false,
   showPublicQuizzes: false,
   persistQuizzes: false,
-  availableQuizThemes: [QuizTheme.WestermannBlue, QuizTheme.Blackbauty],
+  availableQuizThemes: [QuizTheme.WestermannBlue, QuizTheme.Blackbeauty],
 };
 
 export enum DEVICE_TYPES {
