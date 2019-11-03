@@ -7,18 +7,6 @@ const mf = require('messageformat');
 
 const argv = minimist(process.argv.slice(2));
 
-const themes = [
-  'Material',
-  'Material-hope',
-  'Material-blue',
-  'arsnova-dot-click-contrast',
-  'blackbeauty',
-  'elegant',
-  'decent-blue',
-  'spiritual-purple',
-  'GreyBlue-Lime',
-  'westermann-blue'
-];
 const languages = ['en', 'de', 'fr', 'it', 'es'];
 const themeData = require('../themeData');
 const imageDerivates = require('../imageDerivates');
@@ -53,7 +41,7 @@ class GenerateMetaNodes {
   }
 
   generateLinkImages() {
-    themes.forEach(theme => {
+    Object.keys(themeData).forEach(theme => {
       const basePath = `/assets/images/theme/${theme}`;
       const manifestPath = `/manifest_${theme}_%%LANG%%.json`;
 
@@ -149,7 +137,7 @@ class GenerateMetaNodes {
       const descriptionMessage = localizer.compile(descriptionMessageSrc)();
       const destinationPath = path.join(this.pathToAssets, '..');
 
-      themes.forEach(theme => {
+      Object.keys(themeData).forEach(theme => {
         const manifest = {
           short_name: 'arsnova.click',
           name: 'arsnova.click',

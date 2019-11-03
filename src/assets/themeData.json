@@ -1,5 +1,5 @@
 {
-  "theme-arsnova-dot-click-contrast": {
+  "arsnova-dot-click-contrast": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#23425b"
@@ -25,7 +25,7 @@
       "bg": "#424242"
     }
   },
-  "theme-blackbeauty": {
+  "blackbeauty": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#010101"
@@ -51,7 +51,7 @@
       "bg": "#444444"
     }
   },
-  "theme-decent-blue": {
+  "decent-blue": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#455A64"
@@ -77,7 +77,7 @@
       "bg": "#90A4AE"
     }
   },
-  "theme-elegant": {
+  "elegant": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#002d47"
@@ -103,7 +103,7 @@
       "bg": "#dbe4e9"
     }
   },
-  "theme-GreyBlue-Lime": {
+  "GreyBlue-Lime": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#455a64"
@@ -129,7 +129,7 @@
       "bg": "#cfd8dc"
     }
   },
-  "theme-Material": {
+  "Material": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#00796B"
@@ -155,7 +155,7 @@
       "bg": "#B2DFDB"
     }
   },
-  "theme-Material-blue": {
+  "Material-blue": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#303F9F"
@@ -181,7 +181,7 @@
       "bg": "#C5CAE9"
     }
   },
-  "theme-Material-hope": {
+  "Material-hope": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#689F38"
@@ -207,7 +207,7 @@
       "bg": "#AED581"
     }
   },
-  "theme-spiritual-purple": {
+  "spiritual-purple": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#512da8"
@@ -233,7 +233,7 @@
       "bg": "#9575cd"
     }
   },
-  "theme-westermann-blue": {
+  "westermann-blue": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
       "bg": "#00796B"

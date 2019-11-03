@@ -12,19 +12,6 @@ import {default as imageminPngquant} from 'imagemin-pngquant';
 
 const argv = minimist(process.argv.slice(2));
 
-const themes = [
-  'Material',
-  'Material-hope',
-  'Material-blue',
-  'arsnova-dot-click-contrast',
-  'blackbeauty',
-  'elegant',
-  'decent-blue',
-  'spiritual-purple',
-  'GreyBlue-Lime',
-  'westermann-blue'
-];
-
 const languages = ['en', 'de', 'fr', 'it', 'es'];
 
 const __dirname = path.resolve();
@@ -73,7 +60,7 @@ class GenerateImages {
   async generateFrontendPreview(host, isRoot) {
     const params = [];
     const themePreviewEndpoint = `${host}/preview`;
-    themes.forEach((theme) => {
+    Object.keys(themeData).forEach((theme) => {
       languages.forEach((languageKey) => {
         params.push(`${themePreviewEndpoint}/${theme}/${languageKey}`);
       });
