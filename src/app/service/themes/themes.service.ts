@@ -2,9 +2,9 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { themes } from '../../../lib/available-themes';
-import { DefaultSettings } from '../../../lib/default.settings';
 import { DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { QuizTheme } from '../../../lib/enums/QuizTheme';
 import { ITheme } from '../../../lib/interfaces/ITheme';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
@@ -14,25 +14,23 @@ import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class ThemesService {
-  public readonly themeChanged: EventEmitter<string> = new EventEmitter<string>();
+  public readonly themeChanged: EventEmitter<QuizTheme> = new EventEmitter<QuizTheme>();
 
-  get defaultTheme(): string {
-    return this._defaultTheme;
-  }
-
-  private _themes: Array<ITheme> = themes;
-
+  private _currentTheme: QuizTheme;
   get themes(): Array<ITheme> {
     return this._themes;
   }
 
-  private _currentTheme: string;
-
-  get currentTheme(): string {
+  get currentTheme(): QuizTheme {
     return this._currentTheme;
   }
 
-  private readonly _defaultTheme: string;
+  get defaultTheme(): QuizTheme {
+    return this._defaultTheme;
+  }
+
+  private _themes: Array<ITheme> = environment.availableQuizThemes.map(t => themes.find(theme => theme.id === t));
+  private readonly _defaultTheme: QuizTheme;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -42,8 +40,7 @@ export class ThemesService {
     private storageService: StorageService,
     private i18nService: I18nService,
   ) {
-    this._defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'theme-blackbeauty'
-                                                                                   : DefaultSettings.defaultQuizSettings.sessionConfig.theme;
+    this._defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? QuizTheme.Blackbauty : environment.availableQuizThemes[0];
 
     this.storageService.stateNotifier.subscribe(val => {
       if (val === DbState.Initialized) {

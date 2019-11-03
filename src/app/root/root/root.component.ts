@@ -47,7 +47,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private connectionService: ConnectionService, private messageQueue: SimpleMQ,
   ) {
     this.themeService.themeChanged.pipe(takeUntil(this._destroy)).subscribe(themeName => {
-      this.loadExternalStyles(`/${themeName}.css`).then(() => {
+      this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
         this.initializeCookieConsent();
       }).catch(reason => {
         console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));

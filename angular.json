@@ -100,6 +100,11 @@
                 "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
                 "bundleName": "theme-GreyBlue-Lime",
                 "lazy": true
+              },
+              {
+                "input": "src/styles/themes/theme-westermann-blue.scss",
+                "bundleName": "theme-westermann-blue",
+                "lazy": true
               }
             ],
             "scripts": [

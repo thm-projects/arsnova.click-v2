@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 import { LoginMechanism } from '../lib/enums/enums';
+import { QuizTheme } from '../lib/enums/QuizTheme';
 import { IEnvironment } from '../lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
@@ -31,6 +32,7 @@ export const environment: IEnvironment = {
   showPublicQuizzes: false,
   persistQuizzes: false,
   hasCooperationPartner: true,
+  availableQuizThemes: [QuizTheme.WestermannBlue, QuizTheme.Material, QuizTheme.Blackbauty],
 };
 
 export enum DEVICE_TYPES {

@@ -1,4 +1,5 @@
 import { LoginMechanism } from '../lib/enums/enums';
+import { QuizTheme } from '../lib/enums/QuizTheme';
 import { IEnvironment } from '../lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
@@ -26,6 +27,7 @@ export const environment: IEnvironment = {
   showPublicQuizzes: false,
   persistQuizzes: false,
   hasCooperationPartner: true,
+  availableQuizThemes: [QuizTheme.WestermannBlue, QuizTheme.Blackbauty],
 };
 
 export enum DEVICE_TYPES {

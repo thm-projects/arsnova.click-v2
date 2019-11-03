@@ -1,4 +1,5 @@
 import { LoginMechanism } from '../enums/enums';
+import { QuizTheme } from '../enums/QuizTheme';
 
 export interface IEnvironment {
   production: boolean;
@@ -22,4 +23,5 @@ export interface IEnvironment {
   loginMechanism: Array<LoginMechanism>;
   persistQuizzes: boolean;
   hasCooperationPartner: boolean;
+  availableQuizThemes: Array<QuizTheme>;
 }
