@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DbState, LoginMechanism } from '../../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -12,7 +14,7 @@ import { UserService } from '../../service/user/user.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'LoginComponent';
   public username = '';
   public password = '';
@@ -35,6 +37,8 @@ export class LoginComponent implements OnInit {
 
   private return = '';
 
+  private readonly _destroy = new Subject();
+
   constructor(
     private userService: UserService,
     private router: Router,
@@ -48,7 +52,7 @@ export class LoginComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(params => {
       if (params['logout']) {
         this.router.navigate(['/']);
         return;
@@ -56,6 +60,11 @@ export class LoginComponent implements OnInit {
       this._isLoading = false;
       this.return = decodeURI(params['return'] || '%2F');
     });
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public async login(): Promise<void> {
@@ -72,7 +81,7 @@ export class LoginComponent implements OnInit {
     }
 
     if (isLoggedIn) {
-      this.indexedDbService.stateNotifier.subscribe(value => {
+      this.indexedDbService.stateNotifier.pipe(takeUntil(this._destroy)).subscribe(value => {
         if (value === DbState.Initialized) {
           this.router.navigateByUrl(this.return);
         }

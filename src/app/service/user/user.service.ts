@@ -7,7 +7,6 @@ import { StatusProtocol } from '../../../lib/enums/Message';
 import { UserRole } from '../../../lib/enums/UserRole';
 import { ILoginSerialized } from '../../../lib/interfaces/ILoginSerialized';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
-import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { QuizService } from '../quiz/quiz.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
@@ -84,7 +83,6 @@ export class UserService {
     private indexedDbService: IndexedDbService,
     private jwtHelper: JwtHelperService,
     private quizService: QuizService,
-    private quizApiService: QuizApiService,
   ) {
 
     this.storageService.stateNotifier.subscribe((type) => {
