@@ -8,15 +8,16 @@ const mf = require('messageformat');
 const argv = minimist(process.argv.slice(2));
 
 const themes = [
-  'theme-Material',
-  'theme-Material-hope',
-  'theme-Material-blue',
-  'theme-arsnova-dot-click-contrast',
-  'theme-blackbeauty',
-  'theme-elegant',
-  'theme-decent-blue',
-  'theme-spiritual-purple',
-  'theme-GreyBlue-Lime'
+  'Material',
+  'Material-hope',
+  'Material-blue',
+  'arsnova-dot-click-contrast',
+  'blackbeauty',
+  'elegant',
+  'decent-blue',
+  'spiritual-purple',
+  'GreyBlue-Lime',
+  'westermann-blue'
 ];
 const languages = ['en', 'de', 'fr', 'it', 'es'];
 const themeData = require('../themeData');

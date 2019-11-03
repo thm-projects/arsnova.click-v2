@@ -248,6 +248,10 @@
                 {
                   "replace": "src/assets/images/logo.svg",
                   "with": "src/assets/images/logo.westermann.svg"
+                },
+                {
+                  "replace": "src/assets/images/logo_transparent.png",
+                  "with": "src/assets/images/logo_transparent.westermann.png"
                 }
               ],
               "styles": [
@@ -334,6 +338,10 @@
                 {
                   "replace": "src/assets/images/logo.svg",
                   "with": "src/assets/images/logo.westermann.svg"
+                },
+                {
+                  "replace": "src/assets/images/logo_transparent.png",
+                  "with": "src/assets/images/logo_transparent.westermann.png"
                 }
               ],
               "styles": [
