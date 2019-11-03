@@ -159,16 +159,14 @@ class GenerateMetaNodes {
           start_url: '/',
           display: 'standalone',
           orientation: 'portrait',
-          icons: [],
+          icons: imageDerivates.logo.map(derivate => {
+            return {
+              src: `/assets/images/theme/${theme}/logo_s${derivate}.png`,
+              sizes: derivate,
+              type: 'image/png',
+            }
+          })
         };
-
-        imageDerivates.logo.forEach((derivate) => {
-          manifest.icons.push({
-            src: `/assets/images/theme/${theme}/logo_s${derivate}.png`,
-            sizes: derivate,
-            type: 'image/png',
-          });
-        });
 
         fs.writeFileSync(path.join(destinationPath, `manifest_${theme}_${language}.json`), JSON.stringify(manifest));
       });
