@@ -232,5 +232,31 @@
       "fg": "#FFFFFF",
       "bg": "#9575cd"
     }
+  },
+  "theme-westermann-blue": {
+    "quizNameRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#00796B"
+    },
+    "exportedAtRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#00796B"
+    },
+    "statisticsRowStyle": {
+      "fg": "#000000",
+      "bg": "#B2DFDB"
+    },
+    "attendeeHeaderGroupRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#009688"
+    },
+    "attendeeHeaderRowStyle": {
+      "fg": "#000000",
+      "bg": "#FF9800"
+    },
+    "attendeeEntryRowStyle": {
+      "fg": "#000000",
+      "bg": "#B2DFDB"
+    }
   }
 }

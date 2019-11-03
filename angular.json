@@ -133,6 +133,13 @@
                   "replace": "src/assets/piwik/piwik.js",
                   "with": "src/assets/piwik/piwik.prod.js"
                 }
+              ],
+              "styles": [
+                {
+                  "input": "src/styles/themes/theme-Material.scss",
+                  "bundleName": "theme-default",
+                  "lazy": true
+                }
               ]
             },
             "thmStaging": {
@@ -157,6 +164,13 @@
                   "replace": "src/assets/piwik/piwik.js",
                   "with": "src/assets/piwik/piwik.prod.js"
                 }
+              ],
+              "styles": [
+                {
+                  "input": "src/styles/themes/theme-Material.scss",
+                  "bundleName": "theme-default",
+                  "lazy": true
+                }
               ]
             },
             "thmBeta": {
@@ -180,6 +194,17 @@
                 {
                   "replace": "src/assets/piwik/piwik.js",
                   "with": "src/assets/piwik/piwik.prod.js"
+                },
+                {
+                  "replace": "src/assets/images/logo.svg",
+                  "with": "src/assets/images/logo.westermann.svg"
+                }
+              ],
+              "styles": [
+                {
+                  "input": "src/styles/themes/theme-westermann-blue.scss",
+                  "bundleName": "theme-default",
+                  "lazy": true
                 }
               ]
             },
@@ -204,6 +229,17 @@
                 {
                   "replace": "src/assets/piwik/piwik.js",
                   "with": "src/assets/piwik/piwik.westermann.js"
+                },
+                {
+                  "replace": "src/assets/images/logo.svg",
+                  "with": "src/assets/images/logo.westermann.svg"
+                }
+              ],
+              "styles": [
+                {
+                  "input": "src/styles/themes/theme-westermann-blue.scss",
+                  "bundleName": "theme-default",
+                  "lazy": true
                 }
               ]
             }

@@ -71,6 +71,20 @@ pre {
   }
 }
 
+#connection-indicator {
+  &.fill-success {
+    fill: $success;
+  }
+
+  &.fill-danger {
+    fill: $danger;
+  }
+
+  &.fill-grey {
+    fill: $text-muted;
+  }
+}
+
 *::placeholder {
   opacity: 1;
   color: $footer-color;

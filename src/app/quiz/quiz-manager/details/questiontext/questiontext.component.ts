@@ -136,8 +136,11 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.questionTextService.change(this.textarea.nativeElement.value);
-    this.quizService.quiz.questionList[this._questionIndex].questionText = this.textarea.nativeElement.value;
-    this.quizService.persist();
+
+    if (this.quizService.quiz) {
+      this.quizService.quiz.questionList[this._questionIndex].questionText = this.textarea.nativeElement.value;
+      this.quizService.persist();
+    }
 
     this._destroy.next();
     this._destroy.complete();

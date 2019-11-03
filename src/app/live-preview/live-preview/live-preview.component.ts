@@ -1,7 +1,8 @@
-import { Component, Input, OnDestroy, OnInit, SecurityContext } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -44,10 +45,9 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return this._question;
   }
 
+  private readonly _destroy = new Subject();
   private dataSource: string | Array<string>;
   private _questionIndex: number;
-  private _subscription: Subscription;
-  private _routerSubscription: Subscription;
 
   constructor(
     public questionTextService: QuestionTextService,
@@ -98,17 +98,22 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     if (Array.isArray(value)) {
       value = value.join('');
     }
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+
+    // sanitizer.bypassSecurityTrustHtml is required for highslide
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
   public ngOnInit(): void {
-    this._subscription = this.questionTextService.eventEmitter.subscribe(value => {
+    this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe(value => {
       this.dataSource = value;
     });
+    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(),
+      takeUntil(this._destroy));
+
     switch (this.targetEnvironment) {
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
-        this._routerSubscription = this.route.params.subscribe(params => {
-          this._questionIndex = +params['questionIndex'];
+        questionIndex$.subscribe(questionIndex => {
+          this._questionIndex = questionIndex;
           this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
           this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
         });
@@ -121,12 +126,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this._subscription) {
-      this._subscription.unsubscribe();
-    }
-    if (this._routerSubscription) {
-      this._routerSubscription.unsubscribe();
-    }
+    this._destroy.next();
+    this._destroy.complete();
   }
-
 }

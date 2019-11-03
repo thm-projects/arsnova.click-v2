@@ -26,7 +26,6 @@ export const environment: IEnvironment = {
   showJoinableQuizzes: true,
   showPublicQuizzes: true,
   persistQuizzes: true,
-  hasCooperationPartner: false,
   availableQuizThemes: [
     QuizTheme.ArsnovaDotClickContrast,
     QuizTheme.Material,

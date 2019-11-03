@@ -21,7 +21,8 @@ const themes = [
   'theme-elegant',
   'theme-decent-blue',
   'theme-spiritual-purple',
-  'theme-GreyBlue-Lime'
+  'theme-GreyBlue-Lime',
+  'theme-westermann-blue'
 ];
 
 const languages = ['en', 'de', 'fr', 'it', 'es'];

@@ -22,6 +22,5 @@ export interface IEnvironment {
   forceQuizTheme: boolean;
   loginMechanism: Array<LoginMechanism>;
   persistQuizzes: boolean;
-  hasCooperationPartner: boolean;
   availableQuizThemes: Array<QuizTheme>;
 }

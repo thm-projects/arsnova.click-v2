@@ -6,7 +6,7 @@ export enum QuizTheme {
   Elegant                 = 'elegant', //
   GreyBlueLime            = 'GreyBlue-Lime', //
   MaterialHope            = 'Material-hope', //
-  MaterialBlue            = 'material-blue', //
+  MaterialBlue            = 'Material-blue', //
   SpiritualPurple         = 'spiritual-purple', //
   WestermannBlue          = 'westermann-blue', //
 }

@@ -3,7 +3,7 @@
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
     <a [routerLink]="['/']">
       <svg-icon class="text-white"
-                src="/assets/images/logo.svg"></svg-icon>
+                src="/assets/images/logo.westermann.svg"></svg-icon>
     </a>
   </div>
   <div *ngIf="showHeader"
@@ -16,9 +16,10 @@
   </div>
   <div class="text-right d-flex align-items-center cursor-pointer p-0">
     <svg #connectionIndicatorPopover="ngbPopover"
+         #connectionIndicator
+         [ngbPopover]="(connectionService.websocketAvailable ? 'region.header.connection_status.connected' : 'region.header.connection_status.disconnected') | translate"
          (click)="openConnectionQualityModal(connectionQualityModal)"
-         [ngbPopover]="'region.header.connection_status.disconnected' | translate"
-         [style.fill]="generateConnectionQualityColor()"
+         id="connection-indicator"
          height="50px"
          triggers="manual"
          version="1.1"

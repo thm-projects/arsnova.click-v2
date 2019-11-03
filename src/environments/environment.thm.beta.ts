@@ -26,7 +26,6 @@ export const environment: IEnvironment = {
   showJoinableQuizzes: false,
   showPublicQuizzes: false,
   persistQuizzes: false,
-  hasCooperationPartner: true,
   availableQuizThemes: [QuizTheme.WestermannBlue, QuizTheme.Blackbauty],
 };
 

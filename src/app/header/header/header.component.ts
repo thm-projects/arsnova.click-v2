@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
@@ -57,6 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
   @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
+  @ViewChild('connectionIndicator', { static: true }) private connectionIndicator: ElementRef<SVGElement>;
 
   private readonly _destroy = new Subject();
 
@@ -74,16 +75,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  public generateConnectionQualityColor(): SafeStyle {
-    const colorCode = this.connectionService.lowSpeed || //
-                      !this.indexedDbAvailable ? '#dc3545' : //
-                      this.connectionService.mediumSpeed ? '#dc3545' : //
-                      !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? '#6c757d' : '#B2DFDB';
+  public generateConnectionQualityColor(): void {
+    const cssClass = this.connectionService.lowSpeed || //
+                     !this.indexedDbAvailable ? 'fill-danger' : //
+                     this.connectionService.mediumSpeed ? 'fill-danger' : //
+                     !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? 'fill-grey' : 'fill-success';
 
-    return this.sanitizeStyle(colorCode);
+    this.connectionIndicator.nativeElement.classList.remove(...['fill-danger', 'fill-grey', 'fill-success']);
+    this.connectionIndicator.nativeElement.classList.add(cssClass);
   }
 
   public ngOnInit(): void {
+    this.generateConnectionQualityColor();
+
     if (isPlatformBrowser(this.platformId)) {
       this.router.events.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe((url: any) => {
         this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
@@ -94,6 +98,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (!this.showHeader) {
         return;
       }
+
+      this.generateConnectionQualityColor();
 
       if (this.connectionService.serverAvailable || this.headerLabelService.isUnavailableModalOpen) {
         this.connectionIndicatorPopover.close();
@@ -155,7 +161,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
             location.reload(true);
           }
         });
-      }).catch(err => console.error(err)).finally(() => this.isCheckingForUpdates = false);
+      }).catch(err => console.error(err)).finally(() => {
+        this.isCheckingForUpdates = false;
+        location.reload(true);
+      });
     } else {
       location.reload(true);
     }
