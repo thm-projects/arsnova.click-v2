@@ -27,13 +27,11 @@ export const environment: IEnvironment = {
   showPublicQuizzes: true,
   persistQuizzes: true,
   availableQuizThemes: [
-    QuizTheme.ArsnovaDotClickContrast, QuizTheme.Material, QuizTheme.Blackbeauty,
-    QuizTheme.DecentBlue,
-    QuizTheme.Elegant,
-    QuizTheme.GreyBlueLime,
+    QuizTheme.Material, QuizTheme.ArsnovaDotClickContrast, QuizTheme.Blackbeauty,
+    QuizTheme.Elegant, QuizTheme.DecentBlue,
     QuizTheme.MaterialHope,
     QuizTheme.MaterialBlue,
-    QuizTheme.SpiritualPurple,
+    QuizTheme.SpiritualPurple, QuizTheme.GreyBlueLime,
   ],
 };
 
