@@ -112,7 +112,7 @@ export class ThemesService {
 
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).subscribe(val => {
-        if (!val) {
+        if (!val || val.startsWith('theme-')) {
           this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this._defaultTheme).subscribe();
         }
       });
