@@ -2,9 +2,10 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, switchMapTo, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DbTable, StorageKey } from '../../../lib/enums/enums';
+import { QuizTheme } from '../../../lib/enums/QuizTheme';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -61,7 +62,8 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     const themeChanged$ = this._themeChangedEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy));
 
-    this.quizService.quizUpdateEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy), switchMapTo(themeChanged$)).subscribe(themeId => {
+    this.quizService.quizUpdateEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy), filter(v => !!v), switchMapTo(themeChanged$))
+    .subscribe(themeId => {
       this.quizService.quiz.sessionConfig.theme = themeId;
       this.quizService.persist();
     });
@@ -82,11 +84,13 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
     this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
     this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this.previewThemeBackup).subscribe();
     this._themeChangedEmitter.emit(id);
+    this.themesService.themeChanged.emit(QuizTheme[id]);
   }
 
-  public previewTheme(id): void {
+  public previewTheme(id: string): void {
     if (isPlatformBrowser(this.platformId)) {
       document.getElementsByTagName('html').item(0).dataset['theme'] = id;
+      this.themesService.themeChanged.emit(QuizTheme[id]);
     }
   }
 

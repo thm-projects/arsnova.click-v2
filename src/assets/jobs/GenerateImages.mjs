@@ -6,7 +6,6 @@ import derivates from '../imageDerivates';
 import themeData from '../themeData';
 import process from 'process';
 import child_process from 'child_process';
-import minimist from 'minimist';
 import {default as imagemin} from 'imagemin';
 import {default as imageminPngquant} from 'imagemin-pngquant';
 

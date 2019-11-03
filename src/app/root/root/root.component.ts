@@ -6,9 +6,11 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import themeData from '../../../assets/themeData.json';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { StatusProtocol } from '../../../lib/enums/Message';
+import { QuizTheme } from '../../../lib/enums/QuizTheme';
 import { INamedType } from '../../../lib/interfaces/interfaces';
 import { IWindow } from '../../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
@@ -48,7 +50,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   ) {
     this.themeService.themeChanged.pipe(takeUntil(this._destroy)).subscribe(themeName => {
       this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
-        this.initializeCookieConsent();
+        this.initializeCookieConsent(themeName);
       }).catch(reason => {
         console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
       });
@@ -73,7 +75,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.userService.loadConfig();
 
     this.translateService.onLangChange.pipe(takeUntil(this._destroy)).subscribe(() => {
-      this.initializeCookieConsent();
+      this.initializeCookieConsent(this.themeService.currentTheme);
     });
 
     this.router.events.pipe(takeUntil(this._destroy)).subscribe((event: any) => {
@@ -163,8 +165,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private initializeCookieConsent(): void {
-    if (!(<IWindow>window).cookieconsent) {
+  private initializeCookieConsent(theme: QuizTheme): void {
+    if (!(<IWindow>window).cookieconsent || !theme) {
       return;
     }
 
@@ -176,14 +178,15 @@ export class RootComponent implements OnInit, AfterViewInit {
     (<IWindow>window).cookieconsent.initialise({
       palette: {
         popup: {
-          background: '#1d8a8a',
+          background: themeData[theme].quizNameRowStyle.bg,
         },
         button: {
           background: 'transparent',
-          text: '#62ffaa',
-          border: '#62ffaa',
+          text: themeData[theme].exportedAtRowStyle.fg,
+          border: themeData[theme].exportedAtRowStyle.fg,
         },
       },
+      theme: 'classic',
       position: 'bottom-right',
       content: {
         message: this.translateService.instant('global.cookie_consent.message'),
