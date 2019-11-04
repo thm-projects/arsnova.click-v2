@@ -1,0 +1,12 @@
+@import "prebuild";
+
+.imagePreviewFile {
+  @include media-breakpoint-down(xs) {
+    width: 100%;
+    flex-basis: 100%;
+  }
+  @include media-breakpoint-up(sm) {
+    width: 50%;
+    flex-basis: 50%;
+  }
+}
