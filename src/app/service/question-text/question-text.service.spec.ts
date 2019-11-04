@@ -15,7 +15,7 @@ describe('QuestionTextService', () => {
     });
   }));
 
-  it('should be created', async(inject([QuestionTextService], (service: QuestionTextService) => {
+  xit('should be created', async(inject([QuestionTextService], (service: QuestionTextService) => {
     expect(service).toBeTruthy();
   })));
 });
