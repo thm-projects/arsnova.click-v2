@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '../../shared/shared.module';
@@ -15,7 +14,7 @@ describe('SettingsService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule,
+        SharedModule, RouterTestingModule,
       ],
       providers: [
         IndexedDbService, {

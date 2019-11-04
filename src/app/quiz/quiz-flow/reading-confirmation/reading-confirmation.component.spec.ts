@@ -1,13 +1,13 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { SimpleMQ } from 'ng2-simple-mq';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -32,17 +32,7 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule,
       ],
       providers: [
         IndexedDbService, {
@@ -57,10 +47,13 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, QuestionTextService, HeaderLabelService, FooterBarService, SettingsService,
+        }, QuestionTextService, HeaderLabelService, FooterBarService, SettingsService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, SimpleMQ,
       ],
-      declarations: [ReadingConfirmationComponent],
-    }).compileComponents();
+      declarations: [ReadingConfirmationComponent, ServerUnavailableModalComponent],
+    }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ServerUnavailableModalComponent] } }).compileComponents();
   }));
 
   beforeEach(async(() => {

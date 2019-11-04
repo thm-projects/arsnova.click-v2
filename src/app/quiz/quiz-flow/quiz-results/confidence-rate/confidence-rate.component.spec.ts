@@ -1,12 +1,9 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
@@ -34,17 +31,7 @@ describe('QuizResults: ConfidenceRateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule,
       ],
       providers: [
         IndexedDbService, {
@@ -62,6 +49,9 @@ describe('QuizResults: ConfidenceRateComponent', () => {
         }, I18nService, HeaderLabelService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
         },
       ],
       declarations: [ConfidenceRateComponent],

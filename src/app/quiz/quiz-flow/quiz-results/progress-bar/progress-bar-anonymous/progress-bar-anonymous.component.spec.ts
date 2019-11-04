@@ -1,4 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
 
 import { ProgressBarAnonymousComponent } from './progress-bar-anonymous.component';
 
@@ -8,7 +12,14 @@ describe('ProgressBarAnonymousComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProgressBarAnonymousComponent],
+      providers: [
+        {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
+      ],
+      imports: [FontAwesomeModule],
+      declarations: [ProgressBarAnonymousComponent, TranslatePipeMock],
     })
     .compileComponents();
   }));

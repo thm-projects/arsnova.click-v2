@@ -7,6 +7,7 @@ import { DbTable, StorageKey } from '../../../lib/enums/enums';
 })
 export class StorageServiceMock {
 
+  public stateNotifier = of(null);
   private _storage: any = {};
 
   constructor() {

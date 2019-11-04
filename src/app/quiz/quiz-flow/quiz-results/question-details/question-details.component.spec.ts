@@ -1,15 +1,13 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { Observable } from 'rxjs';
-import { createTranslateLoader } from '../../../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { SimpleMQ } from 'ng2-simple-mq';
+import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
+import { ServerUnavailableModalComponent } from '../../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
@@ -28,23 +26,7 @@ import { StorageServiceMock } from '../../../../service/storage/storage.service.
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { SharedModule } from '../../../../shared/shared.module';
-
 import { QuestionDetailsComponent } from './question-details.component';
-
-class MockRouter {
-  public params = {
-    toPromise: () => {
-      return {
-        questionIndex: 0,
-      };
-    },
-    subscribe: () => {
-      return new Observable(subscriber => subscriber.next({
-        questionIndex: 0,
-      }));
-    },
-  };
-}
 
 describe('QuestionDetailsComponent', () => {
   let component: QuestionDetailsComponent;
@@ -53,17 +35,7 @@ describe('QuestionDetailsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule,
       ],
       providers: [
         IndexedDbService, {
@@ -82,12 +54,12 @@ describe('QuestionDetailsComponent', () => {
           provide: AttendeeService,
           useClass: AttendeeMockService,
         }, QuestionTextService, {
-          provide: ActivatedRoute,
-          useClass: MockRouter,
-        },
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, SimpleMQ,
       ],
-      declarations: [QuestionDetailsComponent],
-    }).compileComponents();
+      declarations: [QuestionDetailsComponent, ServerUnavailableModalComponent],
+    }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ServerUnavailableModalComponent] } }).compileComponents();
   }));
 
   beforeEach(async(() => {

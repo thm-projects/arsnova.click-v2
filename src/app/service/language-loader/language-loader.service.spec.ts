@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { inject, TestBed } from '@angular/core/testing';
+import { async, inject, TestBed } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { CasLoginService } from '../login/cas-login.service';
@@ -11,7 +11,7 @@ import { UserService } from '../user/user.service';
 import { LanguageLoaderService } from './language-loader.service';
 
 describe('LanguageLoaderService', () => {
-  beforeEach(() => {
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         JwtModule.forRoot({
@@ -22,9 +22,14 @@ describe('LanguageLoaderService', () => {
           },
         }), HttpClientTestingModule,
       ],
-      providers: [LanguageLoaderService, CasLoginService, UserService, StorageService, IndexedDbService],
+      providers: [
+        LanguageLoaderService, CasLoginService, {
+          provide: UserService,
+          useValue: {},
+        }, StorageService, IndexedDbService,
+      ],
     });
-  });
+  }));
 
   it('should be created', inject([LanguageLoaderService], (service: LanguageLoaderService) => {
     expect(service).toBeTruthy();

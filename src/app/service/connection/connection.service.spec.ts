@@ -1,25 +1,25 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from '../../shared/shared.module';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SharedService } from '../shared/shared.service';
 import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
-
 import { ConnectionService } from './connection.service';
 
 describe('ConnectionService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule,
+        RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
         IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, SharedService, ConnectionService,
+        }, SharedService, FooterBarService, ConnectionService, RxStompService,
       ],
     });
   }));

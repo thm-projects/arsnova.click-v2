@@ -1,20 +1,20 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateService } from '@ngx-translate/core';
 import { DefaultAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_default';
 import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
 import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DbTable } from '../../../lib/enums/enums';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -29,7 +29,6 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
-import { SharedModule } from '../../shared/shared.module';
 
 import { QuizOverviewComponent } from './quiz-overview.component';
 
@@ -85,20 +84,15 @@ describe('QuizOverviewComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
-        UserService, IndexedDbService, {
+        {
+          provide: UserService,
+          useValue: {
+            isAuthorizedFor: () => true,
+          },
+        }, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
@@ -110,9 +104,12 @@ describe('QuizOverviewComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService,
+        }, SharedService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
-      declarations: [QuizOverviewComponent],
+      declarations: [QuizOverviewComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 
@@ -153,11 +150,12 @@ describe('QuizOverviewComponent', () => {
 
     it('should redirect to the quiz manager', inject([QuizService, Router], (quizService: QuizService, router: Router) => {
       spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
+      component.sessions.splice(0, -1, validQuiz);
 
       component.editQuiz(0);
 
       expect(quizService.quiz).toEqual(jasmine.objectContaining(validQuiz));
-      expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager']));
+      expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager', 'overview']));
 
     }));
   });
@@ -177,12 +175,13 @@ describe('QuizOverviewComponent', () => {
 
   describe('#deleteQuiz', () => {
 
-    it('should return null if the quiz does not exist', inject([StorageService], async (storageService: StorageService) => {
+    it('should return null if the quiz does not exist', inject([StorageService], (storageService: StorageService) => {
       const quizName = 'validtestquiz';
 
-      await component.deleteQuiz(0);
-      storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
-        expect(quiz).toBe(null);
+      component.deleteQuiz(0).subscribe(() => {
+        storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
+          expect(quiz).toBe(null);
+        });
       });
     }));
   });

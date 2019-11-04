@@ -1,23 +1,28 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SwUpdate } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { TOAST_CONFIG } from 'ngx-toastr';
+import { SwUpdateMock } from '../../../_mocks/SwUpdateMock';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
-import { createTranslateLoader } from '../../../lib/translation.factory';
 import { HeaderModule } from '../../header/header.module';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { I18nService } from '../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -30,17 +35,7 @@ describe('LivePreviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, HeaderModule, NgbModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule, HeaderModule, NgbModule,
       ],
       providers: [
         QuestionTextService, {
@@ -52,9 +47,21 @@ describe('LivePreviewComponent', () => {
         }, FooterBarService, SharedService, SettingsService, HeaderLabelService, {
           provide: TrackingService,
           useClass: TrackingMockService,
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, I18nService, IndexedDbService, {
+          provide: SwUpdate,
+          useClass: SwUpdateMock,
+        }, {
+          provide: TOAST_CONFIG,
+          useValue: {
+            default: {},
+            config: {},
+          },
         },
       ],
-      declarations: [LivePreviewComponent],
+      declarations: [LivePreviewComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 

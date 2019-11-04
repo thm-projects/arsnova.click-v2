@@ -1,10 +1,9 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -31,19 +30,13 @@ describe('AdminOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule,
       ],
       providers: [
+        {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
         I18nService, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,

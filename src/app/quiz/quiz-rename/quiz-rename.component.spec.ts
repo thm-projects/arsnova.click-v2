@@ -1,10 +1,10 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
@@ -17,7 +17,6 @@ import { SharedService } from '../../service/shared/shared.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
-import { SharedModule } from '../../shared/shared.module';
 
 import { QuizRenameComponent } from './quiz-rename.component';
 
@@ -28,17 +27,7 @@ describe('QuizRenameComponent', () => {
   beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        RouterTestingModule, HttpClientTestingModule, FormsModule,
       ],
       providers: [
         IndexedDbService, {
@@ -53,9 +42,12 @@ describe('QuizRenameComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService,
+        }, SharedService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
-      declarations: [QuizRenameComponent],
+      declarations: [QuizRenameComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 

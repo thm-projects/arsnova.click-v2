@@ -1,4 +1,3 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
@@ -6,17 +5,16 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../lib/translation.factory';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
-import { SharedModule } from '../../shared/shared.module';
 
 import { LoginComponent } from './login.component';
 
@@ -33,25 +31,25 @@ describe('LoginComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), SharedModule, FormsModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        }), FormsModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
         IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, HeaderLabelService, FooterBarService, UserService,
+        }, HeaderLabelService, FooterBarService, {
+          provide: UserService,
+          useValue: {
+            logout: () => {},
+            authenticateThroughLogin: () => new Promise(resolve => resolve()),
+            hashPassword: () => '8c430f5e2df2fdd422c4719b884e9d525110fcf5',
+          },
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
-      declarations: [LoginComponent],
+      declarations: [LoginComponent, TranslatePipeMock],
     })
     .compileComponents();
   }));

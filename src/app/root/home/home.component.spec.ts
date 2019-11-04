@@ -1,17 +1,17 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { PLATFORM_ID, SecurityContext } from '@angular/core';
+import { Pipe, PipeTransform, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../lib/translation.factory';
-import { ModalsModule } from '../../modals/modals.module';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
@@ -35,9 +35,18 @@ import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
-import { SharedModule } from '../../shared/shared.module';
-
 import { HomeComponent } from './home.component';
+
+@Pipe({
+  name: 'searchFilter',
+})
+class SearchFilterPipeMock implements PipeTransform {
+  public transform(value: Array<any>, args?: string): Array<any> {
+    return value;
+  }
+}
+
+(window as any).Modernizr = {};
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -52,17 +61,7 @@ describe('HomeComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }), ModalsModule, NgbModule,
+        }), RouterTestingModule, HttpClientTestingModule, NgbModule, FontAwesomeModule, FormsModule,
       ],
       providers: [
         IndexedDbService, {
@@ -89,9 +88,12 @@ describe('HomeComponent', () => {
         }, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
         },
       ],
-      declarations: [HomeComponent],
+      declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock],
     }).compileComponents();
   });
 

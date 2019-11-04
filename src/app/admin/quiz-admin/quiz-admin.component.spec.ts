@@ -1,13 +1,12 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { PLATFORM_ID } from '@angular/core';
+import { Pipe, PipeTransform, PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtHelperService, JwtModule } from '@auth0/angular-jwt';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../lib/translation.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -25,8 +24,17 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
-
 import { QuizAdminComponent } from './quiz-admin.component';
+
+@Pipe({
+  name: 'quizAdminFilter',
+})
+class QuizAdminFilterPipeMock implements PipeTransform {
+  public transform(value: any, ...args): any {
+    return value;
+  }
+}
+
 
 describe('QuizAdminComponent', () => {
   let component: QuizAdminComponent;
@@ -35,17 +43,7 @@ describe('QuizAdminComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }), JwtModule.forRoot({
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -54,7 +52,10 @@ describe('QuizAdminComponent', () => {
         }),
       ],
       providers: [
-        I18nService, IndexedDbService, {
+        {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, I18nService, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, ThemesService, {
@@ -66,10 +67,13 @@ describe('QuizAdminComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService, UserService, JwtHelperService,
+        }, SharedService, {
+          provide: UserService,
+          useValue: {},
+        }, JwtHelperService,
       ],
       declarations: [
-        QuizAdminComponent,
+        QuizAdminFilterPipeMock, QuizAdminComponent,
       ],
     }).compileComponents();
   }));

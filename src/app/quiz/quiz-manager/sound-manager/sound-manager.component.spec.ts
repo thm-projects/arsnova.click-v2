@@ -1,10 +1,10 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -15,8 +15,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
-import { SharedModule } from '../../../shared/shared.module';
-
+import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
 import { SoundManagerComponent } from './sound-manager.component';
 
 describe('SoundManagerComponent', () => {
@@ -26,17 +25,7 @@ describe('SoundManagerComponent', () => {
   beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        RouterTestingModule, HttpClientModule, FontAwesomeModule,
       ],
       providers: [
         IndexedDbService, {
@@ -48,10 +37,13 @@ describe('SoundManagerComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService,
+        }, SharedService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
       declarations: [
-        SoundManagerComponent,
+        SoundManagerComponent, TranslatePipeMock, AudioPlayerComponent,
       ],
     }).compileComponents();
   }));
@@ -73,6 +65,7 @@ describe('SoundManagerComponent', () => {
     it('should select a given sound title', inject([QuizService], (quizService: QuizService) => {
       const value = 'Song1';
       const event = <any>{ target: { value } };
+      quizService.quizUpdateEmitter.next(quizService.quiz);
       component.selectSound('lobby', event);
       expect(quizService.quiz.sessionConfig.music.titleConfig.lobby).toEqual(value);
     }));
@@ -82,6 +75,7 @@ describe('SoundManagerComponent', () => {
     it('should set the global volume', inject([QuizService], (quizService: QuizService) => {
       const value = 10;
       const event = <any>{ target: { value } };
+      quizService.quizUpdateEmitter.next(quizService.quiz);
       component.setGlobalVolume(event);
       expect(quizService.quiz.sessionConfig.music.volumeConfig.global).toEqual(value);
     }));
@@ -91,7 +85,7 @@ describe('SoundManagerComponent', () => {
     it('should open a config tab', inject([QuizService], (quizService: QuizService) => {
       const id = 'panel-lobby';
       component.openTab(id);
-      expect(document.getElementById(id).classList).toContain('show');
+      expect(component.isSelected(id)).toBeTruthy();
     }));
   });
 });

@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { SurveyQuestionEntity } from '../../../../../../lib/entities/question/SurveyQuestionEntity';
@@ -29,6 +31,7 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
     return this._question;
   }
 
+  private readonly _destroy = new Subject();
   private _questionIndex: number;
 
   constructor(
@@ -68,9 +71,11 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
+    this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
+    .subscribe(questionIndex => {
+      this._questionIndex = questionIndex;
       this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
+      console.log(questionIndex, this.quizService.quiz.questionList[0]);
 
       this.canAddAnsweroptions = ![QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion].includes(this._question.TYPE);
       this.canDeleteAnswer = true;
@@ -86,6 +91,9 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.quizService.quiz.questionList[this._questionIndex] = this.question;
     this.quizService.persist();
+
+    this._destroy.next();
+    this._destroy.complete();
   }
 }
 

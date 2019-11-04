@@ -1,10 +1,10 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -19,17 +19,7 @@ describe('AdditionalDataComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        RouterTestingModule, HttpClientModule, HttpClientTestingModule,
       ],
       providers: [
         {
@@ -38,9 +28,12 @@ describe('AdditionalDataComponent', () => {
         }, {
           provide: TrackingService,
           useClass: TrackingMockService,
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
         },
       ],
-      declarations: [AdditionalDataComponent],
+      declarations: [AdditionalDataComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 

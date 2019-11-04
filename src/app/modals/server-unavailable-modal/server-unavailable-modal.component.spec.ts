@@ -1,4 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { HeaderLabelService } from '../../service/header-label/header-label.service';
 
 import { ServerUnavailableModalComponent } from './server-unavailable-modal.component';
 
@@ -8,7 +12,13 @@ describe('ServerUnavailableModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ServerUnavailableModalComponent],
+      providers: [
+        HeaderLabelService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
+      ],
+      declarations: [ServerUnavailableModalComponent, TranslatePipeMock],
     })
     .compileComponents();
   }));

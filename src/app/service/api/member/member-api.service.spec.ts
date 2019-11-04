@@ -41,17 +41,6 @@ describe('MemberApiService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should delete a member', inject([MemberApiService], (service: MemberApiService) => {
-
-    const quizName = 'test';
-    const nickName = 'testNick';
-
-    service.deleteMember(quizName, nickName).subscribe();
-    backend.expectOne(service.deleteMemberUrl).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
   it('should put a reading confirmation value for a member', inject([MemberApiService], (service: MemberApiService) => {
 
     const quizName = 'test';
@@ -101,11 +90,4 @@ describe('MemberApiService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should get a list of available nicknames', inject([MemberApiService], (service: MemberApiService) => {
-    const quizName = 'test';
-
-    service.getAvailableNames(quizName).subscribe();
-    backend.expectOne(service.getAvailableMemberNamesUrl).flush({});
-    expect(service).toBeTruthy();
-  }));
 });

@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../../../lib/entities/answer/FreetextAnwerEntity';
 import { AbstractQuestionEntity } from '../../../../../../lib/entities/question/AbstractQuestionEntity';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
@@ -37,6 +39,7 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
     return this._testInput;
   }
 
+  private readonly _destroy = new Subject();
   private _questionIndex: number;
 
   constructor(private headerLabelService: HeaderLabelService, private quizService: QuizService, private route: ActivatedRoute) {
@@ -65,8 +68,9 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
+    this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
+    .subscribe(questionIndex => {
+      this._questionIndex = questionIndex;
 
       if (this.quizService.quiz) {
         this._question = this.quizService.quiz.questionList[this._questionIndex];
@@ -91,5 +95,8 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.quizService.quiz.questionList[this._questionIndex] = this.question;
     this.quizService.persist();
+
+    this._destroy.next();
+    this._destroy.complete();
   }
 }

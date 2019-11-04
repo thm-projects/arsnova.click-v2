@@ -1,16 +1,20 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TemplateRef } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TOAST_CONFIG } from 'ngx-toastr';
+import { SwUpdateMock } from '../../../_mocks/SwUpdateMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
+import { I18nService } from '../../service/i18n/i18n.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -23,17 +27,7 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule,
       ],
       providers: [
         HeaderLabelService, {
@@ -42,7 +36,19 @@ describe('HeaderComponent', () => {
         }, {
           provide: TrackingService,
           useClass: TrackingMockService,
-        }, SharedService,
+        }, SharedService, IndexedDbService, I18nService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, {
+          provide: SwUpdate,
+          useClass: SwUpdateMock,
+        }, {
+          provide: TOAST_CONFIG,
+          useValue: {
+            default: {},
+            config: {},
+          },
+        },
       ],
       declarations: [
         HeaderComponent,

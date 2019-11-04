@@ -30,7 +30,10 @@ describe('AddModeComponent', () => {
         IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, NgbActiveModal, UserService,
+        }, NgbActiveModal, {
+          provide: UserService,
+          useValue: {},
+        },
       ],
       declarations: [AddModeComponent],
     })

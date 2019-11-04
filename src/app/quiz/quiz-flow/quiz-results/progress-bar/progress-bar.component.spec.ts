@@ -1,13 +1,10 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
 import { Attendee } from '../../../../../lib/attendee/attendee';
 import { AbstractChoiceQuestionEntity } from '../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
-import { createTranslateLoader } from '../../../../../lib/translation.factory';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
@@ -26,6 +23,7 @@ import { StorageServiceMock } from '../../../../service/storage/storage.service.
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { SharedModule } from '../../../../shared/shared.module';
+import { ProgressBarAnonymousComponent } from './progress-bar-anonymous/progress-bar-anonymous.component';
 import { ProgressBarFreetextComponent } from './progress-bar-freetext/progress-bar-freetext.component';
 import { ProgressBarMultipleChoiceComponent } from './progress-bar-multiple-choice/progress-bar-multiple-choice.component';
 import { ProgressBarRangedComponent } from './progress-bar-ranged/progress-bar-ranged.component';
@@ -41,17 +39,7 @@ describe('ProgressBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule,
       ],
       providers: [
         IndexedDbService, {
@@ -69,7 +57,10 @@ describe('ProgressBarComponent', () => {
         }, I18nService, HeaderLabelService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        }, QuestionTextService,
+        }, QuestionTextService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
       declarations: [
         ProgressBarSingleChoiceComponent,
@@ -77,7 +68,7 @@ describe('ProgressBarComponent', () => {
         ProgressBarSurveyComponent,
         ProgressBarRangedComponent,
         ProgressBarFreetextComponent,
-        ProgressBarComponent,
+        ProgressBarComponent, ProgressBarAnonymousComponent,
       ],
     }).compileComponents();
   }));

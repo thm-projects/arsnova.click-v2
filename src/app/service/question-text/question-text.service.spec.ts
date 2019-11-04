@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -9,7 +8,6 @@ describe('QuestionTextService', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        HttpClientModule,
       ],
       providers: [
         QuestionTextService,

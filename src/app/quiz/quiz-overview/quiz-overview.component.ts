@@ -2,6 +2,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DbTable } from '../../../lib/enums/enums';
@@ -146,24 +147,28 @@ export class QuizOverviewComponent implements OnInit {
     });
   }
 
-  public async deleteQuiz(index: number): Promise<void> {
-    this.trackingService.trackClickEvent({
-      action: QuizOverviewComponent.TYPE,
-      label: `delete-quiz`,
-    });
+  public deleteQuiz(index: number): Observable<void> {
+    return new Observable(subscriber => {
+      this.trackingService.trackClickEvent({
+        action: QuizOverviewComponent.TYPE,
+        label: `delete-quiz`,
+      });
 
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-
-    this.quizApiService.deleteQuiz(this.sessions[index]).subscribe((response: IMessage) => {
-      if (response.status !== StatusProtocol.Success) {
-        console.log('QuizOverviewComponent: DeleteQuiz failed', response);
-      } else {
-        const sessionName = this.sessions[index].name;
-        this.sessions.splice(index, 1);
-        this.storageService.delete(DbTable.Quiz, sessionName).subscribe();
+      if (isPlatformServer(this.platformId)) {
+        return;
       }
+
+      this.quizApiService.deleteQuiz(this.sessions[index]).subscribe((response: IMessage) => {
+        if (response.status !== StatusProtocol.Success) {
+          console.log('QuizOverviewComponent: DeleteQuiz failed', response);
+        } else {
+          const sessionName = this.sessions[index].name;
+          this.sessions.splice(index, 1);
+          this.storageService.delete(DbTable.Quiz, sessionName).subscribe(() => {
+            subscriber.next();
+          });
+        }
+      });
     });
   }
 

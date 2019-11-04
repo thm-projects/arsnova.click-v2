@@ -5,7 +5,7 @@
  * @deprecated Only supported on Chrome and Android Webview.
  */
   // tslint:disable-next-line
-interface BeforeInstallPromptEvent extends Event {
+export declare interface BeforeInstallPromptEvent extends Event {
 
   /**
    * Returns an array of DOMString items containing the platforms on which the event was dispatched.

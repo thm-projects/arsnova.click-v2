@@ -1,185 +1,129 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { SwUpdate } from '@angular/service-worker';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { TOAST_CONFIG } from 'ngx-toastr';
+import { of } from 'rxjs';
+import { SwUpdateMock } from '../../../../../../_mocks/SwUpdateMock';
+import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
 import { SurveyQuestionEntity } from '../../../../../../lib/entities/question/SurveyQuestionEntity';
-import { createTranslateLoader } from '../../../../../../lib/translation.factory';
 import { HeaderComponent } from '../../../../../header/header/header.component';
 import { LivePreviewComponent } from '../../../../../live-preview/live-preview/live-preview.component';
 import { ConnectionMockService } from '../../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
+import { I18nService } from '../../../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../../../service/question-text/question-text.service';
 import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../../service/settings/settings.service';
 import { SharedService } from '../../../../../service/shared/shared.service';
+import { IndexedDbService } from '../../../../../service/storage/indexed.db.service';
 import { TrackingMockService } from '../../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../../service/tracking/tracking.service';
-import { SharedModule } from '../../../../../shared/shared.module';
-
 import { AnsweroptionsDefaultComponent } from './answeroptions-default.component';
 
-class MockRouterSC {
-  public params = {
-    subscribe: (cb) => {
-      cb({
-        questionIndex: 0,
-      });
-    },
-  };
-}
-
-class MockRouterSurvey {
-  public params = {
-    subscribe: (cb) => {
-      cb({
-        questionIndex: 3,
-      });
-    },
-  };
-}
-
-const imports = [
-  SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-    loader: {
-      provide: TranslateLoader,
-      useFactory: (createTranslateLoader),
-      deps: [HttpClient],
-    },
-    compiler: {
-      provide: TranslateCompiler,
-      useClass: TranslateMessageFormatCompiler,
-    },
-  }), NgbModalModule,
-];
-
-const providers: Array<any> = [
-  {
-    provide: QuizService,
-    useClass: QuizMockService,
-  }, FooterBarService, SettingsService, {
-    provide: ConnectionService,
-    useClass: ConnectionMockService,
-  }, SharedService, HeaderLabelService, QuestionTextService, {
-    provide: TrackingService,
-    useClass: TrackingMockService,
-  },
-];
-
-const declarations = [
-  HeaderComponent, LivePreviewComponent, AnsweroptionsDefaultComponent,
-];
-
 describe('AnsweroptionsDefaultComponent', () => {
+  let component: AnsweroptionsDefaultComponent;
+  let fixture: ComponentFixture<AnsweroptionsDefaultComponent>;
 
-  describe('SingleChoiceQuestion', () => {
-    let component: AnsweroptionsDefaultComponent;
-    let fixture: ComponentFixture<AnsweroptionsDefaultComponent>;
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule, NgbModalModule, AngularSvgIconModule, NgbPopoverModule, FontAwesomeModule, HttpClientTestingModule,
+      ],
+      providers: [
+        {
+          provide: QuizService,
+          useClass: QuizMockService,
+        }, FooterBarService, SettingsService, {
+          provide: ConnectionService,
+          useClass: ConnectionMockService,
+        }, SharedService, HeaderLabelService, QuestionTextService, {
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, {
+          provide: ActivatedRoute,
+          useValue: {
+            paramMap: of({
+              get: () => 0,
+            }),
+          },
+        }, I18nService, IndexedDbService, {
+          provide: SwUpdate,
+          useClass: SwUpdateMock,
+        }, {
+          provide: TOAST_CONFIG,
+          useValue: {
+            default: {},
+            config: {},
+          },
+        },
+      ],
+      declarations: [
+        HeaderComponent, LivePreviewComponent, AnsweroptionsDefaultComponent, TranslatePipeMock,
+      ],
+    }).compileComponents();
+  }));
 
-    beforeEach((() => {
-      providers.push({
-        provide: ActivatedRoute,
-        useClass: MockRouterSC,
-      });
+  beforeEach(async(() => {
+    fixture = TestBed.createComponent(AnsweroptionsDefaultComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }));
 
-      TestBed.configureTestingModule({
-        imports,
-        providers,
-        declarations,
-      }).compileComponents();
-    }));
+  it('should be created', async(() => {
+    expect(component).toBeTruthy();
+  }));
 
-    beforeEach((() => {
-      fixture = TestBed.createComponent(AnsweroptionsDefaultComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }));
+  it('should contain a TYPE reference', async(() => {
+    expect(AnsweroptionsDefaultComponent.TYPE).toEqual('AnsweroptionsDefaultComponent');
+  }));
 
-    it('should be created', (() => {
-      expect(component).toBeTruthy();
-    }));
-    it('should contain a TYPE reference', (() => {
-      expect(AnsweroptionsDefaultComponent.TYPE).toEqual('AnsweroptionsDefaultComponent');
-    }));
-
-    describe('#addAnswer', () => {
-      it('should add an answer', () => {
-        component.addAnswer();
-        expect(component.question.answerOptionList.length).toEqual(1);
-        expect(component.question.answerOptionList[0].TYPE).toEqual('DefaultAnswerOption');
-      });
-    });
-
-    describe('#deleteAnswer', () => {
-      it('should delete an answer', () => {
-        component.deleteAnswer(0);
-        expect(component.question.answerOptionList.length).toEqual(0);
-      });
-    });
-
-    describe('#updateAnswerValue', () => {
-      it('should update the answertext', () => {
-        const value = 'newValue';
-        const event = <any>{ target: { value } };
-        component.addAnswer();
-        component.updateAnswerValue(event, 0);
-        expect(component.question.answerOptionList[0].answerText).toEqual(value);
-      });
-    });
-
-    describe('#toggleShowOneAnswerPerRow', () => {
-      it('should toggle the showOneAnswerPerRow option of the question', () => {
-        const initValue = component.question.showOneAnswerPerRow;
-        component.toggleShowOneAnswerPerRow();
-        expect(component.question.showOneAnswerPerRow).not.toEqual(initValue);
-      });
-    });
-
-    describe('#toggleShowAnswerContentOnButtons', () => {
-      it('should toggle the displayAnswerText option of the question', () => {
-        const initValue = component.question.displayAnswerText;
-        component.toggleShowAnswerContentOnButtons();
-        expect(component.question.displayAnswerText).not.toEqual(initValue);
-      });
-    });
+  it('should add an answer', () => {
+    component.addAnswer();
+    expect(component.question.answerOptionList.length).toEqual(1);
+    expect(component.question.answerOptionList[0].TYPE).toEqual('DefaultAnswerOption');
   });
 
-  describe('SurveyQuestion', () => {
-    let component: AnsweroptionsDefaultComponent;
-    let fixture: ComponentFixture<AnsweroptionsDefaultComponent>;
+  it('should delete an answer', () => {
+    component.deleteAnswer(0);
+    expect(component.question.answerOptionList.length).toEqual(0);
+  });
 
-    beforeEach((() => {
-      providers.push({
-        provide: ActivatedRoute,
-        useClass: MockRouterSurvey,
-      });
+  it('should update the answertext', () => {
+    const value = 'newValue';
+    const event = <any>{ target: { value } };
+    component.addAnswer();
+    component.updateAnswerValue(event, 0);
+    expect(component.question.answerOptionList[0].answerText).toEqual(value);
+  });
 
-      TestBed.configureTestingModule({
-        imports,
-        providers,
-        declarations,
-      }).compileComponents();
-    }));
+  it('should toggle the showOneAnswerPerRow option of the question', () => {
+    const initValue = component.question.showOneAnswerPerRow;
+    component.toggleShowOneAnswerPerRow();
+    expect(component.question.showOneAnswerPerRow).not.toEqual(initValue);
+  });
 
-    beforeEach((() => {
-      fixture = TestBed.createComponent(AnsweroptionsDefaultComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }));
+  it('should toggle the displayAnswerText option of the question', () => {
+    const initValue = component.question.displayAnswerText;
+    component.toggleShowAnswerContentOnButtons();
+    expect(component.question.displayAnswerText).not.toEqual(initValue);
+  });
 
-    describe('#toggleMultipleSelectionSurvey', () => {
-
-      it('should toggle the multipleSelectionEnabled option of a survey question', () => {
-        const initValue = (<SurveyQuestionEntity>component.question).multipleSelectionEnabled;
-        component.toggleMultipleSelectionSurvey();
-        expect((<SurveyQuestionEntity>component.question).multipleSelectionEnabled).not.toEqual(initValue);
-      });
-    });
+  it('should toggle the multipleSelectionEnabled option of a survey question', () => {
+    const initValue = (<SurveyQuestionEntity>component.question).multipleSelectionEnabled;
+    component.toggleMultipleSelectionSurvey();
+    expect((<SurveyQuestionEntity>component.question).multipleSelectionEnabled).not.toEqual(initValue);
   });
 });

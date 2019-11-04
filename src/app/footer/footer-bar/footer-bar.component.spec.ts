@@ -1,11 +1,10 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -30,17 +29,7 @@ describe('FooterBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule,
       ],
       providers: [
         IndexedDbService, {
@@ -56,8 +45,8 @@ describe('FooterBarComponent', () => {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, FileUploadService, {
-          provide: QuizService,
-          useClass: QuizMockService,
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
         },
       ],
       declarations: [
@@ -81,7 +70,7 @@ describe('FooterBarComponent', () => {
   }));
 
   it('#getLinkTarget', (inject([FooterBarService], (footerBarService: FooterBarService) => {
-    expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'about']));
+    expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'tos']));
   })));
 
   it('#toggleSetting', (inject([FooterBarService, TrackingService], (footerBarService: FooterBarService, trackingService: TrackingService) => {
@@ -93,7 +82,7 @@ describe('FooterBarComponent', () => {
 
   it('#fileChange', (inject([FileUploadService], (fileUploadService: FileUploadService) => {
     spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
-    component.fileChange({ target: { files: [{ name: 'testFile' }] } });
+    component.fileChange({ target: { files: [new File([], 'testFile')] } });
     expect(fileUploadService.uploadFile).toHaveBeenCalled();
   })));
 });

@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { MessageProtocol } from '../../../lib/enums/Message';
@@ -14,12 +16,13 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   templateUrl: './quiz-rename.component.html',
   styleUrls: ['./quiz-rename.component.scss'],
 })
-export class QuizRenameComponent implements OnInit {
+export class QuizRenameComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizRenameComponent';
   public isQuiznameAvailable: boolean;
   public isQueringQuizname: boolean;
   public quizName = '';
   public isQuiznameMalformed: boolean;
+  private readonly _destroy = new Subject();
 
   constructor(
     public readonly fileUploadService: FileUploadService,
@@ -74,23 +77,28 @@ export class QuizRenameComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.route.params.subscribe(param => {
-      if ((!param || !param.name) && (!this.fileUploadService.renameFilesQueue || !this.fileUploadService.renameFilesQueue.getAll(
+    this.route.paramMap.pipe(takeUntil(this._destroy), distinctUntilChanged()).subscribe(param => {
+      if ((!param || !param.get('name')) && (!this.fileUploadService.renameFilesQueue || !this.fileUploadService.renameFilesQueue.getAll(
         'uploadFiles[]').length)) {
         this.router.navigate(['/']);
         return;
       }
 
-      this.quizApiService.getQuiz(param.name).subscribe((data) => {
+      this.quizApiService.getQuiz(param.get('name')).subscribe((data) => {
         if (data.step !== MessageProtocol.AlreadyTaken && //
             ![QuizState.Active, QuizState.Running, QuizState.Finished].includes(data.payload.state)) {
           return;
         }
 
         const blob = new Blob([JSON.stringify(data.payload.quiz)], { type: 'application/json' });
-        this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, param.name);
+        this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, param.get('name'));
         this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
       });
     });
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
   }
 }

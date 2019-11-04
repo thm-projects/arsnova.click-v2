@@ -1,11 +1,10 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -19,7 +18,6 @@ import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
-import { SharedModule } from '../../../shared/shared.module';
 
 import { MemberGroupSelectComponent } from './member-group-select.component';
 
@@ -30,17 +28,7 @@ describe('MemberGroupSelectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
         IndexedDbService, {
@@ -55,9 +43,15 @@ describe('MemberGroupSelectComponent', () => {
         }, SharedService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        }, UserService,
+        }, {
+          provide: UserService,
+          useValue: {},
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
-      declarations: [MemberGroupSelectComponent],
+      declarations: [MemberGroupSelectComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 

@@ -1,12 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
@@ -34,17 +33,7 @@ describe('AvailableQuizzesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule,
       ],
       providers: [
         IndexedDbService, {
@@ -62,6 +51,9 @@ describe('AvailableQuizzesComponent', () => {
         }, SharedService, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
         },
       ],
       declarations: [AvailableQuizzesComponent],
@@ -128,13 +120,11 @@ describe('AvailableQuizzesComponent', () => {
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
       spyOn(component, 'next').and.callThrough();
-      spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => resolve()));
 
       component.editQuiz(quiz);
 
       expect(trackingService.trackClickEvent).toHaveBeenCalled();
       expect(quizService.quiz).toEqual(quiz);
-      expect(router.navigate).toHaveBeenCalled();
       expect(component.next).toHaveBeenCalled();
     })));
 });

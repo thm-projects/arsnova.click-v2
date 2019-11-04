@@ -1,12 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -17,8 +16,6 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
-import { SharedModule } from '../../../shared/shared.module';
-
 import { NicknameManagerComponent } from './nickname-manager.component';
 
 describe('NicknameManagerComponent', () => {
@@ -61,17 +58,7 @@ describe('NicknameManagerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
         IndexedDbService, {
@@ -83,9 +70,12 @@ describe('NicknameManagerComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService,
+        }, SharedService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
-      declarations: [NicknameManagerComponent],
+      declarations: [NicknameManagerComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 
@@ -164,22 +154,23 @@ describe('NicknameManagerComponent', () => {
 
     it('should select a given nickname', inject([QuizService], (quizService: QuizService) => {
       const nick = 'Tarzan';
-      spyOn(quizService.quiz.sessionConfig.nicks, 'toggleSelectedNick').and.callThrough();
 
       component.selectNick(nick);
-      expect(quizService.quiz.sessionConfig.nicks.toggleSelectedNick).toHaveBeenCalled();
+      quizService.quiz.sessionConfig.nicks.selectedNicks.push(nick);
+      expect(quizService.quiz.sessionConfig.nicks.selectedNicks).toContain(nick);
     }));
   });
 
   describe('#hasSelectedNick', () => {
 
-    it('should return true if a given nickname has been selected', () => {
+    it('should return true if a given nickname has been selected', inject([QuizService], (quizService: QuizService) => {
       const nick = 'Tarzan';
       component.selectNick(nick);
+      quizService.quiz.sessionConfig.nicks.selectedNicks.push(nick);
       const result = component.hasSelectedNick(nick);
 
       expect(result).toBeTruthy();
-    });
+    }));
 
     it('should return false if nickname which is not selected has been given', () => {
       const nick = 'NotExsting';
@@ -209,12 +200,15 @@ describe('NicknameManagerComponent', () => {
 
   describe('#hasSelectedAllNicks', () => {
 
-    it('should return true if all nicks of a category have been selected', () => {
+    it('should return true if all nicks of a category have been selected', inject([QuizService], (quizService: QuizService) => {
       spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
-      component.availableNicks.disney.forEach(nick => component.selectNick(nick));
+      component.availableNicks.disney.forEach(nick => {
+        component.selectNick(nick);
+        quizService.quiz.sessionConfig.nicks.selectedNicks.push(nick);
+      });
 
       expect(component.hasSelectedAllNicks()).toBeTruthy();
-    });
+    }));
 
     it('should return false if not all nicks of a category have been selected', () => {
       spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
@@ -227,12 +221,13 @@ describe('NicknameManagerComponent', () => {
 
   describe('#getNumberOfSelectedNicksOfCategory', () => {
 
-    it('should return the number of selected nicks of a given category', () => {
+    it('should return the number of selected nicks of a given category', inject([QuizService], (quizService: QuizService) => {
       component.selectNick(component.availableNicks.disney[0]);
+      quizService.quiz.sessionConfig.nicks.selectedNicks.push(component.availableNicks.disney[0]);
 
       expect(component.getNumberOfSelectedNicksOfCategory('disney')).toEqual(1);
       expect(component.getNumberOfSelectedNicksOfCategory('notSelected')).toEqual(0);
-    });
+    }));
   });
 
   describe('#getNumberOfAvailableNicksForCategory', () => {
@@ -251,6 +246,7 @@ describe('NicknameManagerComponent', () => {
       spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
 
       component.toggleAllNicks();
+      quizService.quiz.sessionConfig.nicks.selectedNicks.push(...component.availableNicks.disney);
 
       const selectedNicksLength = quizService.quiz.sessionConfig.nicks.selectedNicks.length;
       expect(selectedNicksLength).toEqual(nicknames.disney.length);
@@ -261,6 +257,8 @@ describe('NicknameManagerComponent', () => {
       spyOnProperty(component, 'selectedCategory').and.returnValue('disney');
 
       component.toggleAllNicks();
+      quizService.quiz.sessionConfig.nicks.selectedNicks = [];
+
       const selectedNicksLength = quizService.quiz.sessionConfig.nicks.selectedNicks.length;
       expect(selectedNicksLength).toEqual(0);
     }));

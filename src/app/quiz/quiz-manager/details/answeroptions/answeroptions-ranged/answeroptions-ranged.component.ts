@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { RangedQuestionEntity } from '../../../../../../lib/entities/question/RangedQuestionEntity';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
@@ -36,6 +38,7 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     return this._correctValue;
   }
 
+  private readonly _destroy = new Subject();
   private _questionIndex: number;
 
   constructor(private headerLabelService: HeaderLabelService, private quizService: QuizService, private route: ActivatedRoute) {
@@ -55,8 +58,10 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this._questionIndex = +params['questionIndex'];
+    this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
+    .subscribe(questionIndex => {
+
+      this._questionIndex = questionIndex;
       this._question = <RangedQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
       this._minRange = this._question.rangeMin;
       this._maxRange = this._question.rangeMax;
@@ -69,8 +74,12 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     this._question.rangeMin = this._minRange;
     this._question.rangeMax = this._maxRange;
     this._question.correctValue = this._correctValue;
+
     this.quizService.quiz.questionList[this._questionIndex] = <RangedQuestionEntity>this._question;
     this.quizService.persist();
+
+    this._destroy.next();
+    this._destroy.complete();
   }
 
 }

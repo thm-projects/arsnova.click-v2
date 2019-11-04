@@ -1,14 +1,15 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateService } from '@ngx-translate/core';
+import { SimpleMQ } from 'ng2-simple-mq';
+import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -22,7 +23,6 @@ import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
-import { SharedModule } from '../../../shared/shared.module';
 
 import { NicknameInputComponent } from './nickname-input.component';
 
@@ -39,17 +39,7 @@ describe('NicknameInputComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
         IndexedDbService, {
@@ -64,9 +54,15 @@ describe('NicknameInputComponent', () => {
         }, SharedService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        }, UserService,
+        }, {
+          provide: UserService,
+          useValue: {},
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, SimpleMQ,
       ],
-      declarations: [NicknameInputComponent],
+      declarations: [NicknameInputComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 

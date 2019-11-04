@@ -1,11 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -16,8 +16,6 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
-import { SharedModule } from '../../../shared/shared.module';
-
 import { MemberGroupManagerComponent } from './member-group-manager.component';
 
 describe('MemberGroupManagerComponent', () => {
@@ -27,17 +25,7 @@ describe('MemberGroupManagerComponent', () => {
   beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }), FormsModule,
+        HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule,
       ],
       providers: [
         IndexedDbService, {
@@ -49,9 +37,12 @@ describe('MemberGroupManagerComponent', () => {
         }, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
         },
       ],
-      declarations: [MemberGroupManagerComponent],
+      declarations: [MemberGroupManagerComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 

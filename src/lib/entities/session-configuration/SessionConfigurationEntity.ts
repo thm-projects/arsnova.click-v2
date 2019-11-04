@@ -11,8 +11,8 @@ export class SessionConfigurationEntity {
   public confidenceSliderEnabled: boolean = DefaultSettings.defaultQuizSettings.sessionConfig.confidenceSliderEnabled;
 
   constructor(props) {
-    this.music = props.music;
-    this.nicks = props.nicks;
+    this.music = new MusicSessionConfigurationEntity(props.music);
+    this.nicks = new NickSessionConfigurationEntity(props.nicks);
     this.theme = props.theme;
     this.readingConfirmationEnabled = props.readingConfirmationEnabled;
     this.showResponseProgress = props.showResponseProgress;

@@ -1,11 +1,11 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -30,20 +30,10 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        SimpleMQ, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -55,10 +45,13 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, HeaderLabelService, FooterBarService, SharedService, SettingsService, MemberApiService,
+        }, HeaderLabelService, FooterBarService, SharedService, SettingsService, MemberApiService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
-      declarations: [ConfidenceRateComponent],
-    }).compileComponents();
+      declarations: [ConfidenceRateComponent, ServerUnavailableModalComponent],
+    }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ServerUnavailableModalComponent] } }).compileComponents();
   }));
 
   beforeEach(async(() => {

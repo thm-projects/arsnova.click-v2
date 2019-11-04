@@ -27,7 +27,10 @@ describe('UnusedKeyFilterPipe', () => {
         }), HttpClientTestingModule,
       ],
       providers: [
-        LanguageLoaderService, I18nManagerApiService, ProjectLoaderService, UserService, IndexedDbService, {
+        LanguageLoaderService, I18nManagerApiService, ProjectLoaderService, {
+          provide: UserService,
+          useValue: {},
+        }, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         },

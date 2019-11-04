@@ -1,6 +1,5 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-
 import { ThemesApiService } from './themes-api.service';
 
 describe('ThemesApiService', () => {

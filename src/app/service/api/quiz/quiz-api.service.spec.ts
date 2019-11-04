@@ -59,20 +59,6 @@ describe('QuizApiService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should delete a quiz', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-    const quizDeleteData = {
-      quizName,
-      privateKey: '123456789',
-    };
-
-    service.deleteQuiz(new QuizEntity(quizDeleteData)).subscribe();
-    backend.expectOne(`${service.deleteQuizUrl}/${quizName}`).flush({});
-
-    expect(service).toBeTruthy();
-  }));
-
   it('should generate a Demo Quiz', inject([QuizApiService], (service: QuizApiService) => {
 
     const langKey = 'en';

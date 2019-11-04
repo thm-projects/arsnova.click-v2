@@ -1,14 +1,21 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SwUpdate } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { SimpleMQ } from 'ng2-simple-mq';
+import { TOAST_CONFIG } from 'ngx-toastr';
+import { of } from 'rxjs';
+import { SwUpdateMock } from '../../../_mocks/SwUpdateMock';
+import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../lib/translation.factory';
 import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
 import { HeaderComponent } from '../../header/header/header.component';
@@ -27,8 +34,8 @@ import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { UserService } from '../../service/user/user.service';
-import { SharedModule } from '../../shared/shared.module';
 import { RootComponent } from './root.component';
 
 describe('RootComponent', () => {
@@ -44,20 +51,13 @@ describe('RootComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }), NgbModule,
+        }), RouterTestingModule, HttpClientTestingModule, NgbModule, AngularSvgIconModule, FontAwesomeModule,
       ],
       providers: [
-        UserService, IndexedDbService, HeaderLabelService, ThemesService, {
+        {
+          provide: UserService,
+          useValue: { loadConfig: () => {} },
+        }, IndexedDbService, HeaderLabelService, ThemesService, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, FooterBarService, SettingsService, {
@@ -66,10 +66,27 @@ describe('RootComponent', () => {
         }, SharedService, I18nService, FileUploadService, {
           provide: QuizService,
           useClass: QuizMockService,
-        },
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, {
+          provide: SwUpdate,
+          useClass: SwUpdateMock,
+        }, {
+          provide: UpdateCheckService,
+          useValue: {
+            checkForUpdates: () => of(null),
+          },
+        }, {
+          provide: TOAST_CONFIG,
+          useValue: {
+            default: {},
+            config: {},
+          },
+        }, RxStompService, SimpleMQ,
       ],
       declarations: [
-        HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent,
+        HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent, TranslatePipeMock,
       ],
     }).compileComponents();
   }));

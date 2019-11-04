@@ -1,14 +1,14 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { TranslateService } from '@ngx-translate/core';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../lib/translation.factory';
 import { PipesModule } from '../../pipes/pipes.module';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -36,23 +36,19 @@ describe('I18nManagerOverviewComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, HttpClientModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, HttpClientModule, InfiniteScrollModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, UserService, CasLoginService, FooterBarService, HeaderLabelService, ModalOrganizerService,
+        }, {
+          provide: UserService,
+          useValue: {},
+        }, CasLoginService, FooterBarService, HeaderLabelService, ModalOrganizerService,
       ],
       declarations: [KeyOutputComponent, I18nManagerOverviewComponent],
     })

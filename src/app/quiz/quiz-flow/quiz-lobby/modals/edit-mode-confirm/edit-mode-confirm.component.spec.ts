@@ -1,4 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
 
 import { EditModeConfirmComponent } from './edit-mode-confirm.component';
 
@@ -8,7 +12,13 @@ describe('EditModeConfirmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EditModeConfirmComponent],
+      providers: [
+        {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, NgbActiveModal,
+      ],
+      declarations: [EditModeConfirmComponent, TranslatePipeMock],
     })
     .compileComponents();
   }));

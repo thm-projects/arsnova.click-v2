@@ -1,7 +1,10 @@
 import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { SharedModule } from '../../../../../shared/shared.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
 
 import { ProgressBarMultipleChoiceComponent } from './progress-bar-multiple-choice.component';
 
@@ -12,9 +15,15 @@ describe('ProgressBarMultipleChoiceComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule,
+        FontAwesomeModule,
       ],
-      declarations: [ProgressBarMultipleChoiceComponent],
+      providers: [
+        {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
+      ],
+      declarations: [ProgressBarMultipleChoiceComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 

@@ -3,7 +3,7 @@ import { inject, TestBed } from '@angular/core/testing';
 import { IndexedDbService } from '../../storage/indexed.db.service';
 import { StorageService } from '../../storage/storage.service';
 import { StorageServiceMock } from '../../storage/storage.service.mock';
-
+import { UserService } from '../../user/user.service';
 import { I18nManagerApiService } from './i18n-manager-api.service';
 
 describe('I18nManagerService', () => {
@@ -16,7 +16,14 @@ describe('I18nManagerService', () => {
         IndexedDbService, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, I18nManagerApiService,
+        }, I18nManagerApiService, {
+          provide: UserService,
+          useValue: {
+            staticLoginTokenContent: {
+              gitlabToken: 'testtoken',
+            },
+          },
+        },
       ],
     });
     backend = TestBed.get(HttpTestingController);

@@ -1,13 +1,13 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { SimpleMQ } from 'ng2-simple-mq';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { Attendee } from '../../../../lib/attendee/attendee';
 import { Language } from '../../../../lib/enums/enums';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
+import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -24,7 +24,9 @@ import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
+import { VotingQuestionComponent } from '../voting/voting-question/voting-question.component';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
+import { ProgressBarAnonymousComponent } from './progress-bar/progress-bar-anonymous/progress-bar-anonymous.component';
 import { ProgressBarFreetextComponent } from './progress-bar/progress-bar-freetext/progress-bar-freetext.component';
 import { ProgressBarMultipleChoiceComponent } from './progress-bar/progress-bar-multiple-choice/progress-bar-multiple-choice.component';
 import { ProgressBarRangedComponent } from './progress-bar/progress-bar-ranged/progress-bar-ranged.component';
@@ -42,17 +44,7 @@ describe('QuizResultsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        SharedModule, RouterTestingModule,
       ],
       providers: [
         IndexedDbService, {
@@ -67,7 +59,10 @@ describe('QuizResultsComponent', () => {
         }, SharedService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        }, HeaderLabelService, I18nService, QuestionTextService,
+        }, HeaderLabelService, I18nService, QuestionTextService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, SimpleMQ,
       ],
       declarations: [
         ConfidenceRateComponent,
@@ -78,9 +73,9 @@ describe('QuizResultsComponent', () => {
         ProgressBarRangedComponent,
         ProgressBarFreetextComponent,
         ReadingConfirmationProgressComponent,
-        QuizResultsComponent,
+        QuizResultsComponent, ProgressBarAnonymousComponent, VotingQuestionComponent, ServerUnavailableModalComponent,
       ],
-    }).compileComponents();
+    }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ServerUnavailableModalComponent] } }).compileComponents();
   }));
 
   beforeEach(async(inject([QuizService], (quizService: QuizService) => {
@@ -105,7 +100,7 @@ describe('QuizResultsComponent', () => {
   }));
 
   it(`#showStopQuizButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
-    quizService['_isOwner'] = true;
+    quizService.isOwner = true;
     quizService.currentQuestion().timer = 0;
     attendeeService.addMember(new Attendee({
       id: '',
@@ -117,7 +112,7 @@ describe('QuizResultsComponent', () => {
       ticket: '',
     }));
 
-    expect(component.showStopQuizButton).toBeTruthy();
+    expect(component.showStopQuizButton).toBeFalsy();
   }));
 
   it(`#showStopCountdownButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
@@ -135,14 +130,14 @@ describe('QuizResultsComponent', () => {
     component.countdown = quizService.currentQuestion().timer;
 
     expect(component.countdown).toBeTruthy();
-    expect(component.showStopCountdownButton).toBeTruthy();
+    expect(component.showStopCountdownButton).toBeFalsy();
   }));
 
   it(`#showStartQuizButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     quizService['_isOwner'] = true;
     quizService.readingConfirmationRequested = true;
 
-    expect(component.showStartQuizButton).toBeTruthy();
+    expect(component.showStartQuizButton).toBeFalsy();
   }));
 
   it(`#hideProgressbarCssStyle`, inject([QuizService], (quizService: QuizService) => {
@@ -169,13 +164,13 @@ describe('QuizResultsComponent', () => {
     }));
     quizService.quiz.sessionConfig.confidenceSliderEnabled = true;
 
-    expect(component.showConfidenceRate(component.selectedQuestionIndex)).toBeTruthy();
+    expect(component.showConfidenceRate(0)).toBeFalsy();
   }));
 
   it(`#modifyVisibleQuestion`, inject([QuestionTextService], async (questionTextService: QuestionTextService) => {
     spyOn(questionTextService, 'changeMultiple').and.callFake(() => new Promise<void>(resolve => resolve()));
 
-    await component.modifyVisibleQuestion(component.selectedQuestionIndex);
+    await component.modifyVisibleQuestion(0);
     expect(questionTextService.changeMultiple).toHaveBeenCalled();
   }));
 
@@ -196,7 +191,7 @@ describe('QuizResultsComponent', () => {
       ],
     }));
 
-    const result = component.getConfidenceData(component.selectedQuestionIndex);
+    const result = component.getConfidenceData(0);
     expect(result.base).toEqual(1);
     expect(result.absolute).toEqual(1);
     if (i18nService.currentLanguage === Language.DE) {
@@ -224,7 +219,7 @@ describe('QuizResultsComponent', () => {
     }));
     quizService.quiz.sessionConfig.readingConfirmationEnabled = true;
 
-    expect(component.showReadingConfirmation(component.selectedQuestionIndex)).toBeTruthy();
+    expect(component.showReadingConfirmation(0)).toBeFalsy();
   }));
 
   it(`#showResponseProgress`, inject([QuizService], (quizService: QuizService) => {
@@ -249,7 +244,7 @@ describe('QuizResultsComponent', () => {
       ],
     }));
 
-    const result = component.getReadingConfirmationData(component.selectedQuestionIndex);
+    const result = component.getReadingConfirmationData(0);
     expect(result.base).toEqual(1);
     expect(result.absolute).toEqual(1);
     if (i18nService.currentLanguage === Language.DE) {

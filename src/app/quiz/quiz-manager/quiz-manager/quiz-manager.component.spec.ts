@@ -1,14 +1,15 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { availableQuestionTypes } from '../../../../lib/available-question-types';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
-import { createTranslateLoader } from '../../../../lib/translation.factory';
 import { FooterModule } from '../../../footer/footer.module';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -24,7 +25,6 @@ import { StorageServiceMock } from '../../../service/storage/storage.service.moc
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { UserService } from '../../../service/user/user.service';
-import { SharedModule } from '../../../shared/shared.module';
 
 import { QuizManagerComponent } from './quiz-manager.component';
 
@@ -41,17 +41,7 @@ describe('QuizManagerComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), HttpClientTestingModule, SharedModule, RouterTestingModule, HttpClientModule, FooterModule, TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useFactory: (createTranslateLoader),
-            deps: [HttpClient],
-          },
-          compiler: {
-            provide: TranslateCompiler,
-            useClass: TranslateMessageFormatCompiler,
-          },
-        }),
+        }), HttpClientTestingModule, RouterTestingModule, FooterModule, FontAwesomeModule, NgbPopoverModule, NgbTooltipModule,
       ],
       providers: [
         UserService, IndexedDbService, {
@@ -66,9 +56,12 @@ describe('QuizManagerComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService,
+        }, SharedService, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        },
       ],
-      declarations: [QuizManagerComponent],
+      declarations: [QuizManagerComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 
@@ -88,9 +81,9 @@ describe('QuizManagerComponent', () => {
 
   describe('#addQuestion', () => {
     it('should add a question', inject([QuizService], (quizService: QuizService) => {
-      const id = availableQuestionTypes[0].id;
+      const id = availableQuestionTypes[1].id;
 
-      quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
+      quizService.quiz.questionList.splice(1, quizService.quiz.questionList.length);
 
       expect(quizService.quiz.questionList.length).toEqual(1);
       expect(quizService.quiz.questionList[0].TYPE.toString()).toEqual(id);

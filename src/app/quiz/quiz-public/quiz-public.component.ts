@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -11,9 +13,11 @@ import { StorageService } from '../../service/storage/storage.service';
   templateUrl: './quiz-public.component.html',
   styleUrls: ['./quiz-public.component.scss'],
 })
-export class QuizPublicComponent {
+export class QuizPublicComponent implements OnInit, OnDestroy {
   public availablePublicQuizzes: Array<QuizEntity> = [];
   public isViewingOwnQuizzes = false;
+
+  private readonly _destroy = new Subject();
 
   constructor(
     private storageService: StorageService,
@@ -23,14 +27,6 @@ export class QuizPublicComponent {
     private router: ActivatedRoute,
   ) {
     this.footerBarService.replaceFooterElements([footerBarService.footerElemBack]);
-    this.router.params.subscribe(params => {
-      if (params.own) {
-        this.quizApiService.getOwnPublicQuizzes().subscribe(val => this.availablePublicQuizzes = val);
-        this.isViewingOwnQuizzes = true;
-      } else {
-        this.quizApiService.getPublicQuizzes().subscribe(val => this.availablePublicQuizzes = val);
-      }
-    });
   }
 
   public playQuiz(index: number): void {
@@ -57,5 +53,21 @@ export class QuizPublicComponent {
 
   public getTranslationForYesNo(value: boolean): string {
     return value ? 'global.yes' : 'global.no';
+  }
+
+  public ngOnInit(): void {
+    this.router.paramMap.pipe(takeUntil(this._destroy), distinctUntilChanged()).subscribe(params => {
+      if (params.get('own')) {
+        this.quizApiService.getOwnPublicQuizzes().subscribe(val => this.availablePublicQuizzes = val);
+        this.isViewingOwnQuizzes = true;
+      } else {
+        this.quizApiService.getPublicQuizzes().subscribe(val => this.availablePublicQuizzes = val);
+      }
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
   }
 }
