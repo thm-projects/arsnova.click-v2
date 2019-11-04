@@ -68,7 +68,10 @@ export class ThemesService {
     }));
 
     const themeConfig = await Promise.all(themePromises);
-    const usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
+    let usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
+    if (usedTheme === 'default') {
+      usedTheme = environment.availableQuizThemes[0];
+    }
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
     if (!document.getElementById('link-manifest') && themeDataset === usedTheme) {

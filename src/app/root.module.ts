@@ -47,7 +47,6 @@ import { UserRoleGuardService } from './service/user-role-guard/user-role-guard.
 import { UserService } from './service/user/user.service';
 import { SharedModule } from './shared/shared.module';
 import { ArsnovaClickAngulartics2Piwik } from './shared/tracking/ArsnovaClickAngulartics2Piwik';
-import { ThemesModule } from './themes/themes.module';
 
 export const appRoutes: Routes = [
   {
@@ -128,8 +127,6 @@ export const appRoutes: Routes = [
       enableTracing: false, // <-- debugging purposes only
     }),
     SharedModule,
-    ThemesModule,
-    HeaderModule,
     FooterModule,
     Angulartics2Module.forRoot(),
     JwtModule.forRoot({
@@ -139,7 +136,7 @@ export const appRoutes: Routes = [
         deps: [PLATFORM_ID],
       },
     }),
-    PipesModule,
+    PipesModule, HeaderModule,
   ],
   providers: [
     /* {

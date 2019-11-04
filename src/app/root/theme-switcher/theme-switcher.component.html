@@ -1,3 +1,12 @@
-<app-themes (updateTheme)="updateTheme($event)"
-            (previewTheme)="previewTheme($event)"
-            (restoreTheme)="restoreTheme()"></app-themes>
+<picture *ngFor="let elem of themesService.themes"
+         class="d-flex align-items-center mb-2 flex-wrap flex-sm-nowrap">
+  <source *ngFor="let previewUrl of getThemePreviewUrl(elem.id)"
+          [srcset]="previewUrl"/>
+  <img
+    (click)="change(elem.id)"
+    [alt]="elem.description | translate"
+    [src]="getFallbackPreviewUrl(elem.id)"
+    class="imagePreviewFile border border-secondary rounded cursor-pointer"/>
+  <span [innerHTML]="elem.description | translate"
+        class="text-light ml-sm-2"></span>
+</picture>

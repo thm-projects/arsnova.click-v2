@@ -7,7 +7,6 @@ import { LeaderboardComponent } from '../../quiz/quiz-flow/leaderboard/leaderboa
 import { QuizLobbyComponent } from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
 import { QuestionDetailsComponent } from '../../quiz/quiz-flow/quiz-results/question-details/question-details.component';
 import { QuizResultsComponent } from '../../quiz/quiz-flow/quiz-results/quiz-results.component';
-import { QuizThemeComponent } from '../../quiz/quiz-flow/quiz-theme/quiz-theme.component';
 import { ReadingConfirmationComponent } from '../../quiz/quiz-flow/reading-confirmation/reading-confirmation.component';
 import { VotingComponent } from '../../quiz/quiz-flow/voting/voting.component';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -91,7 +90,6 @@ export class FooterBarComponent implements OnInit {
       LeaderboardComponent.TYPE,
       ReadingConfirmationComponent.TYPE,
       ConfidenceRateComponent.TYPE,
-      QuizThemeComponent.TYPE,
       QuestionDetailsComponent.TYPE,
     ].includes(currentComponent ? currentComponent.TYPE : null);
   }

@@ -1,16 +1,18 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, filter, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { DbTable, StorageKey } from '../../../lib/enums/enums';
-import { QuizTheme } from '../../../lib/enums/QuizTheme';
+import { DbTable, StorageKey, TrackingCategoryType } from '../../../lib/enums/enums';
+import { ThemesApiService } from '../../service/api/themes/themes-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 
 @Component({
   selector: 'app-theme-switcher',
@@ -20,16 +22,18 @@ import { ThemesService } from '../../service/themes/themes.service';
 export class ThemeSwitcherComponent implements OnInit, OnDestroy {
   public static TYPE = 'ThemeSwitcherComponent';
 
-  private previewThemeBackup: string;
   private _themeChangedEmitter = new EventEmitter<string>();
 
   private readonly _destroy = new Subject();
 
   constructor(
+    public themesService: ThemesService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
-    private themesService: ThemesService,
+    private translateService: TranslateService,
+    private trackingService: TrackingService,
+    private themesApiService: ThemesApiService,
     private storageService: StorageService,
     private quizService: QuizService,
     private router: Router,
@@ -38,10 +42,6 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
     this.footerBarService.TYPE_REFERENCE = ThemeSwitcherComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.theme_switcher.set_theme';
-
-    if (isPlatformBrowser(this.platformId)) {
-      this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
-    }
 
     let footerElements;
     if (environment.forceQuizTheme && sessionStorage.getItem(StorageKey.CurrentQuizName)) {
@@ -75,36 +75,28 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  public updateTheme(id: string): void {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-
-    document.getElementsByTagName('html').item(0).dataset['theme'] = id;
-    this.previewThemeBackup = document.getElementsByTagName('html').item(0).dataset['theme'];
-    this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this.previewThemeBackup).subscribe();
-    this._themeChangedEmitter.emit(id);
-    this.themesService.themeChanged.emit(QuizTheme[id]);
+  public getThemePreviewUrl(id: string): Array<string> {
+    return this.themesApiService.THEMES_PREVIEW_GET_URL(id, this.translateService.currentLang);
   }
 
-  public previewTheme(id: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      document.getElementsByTagName('html').item(0).dataset['theme'] = id;
-      this.themesService.themeChanged.emit(QuizTheme[id]);
-    }
+  public getFallbackPreviewUrl(id: string): string {
+    return this.themesApiService.getThemePreviewDefaultUrl(id, this.translateService.currentLang);
   }
 
-  public restoreTheme(): void {
-    if (isPlatformServer(this.platformId)) {
+  public change(id: string): void {
+    if (isPlatformServer(this.platformId) || this.themesService.currentTheme === id) {
       return;
     }
 
-    const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
+    this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, id).subscribe(() => {
+      this._themeChangedEmitter.emit(id);
+      this.themesService.updateCurrentlyUsedTheme();
+    });
 
-    if (themeDataset !== this.previewThemeBackup) {
-      document.getElementsByTagName('html').item(0).dataset['theme'] = this.previewThemeBackup;
-      this.themesService.reloadLinkNodes(this.previewThemeBackup);
-      return;
-    }
+    this.trackingService.trackEvent({
+      action: ThemeSwitcherComponent.TYPE,
+      category: TrackingCategoryType.ThemeChange,
+      label: id,
+    });
   }
 }

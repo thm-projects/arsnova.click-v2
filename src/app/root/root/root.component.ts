@@ -5,8 +5,9 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
+import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
 import { StatusProtocol } from '../../../lib/enums/Message';
@@ -45,10 +46,12 @@ export class RootComponent implements OnInit, AfterViewInit {
     private themeService: ThemesService,
     private updateCheckService: UpdateCheckService,
     private rxStompService: RxStompService,
-    private quizService: QuizService,
-    private connectionService: ConnectionService, private messageQueue: SimpleMQ,
+    private quizService: QuizService, private connectionService: ConnectionService, private messageQueue: SimpleMQ,
   ) {
-    this.themeService.themeChanged.pipe(takeUntil(this._destroy)).subscribe(themeName => {
+    this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe(themeName => {
+      if (String(themeName) === 'default') {
+        themeName = environment.availableQuizThemes[0];
+      }
       this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
         this.initializeCookieConsent(themeName);
       }).catch(reason => {
@@ -144,13 +147,15 @@ export class RootComponent implements OnInit, AfterViewInit {
     return <INamedType>(route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component);
   }
 
-  private loadExternalStyles(styleUrl: string): Promise<Event> {
+  private loadExternalStyles(styleUrl: string): Promise<void> {
     return new Promise(resolve => {
-      const existingNode = document.getElementsByClassName('theme-styles');
-      if (existingNode.length) {
-        if ((existingNode.item(0) as HTMLLinkElement).href.includes(styleUrl)) {
-          return;
-        }
+      const styleCollection = document.getElementsByClassName('theme-styles');
+
+      let existingNode;
+      existingNode = styleCollection.item(0);
+      if (existingNode.href.includes(styleUrl)) {
+        resolve();
+        return;
       }
 
       const styleElement = document.createElement('link') as HTMLLinkElement;
@@ -158,7 +163,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       styleElement.rel = 'stylesheet';
       styleElement.href = styleUrl;
       styleElement.onload = () => {
-        document.head.removeChild(existingNode.item(0));
+        document.head.removeChild(existingNode);
         resolve();
       };
       document.head.appendChild(styleElement);
@@ -166,7 +171,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private initializeCookieConsent(theme: QuizTheme): void {
-    if (!(<IWindow>window).cookieconsent || !theme) {
+    if (!(<IWindow>window).cookieconsent || !theme || document.cookie.includes('cookieconsent_status=dismiss')) {
       return;
     }
 
@@ -174,6 +179,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < elements.length; i++) {
       elements.item(i).remove();
     }
+
+    console.log('initializing cookie consent with theme', theme);
 
     (<IWindow>window).cookieconsent.initialise({
       palette: {

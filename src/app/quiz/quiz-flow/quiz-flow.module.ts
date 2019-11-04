@@ -4,7 +4,6 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { MarkdownModule } from '../../markdown/markdown.module';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { SharedModule } from '../../shared/shared.module';
-import { ThemesModule } from '../../themes/themes.module';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { QuizFlowSharedModule } from './quiz-flow-shared.module';
@@ -14,7 +13,6 @@ import { QuizLobbyComponent } from './quiz-lobby/quiz-lobby.component';
 import { QuestionDetailsComponent } from './quiz-results/question-details/question-details.component';
 import { QuizResultsComponent } from './quiz-results/quiz-results.component';
 import { QuizResultsModule } from './quiz-results/quiz-results.module';
-import { QuizThemeComponent } from './quiz-theme/quiz-theme.component';
 import { ReadingConfirmationComponent } from './reading-confirmation/reading-confirmation.component';
 import { VotingComponent } from './voting/voting.component';
 
@@ -35,10 +33,6 @@ export const quizFlowRoutes: Routes = [
   }, {
     path: 'results/:questionIndex',
     component: QuestionDetailsComponent,
-    data: {},
-  }, {
-    path: 'theme',
-    component: QuizThemeComponent,
     data: {},
   }, {
     path: 'leaderboard',
@@ -65,14 +59,13 @@ export const quizFlowRoutes: Routes = [
 
 @NgModule({
   imports: [
-    MarkdownModule, SharedModule, ThemesModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, QRCodeModule, QuizFlowSharedModule,
+    MarkdownModule, SharedModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, QRCodeModule, QuizFlowSharedModule,
   ],
   bootstrap: [EditModeConfirmComponent, QrCodeContentComponent],
   declarations: [
     QuizLobbyComponent,
     VotingComponent,
     LeaderboardComponent,
-    QuizThemeComponent,
     ReadingConfirmationComponent,
     ConfidenceRateComponent,
     EditModeConfirmComponent,
