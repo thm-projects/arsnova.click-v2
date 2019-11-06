@@ -117,4 +117,9 @@ Credits: https://ihatetomatoes.net/create-custom-preloading-screen/
       border-top-color: $border-loader_wrapper-middle_spin;
     }
   }
+
+  .arsnova-click-label {
+    z-index: 999999;
+    top: 25%;
+  }
 }
