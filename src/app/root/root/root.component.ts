@@ -32,7 +32,7 @@ import { UserService } from '../../service/user/user.service';
 export class RootComponent implements OnInit, AfterViewInit {
   public static TYPE = 'RootComponent';
   public isInQuizManager = false;
-  public isLoading = true;
+  public isLoading = false;
   private _stompSubscription: Subscription;
   private readonly _destroy = new Subject();
 

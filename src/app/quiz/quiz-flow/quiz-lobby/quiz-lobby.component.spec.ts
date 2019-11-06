@@ -5,7 +5,7 @@ import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/t
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode';
+import { QRCodeModule } from 'angularx-qrcode';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
@@ -41,7 +41,7 @@ describe('QuizLobbyComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, SharedModule, NgxQRCodeModule, NgbModule,
+        RouterTestingModule, SharedModule, QRCodeModule, NgbModule,
       ],
       providers: [
         IndexedDbService, {

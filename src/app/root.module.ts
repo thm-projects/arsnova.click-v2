@@ -67,7 +67,7 @@ export const appRoutes: Routes = [
     path: 'quiz/flow',
     loadChildren: () => import('./quiz/quiz-flow/quiz-flow.module').then(m => m.QuizFlowModule),
     data: {
-      preload: true,
+      preload: false,
     },
   }, {
     path: 'quiz',
@@ -76,7 +76,7 @@ export const appRoutes: Routes = [
     path: 'nicks',
     loadChildren: () => import('./root/nickname-chooser/nickname-chooser.module').then(m => m.NicknameChooserModule),
     data: {
-      preload: true,
+      preload: false,
     },
   }, {
     path: 'themes',
