@@ -75,7 +75,6 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
     .subscribe(questionIndex => {
       this._questionIndex = questionIndex;
       this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
-      console.log(questionIndex, this.quizService.quiz.questionList[0]);
 
       this.canAddAnsweroptions = ![QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion].includes(this._question.TYPE);
       this.canDeleteAnswer = true;
