@@ -81,16 +81,6 @@ describe('SoundManagerComponent', () => {
     }));
   });
 
-  describe('#setGlobalVolume', () => {
-    it('should set the global volume', inject([QuizService], (quizService: QuizService) => {
-      const value = 10;
-      const event = <any>{ target: { value } };
-      quizService.quizUpdateEmitter.next(quizService.quiz);
-      component.setGlobalVolume(event);
-      expect(quizService.quiz.sessionConfig.music.volumeConfig.global).toEqual(value);
-    }));
-  });
-
   describe('#openTab', () => {
     it('should open a config tab', inject([QuizService], (quizService: QuizService) => {
       const id = 'panel-lobby';

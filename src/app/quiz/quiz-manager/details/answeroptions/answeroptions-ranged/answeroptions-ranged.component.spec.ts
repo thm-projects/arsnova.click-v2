@@ -61,46 +61,4 @@ describe('AnsweroptionsRangedComponent', () => {
   it('should contain a TYPE reference', (() => {
     expect(AnsweroptionsRangedComponent.TYPE).toEqual('AnsweroptionsRangedComponent');
   }));
-
-  it('should replace the min range value with a given number', () => {
-    const value = 10;
-    const event = <any>{ target: { value } };
-    component.updateMinRange(event);
-    expect(component.minRange).toEqual(value);
-  });
-
-  it('should replace the min range value with a given string as number', () => {
-    const value = '10';
-    const event = <any>{ target: { value } };
-    component.updateMinRange(event);
-    expect(component.minRange).toEqual(parseInt(value, 10));
-  });
-
-  it('should replace the max range value with a given number', () => {
-    const value = 10;
-    const event = <any>{ target: { value } };
-    component.updateMaxRange(event);
-    expect(component.maxRange).toEqual(value);
-  });
-
-  it('should replace the max range value with a given string as number', () => {
-    const value = '10';
-    const event = <any>{ target: { value } };
-    component.updateMaxRange(event);
-    expect(component.maxRange).toEqual(parseInt(value, 10));
-  });
-
-  it('should replace the correct value with a given number', () => {
-    const value = 10;
-    const event = <any>{ target: { value } };
-    component.updateCorrectValue(event);
-    expect(component.correctValue).toEqual(value);
-  });
-
-  it('should replace the correct value with a given string as number', () => {
-    const value = '10';
-    const event = <any>{ target: { value } };
-    component.updateCorrectValue(event);
-    expect(component.correctValue).toEqual(parseInt(value, 10));
-  });
 });

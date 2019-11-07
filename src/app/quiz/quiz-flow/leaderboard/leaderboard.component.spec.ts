@@ -1,6 +1,6 @@
 import { PLATFORM_ID, SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -97,7 +97,7 @@ describe('LeaderboardComponent', () => {
     const nicknameDefault = 'TestNickname';
     const nicknameEmoji = ':+1:';
 
-    spyOn(component, 'sanitizeHTML').and.callFake((value: string) => value as SafeHtml);
+    spyOn(component, 'sanitizeHTML').and.callFake((value: string) => value);
 
     component.parseNickname(nicknameDefault);
     expect(component.sanitizeHTML).toHaveBeenCalledTimes(0);

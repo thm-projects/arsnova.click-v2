@@ -46,7 +46,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.803.17",
+    "@angular-devkit/build-angular": "^0.803.18",
     "@angular/animations": "^8.2.13",
     "@angular/common": "^8.2.13",
     "@angular/compiler": "^8.2.13",
@@ -82,12 +82,12 @@
     "node-sass": "^4.13.0",
     "rxjs": "~6.4.0",
     "ts-loader": "^6.2.1",
-    "web-animations-js": "^2.3.2",
     "tslib": "^1.10.0",
+    "web-animations-js": "^2.3.2",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular/cli": "^8.3.17",
+    "@angular/cli": "^8.3.18",
     "@angular/compiler-cli": "^8.2.13",
     "@angular/language-service": "^8.2.13",
     "@types/jasmine": "^3.3.16",
