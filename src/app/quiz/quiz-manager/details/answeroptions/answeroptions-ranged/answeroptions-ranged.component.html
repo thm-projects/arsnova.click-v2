@@ -9,8 +9,7 @@
            class="border-0 rounded p-2 w-100"
            step="any"
            min="0"
-           [value]="minRange"
-           (input)="updateMinRange($event)"
+           [(ngModel)]="minRange"
            [placeholder]="'component.answeroptions.ranged_question.min_range' | translate"/>
   </div>
   <div class="col-12 mb-5"
@@ -21,8 +20,7 @@
            class="border-0 rounded p-2 w-100"
            step="any"
            min="0"
-           [value]="correctValue"
-           (input)="updateCorrectValue($event)"
+           [(ngModel)]="correctValue"
            [placeholder]="'component.answeroptions.ranged_question.min_range' | translate"/>
   </div>
   <div class="col-12 mb-5"
@@ -33,8 +31,7 @@
            class="border-0 rounded p-2 w-100"
            step="any"
            min="0"
-           [value]="maxRange"
-           (input)="updateMaxRange($event)"
+           [(ngModel)]="maxRange"
            [placeholder]="'component.answeroptions.ranged_question.max_range' | translate"/>
   </div>
 </div>

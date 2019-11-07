@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -77,8 +77,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private quizApiService: QuizApiService,
-    private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private quizApiService: QuizApiService, private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
@@ -88,7 +87,7 @@ export class VotingComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([]);
   }
 
-  public sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): string {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
@@ -231,6 +230,10 @@ export class VotingComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
+  public getQuestionAsSurvey(): SurveyQuestionEntity {
+    return this.quizService.currentQuestion() as SurveyQuestionEntity;
+  }
+
   private handleMessages(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
@@ -278,5 +281,4 @@ export class VotingComponent implements OnInit, OnDestroy {
       QuestionType.YesNoSingleChoiceQuestion,
     ].includes(this._currentQuestion.TYPE);
   }
-
 }

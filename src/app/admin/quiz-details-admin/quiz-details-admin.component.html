@@ -52,10 +52,10 @@
 
       <p *ngIf="isSet(question.displayAnswerText)"
          class="card-text mb-0">Display Answer Text: {{question.displayAnswerText}}</p>
-      <p *ngIf="isSet(question.multipleSelectionEnabled)"
-         class="card-text mb-0">Multiple Selection Enabled: {{question.multipleSelectionEnabled}}</p>
-      <p *ngIf="isSet(question.showOneAnswerPerRow)"
-         class="card-text mb-0">Show One Answer Per Row: {{question.showOneAnswerPerRow}}</p>
+      <p *ngIf="isSet(getQuestionAsSurvey(question).multipleSelectionEnabled)"
+         class="card-text mb-0">Multiple Selection Enabled: {{getQuestionAsSurvey(question).multipleSelectionEnabled}}</p>
+      <p *ngIf="isSet(getQuestionAsSurvey(question).showOneAnswerPerRow)"
+         class="card-text mb-0">Show One Answer Per Row: {{getQuestionAsSurvey(question).showOneAnswerPerRow}}</p>
 
       <hr/>
 

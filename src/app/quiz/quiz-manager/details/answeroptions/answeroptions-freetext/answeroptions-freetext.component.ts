@@ -91,7 +91,7 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
     this.quizService.quiz.questionList[this._questionIndex] = this.question;
     this.quizService.persist();

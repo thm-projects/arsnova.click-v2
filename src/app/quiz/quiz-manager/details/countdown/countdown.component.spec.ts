@@ -86,6 +86,6 @@ describe('CountdownComponent', () => {
     component.updateCountdown(newValue);
 
     expect(quizService.quiz.questionList[0].timer).toEqual(newValue);
-    expect(component.countdown).toEqual(newValue);
+    expect(component.countdown).toEqual(String(newValue));
   }));
 });

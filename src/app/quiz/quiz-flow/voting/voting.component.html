@@ -29,9 +29,9 @@
           *ngFor="let elem of answers; let i = index"
           [class.btn-invers]="isSelected(i)"
           [class.btn-secondary]="!isSelected(i)"
-          [class.m-2]="!quizService.currentQuestion().showOneAnswerPerRow"
-          [class.my-2]="quizService.currentQuestion().showOneAnswerPerRow"
-          [style.flex-basis]="quizService.currentQuestion().showOneAnswerPerRow ? '100%' : 'auto'"
+          [class.m-2]="!getQuestionAsSurvey().showOneAnswerPerRow"
+          [class.my-2]="getQuestionAsSurvey().showOneAnswerPerRow"
+          [style.flex-basis]="getQuestionAsSurvey().showOneAnswerPerRow ? '100%' : 'auto'"
           class="btn answer-option-element d-flex justify-content-center align-items-center rounded p-1 flex-grow-1 flex-shink-1">
     <span *ngIf="quizService.currentQuestion().displayAnswerText"
           [innerHTML]="sanitizeHTML(elem)"

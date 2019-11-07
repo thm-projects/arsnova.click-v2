@@ -6,8 +6,7 @@
            autofocus
            class="w-100"
            (keyup.enter)="sendConfidence()"
-           [value]="confidenceValue"
-           (input)="updateConficence($event)">
+           [(ngModel)]="confidenceValue">
   </div>
   <div class="col-12">
     <p class="text-center mb-5">{{getConfidenceLevelTranslation() | translate}}</p>

@@ -15,7 +15,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
 })
 export class CountdownComponent implements OnInit, OnDestroy {
   public static TYPE = 'CountdownComponent';
-  public minCountdownValue = 0;
+  public minCountdownValue = '0';
 
   private _parsedHours = '0';
 
@@ -53,10 +53,14 @@ export class CountdownComponent implements OnInit, OnDestroy {
     return this._plainSeconds;
   }
 
-  private _countdown: number = this.minCountdownValue;
+  private _countdown: string = this.minCountdownValue;
 
-  get countdown(): number {
+  get countdown(): string {
     return this._countdown;
+  }
+
+  set countdown(value: string) {
+    this._countdown = value;
   }
 
   private _questionIndex: number;
@@ -78,15 +82,11 @@ export class CountdownComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  public updateCountdown(event: Event | number): void {
-    if (typeof event === 'number') {
-      this._countdown = event;
-    } else {
-      this._countdown = parseInt((<HTMLInputElement>(<Event>event).target).value, 10);
-    }
-    const hours = Math.floor(this._countdown / 3600);
-    const minutes = Math.floor((this._countdown - hours * 3600) / 60);
-    const seconds = Math.floor((this._countdown - hours * 3600) - (minutes * 60));
+  public updateCountdown(countdown: number): void {
+    const hours = Math.floor(countdown / 3600);
+    const minutes = Math.floor((countdown - hours * 3600) / 60);
+    const seconds = Math.floor((countdown - hours * 3600) - (minutes * 60));
+    this._countdown = String(countdown);
 
     this._parsedHours = String(hours);
     this._parsedMinutes = String(minutes);
@@ -96,7 +96,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this._plainMinutes = parseInt(this._parsedMinutes, 10);
     this._plainSeconds = parseInt(this._parsedSeconds, 10);
 
-    this.quizService.quiz.questionList[this._questionIndex].timer = this.countdown || 0;
+    this.quizService.quiz.questionList[this._questionIndex].timer = parseInt(this.countdown, 10) || 0;
   }
 
   public ngOnInit(): void {
@@ -115,7 +115,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
     this.quizService.persist();
     this._destroy.next();

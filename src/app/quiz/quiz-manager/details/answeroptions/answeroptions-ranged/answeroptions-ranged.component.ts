@@ -20,22 +20,34 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     return this._question;
   }
 
-  private _minRange: number;
+  private _minRange: string;
 
-  get minRange(): number {
+  get minRange(): string {
     return this._minRange;
   }
 
-  private _maxRange: number;
+  set minRange(value: string) {
+    this._minRange = value;
+  }
 
-  get maxRange(): number {
+  private _maxRange: string;
+
+  get maxRange(): string {
     return this._maxRange;
   }
 
-  private _correctValue: number;
+  set maxRange(value: string) {
+    this._maxRange = value;
+  }
 
-  get correctValue(): number {
+  private _correctValue: string;
+
+  get correctValue(): string {
     return this._correctValue;
+  }
+
+  set correctValue(value: string) {
+    this._correctValue = value;
   }
 
   private readonly _destroy = new Subject();
@@ -45,35 +57,23 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
 
-  public updateMinRange(event: Event): void {
-    this._minRange = parseInt((<HTMLInputElement>event.target).value, 10);
-  }
-
-  public updateMaxRange(event: Event): void {
-    this._maxRange = parseInt((<HTMLInputElement>event.target).value, 10);
-  }
-
-  public updateCorrectValue(event: Event): void {
-    this._correctValue = parseInt((<HTMLInputElement>event.target).value, 10);
-  }
-
   public ngOnInit(): void {
     this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
     .subscribe(questionIndex => {
 
       this._questionIndex = questionIndex;
       this._question = <RangedQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
-      this._minRange = this._question.rangeMin;
-      this._maxRange = this._question.rangeMax;
-      this._correctValue = this._question.correctValue;
+      this._minRange = String(this._question.rangeMin);
+      this._maxRange = String(this._question.rangeMax);
+      this._correctValue = String(this._question.correctValue);
     });
   }
 
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
-    this._question.rangeMin = this._minRange;
-    this._question.rangeMax = this._maxRange;
-    this._question.correctValue = this._correctValue;
+    this._question.rangeMin = parseInt(this._minRange, 10);
+    this._question.rangeMax = parseInt(this._maxRange, 10);
+    this._question.correctValue = parseInt(this._correctValue, 10);
 
     this.quizService.quiz.questionList[this._questionIndex] = <RangedQuestionEntity>this._question;
     this.quizService.persist();

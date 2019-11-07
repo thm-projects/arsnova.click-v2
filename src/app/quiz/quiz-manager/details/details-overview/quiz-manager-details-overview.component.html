@@ -59,17 +59,17 @@
           <p role="listitem"
              class="mb-0">
             <span [innerHTML]="'component.answeroptions.ranged_question.correct_value' | translate"></span>:&nbsp;
-            <span [innerHTML]="question?.correctValue"></span>
+            <span [innerHTML]="toString(getQuestionAsRanged(question)?.correctValue)"></span>
           </p>
           <p role="listitem"
              class="mb-0">
             <span [innerHTML]="'component.answeroptions.ranged_question.min_range' | translate"></span>:&nbsp;
-            <span [innerHTML]="question?.rangeMin"></span>
+            <span [innerHTML]="toString(getQuestionAsRanged(question)?.rangeMin)"></span>
           </p>
           <p role="listitem"
              class="mb-0">
             <span [innerHTML]="'component.answeroptions.ranged_question.max_range' | translate"></span>:&nbsp;
-            <span [innerHTML]="question?.rangeMax"></span>
+            <span [innerHTML]="toString(getQuestionAsRanged(question)?.rangeMax)"></span>
           </p>
         </div>
         <div *ngIf="question?.TYPE === 'FreeTextQuestion'">
@@ -107,7 +107,7 @@
     <div *ngIf="question?.TYPE === 'FreeTextQuestion'"
          class="mb-2 answers">
       <h4>{{'component.quiz_summary.answer_configuration' | translate}}:&nbsp;</h4>
-      <p *ngFor="let config of question?.answerOptionList[0]?.getConfig()"
+      <p *ngFor="let config of getAnswerAsFreetext(question?.answerOptionList[0])?.getConfig()"
          class="mb-0">
         <span>{{config.configTitle | translate}}</span>:&nbsp;
         <span>{{config.configEnabledString | translate}}</span>

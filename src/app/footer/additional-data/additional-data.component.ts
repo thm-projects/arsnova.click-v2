@@ -43,8 +43,8 @@ export class AdditionalDataComponent {
     this.isShowingMore = !this.isShowingMore;
   }
 
-  @HostListener('window:resize', ['$event'])
-  private onResize(): void {
+  @HostListener('window:resize', [])
+  public onResize(): void {
     this.isShowingMore = window.innerWidth >= 768;
   }
 

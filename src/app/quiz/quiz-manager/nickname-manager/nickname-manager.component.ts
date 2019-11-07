@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../lib/enums/enums';
@@ -76,7 +76,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     });
   }
 
-  public sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): string {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
@@ -99,7 +99,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this.quizService.toggleSelectedNick(name.toString());
   }
 
-  public parseAvailableNick(name: any): SafeHtml {
+  public parseAvailableNick(name: any): string {
     if (this.selectedCategory === 'emojis') {
       name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }

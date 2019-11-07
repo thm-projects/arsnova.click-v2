@@ -115,7 +115,7 @@
 <ng-container *ngIf="quizService.isOwner">
   <ng-container *ngIf="countdown && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownRunning">
     <app-audio-player [autostart]="true"
-                      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning"
+                      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? toString(quizService.quiz.sessionConfig.music.volumeConfig.global) : toString(quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning)"
                       [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownRunning"
                       [target]="'countdownRunning'"></app-audio-player>
   </ng-container>
@@ -124,7 +124,7 @@
     <app-audio-player
       [autostart]="true"
       [loop]="false"
-      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? quizService.quiz.sessionConfig.music.volumeConfig.global : quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd"
+      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? toString(quizService.quiz.sessionConfig.music.volumeConfig.global) : toString(quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd)"
       [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownEnd"
       [target]="'countdownEnd'"></app-audio-player>
   </ng-container>

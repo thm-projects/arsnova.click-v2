@@ -25,10 +25,14 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 export class ConfidenceRateComponent implements OnInit, OnDestroy {
   public static TYPE = 'ConfidenceRateComponent';
 
-  private _confidenceValue = 100;
+  private _confidenceValue = '100';
 
-  get confidenceValue(): number {
+  get confidenceValue(): string {
     return this._confidenceValue;
+  }
+
+  set confidenceValue(value: string) {
+    this._confidenceValue = value;
   }
 
   private _serverUnavailableModal: NgbModalRef;
@@ -43,8 +47,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
     private router: Router,
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
-    private memberApiService: MemberApiService,
-    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
@@ -92,25 +95,22 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
   }
 
   public getConfidenceLevelTranslation(): string {
-    if (this.confidenceValue === 100) {
+    const parsedConfidence = parseInt(this.confidenceValue, 10);
+    if (parsedConfidence === 100) {
       return 'component.voting.confidence_level.very_sure';
-    } else if (this.confidenceValue > 70) {
+    } else if (parsedConfidence > 70) {
       return 'component.voting.confidence_level.quite_sure';
-    } else if (this.confidenceValue > 50) {
+    } else if (parsedConfidence > 50) {
       return 'component.voting.confidence_level.unsure';
-    } else if (this.confidenceValue > 20) {
+    } else if (parsedConfidence > 20) {
       return 'component.voting.confidence_level.not_sure';
     } else {
       return 'component.voting.confidence_level.no_idea';
     }
   }
 
-  public updateConficence(event: Event): void {
-    this._confidenceValue = parseInt((<HTMLInputElement>event.target).value, 10);
-  }
-
   public async sendConfidence(): Promise<Subscription> {
-    return this.memberApiService.putConfidenceValue(this._confidenceValue).subscribe((data: IMessage) => {
+    return this.memberApiService.putConfidenceValue(parseInt(this._confidenceValue, 10)).subscribe((data: IMessage) => {
       this.router.navigate(['/quiz', 'flow', 'results']);
     });
   }

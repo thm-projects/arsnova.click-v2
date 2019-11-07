@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-progress-bar-ranged',
@@ -8,6 +8,9 @@ import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 })
 export class ProgressBarRangedComponent {
   public static TYPE = 'ProgressBarRangedComponent';
+  public absolute: number;
+  public label: string;
+  public progressbarCssClass: string;
 
   @Input() set attendeeData(value: any) {
     this.percent = value.percent;
@@ -39,10 +42,6 @@ export class ProgressBarRangedComponent {
     this._base = value;
   }
 
-  private absolute: number;
-  private label: string;
-  private progressbarCssClass: string;
-
   constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) {
   }
 
@@ -51,7 +50,7 @@ export class ProgressBarRangedComponent {
     return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 
-  public sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): string {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 }

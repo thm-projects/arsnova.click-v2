@@ -5,11 +5,10 @@
     <div class="col-12">
       <label class="input-group justify-content-center align-items-center">
         <fa-icon [icon]="'hourglass'"></fa-icon>
-        <input (input)="updateCountdown($event)"
-               [attr.aria-valuetext]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
+        <input [(ngModel)]="countdown"
                [min]="minCountdownValue"
                [title]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
-               [value]="countdown"
+               [attr.aria-valuetext]="countdown + ('component.timer.second' | translate:{COUNT: countdown})"
                class="border-0 rounded mx-3"
                type="number"/>
         <span>

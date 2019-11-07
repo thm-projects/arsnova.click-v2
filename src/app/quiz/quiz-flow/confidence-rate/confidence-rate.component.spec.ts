@@ -81,15 +81,6 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
     expect(component.getConfidenceLevelTranslation()).toEqual('component.voting.confidence_level.very_sure');
   }));
 
-  it('#updateConficence', async(() => {
-    const event = new Event('testEvent');
-    spyOnProperty(event, 'target').and.callFake(() => ({ value: '20' }));
-
-    component.updateConficence(event);
-
-    expect(component.getConfidenceLevelTranslation()).toEqual('component.voting.confidence_level.no_idea');
-  }));
-
   it('#sendConfidence', async(() => {
     spyOn(component, 'sendConfidence').and.callFake(() => new Promise<Subscription>(resolve => resolve()));
 

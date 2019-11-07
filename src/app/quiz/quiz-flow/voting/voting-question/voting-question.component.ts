@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-voting-question',
@@ -21,7 +21,7 @@ export class VotingQuestionComponent {
 
   constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) { }
 
-  public sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): string {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 }

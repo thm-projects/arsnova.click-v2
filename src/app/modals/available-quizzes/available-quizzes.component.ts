@@ -18,14 +18,13 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 })
 export class AvailableQuizzesComponent {
   public static TYPE = 'AvailableQuizzesComponent';
+  public startingQuiz: QuizEntity;
 
   private _sessions: Array<QuizEntity> = [];
 
   get sessions(): Array<QuizEntity> {
     return this._sessions;
   }
-
-  private startingQuiz: QuizEntity;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

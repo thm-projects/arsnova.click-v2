@@ -102,19 +102,19 @@
                style="line-height: 1.2;">
               {{'component.answeroptions.multiple_selection_survey' | translate}}
             </p>
-            <label [class.btn-danger]="!question.multipleSelectionEnabled"
-                   [class.btn-success]="question.multipleSelectionEnabled"
+            <label [class.btn-danger]="!getQuestionAsSurvey(question).multipleSelectionEnabled"
+                   [class.btn-success]="getQuestionAsSurvey(question).multipleSelectionEnabled"
                    class="btn cursor-pointer mb-0 align-self-center">
               <input (change)="toggleMultipleSelectionSurvey()"
                      [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
-                     [checked]="question.multipleSelectionEnabled"
+                     [checked]="getQuestionAsSurvey(question).multipleSelectionEnabled"
                      [title]="'component.answeroptions.multiple_selection_survey' | translate"
                      autocomplete="off"
                      class="d-none"
                      role="switch"
                      type="checkbox">
-              <span *ngIf="question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
-              <span *ngIf="!question.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+              <span *ngIf="getQuestionAsSurvey(question).multipleSelectionEnabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!getQuestionAsSurvey(question).multipleSelectionEnabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { INamedType } from '../../lib/interfaces/interfaces';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -15,7 +16,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class FooterBarComponent implements OnInit {
   public static TYPE = 'FooterBarComponent';
 
-  private collapsedNavbar: boolean;
+  public collapsedNavbar: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -72,6 +73,14 @@ export class FooterBarComponent implements OnInit {
     this.router.events.subscribe((nav: any) => {
       this.detectCurrentRoute();
     });
+  }
+
+  public getIconClass(elem: IFooterBarElement): IconProp {
+    if (elem.isLoading) {
+      return 'spinner';
+    }
+
+    return elem.iconClass;
   }
 
   private detectCurrentRoute(): void {

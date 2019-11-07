@@ -86,13 +86,17 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
     });
   }
 
-  @HostListener('window:beforeunload', ['$event'])
+  @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
     this.quizService.quiz.questionList[this._questionIndex] = this.question;
     this.quizService.persist();
 
     this._destroy.next();
     this._destroy.complete();
+  }
+
+  public getQuestionAsSurvey(question: AbstractChoiceQuestionEntity): SurveyQuestionEntity {
+    return question as SurveyQuestionEntity;
   }
 }
 

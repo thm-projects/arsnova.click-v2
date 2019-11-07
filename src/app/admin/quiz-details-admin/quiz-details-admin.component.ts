@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
+import { SurveyQuestionEntity } from '../../lib/entities/question/SurveyQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -42,6 +44,10 @@ export class QuizDetailsAdminComponent implements OnInit {
     return !['undefined', 'null'].includes(typeof value);
   }
 
+  public getQuestionAsSurvey(question: AbstractQuestionEntity): SurveyQuestionEntity {
+    return question as SurveyQuestionEntity;
+  }
+
   private updateFooterElements(): void {
     const footerElements = [
       this.footerBarService.footerElemBack,
@@ -49,5 +55,4 @@ export class QuizDetailsAdminComponent implements OnInit {
 
     this.footerBarService.replaceFooterElements(footerElements);
   }
-
 }

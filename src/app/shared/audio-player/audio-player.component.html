@@ -25,8 +25,7 @@
        class="input-group flex-grow-1 align-items-center flex-nowrap">
     <input type="range"
            class="flex-grow-1"
-           [value]="volume"
-           (input)="emitVolumeChange($event)">
+           [(ngModel)]="volume">
 
     <span class="ml-2 text-nowrap">{{volume}} %</span>
   </div>

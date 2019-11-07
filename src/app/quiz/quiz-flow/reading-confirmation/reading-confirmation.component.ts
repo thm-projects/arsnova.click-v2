@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -50,7 +50,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([]);
   }
 
-  public sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): string {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 

@@ -56,7 +56,7 @@ build:
     - angular
   script:
     - npm install
-    - npm install typescript@3.4.5
+    - npm install typescript@3.5.3
     - npm run build:STAGING_THM
   artifacts:
     paths:
@@ -114,7 +114,7 @@ build-beta:
     - angular
   script:
     - npm install
-    - npm install typescript@3.4.5
+    - npm install typescript@3.5.3
     - npm run build:BETA_THM
   artifacts:
     paths:

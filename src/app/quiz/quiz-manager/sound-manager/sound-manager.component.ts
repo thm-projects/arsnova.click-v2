@@ -82,10 +82,6 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     this.toggleMusicPreview(target);
   }
 
-  public setGlobalVolume($event): void {
-    this.config.volumeConfig.global = parseInt((<HTMLInputElement>$event.target).value, 10);
-  }
-
   public openTab(id: string): void {
     this._selected = id;
   }
@@ -101,6 +97,10 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     }
     this._destroy.next();
     this._destroy.complete();
+  }
+
+  public toString(value: number): string {
+    return String(value);
   }
 
   private initConfig(): void {

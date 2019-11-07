@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -146,11 +146,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     return o < 125 ? 'ffffff' : '000000';
   }
 
-  public sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): string {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
-  public parseNickname(value: string): SafeHtml {
+  public parseNickname(value: string): string {
     if (value.match(/:[\w\+\-]+:/g)) {
       return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
     }
@@ -170,6 +170,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
     this._destroy.next();
     this._destroy.complete();
+  }
+
+  public toString(value: number): string {
+    return String(value);
   }
 
   private handleNewQuiz(): void {

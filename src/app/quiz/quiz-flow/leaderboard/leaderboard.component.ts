@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -129,11 +129,11 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  public sanitizeHTML(value: string): SafeHtml {
+  public sanitizeHTML(value: string): string {
     return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
   }
 
-  public parseNickname(value: string): SafeHtml {
+  public parseNickname(value: string): string {
     if (value.match(/:[\w\+\-]+:/g)) {
       return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
     }

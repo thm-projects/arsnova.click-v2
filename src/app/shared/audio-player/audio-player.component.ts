@@ -34,13 +34,13 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     this.audioElement.src = this.getUrl();
   }
 
-  private _original_volume: number;
+  private _original_volume: string;
 
-  @Input() set original_volume(value: number) {
+  @Input() set original_volume(value: string) {
     this._original_volume = value;
     this._volume = this._original_volume;
     if (this.audioElement) {
-      this.audioElement.volume = this._volume / 100;
+      this.audioElement.volume = parseInt(this._volume, 10) / 100;
     }
   }
 
@@ -72,10 +72,16 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     this.audioElement.loop = this.loop;
   }
 
-  private _volume = 1;
+  private _volume = '1';
 
-  get volume(): number {
+  get volume(): string {
     return this._volume;
+  }
+
+  set volume(value: string) {
+    this._volume = value;
+    this.volumeChange.emit(this.volume);
+    this.audioElement.volume = parseInt(this.volume, 10) / 100;
   }
 
   private _isPlaying = false;
@@ -116,14 +122,8 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     return (!this.audioElement.currentTime && this.audioElement.paused) || this.audioElement.ended;
   }
 
-  public emitVolumeChange($event): void {
-    this._volume = parseInt((<HTMLInputElement>$event.target).value, 10);
-    this.volumeChange.emit(this._volume);
-    this.audioElement.volume = this._volume / 100;
-  }
-
   public ngAfterViewInit(): void {
-    this.audioElement.volume = this._volume / 100;
+    this.audioElement.volume = parseInt(this._volume, 10) / 100;
   }
 
   public ngOnDestroy(): void {

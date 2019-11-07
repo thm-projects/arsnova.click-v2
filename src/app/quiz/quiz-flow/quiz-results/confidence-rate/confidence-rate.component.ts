@@ -10,6 +10,7 @@ import { I18nService } from '../../../../service/i18n/i18n.service';
 })
 export class ConfidenceRateComponent {
   public static TYPE = 'ConfidenceRateComponent';
+  public absolute: number;
 
   private _percent: string;
 
@@ -46,8 +47,6 @@ export class ConfidenceRateComponent {
   @Input() set name(value: string) {
     this._name = parseGithubFlavoredMarkdown(value);
   }
-
-  private absolute: number;
 
   constructor(private i18nService: I18nService, private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) {
   }

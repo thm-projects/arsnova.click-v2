@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
+import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
@@ -65,7 +66,9 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private attendeeService: AttendeeService,
     private connectionService: ConnectionService,
-    private footerBarService: FooterBarService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private footerBarService: FooterBarService,
+    private ngbModal: NgbModal,
+    private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
@@ -74,8 +77,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     ]);
   }
 
-  public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+  public sanitizeHTML(value: string): string {
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`) as string;
   }
 
   public normalizeAnswerIndex(index: number): string {
@@ -136,6 +139,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy.next();
     this._destroy.complete();
+  }
+
+  public getQuestionAsRanged(): RangedQuestionEntity {
+    return this.quizService.quiz.questionList[this.questionIndex] as RangedQuestionEntity;
   }
 
   private handleMessages(): void {

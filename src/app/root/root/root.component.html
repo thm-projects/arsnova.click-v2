@@ -8,7 +8,9 @@
          class="row flex-sm-nowrap mx-0 mx-md-0">
       <div class="footer-bar-wrapper flex-grow-0 flex-shrink-0 p-0 w-100">
         <app-footer-bar></app-footer-bar>
-        <app-additional-data *ngIf="isInQuizManager"></app-additional-data>
+        <ng-container *ngIf="isInQuizManager">
+          <app-additional-data></app-additional-data>
+        </ng-container>
       </div>
     </div>
 

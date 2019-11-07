@@ -118,6 +118,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
     return ![QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
   }
 
+  public toString(value: number): string {
+    return String(value);
+  }
+
   public showConfidenceRate(questionIndex: number): boolean {
     this.cd.markForCheck();
     if (!environment.confidenceSliderEnabled || !this.quizService.quiz) {

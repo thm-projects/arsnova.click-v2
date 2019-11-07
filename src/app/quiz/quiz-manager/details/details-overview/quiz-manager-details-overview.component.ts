@@ -2,7 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
+import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
+import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
+import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -73,5 +76,17 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
       action: QuizManagerDetailsOverviewComponent.TYPE,
       label: link,
     });
+  }
+
+  public getQuestionAsRanged(question: AbstractQuestionEntity): RangedQuestionEntity {
+    return question as RangedQuestionEntity;
+  }
+
+  public getAnswerAsFreetext(abstractAnswerEntity: AbstractAnswerEntity): FreeTextAnswerEntity {
+    return abstractAnswerEntity as FreeTextAnswerEntity;
+  }
+
+  public toString(correctValue: number): string {
+    return String(correctValue);
   }
 }

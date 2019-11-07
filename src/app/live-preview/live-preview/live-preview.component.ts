@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
@@ -16,8 +16,8 @@ import { QuizService } from '../../service/quiz/quiz.service';
 })
 export class LivePreviewComponent implements OnInit, OnDestroy {
   public static TYPE = 'LivePreviewComponent';
-  public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+  public dataSource: Array<string>;
 
   private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
 
@@ -46,7 +46,6 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   }
 
   private readonly _destroy = new Subject();
-  private dataSource: string | Array<string>;
   private _questionIndex: number;
 
   constructor(
@@ -92,20 +91,20 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     return String.fromCharCode(65 + index);
   }
 
-  public sanitizeHTML(value: string): SafeHtml;
-  public sanitizeHTML<T>(value: Array<string>): SafeHtml;
-  public sanitizeHTML(value: string | Array<string>): SafeHtml {
+  public sanitizeHTML(value: string): string;
+  public sanitizeHTML(value: Array<string>): string;
+  public sanitizeHTML(value: string | Array<string>): string {
     if (Array.isArray(value)) {
       value = value.join('');
     }
 
     // sanitizer.bypassSecurityTrustHtml is required for highslide
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`) as string;
   }
 
   public ngOnInit(): void {
     this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe(value => {
-      this.dataSource = value;
+      this.dataSource = Array.isArray(value) ? value : [value];
     });
     const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(),
       takeUntil(this._destroy));

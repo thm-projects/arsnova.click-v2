@@ -68,8 +68,7 @@
             <input type="range"
                    list="tickmarks"
                    class="flex-grow-1 align-self-center"
-                   (input)="setGlobalVolume($event)"
-                   [value]="config?.volumeConfig.global">
+                   [(ngModel)]="config?.volumeConfig.global">
             <span class="ml-2">{{config?.volumeConfig.global}}&nbsp;&#37;</span>
           </label>
         </div>
@@ -109,7 +108,7 @@
           <app-audio-player [src]="config?.titleConfig?.lobby"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
                             [target]="'lobby'"
-                            [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.lobby"
+                            [original_volume]="config?.volumeConfig.useGlobalVolume ? toString(config?.volumeConfig.global) : toString(config?.volumeConfig.lobby)"
                             (volumeChange)="config?.volumeConfig.lobby = $event"></app-audio-player>
         </div>
       </div>
@@ -157,7 +156,7 @@
           <app-audio-player [src]="config?.titleConfig?.countdownRunning"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
                             [target]="'countdownRunning'"
-                            [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.countdownRunning"
+                            [original_volume]="config?.volumeConfig.useGlobalVolume ? toString(config?.volumeConfig.global) : toString(config?.volumeConfig.countdownRunning)"
                             (volumeChange)="config?.volumeConfig.countdownRunning = $event"></app-audio-player>
         </div>
 
@@ -206,7 +205,7 @@
           <app-audio-player [src]="config?.titleConfig.countdownEnd"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
                             [target]="'countdownEnd'"
-                            [original_volume]="config?.volumeConfig.useGlobalVolume ? config?.volumeConfig.global : config?.volumeConfig.countdownEnd"
+                            [original_volume]="config?.volumeConfig.useGlobalVolume ? toString(config?.volumeConfig.global) : toString(config?.volumeConfig.countdownEnd)"
                             (volumeChange)="config?.volumeConfig.countdownEnd = $event"></app-audio-player>
         </div>
       </div>
