@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { parseGithubFlavoredMarkdown } from '../../../../../lib/markdown/markdown';
+import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
 import { I18nService } from '../../../../service/i18n/i18n.service';
 
 @Component({

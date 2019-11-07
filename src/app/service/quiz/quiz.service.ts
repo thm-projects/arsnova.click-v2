@@ -2,18 +2,16 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ReplaySubject } from 'rxjs';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbTable, StorageKey } from '../../../lib/enums/enums';
-import { StatusProtocol } from '../../../lib/enums/Message';
-import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { StorageKey } from '../../lib/enums/enums';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
-import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SettingsService } from '../settings/settings.service';
 import { StorageService } from '../storage/storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class QuizService {
   public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
@@ -60,7 +58,6 @@ export class QuizService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
-    private footerBarService: FooterBarService,
     private storageService: StorageService,
     private settingsService: SettingsService,
     private quizApiService: QuizApiService,
@@ -82,7 +79,7 @@ export class QuizService {
       return;
     }
 
-    this.storageService.create(DbTable.Quiz, this.quiz.name, this.quiz).subscribe();
+    this.storageService.db.Quiz.put(this.quiz);
 
     if (this._isInEditMode) {
       this.quizApiService.putSavedQuiz(this.quiz).subscribe();
@@ -94,30 +91,10 @@ export class QuizService {
       return;
     }
 
-    this.storageService.create(DbTable.Quiz, quiz.name, quiz).subscribe();
+    this.storageService.db.Quiz.put(quiz);
 
     if (this._isInEditMode) {
       this.quizApiService.putSavedQuiz(quiz).subscribe();
-    }
-  }
-
-  public updateFooterElementsState(): void {
-    if (this.quiz) {
-      this.footerBarService.footerElemEnableCasLogin.isActive = this.quiz.sessionConfig.nicks.restrictToCasLogin;
-      this.footerBarService.footerElemBlockRudeNicknames.isActive = this.quiz.sessionConfig.nicks.blockIllegalNicks;
-
-      this.footerBarService.footerElemEnableCasLogin.onClickCallback = () => {
-        const newState = !this.footerBarService.footerElemEnableCasLogin.isActive;
-        this.footerBarService.footerElemEnableCasLogin.isActive = newState;
-        this.quiz.sessionConfig.nicks.restrictToCasLogin = newState;
-        this.persist();
-      };
-      this.footerBarService.footerElemBlockRudeNicknames.onClickCallback = () => {
-        const newState = !this.footerBarService.footerElemBlockRudeNicknames.isActive;
-        this.footerBarService.footerElemBlockRudeNicknames.isActive = newState;
-        this.quiz.sessionConfig.nicks.blockIllegalNicks = newState;
-        this.persist();
-      };
     }
   }
 
@@ -137,39 +114,6 @@ export class QuizService {
     if (this.isOwner && this._quiz) {
       this.quizApiService.deleteActiveQuiz(this._quiz).subscribe();
     }
-  }
-
-  public toggleSetting(elem: IFooterBarElement): void {
-    let target: string = null;
-    switch (elem) {
-      case this.footerBarService.footerElemResponseProgress:
-        target = 'showResponseProgress';
-        break;
-      case this.footerBarService.footerElemConfidenceSlider:
-        target = 'confidenceSliderEnabled';
-        break;
-      case this.footerBarService.footerElemReadingConfirmation:
-        target = 'readingConfirmationEnabled';
-        break;
-    }
-    if (target) {
-      this._quiz.sessionConfig[target] = !elem.isActive;
-      elem.isActive = !elem.isActive;
-      this.toggleSettingByName(target, elem.isActive);
-    }
-  }
-
-  public toggleSettingByName(target: string, state: boolean | string): void {
-    this.quizApiService.postQuizSettingsUpdate(this.quiz, {
-      target: target,
-      state: state,
-    }).subscribe(data => {
-      if (data.status !== StatusProtocol.Success) {
-        console.log('QuizService: PostQuizSettingsUpdate failed', data);
-      }
-    }, error => {
-      console.log('QuizService: PostQuizSettingsUpdate failed', error);
-    });
   }
 
   public isValid(): boolean {
@@ -218,7 +162,7 @@ export class QuizService {
         return;
       }
 
-      this.storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
+      this.storageService.db.Quiz.get(this.quiz.name).then(quiz => {
 
         console.log('QuizService: loadDataToPlay finished', quiz, quizName);
         if (!quiz) {
@@ -236,7 +180,6 @@ export class QuizService {
           }
 
           this.quiz = response.payload.quiz;
-          this.updateOwnerState();
           resolve();
         });
       });
@@ -244,41 +187,20 @@ export class QuizService {
   }
 
   public loadDataToEdit(quizName: string): void {
-    this.storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
+    this.storageService.db.Quiz.get(this.quiz.name).then(quiz => {
       if (!quiz) {
         return;
       }
 
-      this.quiz = new QuizEntity(quiz);
       this.isOwner = true;
-      this.updateOwnerState();
       this._isInEditMode = true;
+      this.quiz = new QuizEntity(quiz);
       console.log('QuizService: loadDataToEdit finished', quiz, quizName);
     });
   }
 
   public stopEditMode(): void {
     this._isInEditMode = false;
-  }
-
-  public updateOwnerState(): void {
-    if (!this._isOwner || !this.quiz) {
-      console.log('QuizService: Cannot update owner state.', this.isOwner, this.quiz);
-      return;
-    }
-
-    this.footerBarService.footerElemReadingConfirmation.isActive = !!this.quiz.sessionConfig.readingConfirmationEnabled;
-    this.footerBarService.footerElemConfidenceSlider.isActive = !!this.quiz.sessionConfig.confidenceSliderEnabled;
-
-    if (isPlatformBrowser(this.platformId)) {
-      this.footerBarService.footerElemExport.onClickCallback = async () => {
-        const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this._quiz.name}/${sessionStorage.getItem(
-          StorageKey.PrivateKey)}/${this._quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
-        window.open(link);
-      };
-    }
-
-    this.updateFooterElementsState();
   }
 
   private restoreSettings(quizName: string): Promise<boolean> {

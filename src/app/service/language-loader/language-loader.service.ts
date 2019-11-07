@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Language, LanguageTranslation } from '../../../lib/enums/enums';
-import { StatusProtocol } from '../../../lib/enums/Message';
+import { Language, LanguageTranslation } from '../../lib/enums/enums';
+import { StatusProtocol } from '../../lib/enums/Message';
 import { I18nManagerApiService } from '../api/i18n-manager/i18n-manager-api.service';
 import { ProjectLoaderService } from '../project-loader/project-loader.service';
 

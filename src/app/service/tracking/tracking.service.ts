@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
-import { TrackingCategoryType } from '../../../lib/enums/enums';
+import { TrackingCategoryType } from '../../lib/enums/enums';
 import { ArsnovaClickAngulartics2Piwik } from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
 
 interface ITrackEvent {
@@ -24,7 +24,9 @@ export interface ITrackConversionEvent {
 }
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TrackingService {
 
   constructor(private angulartics2: Angulartics2, private angulartics2Piwik: ArsnovaClickAngulartics2Piwik) {

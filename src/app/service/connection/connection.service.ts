@@ -3,13 +3,14 @@ import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
 import { ReplaySubject } from 'rxjs';
-import { MessageProtocol } from '../../../lib/enums/Message';
-import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { MessageProtocol } from '../../lib/enums/Message';
+import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
-import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SharedService } from '../shared/shared.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ConnectionService {
   public readonly dataEmitter: ReplaySubject<IMessage> = new ReplaySubject<IMessage>();
 
@@ -72,8 +73,7 @@ export class ConnectionService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private sharedService: SharedService,
-    private statisticsApiService: StatisticsApiService,
-    private footerBarService: FooterBarService, private rxStompService: RxStompService,
+    private statisticsApiService: StatisticsApiService, private rxStompService: RxStompService,
   ) {
     this.initWebsocket();
   }
@@ -134,13 +134,11 @@ export class ConnectionService {
           this._websocketAvailable = true;
           this._serverAvailable = true;
           this._serverStatusEmitter.emit(true);
-          this.toggleFooterElemState(true);
           break;
         case RxStompState.CLOSED:
           this._websocketAvailable = false;
           this._serverAvailable = false;
           this._serverStatusEmitter.emit(false);
-          this.toggleFooterElemState(false);
           break;
       }
     });
@@ -157,13 +155,6 @@ export class ConnectionService {
       this._lowSpeed = false;
       this._mediumSpeed = false;
     }
-  }
-
-  private toggleFooterElemState(isActive: boolean): void {
-    this.footerBarService.footerElemLeaderboard.isActive = isActive;
-    this.footerBarService.footerElemImport.isActive = isActive;
-    this.footerBarService.footerElemLogin.isActive = isActive;
-    this.footerBarService.footerElemAdmin.isActive = isActive;
   }
 
   private connectToGlobalChannel(): void {

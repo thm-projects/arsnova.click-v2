@@ -7,8 +7,8 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
-import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
+import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -18,7 +18,6 @@ import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesMockService } from '../../service/themes/themes.mock.service';
@@ -42,7 +41,7 @@ describe('QuizJoinComponent', () => {
         }), RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, CasLoginService, QuizApiService, {

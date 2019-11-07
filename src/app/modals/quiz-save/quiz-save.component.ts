@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { QuizVisibility } from '../../../lib/enums/QuizVisibility';
+import { QuizVisibility } from '../../lib/enums/QuizVisibility';
 
 @Component({
   selector: 'app-quiz-save',

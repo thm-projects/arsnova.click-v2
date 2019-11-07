@@ -4,11 +4,10 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbTable } from '../../../lib/enums/enums';
-import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
-import { UserRole } from '../../../lib/enums/UserRole';
-import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
+import { UserRole } from '../../lib/enums/UserRole';
+import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { QuizSaveComponent } from '../../modals/quiz-save/quiz-save.component';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -164,7 +163,7 @@ export class QuizOverviewComponent implements OnInit {
         } else {
           const sessionName = this.sessions[index].name;
           this.sessions.splice(index, 1);
-          this.storageService.delete(DbTable.Quiz, sessionName).subscribe(() => {
+          this.storageService.db.Quiz.delete(sessionName).then(() => {
             subscriber.next();
           });
         }
@@ -217,11 +216,7 @@ export class QuizOverviewComponent implements OnInit {
 
   private loadData(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.getAll(DbTable.Quiz).subscribe((rawSessions) => {
-        rawSessions.forEach(session => {
-          this._sessions.push(new QuizEntity(session.value));
-        });
-      });
+      this.storageService.db.Quiz.toCollection().each(session => this._sessions.push(new QuizEntity(session)));
     }
   }
 

@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddModeComponent } from '../../modals/add-mode/add-mode.component';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ModalOrganizerService {
 
   constructor(private modalService: NgbModal) { }

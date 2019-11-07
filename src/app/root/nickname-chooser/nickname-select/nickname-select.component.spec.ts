@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
-import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -20,7 +20,6 @@ import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
-import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
@@ -43,7 +42,7 @@ describe('NicknameSelectComponent', () => {
         }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {

@@ -8,10 +8,8 @@ import { QuizMockService } from '../quiz/quiz-mock.service';
 import { QuizService } from '../quiz/quiz.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
-
 import { FileUploadService } from './file-upload.service';
 
 describe('FileUploadService', () => {
@@ -21,7 +19,7 @@ describe('FileUploadService', () => {
         HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {

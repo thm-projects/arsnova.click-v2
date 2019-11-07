@@ -1,5 +1,5 @@
-import { DefaultSettings } from '../../../../lib/default.settings';
-import { StorageKey } from '../../../../lib/enums/enums';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { StorageKey } from '../../../lib/enums/enums';
 
 export abstract class AbstractStorageAdapter<T> {
 

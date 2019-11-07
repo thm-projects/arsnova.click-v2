@@ -1,4 +1,4 @@
-import { DbName, DbTable, StorageKey } from '../../../../lib/enums/enums';
+import { DbName, DbTable, StorageKey } from '../../../lib/enums/enums';
 import { AbstractStorageAdapter } from './abstract-storage-adapter';
 
 export class AbstractIndexedDbAdapter extends AbstractStorageAdapter<IDBDatabase> {

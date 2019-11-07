@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SharedService {
   private _activeQuizzes: Array<string> = [];
 

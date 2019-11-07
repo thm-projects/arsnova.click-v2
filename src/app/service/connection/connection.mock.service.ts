@@ -1,5 +1,5 @@
 import { of, ReplaySubject } from 'rxjs';
-import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { IMessage } from '../../lib/interfaces/communication/IMessage';
 
 export class ConnectionMockService {
 

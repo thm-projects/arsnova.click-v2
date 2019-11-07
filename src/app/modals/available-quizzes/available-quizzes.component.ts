@@ -1,11 +1,9 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { IModal } from 'arsnova-click-v2-types/dist/modals/interfaces';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbTable } from '../../../lib/enums/enums';
-import { MessageProtocol } from '../../../lib/enums/Message';
-import { QuizState } from '../../../lib/enums/QuizState';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { MessageProtocol } from '../../lib/enums/Message';
+import { QuizState } from '../../lib/enums/QuizState';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -18,7 +16,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   templateUrl: './available-quizzes.component.html',
   styleUrls: ['./available-quizzes.component.scss'],
 })
-export class AvailableQuizzesComponent implements IModal {
+export class AvailableQuizzesComponent {
   public static TYPE = 'AvailableQuizzesComponent';
 
   private _sessions: Array<QuizEntity> = [];
@@ -29,15 +27,16 @@ export class AvailableQuizzesComponent implements IModal {
 
   private startingQuiz: QuizEntity;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object,
-              public connectionService: ConnectionService,
-              private activeModal: NgbActiveModal,
-              private router: Router,
-              private quizService: QuizService,
-              private trackingService: TrackingService,
-              private fileUploadService: FileUploadService,
-              private quizApiService: QuizApiService,
-              private storageService: StorageService,
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    public connectionService: ConnectionService,
+    private activeModal: NgbActiveModal,
+    private router: Router,
+    private quizService: QuizService,
+    private trackingService: TrackingService,
+    private fileUploadService: FileUploadService,
+    private quizApiService: QuizApiService,
+    private storageService: StorageService,
   ) {
     this.loadData();
   }
@@ -111,10 +110,9 @@ export class AvailableQuizzesComponent implements IModal {
     this.next();
   }
 
-  private async loadData(): Promise<void> {
-    this.storageService.getAll(DbTable.Quiz).subscribe(quizzes => {
-      quizzes.sort((a: any, b: any) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
-      quizzes.forEach(quiz => this.sessions.push(new QuizEntity(quiz.value)));
+  private loadData(): Promise<void> {
+    return this.storageService.db.Quiz.toCollection().sortBy('name').then(quizzes => {
+      quizzes.forEach(quiz => this.sessions.push(new QuizEntity(quiz)));
     });
   }
 

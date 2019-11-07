@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserEntity } from '../../../lib/entities/UserEntity';
-import { DbTable, StorageKey } from '../../../lib/enums/enums';
+import { UserEntity } from '../../lib/entities/UserEntity';
+import { StorageKey } from '../../lib/enums/enums';
 import { AddUserComponent } from '../../modals/add-user/add-user.component';
 import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -82,7 +82,10 @@ export class UserAdminComponent implements OnInit {
 
         if (value.name === this.userService.staticLoginTokenContent.name) {
           sessionStorage.setItem(StorageKey.PrivateKey, value.privateKey);
-          this.storageService.create(DbTable.Config, StorageKey.PrivateKey, value.privateKey).subscribe();
+          this.storageService.db.Config.put({
+            value: value.privateKey,
+            type: StorageKey.PrivateKey,
+          });
         }
       });
     }).catch(() => {});

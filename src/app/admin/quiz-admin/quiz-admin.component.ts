@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { QuizState } from '../../../lib/enums/QuizState';
-import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
+import { QuizState } from '../../lib/enums/QuizState';
+import { IAdminQuiz } from '../../lib/interfaces/quizzes/IAdminQuiz';
 import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 

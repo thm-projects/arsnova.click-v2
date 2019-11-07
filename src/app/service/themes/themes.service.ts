@@ -1,18 +1,20 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { themes } from '../../../lib/available-themes';
-import { DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
-import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
-import { QuizTheme } from '../../../lib/enums/QuizTheme';
-import { ITheme } from '../../../lib/interfaces/ITheme';
+import { themes } from '../../lib/available-themes';
+import { DbState, StorageKey } from '../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
+import { QuizTheme } from '../../lib/enums/QuizTheme';
+import { ITheme } from '../../lib/interfaces/ITheme';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { I18nService } from '../i18n/i18n.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ThemesService {
   public readonly themeChanged: EventEmitter<QuizTheme> = new EventEmitter<QuizTheme>();
 
@@ -56,8 +58,7 @@ export class ThemesService {
 
     const themePromises: Array<Promise<any>> = [];
     if (!environment.forceQuizTheme || !this.quizService.quiz) {
-      themePromises.push(this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise(),
-        this.storageService.read(DbTable.Config, StorageKey.QuizTheme).toPromise());
+      themePromises.push(this.storageService.db.Config.get(StorageKey.DefaultTheme), this.storageService.db.Config.get(StorageKey.QuizTheme));
     }
     themePromises.push(new Promise(resolve => {
       if (this.quizService.quiz && this.quizService.quiz.sessionConfig.theme) {
@@ -68,7 +69,7 @@ export class ThemesService {
     }));
 
     const themeConfig = await Promise.all(themePromises);
-    let usedTheme = themeConfig[0] || themeConfig[1] || themeConfig[2];
+    let usedTheme = themeConfig[0].value || themeConfig[1].value || themeConfig[2];
     if (usedTheme === 'default') {
       usedTheme = environment.availableQuizThemes[0];
     }
@@ -114,9 +115,12 @@ export class ThemesService {
   private initTheme(): void {
 
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).subscribe(val => {
-        if (!val || val.startsWith('theme-')) {
-          this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this._defaultTheme).subscribe();
+      this.storageService.db.Config.get(StorageKey.DefaultTheme).then(val => {
+        if (!val || val.value.startsWith('theme-')) {
+          this.storageService.db.Config.put({
+            value: this.defaultTheme,
+            type: StorageKey.DefaultTheme,
+          });
         }
       });
     }

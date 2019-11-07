@@ -3,7 +3,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
 import { I18nService } from '../../../../service/i18n/i18n.service';
-import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { SharedModule } from '../../../../shared/shared.module';
@@ -20,7 +19,7 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
         SharedModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, I18nService, {

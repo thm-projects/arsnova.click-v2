@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Project } from '../../../lib/enums/enums';
+import { Project } from '../../lib/enums/enums';
 
 @Injectable({
   providedIn: 'root',

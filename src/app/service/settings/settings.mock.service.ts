@@ -1,7 +1,9 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IServerSettings } from 'arsnova-click-v2-types/dist/common';
+import { IServerSettings } from '../../lib/interfaces/IServerSettings';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SettingsMockService {
   private _serverSettings: IServerSettings;
 

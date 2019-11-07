@@ -1,14 +1,14 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { FreeTextAnswerEntity } from '../../../lib/entities/answer/FreetextAnwerEntity';
-import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
-import { FreeTextQuestionEntity } from '../../../lib/entities/question/FreeTextQuestionEntity';
-import { RangedQuestionEntity } from '../../../lib/entities/question/RangedQuestionEntity';
-import { SingleChoiceQuestionEntity } from '../../../lib/entities/question/SingleChoiceQuestionEntity';
-import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { SessionConfigurationEntity } from '../../../lib/entities/session-configuration/SessionConfigurationEntity';
-import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
+import { DefaultSettings } from '../../lib/default.settings';
+import { FreeTextAnswerEntity } from '../../lib/entities/answer/FreetextAnwerEntity';
+import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
+import { FreeTextQuestionEntity } from '../../lib/entities/question/FreeTextQuestionEntity';
+import { RangedQuestionEntity } from '../../lib/entities/question/RangedQuestionEntity';
+import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
+import { SurveyQuestionEntity } from '../../lib/entities/question/SurveyQuestionEntity';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { SessionConfigurationEntity } from '../../lib/entities/session-configuration/SessionConfigurationEntity';
+import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 
 export class QuizMockService {
   public quiz: QuizEntity;

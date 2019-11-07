@@ -1,5 +1,6 @@
-import { ICasData, IQuizResponse } from 'arsnova-click-v2-types/dist/common';
 import { IMemberSerialized } from '../interfaces/entities/Member/IMemberSerialized';
+import { IQuizResponse } from '../interfaces/quizzes/IQuizResponse';
+import { ICasData } from '../interfaces/users/ICasData';
 
 export class Attendee implements IMemberSerialized {
   public casProfile: ICasData;

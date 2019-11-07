@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
-import { FooterModule } from '../../footer/footer.module';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { SharedModule } from '../../shared/shared.module';
 import { MemberGroupSelectComponent } from './member-group-select/member-group-select.component';
@@ -28,7 +27,7 @@ const nicknameChooserRoutes: Routes = [
 
 @NgModule({
   imports: [
-    FooterModule, SharedModule, RouterModule.forChild(nicknameChooserRoutes),
+    SharedModule, RouterModule.forChild(nicknameChooserRoutes),
   ],
   declarations: [
     NicknameInputComponent, NicknameSelectComponent, MemberGroupSelectComponent,

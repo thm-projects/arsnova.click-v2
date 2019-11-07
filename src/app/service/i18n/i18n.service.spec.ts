@@ -1,7 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 
@@ -14,7 +13,7 @@ describe('I18nService', () => {
         HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, I18nService,

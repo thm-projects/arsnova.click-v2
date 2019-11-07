@@ -1,9 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
-import { StorageKey } from '../../../../lib/enums/enums';
-import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
-import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { StorageKey } from '../../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';

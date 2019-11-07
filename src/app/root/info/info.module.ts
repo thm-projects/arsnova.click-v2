@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
-import { FooterModule } from '../../footer/footer.module';
 import { SharedModule } from '../../shared/shared.module';
 import { InfoComponent } from './info.component';
 
@@ -35,7 +34,6 @@ const infoRoutes: Routes = [
 
 @NgModule({
   imports: [
-    FooterModule,
     SharedModule,
     RouterModule.forChild(infoRoutes),
   ],

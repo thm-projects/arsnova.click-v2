@@ -1,11 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Attendee } from '../../../lib/attendee/attendee';
-import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
-import { StorageKey } from '../../../lib/enums/enums';
-import { QuizState } from '../../../lib/enums/QuizState';
-import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
-import { IQuizResponse } from '../../../lib/interfaces/quizzes/IQuizResponse';
+import { Attendee } from '../../lib/attendee/attendee';
+import { MemberEntity } from '../../lib/entities/member/MemberEntity';
+import { StorageKey } from '../../lib/enums/enums';
+import { QuizState } from '../../lib/enums/QuizState';
+import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IQuizResponse } from '../../lib/interfaces/quizzes/IQuizResponse';
 import { MemberApiService } from '../api/member/member-api.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { QuizService } from '../quiz/quiz.service';

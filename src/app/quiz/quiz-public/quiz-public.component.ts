@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';

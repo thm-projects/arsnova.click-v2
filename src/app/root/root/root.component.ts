@@ -8,13 +8,13 @@ import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
-import { BeforeInstallPromptEvent } from '../../../lib/BeforeInstallPrompt';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DeprecatedDb, DeprecatedKeys } from '../../../lib/enums/enums';
-import { StatusProtocol } from '../../../lib/enums/Message';
-import { QuizTheme } from '../../../lib/enums/QuizTheme';
-import { INamedType } from '../../../lib/interfaces/interfaces';
-import { IWindow } from '../../../lib/interfaces/IWindow';
+import { BeforeInstallPromptEvent } from '../../lib/BeforeInstallPrompt';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { DeprecatedDb, DeprecatedKeys } from '../../lib/enums/enums';
+import { StatusProtocol } from '../../lib/enums/Message';
+import { QuizTheme } from '../../lib/enums/QuizTheme';
+import { INamedType } from '../../lib/interfaces/interfaces';
+import { IWindow } from '../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { I18nService } from '../../service/i18n/i18n.service';
@@ -75,8 +75,6 @@ export class RootComponent implements OnInit, AfterViewInit {
         indexedDB.deleteDatabase(deprecatedDb).addEventListener('success', () => {});
       });
     }
-
-    this.userService.loadConfig();
 
     this.translateService.onLangChange.pipe(takeUntil(this._destroy)).subscribe(() => {
       this.initializeCookieConsent(this.themeService.currentTheme);

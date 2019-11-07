@@ -3,10 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { DbState, LoginMechanism } from '../../../lib/enums/enums';
+import { LoginMechanism } from '../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { UserService } from '../../service/user/user.service';
 
 @Component({
@@ -43,8 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private headerLabelService: HeaderLabelService,
-    private footerBarService: FooterBarService, private indexedDbService: IndexedDbService,
+    private headerLabelService: HeaderLabelService, private footerBarService: FooterBarService, private storageServie: StorageService,
   ) {
     this.userService.logout();
     this.headerLabelService.headerLabel = 'component.login.login';
@@ -81,10 +80,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     if (isLoggedIn) {
-      this.indexedDbService.stateNotifier.pipe(takeUntil(this._destroy)).subscribe(value => {
-        if (value === DbState.Initialized) {
-          this.router.navigateByUrl(this.return);
-        }
+      this.storageServie.db.initialized.pipe(takeUntil(this._destroy)).subscribe(value => {
+        this.router.navigateByUrl(this.return);
       });
     } else {
       this._authorizationFailed = true;

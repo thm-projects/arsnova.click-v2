@@ -14,7 +14,6 @@ import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -36,7 +35,7 @@ describe('HeaderComponent', () => {
         }, {
           provide: TrackingService,
           useClass: TrackingMockService,
-        }, SharedService, IndexedDbService, I18nService, {
+        }, SharedService, I18nService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, {

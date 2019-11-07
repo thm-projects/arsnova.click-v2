@@ -8,9 +8,9 @@ import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
-import { availableQuestionTypes } from '../../../../lib/available-question-types';
-import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { FooterModule } from '../../../footer/footer.module';
+import { availableQuestionTypes } from '../../../lib/available-question-types';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -19,7 +19,6 @@ import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
-import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
@@ -44,7 +43,7 @@ describe('QuizManagerComponent', () => {
         }), HttpClientTestingModule, RouterTestingModule, FooterModule, FontAwesomeModule, NgbPopoverModule, NgbTooltipModule,
       ],
       providers: [
-        UserService, IndexedDbService, {
+        UserService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {

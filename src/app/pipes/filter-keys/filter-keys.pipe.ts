@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Filter, Language } from '../../../lib/enums/enums';
+import { Filter, Language } from '../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 
 @Pipe({

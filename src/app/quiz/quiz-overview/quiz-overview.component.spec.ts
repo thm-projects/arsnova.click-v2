@@ -6,15 +6,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateService } from '@ngx-translate/core';
-import { DefaultAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/answeroption_default';
-import { SingleChoiceQuestion } from 'arsnova-click-v2-types/dist/questions/question_choice_single';
-import { SessionConfiguration } from 'arsnova-click-v2-types/dist/session_configuration/session_config';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbTable } from '../../../lib/enums/enums';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
+import { DefaultSettings } from '../../lib/default.settings';
+import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
+import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { SessionConfigurationEntity } from '../../lib/entities/session-configuration/SessionConfigurationEntity';
+import { DbTable } from '../../lib/enums/enums';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -23,7 +23,6 @@ import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -38,18 +37,18 @@ describe('QuizOverviewComponent', () => {
 
   const validQuiz = new QuizEntity({
     name: 'validtestquiz',
-    sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings.sessionConfig),
+    sessionConfig: DefaultSettings.defaultQuizSettings.sessionConfig,
     questionList: [
-      new SingleChoiceQuestion({
+      new SingleChoiceQuestionEntity({
         questionText: 'testtext',
         timer: 20,
         displayAnswerText: true,
         showOneAnswerPerRow: false,
         answerOptionList: [
-          new DefaultAnswerOption({
+          new DefaultAnswerEntity({
             answerText: 'answer1',
             isCorrect: true,
-          }), new DefaultAnswerOption({
+          }), new DefaultAnswerEntity({
             answerText: 'answer2',
             isCorrect: false,
           }),
@@ -59,14 +58,14 @@ describe('QuizOverviewComponent', () => {
   });
   const invalidQuiz = new QuizEntity({
     name: 'invalidtestquiz',
-    sessionConfig: new SessionConfiguration(DefaultSettings.defaultQuizSettings.sessionConfig),
+    sessionConfig: new SessionConfigurationEntity(DefaultSettings.defaultQuizSettings.sessionConfig),
     questionList: [
-      new SingleChoiceQuestion({
+      new SingleChoiceQuestionEntity({
         answerOptionList: [
-          new DefaultAnswerOption({
+          new DefaultAnswerEntity({
             answerText: 'answer1',
             isCorrect: true,
-          }), new DefaultAnswerOption({
+          }), new DefaultAnswerEntity({
             answerText: 'answer2',
             isCorrect: true,
           }),
@@ -92,7 +91,7 @@ describe('QuizOverviewComponent', () => {
           useValue: {
             isAuthorizedFor: () => true,
           },
-        }, IndexedDbService, {
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
@@ -179,7 +178,7 @@ describe('QuizOverviewComponent', () => {
       const quizName = 'validtestquiz';
 
       component.deleteQuiz(0).subscribe(() => {
-        storageService.read(DbTable.Quiz, quizName).subscribe(quiz => {
+        storageService.db.Quiz.get(quizName).then(quiz => {
           expect(quiz).toBe(null);
         });
       });

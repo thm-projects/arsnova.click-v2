@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, filter, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { DbTable, StorageKey, TrackingCategoryType } from '../../../lib/enums/enums';
+import { StorageKey, TrackingCategoryType } from '../../lib/enums/enums';
 import { ThemesApiService } from '../../service/api/themes/themes-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -88,7 +88,10 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, id).subscribe(() => {
+    this.storageService.db.Config.put({
+      value: id,
+      type: StorageKey.DefaultTheme,
+    }).then(() => {
       this._themeChangedEmitter.emit(id);
       this.themesService.updateCurrentlyUsedTheme();
     });

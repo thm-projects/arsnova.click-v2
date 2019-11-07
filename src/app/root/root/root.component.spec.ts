@@ -15,10 +15,10 @@ import { of } from 'rxjs';
 import { SwUpdateMock } from '../../../_mocks/SwUpdateMock';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
 import { HeaderComponent } from '../../header/header/header.component';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -29,7 +29,6 @@ import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -57,7 +56,7 @@ describe('RootComponent', () => {
         {
           provide: UserService,
           useValue: { loadConfig: () => {} },
-        }, IndexedDbService, HeaderLabelService, ThemesService, {
+        }, HeaderLabelService, ThemesService, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, FooterBarService, SettingsService, {

@@ -1,14 +1,7 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
-import { INamedType } from '../../../lib/interfaces/interfaces';
-import { ConfidenceRateComponent } from '../../quiz/quiz-flow/confidence-rate/confidence-rate.component';
-import { LeaderboardComponent } from '../../quiz/quiz-flow/leaderboard/leaderboard.component';
-import { QuizLobbyComponent } from '../../quiz/quiz-flow/quiz-lobby/quiz-lobby.component';
-import { QuestionDetailsComponent } from '../../quiz/quiz-flow/quiz-results/question-details/question-details.component';
-import { QuizResultsComponent } from '../../quiz/quiz-flow/quiz-results/quiz-results.component';
-import { ReadingConfirmationComponent } from '../../quiz/quiz-flow/reading-confirmation/reading-confirmation.component';
-import { VotingComponent } from '../../quiz/quiz-flow/voting/voting.component';
+import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
+import { INamedType } from '../../lib/interfaces/interfaces';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -46,7 +39,7 @@ export class FooterBarComponent implements OnInit {
   }
 
   public toggleSetting(elem: IFooterBarElement): void {
-    this.quizService.toggleSetting(elem);
+    this.footerBarService.toggleSetting(elem);
     elem.onClickCallback(elem);
 
     this.trackingService.trackClickEvent({
@@ -84,13 +77,13 @@ export class FooterBarComponent implements OnInit {
   private detectCurrentRoute(): void {
     const currentComponent = this.fetchChildComponent(this.activatedRoute);
     this.collapsedNavbar = [
-      QuizLobbyComponent.TYPE,
-      QuizResultsComponent.TYPE,
-      VotingComponent.TYPE,
-      LeaderboardComponent.TYPE,
-      ReadingConfirmationComponent.TYPE,
-      ConfidenceRateComponent.TYPE,
-      QuestionDetailsComponent.TYPE,
+      'QuizLobbyComponent',
+      'QuizResultsComponent',
+      'VotingComponent',
+      'LeaderboardComponent',
+      'ReadingConfirmationComponent',
+      'ConfidenceRateComponent',
+      'QuestionDetailsComponent',
     ].includes(currentComponent ? currentComponent.TYPE : null);
   }
 

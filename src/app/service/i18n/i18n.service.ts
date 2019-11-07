@@ -1,10 +1,12 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { CurrencyType, DbState, DbTable, Language, NumberType, StorageKey } from '../../../lib/enums/enums';
+import { CurrencyType, DbState, Language, NumberType, StorageKey } from '../../lib/enums/enums';
 import { StorageService } from '../storage/storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class I18nService {
   private _currentLanguage: Language = Language.EN;
 
@@ -14,7 +16,10 @@ export class I18nService {
 
   set currentLanguage(value: Language) {
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.create(DbTable.Config, StorageKey.Language, value).subscribe();
+      this.storageService.db.Config.put({
+        value,
+        type: StorageKey.Language,
+      });
     }
 
     // the lang to use, if the lang isn't available, it will use the current loader to get them
@@ -89,9 +94,9 @@ export class I18nService {
       return;
     }
 
-    this.storageService.read(DbTable.Config, StorageKey.Language).subscribe(storedLanguage => {
-      if (storedLanguage && Language[storedLanguage.toUpperCase()]) {
-        this.setLanguage(Language[storedLanguage.toUpperCase()]);
+    this.storageService.db.Config.get(StorageKey.Language).then(storedLanguage => {
+      if (storedLanguage && Language[storedLanguage.value.toUpperCase()]) {
+        this.setLanguage(Language[storedLanguage.value.toUpperCase()]);
       } else if (Language[this.translateService.getBrowserLang().toUpperCase()]) {
         this.setLanguage(Language[this.translateService.getBrowserLang().toUpperCase()]);
       } else {

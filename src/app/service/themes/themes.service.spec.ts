@@ -4,8 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { DefaultSettings } from '../../lib/default.settings';
+import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
@@ -14,7 +14,6 @@ import { QuizMockService } from '../quiz/quiz-mock.service';
 import { QuizService } from '../quiz/quiz.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 import { ThemesService } from './themes.service';
@@ -39,7 +38,7 @@ describe('ThemesService', () => {
         RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
-        I18nService, IndexedDbService, {
+        I18nService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {

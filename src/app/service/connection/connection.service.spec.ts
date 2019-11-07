@@ -4,7 +4,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SharedService } from '../shared/shared.service';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 import { ConnectionService } from './connection.service';
@@ -16,7 +15,7 @@ describe('ConnectionService', () => {
         RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, FooterBarService, ConnectionService, RxStompService,

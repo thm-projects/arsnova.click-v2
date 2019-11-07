@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { Filter } from '../../../lib/enums/enums';
+import { Filter } from '../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
 

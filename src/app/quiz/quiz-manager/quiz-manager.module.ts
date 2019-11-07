@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { RouterModule, Routes } from '@angular/router';
-import { FooterModule } from '../../footer/footer.module';
 import { LivePreviewModule } from '../../live-preview/live-preview.module';
 import { MarkdownModule } from '../../markdown/markdown.module';
 import { PipesModule } from '../../pipes/pipes.module';
@@ -70,7 +69,6 @@ const quizManagerRoutes: Routes = [
 
 @NgModule({
   imports: [
-    FooterModule,
     FormsModule,
     SharedModule,
     QuizManagerDetailsModule,

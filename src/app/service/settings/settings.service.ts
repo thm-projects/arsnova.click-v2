@@ -1,10 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { IServerSettings } from 'arsnova-click-v2-types/dist/common';
+import { IServerSettings } from '../../lib/interfaces/IServerSettings';
 import { ConnectionService } from '../connection/connection.service';
 import { SharedService } from '../shared/shared.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SettingsService {
   private _serverSettings: IServerSettings;
 

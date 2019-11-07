@@ -1,17 +1,20 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbState, DbTable, StorageKey } from '../../../lib/enums/enums';
-import { StatusProtocol } from '../../../lib/enums/Message';
-import { UserRole } from '../../../lib/enums/UserRole';
-import { ILoginSerialized } from '../../../lib/interfaces/ILoginSerialized';
+import { ReplaySubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { DbState, StorageKey } from '../../lib/enums/enums';
+import { StatusProtocol } from '../../lib/enums/Message';
+import { UserRole } from '../../lib/enums/UserRole';
+import { ILoginSerialized } from '../../lib/interfaces/ILoginSerialized';
 import { AuthorizeApiService } from '../api/authorize/authorize-api.service';
 import { QuizService } from '../quiz/quiz.service';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UserService {
   private _isLoggedIn: boolean;
 
@@ -32,15 +35,14 @@ export class UserService {
       this.persistTokens();
     }
     if (isPlatformBrowser(this.platformId)) {
-      console.log('UserService: switching db', this.username, value);
+      console.log(`UserService: switching db to user ${this.username} - isLoggedIn: ${value}`);
       this.storageService.switchDb(this._username).subscribe(() => {
-      }, () => {}, () => {
         this._isLoggedIn = value;
-        this._loginNotifier.emit(value);
+        this._loginNotifier.next(value);
       });
     } else {
       this._isLoggedIn = value;
-      this._loginNotifier.emit(value);
+      this._loginNotifier.next(value);
     }
   }
 
@@ -50,9 +52,9 @@ export class UserService {
     return this._staticLoginTokenContent;
   }
 
-  private _loginNotifier = new EventEmitter<boolean>();
+  private _loginNotifier = new ReplaySubject<boolean>(1);
 
-  get loginNotifier(): EventEmitter<boolean> {
+  get loginNotifier(): ReplaySubject<boolean> {
     return this._loginNotifier;
   }
 
@@ -80,70 +82,41 @@ export class UserService {
     @Inject(PLATFORM_ID) private platformId: Object,
     private authorizeApiService: AuthorizeApiService,
     private storageService: StorageService,
-    private indexedDbService: IndexedDbService,
     private jwtHelper: JwtHelperService,
     private quizService: QuizService,
   ) {
 
-    this.storageService.stateNotifier.subscribe((type) => {
-      if (type === DbState.Initialized && !this.username) {
-        console.log('UserService: db is initialized, but no user was set', DbState[type]);
-        this.indexedDbService.stateNotifier.next(DbState.Revalidate);
-      }
-      if (type !== DbState.Initialized || this.indexedDbService.dbName !== this.username) {
-        console.log(`UserService: local db '${this.indexedDbService.dbName}' is not initialized or initialized with other user '${this.username}'`);
-        return;
-      }
+    this.storageService.stateNotifier.pipe(filter(type => this.username && type !== null && type !== DbState.Destroy)).subscribe((type) => {
 
       if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
         console.log('UserService: having static token content with private key');
-        this.storageService.create(DbTable.Config, StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey).subscribe();
+        this.storageService.db.Config.put({
+          type: StorageKey.PrivateKey,
+          value: this._staticLoginTokenContent.privateKey,
+        });
         sessionStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
 
         if (this._tmpRemoteQuizData.length) {
           console.log('UserService: having remote quiz data');
-          this.storageService.getAll<QuizEntity>(DbTable.Quiz).subscribe(localQuizzes => {
-            const onlyLocalQuizzes = localQuizzes.filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.value.name));
-            onlyLocalQuizzes.forEach(localQuiz => {
-              console.log('UserService: syncing local quiz data to server');
-              this.quizService.persistQuiz(new QuizEntity(localQuiz.value));
-            });
-
-            console.log('UserService: received response from storage service and looping through remote quizzes');
-
+          this.storageService.db.Quiz.toCollection().filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.name))
+          .each(localQuiz => {
+            console.log('UserService: syncing local quiz data to server');
+            this.quizService.persistQuiz(new QuizEntity(localQuiz));
+          }).then(() => {
             this._tmpRemoteQuizData.forEach(quiz => {
               this.quizService.persistQuiz(new QuizEntity(quiz));
               console.log('UserService: persisting remote quiz to local db', quiz.name);
             });
-            this.indexedDbService.stateNotifier.next(DbState.Revalidate);
           });
         } else {
           console.log('UserService: not received remote quiz data');
-          this.indexedDbService.stateNotifier.next(DbState.Revalidate);
         }
       } else {
         console.log('UserService: not received any static login token content');
-        this.indexedDbService.stateNotifier.next(DbState.Revalidate);
       }
     });
-  }
 
-  public loadConfig(): boolean {
-    if (isPlatformServer(this.platformId)) {
-      this.isLoggedIn = false;
-      return this.isLoggedIn;
-    }
-
-    this._staticLoginToken = sessionStorage.getItem(StorageKey.LoginToken);
-    this._casTicket = sessionStorage.getItem(StorageKey.CasToken);
-
-    if (!this._staticLoginToken) {
-      this.isLoggedIn = false;
-      return this.isLoggedIn;
-    }
-
-    this.isLoggedIn = !this.jwtHelper.isTokenExpired(this._staticLoginToken);
-    return this.isLoggedIn;
+    this.loadConfig();
   }
 
   public logout(): void {
@@ -233,7 +206,9 @@ export class UserService {
   }
 
   public isAuthorizedFor(authorization: Array<UserRole>): boolean;
+
   public isAuthorizedFor(authorization: UserRole): boolean;
+
   public isAuthorizedFor(authorization: UserRole | Array<UserRole>): boolean {
     if (!this.staticLoginTokenContent) {
       return false;
@@ -250,6 +225,24 @@ export class UserService {
     }
 
     return this.staticLoginTokenContent.userAuthorizations.includes(authorization);
+  }
+
+  private loadConfig(): boolean {
+    if (isPlatformServer(this.platformId)) {
+      this.isLoggedIn = false;
+      return this.isLoggedIn;
+    }
+
+    this._staticLoginToken = sessionStorage.getItem(StorageKey.LoginToken);
+    this._casTicket = sessionStorage.getItem(StorageKey.CasToken);
+
+    if (!this._staticLoginToken) {
+      this.isLoggedIn = false;
+      return this.isLoggedIn;
+    }
+
+    this.isLoggedIn = !this.jwtHelper.isTokenExpired(this._staticLoginToken);
+    return this.isLoggedIn;
   }
 
   private deleteTokens(): void {

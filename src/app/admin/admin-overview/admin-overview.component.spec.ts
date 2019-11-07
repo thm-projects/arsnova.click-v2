@@ -13,7 +13,6 @@ import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesService } from '../../service/themes/themes.service';
@@ -36,8 +35,7 @@ describe('AdminOverviewComponent', () => {
         {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        },
-        I18nService, IndexedDbService, {
+        }, I18nService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, ThemesService, {

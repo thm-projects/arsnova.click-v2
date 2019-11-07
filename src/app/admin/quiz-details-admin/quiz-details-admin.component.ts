@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 

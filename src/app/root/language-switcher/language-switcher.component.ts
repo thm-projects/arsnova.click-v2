@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Language, LanguageTranslation } from '../../../lib/enums/enums';
+import { Language, LanguageTranslation } from '../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';

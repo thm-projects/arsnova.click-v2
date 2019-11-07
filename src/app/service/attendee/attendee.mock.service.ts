@@ -1,4 +1,4 @@
-import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
 
 export class AttendeeMockService {
   public attendees = [];

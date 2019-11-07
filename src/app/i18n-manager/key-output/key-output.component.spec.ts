@@ -4,9 +4,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { CasLoginService } from '../../service/login/cas-login.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
@@ -74,7 +73,7 @@ describe('KeyOutputComponent', () => {
       ],
       declarations: [KeyOutputComponent, UnusedKeyFilterMockPipe, FilterKeysMockPipe, JustafewMockPipe, SearchFilterMockPipe, SortMockPipe],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, CasLoginService, {

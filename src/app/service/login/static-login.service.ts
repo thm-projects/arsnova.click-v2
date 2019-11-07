@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, Router, UrlSegment } from '@angular/router';
-import { UserRole } from '../../../lib/enums/UserRole';
+import { UserRole } from '../../lib/enums/UserRole';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -11,8 +11,6 @@ export class StaticLoginService implements CanLoad {
   constructor(private router: Router, private userService: UserService) { }
 
   public canLoad(route: Route, segments: UrlSegment[]): boolean {
-    this.userService.loadConfig();
-
     if (this.isAllowedToProceed(route)) {
       return true;
     }

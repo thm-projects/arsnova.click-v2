@@ -22,7 +22,6 @@ import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -50,7 +49,7 @@ describe('LivePreviewComponent', () => {
         }, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        }, I18nService, IndexedDbService, {
+        }, I18nService, {
           provide: SwUpdate,
           useClass: SwUpdateMock,
         }, {

@@ -2,11 +2,10 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
-import { SurveyQuestion } from 'arsnova-click-v2-types/dist/questions/question_survey';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
-import { Attendee } from '../../../../lib/attendee/attendee';
-import { Language } from '../../../../lib/enums/enums';
+import { Attendee } from '../../../lib/attendee/attendee';
+import { Language } from '../../../lib/enums/enums';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -20,7 +19,6 @@ import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
-import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
@@ -47,7 +45,7 @@ describe('QuizResultsComponent', () => {
         SharedModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, TranslateService, FooterBarService, SettingsService, {
@@ -95,7 +93,7 @@ describe('QuizResultsComponent', () => {
   });
 
   it(`#showLeaderBoardButton`, inject([QuizService], (quizService: QuizService) => {
-    expect(quizService.quiz[quizService.quiz.currentQuestionIndex] instanceof SurveyQuestion).toBeFalsy();
+    expect(quizService.quiz[quizService.quiz.currentQuestionIndex].TYPE === 'SurveyQuestion').toBeFalsy();
     expect(component.showLeaderBoardButton(quizService.quiz.currentQuestionIndex)).toBeTruthy();
   }));
 

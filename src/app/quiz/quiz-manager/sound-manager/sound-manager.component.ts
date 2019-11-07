@@ -1,12 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { ISong } from 'arsnova-click-v2-types/dist/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { DefaultSettings } from '../../../../lib/default.settings';
-import { MusicSessionConfigurationEntity } from '../../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
-import { StorageKey } from '../../../../lib/enums/enums';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { MusicSessionConfigurationEntity } from '../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
+import { StorageKey } from '../../../lib/enums/enums';
+import { ISong } from '../../../lib/interfaces/ISong';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 

@@ -9,10 +9,8 @@ import { QuizMockService } from '../quiz/quiz-mock.service';
 import { QuizService } from '../quiz/quiz.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
-
 import { AttendeeService } from './attendee.service';
 
 describe('AttendeeService', () => {
@@ -22,7 +20,7 @@ describe('AttendeeService', () => {
         HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {

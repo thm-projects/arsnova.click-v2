@@ -8,13 +8,12 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { PipesModule } from '../../pipes/pipes.module';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
@@ -42,7 +41,7 @@ describe('I18nManagerOverviewComponent', () => {
         {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        }, IndexedDbService, {
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {

@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IMathjaxResponse } from 'arsnova-click-v2-types/dist/common';
-import { Observable } from 'rxjs/index';
-import { DefaultSettings } from '../../../../lib/default.settings';
+import { Observable } from 'rxjs';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { IMathjaxResponse } from '../../../lib/interfaces/IMathjaxResponse';
 
 @Injectable({
   providedIn: 'root',

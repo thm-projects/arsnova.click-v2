@@ -1,6 +1,6 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
+import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 
 import { MemberApiService } from './member-api.service';
 

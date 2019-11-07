@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Filter, Language, Project } from '../../../lib/enums/enums';
+import { Filter, Language, Project } from '../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';

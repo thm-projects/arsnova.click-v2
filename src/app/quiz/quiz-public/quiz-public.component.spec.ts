@@ -11,8 +11,6 @@ import { FileUploadService } from '../../service/file-upload/file-upload.service
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
-
 import { QuizPublicComponent } from './quiz-public.component';
 
 describe('QuizPublicComponent', () => {
@@ -26,7 +24,7 @@ describe('QuizPublicComponent', () => {
         {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        }, IndexedDbService, FooterBarService, {
+        }, FooterBarService, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
         }, {

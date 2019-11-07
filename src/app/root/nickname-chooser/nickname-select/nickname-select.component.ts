@@ -2,11 +2,11 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } fr
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MemberEntity } from '../../../../lib/entities/member/MemberEntity';
-import { StorageKey } from '../../../../lib/enums/enums';
-import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
-import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
-import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
+import { StorageKey } from '../../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';

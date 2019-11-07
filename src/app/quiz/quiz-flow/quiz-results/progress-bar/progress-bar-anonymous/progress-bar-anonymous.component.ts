@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { QuestionType } from '../../../../../../lib/enums/QuestionType';
+import { QuestionType } from '../../../../../lib/enums/QuestionType';
 
 @Component({
   selector: 'app-progress-bar-anonymous',

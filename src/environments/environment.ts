@@ -3,9 +3,9 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-import { LoginMechanism } from '../lib/enums/enums';
-import { QuizTheme } from '../lib/enums/QuizTheme';
-import { IEnvironment } from '../lib/interfaces/IEnvironment';
+import { LoginMechanism } from '../app/lib/enums/enums';
+import { QuizTheme } from '../app/lib/enums/QuizTheme';
+import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: false,

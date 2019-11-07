@@ -20,7 +20,6 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
-import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { VotingQuestionComponent } from './voting-question/voting-question.component';
@@ -37,7 +36,7 @@ describe('VotingComponent', () => {
         RouterTestingModule, FontAwesomeModule, HttpClientTestingModule, NgbModalModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {

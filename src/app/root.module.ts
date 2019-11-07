@@ -13,11 +13,10 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { environment } from '../environments/environment';
-import { jwtOptionsFactory } from '../lib/jwt.factory';
-import { RoutePreloader } from '../lib/route-preloader';
-import { createTranslateLoader } from '../lib/translation.factory';
-import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
+import { jwtOptionsFactory } from './lib/jwt.factory';
+import { RoutePreloader } from './lib/route-preloader';
+import { createTranslateLoader } from './lib/translation.factory';
 import { ModalsModule } from './modals/modals.module';
 import { PipesModule } from './pipes/pipes.module';
 import { HomeComponent } from './root/home/home.component';
@@ -32,13 +31,15 @@ import { FileUploadService } from './service/file-upload/file-upload.service';
 import { FooterBarService } from './service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from './service/header-label/header-label.service';
 import { I18nService } from './service/i18n/i18n.service';
+import { LanguageLoaderService } from './service/language-loader/language-loader.service';
 import { CasLoginService } from './service/login/cas-login.service';
 import { StaticLoginService } from './service/login/static-login.service';
+import { ModalOrganizerService } from './service/modal-organizer/modal-organizer.service';
+import { ProjectLoaderService } from './service/project-loader/project-loader.service';
 import { QuestionTextService } from './service/question-text/question-text.service';
 import { QuizService } from './service/quiz/quiz.service';
 import { SettingsService } from './service/settings/settings.service';
 import { SharedService } from './service/shared/shared.service';
-import { IndexedDbService } from './service/storage/indexed.db.service';
 import { StorageService } from './service/storage/storage.service';
 import { ThemesService } from './service/themes/themes.service';
 import { TrackingService } from './service/tracking/tracking.service';
@@ -48,7 +49,7 @@ import { UserService } from './service/user/user.service';
 import { SharedModule } from './shared/shared.module';
 import { ArsnovaClickAngulartics2Piwik } from './shared/tracking/ArsnovaClickAngulartics2Piwik';
 
-export const appRoutes: Routes = [
+const appRoutes: Routes = [
   {
     path: 'admin',
     canLoad: [StaticLoginService],
@@ -127,7 +128,6 @@ export const appRoutes: Routes = [
       enableTracing: false, // <-- debugging purposes only
     }),
     SharedModule,
-    FooterModule,
     Angulartics2Module.forRoot(),
     JwtModule.forRoot({
       jwtOptionsProvider: {
@@ -135,8 +135,7 @@ export const appRoutes: Routes = [
         useFactory: jwtOptionsFactory,
         deps: [PLATFORM_ID],
       },
-    }),
-    PipesModule, HeaderModule,
+    }), PipesModule, HeaderModule,
   ],
   providers: [
     /* {
@@ -150,9 +149,8 @@ export const appRoutes: Routes = [
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
-    }, SimpleMQ,
+    }, SimpleMQ, UserService,
     RoutePreloader,
-    IndexedDbService,
     StorageService,
     I18nService,
     FooterBarService,
@@ -169,9 +167,7 @@ export const appRoutes: Routes = [
     QuestionTextService,
     ThemesService,
     ArsnovaClickAngulartics2Piwik,
-    TrackingService,
-    UserService,
-    UpdateCheckService, UserRoleGuardService,
+    TrackingService, UpdateCheckService, UserRoleGuardService, LanguageLoaderService, ProjectLoaderService, ModalOrganizerService,
   ],
   exports: [TranslatePipe, TranslateModule],
   entryComponents: [],

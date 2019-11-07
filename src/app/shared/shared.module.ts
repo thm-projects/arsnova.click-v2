@@ -64,7 +64,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { createTranslateLoader } from '../../lib/translation.factory';
+import { FooterModule } from '../footer/footer.module';
+import { createTranslateLoader } from '../lib/translation.factory';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 
@@ -124,7 +125,7 @@ library.add(faCopy);
 
 @NgModule({
   imports: [
-    FormsModule, CommonModule, HttpClientModule, FontAwesomeModule, TranslateModule.forChild({
+    FormsModule, CommonModule, FooterModule, HttpClientModule, FontAwesomeModule, TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
@@ -138,7 +139,7 @@ library.add(faCopy);
   ],
   exports: [
     FormsModule,
-    CommonModule,
+    CommonModule, FooterModule,
     HttpClientModule,
     FontAwesomeModule,
     TranslatePipe,

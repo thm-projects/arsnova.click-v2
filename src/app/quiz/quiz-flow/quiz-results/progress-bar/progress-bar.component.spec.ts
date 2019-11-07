@@ -3,8 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
-import { Attendee } from '../../../../../lib/attendee/attendee';
-import { AbstractChoiceQuestionEntity } from '../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
+import { Attendee } from '../../../../lib/attendee/attendee';
+import { AbstractChoiceQuestionEntity } from '../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
@@ -17,7 +17,6 @@ import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
-import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
@@ -42,7 +41,7 @@ describe('ProgressBarComponent', () => {
         SharedModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, NgbActiveModal, {

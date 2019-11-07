@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, CanLoad } from '@angular/router';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { StatusProtocol } from '../../../lib/enums/Message';
+import { DefaultSettings } from '../../lib/default.settings';
+import { StatusProtocol } from '../../lib/enums/Message';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { UserService } from '../user/user.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CasLoginService implements CanLoad, CanActivate {
 
   public casLoginRequired = false;
@@ -20,8 +22,6 @@ export class CasLoginService implements CanLoad, CanActivate {
   }
 
   public async canLoad(): Promise<boolean> {
-    this.userService.loadConfig();
-
     if (this.userService.isLoggedIn || !this.casLoginRequired) {
       return true;
     }

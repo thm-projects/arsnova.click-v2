@@ -2,10 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { DefaultSettings } from '../../../../lib/default.settings';
-import { QuizEntity } from '../../../../lib/entities/QuizEntity';
-import { StorageKey } from '../../../../lib/enums/enums';
-import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { StorageKey } from '../../../lib/enums/enums';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 
 @Injectable({
   providedIn: 'root',

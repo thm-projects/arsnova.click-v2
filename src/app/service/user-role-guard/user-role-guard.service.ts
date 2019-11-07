@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
-import { UserRole } from '../../../lib/enums/UserRole';
+import { UserRole } from '../../lib/enums/UserRole';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -10,8 +10,6 @@ export class UserRoleGuardService implements CanActivate {
   constructor(private userService: UserService, private router: Router) { }
 
   public canActivate(): boolean {
-    this.userService.loadConfig();
-
     if (this.isAllowedToProceed()) {
       return true;
     }

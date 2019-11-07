@@ -6,17 +6,17 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { of, Subject } from 'rxjs';
 import { distinctUntilChanged, filter, mergeMap, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { AbstractAnswerEntity } from '../../../lib/entities/answer/AbstractAnswerEntity';
-import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
-import { ABCDSingleChoiceQuestionEntity } from '../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { DbState, DbTable, Language, StorageKey } from '../../../lib/enums/enums';
-import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
-import { QuestionType } from '../../../lib/enums/QuestionType';
-import { QuizState } from '../../../lib/enums/QuizState';
-import { UserRole } from '../../../lib/enums/UserRole';
+import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
+import { DefaultSettings } from '../../lib/default.settings';
+import { AbstractAnswerEntity } from '../../lib/entities/answer/AbstractAnswerEntity';
+import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
+import { ABCDSingleChoiceQuestionEntity } from '../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { DbState, Language, StorageKey } from '../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
+import { QuestionType } from '../../lib/enums/QuestionType';
+import { QuizState } from '../../lib/enums/QuizState';
+import { UserRole } from '../../lib/enums/UserRole';
 import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       if (state === DbState.Revalidate) {
         this.cleanUpSessionStorage();
-        this.storageService.getAllQuiznames().then(quizNames => {
+        this.storageService.db.getAllQuiznames().then(quizNames => {
           this._ownQuizzes = quizNames;
 
           if (this._ownQuizzes.length && //
@@ -176,12 +176,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       distinctUntilChanged(), takeUntil(this._destroy), switchMapTo(params$)).subscribe(async params => {
 
       if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
-        const theme = this.storageService.read(DbTable.Config, StorageKey.DefaultTheme).toPromise();
+        const theme = this.storageService.db.Config.get(StorageKey.DefaultTheme);
         if (!theme) {
-          await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, this.themesService.defaultTheme).toPromise();
+          await this.storageService.db.Config.put({
+            value: this.themesService.defaultTheme,
+            type: StorageKey.DefaultTheme,
+          });
         }
       } else {
-        await this.storageService.create(DbTable.Config, StorageKey.DefaultTheme, params.get('themeId')).toPromise();
+        await this.storageService.db.Config.put({
+          value: params.get('themeId'),
+          type: StorageKey.DefaultTheme,
+        });
         this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
       }
       this.themesService.updateCurrentlyUsedTheme();
@@ -296,7 +302,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const questionGroupSerialized = await this.storageService.read(DbTable.Quiz, this.enteredSessionName).toPromise();
+    const questionGroupSerialized = await this.storageService.db.Quiz.get(this.enteredSessionName);
     const questionGroup = await new Promise<QuizEntity>((resolve) => {
       if (this.isAddingDemoQuiz) {
         this.addDemoQuiz().then(value => resolve(value));
@@ -436,7 +442,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private async selectQuizAsExisting(quizname): Promise<void> {
-    const currentQuiz = new QuizEntity(await this.storageService.read(DbTable.Quiz, quizname).toPromise());
+    const currentQuiz = new QuizEntity(await this.storageService.db.Quiz.get(quizname));
     this.canAddQuiz = false;
     this.canEditQuiz = true;
     this.canStartQuiz = this.connectionService.serverAvailable && //
@@ -505,16 +511,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem(StorageKey.CurrentQuizName);
     sessionStorage.removeItem(StorageKey.CurrentNickName);
     if (isPlatformBrowser(this.platformId)) {
-      this.storageService.delete(DbTable.Config, StorageKey.QuizTheme).subscribe();
+      this.storageService.db.Config.delete(StorageKey.QuizTheme);
     }
     if (!environment.persistQuizzes && !this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
-      this.storageService.getAll<QuizEntity>(DbTable.Quiz).pipe(takeUntil(this._destroy)).subscribe(quizDbData => {
-        quizDbData.forEach(quizData => {
-          this.quizApiService.deleteQuiz(quizData.value).subscribe(() => {
-            this.storageService.delete(DbTable.Quiz, quizData.id).subscribe();
-          }, () => {
-            this.storageService.delete(DbTable.Quiz, quizData.id).subscribe();
-          });
+      this.storageService.db.Quiz.toCollection().each(quizData => {
+        this.quizApiService.deleteQuiz(quizData).subscribe(() => {
+          this.storageService.db.Quiz.delete(quizData.name);
+        }, () => {
+          this.storageService.db.Quiz.delete(quizData.name);
         });
       });
     }
@@ -541,7 +545,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return quizName.split(' ')[0] === this.enteredSessionName;
     });
     if (hasMatchedABCDQuiz.length) {
-      const questionGroup = await this.storageService.read(DbTable.Quiz, hasMatchedABCDQuiz[0]).toPromise();
+      const questionGroup = await this.storageService.db.Quiz.get(hasMatchedABCDQuiz[0]);
       const answerOptionList = (<Array<AbstractAnswerEntity>>[]);
 
       answerList.forEach((character, index) => {

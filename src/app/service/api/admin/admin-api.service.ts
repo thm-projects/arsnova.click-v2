@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DefaultSettings } from '../../../../lib/default.settings';
-import { QuizEntity } from '../../../../lib/entities/QuizEntity';
-import { UserEntity } from '../../../../lib/entities/UserEntity';
-import { IAdminQuiz } from '../../../../lib/interfaces/quizzes/IAdminQuiz';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { UserEntity } from '../../../lib/entities/UserEntity';
+import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
 import { UserService } from '../../user/user.service';
 
 @Injectable({

@@ -11,7 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
@@ -27,7 +27,6 @@ import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsMockService } from '../../service/settings/settings.mock.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesMockService } from '../../service/themes/themes.mock.service';
@@ -64,7 +63,7 @@ describe('HomeComponent', () => {
         }), RouterTestingModule, HttpClientTestingModule, NgbModule, FontAwesomeModule, FormsModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, FooterBarService, {

@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
-import { IFreetextAnswerOption } from 'arsnova-click-v2-types/dist/answeroptions/interfaces';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
@@ -108,9 +107,9 @@ describe('AnsweroptionsFreetextComponent', () => {
   });
 
   it('should set a validation configuration of the question', () => {
-    const initValue = (component.question.answerOptionList[0] as unknown as IFreetextAnswerOption).getConfig()[0];
+    const initValue = (component.question.answerOptionList[0]).getConfig()[0];
     component.setConfig(initValue.id, !initValue.enabled);
-    const newValue = (component.question.answerOptionList[0] as unknown as IFreetextAnswerOption).getConfig()[0];
+    const newValue = (component.question.answerOptionList[0]).getConfig()[0];
     expect(newValue.id).toEqual(initValue.id);
     expect(newValue.enabled).not.toEqual(initValue.enabled);
   });

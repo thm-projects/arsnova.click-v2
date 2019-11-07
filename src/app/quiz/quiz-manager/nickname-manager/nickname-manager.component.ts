@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { IAvailableNicks } from 'arsnova-click-v2-types/dist/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StorageKey } from '../../../../lib/enums/enums';
-import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { StorageKey } from '../../../lib/enums/enums';
+import { IAvailableNicks } from '../../../lib/interfaces/IAvailableNicks';
+import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
 import { NickApiService } from '../../../service/api/nick/nick-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';

@@ -1,9 +1,11 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { IMathjaxResponse } from 'arsnova-click-v2-types/dist/common';
-import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
+import { IMathjaxResponse } from '../../lib/interfaces/IMathjaxResponse';
+import { parseGithubFlavoredMarkdown } from '../../lib/markdown/markdown';
 import { MathjaxApiService } from '../api/mathjax/mathjax-api.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class QuestionTextService {
 
   private _eventEmitter: EventEmitter<string | Array<string>> = new EventEmitter();

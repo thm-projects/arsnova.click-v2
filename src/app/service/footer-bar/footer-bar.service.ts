@@ -1,9 +1,18 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { RxStompState } from '@stomp/rx-stomp';
+import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
-import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
-import { IndexedDbService } from '../storage/indexed.db.service';
+import { DefaultSettings } from '../../lib/default.settings';
+import { StorageKey } from '../../lib/enums/enums';
+import { StatusProtocol } from '../../lib/enums/Message';
+import { FooterbarElement } from '../../lib/footerbar-element/footerbar-element';
+import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
+import { QuizApiService } from '../api/quiz/quiz-api.service';
+import { QuizService } from '../quiz/quiz.service';
+import { UserService } from '../user/user.service';
 
 declare class Modernizr {
   public static fullscreen: boolean;
@@ -59,7 +68,9 @@ export function setFullScreen(full: boolean): void {
   }
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FooterBarService {
 
   public TYPE_REFERENCE: string;
@@ -368,7 +379,7 @@ export class FooterBarService {
       logout: true,
     },
   }, () => {
-    this.indexedDbService.isInitialized = false;
+    this.userService.logout();
   });
   public footerElemEditI18n: IFooterBarElement = new FooterbarElement({
     id: 'edit-i18n',
@@ -399,12 +410,60 @@ export class FooterBarService {
     return this._footerElements;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private indexedDbService: IndexedDbService) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private userService: UserService,
+    private rxStompService: RxStompService,
+    private quizService: QuizService,
+    private quizApiService: QuizApiService,
+    private translateService: TranslateService,
+  ) {
+
+    this.rxStompService.connectionState$.subscribe(value => {
+      this.toggleFooterElemState(value === RxStompState.OPEN);
+    });
+
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz)).subscribe(() => {
+      this.updateFooterElementsState();
+    });
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
     this.removeUnsupportedElements(elements);
     this._footerElements = elements;
+  }
+
+  public toggleSetting(elem: IFooterBarElement): void {
+    let target: string = null;
+    switch (elem) {
+      case this.footerElemResponseProgress:
+        target = 'showResponseProgress';
+        break;
+      case this.footerElemConfidenceSlider:
+        target = 'confidenceSliderEnabled';
+        break;
+      case this.footerElemReadingConfirmation:
+        target = 'readingConfirmationEnabled';
+        break;
+    }
+    if (target) {
+      this.quizService.quiz.sessionConfig[target] = !elem.isActive;
+      elem.isActive = !elem.isActive;
+      this.toggleSettingByName(target, elem.isActive);
+    }
+  }
+
+  private toggleSettingByName(target: string, state: boolean | string): void {
+    this.quizApiService.postQuizSettingsUpdate(this.quizService.quiz, {
+      target: target,
+      state: state,
+    }).subscribe(data => {
+      if (data.status !== StatusProtocol.Success) {
+        console.log('FooterBarService: PostQuizSettingsUpdate failed', data);
+      }
+    }, error => {
+      console.log('FooterBarService: PostQuizSettingsUpdate failed', error);
+    });
   }
 
   private removeUnsupportedElements(elements: Array<IFooterBarElement>): void {
@@ -417,5 +476,39 @@ export class FooterBarService {
     if (backIndex > -1 && history.length < 2) {
       elements.splice(backIndex, 1);
     }
+  }
+
+  private toggleFooterElemState(isActive: boolean): void {
+    this.footerElemLeaderboard.isActive = isActive;
+    this.footerElemImport.isActive = isActive;
+    this.footerElemLogin.isActive = isActive;
+    this.footerElemAdmin.isActive = isActive;
+  }
+
+  private updateFooterElementsState(): void {
+    this.footerElemReadingConfirmation.isActive = !!this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
+    this.footerElemConfidenceSlider.isActive = !!this.quizService.quiz.sessionConfig.confidenceSliderEnabled;
+
+    this.footerElemExport.onClickCallback = async () => {
+      const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.quizService.quiz.name}/${sessionStorage.getItem(
+        StorageKey.PrivateKey)}/${this.quizService.quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
+      window.open(link);
+    };
+
+    this.footerElemEnableCasLogin.isActive = this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin;
+    this.footerElemBlockRudeNicknames.isActive = this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks;
+
+    this.footerElemEnableCasLogin.onClickCallback = () => {
+      const newState = !this.footerElemEnableCasLogin.isActive;
+      this.footerElemEnableCasLogin.isActive = newState;
+      this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin = newState;
+      this.quizService.persist();
+    };
+    this.footerElemBlockRudeNicknames.onClickCallback = () => {
+      const newState = !this.footerElemBlockRudeNicknames.isActive;
+      this.footerElemBlockRudeNicknames.isActive = newState;
+      this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks = newState;
+      this.quizService.persist();
+    };
   }
 }

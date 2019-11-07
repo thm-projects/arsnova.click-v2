@@ -2,8 +2,8 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StorageKey } from '../../../lib/enums/enums';
-import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
+import { StorageKey } from '../../lib/enums/enums';
+import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';

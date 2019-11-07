@@ -4,7 +4,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { SharedService } from '../shared/shared.service';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 
@@ -17,7 +16,7 @@ describe('SettingsService', () => {
         SharedModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {

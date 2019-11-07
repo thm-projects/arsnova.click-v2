@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
-import { AbstractChoiceQuestionEntity } from '../../../lib/entities/question/AbstractChoiceQuestionEntity';
+import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
 import { QuizService } from '../../service/quiz/quiz.service';

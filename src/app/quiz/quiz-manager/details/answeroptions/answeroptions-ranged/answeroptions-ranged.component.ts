@@ -2,7 +2,7 @@ import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { RangedQuestionEntity } from '../../../../../../lib/entities/question/RangedQuestionEntity';
+import { RangedQuestionEntity } from '../../../../../lib/entities/question/RangedQuestionEntity';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 

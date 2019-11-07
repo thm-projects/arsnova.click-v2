@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { UserRole } from '../../../lib/enums/UserRole';
+import { AppDb } from '../../lib/db/app.db';
+import { UserRole } from '../../lib/enums/UserRole';
 import { StorageService } from '../../service/storage/storage.service';
 
 @Component({
@@ -66,7 +67,7 @@ export class AddUserComponent implements OnInit {
   }
 
   constructor(private ngbModal: NgbActiveModal, private storageService: StorageService) {
-    this.privateKey = storageService.generatePrivateKey();
+    this.privateKey = AppDb.generatePrivateKey();
   }
 
   public ngOnInit(): void {

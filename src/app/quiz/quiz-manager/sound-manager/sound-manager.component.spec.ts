@@ -12,7 +12,6 @@ import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
-import { IndexedDbService } from '../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
@@ -28,7 +27,7 @@ describe('SoundManagerComponent', () => {
         RouterTestingModule, HttpClientModule, FontAwesomeModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {

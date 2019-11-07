@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../environments/environment';
-import { StorageKey } from '../../../../../lib/enums/enums';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';

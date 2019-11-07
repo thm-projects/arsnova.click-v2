@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
-import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
-import { NumberType } from '../../../../../lib/enums/enums';
-import { QuestionType } from '../../../../../lib/enums/QuestionType';
+import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
+import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
+import { NumberType } from '../../../../lib/enums/enums';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';

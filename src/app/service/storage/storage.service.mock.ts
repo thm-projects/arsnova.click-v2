@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { DbTable, StorageKey } from '../../../lib/enums/enums';
+import { DbTable, StorageKey } from '../../lib/enums/enums';
 
 @Injectable({
   providedIn: 'root',

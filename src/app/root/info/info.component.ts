@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { DefaultSettings } from '../../../lib/default.settings';
+import { DefaultSettings } from '../../lib/default.settings';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { TrackingService } from '../../service/tracking/tracking.service';

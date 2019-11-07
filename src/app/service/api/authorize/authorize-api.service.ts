@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DefaultSettings } from '../../../../lib/default.settings';
-import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 
 @Injectable({
   providedIn: 'root',

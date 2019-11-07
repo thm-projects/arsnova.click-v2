@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
-import { QuestionType } from '../../../../../lib/enums/QuestionType';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -15,7 +15,6 @@ import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
-import { IndexedDbService } from '../../../../service/storage/indexed.db.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { QuestiontypeComponent } from './questiontype.component';
@@ -30,7 +29,7 @@ describe('QuestiontypeComponent', () => {
         HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {

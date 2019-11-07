@@ -2,8 +2,7 @@ import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
@@ -27,7 +26,7 @@ describe('AddModeComponent', () => {
         }), SharedModule, NgbModalModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, NgbActiveModal, {

@@ -1,5 +1,4 @@
 import { inject, TestBed } from '@angular/core/testing';
-import { IndexedDbService } from './indexed.db.service';
 import { StorageService } from './storage.service';
 
 describe('StorageService', () => {
@@ -7,7 +6,7 @@ describe('StorageService', () => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
-        StorageService, IndexedDbService,
+        StorageService,
       ],
     });
   });

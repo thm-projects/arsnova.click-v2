@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { checkABCDOrdering } from '../../../lib/checkABCDOrdering';
-import { QuizState } from '../../../lib/enums/QuizState';
-import { IAdminQuiz } from '../../../lib/interfaces/quizzes/IAdminQuiz';
+import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
+import { QuizState } from '../../lib/enums/QuizState';
+import { IAdminQuiz } from '../../lib/interfaces/quizzes/IAdminQuiz';
 
 @Pipe({
   name: 'quizAdminFilter',

@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { IDuplicateQuiz } from 'arsnova-click-v2-types/dist/common';
+import { IDuplicateQuiz } from '../../lib/interfaces/quizzes/IDuplicateQuiz';
 import { QuizService } from '../quiz/quiz.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FileUploadMockService {
   get duplicateQuizzes(): Array<IDuplicateQuiz> {
     return this._duplicateQuizzes;

@@ -1,16 +1,15 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { DefaultSettings } from '../../../lib/default.settings';
-import { SingleChoiceQuestionEntity } from '../../../lib/entities/question/SingleChoiceQuestionEntity';
-import { QuizEntity } from '../../../lib/entities/QuizEntity';
-import { SessionConfigurationEntity } from '../../../lib/entities/session-configuration/SessionConfigurationEntity';
+import { DefaultSettings } from '../../lib/default.settings';
+import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
+import { SessionConfigurationEntity } from '../../lib/entities/session-configuration/SessionConfigurationEntity';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { SettingsService } from '../settings/settings.service';
 import { SharedService } from '../shared/shared.service';
-import { IndexedDbService } from '../storage/indexed.db.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 import { QuizService } from './quiz.service';
@@ -22,7 +21,7 @@ describe('QuizService', () => {
         HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {
@@ -50,7 +49,7 @@ describe('QuizService', () => {
 
   xit('#persist', async(inject([QuizService, StorageService], (service: QuizService, storageService: StorageService) => {
     service.persist();
-    storageService.getAllQuiznames().then(quiznames => {
+    storageService.db.getAllQuiznames().then(quiznames => {
       expect(quiznames).toContain('test');
     });
   })));

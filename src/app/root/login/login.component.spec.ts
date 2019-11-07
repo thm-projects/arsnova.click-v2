@@ -8,14 +8,12 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
-import { jwtOptionsFactory } from '../../../lib/jwt.factory';
+import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
-import { IndexedDbService } from '../../service/storage/indexed.db.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
-
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -34,7 +32,7 @@ describe('LoginComponent', () => {
         }), FormsModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
-        IndexedDbService, {
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, FooterBarService, {

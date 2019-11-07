@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { DefaultSettings } from '../../../../lib/default.settings';
-import { Project } from '../../../../lib/enums/enums';
-import { IMessage } from '../../../../lib/interfaces/communication/IMessage';
+import { DefaultSettings } from '../../../lib/default.settings';
+import { Project } from '../../../lib/enums/enums';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { UserService } from '../../user/user.service';
 
 @Injectable({

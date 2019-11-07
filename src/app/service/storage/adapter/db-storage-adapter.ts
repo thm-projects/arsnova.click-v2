@@ -1,4 +1,4 @@
-import { DbName } from '../../../../lib/enums/enums';
+import { DbName } from '../../../lib/enums/enums';
 import { AbstractIndexedDbAdapter } from './abstract-indexed-db-adapter';
 
 

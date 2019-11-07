@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { availableQuestionTypes, IAvailableQuestionType } from '../../../../../lib/available-question-types';
-import { QuestionType } from '../../../../../lib/enums/QuestionType';
+import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
 
 @Component({
   selector: 'app-quiz-type-select-modal',

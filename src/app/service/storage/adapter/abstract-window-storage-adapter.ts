@@ -1,4 +1,4 @@
-import { StorageKey } from '../../../../lib/enums/enums';
+import { StorageKey } from '../../../lib/enums/enums';
 import { AbstractStorageAdapter } from './abstract-storage-adapter';
 
 export abstract class AbstractWindowStorageAdapter<T extends Storage> extends AbstractStorageAdapter<T> {

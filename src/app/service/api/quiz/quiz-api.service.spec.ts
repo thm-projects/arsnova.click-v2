@@ -1,7 +1,7 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { inject, TestBed } from '@angular/core/testing';
-import { QuizEntity } from '../../../../lib/entities/QuizEntity';
-import { MessageProtocol, StatusProtocol } from '../../../../lib/enums/Message';
+import { QuizEntity } from '../../../lib/entities/QuizEntity';
+import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 
 import { QuizApiService } from './quiz-api.service';
 
