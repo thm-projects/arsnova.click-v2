@@ -1,6 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs/operators';
 import { CurrencyType, DbState, Language, NumberType, StorageKey } from '../../lib/enums/enums';
 import { StorageService } from '../storage/storage.service';
 
@@ -29,10 +30,8 @@ export class I18nService {
   }
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService, private storageService: StorageService) {
-    this.storageService.stateNotifier.subscribe(val => {
-      if (val === DbState.Initialized) {
-        this.initLanguage();
-      }
+    this.storageService.stateNotifier.pipe(filter(state => state === DbState.Initialized)).subscribe(() => {
+      this.initLanguage();
     });
   }
 

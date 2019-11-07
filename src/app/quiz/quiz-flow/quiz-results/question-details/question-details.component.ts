@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, SecurityContext } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -75,7 +75,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public sanitizeHTML(value: string): SafeHtml {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
   public normalizeAnswerIndex(index: number): string {

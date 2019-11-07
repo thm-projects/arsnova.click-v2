@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
@@ -22,6 +23,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
+import { SharedModule } from '../../../shared/shared.module';
 
 import { NicknameInputComponent } from './nickname-input.component';
 
@@ -38,9 +40,10 @@ describe('NicknameInputComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
+        }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule, SharedModule,
       ],
       providers: [
+        RxStompService,
         {
           provide: StorageService,
           useClass: StorageServiceMock,

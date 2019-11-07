@@ -30,7 +30,7 @@ export class QuizDuplicateComponent implements OnInit, OnDestroy {
     this.route.paramMap.pipe(map(params => params.get('name')), filter(() => this.userService.isAuthorizedFor(UserRole.CreateQuiz)),
       distinctUntilChanged(), takeUntil(this._destroy), switchMap(name => this.quizApiService.initQuizInstance(name)))
     .subscribe(data => {
-      this.storageService.db.Quiz.add(data.payload.quiz, data.payload.quiz.name);
+      this.storageService.db.Quiz.put(data.payload.quiz);
       this.quizService.quiz = new QuizEntity(data.payload.quiz);
       this.quizService.isOwner = true;
       this.router.navigate(['/quiz', 'flow']);

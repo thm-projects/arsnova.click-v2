@@ -9,6 +9,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -63,6 +64,7 @@ describe('HomeComponent', () => {
         }), RouterTestingModule, HttpClientTestingModule, NgbModule, FontAwesomeModule, FormsModule,
       ],
       providers: [
+        RxStompService,
         {
           provide: StorageService,
           useClass: StorageServiceMock,

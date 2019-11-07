@@ -2,7 +2,6 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
@@ -19,13 +18,15 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizJoinComponent';
   private readonly _destroy = new Subject();
 
-  constructor(public quizService: QuizService,
-              @Inject(PLATFORM_ID) private platformId: Object,
-              private route: ActivatedRoute,
-              private router: Router,
-              private casService: CasLoginService,
-              private themesService: ThemesService,
-              private quizApiService: QuizApiService, private sharedService: SharedService,
+  constructor(
+    public quizService: QuizService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private route: ActivatedRoute,
+    private router: Router,
+    private casService: CasLoginService,
+    private themesService: ThemesService,
+    private quizApiService: QuizApiService,
+    private sharedService: SharedService,
   ) {
   }
 
@@ -40,9 +41,6 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
       }
 
       this.sharedService.isLoadingEmitter.next(true);
-      if (!sessionStorage.getItem(StorageKey.PrivateKey)) {
-        await this.quizService.loadDataToPlay(params.quizName);
-      }
       this.quizApiService.getFullQuizStatusData(params.quizName).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
     });
   }

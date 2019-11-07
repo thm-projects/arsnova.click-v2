@@ -19,6 +19,7 @@ import { UserService } from '../../../service/user/user.service';
 export class NicknameInputComponent implements OnInit, OnDestroy {
   public static TYPE = 'NicknameInputComponent';
   public isLoggingIn: boolean;
+  public nickname: string;
 
   private _failedLoginReason = '';
 
@@ -34,8 +35,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private router: Router,
     private attendeeService: AttendeeService,
     private userService: UserService,
-    private quizService: QuizService,
-    private memberApiService: MemberApiService, private messageQueue: SimpleMQ,
+    private quizService: QuizService, private memberApiService: MemberApiService, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -54,14 +54,12 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
 
     this.isLoggingIn = true;
 
-    const nickname = (<HTMLInputElement>document.getElementById('input-nickname')).value;
-
-    const token = await this.memberApiService.generateMemberToken(nickname, this.quizService.quiz.name).toPromise();
+    const token = await this.memberApiService.generateMemberToken(this.nickname, this.quizService.quiz.name).toPromise();
 
     sessionStorage.setItem(StorageKey.QuizToken, token);
 
-    this.putMember(nickname, sessionStorage.getItem(StorageKey.CurrentMemberGroupName)).then(() => {
-      this.attendeeService.ownNick = nickname;
+    this.putMember(this.nickname, sessionStorage.getItem(StorageKey.CurrentMemberGroupName)).then(() => {
+      this.attendeeService.ownNick = this.nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
       this.isLoggingIn = false;
@@ -109,7 +107,10 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
         ticket: this.userService.casTicket,
       })).subscribe(data => {
         if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
-          resolve();
+          this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+            this.attendeeService.addMember(payload.member);
+            resolve();
+          }));
         } else {
           reject(data);
         }
@@ -123,9 +124,6 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages(): void {
-    this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
-      this.attendeeService.addMember(payload.member);
-    }));
   }
 
 }

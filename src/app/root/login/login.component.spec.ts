@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -32,6 +33,7 @@ describe('LoginComponent', () => {
         }), FormsModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
+        RxStompService,
         {
           provide: StorageService,
           useClass: StorageServiceMock,

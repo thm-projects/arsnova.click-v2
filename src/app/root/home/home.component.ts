@@ -3,8 +3,8 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } fr
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { of, Subject } from 'rxjs';
-import { distinctUntilChanged, filter, mergeMap, switchMapTo, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, filter, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -138,41 +138,32 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
     });
 
-    this.storageService.stateNotifier.pipe(takeUntil(this._destroy)).subscribe(state => {
-      if (state === DbState.Destroy) {
-        return;
-      }
+    this.storageService.stateNotifier.pipe(takeUntil(this._destroy), filter(state => state === DbState.Initialized)).subscribe(state => {
+      this.cleanUpSessionStorage();
+      this.storageService.db.getAllQuiznames().then(quizNames => {
+        this._ownQuizzes = quizNames;
 
-      if (state === DbState.Initialized) {
-        this.cleanUpSessionStorage();
-      }
-
-      if (state === DbState.Revalidate) {
-        this.cleanUpSessionStorage();
-        this.storageService.db.getAllQuiznames().then(quizNames => {
-          this._ownQuizzes = quizNames;
-
-          if (this._ownQuizzes.length && //
-              environment.showJoinableQuizzes && //
-              (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz))) {
-            this.modalService.open(AvailableQuizzesComponent);
-          }
-        });
-
-        if (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
-          this.quizApiService.getPublicQuizAmount().subscribe(val => {
-            this.publicQuizAmount = val;
-          });
-          this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
-            this.ownPublicQuizAmount = val;
-          });
+        if (this._ownQuizzes.length && //
+            environment.showJoinableQuizzes && //
+            (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz))) {
+          this.modalService.open(AvailableQuizzesComponent);
         }
+      });
+
+      if (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
+        this.quizApiService.getPublicQuizAmount().subscribe(val => {
+          this.publicQuizAmount = val;
+        });
+        this.quizApiService.getOwnPublicQuizAmount().subscribe(val => {
+          this.ownPublicQuizAmount = val;
+        });
       }
+
     });
 
     const params$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
 
-    this.storageService.stateNotifier.pipe(mergeMap(val => of(![DbState.Initialized, DbState.Revalidate].includes(val))), filter(val => !val),
+    this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy),
       distinctUntilChanged(), takeUntil(this._destroy), switchMapTo(params$)).subscribe(async params => {
 
       if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
@@ -190,7 +181,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
         this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
       }
-      this.themesService.updateCurrentlyUsedTheme();
     });
   }
 

@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -13,7 +14,6 @@ import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEnti
 import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { SessionConfigurationEntity } from '../../lib/entities/session-configuration/SessionConfigurationEntity';
-import { DbTable } from '../../lib/enums/enums';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -106,22 +106,17 @@ describe('QuizOverviewComponent', () => {
         }, SharedService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        },
+        }, RxStompService,
       ],
       declarations: [QuizOverviewComponent, TranslatePipeMock],
     }).compileComponents();
   }));
 
   beforeEach(async(() => {
-    TestBed.get(StorageService).create(DbTable.Quiz, 'validtestquiz', JSON.stringify(validQuiz)).subscribe();
     fixture = TestBed.createComponent(QuizOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
-
-  afterEach(() => {
-    TestBed.get(StorageService).delete(DbTable.Quiz, 'validtestquiz').subscribe();
-  });
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -162,6 +157,7 @@ describe('QuizOverviewComponent', () => {
   describe('#exportQuiz', () => {
 
     it('should generate an export file containing the quiz data', async () => {
+      component.sessions.push(validQuiz);
       const exportData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(validQuiz));
 
       await component.exportQuiz(0, (self, event) => {

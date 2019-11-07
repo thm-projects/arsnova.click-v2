@@ -162,32 +162,18 @@ export class QuizService {
         return;
       }
 
-      this.storageService.db.Quiz.get(this.quiz.name).then(quiz => {
+      this.storageService.db.Quiz.get(quizName).then(quiz => {
 
-        console.log('QuizService: loadDataToPlay finished', quiz, quizName);
-        if (!quiz) {
-          this.isOwner = false;
-          this.restoreSettings(quizName).then(() => resolve());
-          return;
-        }
-
-        this.isOwner = true;
-
-        this.quizApiService.getQuiz(quizName).subscribe(response => {
-          if (!response.payload.quiz) {
-            reject();
-            throw new Error(`No valid quiz found in quizStatus: ${JSON.stringify(response)}`);
-          }
-
-          this.quiz = response.payload.quiz;
-          resolve();
-        });
+        console.log('QuizService: loadDataToPlay finished', quizName);
+        this.isOwner = !!quiz;
+        console.log('QuizService: isOwner', this.isOwner);
+        this.restoreSettings(quizName).then(() => resolve());
       });
     });
   }
 
   public loadDataToEdit(quizName: string): void {
-    this.storageService.db.Quiz.get(this.quiz.name).then(quiz => {
+    this.storageService.db.Quiz.get(quizName).then(quiz => {
       if (!quiz) {
         return;
       }
@@ -204,8 +190,13 @@ export class QuizService {
   }
 
   private restoreSettings(quizName: string): Promise<boolean> {
-    return new Promise<boolean>(resolve => {
+    return new Promise<boolean>((resolve, reject) => {
       this.quizApiService.getQuiz(quizName).subscribe(response => {
+        if (!response.payload.quiz) {
+          reject();
+          throw new Error(`No valid quiz found in quizStatus: ${JSON.stringify(response)}`);
+        }
+
         this.quiz = response.payload.quiz;
         resolve();
       });

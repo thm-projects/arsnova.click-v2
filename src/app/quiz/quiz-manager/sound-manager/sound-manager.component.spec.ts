@@ -1,10 +1,14 @@
 import { HttpClientModule } from '@angular/common/http';
+import { PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -24,9 +28,16 @@ describe('SoundManagerComponent', () => {
   beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, FontAwesomeModule,
+        RouterTestingModule, HttpClientModule, FontAwesomeModule, JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [PLATFORM_ID],
+          },
+        }),
       ],
       providers: [
+        RxStompService,
         {
           provide: StorageService,
           useClass: StorageServiceMock,

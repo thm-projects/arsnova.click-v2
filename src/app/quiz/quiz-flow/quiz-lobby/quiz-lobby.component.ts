@@ -85,6 +85,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         return;
       }
 
+      this.handleMessages();
+
       this.sharedService.isLoadingEmitter.next(false);
       if (this.quizService.isOwner) {
         console.log('QuizLobbyComponent: quiz for owner initialized', this.quizService.quiz);
@@ -95,7 +97,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     });
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-      this.handleMessages();
     });
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
@@ -268,6 +269,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       }),
     ]);
     this.quizService.isOwner ? this.handleMessagesForOwner() : this.handleMessagesForAttendee();
+    console.log('QuizLobbyComponent: Message handler attached');
   }
 
   private handleMessagesForOwner(): void {

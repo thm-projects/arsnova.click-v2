@@ -5,7 +5,7 @@ import { DbName, DbTable, StorageKey } from '../enums/enums';
 
 export class AppDb extends Dexie {
   public readonly initialized: ReplaySubject<void> = new ReplaySubject<void>(1);
-  public readonly [DbTable.Config]: Dexie.Table<{ type: StorageKey, value: any }, string>;
+  public readonly [DbTable.Config]: Dexie.Table<{ type: StorageKey, value: any }, StorageKey>;
   public readonly [DbTable.Quiz]: Dexie.Table<QuizEntity, string>;
 
   constructor(dbName: DbName) {
@@ -15,15 +15,18 @@ export class AppDb extends Dexie {
       [DbTable.Quiz]: 'name',
     });
 
-    this.Config.get(DbTable.Config).then(privateKey => {
-      if (!privateKey) {
-        privateKey = {
-          value: AppDb.generatePrivateKey(),
-          type: StorageKey.PrivateKey,
-        };
-        sessionStorage.setItem(StorageKey.PrivateKey, privateKey.value);
-        this.Config.put(privateKey).then(() => this.initialized.next());
+    this.Config.get(StorageKey.PrivateKey).then(privateKey => {
+      if (privateKey) {
+        this.initialized.next();
+        return;
       }
+
+      privateKey = {
+        value: AppDb.generatePrivateKey(),
+        type: StorageKey.PrivateKey,
+      };
+      sessionStorage.setItem(StorageKey.PrivateKey, privateKey.value);
+      this.Config.put(privateKey).then(() => this.initialized.next());
     });
 
   }

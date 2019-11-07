@@ -19,6 +19,7 @@ export class StorageService {
 
   public switchDb(username: string): Observable<void> {
     if (this._db && this._db.name === username) {
+      this.stateNotifier.next(DbState.Initialized);
       return this._db.initialized;
     }
 
@@ -26,6 +27,10 @@ export class StorageService {
   }
 
   private initDb(dbName): Observable<void> {
+    if (this._db) {
+      this._db.close();
+    }
+
     this._db = new AppDb(dbName);
 
     this._db.initialized.subscribe(() => this.stateNotifier.next(DbState.Initialized));

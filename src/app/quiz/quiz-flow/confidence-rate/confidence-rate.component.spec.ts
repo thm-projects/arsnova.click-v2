@@ -1,10 +1,14 @@
+import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -29,10 +33,16 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule,
+        SharedModule, RouterTestingModule, JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [PLATFORM_ID],
+          },
+        }),
       ],
       providers: [
-        SimpleMQ, {
+        RxStompService, SimpleMQ, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {

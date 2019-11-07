@@ -3,6 +3,7 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -30,6 +31,7 @@ describe('MemberGroupSelectComponent', () => {
         HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
+        RxStompService,
         {
           provide: StorageService,
           useClass: StorageServiceMock,

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -61,11 +61,8 @@ import {
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
-import { FooterModule } from '../footer/footer.module';
-import { createTranslateLoader } from '../lib/translation.factory';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 
@@ -125,24 +122,12 @@ library.add(faCopy);
 
 @NgModule({
   imports: [
-    FormsModule, CommonModule, FooterModule, HttpClientModule, FontAwesomeModule, TranslateModule.forChild({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [HttpClient],
-      },
-      compiler: {
-        provide: TranslateCompiler,
-        useClass: TranslateMessageFormatCompiler,
-      },
-    }), NgbModule, RouterModule, AngularSvgIconModule,
+    FormsModule, CommonModule, HttpClientModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule,
   ],
   exports: [
-    FormsModule,
-    CommonModule, FooterModule,
+    FormsModule, CommonModule,
     HttpClientModule,
     FontAwesomeModule,
-    TranslatePipe,
     TranslateModule,
     NgbModule,
     RouterModule,

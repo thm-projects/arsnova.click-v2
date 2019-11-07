@@ -14,10 +14,4 @@ import { UnusedKeyFilterPipe } from './unused-key-filter/unused-key-filter.pipe'
   declarations: [JustAFewPipe, FilterKeysPipe, SearchFilterPipe, SortPipe, UnusedKeyFilterPipe, QuizAdminFilterPipe, GenericFilterPipe],
 })
 export class PipesModule {
-  public static forRoot(): object {
-    return {
-      ngModule: PipesModule,
-      providers: [],
-    };
-  }
 }

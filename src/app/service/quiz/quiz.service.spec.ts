@@ -56,7 +56,7 @@ describe('QuizService', () => {
 
   xit('#updateFooterElementsState', async(inject([QuizService, FooterBarService], (service: QuizService, footerBarService: FooterBarService) => {
     const defaultNickConfig = DefaultSettings.defaultQuizSettings.sessionConfig.nicks;
-    service.updateFooterElementsState();
+    footerBarService['updateFooterElementsState']();
 
     expect(footerBarService.footerElemEnableCasLogin.isActive).toEqual(defaultNickConfig.restrictToCasLogin);
     expect(footerBarService.footerElemBlockRudeNicknames.isActive).toEqual(defaultNickConfig.blockIllegalNicks);

@@ -65,6 +65,7 @@ export class AttendeeService {
   }
 
   public addMember(attendee: IMemberSerialized): void {
+    console.log('AttendeeService: Adding member', attendee);
     if (!this.getMember(attendee.name)) {
       this._attendees.push(new Attendee(attendee));
     }

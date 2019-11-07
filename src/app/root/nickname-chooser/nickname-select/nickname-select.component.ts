@@ -73,7 +73,10 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         ticket: this.userService.casTicket,
       })).subscribe((data: IMessage) => {
         if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
-          resolve();
+          this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+            this.attendeeService.addMember(payload.member);
+            resolve();
+          }));
         } else {
           reject();
         }
@@ -104,8 +107,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
     }
 
-    this.handleMessages();
-
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.memberApiService.getAvailableNames(this.quizService.quiz.name).subscribe(data => {
         this._nicks = this._nicks.concat(data);
@@ -116,11 +117,5 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.footerBarService.footerElemBack.restoreClickCallback();
     this._messageSubscriptions.forEach(sub => this.messageQueue.unsubscribe(sub));
-  }
-
-  private handleMessages(): void {
-    this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
-      this.attendeeService.addMember(payload.member);
-    }));
   }
 }

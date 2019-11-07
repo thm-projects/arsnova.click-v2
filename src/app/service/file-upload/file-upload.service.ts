@@ -52,7 +52,7 @@ export class FileUploadService {
       if (data.payload.quizData.length) {
         data.payload.quizData.forEach(quizData => {
           const quiz = new QuizEntity(quizData.quiz);
-          this.storageService.db.Quiz.add(quiz, quiz.name);
+          this.storageService.db.Quiz.put(quiz);
           this.quizApiService.putSavedQuiz(quiz).subscribe();
         });
 

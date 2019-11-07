@@ -3,6 +3,7 @@ import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
@@ -10,7 +11,7 @@ import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
 import { BeforeInstallPromptEvent } from '../../lib/BeforeInstallPrompt';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { DeprecatedDb, DeprecatedKeys } from '../../lib/enums/enums';
+import { DbState, DeprecatedDb, DeprecatedKeys } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
 import { INamedType } from '../../lib/interfaces/interfaces';
@@ -20,6 +21,7 @@ import { ConnectionService } from '../../service/connection/connection.service';
 import { I18nService } from '../../service/i18n/i18n.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { UserService } from '../../service/user/user.service';
@@ -47,7 +49,10 @@ export class RootComponent implements OnInit, AfterViewInit {
     private themeService: ThemesService,
     private updateCheckService: UpdateCheckService,
     private rxStompService: RxStompService,
-    private quizService: QuizService, private connectionService: ConnectionService, private messageQueue: SimpleMQ,
+    private storageService: StorageService,
+    private quizService: QuizService,
+    private connectionService: ConnectionService,
+    private messageQueue: SimpleMQ,
   ) {
     this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe(themeName => {
       if (String(themeName) === 'default') {
@@ -88,6 +93,10 @@ export class RootComponent implements OnInit, AfterViewInit {
       }
     });
 
+    this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy), takeUntil(this._destroy)).subscribe(() => {
+      this.themeService.updateCurrentlyUsedTheme();
+    });
+
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
       if (this._stompSubscription) {
         this._stompSubscription.unsubscribe();
@@ -100,29 +109,28 @@ export class RootComponent implements OnInit, AfterViewInit {
       this._stompSubscription = this.rxStompService.watch(`/exchange/quiz_${encodeURI(quiz.name)}`).pipe(takeUntil(this._destroy))
       .subscribe(message => {
         console.log('Message in quiz channel received', message);
-        try {
-          const parsedMessage = JSON.parse(message.body);
-          if (parsedMessage.status !== StatusProtocol.Success || !parsedMessage.step) {
-            this.messageQueue.publish('error', parsedMessage);
-          } else {
-            if (typeof parsedMessage.payload === 'undefined') {
-              parsedMessage.payload = {};
-            }
-            this.messageQueue.publish(parsedMessage.step, parsedMessage.payload);
-          }
-        } catch (e) {
-          console.error('Invalid message in quiz channel', e.message);
-        }
+        this.onReceivedMessage(message);
       });
     });
   }
 
-  public onSendMessage(): void {
-    const message = `Message generated at ${new Date}`;
-    this.rxStompService.publish({
-      destination: '/topic/demo',
-      body: message,
-    });
+  public onReceivedMessage(message: IMessage): void {
+    try {
+      const parsedMessage = JSON.parse(message.body);
+      let publishSuccess;
+      if (parsedMessage.status !== StatusProtocol.Success || !parsedMessage.step) {
+        publishSuccess = this.messageQueue.publish('error', parsedMessage, false);
+      } else {
+        if (typeof parsedMessage.payload === 'undefined') {
+          parsedMessage.payload = {};
+        }
+        console.log('Publishing message with key', parsedMessage.step, parsedMessage.payload);
+        publishSuccess = this.messageQueue.publish(parsedMessage.step, parsedMessage.payload, false);
+      }
+      console.log('Published message in quiz channel successfully', publishSuccess);
+    } catch (e) {
+      console.error('Invalid message in quiz channel', e.message);
+    }
   }
 
   public ngAfterViewInit(): void {
@@ -134,11 +142,8 @@ export class RootComponent implements OnInit, AfterViewInit {
       event.prompt();
     });
 
-    this.router.events.pipe(takeUntil(this._destroy)).subscribe((nav: any) => {
-      if (nav instanceof NavigationEnd) {
-
-        this.isInQuizManager = [QuizManagerComponent.TYPE].includes(this.fetchChildComponent(this.activatedRoute).TYPE);
-      }
+    this.router.events.pipe(takeUntil(this._destroy), filter(nav => nav instanceof NavigationEnd)).subscribe(() => {
+      this.isInQuizManager = [QuizManagerComponent.TYPE].includes(this.fetchChildComponent(this.activatedRoute).TYPE);
     });
   }
 

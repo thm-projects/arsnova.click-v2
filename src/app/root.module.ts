@@ -6,13 +6,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateCompiler, TranslateLoader, TranslateModule, TranslatePipe } from '@ngx-translate/core';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { Angulartics2Module } from 'angulartics2';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { environment } from '../environments/environment';
+import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
 import { jwtOptionsFactory } from './lib/jwt.factory';
 import { RoutePreloader } from './lib/route-preloader';
@@ -126,7 +127,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes, {
       preloadingStrategy: RoutePreloader,
       enableTracing: false, // <-- debugging purposes only
-    }),
+    }), FooterModule,
     SharedModule,
     Angulartics2Module.forRoot(),
     JwtModule.forRoot({
@@ -156,7 +157,6 @@ const appRoutes: Routes = [
     FooterBarService,
     ConnectionService,
     QuizService,
-    TranslateModule,
     CasLoginService,
     FileUploadService,
     SettingsService,
@@ -169,8 +169,6 @@ const appRoutes: Routes = [
     ArsnovaClickAngulartics2Piwik,
     TrackingService, UpdateCheckService, UserRoleGuardService, LanguageLoaderService, ProjectLoaderService, ModalOrganizerService,
   ],
-  exports: [TranslatePipe, TranslateModule],
-  entryComponents: [],
   bootstrap: [RootComponent],
 })
 export class RootModule {

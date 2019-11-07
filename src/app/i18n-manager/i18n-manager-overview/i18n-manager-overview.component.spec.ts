@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -38,6 +39,7 @@ describe('I18nManagerOverviewComponent', () => {
         }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, HttpClientModule, InfiniteScrollModule,
       ],
       providers: [
+        RxStompService,
         {
           provide: TranslateService,
           useClass: TranslateServiceMock,

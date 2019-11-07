@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
+import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
 import { ConnectionMockService } from '../../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../../service/connection/connection.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
@@ -107,9 +108,9 @@ describe('AnsweroptionsFreetextComponent', () => {
   });
 
   it('should set a validation configuration of the question', () => {
-    const initValue = (component.question.answerOptionList[0]).getConfig()[0];
+    const initValue = (component.question.answerOptionList[0] as FreeTextAnswerEntity).getConfig()[0];
     component.setConfig(initValue.id, !initValue.enabled);
-    const newValue = (component.question.answerOptionList[0]).getConfig()[0];
+    const newValue = (component.question.answerOptionList[0] as FreeTextAnswerEntity).getConfig()[0];
     expect(newValue.id).toEqual(initValue.id);
     expect(newValue.enabled).not.toEqual(initValue.enabled);
   });
