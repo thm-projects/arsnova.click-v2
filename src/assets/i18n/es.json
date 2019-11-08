@@ -166,8 +166,6 @@
           "connected": "Connectado",
           "disconnected": "Desconnectado"
         },
-        "connected": "Connectado",
-        "disconnected": "Desconnectado",
         "show_result": "Detalles",
         "pending": "Aquilatar …",
         "finished_with_errors": "Terminado con errores",

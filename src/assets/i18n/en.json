@@ -182,8 +182,6 @@
           "connected": "Connected",
           "not_connected": "Disconnected"
         },
-        "connected": "Connected",
-        "not_connected": "Disconnected",
         "show_result": "Details",
         "pending": "Pending...",
         "finished_with_errors": "Finished with errors",

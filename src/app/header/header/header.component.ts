@@ -79,7 +79,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const cssClass = this.connectionService.lowSpeed || //
                      this.connectionService.mediumSpeed || //
                      !this.indexedDbAvailable ? 'fill-danger' : //
-                     !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? 'fill-grey' : //
+                     (!this.connectionService.serverAvailable || !this.connectionService.websocketAvailable) ? 'fill-grey' : //
                      'fill-success';
 
     this.connectionIndicator.nativeElement.classList.remove(...['fill-danger', 'fill-grey', 'fill-success']);
@@ -102,7 +102,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       this.generateConnectionQualityColor();
 
-      if (this.connectionService.serverAvailable || this.headerLabelService.isUnavailableModalOpen) {
+      if (this.connectionService.websocketAvailable || this.headerLabelService.isUnavailableModalOpen) {
         this.connectionIndicatorPopover.close();
       } else {
         this.connectionIndicatorPopover.open();

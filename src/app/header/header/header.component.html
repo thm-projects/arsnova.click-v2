@@ -14,12 +14,11 @@
            class="text-center header-label"></div>
     </div>
   </div>
-  <div [ngbTooltip]="(connectionService.serverAvailable ? 'region.header.connection_status.connected' : 'region.header.connection_status.disconnected') | translate"
-       class="text-right d-flex align-items-center cursor-pointer p-0">
+  <div class="text-right d-flex align-items-center cursor-pointer p-0">
     <svg #connectionIndicator
          #connectionIndicatorPopover="ngbPopover"
          (click)="openConnectionQualityModal(connectionQualityModal)"
-         [ngbPopover]="(connectionService.serverAvailable ? 'region.header.connection_status.connected' : 'region.header.connection_status.disconnected') | translate"
+         [ngbPopover]="'region.header.connection_status.disconnected' | translate"
          height="50px"
          id="connection-indicator"
          triggers="manual"

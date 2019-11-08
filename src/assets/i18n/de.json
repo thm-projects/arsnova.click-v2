@@ -166,8 +166,6 @@
           "connected": "Verbunden",
           "not_connected": "Nicht verbunden"
         },
-        "connected": "Verbunden",
-        "not_connected": "Nicht verbunden",
         "estimated-storage-quota": {
           "label": "Geschätzter Speicherplatz",
           "not_available": "Nicht verfügbar - Aktualisierungen müssen manuell gesucht werden!",

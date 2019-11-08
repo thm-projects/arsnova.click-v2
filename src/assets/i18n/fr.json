@@ -165,8 +165,6 @@
           "connected": "Connecté",
           "disconnected": "déconnecté"
         },
-        "connected": "Connecté",
-        "disconnected": "déconnecté",
         "show_result": "Details",
         "pending": "en cours…",
         "finished_with_errors": "Avec erreurs",
