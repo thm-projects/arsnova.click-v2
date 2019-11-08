@@ -1,5 +1,6 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { themes } from '../../lib/available-themes';
 import { DbState, StorageKey } from '../../lib/enums/enums';
@@ -44,10 +45,8 @@ export class ThemesService {
   ) {
     this._defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? QuizTheme.Blackbeauty : environment.availableQuizThemes[0];
 
-    this.storageService.stateNotifier.subscribe(val => {
-      if (val === DbState.Initialized) {
-        this.initTheme();
-      }
+    this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized)).subscribe(() => {
+      this.initTheme();
     });
   }
 

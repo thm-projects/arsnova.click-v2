@@ -212,12 +212,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public selectQuizByList(quizName: string): void {
     this.hideQuiznameDatalist();
-    this.selectQuizByName(quizName);
+    this.enteredSessionName = quizName;
+    this.selectQuizByName(this.enteredSessionName.trim());
   }
 
-  public parseQuiznameInput(event: any): void {
+  public parseQuiznameInput(): void {
     this.isQueryingQuizState = true;
-    this.selectQuizByName(event.target.value.trim());
+    this.selectQuizByName(this.enteredSessionName.trim());
   }
 
   public setPassword(event: Event): void {
@@ -403,7 +404,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private selectQuizByName(quizName: string): void {
-    this.enteredSessionName = quizName;
     this.canJoinQuiz = false;
     this.canAddQuiz = false;
     this.canEditQuiz = false;
@@ -416,7 +416,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.ownQuizzes.find(quiz => quiz === quizName.toLowerCase())) {
+    if (this.ownQuizzes.find(quiz => quiz === quizName)) {
       this.selectQuizAsExisting(quizName);
     } else if (quizName.toLowerCase() === 'demo quiz') {
       this.selectQuizAsDemoQuiz();

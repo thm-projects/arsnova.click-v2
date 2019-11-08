@@ -24,7 +24,7 @@
         </span>
         <input #enteredSessionNameInput
                (focus)="showQuiznameDatalist()"
-               (input)="parseQuiznameInput($event)"
+               (ngModelChange)="parseQuiznameInput()"
                [(ngModel)]="enteredSessionName"
                [class.rounded-top]="showJoinableQuizzes && isShowingQuiznameDatalist"
                [class.rounded]="!showJoinableQuizzes || !isShowingQuiznameDatalist"
@@ -77,7 +77,7 @@
     </div>
     <div class="row no-gutters">
       <div [class.col-12]="!canModifyQuiz"
-           [class.pr-1]="!canModifyQuiz"
+           [class.pr-1]="canModifyQuiz"
            [class.col-6]="canModifyQuiz"
            class="col-join-session pl-0">
 
@@ -108,8 +108,7 @@
                 [class.btn-outline-secondary]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
                 [class.btn-secondary]="canStartQuiz && (!passwordRequired || serverPassword.length)"
                 [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
-                class="btn btn-success btn-block px-1"
-                id="startSession">
+                class="btn btn-success btn-block px-1">
           <fa-icon *ngIf="isPerformingClick('startSession')"
                    [icon]="'spinner'"
                    [spin]="true"></fa-icon>

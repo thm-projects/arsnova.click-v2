@@ -25,6 +25,7 @@ export class AppDb extends Dexie {
 
     this.Config.get(StorageKey.PrivateKey).then(privateKey => {
       if (privateKey) {
+        sessionStorage.setItem(StorageKey.PrivateKey, privateKey.value);
         this.initialized.next();
         return;
       }

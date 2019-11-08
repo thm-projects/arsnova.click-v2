@@ -19,7 +19,6 @@ export class StorageService {
 
   public switchDb(username: string): Observable<void> {
     if (this._db && this._db.name === username) {
-      this.stateNotifier.next(DbState.Initialized);
       return this._db.initialized;
     }
 
