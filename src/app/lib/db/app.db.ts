@@ -14,6 +14,8 @@ export class AppDb extends Dexie {
     this.version(1).stores({
       [DbTable.Config]: 'type',
       [DbTable.Quiz]: 'name',
+    }).upgrade(async trans => {
+      return trans.db.delete();
     });
 
     this.version(0.1).stores({
