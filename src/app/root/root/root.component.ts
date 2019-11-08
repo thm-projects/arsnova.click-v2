@@ -68,11 +68,6 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.sharedService.isLoadingEmitter.pipe(takeUntil(this._destroy)).subscribe(isLoading => {
       setTimeout(() => this.isLoading = isLoading);
     });
-
-    if (environment.production) {
-      console.log = () => {};
-      console.warn = () => {};
-    }
   }
 
   public ngOnInit(): void {

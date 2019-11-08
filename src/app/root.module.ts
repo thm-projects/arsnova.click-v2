@@ -172,5 +172,17 @@ const appRoutes: Routes = [
   bootstrap: [RootComponent],
 })
 export class RootModule {
-  constructor() {}
+  constructor() {
+    if (environment.production) {
+      const console: any = {};
+      console.log = function (): void {};
+      // tslint:disable-next-line:no-console
+      console.info = function (): void {};
+      // tslint:disable-next-line:no-console
+      console.trace = function (): void {};
+      console.warn = function (): void {};
+      console.error = window.console.error;
+      (window as any).console = console;
+    }
+  }
 }
