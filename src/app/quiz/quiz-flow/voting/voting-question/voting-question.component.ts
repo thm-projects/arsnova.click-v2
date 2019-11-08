@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -22,6 +22,7 @@ export class VotingQuestionComponent {
   constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) { }
 
   public sanitizeHTML(value: string): string {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+    // sanitizer.bypassSecurityTrustHtml is required for highslide
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`) as string;
   }
 }
