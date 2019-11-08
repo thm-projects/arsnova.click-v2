@@ -10,7 +10,7 @@ export class AppDb extends Dexie {
 
   constructor(dbName: DbName) {
     super(dbName);
-    this.version(0.2).stores({
+    this.version(1.2).stores({
       [DbTable.Config]: 'type',
       [DbTable.Quiz]: 'name',
     });
