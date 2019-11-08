@@ -77,9 +77,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public generateConnectionQualityColor(): void {
     const cssClass = this.connectionService.lowSpeed || //
+                     this.connectionService.mediumSpeed || //
                      !this.indexedDbAvailable ? 'fill-danger' : //
-                     this.connectionService.mediumSpeed ? 'fill-danger' : //
-                     !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? 'fill-grey' : 'fill-success';
+                     !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable ? 'fill-grey' : //
+                     'fill-success';
 
     this.connectionIndicator.nativeElement.classList.remove(...['fill-danger', 'fill-grey', 'fill-success']);
     this.connectionIndicator.nativeElement.classList.add(cssClass);
@@ -168,6 +169,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     } else {
       location.reload(true);
     }
+  }
+
+  public round(number: number): number {
+    return Math.round(number);
   }
 
   private sanitizeStyle(value: string): SafeStyle {
