@@ -23,4 +23,6 @@ export interface IEnvironment {
   loginMechanism: Array<LoginMechanism>;
   persistQuizzes: boolean;
   availableQuizThemes: Array<QuizTheme>;
+  defaultTheme: QuizTheme;
+  darkModeCheckEnabled: boolean;
 }

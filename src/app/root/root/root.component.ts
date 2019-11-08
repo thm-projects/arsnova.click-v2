@@ -56,7 +56,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   ) {
     this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe(themeName => {
       if (String(themeName) === 'default') {
-        themeName = environment.availableQuizThemes[0];
+        themeName = environment.defaultTheme;
       }
       this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
         this.initializeCookieConsent(themeName);

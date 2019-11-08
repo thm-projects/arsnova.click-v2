@@ -54,7 +54,7 @@ export const DefaultSettings = {
         restrictToCasLogin: false,
         selectedNicks: [],
       },
-      theme: environment.availableQuizThemes[0],
+      theme: environment.defaultTheme,
       readingConfirmationEnabled: true,
       showResponseProgress: true,
       confidenceSliderEnabled: true,

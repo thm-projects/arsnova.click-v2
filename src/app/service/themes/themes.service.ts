@@ -20,9 +20,6 @@ export class ThemesService {
   public readonly themeChanged: EventEmitter<QuizTheme> = new EventEmitter<QuizTheme>();
 
   private _currentTheme: QuizTheme;
-  get themes(): Array<ITheme> {
-    return this._themes;
-  }
 
   get currentTheme(): QuizTheme {
     return this._currentTheme;
@@ -33,6 +30,11 @@ export class ThemesService {
   }
 
   private _themes: Array<ITheme> = environment.availableQuizThemes.map(t => themes.find(theme => theme.id === t));
+
+  get themes(): Array<ITheme> {
+    return this._themes;
+  }
+
   private readonly _defaultTheme: QuizTheme;
 
   constructor(
@@ -43,7 +45,9 @@ export class ThemesService {
     private storageService: StorageService,
     private i18nService: I18nService,
   ) {
-    this._defaultTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? QuizTheme.Blackbeauty : environment.availableQuizThemes[0];
+    this._defaultTheme = environment.darkModeCheckEnabled && //
+                         window.matchMedia('(prefers-color-scheme: dark)').matches ? //
+                         QuizTheme.Blackbeauty : environment.defaultTheme;
 
     this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized)).subscribe(() => {
       this.initTheme();
@@ -70,7 +74,7 @@ export class ThemesService {
     const themeConfig = await Promise.all(themePromises);
     let usedTheme = themeConfig[0] ? themeConfig[0].value : themeConfig[1] ? themeConfig[1].value : themeConfig[2];
     if (usedTheme === 'default') {
-      usedTheme = environment.availableQuizThemes[0];
+      usedTheme = environment.defaultTheme;
     }
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
 
