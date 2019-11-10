@@ -173,10 +173,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           });
         }
       } else {
-        await this.storageService.db.Config.put({
+        this.storageService.db.Config.put({
           value: params.get('themeId'),
           type: StorageKey.DefaultTheme,
-        });
+        }).then(() => this.themesService.updateCurrentlyUsedTheme());
         this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
       }
     });
