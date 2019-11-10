@@ -6,7 +6,7 @@ import { INamedType } from '../../lib/interfaces/interfaces';
 
 declare var _paq: any;
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ArsnovaClickAngulartics2Piwik extends Angulartics2Piwik {
 
   constructor(private _angulartics2: Angulartics2, private route: ActivatedRoute) {

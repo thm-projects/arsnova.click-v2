@@ -1,7 +1,7 @@
 import { isPlatformBrowser, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { ErrorHandler, Inject, Injectable, Injector, PLATFORM_ID } from '@angular/core';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GlobalErrorHandler implements ErrorHandler {
   private _errorMap = [];
 
