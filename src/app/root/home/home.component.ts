@@ -132,13 +132,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.userService.loginNotifier.pipe(takeUntil(this._destroy)).subscribe(isLoggedIn => {
+    this.userService.loginNotifier.pipe(takeUntil(this._destroy), distinctUntilChanged()).subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
       this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin));
       this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
     });
 
-    this.storageService.stateNotifier.pipe(takeUntil(this._destroy), filter(state => state === DbState.Initialized)).subscribe(state => {
+    const params$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
+    const state$ = this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy), distinctUntilChanged(), takeUntil(this._destroy));
+
+    state$.pipe(filter(state => state === DbState.Initialized)).subscribe(() => {
       this.cleanUpSessionStorage();
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
@@ -158,14 +161,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.ownPublicQuizAmount = val;
         });
       }
-
     });
 
-    const params$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
-
-    this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy),
-      distinctUntilChanged(), takeUntil(this._destroy), switchMapTo(params$)).subscribe(async params => {
-
+    state$.pipe(switchMapTo(params$)).subscribe(async params => {
       if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
         const theme = this.storageService.db.Config.get(StorageKey.DefaultTheme);
         if (!theme) {
