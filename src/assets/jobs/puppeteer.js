@@ -41,7 +41,7 @@ async function asyncForEach(array, callback) {
 
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
-    await page.goto(url, {waitUntil: 'networkidle2'});
+    await page.goto(url, {waitUntil: 'networkidle0'});
     console.log('navigated to', url);
 
     const urlSeparated = url.split('/');
