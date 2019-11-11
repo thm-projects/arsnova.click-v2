@@ -1,4 +1,82 @@
 {
+  "Material": {
+    "quizNameRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#00796B"
+    },
+    "exportedAtRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#00796B"
+    },
+    "statisticsRowStyle": {
+      "fg": "#000000",
+      "bg": "#B2DFDB"
+    },
+    "attendeeHeaderGroupRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#009688"
+    },
+    "attendeeHeaderRowStyle": {
+      "fg": "#000000",
+      "bg": "#FF9800"
+    },
+    "attendeeEntryRowStyle": {
+      "fg": "#000000",
+      "bg": "#B2DFDB"
+    }
+  },
+  "Material-blue": {
+    "quizNameRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#303F9F"
+    },
+    "exportedAtRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#303F9F"
+    },
+    "statisticsRowStyle": {
+      "fg": "#000000",
+      "bg": "#C5CAE9"
+    },
+    "attendeeHeaderGroupRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#3F51B5"
+    },
+    "attendeeHeaderRowStyle": {
+      "fg": "#000000",
+      "bg": "#4CAF50"
+    },
+    "attendeeEntryRowStyle": {
+      "fg": "#000000",
+      "bg": "#C5CAE9"
+    }
+  },
+  "Material-hope": {
+    "quizNameRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#689F38"
+    },
+    "exportedAtRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#689F38"
+    },
+    "statisticsRowStyle": {
+      "fg": "#000000",
+      "bg": "#AED581"
+    },
+    "attendeeHeaderGroupRowStyle": {
+      "fg": "#FFFFFF",
+      "bg": "#8BC34A"
+    },
+    "attendeeHeaderRowStyle": {
+      "fg": "#000000",
+      "bg": "#FFC400"
+    },
+    "attendeeEntryRowStyle": {
+      "fg": "#000000",
+      "bg": "#AED581"
+    }
+  },
   "arsnova-dot-click-contrast": {
     "quizNameRowStyle": {
       "fg": "#FFFFFF",
@@ -127,84 +205,6 @@
     "attendeeEntryRowStyle": {
       "fg": "#000000",
       "bg": "#cfd8dc"
-    }
-  },
-  "Material": {
-    "quizNameRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#00796B"
-    },
-    "exportedAtRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#00796B"
-    },
-    "statisticsRowStyle": {
-      "fg": "#000000",
-      "bg": "#B2DFDB"
-    },
-    "attendeeHeaderGroupRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#009688"
-    },
-    "attendeeHeaderRowStyle": {
-      "fg": "#000000",
-      "bg": "#FF9800"
-    },
-    "attendeeEntryRowStyle": {
-      "fg": "#000000",
-      "bg": "#B2DFDB"
-    }
-  },
-  "Material-blue": {
-    "quizNameRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#303F9F"
-    },
-    "exportedAtRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#303F9F"
-    },
-    "statisticsRowStyle": {
-      "fg": "#000000",
-      "bg": "#C5CAE9"
-    },
-    "attendeeHeaderGroupRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#3F51B5"
-    },
-    "attendeeHeaderRowStyle": {
-      "fg": "#000000",
-      "bg": "#4CAF50"
-    },
-    "attendeeEntryRowStyle": {
-      "fg": "#000000",
-      "bg": "#C5CAE9"
-    }
-  },
-  "Material-hope": {
-    "quizNameRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#689F38"
-    },
-    "exportedAtRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#689F38"
-    },
-    "statisticsRowStyle": {
-      "fg": "#000000",
-      "bg": "#AED581"
-    },
-    "attendeeHeaderGroupRowStyle": {
-      "fg": "#FFFFFF",
-      "bg": "#8BC34A"
-    },
-    "attendeeHeaderRowStyle": {
-      "fg": "#000000",
-      "bg": "#FFC400"
-    },
-    "attendeeEntryRowStyle": {
-      "fg": "#000000",
-      "bg": "#AED581"
     }
   },
   "spiritual-purple": {
