@@ -65,7 +65,7 @@ async function asyncForEach(array, callback) {
       .toBuffer();
 
       const minifiedBuffer = await imagemin.buffer(buffer, {
-        plugins: [imageminPngquant({quality: '65-80'})]
+        plugins: [imageminPngquant({quality: [0.65, 0.8]})]
       });
 
       fs.writeFileSync(targetLogo, minifiedBuffer, 'binary');
