@@ -3,8 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faAlignLeft,
   faAppleAlt,
@@ -66,60 +65,6 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 
-library.add(faTimes);
-library.add(faSpinner);
-library.add(faInfoCircle);
-library.add(faGlobe);
-library.add(faAppleAlt);
-library.add(faArrowsAlt);
-library.add(faWrench);
-library.add(faUpload);
-library.add(faLanguage);
-library.add(faUnlock);
-library.add(faSignOutAlt);
-library.add(faSignInAlt);
-library.add(faHome);
-library.add(faExclamationTriangle);
-library.add(faPaperPlane);
-library.add(faEdit);
-library.add(faDownload);
-library.add(faTrash);
-library.add(faCaretLeft);
-library.add(faCaretRight);
-library.add(faCaretSquareDown);
-library.add(faCaretUp);
-library.add(faArrowDown);
-library.add(faArrowUp);
-library.add(faUsers);
-library.add(faMusic);
-library.add(faFlag);
-library.add(faUndo);
-library.add(faBold);
-library.add(faHeading);
-library.add(faListUl);
-library.add(faCode);
-library.add(faImage);
-library.add(faHourglass);
-library.add(faLock);
-library.add(faPlay);
-library.add(faPause);
-library.add(faStop);
-library.add(faThumbsUp);
-library.add(faEye);
-library.add(faQrcode);
-library.add(faAlignLeft);
-library.add(faSlidersH);
-library.add(faQuestion);
-library.add(faCaretSquareUp);
-library.add(faCheck);
-library.add(faUnderline);
-library.add(faStrikethrough);
-library.add(faItalic);
-library.add(faTrophy);
-library.add(faBan);
-library.add(faSave);
-library.add(faCopy);
-
 @NgModule({
   imports: [
     FormsModule, CommonModule, HttpClientModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule,
@@ -140,5 +85,59 @@ library.add(faCopy);
   bootstrap: [],
 })
 export class SharedModule {
-  constructor() {}
+  constructor(library: FaIconLibrary) {
+    library.addIcons(faTimes);
+    library.addIcons(faSpinner);
+    library.addIcons(faInfoCircle);
+    library.addIcons(faGlobe);
+    library.addIcons(faAppleAlt);
+    library.addIcons(faArrowsAlt);
+    library.addIcons(faWrench);
+    library.addIcons(faUpload);
+    library.addIcons(faLanguage);
+    library.addIcons(faUnlock);
+    library.addIcons(faSignOutAlt);
+    library.addIcons(faSignInAlt);
+    library.addIcons(faHome);
+    library.addIcons(faExclamationTriangle);
+    library.addIcons(faPaperPlane);
+    library.addIcons(faEdit);
+    library.addIcons(faDownload);
+    library.addIcons(faTrash);
+    library.addIcons(faCaretLeft);
+    library.addIcons(faCaretRight);
+    library.addIcons(faCaretSquareDown);
+    library.addIcons(faCaretUp);
+    library.addIcons(faArrowDown);
+    library.addIcons(faArrowUp);
+    library.addIcons(faUsers);
+    library.addIcons(faMusic);
+    library.addIcons(faFlag);
+    library.addIcons(faUndo);
+    library.addIcons(faBold);
+    library.addIcons(faHeading);
+    library.addIcons(faListUl);
+    library.addIcons(faCode);
+    library.addIcons(faImage);
+    library.addIcons(faHourglass);
+    library.addIcons(faLock);
+    library.addIcons(faPlay);
+    library.addIcons(faPause);
+    library.addIcons(faStop);
+    library.addIcons(faThumbsUp);
+    library.addIcons(faEye);
+    library.addIcons(faQrcode);
+    library.addIcons(faAlignLeft);
+    library.addIcons(faSlidersH);
+    library.addIcons(faQuestion);
+    library.addIcons(faCaretSquareUp);
+    library.addIcons(faCheck);
+    library.addIcons(faUnderline);
+    library.addIcons(faStrikethrough);
+    library.addIcons(faItalic);
+    library.addIcons(faTrophy);
+    library.addIcons(faBan);
+    library.addIcons(faSave);
+    library.addIcons(faCopy);
+  }
 }

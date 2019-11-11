@@ -1,17 +1,17 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { TranslateService } from '@ngx-translate/core';
 import { QuestiontextComponent } from '../../quiz/quiz-manager/details/questiontext/questiontext.component';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
 class MarkdownBarElement {
-  private _iconClass: IconProp;
+  private _iconClass: IconName;
 
-  get iconClass(): IconProp {
+  get iconClass(): IconName {
     return this._iconClass;
   }
 
-  set iconClass(value: IconProp) {
+  set iconClass(value: IconName) {
     this._iconClass = value;
   }
 
@@ -31,13 +31,13 @@ class MarkdownBarElement {
     return this._titleRef;
   }
 
-  private _iconClassToggled: IconProp;
+  private _iconClassToggled: IconName;
 
-  get iconClassToggled(): IconProp {
+  get iconClassToggled(): IconName {
     return this._iconClassToggled;
   }
 
-  set iconClassToggled(value: IconProp) {
+  set iconClassToggled(value: IconName) {
     this._iconClassToggled = value;
   }
 

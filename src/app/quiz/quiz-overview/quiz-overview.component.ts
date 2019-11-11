@@ -2,7 +2,6 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
@@ -146,28 +145,24 @@ export class QuizOverviewComponent implements OnInit {
     });
   }
 
-  public deleteQuiz(index: number): Observable<void> {
-    return new Observable(subscriber => {
-      this.trackingService.trackClickEvent({
-        action: QuizOverviewComponent.TYPE,
-        label: `delete-quiz`,
-      });
+  public deleteQuiz(index: number): void {
+    this.trackingService.trackClickEvent({
+      action: QuizOverviewComponent.TYPE,
+      label: `delete-quiz`,
+    });
 
-      if (isPlatformServer(this.platformId)) {
-        return;
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
+    this.quizApiService.deleteQuiz(this.sessions[index]).subscribe((response: IMessage) => {
+      if (response.status !== StatusProtocol.Success) {
+        console.log('QuizOverviewComponent: DeleteQuiz failed', response);
+      } else {
+        const sessionName = this.sessions[index].name;
+        this.sessions.splice(index, 1);
+        this.storageService.db.Quiz.delete(sessionName);
       }
-
-      this.quizApiService.deleteQuiz(this.sessions[index]).subscribe((response: IMessage) => {
-        if (response.status !== StatusProtocol.Success) {
-          console.log('QuizOverviewComponent: DeleteQuiz failed', response);
-        } else {
-          const sessionName = this.sessions[index].name;
-          this.sessions.splice(index, 1);
-          this.storageService.db.Quiz.delete(sessionName).then(() => {
-            subscriber.next();
-          });
-        }
-      });
     });
   }
 

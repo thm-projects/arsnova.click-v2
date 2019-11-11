@@ -1,8 +1,8 @@
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 export declare interface IFooterBarElement {
   id: string;
-  iconClass: IconProp;
+  iconClass: IconName;
   textClass: string;
   textName: string;
   selectable: boolean;

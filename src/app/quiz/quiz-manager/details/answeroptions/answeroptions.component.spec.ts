@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
@@ -45,7 +46,14 @@ describe('AnsweroptionsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, RouterTestingModule, NgbModalModule, AngularSvgIconModule, NgbPopoverModule, FontAwesomeModule, JwtModule.forRoot({
+        HttpClientTestingModule,
+        RouterTestingModule,
+        FormsModule,
+        NgbModalModule,
+        AngularSvgIconModule,
+        NgbPopoverModule,
+        FontAwesomeModule,
+        JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -54,8 +62,7 @@ describe('AnsweroptionsComponent', () => {
         }),
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -93,8 +100,7 @@ describe('AnsweroptionsComponent', () => {
         LivePreviewComponent,
         AnsweroptionsDefaultComponent,
         AnsweroptionsFreetextComponent,
-        AnsweroptionsRangedComponent,
-        AnsweroptionsComponent, TranslatePipeMock,
+        AnsweroptionsRangedComponent, AnsweroptionsComponent, TranslatePipeMock,
       ],
     }).compileComponents();
   }));

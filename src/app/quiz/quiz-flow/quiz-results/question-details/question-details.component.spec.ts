@@ -1,4 +1,4 @@
-import { PLATFORM_ID, SecurityContext } from '@angular/core';
+import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
@@ -92,7 +92,7 @@ describe('QuestionDetailsComponent', () => {
   it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>TestMarkup</span></div>';
 
-    spyOn(sanitizer, 'sanitize').and.callFake((ctx: SecurityContext, value: string) => value as string);
+    spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake((value: string) => value as string);
     component.sanitizeHTML(markup);
     expect(sanitizer.sanitize).toHaveBeenCalled();
   }));
