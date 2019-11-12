@@ -105,7 +105,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe(value => {
-      this.dataSource = Array.isArray(value) ? value : [this.markdownService.parseGithubFlavoredMarkdown(value)];
+      this.dataSource = Array.isArray(value) ? value : [value];
     });
     const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(),
       takeUntil(this._destroy));
