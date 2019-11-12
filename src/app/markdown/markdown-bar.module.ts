@@ -9,5 +9,5 @@ import { MarkdownBarComponent } from './markdown-bar/markdown-bar.component';
   declarations: [MarkdownBarComponent],
   exports: [MarkdownBarComponent],
 })
-export class MarkdownModule {
+export class MarkdownBarModule {
 }

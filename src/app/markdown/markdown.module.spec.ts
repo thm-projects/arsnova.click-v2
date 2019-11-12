@@ -1,10 +1,10 @@
-import { MarkdownModule } from './markdown.module';
+import { MarkdownBarModule } from './markdown-bar.module';
 
 describe('MarkdownModule', () => {
-  let markdownModule: MarkdownModule;
+  let markdownModule: MarkdownBarModule;
 
   beforeEach(() => {
-    markdownModule = new MarkdownModule();
+    markdownModule = new MarkdownBarModule();
   });
 
   it('should create an instance', () => {

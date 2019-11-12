@@ -10,6 +10,7 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { Angulartics2Module } from 'angulartics2';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { environment } from '../environments/environment';
@@ -28,6 +29,7 @@ import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.com
 import rxStompConfig from './rx-stomp.config';
 import { AttendeeService } from './service/attendee/attendee.service';
 import { ConnectionService } from './service/connection/connection.service';
+import { CustomMarkdownService } from './service/custom-markdown/custom-markdown.service';
 import { FileUploadService } from './service/file-upload/file-upload.service';
 import { FooterBarService } from './service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from './service/header-label/header-label.service';
@@ -102,6 +104,23 @@ const appRoutes: Routes = [
   },
 ];
 
+// function that returns `MarkedOptions` with renderer override
+export function markedOptionsFactory(): MarkedOptions {
+  const renderer = new MarkedRenderer();
+  renderer.paragraph = (text) => `${text}\n`;
+
+  return {
+    renderer: renderer,
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+  };
+}
+
 @NgModule({
   declarations: [
     HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent,
@@ -136,21 +155,30 @@ const appRoutes: Routes = [
         useFactory: jwtOptionsFactory,
         deps: [PLATFORM_ID],
       },
-    }), PipesModule, HeaderModule,
+    }), PipesModule, HeaderModule, MarkdownModule.forRoot({
+      markedOptions: {
+        provide: MarkedOptions,
+        useFactory: (markedOptionsFactory),
+      },
+    }),
   ],
   providers: [
     /* {
      provide: ErrorHandler,
      useClass: GlobalErrorHandler,
      }, */
+    CustomMarkdownService,
     {
       provide: InjectableRxStompConfig,
       useValue: rxStompConfig,
-    }, {
+    },
+    {
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
-    }, SimpleMQ, UserService,
+    },
+    SimpleMQ,
+    UserService,
     RoutePreloader,
     StorageService,
     I18nService,
@@ -167,7 +195,12 @@ const appRoutes: Routes = [
     QuestionTextService,
     ThemesService,
     ArsnovaClickAngulartics2Piwik,
-    TrackingService, UpdateCheckService, UserRoleGuardService, LanguageLoaderService, ProjectLoaderService, ModalOrganizerService,
+    TrackingService,
+    UpdateCheckService,
+    UserRoleGuardService,
+    LanguageLoaderService,
+    ProjectLoaderService,
+    ModalOrganizerService,
   ],
   bootstrap: [RootComponent],
 })

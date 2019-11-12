@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { parseGithubFlavoredMarkdown } from '../../../../lib/markdown/markdown';
+import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
 
 @Component({
@@ -46,12 +46,17 @@ export class ReadingConfirmationProgressComponent {
   private _name: string;
 
   @Input() set name(value: string) {
-    this._name = parseGithubFlavoredMarkdown(value);
+    this._name = this.customMarkdownService.parseGithubFlavoredMarkdown(value);
   }
 
   private _hasData = false;
 
-  constructor(private i18nService: I18nService, private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) {
+  constructor(
+    private i18nService: I18nService,
+    private sanitizer: DomSanitizer,
+    private cd: ChangeDetectorRef,
+    private customMarkdownService: CustomMarkdownService,
+  ) {
   }
 
   public sanitizeStyle(value: string): SafeStyle {

@@ -11,11 +11,11 @@ import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { ILeaderBoardItem } from '../../../lib/interfaces/ILeaderboard';
-import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { I18nService } from '../../../service/i18n/i18n.service';
@@ -77,7 +77,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private i18nService: I18nService,
     private leaderboardApiService: LeaderboardApiService,
-    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private ngbModal: NgbModal, private messageQueue: SimpleMQ, private customMarkdownService: CustomMarkdownService,
   ) {
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
   }
@@ -135,7 +135,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
 
   public parseNickname(value: string): string {
     if (value.match(/:[\w\+\-]+:/g)) {
-      return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
+      return this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(value));
     }
     return value;
   }

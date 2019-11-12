@@ -107,6 +107,8 @@ $logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova
 
 $popover-body-color: initial;
 
+$code-color: $primary_text_color;
+
 @import "postbuild";
 
 .btn-secondary {

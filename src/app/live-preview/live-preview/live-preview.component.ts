@@ -6,6 +6,7 @@ import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { ConnectionService } from '../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 
@@ -53,7 +54,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     public connectionService: ConnectionService,
     private quizService: QuizService,
     private sanitizer: DomSanitizer,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute, private markdownService: CustomMarkdownService,
   ) {
   }
 
@@ -104,7 +105,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe(value => {
-      this.dataSource = Array.isArray(value) ? value : [value];
+      this.dataSource = Array.isArray(value) ? value : [this.markdownService.parseGithubFlavoredMarkdown(value)];
     });
     const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(),
       takeUntil(this._destroy));

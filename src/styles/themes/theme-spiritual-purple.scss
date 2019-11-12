@@ -108,6 +108,8 @@ $colorChangingClick: (
 $logo-bg: transparent;
 $logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova-logo-click": white);
 
+$code-color: $primary_text_color;
+
 @import "postbuild";
 
 $popover-body-color: initial;

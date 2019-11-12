@@ -6,9 +6,9 @@ import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
-import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { UserService } from '../../../service/user/user.service';
@@ -38,7 +38,9 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private quizService: QuizService,
-    private memberApiService: MemberApiService, private messageQueue: SimpleMQ,
+    private memberApiService: MemberApiService,
+    private messageQueue: SimpleMQ,
+    private customMarkdownService: CustomMarkdownService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
@@ -99,7 +101,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   public parseAvailableNick(name: string): string {
-    return name.match(/:[\w\+\-]+:/g) ? this.sanitizeHTML(parseGithubFlavoredMarkdown(name)) : name;
+    return name.match(/:[\w\+\-]+:/g) ? this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(name)) : name;
   }
 
   public ngOnInit(): void {

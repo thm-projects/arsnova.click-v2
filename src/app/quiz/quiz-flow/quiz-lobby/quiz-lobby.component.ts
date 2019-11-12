@@ -14,12 +14,12 @@ import { UserRole } from '../../../lib/enums/UserRole';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
-import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
@@ -67,7 +67,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
     private ngbModal: NgbModal,
     private sharedService: SharedService,
     private userService: UserService,
-    private messageQueue: SimpleMQ,
+    private messageQueue: SimpleMQ, private customMarkdownService: CustomMarkdownService,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
@@ -152,7 +152,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
   public parseNickname(value: string): string {
     if (value.match(/:[\w\+\-]+:/g)) {
-      return this.sanitizeHTML(parseGithubFlavoredMarkdown(value));
+      return this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(value));
     }
     return value;
   }

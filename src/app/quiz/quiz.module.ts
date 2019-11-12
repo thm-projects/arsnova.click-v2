@@ -36,6 +36,7 @@ const quizRoutes: Routes = [
   imports: [
     SharedModule, RouterModule.forChild(quizRoutes),
   ],
+  providers: [],
   declarations: [
     QuizOverviewComponent, QuizRenameComponent, QuizJoinComponent, QuizPublicComponent, QuizDuplicateComponent,
   ],

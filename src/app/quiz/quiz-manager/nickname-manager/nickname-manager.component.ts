@@ -4,8 +4,8 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../lib/enums/enums';
 import { IAvailableNicks } from '../../../lib/interfaces/IAvailableNicks';
-import { parseGithubFlavoredMarkdown } from '../../../lib/markdown/markdown';
 import { NickApiService } from '../../../service/api/nick/nick-api.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 
@@ -27,7 +27,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   set availableNicks(value: IAvailableNicks) {
     this._availableNicks = value;
     if (this._availableNicks.emojis) {
-      this._availableNicks.emojis = this._availableNicks.emojis.map(nick => this.sanitizeHTML(parseGithubFlavoredMarkdown(nick)));
+      this._availableNicks.emojis = this._availableNicks.emojis.map(
+        nick => this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(nick)));
     }
     this._availableNicksBackup = Object.assign({}, value);
   }
@@ -45,7 +46,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private quizService: QuizService,
     private footerBarService: FooterBarService,
-    private nickApiService: NickApiService,
+    private nickApiService: NickApiService, private customMarkdownService: CustomMarkdownService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameManagerComponent.TYPE;
@@ -103,7 +104,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     if (this.selectedCategory === 'emojis') {
       name = name.changingThisBreaksApplicationSecurity.match(/:[\w\+\-]+:/g)[0];
     }
-    return name.match(/:[\w\+\-]+:/g) ? this.sanitizeHTML(parseGithubFlavoredMarkdown(name)) : name;
+    return name.match(/:[\w\+\-]+:/g) ? this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(name)) : name;
   }
 
   public hasSelectedNick(name: any): boolean {

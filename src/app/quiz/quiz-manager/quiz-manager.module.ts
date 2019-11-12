@@ -2,8 +2,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { RouterModule, Routes } from '@angular/router';
+import { MarkdownModule } from 'ngx-markdown';
 import { LivePreviewModule } from '../../live-preview/live-preview.module';
-import { MarkdownModule } from '../../markdown/markdown.module';
+import { MarkdownBarModule } from '../../markdown/markdown-bar.module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../shared/shared.module';
 import { AnsweroptionsComponent } from './details/answeroptions/answeroptions.component';
@@ -71,11 +72,10 @@ const quizManagerRoutes: Routes = [
   imports: [
     FormsModule,
     SharedModule,
-    QuizManagerDetailsModule,
-    MarkdownModule,
+    QuizManagerDetailsModule, MarkdownBarModule,
     LivePreviewModule,
     RouterModule.forChild(quizManagerRoutes),
-    PipesModule,
+    PipesModule, MarkdownModule.forChild(),
   ],
   declarations: [
     QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent, MemberGroupManagerComponent, QuizTypeSelectModalComponent,

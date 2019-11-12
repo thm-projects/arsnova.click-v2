@@ -1,7 +1,7 @@
 import { EventEmitter, Injectable } from '@angular/core';
 import { IMathjaxResponse } from '../../lib/interfaces/IMathjaxResponse';
-import { parseGithubFlavoredMarkdown } from '../../lib/markdown/markdown';
 import { MathjaxApiService } from '../api/mathjax/mathjax-api.service';
+import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +16,7 @@ export class QuestionTextService {
 
   private _inputCache = {};
 
-  constructor(private mathjaxApiService: MathjaxApiService) {
+  constructor(private mathjaxApiService: MathjaxApiService, private customMarkdownService: CustomMarkdownService) {
   }
 
   public async change(value: string): Promise<void> {
@@ -61,8 +61,9 @@ export class QuestionTextService {
 
     return new Promise(async (resolve) => {
       if (mathjaxValues.length) {
+        console.log('QuestionTextService: Parsing input as mathjax');
         const mathjaxRendered = await this.parseMathjax(mathjaxValues);
-        result = parseGithubFlavoredMarkdown(result);
+        result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
 
         mathjaxValues.forEach((mathjaxValue: string, index: number) => {
           result = result.replace(mathjaxValue, mathjaxRendered[index].svg);
@@ -72,7 +73,8 @@ export class QuestionTextService {
         resolve(result);
 
       } else {
-        result = parseGithubFlavoredMarkdown(result);
+        console.log('QuestionTextService: Parsing input as non-mathjax');
+        result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
         this._inputCache[value] = result;
         resolve(result);
 
