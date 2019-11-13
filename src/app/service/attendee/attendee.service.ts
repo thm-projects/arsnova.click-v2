@@ -123,9 +123,9 @@ export class AttendeeService {
         return;
       }
       if (quiz.state === QuizState.Inactive) {
-        this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
         return;
       }
+      this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
 
       console.log('AttendeeService#loadData', 'quiz set', quiz);
       this.restoreMembers();

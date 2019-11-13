@@ -27,30 +27,8 @@ import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import rxStompConfig from './rx-stomp.config';
-import { AttendeeService } from './service/attendee/attendee.service';
-import { ConnectionService } from './service/connection/connection.service';
-import { CustomMarkdownService } from './service/custom-markdown/custom-markdown.service';
-import { FileUploadService } from './service/file-upload/file-upload.service';
-import { FooterBarService } from './service/footer-bar/footer-bar.service';
-import { HeaderLabelService } from './service/header-label/header-label.service';
-import { I18nService } from './service/i18n/i18n.service';
-import { LanguageLoaderService } from './service/language-loader/language-loader.service';
-import { CasLoginService } from './service/login/cas-login.service';
 import { StaticLoginService } from './service/login/static-login.service';
-import { ModalOrganizerService } from './service/modal-organizer/modal-organizer.service';
-import { ProjectLoaderService } from './service/project-loader/project-loader.service';
-import { QuestionTextService } from './service/question-text/question-text.service';
-import { QuizService } from './service/quiz/quiz.service';
-import { SettingsService } from './service/settings/settings.service';
-import { SharedService } from './service/shared/shared.service';
-import { StorageService } from './service/storage/storage.service';
-import { ThemesService } from './service/themes/themes.service';
-import { TrackingService } from './service/tracking/tracking.service';
-import { UpdateCheckService } from './service/update-check/update-check.service';
-import { UserRoleGuardService } from './service/user-role-guard/user-role-guard.service';
-import { UserService } from './service/user/user.service';
 import { SharedModule } from './shared/shared.module';
-import { ArsnovaClickAngulartics2Piwik } from './shared/tracking/ArsnovaClickAngulartics2Piwik';
 
 const appRoutes: Routes = [
   {
@@ -163,11 +141,6 @@ export function markedOptionsFactory(): MarkedOptions {
     }),
   ],
   providers: [
-    /* {
-     provide: ErrorHandler,
-     useClass: GlobalErrorHandler,
-     }, */
-    CustomMarkdownService,
     {
       provide: InjectableRxStompConfig,
       useValue: rxStompConfig,
@@ -178,44 +151,21 @@ export function markedOptionsFactory(): MarkedOptions {
       deps: [InjectableRxStompConfig],
     },
     SimpleMQ,
-    UserService,
     RoutePreloader,
-    StorageService,
-    I18nService,
-    FooterBarService,
-    ConnectionService,
-    QuizService,
-    CasLoginService,
-    FileUploadService,
-    SettingsService,
     NgbActiveModal,
-    SharedService,
-    AttendeeService,
-    HeaderLabelService,
-    QuestionTextService,
-    ThemesService,
-    ArsnovaClickAngulartics2Piwik,
-    TrackingService,
-    UpdateCheckService,
-    UserRoleGuardService,
-    LanguageLoaderService,
-    ProjectLoaderService,
-    ModalOrganizerService,
   ],
   bootstrap: [RootComponent],
 })
 export class RootModule {
   constructor() {
     if (environment.production) {
-      const console: any = {};
-      console.log = function (): void {};
-      // tslint:disable-next-line:no-console
-      console.info = function (): void {};
-      // tslint:disable-next-line:no-console
-      console.trace = function (): void {};
-      console.warn = function (): void {};
-      console.error = window.console.error;
-      (window as any).console = console;
+      (window as any).console = {
+        log: function (): void {},
+        info: function (): void {},
+        trace: function (): void {},
+        warn: function (): void {},
+        error: window.console.error,
+      };
     }
   }
 }

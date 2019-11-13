@@ -83,6 +83,7 @@ export class QuizService {
 
     if (this._isInEditMode) {
       this.quizApiService.putSavedQuiz(this.quiz).subscribe();
+      this.quizUpdateEmitter.next(this.quiz);
     }
   }
 

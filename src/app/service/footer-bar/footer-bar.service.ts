@@ -410,6 +410,8 @@ export class FooterBarService {
     return this._footerElements;
   }
 
+  private _connectionState: RxStompState;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private userService: UserService,
@@ -420,7 +422,9 @@ export class FooterBarService {
   ) {
 
     this.rxStompService.connectionState$.subscribe(value => {
+      this._connectionState = value;
       this.toggleFooterElemState(value === RxStompState.OPEN);
+      console.log('setting active state', value === RxStompState.OPEN);
     });
 
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz)).subscribe(() => {
@@ -483,27 +487,34 @@ export class FooterBarService {
     this.footerElemImport.isActive = isActive;
     this.footerElemLogin.isActive = isActive;
     this.footerElemAdmin.isActive = isActive;
+    this.footerElemStartQuiz.isActive = this.quizService.isValid() && isActive;
+    this.footerElemNicknames.isActive = isActive;
   }
 
   private updateFooterElementsState(): void {
     this.footerElemReadingConfirmation.isActive = !!this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
     this.footerElemConfidenceSlider.isActive = !!this.quizService.quiz.sessionConfig.confidenceSliderEnabled;
+    this.footerElemStartQuiz.isActive = this.quizService.isValid() && this._connectionState === RxStompState.OPEN;
+    console.log('updating footer elements state', this.quizService.isValid(), this._connectionState === RxStompState.OPEN);
 
+    this.footerElemExport.restoreClickCallback();
     this.footerElemExport.onClickCallback = async () => {
       const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.quizService.quiz.name}/${sessionStorage.getItem(
         StorageKey.PrivateKey)}/${this.quizService.quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
       window.open(link);
     };
 
+    this.footerElemEnableCasLogin.restoreClickCallback();
     this.footerElemEnableCasLogin.isActive = this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin;
-    this.footerElemBlockRudeNicknames.isActive = this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks;
-
     this.footerElemEnableCasLogin.onClickCallback = () => {
       const newState = !this.footerElemEnableCasLogin.isActive;
       this.footerElemEnableCasLogin.isActive = newState;
       this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin = newState;
       this.quizService.persist();
     };
+
+    this.footerElemBlockRudeNicknames.restoreClickCallback();
+    this.footerElemBlockRudeNicknames.isActive = this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks;
     this.footerElemBlockRudeNicknames.onClickCallback = () => {
       const newState = !this.footerElemBlockRudeNicknames.isActive;
       this.footerElemBlockRudeNicknames.isActive = newState;

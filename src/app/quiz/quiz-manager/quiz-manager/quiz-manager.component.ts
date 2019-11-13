@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../lib/available-question-types';
 import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
@@ -71,6 +70,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
       }
       self.isLoading = true;
       this.quizApiService.setQuiz(this.quizService.quiz).subscribe(updatedQuiz => {
+        this.quizService.quiz = updatedQuiz;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
         self.isLoading = false;
       });
@@ -78,16 +78,6 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(() => {
-      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
-    });
-
-    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(() => {
-      this.footerBarService.footerElemStartQuiz.isActive = this.quizService.isValid() && this.connectionService.serverAvailable;
-      this.footerBarService.footerElemNicknames.isActive = this.connectionService.serverAvailable;
-    });
-
-    this.footerBarService.footerElemNicknames.isActive = this.connectionService.serverAvailable;
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
