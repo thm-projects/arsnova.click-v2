@@ -215,9 +215,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.selectQuizByName(this.enteredSessionName.trim());
   }
 
-  public parseQuiznameInput(): void {
+  public parseQuiznameInput(quizname: string): void {
     this.isQueryingQuizState = true;
-    this.selectQuizByName(this.enteredSessionName.trim());
+    this.selectQuizByName(quizname.trim());
   }
 
   public setPassword(event: Event): void {

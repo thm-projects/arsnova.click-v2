@@ -24,7 +24,7 @@
         </span>
         <input #enteredSessionNameInput
                (focus)="showQuiznameDatalist()"
-               (ngModelChange)="parseQuiznameInput()"
+               (ngModelChange)="parseQuiznameInput(enteredSessionNameInput.value)"
                [(ngModel)]="enteredSessionName"
                [class.rounded-top]="showJoinableQuizzes && isShowingQuiznameDatalist"
                [class.rounded]="!showJoinableQuizzes || !isShowingQuiznameDatalist"
