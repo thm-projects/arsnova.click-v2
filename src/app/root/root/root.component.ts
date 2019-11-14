@@ -9,7 +9,6 @@ import { Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
-import { BeforeInstallPromptEvent } from '../../lib/BeforeInstallPrompt';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { DbState, DeprecatedDb, DeprecatedKeys } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
@@ -23,6 +22,7 @@ import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { UserService } from '../../service/user/user.service';
 
@@ -52,7 +52,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private storageService: StorageService,
     private quizService: QuizService,
     private connectionService: ConnectionService,
-    private messageQueue: SimpleMQ,
+    private messageQueue: SimpleMQ, private trackingService: TrackingService,
   ) {
     this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe(themeName => {
       if (String(themeName) === 'default') {
@@ -138,8 +138,11 @@ export class RootComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    window.addEventListener('beforeinstallprompt', (event: BeforeInstallPromptEvent) => {
-      event.prompt();
+    window.addEventListener('appinstalled', () => {
+      this.trackingService.trackConversionEvent({
+        action: this.fetchChildComponent(this.activatedRoute).TYPE,
+        label: 'WebApp installed',
+      });
     });
 
     this.router.events.pipe(takeUntil(this._destroy), filter(nav => nav instanceof NavigationEnd)).subscribe(() => {

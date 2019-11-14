@@ -184,7 +184,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
 
     this.headerLabelService.headerLabel = this.quizService.quiz.name;
 
-    this.trackingService.trackConversionEvent({ action: QuizLobbyComponent.TYPE });
+    this.trackingService.trackConversionEvent({
+      action: QuizLobbyComponent.TYPE,
+      label: 'Quiz started',
+    });
+
     this.addFooterElementsAsOwner();
   }
 
