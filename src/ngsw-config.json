@@ -43,7 +43,8 @@
         "/backend/**",
         "/rabbitmq/**",
         "/rabbitmq-mgmt/**",
-        "https://polyfill.io/**"
+        "https://polyfill.io/**",
+        "https://sentry.io/**"
       ],
       "cacheConfig": {
         "strategy": "freshness",

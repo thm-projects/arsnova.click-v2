@@ -1,20 +1,23 @@
 import { ErrorHandler, Injectable } from '@angular/core';
-import { captureException, init as SentryInit, showReportDialog } from '@sentry/browser';
+import { captureException, init as SentryInit, setExtra, showReportDialog } from '@sentry/browser';
 import { environment } from '../../environments/environment';
-
-if (environment.production) {
-  SentryInit({
-    dsn: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
-  });
-}
 
 @Injectable({ providedIn: 'root' })
 export class SentryErrorHandler implements ErrorHandler {
+  private readonly _enabled = environment.production && !['localhost', '127.0.0.1'].includes(location.hostname);
 
-  constructor() {}
+  constructor() {
+
+    SentryInit({
+      dsn: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
+      enabled: this._enabled,
+    });
+
+    setExtra('nonErrorException', true);
+  }
 
   public handleError(error): void {
-    if (!environment.production) {
+    if (!this._enabled) {
       return;
     }
 
