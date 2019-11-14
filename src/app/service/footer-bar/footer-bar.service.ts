@@ -424,7 +424,6 @@ export class FooterBarService {
     this.rxStompService.connectionState$.subscribe(value => {
       this._connectionState = value;
       this.toggleFooterElemState(value === RxStompState.OPEN);
-      console.log('setting active state', value === RxStompState.OPEN);
     });
 
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz)).subscribe(() => {

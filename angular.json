@@ -35,6 +35,11 @@
                 "glob": "robots.txt",
                 "input": "src/assets",
                 "output": "/"
+              },
+              {
+                "glob": "noscript.css",
+                "input": "src/styles",
+                "output": "/"
               }
             ],
             "stylePreprocessorOptions": {

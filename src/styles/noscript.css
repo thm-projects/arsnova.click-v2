@@ -1,7 +1,3 @@
-body {
-  background-color: #009688;
-}
-
 h1 {
   color: #fff;
 }
@@ -10,8 +6,17 @@ hr {
   border-color: #FF9800;
 }
 
+main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
+  background: inherit;
+}
+
 img {
   display: block;
-  height: 40px;
-  width: 40px;
+  width: 200px;
+  margin-left: auto;
+  margin-right: auto;
 }
