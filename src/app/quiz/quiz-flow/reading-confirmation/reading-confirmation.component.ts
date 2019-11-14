@@ -3,7 +3,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
@@ -27,9 +28,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
   public questionIndex: number;
   public questionText: string;
-  private readonly _subscriptions: Array<Subscription> = [];
-  private readonly _messageSubscriptions: Array<string> = [];
+
   private _serverUnavailableModal: NgbModalRef;
+  private readonly _messageSubscriptions: Array<string> = [];
+  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -41,8 +43,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
-    private memberApiService: MemberApiService,
-    private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;
@@ -55,8 +56,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-
-    this._subscriptions.push(this.connectionService.serverStatusEmitter.subscribe(isConnected => {
+    this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
           this._serverUnavailableModal.dismiss();
@@ -72,9 +72,9 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
         backdrop: 'static',
       });
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
-    }));
+    });
 
-    this._subscriptions.push(this.quizService.quizUpdateEmitter.subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }
@@ -86,19 +86,20 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
       this.questionIndex = this.quizService.quiz.currentQuestionIndex;
       this.questionTextService.change(this.quizService.currentQuestion().questionText);
-    }));
+    });
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
     });
 
-    this._subscriptions.push(this.questionTextService.eventEmitter.subscribe((value: string) => {
+    this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string) => {
       this.questionText = value;
-    }));
+    });
   }
 
   public ngOnDestroy(): void {
-    this._subscriptions.forEach(sub => sub.unsubscribe());
+    this._destroy.next();
+    this._destroy.complete();
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 
@@ -113,8 +114,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
       this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
         sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
-      }),
-      this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+      }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         console.log('ReadingConfirmationComponent: modifying response data for nickname', payload.nickname);

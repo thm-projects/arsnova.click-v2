@@ -119,10 +119,7 @@ export class AttendeeService {
   private loadData(): void {
     this._ownNick = sessionStorage.getItem(StorageKey.CurrentNickName);
     this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (!quiz) {
-        return;
-      }
-      if (quiz.state === QuizState.Inactive) {
+      if (!quiz || typeof quiz.state === 'undefined' || quiz.state === QuizState.Inactive) {
         return;
       }
       this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
