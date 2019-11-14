@@ -200,5 +200,12 @@
         </a>
       </p>
     </div>
+
+    <div *ngIf="claimSrc"
+         class="col-12 mt-5 justify-content-center d-flex">
+      <img [src]="claimSrc"
+           alt="claim"
+           style="width: 250px"/>
+    </div>
   </ng-container>
 </div>

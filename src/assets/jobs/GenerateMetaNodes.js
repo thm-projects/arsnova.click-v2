@@ -8,8 +8,8 @@ const mf = require('messageformat');
 const argv = minimist(process.argv.slice(2));
 
 const languages = ['en', 'de', 'fr', 'it', 'es'];
-const themeData = require('../themeData');
-const imageDerivates = require('../imageDerivates');
+const themeData = require('./../themeData');
+const imageDerivates = require('./../imageDerivates');
 
 class GenerateMetaNodes {
 
@@ -56,15 +56,8 @@ class GenerateMetaNodes {
           tagName: 'link',
           className: 'theme-meta-data',
           rel: 'apple-touch-icon',
-          id: 'link-apple-touch-default',
-          href: `${basePath}/logo_s32x32.png`,
-          type: 'image/png',
-        }, {
-          tagName: 'link',
-          className: 'theme-meta-data',
-          rel: 'apple-touch-icon-precomposed',
-          id: 'link-apple-touch-precomposed-default',
-          href: `${basePath}/logo_s32x32.png`,
+          id: 'link-apple-touch',
+          href: `${basePath}/logo_s144x144.png`,
           type: 'image/png',
         }, {
           tagName: 'meta',
@@ -103,14 +96,6 @@ class GenerateMetaNodes {
           rel: 'apple-touch-icon',
           href: `${basePath}/logo_s${derivate}.png`,
           id: `link-apple-touch-${derivate}`,
-          sizes: derivate,
-          type: 'image/png',
-        }, {
-          tagName: 'link',
-          className: 'theme-meta-data',
-          rel: 'apple-touch-icon-precomposed',
-          href: `${basePath}/logo_s${derivate}.png`,
-          id: `link-apple-touch-precomposed-${derivate}`,
           sizes: derivate,
           type: 'image/png',
         });

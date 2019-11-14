@@ -34,6 +34,7 @@ export const environment: IEnvironment = {
   availableQuizThemes: [QuizTheme.WestermannBlue, QuizTheme.Material, QuizTheme.Blackbeauty],
   defaultTheme: QuizTheme.WestermannBlue,
   darkModeCheckEnabled: true,
+  claimSrc: '/assets/images/external/westermann-claim.png',
 };
 
 export enum DEVICE_TYPES {

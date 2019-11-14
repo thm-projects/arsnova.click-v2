@@ -55,6 +55,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
   public showJoinableQuizzes: boolean = environment.showJoinableQuizzes;
   public isQueryingQuizState: boolean;
+  public readonly claimSrc = environment.claimSrc;
 
   private _serverPassword = '';
 
