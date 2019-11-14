@@ -85,7 +85,7 @@
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.9.1",
-    "@sentry/browser": "latest"
+    "@sentry/browser": "^5.9.0"
   },
   "devDependencies": {
     "@angular/cli": "^8.3.18",
