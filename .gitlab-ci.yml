@@ -90,8 +90,6 @@ generate_assets:
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
-    - cd ../../../..
-    - npm run compress
   artifacts:
     paths:
       - dist
@@ -133,6 +131,8 @@ deploy:
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
     - rm dist/*.map
+    - npm install
+    - npm run compress
     - rsync -rltgoDqv --delete -e "ssh" dist/* "$STAGING_FRONTEND_SCP_URL"
     - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2/frontend/deploy.touch'
 
@@ -174,8 +174,6 @@ generate_assets-beta:
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://beta.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://beta.arsnova.click
-    - cd ../../../..
-    - npm run compress
   artifacts:
     paths:
       - dist
@@ -217,5 +215,7 @@ deploy-beta:
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
     - rm dist/*.map
+    - npm install
+    - npm run compress
     - rsync -rltgoDqv --delete -e "ssh" dist/* "$BETA_FRONTEND_SCP_URL"
     - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2-beta/frontend/deploy.touch'
