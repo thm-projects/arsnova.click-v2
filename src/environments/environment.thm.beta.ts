@@ -4,6 +4,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: true,
+  version: 'VERSION',
   ssrEndpoint: 'https://beta.arsnova.click/backend',
   serverEndpoint: 'https://beta.arsnova.click/backend',
   httpApiEndpoint: 'https://beta.arsnova.click/backend/api/v1',

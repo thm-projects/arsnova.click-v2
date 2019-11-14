@@ -2,6 +2,7 @@ import { LoginMechanism } from '../enums/enums';
 import { QuizTheme } from '../enums/QuizTheme';
 
 export interface IEnvironment {
+  version: string;
   claimSrc?: string;
   production: boolean;
   ssrEndpoint: string;

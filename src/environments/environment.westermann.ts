@@ -4,6 +4,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: true,
+  version: 'VERSION',
   ssrEndpoint: 'https://test01.ars.sbzo.de',
   serverEndpoint: 'https://test01.ars.sbzo.de',
   httpApiEndpoint: 'https://test01.ars.sbzo.de/api/v1',

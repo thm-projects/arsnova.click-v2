@@ -116,7 +116,11 @@
             "production": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "styles": true,
+                "scripts": true
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -199,7 +203,11 @@
             "thmStaging": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "styles": true,
+                "scripts": true
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -282,7 +290,11 @@
             "thmBeta": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "styles": true,
+                "scripts": true
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
@@ -373,7 +385,11 @@
             "westermann": {
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": {
+                "hidden": true,
+                "styles": true,
+                "scripts": true
+              },
               "extractCss": true,
               "namedChunks": false,
               "aot": true,

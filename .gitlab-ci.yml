@@ -54,6 +54,8 @@ build:
   tags:
     - nodejs
     - angular
+  before_script:
+    - sed -ri "s|\"VERSION\"|\"$CI_COMMIT_SHA\"|" src/environments/environment.thm.staging.ts
   script:
     - npm install
     - npm install typescript@3.5.3
@@ -88,6 +90,25 @@ generate_assets:
     paths:
       - dist
 
+sync_sentry:
+  stage: deploy
+  only:
+    - master
+  dependencies:
+    - generate_assets
+  image: getsentry/sentry-cli
+  script:
+    - echo "Create a new release $CI_COMMIT_SHA"
+    #- export SENTRY_URL=$SENTRY_BASE_URL
+    - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
+    - export SENTRY_ORG=$SENTRY_BASE_ORGANIZATION
+    - export SENTRY_PROJECT=$SENTRY_BASE_PROJECT
+    - sentry-cli releases new $CI_COMMIT_SHA
+    - sentry-cli releases set-commits --auto $CI_COMMIT_SHA
+    - sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
+    - sentry-cli releases finalize $CI_COMMIT_SHA
+    - echo "Finalized release for $CI_COMMIT_SHA"
+
 deploy:
   stage: deploy
   only:
@@ -95,13 +116,14 @@ deploy:
   tags:
     - rsync
   dependencies:
-    - generate_assets
+    - sync_sentry
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
     - mkdir ~/.ssh
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
+    - rm dist/*.map
     - rsync -rltgoDqv --delete -e "ssh" dist/* "$STAGING_FRONTEND_SCP_URL"
     - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2/frontend/deploy.touch'
 
@@ -112,6 +134,8 @@ build-beta:
   tags:
     - nodejs
     - angular
+  before_script:
+    - sed -ri "s|\"VERSION\"|\"$CI_COMMIT_SHA\"|" src/environments/environment.thm.beta.ts
   script:
     - npm install
     - npm install typescript@3.5.3
@@ -146,6 +170,25 @@ generate_assets-beta:
     paths:
       - dist
 
+sync_sentry-beta:
+  stage: deploy-beta
+  only:
+    - beta
+  dependencies:
+    - generate_assets-beta
+  image: getsentry/sentry-cli
+  script:
+    - echo "Create a new release $CI_COMMIT_SHA"
+    #- export SENTRY_URL=$SENTRY_BASE_URL
+    - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
+    - export SENTRY_ORG=$SENTRY_BASE_ORGANIZATION
+    - export SENTRY_PROJECT=$SENTRY_BASE_PROJECT
+    - sentry-cli releases new $CI_COMMIT_SHA
+    - sentry-cli releases set-commits --auto $CI_COMMIT_SHA
+    - sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
+    - sentry-cli releases finalize $CI_COMMIT_SHA
+    - echo "Finalized release for $CI_COMMIT_SHA"
+
 deploy-beta:
   stage: deploy-beta
   only:
@@ -153,12 +196,13 @@ deploy-beta:
   tags:
     - rsync
   dependencies:
-    - generate_assets-beta
+    - sync_sentry-beta
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
     - mkdir ~/.ssh
     - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
+    - rm dist/*.map
     - rsync -rltgoDqv --delete -e "ssh" dist/* "$BETA_FRONTEND_SCP_URL"
     - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2-beta/frontend/deploy.touch'

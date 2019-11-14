@@ -11,6 +11,7 @@ export class SentryErrorHandler implements ErrorHandler {
     SentryInit({
       dsn: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
       enabled: this._enabled,
+      release: environment.version,
     });
 
     setExtra('nonErrorException', true);

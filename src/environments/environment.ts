@@ -9,6 +9,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: false,
+  version: 'VERSION',
   ssrEndpoint: 'http://192.168.2.106:4000',
   serverEndpoint: 'http://192.168.2.106:3010',
   httpApiEndpoint: 'http://192.168.2.106:3010/api/v1',
