@@ -3,9 +3,11 @@ stages:
   - test
   - build
   - assets
+  - sync_sentry
   - deploy
   - build-beta
   - assets-beta
+  - sync_sentry-beta
   - deploy-beta
 
 # Cache modules in between jobs
@@ -91,7 +93,7 @@ generate_assets:
       - dist
 
 sync_sentry:
-  stage: deploy
+  stage: sync_sentry
   only:
     - master
   dependencies:
@@ -171,7 +173,7 @@ generate_assets-beta:
       - dist
 
 sync_sentry-beta:
-  stage: deploy-beta
+  stage: sync_sentry-beta
   only:
     - beta
   dependencies:
