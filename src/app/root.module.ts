@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { NgModule, PLATFORM_ID } from '@angular/core';
+import { ErrorHandler, NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -28,6 +28,7 @@ import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import rxStompConfig from './rx-stomp.config';
 import { StaticLoginService } from './service/login/static-login.service';
+import { SentryErrorHandler } from './shared/sentry-error-handler';
 import { SharedModule } from './shared/shared.module';
 
 const appRoutes: Routes = [
@@ -142,17 +143,16 @@ export function markedOptionsFactory(): MarkedOptions {
   ],
   providers: [
     {
+      provide: ErrorHandler,
+      useClass: SentryErrorHandler,
+    }, {
       provide: InjectableRxStompConfig,
       useValue: rxStompConfig,
-    },
-    {
+    }, {
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
-    },
-    SimpleMQ,
-    RoutePreloader,
-    NgbActiveModal,
+    }, SimpleMQ, RoutePreloader, NgbActiveModal,
   ],
   bootstrap: [RootComponent],
 })
@@ -163,7 +163,7 @@ export class RootModule {
         log: function (): void {},
         info: function (): void {},
         trace: function (): void {},
-        warn: function (): void {},
+        warn: window.console.warn,
         error: window.console.error,
       };
     }
