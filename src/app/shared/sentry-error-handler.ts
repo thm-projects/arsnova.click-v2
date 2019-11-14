@@ -4,12 +4,15 @@ import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class SentryErrorHandler implements ErrorHandler {
-  private readonly _enabled = environment.production && !['localhost', '127.0.0.1'].includes(location.hostname);
+  private readonly _enabled = environment.production && environment.sentryDSN && !['localhost', '127.0.0.1'].includes(location.hostname);
 
   constructor() {
+    if (!environment.sentryDSN) {
+      return;
+    }
 
     SentryInit({
-      dsn: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
+      dsn: environment.sentryDSN,
       enabled: this._enabled,
       release: environment.version,
     });
