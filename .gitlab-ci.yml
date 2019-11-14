@@ -99,7 +99,7 @@ sync_sentry:
   dependencies:
     - generate_assets
   script:
-    - npm install -g @sentry/cli
+    - npm install @sentry/cli
     - echo "Create a new release $CI_COMMIT_SHA"
     #- export SENTRY_URL=$SENTRY_BASE_URL
     - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
@@ -181,7 +181,7 @@ sync_sentry-beta:
   dependencies:
     - generate_assets-beta
   script:
-    - npm install -g @sentry/cli
+    - npm install @sentry/cli
     - echo "Create a new release $CI_COMMIT_SHA"
     #- export SENTRY_URL=$SENTRY_BASE_URL
     - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
