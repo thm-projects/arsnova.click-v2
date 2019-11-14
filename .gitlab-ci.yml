@@ -24,7 +24,6 @@ install_node_modules:
     - nodejs
   script:
     - npm install
-  interruptible: true
 
 ts_lint:
   stage: test
@@ -35,7 +34,6 @@ ts_lint:
   script:
     - npm install
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
-  interruptible: true
 
 npm_test:
   stage: test
@@ -50,7 +48,6 @@ npm_test:
     - apt-get -y install --allow-unauthenticated google-chrome-stable
     - npm install
     - npm test
-  interruptible: true
 
 build:
   stage: build
@@ -68,7 +65,6 @@ build:
   artifacts:
     paths:
       - dist
-  interruptible: true
 
 generate_assets:
   stage: assets
@@ -93,7 +89,6 @@ generate_assets:
   artifacts:
     paths:
       - dist
-  interruptible: true
 
 sync_sentry:
   stage: sync_sentry
@@ -152,7 +147,6 @@ build-beta:
   artifacts:
     paths:
       - dist
-  interruptible: true
 
 generate_assets-beta:
   stage: assets-beta
@@ -177,7 +171,6 @@ generate_assets-beta:
   artifacts:
     paths:
       - dist
-  interruptible: true
 
 sync_sentry-beta:
   stage: sync_sentry-beta
