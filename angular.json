@@ -107,7 +107,7 @@
               }
             ],
             "scripts": [
-              "node_modules/ngx-markdown/node_modules/marked/lib/marked.js",
+              "node_modules/marked/lib/marked.js",
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components.js"
             ]
@@ -505,7 +505,7 @@
               ]
             },
             "scripts": [
-              "node_modules/ngx-markdown/node_modules/marked/lib/marked.js",
+              "node_modules/marked/lib/marked.js",
               "node_modules/prismjs/prism.js",
               "node_modules/prismjs/components.js"
             ],

@@ -76,6 +76,7 @@
     "ng2-simple-mq": "^8.2.1",
     "ngx-infinite-scroll": "^8.0.1",
     "ngx-markdown": "^8.2.1",
+    "marked": "^0.7.0",
     "ngx-toastr": "^11.2.1",
     "ngx-translate-messageformat-compiler": "^4.5.0",
     "node-sass": "^4.13.0",

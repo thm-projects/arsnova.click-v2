@@ -2,8 +2,8 @@ import path from 'path';
 import fs from 'fs';
 import sharp from 'sharp';
 
-import derivates from '../imageDerivates';
-import themeData from '../themeData';
+import derivates from './../imageDerivates.json';
+import themeData from './../themeData.json';
 import process from 'process';
 import minimist from 'minimist';
 import child_process from 'child_process';
