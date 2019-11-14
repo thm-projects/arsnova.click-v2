@@ -96,6 +96,8 @@ sync_sentry:
   stage: sync_sentry
   only:
     - master
+  tags:
+    - nodejs
   dependencies:
     - generate_assets
   image: getsentry/sentry-cli
@@ -176,6 +178,8 @@ sync_sentry-beta:
   stage: sync_sentry-beta
   only:
     - beta
+  tags:
+    - nodejs
   dependencies:
     - generate_assets-beta
   image: getsentry/sentry-cli
