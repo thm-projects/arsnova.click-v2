@@ -120,7 +120,7 @@ deploy:
   dependencies:
     - sync_sentry
   environment:
-    - name: staging
+    name: Staging
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
@@ -204,7 +204,7 @@ deploy-beta:
   dependencies:
     - sync_sentry-beta
   environment:
-    - name: Beta
+    name: Beta
   script:
     - chmod -R a+rX,ug+w .
     - eval $(ssh-agent -s)
