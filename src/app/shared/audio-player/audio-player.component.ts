@@ -40,7 +40,7 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     this._original_volume = value;
     this._volume = this._original_volume;
     if (this.audioElement) {
-      this.audioElement.volume = parseInt(this._volume, 10) / 100;
+      this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
     }
   }
 
@@ -81,7 +81,7 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
   set volume(value: string) {
     this._volume = value;
     this.volumeChange.emit(this.volume);
-    this.audioElement.volume = parseInt(this.volume, 10) / 100;
+    this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
   }
 
   private _isPlaying = false;
@@ -123,7 +123,7 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit(): void {
-    this.audioElement.volume = parseInt(this._volume, 10) / 100;
+    this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
   }
 
   public ngOnDestroy(): void {

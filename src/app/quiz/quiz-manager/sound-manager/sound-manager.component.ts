@@ -176,7 +176,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       const audioElements = document.getElementsByTagName('audio');
       for (let i = 0; i < audioElements.length; i++) {
-        (<HTMLAudioElement>audioElements.item(i)).volume = (this.config.volumeConfig[target] || 60) / 100;
+        (<HTMLAudioElement>audioElements.item(i)).volume = (parseInt(String(this.config.volumeConfig[target]), 10) || 60) / 100;
       }
     }
   }
