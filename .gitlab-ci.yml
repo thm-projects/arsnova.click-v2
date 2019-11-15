@@ -120,7 +120,7 @@ deploy:
   tags:
     - rsync
   dependencies:
-    - sync_sentry
+    - generate_assets
   environment:
     name: Staging
   script:
@@ -204,7 +204,7 @@ deploy-beta:
   tags:
     - rsync
   dependencies:
-    - sync_sentry-beta
+    - generate_assets-beta
   environment:
     name: Beta
   script:
