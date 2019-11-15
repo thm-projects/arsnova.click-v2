@@ -65,6 +65,7 @@
     "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "~4.0.0",
+    "@sentry/browser": "^5.9.0",
     "@stomp/ng2-stompjs": "^7.2.0",
     "angular-svg-icon": "^8.0.0",
     "angulartics2": "^8.1.0",
@@ -72,11 +73,11 @@
     "bootstrap": "^4.3.1",
     "cors": "^2.8.5",
     "dexie": "^2.0.4",
+    "marked": "^0.7.0",
     "messageformat": "^2.3.0",
     "ng2-simple-mq": "^8.2.1",
     "ngx-infinite-scroll": "^8.0.1",
     "ngx-markdown": "^8.2.1",
-    "marked": "^0.7.0",
     "ngx-toastr": "^11.2.1",
     "ngx-translate-messageformat-compiler": "^4.5.0",
     "node-sass": "^4.13.0",
@@ -85,8 +86,7 @@
     "ts-loader": "^6.2.1",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
-    "zone.js": "~0.9.1",
-    "@sentry/browser": "^5.9.0"
+    "zone.js": "~0.9.1"
   },
   "devDependencies": {
     "@angular/cli": "^8.3.18",

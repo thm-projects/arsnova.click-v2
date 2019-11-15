@@ -105,10 +105,10 @@ sync_sentry:
     - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
     - export SENTRY_ORG=$SENTRY_BASE_ORGANIZATION
     - export SENTRY_PROJECT=$SENTRY_BASE_PROJECT
-    - sentry-cli releases new $CI_COMMIT_SHA
-    - sentry-cli releases set-commits --auto $CI_COMMIT_SHA
-    - sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
-    - sentry-cli releases finalize $CI_COMMIT_SHA
+    - node_modules/@sentry/cli/bin/sentry-cli releases new $CI_COMMIT_SHA
+    - node_modules/@sentry/cli/bin/sentry-cli releases set-commits --auto $CI_COMMIT_SHA
+    - node_modules/@sentry/cli/bin/sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
+    - node_modules/@sentry/cli/bin/sentry-cli releases finalize $CI_COMMIT_SHA
     - echo "Finalized release for $CI_COMMIT_SHA"
 
 deploy:
@@ -187,10 +187,10 @@ sync_sentry-beta:
     - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
     - export SENTRY_ORG=$SENTRY_BASE_ORGANIZATION
     - export SENTRY_PROJECT=$SENTRY_BASE_PROJECT
-    - sentry-cli releases new $CI_COMMIT_SHA
-    - sentry-cli releases set-commits --auto $CI_COMMIT_SHA
-    - sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
-    - sentry-cli releases finalize $CI_COMMIT_SHA
+    - node_modules/@sentry/cli/bin/sentry-cli releases new $CI_COMMIT_SHA
+    - node_modules/@sentry/cli/bin/sentry-cli releases set-commits --auto $CI_COMMIT_SHA
+    - node_modules/@sentry/cli/bin/sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
+    - node_modules/@sentry/cli/bin/sentry-cli releases finalize $CI_COMMIT_SHA
     - echo "Finalized release for $CI_COMMIT_SHA"
 
 deploy-beta:
