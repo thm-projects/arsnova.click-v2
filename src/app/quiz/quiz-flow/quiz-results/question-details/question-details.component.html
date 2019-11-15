@@ -10,9 +10,9 @@
 </ng-container>
 
 <ng-container *ngIf="!answers?.length">
-  <h5>{{'component.answeroptions.ranged_question.min_range' | translate}}: {{getQuestionAsRanged()?.rangeMin}}</h5>
-  <h5>{{'component.answeroptions.ranged_question.correct_value' | translate}}: {{getQuestionAsRanged()?.correctValue}}</h5>
-  <h5>{{'component.answeroptions.ranged_question.max_range' | translate}}: {{getQuestionAsRanged()?.rangeMax}}</h5>
+  <h5>{{'component.answeroptions.ranged_question.min_range' | translate}}: {{getCurrentQuestionAsRanged()?.rangeMin}}</h5>
+  <h5>{{'component.answeroptions.ranged_question.correct_value' | translate}}: {{getCurrentQuestionAsRanged()?.correctValue}}</h5>
+  <h5>{{'component.answeroptions.ranged_question.max_range' | translate}}: {{getCurrentQuestionAsRanged()?.rangeMax}}</h5>
 </ng-container>
 
 <ng-template #defaultAnswerView>

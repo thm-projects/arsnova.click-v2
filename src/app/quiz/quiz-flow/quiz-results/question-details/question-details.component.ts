@@ -141,7 +141,11 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  public getQuestionAsRanged(): RangedQuestionEntity {
+  public getCurrentQuestionAsRanged(): RangedQuestionEntity {
+    if (!this.quizService.quiz) {
+      return;
+    }
+
     return this.quizService.quiz.questionList[this.questionIndex] as RangedQuestionEntity;
   }
 
