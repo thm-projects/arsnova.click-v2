@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { AppDb } from '../../lib/db/app.db';
 import { DbName, DbState, StorageKey } from '../../lib/enums/enums';
 
@@ -10,6 +11,7 @@ export class StorageService {
   public readonly stateNotifier = new ReplaySubject<DbState>(1);
 
   private _db: AppDb;
+  private readonly _closeDb = new Subject();
 
   get db(): AppDb {
     return this._db;
@@ -28,11 +30,12 @@ export class StorageService {
   private initDb(dbName): Observable<void> {
     if (this._db) {
       this._db.close();
+      this._closeDb.next();
     }
 
     this._db = new AppDb(dbName);
 
-    this._db.initialized.subscribe(() => this.stateNotifier.next(DbState.Initialized));
+    this._db.initialized.pipe(takeUntil(this._closeDb)).subscribe(() => this.stateNotifier.next(DbState.Initialized));
     return this._db.initialized;
   }
 
