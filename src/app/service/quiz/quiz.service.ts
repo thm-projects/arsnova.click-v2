@@ -157,6 +157,10 @@ export class QuizService {
 
   public loadDataToPlay(quizName: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
+      if (!quizName) {
+        reject('QuizService: No quizname provided');
+      }
+
       if (this.quiz) {
         console.log('QuizService: aborting loadDataToPlay since the quiz is already present', quizName);
         resolve();
@@ -174,6 +178,10 @@ export class QuizService {
   }
 
   public loadDataToEdit(quizName: string): void {
+    if (!quizName) {
+      return;
+    }
+
     this.storageService.db.Quiz.get(quizName).then(quiz => {
       if (!quiz) {
         return;
