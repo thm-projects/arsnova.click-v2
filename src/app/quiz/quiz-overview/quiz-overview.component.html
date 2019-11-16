@@ -71,11 +71,12 @@
             <fa-icon [icon]="'download'"></fa-icon>
           </button>
 
-          <button (click)="deleteQuiz(i)"
+          <button (click)="deleteQuiz(elem)"
                   [disabled]="!connectionService.serverAvailable"
                   [title]="'component.name_management.delete_session' | translate"
                   class="btn btn-secondary">
-            <fa-icon [icon]="'trash'"></fa-icon>
+            <fa-icon [icon]="isDeletingQuiz === elem ? 'spinner' : 'trash'"
+                     [spin]="isDeletingQuiz === elem"></fa-icon>
           </button>
         </div>
 

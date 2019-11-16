@@ -26,6 +26,7 @@ export class QuizOverviewComponent implements OnInit {
   public static TYPE = 'QuizOverviewComponent';
   public publicQuizAmount: number;
   public isStartingQuiz: QuizEntity;
+  public isDeletingQuiz: QuizEntity;
 
   private _sessions: Array<QuizEntity> = [];
 
@@ -145,7 +146,8 @@ export class QuizOverviewComponent implements OnInit {
     });
   }
 
-  public deleteQuiz(index: number): void {
+  public deleteQuiz(elem: QuizEntity): void {
+    this.isStartingQuiz = elem;
     this.trackingService.trackClickEvent({
       action: QuizOverviewComponent.TYPE,
       label: `delete-quiz`,
@@ -155,13 +157,17 @@ export class QuizOverviewComponent implements OnInit {
       return;
     }
 
-    this.quizApiService.deleteQuiz(this.sessions[index]).subscribe((response: IMessage) => {
+    this.quizApiService.deleteQuiz(elem).subscribe((response: IMessage) => {
       if (response.status !== StatusProtocol.Success) {
         console.log('QuizOverviewComponent: DeleteQuiz failed', response);
       } else {
-        const sessionName = this.sessions[index].name;
-        this.sessions.splice(index, 1);
-        this.storageService.db.Quiz.delete(sessionName);
+        const sessionName = elem.name;
+        this.storageService.db.Quiz.delete(sessionName).then(() => {
+          const index = this.sessions.findIndex(quiz => quiz.name === sessionName);
+          if (index > -1) {
+            this.sessions.splice(index, 1);
+          }
+        });
       }
     });
   }

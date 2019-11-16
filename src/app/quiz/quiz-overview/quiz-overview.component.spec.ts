@@ -173,7 +173,7 @@ describe('QuizOverviewComponent', () => {
     it('should return null if the quiz does not exist', inject([StorageService], (storageService: StorageService) => {
       const quizName = 'validtestquiz';
 
-      component.deleteQuiz(0);
+      component.deleteQuiz(validQuiz);
       storageService.db.Quiz.get(quizName).then(quiz => {
         expect(quiz).toBe(null);
       });

@@ -147,6 +147,11 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
 
     this.hasTriggeredNavigation = true;
     this.router.navigate(this.getNextRoute(route));
+    this.memberApiService.putResponse(this._selectedAnswers).subscribe((data: IMessage) => {
+      if (data.status !== StatusProtocol.Success) {
+        console.log('VotingComponent: PutResponse failed', data);
+      }
+    });
   }
 
   public initData(): void {
@@ -163,7 +168,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   public ngOnInit(): void {
-
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
@@ -220,12 +224,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   public ngOnDestroy(): void {
-    this.memberApiService.putResponse(this._selectedAnswers).subscribe((data: IMessage) => {
-      if (data.status !== StatusProtocol.Success) {
-        console.log('VotingComponent: PutResponse failed', data);
-      }
-    });
-
     if (this.countdown) {
       this.countdown.onChange.unsubscribe();
       this.countdown.stop();
@@ -272,7 +270,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
         this._selectedAnswers = [];
         this.hasTriggeredNavigation = true;
-        this.router.navigate(['/quiz', 'flow', 'results']);
+        this.sendResponses('results');
       }),
     ]);
   }
