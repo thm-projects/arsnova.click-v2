@@ -1,0 +1,16 @@
+<div class="modal-header">
+  <h5 class="modal-title"
+      id="noDataErrorModalTitle">{{'global.no-data-error.title' | translate}}</h5>
+</div>
+<div class="modal-body">
+  {{targetMessage | translate}}
+</div>
+<div class="modal-footer">
+  <button (click)="toHomepage()"
+          class="btn btn-secondary"
+          type="button">{{'global.no-data-error.homepage' | translate}}</button>
+  <button (click)="navigate()"
+          *ngIf="targetButton"
+          class="btn btn-secondary"
+          type="button">{{targetButton | translate}}</button>
+</div>

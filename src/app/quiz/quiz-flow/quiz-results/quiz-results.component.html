@@ -81,6 +81,7 @@
     <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
          class="btn-group w-100">
       <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
+              (click)="hasTriggeredNavigation = true"
               [routerLink]="['/quiz', 'flow', 'leaderboard', visibleQuestions.length > 1 ? selectedQuestionIndex : 'all']"
               class="btn btn-light w-100 cursor-pointer"
               type="button">
@@ -89,6 +90,7 @@
         <span>{{'component.liveResults.ranking' | translate}}</span>
       </button>
       <button *ngIf="showQuestionButton(selectedQuestionIndex)"
+              (click)="hasTriggeredNavigation = true"
               [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
               class="btn btn-light w-100 cursor-pointer"
               type="button">

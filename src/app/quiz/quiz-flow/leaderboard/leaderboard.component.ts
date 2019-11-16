@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +9,7 @@ import { environment } from '../../../../environments/environment';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
+import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ILeaderBoardItem } from '../../../lib/interfaces/ILeaderboard';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
@@ -26,9 +26,10 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
 })
-export class LeaderboardComponent implements OnInit, OnDestroy {
+export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'LeaderboardComponent';
   public isLoadingData = true;
+  public hasTriggeredNavigation: boolean;
 
   private _questionIndex: number;
   private readonly _destroy = new Subject();
@@ -89,6 +90,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       }
 
       if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
       }
@@ -177,6 +179,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
         this._questionIndex = null;
         if (params['questionIndex']) {
+          this.hasTriggeredNavigation = true;
           this.router.navigate(['/quiz', 'flow', 'leaderboard']);
           return;
         }
@@ -205,6 +208,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
         sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }),
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         console.log('LeaderboardComponent: modify response data for nickname', payload.nickname);
@@ -214,15 +218,16 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
-        if (isPlatformBrowser(this.platformId)) {
-          const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
-          if (existingNickname === payload.name) {
-            this.router.navigate(['/']);
-          }
+        const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
+        if (existingNickname === payload.name) {
+          this.hasTriggeredNavigation = true;
+          this.router.navigate(['/']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
     ]);
@@ -234,6 +239,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy {
     ];
 
     this.footerBarService.footerElemBack.onClickCallback = () => {
+      this.hasTriggeredNavigation = true;
       this.router.navigate(['/quiz', 'flow', 'results']);
     };
 

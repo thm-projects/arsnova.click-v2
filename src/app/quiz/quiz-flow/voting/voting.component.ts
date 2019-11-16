@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -15,6 +14,7 @@ import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
@@ -30,9 +30,10 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.scss'],
 })
-export class VotingComponent implements OnInit, OnDestroy {
+export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'VotingComponent';
   public isSendingResponse: boolean;
+  public hasTriggeredNavigation: boolean;
 
   private _answers: Array<string> = [];
 
@@ -144,10 +145,8 @@ export class VotingComponent implements OnInit, OnDestroy {
   public sendResponses(route?: string): void {
     this.isSendingResponse = true;
 
-    this.router.navigate([
-      '/quiz', 'flow', route ? route : environment.confidenceSliderEnabled && //
-                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
-    ]);
+    this.hasTriggeredNavigation = true;
+    this.router.navigate(this.getNextRoute(route));
   }
 
   public initData(): void {
@@ -171,11 +170,18 @@ export class VotingComponent implements OnInit, OnDestroy {
       }
 
       if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
       }
 
       this._currentQuestion = this.quizService.currentQuestion();
+      if (this.attendeeService.hasReponse()) {
+        this.hasTriggeredNavigation = true;
+        this.router.navigate(this.getNextRoute());
+        return;
+      }
+
       this.initData();
 
       this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string | Array<string>) => {
@@ -252,18 +258,20 @@ export class VotingComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
-        if (isPlatformBrowser(this.platformId)) {
-          const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
-          if (existingNickname === payload.name) {
-            this.router.navigate(['/']);
-          }
+        const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
+        if (existingNickname === payload.name) {
+          this.hasTriggeredNavigation = true;
+          this.router.navigate(['/']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
         this._selectedAnswers = [];
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'results']);
       }),
     ]);
@@ -280,5 +288,12 @@ export class VotingComponent implements OnInit, OnDestroy {
       QuestionType.ABCDSingleChoiceQuestion,
       QuestionType.YesNoSingleChoiceQuestion,
     ].includes(this._currentQuestion.TYPE);
+  }
+
+  private getNextRoute(route?: string): Array<string> {
+    return [
+      '/quiz', 'flow', route ? route : environment.confidenceSliderEnabled && //
+                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
+    ];
   }
 }

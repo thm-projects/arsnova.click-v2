@@ -11,6 +11,7 @@ import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -28,8 +29,9 @@ import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-conf
   styleUrls: ['./quiz-results.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuizResultsComponent implements OnInit, OnDestroy {
+export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'QuizResultsComponent';
+  public hasTriggeredNavigation: boolean;
   public countdown: number;
   public answers: Array<string> = [];
   public showStartQuizButton: boolean;
@@ -222,6 +224,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }
 
       if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
       }
@@ -327,6 +330,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
 
     return this.quizApiService.getQuizStatus(this.quizService.quiz.name).toPromise().then(currentStateData => {
       if (currentStateData.status !== StatusProtocol.Success) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
       }
@@ -334,6 +338,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       if (currentStateData.payload.state === QuizState.Active) {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
         return;
       }
@@ -470,8 +475,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
     ]);
@@ -504,10 +511,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
   private handleMessagesForAttendee(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         } else {
@@ -516,6 +525,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
         const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
         if (existingNickname === payload.name) {
+          this.hasTriggeredNavigation = true;
           this.router.navigate(['/']);
         }
       }),

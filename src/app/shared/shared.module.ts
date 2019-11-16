@@ -64,10 +64,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
+import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
 
 @NgModule({
   imports: [
-    FormsModule, CommonModule, HttpClientModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule,
+    FormsModule, CommonModule, HttpClientModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(),
   ],
   exports: [
     FormsModule, CommonModule,
@@ -78,10 +79,11 @@ import { GamificationAnimationComponent } from './gamification-animation/gamific
     RouterModule,
     AudioPlayerComponent,
     GamificationAnimationComponent,
-    AngularSvgIconModule,
+    AngularSvgIconModule, NoDataErrorComponent,
   ],
   providers: [],
-  declarations: [AudioPlayerComponent, GamificationAnimationComponent],
+  declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent],
+  entryComponents: [NoDataErrorComponent],
   bootstrap: [],
 })
 export class SharedModule {

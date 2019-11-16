@@ -26,7 +26,15 @@
     "false": "False",
     "in-cooperation-with": "in cooperation with",
     "please-wait": "Please wait...",
-    "please-select": "Please select..."
+    "please-select": "Please select...",
+    "loose-data-warning": "With this navigation data loss is possible - do you want to proceed?",
+    "no-data-error": {
+      "title": "Error while loading data",
+      "load-to-edit": "The data for the requested page could not be loaded. Please do not use the browser's navigation as data loss is possible. You can go to the quiz overview or to the home page now.",
+      "load-to-play": "The data for the requested page could not be loaded. Please do not use the browser's navigation as data loss is possible. The quiz round must be quit now. You can only return to the home page.",
+      "homepage": "To the home page",
+      "to-quiz-overview": "To the quiz overview"
+    }
   },
   "region": {
     "footer": {

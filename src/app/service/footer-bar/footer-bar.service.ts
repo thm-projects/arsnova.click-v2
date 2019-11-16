@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, Injector, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
@@ -158,9 +159,9 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.description.fullscreen',
     linkTarget: null,
     isActive: isPlatformBrowser(this.platformId) ? window.outerWidth === screen.width && window.outerHeight === screen.height : false,
-  }, function (): void {
-    this.isActive = !this.isActive;
-    setFullScreen(this.isActive);
+  }, self => {
+    self.isActive = !self.isActive;
+    setFullScreen(self.isActive);
   });
   public footerElemHome: IFooterBarElement = new FooterbarElement({
     id: 'home',
@@ -260,8 +261,7 @@ export class FooterBarService {
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.back',
     linkTarget: null,
-  }, function (): void {
-    console.log('footerElemBack: going back');
+  }, () => {
     history.back();
   });
   public footerElemStartQuiz: IFooterBarElement = new FooterbarElement({
@@ -418,7 +418,7 @@ export class FooterBarService {
     private rxStompService: RxStompService,
     private quizService: QuizService,
     private quizApiService: QuizApiService,
-    private translateService: TranslateService,
+    private translateService: TranslateService, private route: ActivatedRoute, private injector: Injector,
   ) {
 
     this.rxStompService.connectionState$.subscribe(value => {

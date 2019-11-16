@@ -100,6 +100,25 @@ export class AttendeeService {
     });
   }
 
+  public hasReponse(): boolean {
+    const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
+    if (typeof response.value === 'number') {
+      return response && !isNaN(response.value);
+    }
+
+    return response && response.value.length > 0;
+  }
+
+  public hasReadingConfirmation(): boolean {
+    const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
+    return response && response.readingConfirmation;
+  }
+
+  public hasConfidenceValue(): boolean {
+    const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
+    return response && !isNaN(response.confidence);
+  }
+
   private restoreMembers(): Promise<void> {
     return new Promise<void>(resolve => {
       this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {

@@ -1,10 +1,12 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { ReplaySubject } from 'rxjs';
 import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { StorageKey } from '../../lib/enums/enums';
+import { NoDataErrorComponent } from '../../shared/no-data-error/no-data-error.component';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { SettingsService } from '../settings/settings.service';
 import { StorageService } from '../storage/storage.service';
@@ -60,7 +62,7 @@ export class QuizService {
     private translateService: TranslateService,
     private storageService: StorageService,
     private settingsService: SettingsService,
-    private quizApiService: QuizApiService,
+    private quizApiService: QuizApiService, private ngbModal: NgbModal,
   ) {
   }
 
@@ -158,7 +160,14 @@ export class QuizService {
   public loadDataToPlay(quizName: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       if (!quizName) {
-        reject('QuizService: No quizname provided');
+        const instance = this.ngbModal.open(NoDataErrorComponent, {
+          keyboard: false,
+          backdrop: 'static',
+        });
+        instance.componentInstance.targetMessage = 'global.no-data-error.load-to-play';
+        instance.result.catch(() => {});
+        reject();
+        return;
       }
 
       if (this.quiz) {
@@ -179,6 +188,14 @@ export class QuizService {
 
   public loadDataToEdit(quizName: string): void {
     if (!quizName) {
+      const instance = this.ngbModal.open(NoDataErrorComponent, {
+        keyboard: false,
+        backdrop: 'static',
+      });
+      instance.componentInstance.target = ['/quiz/overview'];
+      instance.componentInstance.targetMessage = 'global.no-data-error.load-to-edit';
+      instance.componentInstance.targetButton = 'global.no-data-error.to-quiz-overview';
+      instance.result.catch(() => {});
       return;
     }
 

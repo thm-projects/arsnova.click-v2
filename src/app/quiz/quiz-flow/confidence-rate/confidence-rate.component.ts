@@ -9,6 +9,7 @@ import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -22,8 +23,10 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   templateUrl: './confidence-rate.component.html',
   styleUrls: ['./confidence-rate.component.scss'],
 })
-export class ConfidenceRateComponent implements OnInit, OnDestroy {
+export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'ConfidenceRateComponent';
+
+  public hasTriggeredNavigation: boolean;
 
   private _confidenceValue = '100';
 
@@ -60,10 +63,17 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
       }
 
       if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
       }
     });
+
+    if (this.attendeeService.hasConfidenceValue()) {
+      this.hasTriggeredNavigation = true;
+      this.router.navigate(['/quiz', 'flow', 'results']);
+      return;
+    }
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
@@ -111,6 +121,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
 
   public async sendConfidence(): Promise<Subscription> {
     return this.memberApiService.putConfidenceValue(parseInt(this._confidenceValue, 10)).subscribe((data: IMessage) => {
+      this.hasTriggeredNavigation = true;
       this.router.navigate(['/quiz', 'flow', 'results']);
     });
   }
@@ -122,8 +133,10 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
         sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
-      }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
+      }), this.messageQueue.subscribe(MessageProtocol.Stop, () => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'results']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         console.log('ConfidenceRateComponent: modify response data for nickname', payload.nickname);
@@ -131,6 +144,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         } else {
@@ -139,12 +153,14 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
         this.attendeeService.addMember(payload.member);
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
         this.attendeeService.removeMember(payload.name);
-      }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+      }), this.messageQueue.subscribe(MessageProtocol.Closed, () => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
     ]);

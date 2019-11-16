@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { QRCodeModule } from 'angularx-qrcode';
 import { MarkdownModule } from 'ngx-markdown';
 import { CasLoginService } from '../../service/login/cas-login.service';
+import { ShowUnloadWarningGuard } from '../../service/show-unload-warning-guard/show-unload-warning.guard';
 import { SharedModule } from '../../shared/shared.module';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
@@ -26,6 +27,7 @@ export const quizFlowRoutes: Routes = [
     canLoad: [CasLoginService],
     component: QuizLobbyComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   }, {
     path: 'results',
     component: QuizResultsComponent,
@@ -46,14 +48,17 @@ export const quizFlowRoutes: Routes = [
     path: 'voting',
     component: VotingComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   }, {
     path: 'reading-confirmation',
     component: ReadingConfirmationComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   }, {
     path: 'confidence-rate',
     component: ConfidenceRateComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   },
 ];
 

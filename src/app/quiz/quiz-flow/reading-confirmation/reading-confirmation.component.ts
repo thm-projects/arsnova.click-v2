@@ -9,6 +9,7 @@ import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -23,8 +24,10 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   templateUrl: './reading-confirmation.component.html',
   styleUrls: ['./reading-confirmation.component.scss'],
 })
-export class ReadingConfirmationComponent implements OnInit, OnDestroy {
+export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'ReadingConfirmationComponent';
+
+  public hasTriggeredNavigation: boolean;
 
   public questionIndex: number;
   public questionText: string;
@@ -74,12 +77,19 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     });
 
+    if (this.attendeeService.hasReadingConfirmation()) {
+      this.hasTriggeredNavigation = true;
+      this.router.navigate(['/quiz', 'flow', 'results']);
+      return;
+    }
+
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }
 
       if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
       }
@@ -105,6 +115,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
 
   public confirmReading(): void {
     this.memberApiService.putReadingConfirmationValue().subscribe(() => {
+      this.hasTriggeredNavigation = true;
       this.router.navigate(['/quiz', 'flow', 'results']);
     });
   }
@@ -115,6 +126,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
         sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         console.log('ReadingConfirmationComponent: modifying response data for nickname', payload.nickname);
@@ -124,8 +136,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
         this.attendeeService.addMember(payload.member);

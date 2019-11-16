@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -14,6 +13,7 @@ import { UserRole } from '../../../lib/enums/UserRole';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
@@ -35,8 +35,10 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
   templateUrl: './quiz-lobby.component.html',
   styleUrls: ['./quiz-lobby.component.scss'],
 })
-export class QuizLobbyComponent implements OnInit, OnDestroy {
+export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'QuizLobbyComponent';
+
+  public hasTriggeredNavigation: boolean;
 
   private _nickToRemove: string;
 
@@ -81,6 +83,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       }
 
       if (this.quizService.quiz.state === QuizState.Inactive) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
       }
@@ -200,6 +203,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
       this.attendeeService.cleanUp();
       this.connectionService.cleanUp();
+      this.hasTriggeredNavigation = true;
       this.router.navigate(['/']);
     };
   }
@@ -238,6 +242,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.quizService.readingConfirmationRequested = environment.readingConfirmationEnabled ? data.step
                                                                                                  === MessageProtocol.ReadingConfirmationRequested
                                                                                                : false;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'results']);
         self.isLoading = false;
       });
@@ -252,6 +257,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
         this.quizService.close();
         this.attendeeService.cleanUp();
         this.connectionService.cleanUp();
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'manager', 'overview']);
       }).catch(() => {});
     };
@@ -273,6 +279,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
     ]);
@@ -295,21 +302,22 @@ export class QuizLobbyComponent implements OnInit, OnDestroy {
   private handleMessagesForAttendee(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         } else {
           this.router.navigate(['/quiz', 'flow', 'voting']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
-        if (isPlatformBrowser(this.platformId)) {
-          const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
-          if (existingNickname === payload.name) {
-            this.router.navigate(['/']);
-          }
+        const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
+        if (existingNickname === payload.name) {
+          this.hasTriggeredNavigation = true;
+          this.router.navigate(['/']);
         }
       }),
     ]);

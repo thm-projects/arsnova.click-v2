@@ -13,7 +13,7 @@ export class ServerUnavailableModalComponent implements OnDestroy {
   }
 
   public reloadPage(): void {
-    location.reload(true);
+    window.caches.keys().then(keys => Promise.all(keys.map(key => window.caches.delete(key)))).finally(() => location.reload(true));
   }
 
   public ngOnDestroy(): void {

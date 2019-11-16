@@ -20,7 +20,15 @@
     "false": "Falsch",
     "in-cooperation-with": "in Kooperation mit",
     "please-wait": "Bitte warten...",
-    "please-select": "Bitte auswählen..."
+    "please-select": "Bitte auswählen...",
+    "loose-data-warning": "Bei dieser Navigation können Datenverluste auftreten - möchtest du fortfahren?",
+    "no-data-error": {
+      "title": "Fehler beim Laden der Daten",
+      "load-to-edit": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier ggf. Daten verloren gehen können. Du kannst zur Quiz Übersicht oder zur Startseite zurückkehren.",
+      "load-to-play": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier ggf. Daten verloren gehen können. Die Quiz Runde muss für dich beendet werden. Du kannst nur zur Startseite zurückkehren.",
+      "homepage": "Zur Startseite",
+      "to-quiz-overview": "Zur Quiz Übersicht"
+    }
   },
   "region": {
     "footer": {

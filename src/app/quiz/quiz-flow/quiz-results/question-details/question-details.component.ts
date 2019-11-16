@@ -11,6 +11,7 @@ import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQu
 import { StorageKey } from '../../../../lib/enums/enums';
 import { MessageProtocol } from '../../../../lib/enums/Message';
 import { IMemberSerialized } from '../../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IHasTriggeredNavigation } from '../../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
@@ -23,8 +24,9 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   templateUrl: './question-details.component.html',
   styleUrls: ['./question-details.component.scss'],
 })
-export class QuestionDetailsComponent implements OnInit, OnDestroy {
+export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'QuestionDetailsComponent';
+  public hasTriggeredNavigation: boolean;
 
   private _question: AbstractQuestionEntity;
 
@@ -75,6 +77,11 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
     ]);
+
+    this.footerBarService.footerElemBack.onClickCallback = () => {
+      this.hasTriggeredNavigation = true;
+      history.back();
+    };
   }
 
   public sanitizeHTML(value: string): string {
@@ -121,6 +128,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
 
       this._questionIndex = questionIndex;
       if (this._questionIndex < 0 || this._questionIndex > this.quizService.quiz.currentQuestionIndex) {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'results']);
         return;
       }
@@ -136,6 +144,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
+    this.footerBarService.footerElemBack.restoreClickCallback();
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy.next();
     this._destroy.complete();
@@ -165,8 +174,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
     ]);
@@ -179,10 +190,12 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy {
   private handleMessagesForAttendee(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
         } else {
