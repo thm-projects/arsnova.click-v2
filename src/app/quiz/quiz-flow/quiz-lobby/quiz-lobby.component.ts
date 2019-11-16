@@ -100,7 +100,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     });
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-    });
+    }).catch(() => this.hasTriggeredNavigation = true);
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {

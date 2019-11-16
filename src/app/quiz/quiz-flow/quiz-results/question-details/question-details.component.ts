@@ -140,7 +140,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
-    });
+    }).catch(() => this.hasTriggeredNavigation = true);
   }
 
   public ngOnDestroy(): void {

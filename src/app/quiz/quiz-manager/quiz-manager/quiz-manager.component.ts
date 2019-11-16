@@ -4,7 +4,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { availableQuestionTypes, IAvailableQuestionType } from '../../../lib/available-question-types';
 import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
 import { ABCDSingleChoiceQuestionEntity } from '../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { TrueFalseSingleChoiceQuestionEntity } from '../../../lib/entities/question/TrueFalseSingleChoiceQuestionEntity';
@@ -28,12 +27,6 @@ import { QuizTypeSelectModalComponent } from './quiz-type-select-modal/quiz-type
 })
 export class QuizManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizManagerComponent';
-
-  private _selectableQuestionTypes = availableQuestionTypes;
-
-  get selectableQuestionTypes(): Array<IAvailableQuestionType> {
-    return this._selectableQuestionTypes;
-  }
 
   private readonly _destroy = new Subject();
 

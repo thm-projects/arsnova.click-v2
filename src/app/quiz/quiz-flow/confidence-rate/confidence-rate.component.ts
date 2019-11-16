@@ -77,7 +77,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
-    });
+    }).catch(() => this.hasTriggeredNavigation = true);
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {

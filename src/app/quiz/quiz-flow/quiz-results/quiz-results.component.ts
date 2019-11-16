@@ -247,7 +247,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
       this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
-    });
+    }).catch(() => this.hasTriggeredNavigation = true);
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {

@@ -100,7 +100,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
-    });
+    }).catch(() => this.hasTriggeredNavigation = true);
 
     this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string) => {
       this.questionText = value;

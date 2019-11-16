@@ -150,7 +150,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (this._ownQuizzes.length && //
             environment.showJoinableQuizzes && //
             (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz))) {
-          this.modalService.open(AvailableQuizzesComponent);
+          const ref = this.modalService.open(AvailableQuizzesComponent);
+          this._destroy.subscribe(() => ref.close());
         }
       });
 
