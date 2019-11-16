@@ -147,7 +147,7 @@ export class QuizOverviewComponent implements OnInit {
   }
 
   public deleteQuiz(elem: QuizEntity): void {
-    this.isStartingQuiz = elem;
+    this.isDeletingQuiz = elem;
     this.trackingService.trackClickEvent({
       action: QuizOverviewComponent.TYPE,
       label: `delete-quiz`,
