@@ -54,3 +54,9 @@
 .server-not-available-label {
   height: calc(100% - 10vh);
 }
+
+.mathjax-container {
+  ::ng-deep svg {
+    max-width: 100%;
+  }
+}

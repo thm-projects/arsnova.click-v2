@@ -16,7 +16,7 @@
              class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer"
              [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
           <p *ngIf="question.displayAnswerText"
-             class="mb-0 markdown-answer text-dark"
+             class="mb-0 markdown-answer text-dark mathjax-container overflow-hidden"
              [innerHTML]="sanitizeHTML(elem)"></p>
           <p *ngIf="!question.displayAnswerText"
              class="mb-0 text-dark">{{normalizeAnswerOptionIndex(i)}}</p>
@@ -35,7 +35,7 @@
   <div class="px-4 preview-content position-relative overflow-auto">
     <app-header [showHeader]="false"></app-header>
     <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-      <p class="mb-0"
+      <p class="mb-0 overflow-hidden mathjax-container"
          [innerHTML]="sanitizeHTML(dataSource)"></p>
     </ng-container>
   </div>
