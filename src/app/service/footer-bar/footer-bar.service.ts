@@ -379,7 +379,6 @@ export class FooterBarService {
       logout: true,
     },
   }, () => {
-    this.userService.logout();
   });
   public footerElemEditI18n: IFooterBarElement = new FooterbarElement({
     id: 'edit-i18n',

@@ -1,28 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
 import { TrackingCategoryType } from '../../lib/enums/enums';
+import { ITrackClickEvent } from '../../lib/interfaces/tracking/ITrackClickEvent';
+import { ITrackConversionEvent } from '../../lib/interfaces/tracking/ITrackConversionEvent';
+import { ITrackEvent } from '../../lib/interfaces/tracking/ITrackEvent';
 import { ArsnovaClickAngulartics2Piwik } from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
-
-interface ITrackEvent {
-  action: string;
-  category: TrackingCategoryType;
-  label: string;
-  value?: number;
-  customDimensions?: any;
-}
-
-export interface ITrackClickEvent {
-  action: string;
-  label: string;
-  value?: number;
-  customDimensions?: any;
-}
-
-export interface ITrackConversionEvent {
-  action: string;
-  label?: string;
-}
-
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +26,9 @@ export class TrackingService {
         },
       });
     } catch (ex) {
-      console.error(ex.message);
+      if (!(ex instanceof ReferenceError)) {
+        console.error(ex.message);
+      }
     }
   }
 

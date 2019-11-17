@@ -4,7 +4,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { ReplaySubject, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { DbState, StorageKey } from '../../lib/enums/enums';
+import { DbName, DbState, StorageKey } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
 import { UserRole } from '../../lib/enums/UserRole';
 import { ILoginSerialized } from '../../lib/interfaces/ILoginSerialized';
@@ -27,7 +27,7 @@ export class UserService {
       this._casTicket = null;
       this._staticLoginToken = null;
       this._staticLoginTokenContent = null;
-      this._username = null;
+      this._username = DbName.Default;
       this.deleteTokens();
     } else {
       this._staticLoginTokenContent = this.decodeToken();
@@ -88,7 +88,8 @@ export class UserService {
     private quizService: QuizService,
   ) {
 
-    this.storageService.stateNotifier.pipe(filter(type => this.username && type !== null && type !== DbState.Destroy)).subscribe((type) => {
+    this.storageService.stateNotifier.pipe(filter(type => this.username !== DbName.Default && type !== null && type !== DbState.Destroy))
+    .subscribe(() => {
 
       if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
         console.log('UserService: having static token content with private key');

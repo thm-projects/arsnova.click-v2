@@ -17,6 +17,7 @@ import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
 import { UserRole } from '../../lib/enums/UserRole';
+import { ITrackClickEvent } from '../../lib/interfaces/tracking/ITrackClickEvent';
 import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
@@ -31,7 +32,7 @@ import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
-import { ITrackClickEvent, TrackingService } from '../../service/tracking/tracking.service';
+import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
 
 @Component({

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AppDb } from '../../lib/db/app.db';
-import { DbName, DbState, StorageKey } from '../../lib/enums/enums';
+import { DbState, StorageKey } from '../../lib/enums/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +24,7 @@ export class StorageService {
       return this._db.initialized;
     }
 
-    return this.initDb(username || DbName.Default);
+    return this.initDb(username);
   }
 
   private initDb(dbName): Observable<void> {
