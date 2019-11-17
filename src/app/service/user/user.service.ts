@@ -1,8 +1,8 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { ReplaySubject } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { ReplaySubject, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { DbState, StorageKey } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
@@ -16,12 +16,6 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class UserService {
-  private _isLoggedIn: boolean;
-
-  get isLoggedIn(): boolean {
-    return this._isLoggedIn;
-  }
-
   set isLoggedIn(value: boolean) {
     if (!value) {
       this._casTicket = null;
@@ -36,7 +30,8 @@ export class UserService {
     }
     if (isPlatformBrowser(this.platformId)) {
       console.log(`UserService: switching db to user ${this.username} - isLoggedIn: ${value}`);
-      this.storageService.switchDb(this._username).subscribe(() => {
+      this._destroy.next();
+      this.storageService.switchDb(this._username).pipe(takeUntil(this._destroy)).subscribe(() => {
         this._isLoggedIn = value;
         this._loginNotifier.next(value);
       });
@@ -45,6 +40,14 @@ export class UserService {
       this._loginNotifier.next(value);
     }
   }
+
+  private _isLoggedIn: boolean;
+
+  get isLoggedIn(): boolean {
+    return this._isLoggedIn;
+  }
+
+  private readonly _destroy = new Subject();
 
   private _staticLoginTokenContent: ILoginSerialized;
 
