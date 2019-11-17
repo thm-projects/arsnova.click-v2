@@ -139,7 +139,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   public modifyVisibleQuestion(index: number): void {
-    if (!this.quizService.quiz) {
+    if (!this.quizService.quiz || typeof index === 'undefined' || index < 0 || index > this.quizService.quiz.questionList.length) {
       return;
     }
 
