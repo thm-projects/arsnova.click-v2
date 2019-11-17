@@ -47,7 +47,7 @@ export class MemberGroupSelectComponent {
 
       if (this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup) {
         this.quizApiService.getFreeMemberGroup().subscribe((data: IMessage) => {
-          if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Updated) {
+          if (data.status === StatusProtocol.Success && data.step === MessageProtocol.GetFreeMemberGroup) {
             this.addToGroup(data.payload.groupName);
           }
         });

@@ -55,17 +55,18 @@ export enum MessageProtocol {
   EndOfQuestions               = 'EndOfQuestions', //
   CurrentState                 = 'CurrentState', //
   GetStartTime                 = 'GetStartTime', //
-  GetLeaderboardData           = 'GetLeaderboardData', //
-  Reserved                     = 'Reserved', //
-  Removed                      = 'Removed', //
-  GetThemes                    = 'GetThemes', //
-  QuizAssets                   = 'QuizAssets', //
-  Render                       = 'Render', //
-  Connected                    = 'Connected', //
-  QuizNotFound                 = 'QuizNotFound', //
-  Connect                      = 'Connect', //
-  Disconnect                   = 'Disconnect', //
-  Editable                     = 'Editable', //
+  GetLeaderboardData = 'GetLeaderboardData', //
+  Reserved           = 'Reserved', //
+  Removed            = 'Removed', //
+  GetThemes          = 'GetThemes', //
+  QuizAssets         = 'QuizAssets', //
+  Render             = 'Render', //
+  Connected          = 'Connected', //
+  QuizNotFound       = 'QuizNotFound', //
+  Connect            = 'Connect', //
+  Disconnect         = 'Disconnect', //
+  Editable           = 'Editable', //
+  GetFreeMemberGroup = 'GetFreeMemberGroup', //
 }
 
 export const Message = {
