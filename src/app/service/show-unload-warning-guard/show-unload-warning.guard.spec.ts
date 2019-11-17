@@ -9,7 +9,7 @@ describe('ShowUnloadWarningGuard', () => {
     });
   });
 
-  it('should ...', inject([ShowUnloadWarningGuard], (guard: ShowUnloadWarningGuard) => {
+  it('should ...', inject([ShowUnloadWarningGuard], (guard: ShowUnloadWarningGuard<any>) => {
     expect(guard).toBeTruthy();
   }));
 });
