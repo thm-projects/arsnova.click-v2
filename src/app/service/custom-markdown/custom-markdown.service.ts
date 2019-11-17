@@ -70,7 +70,7 @@ export class CustomMarkdownService {
     if (imgMatch) {
       imgMatch.forEach(token => {
         const imgNode: HTMLImageElement = this.createElementFromHTML(token) as HTMLImageElement;
-        imgNode.classList.add(...['thumbnail', 'cursor-zoom-in', 'img-fluid']);
+        imgNode.classList.add(...['thumbnail', 'cursor-zoom-in']);
 
         const anchorNode = document.createElement<'a'>('a');
         anchorNode.href = imgNode.src;
