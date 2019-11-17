@@ -102,11 +102,15 @@ export class AttendeeService {
 
   public hasReponse(): boolean {
     const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
-    if (typeof response.value === 'number') {
-      return response && !isNaN(response.value);
+    if (typeof response === 'undefined' || typeof response.value === 'undefined') {
+      return false;
     }
 
-    return response && response.value.length > 0;
+    if (typeof response.value === 'number') {
+      return !isNaN(response.value);
+    }
+
+    return response.value.length > 0;
   }
 
   public hasReadingConfirmation(): boolean {
