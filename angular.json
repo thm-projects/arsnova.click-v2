@@ -117,7 +117,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": {
-                "hidden": true,
+                "hidden": false,
                 "styles": true,
                 "scripts": true
               },
@@ -204,7 +204,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": {
-                "hidden": true,
+                "hidden": false,
                 "styles": true,
                 "scripts": true
               },
@@ -291,7 +291,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": {
-                "hidden": true,
+                "hidden": false,
                 "styles": true,
                 "scripts": true
               },
@@ -386,7 +386,7 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": {
-                "hidden": true,
+                "hidden": false,
                 "styles": true,
                 "scripts": true
               },

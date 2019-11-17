@@ -16,6 +16,12 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class UserService {
+  private _isLoggedIn: boolean;
+
+  get isLoggedIn(): boolean {
+    return this._isLoggedIn;
+  }
+
   set isLoggedIn(value: boolean) {
     if (!value) {
       this._casTicket = null;
@@ -40,14 +46,6 @@ export class UserService {
       this._loginNotifier.next(value);
     }
   }
-
-  private _isLoggedIn: boolean;
-
-  get isLoggedIn(): boolean {
-    return this._isLoggedIn;
-  }
-
-  private readonly _destroy = new Subject();
 
   private _staticLoginTokenContent: ILoginSerialized;
 
@@ -79,6 +77,7 @@ export class UserService {
     return this._staticLoginToken;
   }
 
+  private readonly _destroy = new Subject();
   private _tmpRemoteQuizData: Array<any> = [];
 
   constructor(
