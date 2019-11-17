@@ -53,7 +53,7 @@ describe('QuizApiService', () => {
       },
     };
 
-    service.getFreeMemberGroup().subscribe();
+    service.getFreeMemberGroup(quizName).subscribe();
     backend.expectOne(service.getFreeMemberGroupUrl).flush(quizStatusData);
 
     expect(service).toBeTruthy();

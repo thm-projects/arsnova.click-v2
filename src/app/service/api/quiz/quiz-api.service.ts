@@ -148,8 +148,8 @@ export class QuizApiService {
       { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
-  public getFreeMemberGroup(): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getFreeMemberGroupUrl}`,
+  public getFreeMemberGroup(quizName: string): Observable<IMessage> {
+    return this.http.get<IMessage>(`${this._getFreeMemberGroupUrl}/${quizName}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
