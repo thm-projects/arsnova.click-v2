@@ -5,6 +5,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 export const environment: IEnvironment = {
   production: true,
   version: 'VERSION',
+  enableCasLogin: false,
   sentryDSN: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
   ssrEndpoint: 'https://beta.arsnova.click/backend',
   serverEndpoint: 'https://beta.arsnova.click/backend',

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 import { StorageKey } from '../../../lib/enums/enums';
 import { IAvailableNicks } from '../../../lib/interfaces/IAvailableNicks';
 import { NickApiService } from '../../../service/api/nick/nick-api.service';
@@ -61,9 +62,11 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameManagerComponent.TYPE;
-    this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack, this.footerBarService.footerElemBlockRudeNicknames, this.footerBarService.footerElemEnableCasLogin,
-    ]);
+    const footerElements = [this.footerBarService.footerElemBack, this.footerBarService.footerElemBlockRudeNicknames];
+    if (environment.enableCasLogin) {
+      footerElements.push(this.footerBarService.footerElemEnableCasLogin);
+    }
+    this.footerBarService.replaceFooterElements(footerElements);
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
