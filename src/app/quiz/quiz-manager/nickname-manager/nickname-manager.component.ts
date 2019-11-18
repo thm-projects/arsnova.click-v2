@@ -35,6 +35,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
         nick => this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(nick)));
     }
     this._availableNicksBackup = Object.assign({}, value);
+    this.cd.markForCheck();
   }
 
   private _selectedCategory = '';
