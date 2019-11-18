@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Filter } from '../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
-import { ProjectLoaderService } from '../../service/project-loader/project-loader.service';
 
 @Component({
   selector: 'app-key-output',
@@ -33,8 +32,7 @@ export class KeyOutputComponent {
 
   @Output() private changeEmitter = new EventEmitter<Object>();
 
-  constructor(public projectLoaderService: ProjectLoaderService, public languageLoaderService: LanguageLoaderService, private cd: ChangeDetectorRef) {
-  }
+  constructor(public languageLoaderService: LanguageLoaderService, private cd: ChangeDetectorRef) {}
 
   public selectKey(key: string): void {
     if (this.selectedKey === key) {

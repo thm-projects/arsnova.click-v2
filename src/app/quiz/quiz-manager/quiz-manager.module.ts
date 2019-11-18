@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { RouterModule, Routes } from '@angular/router';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MarkdownModule } from 'ngx-markdown';
 import { LivePreviewModule } from '../../live-preview/live-preview.module';
 import { MarkdownBarModule } from '../../markdown/markdown-bar.module';
@@ -71,11 +72,9 @@ const quizManagerRoutes: Routes = [
 @NgModule({
   imports: [
     FormsModule,
-    SharedModule,
-    QuizManagerDetailsModule, MarkdownBarModule,
+    SharedModule, QuizManagerDetailsModule, MarkdownBarModule,
     LivePreviewModule,
-    RouterModule.forChild(quizManagerRoutes),
-    PipesModule, MarkdownModule.forChild(),
+    RouterModule.forChild(quizManagerRoutes), PipesModule, MarkdownModule.forChild(), InfiniteScrollModule,
   ],
   declarations: [
     QuizManagerComponent, NicknameManagerComponent, SoundManagerComponent, MemberGroupManagerComponent, QuizTypeSelectModalComponent,

@@ -1,5 +1,5 @@
-import { Component, OnDestroy, OnInit, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../lib/enums/enums';
@@ -13,12 +13,15 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-nickname-manager',
   templateUrl: './nickname-manager.component.html',
   styleUrls: ['./nickname-manager.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NicknameManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'NicknameManagerComponent';
+  public readonly throttle = 0;
+  public readonly scrollDistance = 4;
+  public visibleData = 20;
 
   private _availableNicks: IAvailableNicks;
-  private readonly _destroy = new Subject();
 
   get availableNicks(): IAvailableNicks {
     return this._availableNicks;
@@ -39,6 +42,12 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     return this._selectedCategory;
   }
 
+  set selectedCategory(value: string) {
+    this._selectedCategory = value;
+    this.visibleData = 20;
+  }
+
+  private readonly _destroy = new Subject();
   private _availableNicksBackup: IAvailableNicks;
   private _previousSearchValue = '';
 
@@ -46,7 +55,9 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private quizService: QuizService,
     private footerBarService: FooterBarService,
-    private nickApiService: NickApiService, private customMarkdownService: CustomMarkdownService,
+    private nickApiService: NickApiService,
+    private customMarkdownService: CustomMarkdownService,
+    private cd: ChangeDetectorRef,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameManagerComponent.TYPE;
@@ -55,6 +66,11 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     ]);
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+  }
+
+  public onScrollDown(): void {
+    this.visibleData += 20;
+    this.cd.markForCheck();
   }
 
   public filterForKeyword(event: Event): void {
@@ -77,8 +93,9 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     });
   }
 
-  public sanitizeHTML(value: string): string {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  public sanitizeHTML(value: string): SafeHtml {
+    // bypassSecurityTrustHtml is required because the img tag of the emoji must be rendered
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`);
   }
 
   public availableNickCategories(): Array<string> {
@@ -90,7 +107,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._selectedCategory = this.selectedCategory === name ? '' : name;
+    this.selectedCategory = this.selectedCategory === name ? '' : name;
   }
 
   public selectNick(name: any): void {

@@ -1,46 +1,51 @@
 <div class="row text-dark">
   <div class="col-12 nicknameFilter">
-    <input type="text"
-           class="rounded p-1 w-100 mb-3 form-control"
+    <input (input)="filterForKeyword($event)"
            [placeholder]="'component.nickname_categories.filter' | translate"
            [title]="'component.nickname_categories.filter' | translate"
-           (input)="filterForKeyword($event)"/>
+           class="rounded p-1 w-100 mb-3 form-control"
+           type="text"/>
   </div>
-  <div class="col-12 nickCategoryWrapper"
+
+  <div [class.col-md-6]="hasSelectedCategory()"
        [class.col-sm-4]="hasSelectedCategory()"
-       [class.col-md-6]="hasSelectedCategory()">
+       class="col-12 nickCategoryWrapper">
     <div class="row no-gutters">
-      <div *ngFor="let cat of availableNickCategories()"
-           class="nickCategory cursor-pointer col-6"
-           [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
-           [class.selectedCategory]="hasSelectedCategory(cat)"
+      <div (click)="toggleSelectedCategory(cat)"
+           *ngFor="let cat of availableNickCategories()"
            [class.col-sm-12]="hasSelectedCategory()"
            [class.col-sm-6]="!hasSelectedCategory()"
-           (click)="toggleSelectedCategory(cat)">
+           [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
+           [class.selectedCategory]="hasSelectedCategory(cat)"
+           class="nickCategory cursor-pointer col-6">
         <div class="nickCategoryText bg-secondary cursor-pointer rounded p-2 m-1">
-          <p class="mb-0"
-             [innerHTML]="getCategoryTranslation(cat) | translate"></p>
+          <p [innerHTML]="getCategoryTranslation(cat) | translate"
+             class="mb-0"></p>
           <p class="mb-0">({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="hasSelectedCategory()"
-       class="col-12 col-sm-8 col-md-6">
+  <div (scrolled)="onScrollDown()"
+       *ngIf="hasSelectedCategory()"
+       [infiniteScrollDistance]="scrollDistance"
+       [infiniteScrollThrottle]="throttle"
+       class="col-12 col-sm-8 col-md-6"
+       infinite-scroll>
     <div class="bg-secondary rounded pt-2 mt-2 mt-sm-0">
       <div class="mx-2">
-        <button class="btn btn-block cursor-pointer"
-                [class.btn-warning]="hasSelectedAllNicks()"
+        <button (click)="toggleAllNicks()"
                 [class.btn-success]="!hasSelectedAllNicks()"
-                (click)="toggleAllNicks()">
+                [class.btn-warning]="hasSelectedAllNicks()"
+                class="btn btn-block cursor-pointer">
           <span *ngIf="hasSelectedAllNicks()">{{'component.nickname_categories.remove_all' | translate}}</span>
           <span *ngIf="!hasSelectedAllNicks()">{{'component.nickname_categories.choose_all' | translate}}</span>
         </button>
       </div>
-      <div *ngFor="let nick of availableNicks[selectedCategory]"
-           (click)="selectNick(nick)"
-           class="nickStyle rounded p-2 m-2 cursor-pointer border-bottom"
-           [class.selectedNickName]="hasSelectedNick(nick)">
+      <div (click)="selectNick(nick)"
+           *ngFor="let nick of availableNicks[selectedCategory] | justafew:visibleData"
+           [class.selectedNickName]="hasSelectedNick(nick)"
+           class="nickStyle rounded p-2 m-2 cursor-pointer border-bottom">
       <span [innerHTML]="parseAvailableNick(nick)"
             class="nickName d-inline-block pb-1"></span>
       </div>
