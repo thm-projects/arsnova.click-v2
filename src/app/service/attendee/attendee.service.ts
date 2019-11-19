@@ -101,6 +101,10 @@ export class AttendeeService {
   }
 
   public hasReponse(): boolean {
+    if (!this.getMember(this.ownNick)) {
+      return;
+    }
+
     const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
     if (typeof response === 'undefined' || typeof response.value === 'undefined') {
       return false;
@@ -114,11 +118,19 @@ export class AttendeeService {
   }
 
   public hasReadingConfirmation(): boolean {
+    if (!this.getMember(this.ownNick)) {
+      return;
+    }
+
     const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
     return response && response.readingConfirmation;
   }
 
   public hasConfidenceValue(): boolean {
+    if (!this.getMember(this.ownNick)) {
+      return;
+    }
+
     const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
     return response && !isNaN(response.confidence);
   }
