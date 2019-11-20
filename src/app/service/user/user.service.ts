@@ -159,6 +159,8 @@ export class UserService {
       }).toPromise().catch(() => resolve(false));
 
       if (!data) {
+        this.isLoggedIn = false;
+        resolve(false);
         return;
       }
 

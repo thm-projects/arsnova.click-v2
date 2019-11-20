@@ -127,6 +127,9 @@
       Modernizr.websockets,
       Modernizr.xhrresponsetype,
       'indexedDB' in window,
+      'Uint8Array' in window,
+      'TextEncoder' in window,
+      'TextDecoder' in window,
     ].forEach(function (test) {
       if (!test) {
         location.href = '/assets/static/unsupported.html';
