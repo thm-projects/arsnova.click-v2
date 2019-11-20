@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DefaultSettings } from '../../lib/default.settings';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -17,7 +18,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   public static TYPE = 'InfoComponent';
   public currentData: string;
   public readonly infoButtons: Array<{ id: string, i18nRef: string }> = [];
-  private _routerSubscription: Subscription;
+  private readonly _destroy = new Subject();
 
   @ViewChild('buttonHeader', { static: true }) private buttonHeader: ElementRef;
 
@@ -58,7 +59,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    this._routerSubscription = this.route.data.subscribe(data => {
+    this.route.data.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(data => {
       this.currentData = data.content;
     });
   }
@@ -74,7 +75,8 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnDestroy(): void {
-    this._routerSubscription.unsubscribe();
+    this._destroy.next();
+    this._destroy.complete();
   }
 
   public toInfoContent(target: string): void {

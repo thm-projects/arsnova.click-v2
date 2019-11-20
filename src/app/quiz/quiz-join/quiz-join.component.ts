@@ -1,8 +1,9 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
+import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -31,17 +32,19 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.queryParams.pipe(takeUntil(this._destroy)).subscribe(queryParams => {
+    this.route.queryParams.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(queryParams => {
       this.casService.ticket = queryParams.ticket;
     });
-    this.route.params.pipe(takeUntil(this._destroy)).subscribe(async params => {
-      if (!params || !params.quizName) {
+
+    this.route.paramMap.pipe(map(val => val.get('quizName')), distinctUntilChanged(), takeUntil(this._destroy)).subscribe(quizname => {
+      console.log(quizname);
+      if (!quizname) {
         this.router.navigate(['/']);
         return;
       }
 
       this.sharedService.isLoadingEmitter.next(true);
-      this.quizApiService.getFullQuizStatusData(params.quizName).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
+      this.quizApiService.getFullQuizStatusData(quizname).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
     });
   }
 
@@ -50,7 +53,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  private resolveQuizStatusData(quizStatusData): void {
+  private resolveQuizStatusData(quizStatusData: IMessage): void {
     if (quizStatusData.status !== StatusProtocol.Success || quizStatusData.step !== MessageProtocol.Available) {
       this.router.navigate(['/']);
       return;

@@ -17,7 +17,7 @@ export class SentryErrorHandler implements ErrorHandler {
       release: environment.version,
     });
 
-    setExtra('nonErrorException', true);
+    setExtra('nonErrorException', false);
   }
 
   public handleError(error): void {

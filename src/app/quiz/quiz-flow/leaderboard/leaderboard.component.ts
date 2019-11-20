@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
@@ -32,7 +32,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public hasTriggeredNavigation: boolean;
 
   private _questionIndex: number;
-  private readonly _destroy = new Subject();
 
   get questionIndex(): number {
     return this._questionIndex;
@@ -62,6 +61,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return this._ownResponse;
   }
 
+  private readonly _destroy = new Subject();
   private _serverUnavailableModal: NgbModalRef;
   private _name: string;
   private readonly _messageSubscriptions: Array<string> = [];
@@ -78,7 +78,9 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     private connectionService: ConnectionService,
     private i18nService: I18nService,
     private leaderboardApiService: LeaderboardApiService,
-    private ngbModal: NgbModal, private messageQueue: SimpleMQ, private customMarkdownService: CustomMarkdownService,
+    private ngbModal: NgbModal,
+    private messageQueue: SimpleMQ,
+    private customMarkdownService: CustomMarkdownService,
   ) {
     this.footerBarService.TYPE_REFERENCE = LeaderboardComponent.TYPE;
   }
@@ -171,14 +173,15 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   private initData(): void {
-    this.route.params.pipe(takeUntil(this._destroy)).subscribe(params => {
 
-      this._questionIndex = +params['questionIndex'];
+    this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
+    .subscribe(questionIndex => {
+      this._questionIndex = questionIndex;
       this._isGlobalRanking = isNaN(this._questionIndex);
       if (this._isGlobalRanking) {
         this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
         this._questionIndex = null;
-        if (params['questionIndex']) {
+        if (!!questionIndex) {
           this.hasTriggeredNavigation = true;
           this.router.navigate(['/quiz', 'flow', 'leaderboard']);
           return;
@@ -206,8 +209,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
       this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
         sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
-      }),
-      this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+      }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
