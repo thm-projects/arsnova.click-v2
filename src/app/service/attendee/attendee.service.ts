@@ -136,7 +136,7 @@ export class AttendeeService {
   }
 
   private restoreMembers(): Promise<void> {
-    return new Promise<void>(resolve => {
+    return new Promise<void>((resolve, reject) => {
       this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {
         if (!data || !data.payload) {
           return;
@@ -147,7 +147,7 @@ export class AttendeeService {
         });
         this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
         resolve();
-      });
+      }, () => reject());
     });
   }
 

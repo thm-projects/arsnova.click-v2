@@ -1,8 +1,7 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs/operators';
-import { CurrencyType, DbState, Language, NumberType, StorageKey } from '../../lib/enums/enums';
+import { CurrencyType, Language, NumberType, StorageKey } from '../../lib/enums/enums';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -29,11 +28,7 @@ export class I18nService {
     this._currentLanguage = value;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService, private storageService: StorageService) {
-    this.storageService.stateNotifier.pipe(filter(state => state === DbState.Initialized)).subscribe(() => {
-      this.initLanguage();
-    });
-  }
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService, private storageService: StorageService) {}
 
   public formatNumber(number: number, type: NumberType = NumberType.Decimal, locale?: string): string {
     if (isNaN(number)) {
@@ -87,7 +82,7 @@ export class I18nService {
     });
   }
 
-  private initLanguage(): void {
+  public initLanguage(): void {
     if (isPlatformServer(this.platformId)) {
       this.setLanguage(Language.EN);
       return;

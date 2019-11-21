@@ -93,6 +93,9 @@ export class RootComponent implements OnInit, AfterViewInit {
       }
     });
 
+    this.themeService.initTheme();
+    this.i18nService.initLanguage();
+
     this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy), takeUntil(this._destroy)).subscribe(() => {
       this.themeService.updateCurrentlyUsedTheme();
     });

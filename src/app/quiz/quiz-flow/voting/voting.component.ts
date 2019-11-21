@@ -151,7 +151,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       if (data.status !== StatusProtocol.Success) {
         console.log('VotingComponent: PutResponse failed', data);
       }
-    });
+    }, () => {});
   }
 
   public initData(): void {

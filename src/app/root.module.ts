@@ -27,6 +27,7 @@ import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import rxStompConfig from './rx-stomp.config';
+import { InitDbGuard } from './service/init-db-guard/init-db.guard';
 import { StaticLoginService } from './service/login/static-login.service';
 import { SentryErrorHandler } from './shared/sentry-error-handler';
 import { SharedModule } from './shared/shared.module';
@@ -36,50 +37,63 @@ const appRoutes: Routes = [
     path: 'admin',
     canLoad: [StaticLoginService],
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canActivate: [InitDbGuard],
   }, {
     path: 'info',
     loadChildren: () => import('./root/info/info.module').then(m => m.InfoModule),
+    canActivate: [InitDbGuard],
   }, {
     path: 'i18n-manager',
     canLoad: [StaticLoginService],
     loadChildren: () => import('./i18n-manager/i18n-manager.module').then(m => m.I18nManagerModule),
+    canActivate: [InitDbGuard],
   }, {
     path: 'quiz/manager',
     loadChildren: () => import('./quiz/quiz-manager/quiz-manager.module').then(m => m.QuizManagerModule),
+    canActivate: [InitDbGuard],
   }, {
     path: 'quiz/flow',
     loadChildren: () => import('./quiz/quiz-flow/quiz-flow.module').then(m => m.QuizFlowModule),
     data: {
       preload: false,
     },
+    canActivate: [InitDbGuard],
   }, {
     path: 'quiz',
     loadChildren: () => import('./quiz/quiz.module').then(m => m.QuizModule),
+    canActivate: [InitDbGuard],
   }, {
     path: 'nicks',
     loadChildren: () => import('./root/nickname-chooser/nickname-chooser.module').then(m => m.NicknameChooserModule),
     data: {
       preload: false,
     },
+    canActivate: [InitDbGuard],
   }, {
     path: 'themes',
     component: ThemeSwitcherComponent,
+    canActivate: [InitDbGuard],
   }, {
     path: 'preview/:themeId/:languageId',
     component: HomeComponent,
+    canActivate: [InitDbGuard],
   }, {
     path: 'languages',
     component: LanguageSwitcherComponent,
+    canActivate: [InitDbGuard],
   }, {
     path: 'login',
     component: LoginComponent,
+    canActivate: [InitDbGuard],
   }, {
     path: '',
     component: HomeComponent,
     pathMatch: 'full',
+    canActivate: [InitDbGuard],
   }, {
     path: '**',
     redirectTo: '/',
+    canActivate: [InitDbGuard],
   },
 ];
 

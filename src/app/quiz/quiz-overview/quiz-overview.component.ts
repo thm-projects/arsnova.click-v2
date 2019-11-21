@@ -6,7 +6,6 @@ import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { UserRole } from '../../lib/enums/UserRole';
-import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { QuizSaveComponent } from '../../modals/quiz-save/quiz-save.component';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -157,18 +156,19 @@ export class QuizOverviewComponent implements OnInit {
       return;
     }
 
-    this.quizApiService.deleteQuiz(elem).subscribe((response: IMessage) => {
+    this.quizApiService.deleteQuiz(elem).subscribe(response => {
       if (response.status !== StatusProtocol.Success) {
         console.log('QuizOverviewComponent: DeleteQuiz failed', response);
-      } else {
-        const sessionName = elem.name;
-        this.storageService.db.Quiz.delete(sessionName).then(() => {
-          const index = this.sessions.findIndex(quiz => quiz.name === sessionName);
-          if (index > -1) {
-            this.sessions.splice(index, 1);
-          }
-        });
+        return;
       }
+
+      const sessionName = elem.name;
+      this.storageService.db.Quiz.delete(sessionName).then(() => {
+        const index = this.sessions.findIndex(quiz => quiz.name === sessionName);
+        if (index > -1) {
+          this.sessions.splice(index, 1);
+        }
+      });
     });
   }
 

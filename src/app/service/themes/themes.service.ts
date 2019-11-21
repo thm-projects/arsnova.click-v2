@@ -1,9 +1,8 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { themes } from '../../lib/available-themes';
-import { DbState, StorageKey } from '../../lib/enums/enums';
+import { StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
 import { ITheme } from '../../lib/interfaces/ITheme';
@@ -48,10 +47,6 @@ export class ThemesService {
     this._defaultTheme = environment.darkModeCheckEnabled && //
                          window.matchMedia('(prefers-color-scheme: dark)').matches ? //
                          QuizTheme.Blackbeauty : environment.defaultTheme;
-
-    this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized)).subscribe(() => {
-      this.initTheme();
-    });
   }
 
   public async updateCurrentlyUsedTheme(): Promise<void> {
@@ -112,10 +107,10 @@ export class ThemesService {
           this.addNewNode(elem);
         }
       });
-    });
+    }, () => {});
   }
 
-  private initTheme(): void {
+  public initTheme(): void {
 
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.db.Config.get(StorageKey.DefaultTheme).then(val => {

@@ -87,36 +87,9 @@ export class UserService {
     private jwtHelper: JwtHelperService,
     private quizService: QuizService,
   ) {
-
     this.storageService.stateNotifier.pipe(filter(type => this.username !== DbName.Default && type !== null && type !== DbState.Destroy))
     .subscribe(() => {
-
-      if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
-        console.log('UserService: having static token content with private key');
-        this.storageService.db.Config.put({
-          type: StorageKey.PrivateKey,
-          value: this._staticLoginTokenContent.privateKey,
-        });
-        sessionStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
-
-        if (this._tmpRemoteQuizData.length) {
-          console.log('UserService: having remote quiz data');
-          this.storageService.db.Quiz.toCollection().filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.name))
-          .each(localQuiz => {
-            console.log('UserService: syncing local quiz data to server');
-            this.quizService.persistQuiz(new QuizEntity(localQuiz));
-          }).then(() => {
-            this._tmpRemoteQuizData.forEach(quiz => {
-              this.quizService.persistQuiz(new QuizEntity(quiz));
-              console.log('UserService: persisting remote quiz to local db', quiz.name);
-            });
-          });
-        } else {
-          console.log('UserService: not received remote quiz data');
-        }
-      } else {
-        console.log('UserService: not received any static login token content');
-      }
+      this.reloadState();
     });
 
     this.loadConfig();
@@ -135,15 +108,18 @@ export class UserService {
   }
 
   public authenticateThroughCas(token: string): Promise<boolean> {
-    return new Promise(async resolve => {
-      const data = await this.authorizeApiService.getAuthorizationForToken(token).toPromise();
-
-      if (data.status === StatusProtocol.Success) {
-        this._casTicket = data.payload.casTicket;
-        this.isLoggedIn = true;
-        resolve(true);
-      } else {
-        this.isLoggedIn = false;
+    return new Promise(async (resolve, reject) => {
+      try {
+        const data = await this.authorizeApiService.getAuthorizationForToken(token).toPromise();
+        if (data.status === StatusProtocol.Success) {
+          this._casTicket = data.payload.casTicket;
+          this.isLoggedIn = true;
+          resolve(true);
+        } else {
+          this.isLoggedIn = false;
+          resolve(false);
+        }
+      } catch (e) {
         resolve(false);
       }
     });
@@ -230,6 +206,35 @@ export class UserService {
     }
 
     return this.staticLoginTokenContent.userAuthorizations.includes(authorization);
+  }
+
+  private reloadState(): void {
+    if (this._staticLoginTokenContent && this._staticLoginTokenContent.privateKey) {
+      console.log('UserService: having static token content with private key');
+      this.storageService.db.Config.put({
+        type: StorageKey.PrivateKey,
+        value: this._staticLoginTokenContent.privateKey,
+      });
+      sessionStorage.setItem(StorageKey.PrivateKey, this._staticLoginTokenContent.privateKey);
+
+      if (this._tmpRemoteQuizData.length) {
+        console.log('UserService: having remote quiz data');
+        this.storageService.db.Quiz.toCollection().filter(localQuiz => !this._tmpRemoteQuizData.find(val => val.name === localQuiz.name))
+        .each(localQuiz => {
+          console.log('UserService: syncing local quiz data to server');
+          this.quizService.persistQuiz(new QuizEntity(localQuiz));
+        }).then(() => {
+          this._tmpRemoteQuizData.forEach(quiz => {
+            this.quizService.persistQuiz(new QuizEntity(quiz));
+            console.log('UserService: persisting remote quiz to local db', quiz.name);
+          });
+        });
+      } else {
+        console.log('UserService: not received remote quiz data');
+      }
+    } else {
+      console.log('UserService: not received any static login token content');
+    }
   }
 
   private loadConfig(): boolean {

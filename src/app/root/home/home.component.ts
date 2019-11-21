@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, filter, switchMapTo, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -12,7 +12,7 @@ import { AbstractAnswerEntity } from '../../lib/entities/answer/AbstractAnswerEn
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
 import { ABCDSingleChoiceQuestionEntity } from '../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { DbState, Language, StorageKey } from '../../lib/enums/enums';
+import { Language, StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
@@ -140,11 +140,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
     });
 
-    const params$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
-    const state$ = this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy), distinctUntilChanged(), takeUntil(this._destroy));
-
-    state$.pipe(filter(state => state === DbState.Initialized)).subscribe(() => {
+    this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(async params => {
       this.cleanUpSessionStorage();
+
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
 
@@ -164,9 +162,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.ownPublicQuizAmount = val;
         });
       }
-    });
 
-    state$.pipe(switchMapTo(params$)).subscribe(async params => {
       if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
         const theme = this.storageService.db.Config.get(StorageKey.DefaultTheme);
         if (!theme) {
@@ -490,7 +486,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           console.error('Invalid quiz status response in home component', value);
         }
       }
-    });
+    }, () => {});
   }
 
   private cleanUpSessionStorage(): void {

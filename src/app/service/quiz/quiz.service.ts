@@ -182,7 +182,7 @@ export class QuizService {
         this.isOwner = !!quiz;
         console.log('QuizService: isOwner', this.isOwner);
         this.restoreSettings(quizName).then(() => resolve());
-      });
+      }).catch(() => reject());
     });
   }
 
@@ -225,7 +225,7 @@ export class QuizService {
 
         this.quiz = response.payload.quiz;
         resolve();
-      });
+      }, () => reject());
     });
   }
 }

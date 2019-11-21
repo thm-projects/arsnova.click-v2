@@ -1,8 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMapTo, takeUntil } from 'rxjs/operators';
-import { DbState } from '../../lib/enums/enums';
+import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
@@ -28,8 +27,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     private router: Router,
     private casService: CasLoginService,
     private themesService: ThemesService,
-    private quizApiService: QuizApiService,
-    private sharedService: SharedService, private storageService: StorageService,
+    private quizApiService: QuizApiService, private sharedService: SharedService, private storageService: StorageService,
   ) {
   }
 
@@ -46,18 +44,22 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
 
       this.sharedService.isLoadingEmitter.next(true);
 
-      const quizData$ = this.quizApiService.getFullQuizStatusData(quizname);
-      this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), distinctUntilChanged(), switchMapTo(quizData$),
-        takeUntil(this._destroy)).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
+      this.quizApiService.getFullQuizStatusData(quizname).subscribe(data => {
+        this.resolveQuizStatusData(data);
+      }, () => {
+        this.router.navigate(['/']);
+      });
     });
   }
 
   public ngOnDestroy(): void {
+    console.log('ondestroy');
     this._destroy.next();
     this._destroy.complete();
   }
 
   private resolveQuizStatusData(quizStatusData: IMessage): void {
+    console.log('resolevstatus', quizStatusData);
     if (quizStatusData.status !== StatusProtocol.Success || quizStatusData.step !== MessageProtocol.Available) {
       this.router.navigate(['/']);
       return;
