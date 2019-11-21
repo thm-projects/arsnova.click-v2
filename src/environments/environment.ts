@@ -11,6 +11,7 @@ export const environment: IEnvironment = {
   production: false,
   version: 'VERSION',
   enableCasLogin: true,
+  sentryDSN: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
   ssrEndpoint: 'http://192.168.2.106:4000',
   serverEndpoint: 'http://192.168.2.106:3010',
   httpApiEndpoint: 'http://192.168.2.106:3010/api/v1',

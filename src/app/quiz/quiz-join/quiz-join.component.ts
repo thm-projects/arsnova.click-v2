@@ -1,13 +1,15 @@
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMapTo, takeUntil } from 'rxjs/operators';
+import { DbState } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 
 @Component({
@@ -27,7 +29,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     private casService: CasLoginService,
     private themesService: ThemesService,
     private quizApiService: QuizApiService,
-    private sharedService: SharedService,
+    private sharedService: SharedService, private storageService: StorageService,
   ) {
   }
 
@@ -37,14 +39,16 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     });
 
     this.route.paramMap.pipe(map(val => val.get('quizName')), distinctUntilChanged(), takeUntil(this._destroy)).subscribe(quizname => {
-      console.log(quizname);
       if (!quizname) {
         this.router.navigate(['/']);
         return;
       }
 
       this.sharedService.isLoadingEmitter.next(true);
-      this.quizApiService.getFullQuizStatusData(quizname).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
+
+      const quizData$ = this.quizApiService.getFullQuizStatusData(quizname);
+      this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), distinctUntilChanged(), switchMapTo(quizData$),
+        takeUntil(this._destroy)).subscribe(quizStatusData => this.resolveQuizStatusData(quizStatusData));
     });
   }
 
