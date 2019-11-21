@@ -158,7 +158,7 @@ export function markedOptionsFactory(): MarkedOptions {
 })
 export class RootModule {
   constructor() {
-    if (environment.production) {
+    if (false && environment.production) {
       (window as any).console = {
         log: function (): void {},
         info: function (): void {},
