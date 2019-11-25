@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
@@ -29,7 +29,7 @@ describe('SoundManagerComponent', () => {
   beforeEach((() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
+        RouterTestingModule, HttpClientTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,

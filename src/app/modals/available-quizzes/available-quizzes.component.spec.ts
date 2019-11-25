@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
@@ -32,7 +31,7 @@ describe('AvailableQuizzesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule, NgbModule,
+        SharedModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule, NgbModule,
       ],
       providers: [
         {

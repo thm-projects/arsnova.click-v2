@@ -5,7 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faHourglass } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { of } from 'rxjs';
@@ -40,8 +41,7 @@ describe('CountdownComponent', () => {
         }),
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -67,8 +67,11 @@ describe('CountdownComponent', () => {
   }));
 
   beforeEach(async(() => {
+    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    library.addIcons(faHourglass);
     fixture = TestBed.createComponent(CountdownComponent);
     component = fixture.componentInstance;
+    component['_questionIndex'] = 0;
     fixture.detectChanges();
   }));
 
@@ -80,7 +83,7 @@ describe('CountdownComponent', () => {
     expect(CountdownComponent.TYPE).toEqual('CountdownComponent');
   }));
 
-  xit('should update the countdown', inject([QuizService], (quizService: QuizService) => {
+  it('should update the countdown', inject([QuizService], (quizService: QuizService) => {
     const initValue = quizService.quiz.questionList[0].timer;
     const newValue = initValue + 10;
 

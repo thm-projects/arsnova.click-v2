@@ -61,7 +61,6 @@ export class QuestionTextService {
 
     return new Promise(async (resolve) => {
       if (mathjaxValues.length) {
-        console.log('QuestionTextService: Parsing input as mathjax');
         const mathjaxRendered = await this.parseMathjax(mathjaxValues);
         result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
 
@@ -73,7 +72,6 @@ export class QuestionTextService {
         resolve(result);
 
       } else {
-        console.log('QuestionTextService: Parsing input as non-mathjax');
         result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
         this._inputCache[value] = result;
         resolve(result);

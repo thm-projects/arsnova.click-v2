@@ -1,7 +1,9 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
 import { Attendee } from '../../../../lib/attendee/attendee';
 import { AbstractChoiceQuestionEntity } from '../../../../lib/entities/question/AbstractChoiceQuestionEntity';
@@ -38,10 +40,13 @@ describe('ProgressBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule,
+        SharedModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
-        {
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, NgbActiveModal, {

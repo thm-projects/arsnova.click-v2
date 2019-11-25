@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { SwUpdateMock } from '../../../../../../_mocks/SwUpdateMock';
@@ -39,6 +40,10 @@ describe('AnsweroptionsDefaultComponent', () => {
         RouterTestingModule, NgbModalModule, AngularSvgIconModule, NgbPopoverModule, FontAwesomeModule, HttpClientTestingModule,
       ],
       providers: [
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        },
         {
           provide: QuizService,
           useClass: QuizMockService,

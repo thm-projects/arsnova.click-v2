@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID, SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -8,7 +9,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownService } from 'ngx-markdown';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
@@ -41,11 +42,13 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID],
           },
-        }),
+        }), HttpClientTestingModule,
       ],
       providers: [
-        RxStompService, MarkdownService,
-        {
+        RxStompService, MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -88,7 +91,6 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
   }));
 
   it('#confirmReading', async(inject([Router], (router: Router) => {
-
     spyOn(component, 'confirmReading').and.callFake(() => {});
 
     component.confirmReading();

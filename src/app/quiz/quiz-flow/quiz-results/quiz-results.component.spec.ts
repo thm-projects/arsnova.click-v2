@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
@@ -6,6 +7,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
@@ -53,10 +55,13 @@ describe('QuizResultsComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID],
           },
-        }),
+        }), HttpClientTestingModule,
       ],
       providers: [
-        RxStompService, {
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, TranslateService, FooterBarService, SettingsService, {

@@ -1,11 +1,14 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { PLATFORM_ID, SecurityContext } from '@angular/core';
+import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
+import { JustafewPipeMock } from '../../../../_mocks/JustafewPipeMock';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -66,9 +69,13 @@ describe('NicknameManagerComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID],
           },
-        }),
+        }), InfiniteScrollModule,
       ],
       providers: [
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        },
         RxStompService,
         {
           provide: StorageService,
@@ -84,7 +91,7 @@ describe('NicknameManagerComponent', () => {
           useClass: TranslateServiceMock,
         },
       ],
-      declarations: [NicknameManagerComponent, TranslatePipeMock],
+      declarations: [NicknameManagerComponent, TranslatePipeMock, JustafewPipeMock],
     }).compileComponents();
   }));
 
@@ -130,9 +137,9 @@ describe('NicknameManagerComponent', () => {
     it('should sanitize the html input', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
       const markup = '<div><span>TestMarkup</span></div>';
 
-      spyOn(sanitizer, 'sanitize').and.callFake((ctx: SecurityContext, value: string) => value as string);
+      spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callFake(value => value);
       component.sanitizeHTML(markup);
-      expect(sanitizer.sanitize).toHaveBeenCalled();
+      expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
     }));
   });
 

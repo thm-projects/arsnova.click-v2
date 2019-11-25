@@ -35,7 +35,7 @@ describe('StaticLoginService', () => {
     });
   });
 
-  xit('should be created', inject([StaticLoginService], (service: StaticLoginService) => {
+  it('should be created', inject([StaticLoginService], (service: StaticLoginService) => {
     expect(service).toBeTruthy();
   }));
 });

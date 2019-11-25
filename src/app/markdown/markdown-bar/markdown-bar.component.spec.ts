@@ -1,7 +1,8 @@
-import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -17,7 +18,7 @@ describe('MarkdownBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientModule, HttpClientTestingModule,
+        SharedModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
         {
@@ -33,6 +34,15 @@ describe('MarkdownBarComponent', () => {
   }));
 
   beforeEach(async(() => {
+    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    library.addIcons(faBold);
+    library.addIcons(faHeading);
+    library.addIcons(faGlobe);
+    library.addIcons(faListUl);
+    library.addIcons(faCode);
+    library.addIcons(faImage);
+    library.addIcons(faStrikethrough);
+    library.addIcons(faItalic);
     fixture = TestBed.createComponent(MarkdownBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

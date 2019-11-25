@@ -4,12 +4,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faHourglass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownService } from 'ngx-markdown';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -47,7 +48,10 @@ describe('VotingComponent', () => {
         }),
       ],
       providers: [
-        MarkdownService,
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        },
         RxStompService,
         {
           provide: StorageService,
@@ -71,6 +75,9 @@ describe('VotingComponent', () => {
   }));
 
   beforeEach(async(() => {
+    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    library.addIcons(faHourglass);
+    library.addIcons(faSpinner);
     fixture = TestBed.createComponent(VotingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

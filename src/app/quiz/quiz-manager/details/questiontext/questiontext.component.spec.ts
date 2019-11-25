@@ -10,6 +10,7 @@ import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { SwUpdateMock } from '../../../../../_mocks/SwUpdateMock';
@@ -51,6 +52,10 @@ describe('QuestiontextComponent', () => {
         }),
       ],
       providers: [
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        },
         RxStompService,
         {
           provide: StorageService,
@@ -94,6 +99,7 @@ describe('QuestiontextComponent', () => {
   beforeEach((() => {
     fixture = TestBed.createComponent(QuestiontextComponent);
     component = fixture.componentInstance;
+    component['_questionIndex'] = 0;
     fixture.detectChanges();
   }));
 

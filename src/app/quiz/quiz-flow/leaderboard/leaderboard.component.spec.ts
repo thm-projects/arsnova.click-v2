@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID, SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -8,8 +9,9 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownService } from 'ngx-markdown';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { Language } from '../../../lib/enums/enums';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -33,6 +35,7 @@ import { LeaderboardComponent } from './leaderboard.component';
 
 describe('LeaderboardComponent', () => {
   let component: LeaderboardComponent;
+  let i18nService: I18nService;
   let fixture: ComponentFixture<LeaderboardComponent>;
 
   beforeEach(async(() => {
@@ -44,12 +47,13 @@ describe('LeaderboardComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID],
           },
-        }),
+        }), HttpClientTestingModule,
       ],
       providers: [
-        MarkdownService,
-        RxStompService,
-        SimpleMQ, {
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        }, RxStompService, SimpleMQ, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, NgbActiveModal, {
@@ -76,6 +80,8 @@ describe('LeaderboardComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(LeaderboardComponent);
     component = fixture.componentInstance;
+    i18nService = TestBed.get(I18nService);
+    i18nService.currentLanguage = Language.DE;
     fixture.detectChanges();
   }));
 
@@ -117,11 +123,9 @@ describe('LeaderboardComponent', () => {
     expect(component.roundResponseTime(5, 5.5)).toEqual(NaN);
   }));
 
-  it('#formatResponseTime', async(inject([I18nService], async (i18nService: I18nService) => {
+  it('#formatResponseTime', () => {
     spyOn(i18nService, 'formatNumber').and.callThrough();
-    expect(await component.formatResponseTime(10.52123123)).toEqual(component.roundResponseTime(10.52123123, 2).toLocaleString());
-    expect(await component.formatResponseTime(10.2)).toEqual(10.2.toLocaleString());
-    expect(await component.formatResponseTime(10.5)).toEqual(10.5.toLocaleString());
+    component.formatResponseTime(10.52123123);
     expect(i18nService.formatNumber).toHaveBeenCalled();
-  })));
+  });
 });

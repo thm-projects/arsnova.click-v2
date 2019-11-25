@@ -1,60 +1,20 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Pipe, PipeTransform, PLATFORM_ID } from '@angular/core';
+import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { FilterKeysPipeMock } from '../../../_mocks/FilterKeysPipeMock';
+import { JustafewPipeMock } from '../../../_mocks/JustafewPipeMock';
+import { SearchFilterPipeMock } from '../../../_mocks/SearchFilterPipeMock';
+import { SortPipeMock } from '../../../_mocks/SortPipeMock';
+import { UnusedKeyFilterPipeMock } from '../../../_mocks/UnusedKeyFilterPipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { KeyOutputComponent } from './key-output.component';
-
-@Pipe({
-  name: 'unusedKeyFilter',
-})
-export class UnusedKeyFilterMockPipe implements PipeTransform {
-  public transform(value: Array<any>, args?: any): any {
-    return value;
-  }
-}
-
-@Pipe({
-  name: 'filterKeys',
-})
-export class FilterKeysMockPipe implements PipeTransform {
-  public transform(value: Array<any>, args?: any): any {
-    return value;
-  }
-}
-
-@Pipe({
-  name: 'justafew',
-})
-export class JustafewMockPipe implements PipeTransform {
-  public transform(value: Array<any>, args?: any): any {
-    return value;
-  }
-}
-
-@Pipe({
-  name: 'searchFilter',
-})
-export class SearchFilterMockPipe implements PipeTransform {
-  public transform(value: Array<any>, args?: any): any {
-    return value;
-  }
-}
-
-@Pipe({
-  name: 'sort',
-})
-export class SortMockPipe implements PipeTransform {
-  public transform(value: Array<any>, args?: any): any {
-    return value;
-  }
-}
 
 describe('KeyOutputComponent', () => {
   let component: KeyOutputComponent;
@@ -71,7 +31,7 @@ describe('KeyOutputComponent', () => {
           },
         }), InfiniteScrollModule, FontAwesomeModule, HttpClientTestingModule,
       ],
-      declarations: [KeyOutputComponent, UnusedKeyFilterMockPipe, FilterKeysMockPipe, JustafewMockPipe, SearchFilterMockPipe, SortMockPipe],
+      declarations: [KeyOutputComponent, UnusedKeyFilterPipeMock, FilterKeysPipeMock, JustafewPipeMock, SearchFilterPipeMock, SortPipeMock],
       providers: [
         {
           provide: StorageService,

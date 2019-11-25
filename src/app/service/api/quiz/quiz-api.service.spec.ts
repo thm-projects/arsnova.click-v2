@@ -42,23 +42,6 @@ describe('QuizApiService', () => {
     expect(service).toBeTruthy();
   }));
 
-  it('should return a free member group', inject([QuizApiService], (service: QuizApiService) => {
-
-    const quizName = 'test';
-    const quizStatusData = {
-      status: StatusProtocol.Success,
-      step: MessageProtocol.Updated,
-      payload: {
-        groupName: 'testGroup',
-      },
-    };
-
-    service.getFreeMemberGroup(quizName).subscribe();
-    backend.expectOne(service.getFreeMemberGroupUrl).flush(quizStatusData);
-
-    expect(service).toBeTruthy();
-  }));
-
   it('should generate a Demo Quiz', inject([QuizApiService], (service: QuizApiService) => {
 
     const langKey = 'en';

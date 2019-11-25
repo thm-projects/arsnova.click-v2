@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
@@ -36,7 +35,7 @@ describe('I18nManagerOverviewComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, HttpClientModule, InfiniteScrollModule,
+        }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, InfiniteScrollModule,
       ],
       providers: [
         RxStompService,

@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -43,6 +44,10 @@ describe('NicknameSelectComponent', () => {
         }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        },
         RxStompService,
         {
           provide: StorageService,

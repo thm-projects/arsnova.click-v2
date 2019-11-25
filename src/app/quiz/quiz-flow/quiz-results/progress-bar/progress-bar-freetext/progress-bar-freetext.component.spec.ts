@@ -1,7 +1,8 @@
 import { SecurityContext } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
@@ -28,6 +29,8 @@ describe('ProgressBarFreetextComponent', () => {
   }));
 
   beforeEach(async(() => {
+    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    library.addIcons(faSpinner);
     fixture = TestBed.createComponent(ProgressBarFreetextComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

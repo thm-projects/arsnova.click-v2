@@ -1,6 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateService } from '@ngx-translate/core';
+import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 
@@ -14,6 +16,9 @@ describe('I18nService', () => {
       ],
       providers: [
         {
+          provide: TranslateService,
+          useClass: TranslateServiceMock,
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, I18nService,
@@ -21,7 +26,7 @@ describe('I18nService', () => {
     });
   }));
 
-  xit('should be created', async(inject([I18nService], (service: I18nService) => {
+  it('should be created', async(inject([I18nService], (service: I18nService) => {
     expect(service).toBeTruthy();
   })));
 });

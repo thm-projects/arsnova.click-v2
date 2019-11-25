@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
@@ -39,7 +40,7 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID],
           },
-        }),
+        }), HttpClientTestingModule,
       ],
       providers: [
         RxStompService, SimpleMQ, {

@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -25,6 +25,7 @@ import { QuestiontypeComponent } from './questiontype.component';
 
 describe('QuestiontypeComponent', () => {
   let component: QuestiontypeComponent;
+  let quizService: QuizService;
   let fixture: ComponentFixture<QuestiontypeComponent>;
 
   beforeEach(async(() => {
@@ -66,8 +67,11 @@ describe('QuestiontypeComponent', () => {
   }));
 
   beforeEach(async(() => {
+    quizService = TestBed.get(QuizService);
     fixture = TestBed.createComponent(QuestiontypeComponent);
     component = fixture.componentInstance;
+    component['_questionType'] = QuestionType.SingleChoiceQuestion;
+    component['_questionIndex'] = 0;
     fixture.detectChanges();
   }));
 
@@ -78,28 +82,26 @@ describe('QuestiontypeComponent', () => {
     expect(QuestiontypeComponent.TYPE).toEqual('QuestiontypeComponent');
   }));
 
-  xdescribe('#isActiveQuestionType', () => {
-    it('should return true if the current question type matches the input', () => {
-      expect(component.isActiveQuestionType('SingleChoiceQuestion')).toBeTruthy();
-    });
-    it('should return false if the current question type does not match the input', () => {
-      expect(component.isActiveQuestionType('SurveyQuestion')).toBeFalsy();
-    });
+  it('should return true if the current question type matches the input', () => {
+    expect(component.isActiveQuestionType(QuestionType.SingleChoiceQuestion)).toBeTruthy();
   });
 
-  xdescribe('#morphToQuestionType', () => {
-    it('should convert the current question type to a new one', inject([QuizService], (quizService: QuizService) => {
-      const targetType = 'MultipleChoiceQuestion';
-      component.morphToQuestionType(QuestionType.MultipleChoiceQuestion);
-      expect(quizService.quiz.questionList[0].TYPE).toEqual(targetType);
-    }));
-    it('should not convert the current question type if the passed type does not exist', inject([QuizService], (quizService: QuizService) => {
-      const targetType = 'NotExistingType';
-      const initType = quizService.quiz.questionList[0].TYPE;
-      component.morphToQuestionType(QuestionType.MultipleChoiceQuestion);
-      expect(quizService.quiz.questionList[0].TYPE).not.toEqual(targetType);
-      expect(quizService.quiz.questionList[0].TYPE).not.toEqual(initType);
-      expect(quizService.quiz.questionList[0].TYPE).toEqual(QuestionType.MultipleChoiceQuestion);
-    }));
+  it('should return false if the current question type does not match the input', () => {
+    expect(component.isActiveQuestionType('SurveyQuestion')).toBeFalsy();
+  });
+
+  it('should convert the current question type to a new one', () => {
+    const targetType = QuestionType.MultipleChoiceQuestion;
+    component.morphToQuestionType(QuestionType.MultipleChoiceQuestion);
+    expect(quizService.quiz.questionList[0].TYPE).toEqual(targetType);
+  });
+
+  it('should not convert the current question type if the passed type does not exist', () => {
+    const targetType = 'NotExistingType';
+    const initType = quizService.quiz.questionList[0].TYPE;
+    component.morphToQuestionType(QuestionType.MultipleChoiceQuestion);
+    expect(quizService.quiz.questionList[0].TYPE).not.toEqual(targetType);
+    expect(quizService.quiz.questionList[0].TYPE).not.toEqual(initType);
+    expect(quizService.quiz.questionList[0].TYPE).toEqual(QuestionType.MultipleChoiceQuestion);
   });
 });

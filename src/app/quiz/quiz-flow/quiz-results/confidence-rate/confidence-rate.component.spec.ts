@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
@@ -33,6 +34,10 @@ describe('QuizResults: ConfidenceRateComponent', () => {
         SharedModule, RouterTestingModule,
       ],
       providers: [
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        },
         {
           provide: StorageService,
           useClass: StorageServiceMock,

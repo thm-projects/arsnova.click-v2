@@ -66,7 +66,7 @@ describe('ThemesService', () => {
     expect(service).toBeTruthy();
   })));
 
-  xit('#updateCurrentlyUsedTheme',
+  it('#updateCurrentlyUsedTheme',
     async(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
       spyOnProperty(service, 'currentTheme').and.returnValue('Material');
       spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));

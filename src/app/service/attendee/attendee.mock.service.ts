@@ -23,4 +23,8 @@ export class AttendeeMockService {
   public hasConfidenceValue(): boolean {
     return false;
   }
+
+  public hasReadingConfirmation(): boolean {
+    return false;
+  }
 }

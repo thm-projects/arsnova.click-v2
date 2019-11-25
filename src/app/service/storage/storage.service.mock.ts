@@ -10,15 +10,9 @@ export class StorageServiceMock {
 
   private _db: any = {
     initialized: of(true),
-  };
-
-  get db(): any {
-    return this._db;
-  }
-
-  constructor() {
-    this._db[DbTable.Quiz] = {
+    [DbTable.Quiz]: {
       get: () => new Promise(resolve => resolve()),
+      put: () => new Promise(resolve => resolve()),
       delete: () => new Promise(resolve => resolve()),
       toCollection: () => {
         return {
@@ -26,17 +20,28 @@ export class StorageServiceMock {
           each: () => new Promise(resolve => resolve([])),
         };
       },
-    };
-    this._db[DbTable.Config] = {
+    },
+    [DbTable.Config]: {
       get: () => new Promise(resolve => resolve()),
+      put: () => new Promise(resolve => resolve()),
       delete: () => new Promise(resolve => resolve()),
       toCollection: () => {
         return {
-          sortBy: (data) => new Promise(resolve => resolve(data)),
-          each: (data) => new Promise(resolve => resolve(data)),
+          sortBy: () => new Promise(resolve => resolve([])),
+          each: () => new Promise(resolve => resolve([])),
         };
       },
-    };
+    },
+    getAllQuiznames(): Promise<any> {
+      return new Promise(resolve => resolve(Object.keys({}).map(key => key)));
+    },
+  };
+
+  get db(): any {
+    return this._db;
+  }
+
+  constructor() {
   }
 
   public create(table: DbTable, key: string | StorageKey, value: any): Observable<any> {
@@ -51,10 +56,6 @@ export class StorageServiceMock {
   public delete(table: DbTable, key: string | StorageKey): Observable<any> {
     delete this._db[table][key];
     return of(null);
-  }
-
-  public async getAllQuiznames(): Promise<any> {
-    return new Promise(resolve => resolve(Object.keys(this._db[DbTable.Quiz]).map(key => key)));
   }
 
   public getAll(table: DbTable): Observable<any> {

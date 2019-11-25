@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SecurityContext, TemplateRef } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -8,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { QRCodeModule } from 'angularx-qrcode';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -41,11 +43,13 @@ describe('QuizLobbyComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, SharedModule, QRCodeModule, NgbModule,
+        RouterTestingModule, SharedModule, QRCodeModule, NgbModule, HttpClientTestingModule,
       ],
       providers: [
-        RxStompService,
-        {
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, NgbModal, {
@@ -81,7 +85,7 @@ describe('QuizLobbyComponent', () => {
     fixture.detectChanges();
   }));
 
-  xit('should be created', async(() => {
+  it('should be created', async(() => {
     expect(component).toBeTruthy();
   }));
 
@@ -89,7 +93,7 @@ describe('QuizLobbyComponent', () => {
     expect(QuizLobbyComponent.TYPE).toEqual('QuizLobbyComponent');
   }));
 
-  xit('#openKickMemberModal', inject([NgbModal], (modalService: NgbModal) => {
+  it('#openKickMemberModal', inject([NgbModal], (modalService: NgbModal) => {
     const modalContent = '<div></div>' as unknown as TemplateRef<any>;
     const nickToRemove = 'TestNick';
 
@@ -114,7 +118,7 @@ describe('QuizLobbyComponent', () => {
     expect(component.kickMember).toHaveBeenCalled();
   }));
 
-  xit('#hexToRgb', () => {
+  it('#hexToRgb', () => {
     expect(component.hexToRgb('#ffffff')).toEqual({
       r: 255,
       g: 255,
@@ -127,7 +131,7 @@ describe('QuizLobbyComponent', () => {
     });
   });
 
-  xit('#transformForegroundColor', () => {
+  it('#transformForegroundColor', () => {
     expect(component.transformForegroundColor({
       r: 0,
       g: 0,
@@ -140,7 +144,7 @@ describe('QuizLobbyComponent', () => {
     })).toEqual('000000');
   });
 
-  xit('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
+  it('#sanitizeHTML', inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>TestMarkup</span></div>';
 
     spyOn(sanitizer, 'sanitize').and.callFake((context: SecurityContext, value: string) => value);

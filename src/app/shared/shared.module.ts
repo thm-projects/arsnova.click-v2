@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -68,11 +67,10 @@ import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
 
 @NgModule({
   imports: [
-    FormsModule, CommonModule, HttpClientModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(),
+    FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(),
   ],
   exports: [
     FormsModule, CommonModule,
-    HttpClientModule,
     FontAwesomeModule,
     TranslateModule,
     NgbModule,

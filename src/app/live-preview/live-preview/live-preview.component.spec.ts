@@ -1,4 +1,3 @@
-import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -6,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { SwUpdateMock } from '../../../_mocks/SwUpdateMock';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
@@ -34,9 +34,13 @@ describe('LivePreviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientModule, HttpClientTestingModule, HeaderModule, NgbModule,
+        RouterTestingModule, HttpClientTestingModule, HeaderModule, NgbModule,
       ],
       providers: [
+        MarkdownService, {
+          provide: MarkedOptions,
+          useValue: {},
+        },
         QuestionTextService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,

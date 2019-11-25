@@ -175,7 +175,7 @@ describe('QuizOverviewComponent', () => {
 
       component.deleteQuiz(validQuiz);
       storageService.db.Quiz.get(quizName).then(quiz => {
-        expect(quiz).toBe(null);
+        expect(quiz).toBe(undefined);
       });
     }));
   });
