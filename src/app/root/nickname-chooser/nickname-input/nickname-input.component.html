@@ -10,6 +10,7 @@
            maxlength="20"
            type="text"/>
     <button (click)="joinQuiz()"
+            [disabled]="!nickname"
             class="btn btn-success text-nowrap">
       <span *ngIf="!isLoggingIn">{{'component.name_management.join_session' | translate}}</span>
       <ng-container *ngIf="isLoggingIn">

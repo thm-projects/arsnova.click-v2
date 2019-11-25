@@ -48,7 +48,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   }
 
   public async joinQuiz(): Promise<void> {
-    if (isPlatformServer(this.platformId)) {
+    if (isPlatformServer(this.platformId) || !this.nickname) {
       return;
     }
 

@@ -53,7 +53,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   public async joinQuiz(nickname: any): Promise<void> {
-    if (this.isLoggingIn) {
+    if (this.isLoggingIn || !nickname) {
       return;
     }
 
