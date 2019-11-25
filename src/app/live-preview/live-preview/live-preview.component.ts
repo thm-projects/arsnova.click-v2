@@ -6,7 +6,6 @@ import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { ConnectionService } from '../../service/connection/connection.service';
-import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 
@@ -53,8 +52,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     public questionTextService: QuestionTextService,
     public connectionService: ConnectionService,
     private quizService: QuizService,
-    private sanitizer: DomSanitizer,
-    private route: ActivatedRoute, private markdownService: CustomMarkdownService,
+    private sanitizer: DomSanitizer, private route: ActivatedRoute,
   ) {
   }
 

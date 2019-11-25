@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -148,7 +148,7 @@ export function markedOptionsFactory(): MarkedOptions {
         useFactory: jwtOptionsFactory,
         deps: [PLATFORM_ID],
       },
-    }), PipesModule, HeaderModule, MarkdownModule.forRoot({
+    }), PipesModule, HeaderModule, HttpClientModule, MarkdownModule.forRoot({
       markedOptions: {
         provide: MarkedOptions,
         useFactory: (markedOptionsFactory),

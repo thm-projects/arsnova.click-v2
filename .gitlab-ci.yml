@@ -3,11 +3,9 @@ stages:
   - test
   - build
   - assets
-  - sync_sentry
   - deploy
   - build-beta
   - assets-beta
-  - sync_sentry-beta
   - deploy-beta
 
 # Cache modules in between jobs
@@ -37,7 +35,6 @@ ts_lint:
 
 npm_test:
   stage: test
-  allow_failure: true
   tags:
     - nodejs
     - angular
@@ -90,28 +87,6 @@ generate_assets:
   artifacts:
     paths:
       - dist
-
-sync_sentry:
-  stage: sync_sentry
-  allow_failure: true
-  only:
-    - master
-  tags:
-    - nodejs
-  dependencies:
-    - generate_assets
-  script:
-    - npm install @sentry/cli
-    - echo "Create a new release $CI_COMMIT_SHA"
-    #- export SENTRY_URL=$SENTRY_BASE_URL
-    - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
-    - export SENTRY_ORG=$SENTRY_BASE_ORGANIZATION
-    - export SENTRY_PROJECT=$SENTRY_BASE_PROJECT
-    - node_modules/@sentry/cli/bin/sentry-cli releases new $CI_COMMIT_SHA
-    - node_modules/@sentry/cli/bin/sentry-cli releases set-commits --auto $CI_COMMIT_SHA
-    - node_modules/@sentry/cli/bin/sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
-    - node_modules/@sentry/cli/bin/sentry-cli releases finalize $CI_COMMIT_SHA
-    - echo "Finalized release for $CI_COMMIT_SHA"
 
 deploy:
   stage: deploy
@@ -174,28 +149,6 @@ generate_assets-beta:
   artifacts:
     paths:
       - dist
-
-sync_sentry-beta:
-  stage: sync_sentry-beta
-  allow_failure: true
-  only:
-    - beta
-  tags:
-    - nodejs
-  dependencies:
-    - generate_assets-beta
-  script:
-    - npm install @sentry/cli
-    - echo "Create a new release $CI_COMMIT_SHA"
-    #- export SENTRY_URL=$SENTRY_BASE_URL
-    - export SENTRY_AUTH_TOKEN=$SENTRY_BASE_TOKEN
-    - export SENTRY_ORG=$SENTRY_BASE_ORGANIZATION
-    - export SENTRY_PROJECT=$SENTRY_BASE_PROJECT
-    - node_modules/@sentry/cli/bin/sentry-cli releases new $CI_COMMIT_SHA
-    - node_modules/@sentry/cli/bin/sentry-cli releases set-commits --auto $CI_COMMIT_SHA
-    - node_modules/@sentry/cli/bin/sentry-cli releases files $CI_COMMIT_SHA upload-sourcemaps $CI_PROJECT_DIR/dist -x .js -x .map --validate --verbose --rewrite --strip-common-prefix
-    - node_modules/@sentry/cli/bin/sentry-cli releases finalize $CI_COMMIT_SHA
-    - echo "Finalized release for $CI_COMMIT_SHA"
 
 deploy-beta:
   stage: deploy-beta

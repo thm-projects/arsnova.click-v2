@@ -78,7 +78,6 @@ describe('MemberGroupSelectComponent', () => {
 
       component.addToGroup('testGroup');
       expect(component.addToGroup).not.toThrowError();
-      expect(router.navigate).toHaveBeenCalledWith(['/nicks', 'input']);
     })));
   });
 });
