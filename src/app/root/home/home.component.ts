@@ -385,6 +385,11 @@ export class HomeComponent implements OnInit, OnDestroy {
           action: HomeComponent.TYPE,
           label: 'Demo Quiz created',
         });
+      } else {
+        this.trackingService.trackConversionEvent({
+          action: HomeComponent.TYPE,
+          label: 'Custom Quiz created',
+        });
       }
 
       this.router.navigate(routingTarget);
