@@ -224,7 +224,7 @@
                 },
                 {
                   "replace": "src/assets/piwik/piwik.js",
-                  "with": "src/assets/piwik/piwik.prod.js"
+                  "with": "src/assets/piwik/piwik.staging.js"
                 }
               ],
               "styles": [
@@ -311,7 +311,7 @@
                 },
                 {
                   "replace": "src/assets/piwik/piwik.js",
-                  "with": "src/assets/piwik/piwik.prod.js"
+                  "with": "src/assets/piwik/piwik.beta.js"
                 },
                 {
                   "replace": "src/assets/images/logo.svg",

@@ -19,6 +19,7 @@ export class StorageServiceMock {
   constructor() {
     this._db[DbTable.Quiz] = {
       get: () => new Promise(resolve => resolve()),
+      delete: () => new Promise(resolve => resolve()),
       toCollection: () => {
         return {
           sortBy: () => new Promise(resolve => resolve([])),
@@ -28,6 +29,7 @@ export class StorageServiceMock {
     };
     this._db[DbTable.Config] = {
       get: () => new Promise(resolve => resolve()),
+      delete: () => new Promise(resolve => resolve()),
       toCollection: () => {
         return {
           sortBy: (data) => new Promise(resolve => resolve(data)),

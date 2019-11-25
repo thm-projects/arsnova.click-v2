@@ -9,6 +9,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { MarkdownService } from 'ngx-markdown';
 import { TranslatePipeMock } from '../../../../_mocks/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -46,6 +47,7 @@ describe('VotingComponent', () => {
         }),
       ],
       providers: [
+        MarkdownService,
         RxStompService,
         {
           provide: StorageService,

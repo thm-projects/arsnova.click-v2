@@ -19,4 +19,8 @@ export class AttendeeMockService {
   public cleanUp(): void {
     this.attendees = [];
   }
+
+  public hasConfidenceValue(): boolean {
+    return false;
+  }
 }
