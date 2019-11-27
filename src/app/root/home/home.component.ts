@@ -534,11 +534,11 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const hasMatchedABCDQuiz = this.ownQuizzes.filter(quizName => {
-      return quizName.split(' ')[0] === this.enteredSessionName;
+    const hasMatchedABCDQuiz = this.ownQuizzes.find(quizName => {
+      return quizName.toLowerCase().trim().split(' ')[0] === this.enteredSessionName.toLowerCase().trim();
     });
-    if (hasMatchedABCDQuiz.length) {
-      const questionGroup = await this.storageService.db.Quiz.get(hasMatchedABCDQuiz[0]);
+    if (hasMatchedABCDQuiz) {
+      const questionGroup = await this.storageService.db.Quiz.get(hasMatchedABCDQuiz);
       const answerOptionList = (<Array<AbstractAnswerEntity>>[]);
 
       answerList.forEach((character, index) => {

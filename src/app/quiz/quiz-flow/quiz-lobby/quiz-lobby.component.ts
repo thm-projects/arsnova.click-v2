@@ -254,11 +254,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       const promise = this.attendeeService.attendees.length ? this.ngbModal.open(EditModeConfirmComponent).result : new Promise<any>(
         resolve => resolve());
       promise.then(() => {
-        this.quizService.close();
-        this.attendeeService.cleanUp();
-        this.connectionService.cleanUp();
         this.hasTriggeredNavigation = true;
-        this.router.navigate(['/quiz', 'manager', 'overview']);
+        this.router.navigate(['/quiz', 'manager', 'overview']).then(() => {
+          this.quizService.close();
+          this.attendeeService.cleanUp();
+        });
       }).catch(() => {});
     };
   }

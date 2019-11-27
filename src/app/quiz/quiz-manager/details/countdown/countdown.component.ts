@@ -61,6 +61,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
 
   set countdown(value: string) {
     this._countdown = value;
+    this.updateCountdown(parseInt(value, 10));
   }
 
   private _questionIndex: number;
@@ -96,7 +97,7 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this._plainMinutes = parseInt(this._parsedMinutes, 10);
     this._plainSeconds = parseInt(this._parsedSeconds, 10);
 
-    this.quizService.quiz.questionList[this._questionIndex].timer = parseInt(this.countdown, 10) || 0;
+    this.quizService.quiz.questionList[this._questionIndex].timer = countdown || 0;
   }
 
   public ngOnInit(): void {

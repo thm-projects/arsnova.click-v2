@@ -7,7 +7,6 @@ import { QuizState } from '../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
 import { IQuizResponse } from '../../lib/interfaces/quizzes/IQuizResponse';
 import { MemberApiService } from '../api/member/member-api.service';
-import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
 
@@ -36,7 +35,6 @@ export class AttendeeService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
-    private footerBarService: FooterBarService,
     private quizService: QuizService,
     private storageService: StorageService,
     private memberApiService: MemberApiService,
@@ -145,7 +143,6 @@ export class AttendeeService {
         this._attendees = data.payload.members.map((attendee) => {
           return new Attendee(attendee);
         });
-        this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
         resolve();
       }, () => reject());
     });
@@ -157,7 +154,6 @@ export class AttendeeService {
       if (!quiz || typeof quiz.state === 'undefined' || quiz.state === QuizState.Inactive) {
         return;
       }
-      this.footerBarService.footerElemStartQuiz.isActive = this._attendees.length > 0;
 
       console.log('AttendeeService#loadData', 'quiz set', quiz);
       this.restoreMembers();

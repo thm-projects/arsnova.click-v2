@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
-import { filter } from 'rxjs/operators';
+import { filter, switchMapTo } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DefaultSettings } from '../../lib/default.settings';
 import { StorageKey } from '../../lib/enums/enums';
@@ -12,6 +12,7 @@ import { StatusProtocol } from '../../lib/enums/Message';
 import { FooterbarElement } from '../../lib/footerbar-element/footerbar-element';
 import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
+import { AttendeeService } from '../attendee/attendee.service';
 import { QuizService } from '../quiz/quiz.service';
 import { UserService } from '../user/user.service';
 
@@ -415,18 +416,16 @@ export class FooterBarService {
     @Inject(PLATFORM_ID) private platformId: Object,
     private userService: UserService,
     private rxStompService: RxStompService,
-    private quizService: QuizService,
+    private quizService: QuizService, private attendeeService: AttendeeService,
     private quizApiService: QuizApiService,
     private translateService: TranslateService, private route: ActivatedRoute, private injector: Injector,
   ) {
 
-    this.rxStompService.connectionState$.subscribe(value => {
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz), switchMapTo(this.rxStompService.connectionState$)).subscribe(value => {
       this._connectionState = value;
-      this.toggleFooterElemState(value === RxStompState.OPEN);
-    });
-
-    this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz)).subscribe(() => {
       this.updateFooterElementsState();
+      // this.toggleFooterElemState(value === RxStompState.OPEN && ([QuizState.Inactive].includes(this.quizService.quiz.state) ||
+      // this.attendeeService.attendees.length > 0));
     });
   }
 

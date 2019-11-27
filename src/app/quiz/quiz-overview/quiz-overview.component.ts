@@ -79,6 +79,7 @@ export class QuizOverviewComponent implements OnInit {
 
       const quizAvailable = await this.requestQuizStatus(elem);
       if (!quizAvailable) {
+        this.isStartingQuiz = null;
         resolve();
         return;
       }
