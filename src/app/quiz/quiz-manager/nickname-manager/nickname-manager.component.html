@@ -18,7 +18,7 @@
            [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
            [class.selectedCategory]="hasSelectedCategory(cat)"
            class="nickCategory cursor-pointer col-6">
-        <div class="nickCategoryText bg-secondary cursor-pointer rounded p-2 m-1">
+        <div class="nickCategoryText bg-light cursor-pointer rounded p-2 m-1">
           <p [innerHTML]="getCategoryTranslation(cat) | translate"
              class="mb-0"></p>
           <p class="mb-0">({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
@@ -32,7 +32,7 @@
        [infiniteScrollThrottle]="throttle"
        class="col-12 col-sm-8 col-md-6"
        infinite-scroll>
-    <div class="bg-secondary rounded pt-2 mt-2 mt-sm-0">
+    <div class="bg-light rounded pt-2 mt-2 mt-sm-0">
       <div class="mx-2">
         <button (click)="toggleAllNicks()"
                 [class.btn-success]="!hasSelectedAllNicks()"
