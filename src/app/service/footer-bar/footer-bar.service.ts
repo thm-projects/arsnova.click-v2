@@ -492,7 +492,7 @@ export class FooterBarService {
     this.footerElemReadingConfirmation.isActive = !!this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
     this.footerElemConfidenceSlider.isActive = !!this.quizService.quiz.sessionConfig.confidenceSliderEnabled;
     this.footerElemStartQuiz.isActive = this.quizService.isValid() && this._connectionState === RxStompState.OPEN;
-    console.log('updating footer elements state', this.quizService.isValid(), this._connectionState === RxStompState.OPEN);
+    this.footerElemNicknames.isActive = this._connectionState === RxStompState.OPEN;
 
     this.footerElemExport.restoreClickCallback();
     this.footerElemExport.onClickCallback = async () => {
