@@ -70,7 +70,7 @@
     "angular-svg-icon": "^8.0.0",
     "angulartics2": "^8.1.0",
     "angularx-qrcode": "^1.6.4",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.4.0",
     "cors": "^2.8.5",
     "dexie": "^2.0.4",
     "marked": "^0.7.0",
