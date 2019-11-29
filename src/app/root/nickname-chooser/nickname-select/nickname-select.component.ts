@@ -67,26 +67,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
 
     sessionStorage.setItem(StorageKey.QuizToken, token);
 
-    const promise = new Promise(async (resolve, reject) => {
-      this.memberApiService.putMember(new MemberEntity({
-        currentQuizName: this.quizService.quiz.name,
-        name: nickname,
-        groupName: sessionStorage.getItem(StorageKey.CurrentMemberGroupName),
-        ticket: this.userService.casTicket,
-      })).subscribe((data: IMessage) => {
-        if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
-          this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
-            this.attendeeService.addMember(payload.member);
-            resolve();
-          }));
-        } else {
-          reject();
-        }
-      }, () => {
-        reject();
-      });
-    });
-    promise.then(() => {
+    this.putMember(nickname).then(() => {
       this.attendeeService.ownNick = nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, (err) => {
@@ -119,5 +100,30 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.footerBarService.footerElemBack.restoreClickCallback();
     this._messageSubscriptions.forEach(sub => this.messageQueue.unsubscribe(sub));
+  }
+
+  private putMember(name: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+        this.attendeeService.addMember(payload.member);
+        resolve();
+      }));
+
+      this.memberApiService.putMember(new MemberEntity({
+        currentQuizName: this.quizService.quiz.name,
+        name,
+        groupName: sessionStorage.getItem(StorageKey.CurrentMemberGroupName),
+        ticket: this.userService.casTicket,
+      })).subscribe((data: IMessage) => {
+        if (data.status !== StatusProtocol.Success || data.step !== MessageProtocol.Added) {
+          reject(data);
+        }
+      }, error => {
+        reject({
+          status: StatusProtocol.Failed,
+          payload: error,
+        });
+      });
+    });
   }
 }

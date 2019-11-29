@@ -58,7 +58,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
 
     sessionStorage.setItem(StorageKey.QuizToken, token);
 
-    this.putMember(this.nickname, sessionStorage.getItem(StorageKey.CurrentMemberGroupName)).then(() => {
+    this.putMember(this.nickname).then(() => {
       this.attendeeService.ownNick = this.nickname;
       this.router.navigate(['/quiz', 'flow', 'lobby']);
     }, data => {
@@ -98,20 +98,20 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     this._messageSubscriptions.forEach(sub => this.messageQueue.unsubscribe(sub));
   }
 
-  private putMember(name, groupName): Promise<void> {
+  private putMember(name: string): Promise<void> {
     return new Promise((resolve, reject) => {
+      this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+        this.attendeeService.addMember(payload.member);
+        resolve();
+      }));
+
       this.memberApiService.putMember(new MemberEntity({
         currentQuizName: this.quizService.quiz.name,
         name,
-        groupName,
+        groupName: sessionStorage.getItem(StorageKey.CurrentMemberGroupName),
         ticket: this.userService.casTicket,
       })).subscribe(data => {
-        if (data.status === StatusProtocol.Success && data.step === MessageProtocol.Added) {
-          this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
-            this.attendeeService.addMember(payload.member);
-            resolve();
-          }));
-        } else {
+        if (data.status !== StatusProtocol.Success || data.step !== MessageProtocol.Added) {
           reject(data);
         }
       }, (error) => {
