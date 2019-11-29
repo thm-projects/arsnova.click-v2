@@ -17,12 +17,7 @@ export class LeaderboardApiService {
   }
 
   public getLeaderboardData(quizName: string, amount: number, questionIndex?: number): Observable<IMessage> {
-    const headers: { [key: string]: string } = {};
-    if (sessionStorage.getItem(StorageKey.QuizToken)) {
-      headers.authorization = sessionStorage.getItem(StorageKey.QuizToken);
-    } else {
-      headers.authorization = sessionStorage.getItem(StorageKey.PrivateKey);
-    }
-    return this.http.get<IMessage>(this.LEADERBOARD_GET_DATA_URL(quizName, amount, questionIndex), { headers });
+    return this.http.get<IMessage>(this.LEADERBOARD_GET_DATA_URL(quizName, amount, questionIndex),
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 }

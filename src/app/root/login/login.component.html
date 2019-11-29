@@ -2,12 +2,12 @@
   <h4 class="text-center mb-5 mt-sm-5">{{'component.login.title' | translate}}</h4>
 
   <div *ngIf="hasUsernamePasswordLogin"
-       class="input-group input-group-sm">
+       class="input-group">
 
     <input (keydown.enter)="login()"
            [(ngModel)]="username"
            [placeholder]="'component.login.username' | translate"
-           class="form-control"
+           class="form-control my-2 my-sm-0"
            name="username"
            type="text"/>
 
@@ -32,7 +32,7 @@
     <h6 *ngIf="hasMultipleLoginMethods"
         class="mt-5">{{'component.login.login-via-token' | translate}}</h6>
 
-    <div class="input-group input-group-sm">
+    <div class="input-group">
 
       <input (keydown.enter)="login()"
              [(ngModel)]="token"
