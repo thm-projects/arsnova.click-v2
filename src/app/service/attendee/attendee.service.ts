@@ -5,7 +5,6 @@ import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../lib/enums/enums';
 import { QuizState } from '../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
-import { IQuizResponse } from '../../lib/interfaces/quizzes/IQuizResponse';
 import { MemberApiService } from '../api/member/member-api.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
@@ -78,7 +77,12 @@ export class AttendeeService {
 
   public clearResponses(): void {
     this._attendees.forEach((attendee) => {
-      attendee.responses.splice(0, attendee.responses.length, {} as IQuizResponse);
+      attendee.responses.forEach(response => {
+        response.confidence = -1;
+        response.readingConfirmation = false;
+        response.responseTime = -1;
+        response.value = [];
+      });
     });
   }
 
