@@ -21,7 +21,8 @@ body {
 }
 
 .thumbnail {
-  max-height: 15rem;
+  max-width: 100%;
+  height: auto;
 }
 
 #theme-wrapper {
