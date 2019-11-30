@@ -147,7 +147,7 @@ describe('QuizResultsComponent', () => {
     expect(component.showStopCountdownButton).toBeFalsy();
   }));
 
-  it(`#showStartQuizButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
+  it(`#showStartQuizButton`, inject([QuizService], (quizService: QuizService) => {
     quizService['_isOwner'] = true;
     quizService.readingConfirmationRequested = true;
 
@@ -169,7 +169,7 @@ describe('QuizResultsComponent', () => {
       currentQuizName: '',
       responses: [
         {
-          value: 0,
+          value: '0',
           confidence: 20,
           readingConfirmation: true,
           responseTime: 10,
@@ -197,7 +197,7 @@ describe('QuizResultsComponent', () => {
       currentQuizName: '',
       responses: [
         {
-          value: 0,
+          value: '0',
           confidence: 20,
           readingConfirmation: true,
           responseTime: 10,
@@ -224,7 +224,7 @@ describe('QuizResultsComponent', () => {
       currentQuizName: '',
       responses: [
         {
-          value: 0,
+          value: '0',
           confidence: 20,
           readingConfirmation: true,
           responseTime: 10,
@@ -250,7 +250,7 @@ describe('QuizResultsComponent', () => {
       currentQuizName: '',
       responses: [
         {
-          value: 0,
+          value: '0',
           confidence: 20,
           readingConfirmation: true,
           responseTime: 10,

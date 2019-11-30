@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
@@ -30,11 +32,10 @@ describe('LoginComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), FormsModule, RouterTestingModule, HttpClientTestingModule,
+        }), FormsModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, FooterBarService, {
@@ -55,6 +56,8 @@ describe('LoginComponent', () => {
   }));
 
   beforeEach(() => {
+    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    library.addIcons(faSpinner);
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -80,7 +83,7 @@ describe('LoginComponent', () => {
         spyOn(userService, 'authenticateThroughLogin').and.returnValue(new Promise(resolve => resolve(true)));
         spyOn(router, 'navigateByUrl').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
-        await component.login();
+        await component.login('password');
         expect(component['_authorizationFailed']).toBeFalsy();
 
       }));
@@ -96,7 +99,7 @@ describe('LoginComponent', () => {
         spyOn(userService, 'authenticateThroughLogin').and.returnValue(new Promise(resolve => resolve(false)));
         spyOn(router, 'navigateByUrl').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
-        await component.login();
+        await component.login('token');
         expect(component['_authorizationFailed']).toBeTruthy();
       }));
   });

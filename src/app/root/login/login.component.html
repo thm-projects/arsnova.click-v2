@@ -4,14 +4,14 @@
   <div *ngIf="hasUsernamePasswordLogin"
        class="input-group">
 
-    <input (keydown.enter)="login()"
+    <input (keydown.enter)="login('password')"
            [(ngModel)]="username"
            [placeholder]="'component.login.username' | translate"
            class="form-control my-2 my-sm-0"
            name="username"
            type="text"/>
 
-    <input (keydown.enter)="login()"
+    <input (keydown.enter)="login('password')"
            [(ngModel)]="password"
            [placeholder]="'component.login.password' | translate"
            class="form-control my-2 my-sm-0"
@@ -20,8 +20,14 @@
 
     <div class="input-group-append">
 
-      <button (click)="login()"
-              class="btn btn-light">{{'component.login.login' | translate}}
+      <button (click)="login('password')"
+              [disabled]="isLoggingIn"
+              class="btn btn-light">
+        <fa-icon *ngIf="isLoggingIn === 'password'"
+                 [icon]="'spinner'"
+                 [spin]="true"
+                 class="mr-2"></fa-icon>
+        <span>{{'component.login.login' | translate}}</span>
       </button>
 
     </div>
@@ -34,7 +40,7 @@
 
     <div class="input-group">
 
-      <input (keydown.enter)="login()"
+      <input (keydown.enter)="login('token')"
              [(ngModel)]="token"
              [placeholder]="'component.login.token' | translate"
              class="form-control my-2 my-sm-0"
@@ -43,8 +49,14 @@
 
       <div class="input-group-append">
 
-        <button (click)="login()"
-                class="btn btn-light">{{'component.login.login' | translate}}
+        <button (click)="login('token')"
+                [disabled]="isLoggingIn"
+                class="btn btn-light">
+          <fa-icon *ngIf="isLoggingIn === 'token'"
+                   [icon]="'spinner'"
+                   [spin]="true"
+                   class="mr-2"></fa-icon>
+          <span>{{'component.login.login' | translate}}</span>
         </button>
 
       </div>

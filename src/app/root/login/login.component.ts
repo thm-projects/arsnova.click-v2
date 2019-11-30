@@ -22,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public hasUsernamePasswordLogin: boolean = environment.loginMechanism.includes(LoginMechanism.UsernamePassword);
   public hasTokenLogin: boolean = environment.loginMechanism.includes(LoginMechanism.Token);
   public hasMultipleLoginMethods: boolean = environment.loginMechanism.length > 1;
+  public isLoggingIn: string;
 
   private _authorizationFailed = false;
 
@@ -66,25 +67,28 @@ export class LoginComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  public async login(): Promise<void> {
+  public async login(method: string): Promise<void> {
     this._authorizationFailed = false;
-    let isLoggedIn = false;
+    let authenticated = false;
+    this.isLoggingIn = method;
 
     if (this.hasTokenLogin && this.token) {
       const tokenHash = this.userService.hashToken(this.token);
-      isLoggedIn = await this.userService.authenticateThroughLoginToken(tokenHash);
+      authenticated = await this.userService.authenticateThroughLoginToken(tokenHash);
 
     } else if (this.hasUsernamePasswordLogin && this.username && this.password) {
       const passwordHash = this.userService.hashPassword(this.username, this.password);
-      isLoggedIn = await this.userService.authenticateThroughLogin(this.username.toLowerCase(), passwordHash);
+      authenticated = await this.userService.authenticateThroughLogin(this.username.toLowerCase(), passwordHash);
     }
 
-    if (isLoggedIn) {
+    if (authenticated) {
       this.storageServie.db.initialized.pipe(takeUntil(this._destroy)).subscribe(value => {
+        this.isLoggingIn = null;
         this.router.navigateByUrl(this.return);
       });
     } else {
       this._authorizationFailed = true;
+      this.isLoggingIn = null;
     }
   }
 }
