@@ -126,5 +126,6 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy.next();
     this._destroy.complete();
+    window['hs'].close();
   }
 }
