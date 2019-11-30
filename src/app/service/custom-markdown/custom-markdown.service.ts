@@ -36,7 +36,7 @@ export class CustomMarkdownService {
   }
 
   private postMarkdownRenderer(value: string): string {
-    const iframeOptions = `frameborder="0" gesture="media" width="100%" webkitallowfullscreen mozallowfullscreen allowfullscreen`;
+    const iframeOptions = `frameborder="0" gesture="media" webkitallowfullscreen mozallowfullscreen allowfullscreen`;
 
     const youtubeMatch = value.match(/<a href=".*(youtube|youtu).*">.*<\/a>/g);
     if (youtubeMatch) {
@@ -75,7 +75,7 @@ export class CustomMarkdownService {
         const anchorNode = document.createElement<'a'>('a');
         anchorNode.href = imgNode.src;
         anchorNode.target = null;
-        anchorNode.classList.add(...['highslide', 'd-flex', 'd-sm-block', 'justify-content-center']);
+        anchorNode.classList.add(...['highslide']);
         anchorNode.setAttribute('onclick', 'return hs.expand(this);');
         anchorNode.appendChild(imgNode);
 
