@@ -62,7 +62,7 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     .subscribe(questionIndex => {
 
       this._questionIndex = questionIndex;
-      this._question = <RangedQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
+      this._question = this.quizService.quiz.questionList[this._questionIndex] as RangedQuestionEntity;
       this._minRange = String(this._question.rangeMin);
       this._maxRange = String(this._question.rangeMax);
       this._correctValue = String(this._question.correctValue);
@@ -75,7 +75,7 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     this._question.rangeMax = parseInt(this._maxRange, 10);
     this._question.correctValue = parseInt(this._correctValue, 10);
 
-    this.quizService.quiz.questionList[this._questionIndex] = <RangedQuestionEntity>this._question;
+    this.quizService.quiz.questionList[this._questionIndex] = this._question;
     this.quizService.persist();
 
     this._destroy.next();

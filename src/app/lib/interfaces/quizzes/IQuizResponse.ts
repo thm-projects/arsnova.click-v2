@@ -1,5 +1,5 @@
 export interface IQuizResponse {
-  value: Array<number> | number | string;
+  value: Array<number> | string;
   responseTime: number;
   confidence: number;
   readingConfirmation: boolean;

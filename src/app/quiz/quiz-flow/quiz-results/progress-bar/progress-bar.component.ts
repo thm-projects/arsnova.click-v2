@@ -72,21 +72,25 @@ export class ProgressBarComponent {
       if (typeof value.responses[this.questionIndex] === 'undefined' || value.responses[this.questionIndex].responseTime === -1) {
         return false;
       }
-      const responseValue: any = value.responses[this.questionIndex].value;
-      if (!responseValue || !String(responseValue).length || (Array.isArray(responseValue) && !responseValue.length)) {
+      const responseValue: Array<number> | string = value.responses[this.questionIndex].value;
+      if (!Array.isArray(responseValue) || !['number', 'string'].includes(typeof responseValue)) {
         return false;
       }
 
       if (question.TYPE === QuestionType.FreeTextQuestion) {
         const answer = question.answerOptionList[0] = new FreeTextAnswerEntity(question.answerOptionList[0]);
-        if (answer.isCorrectInput(responseValue)) {
+        if (answer.isCorrectInput(responseValue as unknown as string)) {
           correct++;
         } else {
           wrong++;
         }
       } else if (question.TYPE === QuestionType.RangedQuestion) {
-        if (responseValue === question.correctValue || responseValue !== question.correctValue && responseValue >= question.rangeMin && responseValue
-            <= question.rangeMax) {
+        const parsedResponseValue = parseInt(responseValue as unknown as string, 10);
+        if (parsedResponseValue === question.correctValue || //
+            (
+              parsedResponseValue >= question.rangeMin && //
+              parsedResponseValue <= question.rangeMax
+            )) {
           correct++;
         } else {
           wrong++;
@@ -98,12 +102,16 @@ export class ProgressBarComponent {
         base--;
         question.answerOptionList.forEach((answer, answerIndex) => {
           if (answer.isCorrect) {
-            if ((<any>responseValue.indexOf(answerIndex)) > -1) {
+            if ((
+                  responseValue.indexOf(answerIndex)
+                ) > -1) {
               correct++;
               base++;
             }
           } else {
-            if ((<any>responseValue.indexOf(answerIndex)) > -1) {
+            if ((
+                  responseValue.indexOf(answerIndex)
+                ) > -1) {
               wrong++;
               base++;
             }
@@ -145,9 +153,13 @@ export class ProgressBarComponent {
 
       if (Array.isArray(responseValue)) {
         if (isNaN(responseValue[0])) {
-          return (<any>responseValue.indexOf(question.answerOptionList[answerIndex].answerText)) > -1;
+          return (
+                   <any>responseValue.indexOf(question.answerOptionList[answerIndex].answerText)
+                 ) > -1;
         } else {
-          return (<any>responseValue.indexOf(answerIndex)) > -1;
+          return (
+                   <any>responseValue.indexOf(answerIndex)
+                 ) > -1;
         }
       } else {
         return responseValue === answerIndex;
@@ -169,7 +181,7 @@ export class ProgressBarComponent {
       if (typeof value.responses[this.questionIndex] === 'undefined') {
         return false;
       }
-      const responseValue = value.responses[this.questionIndex].value;
+      const responseValue = parseInt(value.responses[this.questionIndex].value as unknown as string, 10);
       if (Array.isArray(responseValue)) {
         return false;
       }
