@@ -544,11 +544,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
       answerList.forEach((character, index) => {
         answerOptionList.push(new DefaultAnswerEntity({
-          answerText: (String.fromCharCode(index + 65)),
+          answerText: (
+            String.fromCharCode(index + 65)
+          ),
           isCorrect: false,
         }));
       });
-      this.enteredSessionName = questionGroup.name;
+      this.enteredSessionName = questionGroup ? questionGroup.name : this.enteredSessionName.trim();
       const abcdQuestion: ABCDSingleChoiceQuestionEntity = new ABCDSingleChoiceQuestionEntity({
         questionText: '',
         timer: 60,
