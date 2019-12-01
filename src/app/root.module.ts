@@ -35,18 +35,16 @@ import { SharedModule } from './shared/shared.module';
 const appRoutes: Routes = [
   {
     path: 'admin',
-    canLoad: [StaticLoginService],
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    canActivate: [InitDbGuard],
+    canActivate: [InitDbGuard, StaticLoginService],
   }, {
     path: 'info',
     loadChildren: () => import('./root/info/info.module').then(m => m.InfoModule),
     canActivate: [InitDbGuard],
   }, {
     path: 'i18n-manager',
-    canLoad: [StaticLoginService],
     loadChildren: () => import('./i18n-manager/i18n-manager.module').then(m => m.I18nManagerModule),
-    canActivate: [InitDbGuard],
+    canActivate: [InitDbGuard, StaticLoginService],
   }, {
     path: 'quiz/manager',
     loadChildren: () => import('./quiz/quiz-manager/quiz-manager.module').then(m => m.QuizManagerModule),

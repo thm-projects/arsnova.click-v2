@@ -1,44 +1,40 @@
 import { Injectable } from '@angular/core';
-import { CanLoad, Route, Router, UrlSegment } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { UserRole } from '../../lib/enums/UserRole';
 import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class StaticLoginService implements CanLoad {
+export class StaticLoginService implements CanActivate {
 
   constructor(private router: Router, private userService: UserService) { }
 
-  public canLoad(route: Route, segments: UrlSegment[]): Observable<boolean> {
-    return new Observable<boolean>(subscriber => {
-      this.isAllowedToProceed(route).pipe(map(isAllowedToProceed => {
-        if (isAllowedToProceed) {
-          return true;
-        }
+  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
+    const url = route.url.map(u => u.path).join('/');
 
-        this.router.navigate(['/login'], {
-          queryParams: {
-            return: segments.map(segment => segment.path).join('/'),
-          },
-        });
-        return false;
-      })).subscribe(isAllowedToProceed => {
-        subscriber.next(isAllowedToProceed);
-        subscriber.complete();
+    return this.isAllowedToProceed(url).pipe(map(isAllowedToProceed => {
+      if (isAllowedToProceed) {
+        return true;
+      }
+
+      return this.router.createUrlTree(['/login'], {
+        queryParams: {
+          return: url,
+        },
       });
-    });
+    }), take(1));
   }
 
-  private isAllowedToProceed(route: Route): Observable<boolean> {
+  private isAllowedToProceed(url: string): Observable<boolean> {
     return this.userService.loginNotifier.pipe(map(isLoggedIn => {
       if (!isLoggedIn) {
         return false;
       }
 
-      switch (route.path) {
+      switch (url) {
         case 'i18n-manager':
           return this.userService.isAuthorizedFor(UserRole.EditI18n);
         case 'admin':

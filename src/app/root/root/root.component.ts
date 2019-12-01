@@ -1,6 +1,6 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs/esm6';
@@ -88,9 +88,10 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.router.events.pipe(takeUntil(this._destroy)).subscribe((event: any) => {
       if (event instanceof RouteConfigLoadStart) {
         this.sharedService.isLoadingEmitter.next(true);
-      } else if (event instanceof RouteConfigLoadEnd || event instanceof NavigationEnd) {
-        this.sharedService.isLoadingEmitter.next(false);
+        return;
       }
+
+      this.sharedService.isLoadingEmitter.next(false);
     });
 
     this.themeService.initTheme();
@@ -149,7 +150,13 @@ export class RootComponent implements OnInit, AfterViewInit {
     });
 
     this.router.events.pipe(takeUntil(this._destroy), filter(nav => nav instanceof NavigationEnd)).subscribe(() => {
-      this.isInQuizManager = [QuizManagerComponent.TYPE].includes(this.fetchChildComponent(this.activatedRoute).TYPE);
+      const currentComponent = this.fetchChildComponent(this.activatedRoute);
+      if (!currentComponent) {
+        this.router.navigate(['/']);
+        return;
+      }
+
+      this.isInQuizManager = [QuizManagerComponent.TYPE].includes(currentComponent.TYPE);
     });
   }
 

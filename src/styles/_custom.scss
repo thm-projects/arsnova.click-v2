@@ -45,6 +45,10 @@ img[alt*="emoji_"] {
   width: 24px;
 }
 
+iframe {
+  max-width: 100%;
+}
+
 @include media-breakpoint-only(xs) {
   .btn-header {
     width: calc(100% + 30px);
