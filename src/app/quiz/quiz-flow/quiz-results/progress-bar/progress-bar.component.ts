@@ -73,7 +73,7 @@ export class ProgressBarComponent {
         return false;
       }
       const responseValue: Array<number> | string = value.responses[this.questionIndex].value;
-      if (!Array.isArray(responseValue) || !['number', 'string'].includes(typeof responseValue)) {
+      if (!Array.isArray(responseValue) && !['number', 'string'].includes(typeof responseValue)) {
         return false;
       }
 
@@ -85,11 +85,10 @@ export class ProgressBarComponent {
           wrong++;
         }
       } else if (question.TYPE === QuestionType.RangedQuestion) {
-        const parsedResponseValue = parseInt(responseValue as unknown as string, 10);
-        if (parsedResponseValue === question.correctValue || //
+        if (responseValue === question.correctValue || //
             (
-              parsedResponseValue >= question.rangeMin && //
-              parsedResponseValue <= question.rangeMax
+              responseValue >= question.rangeMin && //
+              responseValue <= question.rangeMax
             )) {
           correct++;
         } else {
@@ -103,14 +102,18 @@ export class ProgressBarComponent {
         question.answerOptionList.forEach((answer, answerIndex) => {
           if (answer.isCorrect) {
             if ((
-                  responseValue.indexOf(answerIndex)
+                  (
+                    responseValue as unknown as Array<string>
+                  ).indexOf(answerIndex)
                 ) > -1) {
               correct++;
               base++;
             }
           } else {
             if ((
-                  responseValue.indexOf(answerIndex)
+                  (
+                    responseValue as unknown as Array<string>
+                  ).indexOf(answerIndex)
                 ) > -1) {
               wrong++;
               base++;

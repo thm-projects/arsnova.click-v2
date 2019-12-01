@@ -2,7 +2,7 @@
   <app-progress-bar-anonymous [attendeeData]="attendeeDataForAnswer()"
                               [type]="question?.TYPE"></app-progress-bar-anonymous>
 </ng-container>
-<ng-container *ngIf="!hideProgressbarCssStyle">
+<ng-container *ngIf="!hideProgressbarCssStyle && data">
   <ng-container *ngFor="let answer of data; let i = index">
     <app-progress-bar-single-choice *ngIf="question?.TYPE === 'SingleChoiceQuestion'"
                                     [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
