@@ -3,7 +3,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { UserService } from '../../service/user/user.service';
-
 import { QuizDetailsAdminComponent } from './quiz-details-admin.component';
 
 describe('QuizDetailsAdminComponent', () => {

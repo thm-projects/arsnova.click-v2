@@ -51,8 +51,8 @@ export class UserAdminComponent implements OnInit {
     });
   }
 
-  public showAddUserModal(): void {
-    this.ngbModal.open(AddUserComponent).result.then(value => {
+  public showAddUserModal(): Promise<void> {
+    return this.ngbModal.open(AddUserComponent).result.then(value => {
       value.passwordHash = this.userService.hashPassword(value.name, value.password);
       delete value.password;
       this.adminApiService.updateUser(value).subscribe(() => {
@@ -61,14 +61,14 @@ export class UserAdminComponent implements OnInit {
     }).catch(() => {});
   }
 
-  public editElem(user: UserEntity): void {
+  public editElem(user: UserEntity): Promise<void> {
     const ref = this.ngbModal.open(AddUserComponent);
     ref.componentInstance.name = user.name;
     ref.componentInstance.privateKey = user.privateKey;
     ref.componentInstance.gitlabToken = user.gitlabToken;
     ref.componentInstance.userAuthorizations = user.userAuthorizations;
 
-    ref.result.then(value => {
+    return ref.result.then(value => {
       value.originalUser = user.name;
       value.passwordHash = this.userService.hashPassword(value.name, value.password);
       delete value.password;

@@ -3,10 +3,14 @@ import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtHelperService, JwtModule } from '@auth0/angular-jwt';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { Observable, of } from 'rxjs';
+import { UserMock } from '../../../_mocks/_fixtures/user.mock';
 import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
+import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -29,6 +33,10 @@ import { UserAdminComponent } from './user-admin.component';
 describe('UserAdminComponent', () => {
   let component: UserAdminComponent;
   let fixture: ComponentFixture<UserAdminComponent>;
+  const newUser = {
+    ...UserMock,
+    name: 'new-user-name',
+  };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -42,8 +50,7 @@ describe('UserAdminComponent', () => {
         }),
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, I18nService, {
@@ -60,8 +67,30 @@ describe('UserAdminComponent', () => {
           useClass: ConnectionMockService,
         }, SharedService, {
           provide: UserService,
-          useValue: {},
-        }, JwtHelperService,
+          useValue: {
+            hashPassword: () => 'hashed-password',
+          },
+        }, JwtHelperService, {
+          provide: AdminApiService,
+          useValue: {
+            getAvailableUsers: () => of([UserMock]),
+            deleteUser: () => new Observable(subscriber => {
+              subscriber.next();
+              subscriber.complete();
+            }),
+            updateUser: () => new Observable(subscriber => {
+              subscriber.next();
+              subscriber.complete();
+            }),
+          },
+        }, {
+          provide: NgbModal,
+          useValue: {
+            open: () => (
+              { result: new Promise(resolve => resolve(newUser)) }
+            ),
+          },
+        },
       ],
       declarations: [
         UserAdminComponent,
@@ -78,4 +107,25 @@ describe('UserAdminComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should check if a user is currently deleted', () => {
+    expect(component.isDeletingElem(UserMock)).toBeFalsy();
+    component['_deletingElements'].push(UserMock.name);
+    expect(component.isDeletingElem(UserMock)).toBeTruthy();
+  });
+
+  it('should delete a given user by name', () => {
+    component.deleteElem(UserMock);
+    expect(component.data).not.toContain(UserMock);
+  });
+
+  it('should show the adduser modal', async(() => done => {
+    component.showAddUserModal().then(() => done());
+    expect(component.data).toContain(newUser);
+  }));
+
+  it('should edit an existing user', async(() => done => {
+    component.editElem(UserMock).then(() => done());
+    expect(component.data).toContain(newUser);
+  }));
 });

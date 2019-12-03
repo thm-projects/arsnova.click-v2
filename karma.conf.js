@@ -42,5 +42,9 @@ module.exports = function (config) {
     autoWatch: false,
     browsers: ['ChromeHeadless'],
     singleRun: true,
+    angularCli: {
+      config: './angular.json',
+      environment: 'dev'
+    },
   });
 };
