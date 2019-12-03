@@ -11,16 +11,23 @@ export class AppDb extends Dexie {
   constructor(dbName: DbName) {
     super(dbName);
 
-    this.version(1).stores({
-      [DbTable.Config]: 'type',
-      [DbTable.Quiz]: 'name',
-    }).upgrade(async trans => {
-      return trans.db.delete();
-    });
-
     this.version(0.1).stores({
       [DbTable.Config]: '++id,&id',
       [DbTable.Quiz]: '++id,&id',
+    });
+
+    this.version(0.2)
+    .stores({
+      [DbTable.Config]: null,
+      [DbTable.Quiz]: null,
+    }).upgrade(trans => {
+      trans.idbtrans.db.deleteObjectStore(DbTable.Quiz);
+      trans.idbtrans.db.deleteObjectStore(DbTable.Config);
+    });
+
+    this.version(1).stores({
+      [DbTable.Config]: 'type',
+      [DbTable.Quiz]: 'name',
     });
 
     this.Config.get(StorageKey.PrivateKey).then(privateKey => {
