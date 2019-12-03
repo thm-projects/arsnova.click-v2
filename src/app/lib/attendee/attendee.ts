@@ -79,6 +79,7 @@ export class Attendee implements IMemberSerialized {
     this._id = member.id;
     this._name = member.name;
     this._groupName = member.groupName;
+    this._currentQuizName = member.currentQuizName;
     this._colorCode = member.colorCode;
     this._responses = member.responses || [];
     this._ticket = member.ticket;

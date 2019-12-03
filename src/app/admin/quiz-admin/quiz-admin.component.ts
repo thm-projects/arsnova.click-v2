@@ -50,7 +50,7 @@ export class QuizAdminComponent implements OnInit {
     return this._deletingElements.indexOf(quiz.name) > -1;
   }
 
-  public deleteElem($event: Event, quiz: IAdminQuiz): void {
+  public deleteElem(quiz: IAdminQuiz): void {
     const index = this._deletingElements.push(quiz.name) - 1;
     this.adminApiService.deleteQuiz(quiz.name).subscribe(() => {
       this._deletingElements.splice(index, 1);

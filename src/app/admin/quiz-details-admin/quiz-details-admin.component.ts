@@ -41,7 +41,7 @@ export class QuizDetailsAdminComponent implements OnInit {
   }
 
   public isSet(value: any): boolean {
-    return !['undefined', 'null'].includes(typeof value);
+    return value !== null && typeof value !== 'undefined';
   }
 
   public getQuestionAsSurvey(question: AbstractQuestionEntity): SurveyQuestionEntity {
