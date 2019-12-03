@@ -23,19 +23,22 @@ declare class Modernizr {
 interface IFsDocument extends HTMLDocument {
   mozFullScreenElement?: Element;
   msFullscreenElement?: Element;
-  msExitFullscreen?: () => void;
+  webkitFullscreenElement?: Element;
   mozCancelFullScreen?: () => void;
+  msExitFullscreen?: () => void;
+  webkitExitFullscreen?: () => void;
 }
 
 export function isFullScreen(): boolean {
   const fsDoc = <IFsDocument>document;
 
-  return !!((fsDoc as any).fullscreenElement || fsDoc.mozFullScreenElement || (fsDoc as any).webkitFullscreenElement || fsDoc.msFullscreenElement);
+  return Boolean(fsDoc.fullscreenElement || fsDoc.mozFullScreenElement || fsDoc.webkitFullscreenElement || fsDoc.msFullscreenElement);
 }
 
 interface IFsDocumentElement extends HTMLElement {
   msRequestFullscreen?: () => void;
   mozRequestFullScreen?: () => void;
+  webkitRequestFullscreen?: () => void;
 }
 
 export function toggleFullScreen(): void {
@@ -50,17 +53,17 @@ export function toggleFullScreen(): void {
       fsDocElem.msRequestFullscreen();
     } else if (fsDocElem.mozRequestFullScreen) {
       fsDocElem.mozRequestFullScreen();
-    } else if ((fsDocElem as any).webkitRequestFullscreen) {
-      (fsDocElem as any).webkitRequestFullscreen();
+    } else if (fsDocElem.webkitRequestFullscreen) {
+      fsDocElem.webkitRequestFullscreen();
     }
   } else if (fsDoc.exitFullscreen) {
-    (fsDoc as any).exitFullscreen();
+    fsDoc.exitFullscreen();
   } else if (fsDoc.msExitFullscreen) {
     fsDoc.msExitFullscreen();
   } else if (fsDoc.mozCancelFullScreen) {
     fsDoc.mozCancelFullScreen();
-  } else if ((fsDoc as any).webkitExitFullscreen) {
-    (fsDoc as any).webkitExitFullscreen();
+  } else if (fsDoc.webkitExitFullscreen) {
+    fsDoc.webkitExitFullscreen();
   }
 }
 
@@ -424,9 +427,10 @@ export class FooterBarService {
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz), switchMapTo(this.rxStompService.connectionState$)).subscribe(value => {
       this._connectionState = value;
       this.updateFooterElementsState();
-      // this.toggleFooterElemState(value === RxStompState.OPEN && ([QuizState.Inactive].includes(this.quizService.quiz.state) ||
-      // this.attendeeService.attendees.length > 0));
     });
+
+    document.onfullscreenchange = () => {};
+    document.onfullscreenerror = () => {};
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
