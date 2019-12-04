@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'justafew',
 })
 export class JustAFewPipe implements PipeTransform {
-  public transform(value: Array<any>, start: number): Array<any> {
+  public transform<T>(value: Array<T>, start: number): Array<T> {
     if (!start || value.length < start) {
       return value;
     }

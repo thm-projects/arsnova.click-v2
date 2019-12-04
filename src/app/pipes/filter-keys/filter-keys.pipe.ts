@@ -9,7 +9,7 @@ export class FilterKeysPipe implements PipeTransform {
 
   constructor(private languageLoaderService: LanguageLoaderService) {}
 
-  public transform(value: Array<any>, filterSetting?: Filter): any {
+  public transform<T>(value: Array<T>, filterSetting?: Filter): Array<T> {
     switch (filterSetting) {
       case Filter.None:
         return value;

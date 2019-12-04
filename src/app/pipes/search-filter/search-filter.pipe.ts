@@ -1,21 +1,28 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+interface ISearchType {
+  key: string;
+}
+
 @Pipe({
   name: 'searchFilter',
   pure: false,
 })
 export class SearchFilterPipe implements PipeTransform {
 
-  public transform(value: Array<any>, args?: string): Array<any> {
-    if (!args || !args.length) {
+  public transform<T extends ISearchType | string>(value: Array<T>, searchFilter?: string): Array<T> {
+    if (!searchFilter) {
       return value;
     }
+
     return value.filter(val => {
-      if (val.key) {
-        return val.key.indexOf(args) > -1;
+      if (typeof val === 'string') {
+        return val.includes(searchFilter);
       }
 
-      return val.indexOf(args) > -1;
+      return (
+        val as ISearchType
+      ).key.includes(searchFilter);
     });
   }
 

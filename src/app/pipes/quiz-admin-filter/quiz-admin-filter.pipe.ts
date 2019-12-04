@@ -3,14 +3,21 @@ import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { QuizState } from '../../lib/enums/QuizState';
 import { IAdminQuiz } from '../../lib/interfaces/quizzes/IAdminQuiz';
 
+interface IFilterArgs {
+  filterDemoQuiz?: boolean;
+  filterAbcdQuiz?: boolean;
+  filterActiveQuiz?: boolean;
+  filterQuizName?: string;
+}
+
 @Pipe({
   name: 'quizAdminFilter',
   pure: false,
 })
 export class QuizAdminFilterPipe implements PipeTransform {
 
-  public transform(value: Array<IAdminQuiz>, args?: any): Array<IAdminQuiz> {
-    if (!value || !value.length || !args || !Object.keys(args).length) {
+  public transform(value: Array<IAdminQuiz>, args: IFilterArgs): Array<IAdminQuiz> {
+    if (!value || !Object.keys(args || {}).length) {
       return value;
     }
 

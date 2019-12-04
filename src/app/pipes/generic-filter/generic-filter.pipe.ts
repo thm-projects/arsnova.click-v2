@@ -9,7 +9,7 @@ export class GenericFilterPipe implements PipeTransform {
   public constructor(private translateService: TranslateService) {}
 
   public transform<T extends any>(value: Array<T>, args?: string | { [key: string]: any }): Array<T> {
-    if (!args || (typeof args === 'string' && !args.length) || !Object.keys(args).length) {
+    if (!args || !Object.keys(args).length) {
       return value;
     }
 

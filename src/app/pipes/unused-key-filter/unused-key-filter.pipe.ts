@@ -7,8 +7,8 @@ import { LanguageLoaderService } from '../../service/language-loader/language-lo
 export class UnusedKeyFilterPipe implements PipeTransform {
   constructor(private languageLoaderService: LanguageLoaderService) {}
 
-  public transform(value: Array<any>, args?: any): any {
-    if (args) {
+  public transform<T>(value: Array<T>, filterUnused?: boolean): Array<T> {
+    if (filterUnused) {
       return value.filter(elem => this.isUnused(elem));
     }
 
@@ -16,6 +16,6 @@ export class UnusedKeyFilterPipe implements PipeTransform {
   }
 
   private isUnused(elem): boolean {
-    return !!this.languageLoaderService.unusedKeys.find(unusedKey => unusedKey === elem.key);
+    return this.languageLoaderService.unusedKeys.some(unusedKey => unusedKey === elem.key);
   }
 }

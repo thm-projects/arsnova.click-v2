@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SortPipe implements PipeTransform {
 
-  public transform(value: Array<any>, args?: string): Array<any> {
+  public transform<T extends { key: string }>(value: Array<T>): Array<T> {
     return value.sort((a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : 0);
   }
 

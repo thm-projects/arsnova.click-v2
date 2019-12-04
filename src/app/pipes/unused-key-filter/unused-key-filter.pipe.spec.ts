@@ -13,6 +13,20 @@ import { UnusedKeyFilterPipe } from './unused-key-filter.pipe';
 
 describe('UnusedKeyFilterPipe', () => {
   let pipe: UnusedKeyFilterPipe;
+  const mockValues = [
+    {
+      key: 'test1key',
+      value: 'test1value',
+    },
+    {
+      key: 'test2key',
+      value: 'test2value',
+    },
+    {
+      key: 'unused-key',
+      value: 'unused-value',
+    },
+  ];
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -26,7 +40,12 @@ describe('UnusedKeyFilterPipe', () => {
         }), HttpClientTestingModule,
       ],
       providers: [
-        LanguageLoaderService, I18nManagerApiService, ProjectLoaderService, {
+        {
+          provide: LanguageLoaderService,
+          useValue: {
+            unusedKeys: ['unused-key'],
+          },
+        }, I18nManagerApiService, ProjectLoaderService, {
           provide: UserService,
           useValue: {},
         }, {
@@ -46,5 +65,13 @@ describe('UnusedKeyFilterPipe', () => {
 
   it('create an instance', () => {
     expect(pipe).toBeTruthy();
+  });
+
+  it('should return only the unused keys of the value', () => {
+    expect(pipe.transform(mockValues, true).length).toEqual(1);
+  });
+
+  it('should return only the used keys of the value', () => {
+    expect(pipe.transform(mockValues).length).toEqual(2);
   });
 });
