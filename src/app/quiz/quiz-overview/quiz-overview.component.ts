@@ -192,7 +192,9 @@ export class QuizOverviewComponent implements OnInit {
     });
 
     this.modalService.open(QuizSaveComponent).result.catch(() => {}).then(val => {
-      if (!val || (val.expiry && new Date(val.expiry).getTime() <= new Date().getTime())) {
+      if (!val || (
+        val.expiry && new Date(val.expiry).getTime() <= new Date().getTime()
+      )) {
         return;
       }
 
@@ -200,6 +202,8 @@ export class QuizOverviewComponent implements OnInit {
       this.sessions[index].visibility = val.visibility;
       this.sessions[index].description = val.description;
       this._isSaving.push(index);
+
+      this.storageService.db.Quiz.put(this.sessions[index]);
       this.quizApiService.putSavedQuiz(this.sessions[index]).subscribe(() => {
         this._isSaving.splice(this._isSaving.indexOf(index), 1);
       }, () => {
