@@ -9,10 +9,11 @@ import { interval } from 'rxjs';
 })
 export class UpdateCheckService {
   private swUpdateToast: ActiveToast<any>;
+  private readonly INTERVAL_PERIOD = 21600;
 
   constructor(private updates: SwUpdate, private translateService: TranslateService, private toastService: ToastrService) {
     if (updates.isEnabled) {
-      interval(6 * 60 * 60).subscribe(() => this.doCheck().then(() => console.log('checking for updates')));
+      interval(this.INTERVAL_PERIOD).subscribe(() => this.doCheck().then(() => console.log('checking for updates')));
     }
   }
 
