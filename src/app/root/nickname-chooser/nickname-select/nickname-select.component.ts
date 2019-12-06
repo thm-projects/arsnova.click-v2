@@ -95,6 +95,17 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
         this._nicks = this._nicks.concat(data);
       });
     });
+
+    this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
+      this.attendeeService.addMember(payload.member);
+      const nickIndex = this.nicks.indexOf(payload.member.name);
+      if (nickIndex > -1) {
+        this.nicks.splice(nickIndex, 1);
+      }
+    }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+      this.attendeeService.removeMember(payload.name);
+      this.nicks.push(payload.name);
+    }));
   }
 
   public ngOnDestroy(): void {
@@ -105,7 +116,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   private putMember(name: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
       this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Added, payload => {
-        this.attendeeService.addMember(payload.member);
         resolve();
       }));
 
