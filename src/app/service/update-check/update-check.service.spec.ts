@@ -3,8 +3,8 @@ import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { TOAST_CONFIG, ToastrService } from 'ngx-toastr';
 import { of, Subject } from 'rxjs';
-import { SwUpdateMock } from '../../../_mocks/SwUpdateMock';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { UpdateCheckService } from './update-check.service';
 
 describe('UpdateCheckService', () => {

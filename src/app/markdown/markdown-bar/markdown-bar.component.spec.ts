@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { SharedModule } from '../../shared/shared.module';

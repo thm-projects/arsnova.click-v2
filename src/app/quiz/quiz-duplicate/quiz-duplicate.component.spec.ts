@@ -6,7 +6,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { QuizDuplicateComponent } from './quiz-duplicate.component';
 

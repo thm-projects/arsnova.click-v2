@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { Observable, of } from 'rxjs';
 import { UserMock } from '../../../_mocks/_fixtures/user.mock';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { AdminApiService } from '../../service/api/admin/admin-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';

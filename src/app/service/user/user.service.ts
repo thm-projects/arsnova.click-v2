@@ -120,6 +120,7 @@ export class UserService {
           resolve(false);
         }
       } catch (e) {
+        console.error('UserService: Error while authenticating through CAS', e);
         resolve(false);
       }
     });
@@ -187,9 +188,7 @@ export class UserService {
   }
 
   public isAuthorizedFor(authorization: Array<UserRole>): boolean;
-
   public isAuthorizedFor(authorization: UserRole): boolean;
-
   public isAuthorizedFor(authorization: UserRole | Array<UserRole>): boolean {
     if (!this.staticLoginTokenContent) {
       return false;
@@ -273,7 +272,9 @@ export class UserService {
 
   private tohex(i2: number): string {
     for (let h = '', s = 28; ; s -= 4) {
-      h += (i2 >>> s & 0xf).toString(16);
+      h += (
+        i2 >>> s & 0xf
+      ).toString(16);
       if (!s) {
         return h;
       }
@@ -295,7 +296,9 @@ export class UserService {
       wa.push(0);
     }
     wa.push(ml >>> 29);
-    wa.push((ml << 3) & M);
+    wa.push((
+              ml << 3
+            ) & M);
     for (let bo = 0; bo < wa.length; bo += 16) {
       for (i = 0; i < 16; i++) {
         W[i] = wa[bo + i];
@@ -305,16 +308,32 @@ export class UserService {
       }
       let A = H0, B = H1, C = H2, D = H3, E = H4;
       for (i = 0; i <= 19; i++) {
-        t = (this.rotl(A, 5) + (B & C | ~B & D) + E + W[i] + 0x5A827999) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (
+              this.rotl(A, 5) + (
+                B & C | ~B & D
+              ) + E + W[i] + 0x5A827999
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 20; i <= 39; i++) {
-        t = (this.rotl(A, 5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (
+              this.rotl(A, 5) + (
+                B ^ C ^ D
+              ) + E + W[i] + 0x6ED9EBA1
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 40; i <= 59; i++) {
-        t = (this.rotl(A, 5) + (B & C | B & D | C & D) + E + W[i] + 0x8F1BBCDC) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (
+              this.rotl(A, 5) + (
+                B & C | B & D | C & D
+              ) + E + W[i] + 0x8F1BBCDC
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       for (i = 60; i <= 79; i++) {
-        t = (this.rotl(A, 5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
+        t = (
+              this.rotl(A, 5) + (
+                B ^ C ^ D
+              ) + E + W[i] + 0xCA62C1D6
+            ) & M, E = D, D = C, C = this.rotl(B, 30), B = A, A = t;
       }
       H0 = H0 + A & M;
       H1 = H1 + B & M;

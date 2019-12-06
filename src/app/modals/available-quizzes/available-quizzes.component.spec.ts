@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';

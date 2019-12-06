@@ -4,8 +4,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
-import { TranslatePipeMock } from '../../../../../../_mocks/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../../../_mocks/TranslateServiceMock';
+import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../../../_mocks/_services/TranslateServiceMock';
 
 import { ProgressBarSurveyComponent } from './progress-bar-survey.component';
 

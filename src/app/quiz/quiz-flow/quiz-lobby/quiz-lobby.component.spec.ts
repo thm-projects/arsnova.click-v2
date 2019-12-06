@@ -10,7 +10,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { QRCodeModule } from 'angularx-qrcode';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
-import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';

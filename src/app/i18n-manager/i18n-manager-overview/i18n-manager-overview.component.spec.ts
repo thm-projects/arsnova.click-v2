@@ -7,7 +7,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { PipesModule } from '../../pipes/pipes.module';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';

@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
+import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 
 import { NoDataErrorComponent } from './no-data-error.component';
 

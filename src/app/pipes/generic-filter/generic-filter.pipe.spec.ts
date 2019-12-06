@@ -1,4 +1,4 @@
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { GenericFilterPipe } from './generic-filter.pipe';
 
 describe('GenericFilterPipe', () => {

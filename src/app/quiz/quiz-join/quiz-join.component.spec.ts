@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';

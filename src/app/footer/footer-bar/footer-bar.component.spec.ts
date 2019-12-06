@@ -6,7 +6,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';

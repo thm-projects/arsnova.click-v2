@@ -9,8 +9,8 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
-import { TranslatePipeMock } from '../../../_mocks/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../_mocks/TranslateServiceMock';
+import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';

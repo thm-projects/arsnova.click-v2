@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
-import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
 import { Language } from '../../../lib/enums/enums';

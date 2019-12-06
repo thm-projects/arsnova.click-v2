@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
-import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { Language } from '../../../lib/enums/enums';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';

@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subscription } from 'rxjs';
-import { TranslateServiceMock } from '../../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';

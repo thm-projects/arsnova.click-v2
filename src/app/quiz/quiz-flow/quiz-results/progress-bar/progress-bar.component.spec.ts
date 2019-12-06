@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
-import { TranslateServiceMock } from '../../../../../_mocks/TranslateServiceMock';
+import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { Attendee } from '../../../../lib/attendee/attendee';
 import { AbstractChoiceQuestionEntity } from '../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
