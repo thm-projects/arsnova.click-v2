@@ -66,3 +66,18 @@ iframe {
     }
   }
 }
+
+.box-shadow-success {
+  box-shadow: 0 0 .25rem $success;
+  pointer-events: none;
+}
+
+.box-shadow-danger {
+  box-shadow: 0 0 .25rem $danger;
+  pointer-events: none;
+}
+
+.box-shadow-warning {
+  box-shadow: 0 0 .25rem $warning;
+  pointer-events: none;
+}

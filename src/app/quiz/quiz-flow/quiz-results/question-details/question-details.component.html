@@ -16,9 +16,11 @@
 </ng-container>
 
 <ng-template #defaultAnswerView>
-  <h5 *ngFor="let elem of answers; let i = index">
+  <p *ngFor="let elem of answers; let i = index"
+     class="mb-0">
+    <fa-icon [icon]="(i === getCorrectAnswerIndex() ? 'check-square' : 'square')"
+             class="mr-2"></fa-icon>
     <span>{{normalizeAnswerIndex(i)}}:&nbsp;</span>
-    <span *ngIf="question.answerOptionList[i].isCorrect">({{'component.liveResults.correct_answer' | translate}})&nbsp;</span>
     <span [innerHTML]="sanitizeHTML(elem)"></span>
-  </h5>
+  </p>
 </ng-template>

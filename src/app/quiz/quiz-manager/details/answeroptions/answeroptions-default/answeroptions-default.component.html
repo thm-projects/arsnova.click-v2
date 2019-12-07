@@ -21,11 +21,11 @@
                data-step="1"
                role="list">
             <div *ngFor="let elem of question.answerOptionList; let i = index"
-                 class="btn-group mb-2 d-flex bg-secondary text-dark rounded">
+                 class="btn-group mb-2 d-flex bg-light text-dark rounded">
               <span (click)="deleteAnswer(i)"
                     *ngIf="canDeleteAnswer"
-                    class="delete-icon px-2 rounded-left"><fa-icon [icon]="'trash'"
-                                                                   class="cursor-pointer h-100 d-flex align-items-center"></fa-icon>
+                    class="delete-icon px-2 rounded-left cursor-pointer"><fa-icon [icon]="'trash'"
+                                                                                  class="h-100 d-flex align-items-center"></fa-icon>
               </span>
               <input (input)="updateAnswerValue($event, i)"
                      [class.rounded-right]="['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"

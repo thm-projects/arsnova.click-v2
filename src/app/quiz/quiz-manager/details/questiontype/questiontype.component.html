@@ -2,10 +2,9 @@
      [attr.data-intro]="'view.question_type.description.type_wrapper' | translate"
      [attr.aria-label]="'view.question_type.description.type_wrapper' | translate">
   <div *ngFor="let elem of selectableQuestionTypes"
-       [id]="elem.id"
        class="col-12 col-sm-6 mb-2"
        [attr.aria-selected]="isActiveQuestionType(elem.id)">
-    <div class="card bg-secondary text-dark h-100">
+    <div class="card text-primary h-100">
       <div class="card-header">
         <span class="card-title">{{elem.translationName | translate}}</span>
       </div>

@@ -1,13 +1,16 @@
-import { ChangeDetectorRef, Component, Input, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { Component, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { QuestionType } from '../../../../../lib/enums/QuestionType';
+import { AbstractProgressBar } from '../AbstractProgressBar';
 
 @Component({
   selector: 'app-progress-bar-anonymous',
   templateUrl: './progress-bar-anonymous.component.html',
   styleUrls: ['./progress-bar-anonymous.component.scss'],
 })
-export class ProgressBarAnonymousComponent {
+export class ProgressBarAnonymousComponent extends AbstractProgressBar {
+  public static TYPE = 'ProgressBarAnonymousComponent';
+
   public correct: { absolute: number; percent: string } = {
     absolute: 0,
     percent: '',
@@ -29,15 +32,10 @@ export class ProgressBarAnonymousComponent {
     this.wrong = value.wrong;
     this.base = value.base;
     this.neutral = value.neutral;
-    this.cd.markForCheck();
   }
 
-  constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) {
-  }
-
-  public sanitizeStyle(value: string | number): SafeStyle {
-    value = value.toString().replace(/\s/g, '');
-    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
+  constructor(sanitizer: DomSanitizer) {
+    super(sanitizer);
   }
 
   public isSurveyQuestion(): boolean {

@@ -1,79 +1,91 @@
+<hr/>
+
 <ng-container *ngIf="!isSurveyQuestion()">
   <div *ngIf="correct"
-       class="progress my-2 position-relative"
-       style="height: 2rem;">
-    <div [attr.aria-valuenow]="correct.percent"
-         [style.width]="sanitizeStyle(correct.percent)"
-         aria-valuemax="100"
-         aria-valuemin="0"
-         class="progress-bar overflow-hidden bg-success"
-         role="progressbar"></div>
+       class="my-2">
 
-    <ng-container *ngIf="base">
-      <div class="d-flex align-self-center align-items-center position-absolute h-100"
-           style="left: 10px;"><span>{{'component.liveResults.correct_answer' | translate}}</span>
-      </div>
-      <div class="align-self-center position-absolute"
-           style="right: 10px;">{{correct.percent}}&nbsp;|&nbsp;{{correct.absolute}}&nbsp;/&nbsp;{{base}}
-      </div>
-    </ng-container>
-
-    <div *ngIf="!base"
-         class="w-100 d-flex align-items-center justify-content-center">
-      <fa-icon [icon]="'spinner'"
-               [spin]="true"></fa-icon>
+    <div *ngIf="base"
+         class="d-flex justify-content-between">
+      <span class="text-truncate mx-2">{{'component.liveResults.correct_answer' | translate}}</span>
+      <span class="mr-2">{{correct.percent}}&nbsp;|&nbsp;{{correct.absolute}}&nbsp;/&nbsp;{{base}}</span>
     </div>
+
+    <div class="progress">
+
+      <div *ngIf="base && correct.percent"
+           [attr.aria-valuenow]="correct.percent"
+           [style.width]="sanitizeStyle(correct.percent)"
+           aria-valuemax="100"
+           aria-valuemin="0"
+           class="progress-bar overflow-visible bg-success box-shadow-success"
+           role="progressbar">
+      </div>
+
+      <div *ngIf="!base"
+           class="w-100 d-flex align-items-center justify-content-center">
+        <fa-icon [icon]="'spinner'"
+                 [spin]="true"></fa-icon>
+      </div>
+    </div>
+
   </div>
 
   <div *ngIf="wrong"
-       class="progress my-2 position-relative"
-       style="height: 2rem;">
-    <div [attr.aria-valuenow]="wrong.percent"
-         [style.width]="sanitizeStyle(wrong.percent)"
-         aria-valuemax="100"
-         aria-valuemin="0"
-         class="progress-bar overflow-hidden bg-danger"
-         role="progressbar"></div>
+       class="my-2">
 
-    <ng-container *ngIf="base">
-      <div class="d-flex align-self-center align-items-center position-absolute h-100"
-           style="left: 10px;"><span>{{'component.liveResults.wrong_answer' | translate}}</span>
-      </div>
-      <div class="align-self-center position-absolute"
-           style="right: 10px;">{{wrong.percent}}&nbsp;|&nbsp;{{wrong.absolute}}&nbsp;/&nbsp;{{base}}
-      </div>
-    </ng-container>
-
-    <div *ngIf="!base"
-         class="w-100 d-flex align-items-center justify-content-center">
-      <fa-icon [icon]="'spinner'"
-               [spin]="true"></fa-icon>
+    <div *ngIf="base"
+         class="d-flex justify-content-between">
+      <span class="text-truncate mx-2">{{'component.liveResults.wrong_answer' | translate}}</span>
+      <span class="mr-2">{{wrong.percent}}&nbsp;|&nbsp;{{wrong.absolute}}&nbsp;/&nbsp;{{base}}</span>
     </div>
+
+    <div class="progress">
+
+      <div *ngIf="base && wrong.percent"
+           [attr.aria-valuenow]="wrong.percent"
+           [style.width]="sanitizeStyle(wrong.percent)"
+           aria-valuemax="100"
+           aria-valuemin="0"
+           class="progress-bar overflow-visible bg-danger box-shadow-danger"
+           role="progressbar">
+      </div>
+
+      <div *ngIf="!base"
+           class="w-100 d-flex align-items-center justify-content-center">
+        <fa-icon [icon]="'spinner'"
+                 [spin]="true"></fa-icon>
+      </div>
+    </div>
+
   </div>
 </ng-container>
 
 <div *ngIf="isSurveyQuestion() && neutral"
-     class="progress my-2 position-relative"
-     style="height: 2rem;">
-  <div [attr.aria-valuenow]="neutral.percent"
-       [style.width]="sanitizeStyle(neutral.percent)"
-       aria-valuemax="100"
-       aria-valuemin="0"
-       class="progress-bar overflow-hidden"
-       role="progressbar"></div>
+     class="my-2">
 
-  <ng-container *ngIf="base">
-    <div class="d-flex align-self-center align-items-center position-absolute h-100"
-         style="left: 10px;"><span>{{'component.liveResults.neutral_answer' | translate}}</span>
-    </div>
-    <div class="align-self-center position-absolute"
-         style="right: 10px;">{{neutral.percent}}&nbsp;|&nbsp;{{neutral.absolute}}&nbsp;/&nbsp;{{base}}
-    </div>
-  </ng-container>
-
-  <div *ngIf="!base"
-       class="w-100 d-flex align-items-center justify-content-center">
-    <fa-icon [icon]="'spinner'"
-             [spin]="true"></fa-icon>
+  <div *ngIf="base"
+       class="d-flex justify-content-between">
+    <span class="text-truncate mx-2">{{'component.liveResults.neutral_answer' | translate}}</span>
+    <span class="mr-2">{{neutral.percent}}&nbsp;|&nbsp;{{neutral.absolute}}&nbsp;/&nbsp;{{base}}</span>
   </div>
+
+  <div class="progress">
+
+    <div *ngIf="base && neutral.percent"
+         [attr.aria-valuenow]="neutral.percent"
+         [style.width]="sanitizeStyle(neutral.percent)"
+         aria-valuemax="100"
+         aria-valuemin="0"
+         class="progress-bar overflow-visible bg-success box-shadow-success"
+         role="progressbar">
+    </div>
+
+    <div *ngIf="!base"
+         class="w-100 d-flex align-items-center justify-content-center">
+      <fa-icon [icon]="'spinner'"
+               [spin]="true"></fa-icon>
+    </div>
+  </div>
+
 </div>
+

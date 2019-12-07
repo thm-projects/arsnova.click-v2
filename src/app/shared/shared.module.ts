@@ -17,6 +17,7 @@ import {
   faCaretSquareUp,
   faCaretUp,
   faCheck,
+  faCheckSquare,
   faCode,
   faCopy,
   faDownload,
@@ -45,6 +46,7 @@ import {
   faSignOutAlt,
   faSlidersH,
   faSpinner,
+  faSquare,
   faStop,
   faStrikethrough,
   faThumbsUp,
@@ -70,14 +72,16 @@ import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
     FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(),
   ],
   exports: [
-    FormsModule, CommonModule,
+    FormsModule,
+    CommonModule,
     FontAwesomeModule,
     TranslateModule,
     NgbModule,
     RouterModule,
     AudioPlayerComponent,
     GamificationAnimationComponent,
-    AngularSvgIconModule, NoDataErrorComponent,
+    AngularSvgIconModule,
+    NoDataErrorComponent,
   ],
   providers: [],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent],
@@ -139,5 +143,7 @@ export class SharedModule {
     library.addIcons(faBan);
     library.addIcons(faSave);
     library.addIcons(faCopy);
+    library.addIcons(faSquare);
+    library.addIcons(faCheckSquare);
   }
 }

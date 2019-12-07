@@ -159,6 +159,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     return this.quizService.quiz.questionList[this.questionIndex] as RangedQuestionEntity;
   }
 
+  public getCorrectAnswerIndex(): number {
+    return this.question.answerOptionList.findIndex(a => a.isCorrect);
+  }
+
   private handleMessages(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.AllPlayers, payload => {

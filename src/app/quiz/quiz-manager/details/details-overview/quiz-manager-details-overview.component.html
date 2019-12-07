@@ -119,7 +119,7 @@
       <p *ngIf="!question?.timer">{{ 'component.quiz_summary.no-timer' | translate }}</p>
     </div>
     <div class="mb-2 validation">
-      <h4 class="bg-secondary p-2 rounded text-center">
+      <h4 class="bg-light p-2 rounded text-center">
         <span class="text-success"
               *ngIf="question?.isValid()">{{'component.quiz_summary.question_successful' | translate}}</span>
         <span class="text-danger"

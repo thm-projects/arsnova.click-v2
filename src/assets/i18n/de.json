@@ -345,18 +345,6 @@
       },
       "filter": "Gib hier einen Suchtext ein..."
     },
-    "question_type": {
-      "description": {
-        "SingleChoiceQuestion": "Single-Choice-Fragen enthalten beliebig viele Antwortoptionen, von denen genau eine als richtig markiert sein muss.",
-        "YesNoSingleChoiceQuestion": "Ja-Nein-Fragen enthalten nur zwei Antwortopionen (Ja und Nein, überschreibbar), von denen eine als richtig markiert sein muss.",
-        "TrueFalseSingleChoiceQuestion": "Wahr-Falsch-Fragen enthalten nur zwei Antwortopionen (Wahr und Falsch, überschreibbar), von denen eine als richtig markiert sein muss.",
-        "MultipleChoiceQuestion": "Multiple-Choice-Fragen enthalten beliebig viele Antwortoptionen, von denen beliebig viele (mindestens jedoch eine) als richtig markiert sein können.",
-        "RangedQuestion": "Für die Schätzfrage muss eine Ganzzahl als richtig angegeben werden. Zusätzlich können Toleranzen nach oben und unten festgelegt werden.",
-        "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Teilnehmenden einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
-        "SurveyQuestion": "Umfragen enthalten beliebig viele Antwortoptionen, die nicht bewertet werden. Sie können vom Typ Single-Choice oder Multiple-Choice sein.",
-        "AbcdSingleChoiceQuestion": "ABCD Fragen enthalten maximal 26 Antworten (von A - Z)."
-      }
-    },
     "questions": {
       "enter_question_here": "Gib hier die Frage ein. Alles wird automatisch gespeichert.",
       "single_choice_question": "Single-Choice-Frage",
@@ -688,6 +676,17 @@
   },
   "view": {
     "question_type": {
+      "description": {
+        "SingleChoiceQuestion": "Single-Choice-Fragen enthalten beliebig viele Antwortoptionen, von denen genau eine als richtig markiert sein muss.",
+        "YesNoSingleChoiceQuestion": "Ja-Nein-Fragen enthalten nur zwei Antwortopionen (Ja und Nein, überschreibbar), von denen eine als richtig markiert sein muss.",
+        "TrueFalseSingleChoiceQuestion": "Wahr-Falsch-Fragen enthalten nur zwei Antwortopionen (Wahr und Falsch, überschreibbar), von denen eine als richtig markiert sein muss.",
+        "MultipleChoiceQuestion": "Multiple-Choice-Fragen enthalten beliebig viele Antwortoptionen, von denen beliebig viele (mindestens jedoch eine) als richtig markiert sein können.",
+        "RangedQuestion": "Für die Schätzfrage muss eine Ganzzahl als richtig angegeben werden. Zusätzlich können Toleranzen nach oben und unten festgelegt werden.",
+        "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Teilnehmenden einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
+        "SurveyQuestion": "Umfragen enthalten beliebig viele Antwortoptionen, die nicht bewertet werden. Sie können vom Typ Single-Choice oder Multiple-Choice sein.",
+        "AbcdSingleChoiceQuestion": "ABCD Fragen enthalten maximal 26 Antworten (von A - Z).",
+        "type_wrapper": "Hier kannst du den typ der Quizfrage ändern. Jeder Typ hat seine eigenen Einstellungen. Wechsel den Typ indem du auf die Box klickst."
+      },
       "select-type": "Typ auswählen",
       "current-type": "Aktueller Typ"
     }
