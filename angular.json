@@ -536,6 +536,9 @@
               "src/assets/serverEndpoint.json",
               "src/assets/imageDerivates.json",
               "src/assets/themeData.json"
+            ],
+            "codeCoverageExclude": [
+              "/**/*mock*.ts"
             ]
           }
         },

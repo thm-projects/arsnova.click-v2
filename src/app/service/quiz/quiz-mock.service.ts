@@ -21,6 +21,7 @@ export class QuizMockService {
     this.quiz = new QuizEntity({
       name: 'test',
       sessionConfig: new SessionConfigurationEntity(DefaultSettings.defaultQuizSettings.sessionConfig),
+      currentQuestionIndex: 0,
       questionList: [
         new SingleChoiceQuestionEntity({}), new FreeTextQuestionEntity({
           questionText: '',
