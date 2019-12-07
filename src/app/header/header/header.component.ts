@@ -1,6 +1,6 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef, ViewChild } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
@@ -45,17 +45,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this._inHomeRoute = value;
   }
 
-  get indexedDbAvailable(): boolean {
-    return this._indexedDbAvailable;
-  }
-
   private _storage: StorageEstimate;
 
   get storage(): StorageEstimate {
     return this._storage;
   }
 
-  private readonly _indexedDbAvailable: boolean = this.indexedDbSupported();
   @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
   @ViewChild('connectionIndicator', { static: true }) private connectionIndicator: ElementRef<SVGElement>;
 
@@ -77,9 +72,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public generateConnectionQualityColor(): void {
     const cssClass = this.connectionService.lowSpeed || //
-                     this.connectionService.mediumSpeed || //
-                     !this.indexedDbAvailable ? 'fill-danger' : //
-                     (!this.connectionService.serverAvailable || !this.connectionService.websocketAvailable) ? 'fill-grey' : //
+                     this.connectionService.mediumSpeed ? 'fill-danger' : //
+                     (
+                       !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable
+                     ) ? 'fill-grey' : //
                      'fill-success';
 
     this.connectionIndicator.nativeElement.classList.remove(...['fill-danger', 'fill-grey', 'fill-success']);
@@ -141,7 +137,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
         dimension3: this.connectionService.rtt,
         dimension4: this.connectionService.serverAvailable,
         dimension5: this.connectionService.websocketAvailable,
-        dimension6: this.indexedDbAvailable,
       },
     });
 
@@ -173,20 +168,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public round(number: number): number {
     return Math.round(number);
-  }
-
-  private sanitizeStyle(value: string): SafeStyle {
-    if (isPlatformServer(this.platformId)) {
-      return value;
-    }
-
-    value = value.replace(/\s/g, '');
-    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
-  }
-
-  private indexedDbSupported(): boolean {
-    return (isPlatformBrowser(this.platformId) && //
-            'indexedDB' in window //
-    );
   }
 }

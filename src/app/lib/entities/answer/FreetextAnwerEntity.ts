@@ -21,6 +21,10 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
   }
 
   public isCorrectInput(ref: string): boolean {
+    if (!ref) {
+      return false;
+    }
+
     let refValue = this.answerText;
     let result = false;
     if (!this.configCaseSensitive) {

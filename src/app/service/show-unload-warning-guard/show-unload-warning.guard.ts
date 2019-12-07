@@ -10,7 +10,7 @@ export class ShowUnloadWarningGuard<T extends IHasTriggeredNavigation> implement
 
   constructor(private translate: TranslateService) {}
 
-  public canDeactivate(component): boolean {
+  public canDeactivate(component: T): boolean {
     if (component && component.hasTriggeredNavigation) {
       return true;
     }

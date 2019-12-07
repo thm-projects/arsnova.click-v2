@@ -88,16 +88,6 @@
         </p>
       </li>
       <li>
-        <fa-icon [class.text-danger]="!indexedDbAvailable"
-                 [class.text-success]="indexedDbAvailable"
-                 [icon]="indexedDbAvailable ? 'check' : 'times'"></fa-icon>
-        <p class="ml-2 mb-0 d-inline">
-          <span>IndexedDb: </span>
-          <span *ngIf="indexedDbAvailable">{{'region.header.connection_status.indexedDb_status.writable' | translate}}</span>
-          <span *ngIf="!indexedDbAvailable">{{'region.header.connection_status.indexedDb_status.non_writable' | translate}}</span>
-        </p>
-      </li>
-      <li>
         <fa-icon [class.text-danger]="connectionService.rtt > 300 || !connectionService.serverAvailable"
                  [class.text-success]="connectionService.rtt <= 300 && connectionService.serverAvailable"
                  [icon]="connectionService.rtt <= 300 && connectionService.serverAvailable ? 'check' : 'times'"></fa-icon>

@@ -79,11 +79,14 @@
                          [questionText]="questionText"></app-voting-question>
 
     <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
-         class="btn-group w-100">
+         class="d-flex">
       <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
               (click)="hasTriggeredNavigation = true"
               [routerLink]="['/quiz', 'flow', 'leaderboard', visibleQuestions.length > 1 ? selectedQuestionIndex : 'all']"
-              class="btn btn-light w-100 cursor-pointer"
+              [class.mr-1]="showQuestionButton(selectedQuestionIndex)"
+              [class.w-100]="!showQuestionButton(selectedQuestionIndex)"
+              [class.w-50]="showQuestionButton(selectedQuestionIndex)"
+              class="btn btn-light"
               type="button">
         <fa-icon [icon]="'trophy'"
                  class="mr-2"></fa-icon>
@@ -92,7 +95,10 @@
       <button *ngIf="showQuestionButton(selectedQuestionIndex)"
               (click)="hasTriggeredNavigation = true"
               [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
-              class="btn btn-light w-100 cursor-pointer"
+              [class.ml-1]="showLeaderBoardButton(selectedQuestionIndex)"
+              [class.w-100]="!showLeaderBoardButton(selectedQuestionIndex)"
+              [class.w-50]="showLeaderBoardButton(selectedQuestionIndex)"
+              class="btn btn-light"
               type="button">
         <fa-icon [icon]="'question'"
                  class="mr-2"></fa-icon>

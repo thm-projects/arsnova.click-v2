@@ -245,10 +245,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
       this.router.navigate(['/quiz', 'flow', 'results']);
     };
 
-    if (this.quizService.isOwner && this._isGlobalRanking) {
-      footerElements.push(this.footerBarService.footerElemExport);
-    }
-
     this.footerBarService.replaceFooterElements(footerElements);
   }
 }

@@ -21,7 +21,13 @@ body {
 }
 
 .thumbnail {
-  max-width: 100%;
+  @include media-breakpoint-down(sm) {
+    max-width: 100%;
+  }
+  @include media-breakpoint-up(md) {
+    max-width: 30vw;
+  }
+
   max-height: 400px;
   height: auto;
   width: auto;

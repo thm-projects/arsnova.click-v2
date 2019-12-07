@@ -156,11 +156,11 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
 
   public initData(): void {
     switch (this._currentQuestion.TYPE) {
+      case QuestionType.RangedQuestion:
+        this._selectedAnswers = null;
+        break;
       case QuestionType.FreeTextQuestion:
         this._selectedAnswers = '';
-        break;
-      case QuestionType.RangedQuestion:
-        this._selectedAnswers = -1;
         break;
       default:
         this._selectedAnswers = [];
@@ -268,7 +268,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
           this.router.navigate(['/']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
-        this._selectedAnswers = [];
         this.hasTriggeredNavigation = true;
         this.sendResponses('results');
       }),

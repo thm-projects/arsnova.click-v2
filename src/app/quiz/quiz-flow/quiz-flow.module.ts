@@ -32,18 +32,22 @@ export const quizFlowRoutes: Routes = [
     path: 'results',
     component: QuizResultsComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   }, {
     path: 'results/:questionIndex',
     component: QuestionDetailsComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   }, {
     path: 'leaderboard',
     component: LeaderboardComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   }, {
     path: 'leaderboard/:questionIndex',
     component: LeaderboardComponent,
     data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   }, {
     path: 'voting',
     component: VotingComponent,
