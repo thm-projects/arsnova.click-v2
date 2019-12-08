@@ -1,12 +1,14 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { Attendee } from '../../../../lib/attendee/attendee';
-import { AbstractChoiceQuestionEntity } from '../../../../lib/entities/question/AbstractChoiceQuestionEntity';
+import { FreeTextQuestionEntity } from '../../../../lib/entities/question/FreeTextQuestionEntity';
+import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
+import { SingleChoiceQuestionEntity } from '../../../../lib/entities/question/SingleChoiceQuestionEntity';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
@@ -83,33 +85,180 @@ describe('ProgressBarComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+
+  it('should contain a TYPE reference', (
+    () => {
+      expect(ProgressBarComponent.TYPE).toEqual('ProgressBarComponent');
+    }
+  ));
+
+  it('#attendeeDataForAnswer', async(() => {
+    const quizService: QuizService = TestBed.get(QuizService);
+    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+
+    component.questionIndex = 0;
+    component.hideProgressbarCssStyle = false;
+    const question = <SingleChoiceQuestionEntity>quizService.quiz.questionList[component.questionIndex];
+    question.addDefaultAnswerOption();
+
+    attendeeService.addMember(new Attendee({
+      id: '',
+      name: 'testNickname',
+      groupName: 'Default',
+      currentQuizName: '',
+      colorCode: '#00000',
+      responses: [],
+    }));
+
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.eventEmitter.subscribe((value) => {
+      if (Array.isArray(value)) {
+        component.data = value;
+        expect(component.attendeeDataForAnswer(0)).toBeTruthy();
+      }
+    });
   }));
-  it('should contain a TYPE reference', (() => {
-    expect(ProgressBarComponent.TYPE).toEqual('ProgressBarComponent');
+
+  it('#attendeeDataForAnswer anonymous', async(() => {
+    const quizService: QuizService = TestBed.get(QuizService);
+    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+
+    component.questionIndex = 0;
+    const question = <SingleChoiceQuestionEntity>quizService.quiz.questionList[component.questionIndex];
+    question.addDefaultAnswerOption();
+
+    attendeeService.addMember(new Attendee({
+      id: '',
+      name: 'testNickname',
+      groupName: 'Default',
+      currentQuizName: '',
+      colorCode: '#00000',
+      responses: [],
+    }));
+
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.eventEmitter.subscribe((value) => {
+      if (Array.isArray(value)) {
+        component.data = value;
+        expect(component.attendeeDataForAnswer(0)).toBeTruthy();
+      }
+    });
   }));
 
-  it('#attendeeDataForAnswer', async(inject([QuizService, AttendeeService, QuestionTextService],
-    (quizService: QuizService, attendeeService: AttendeeService, questionTextService: QuestionTextService) => {
-      component.questionIndex = 0;
-      const question = <AbstractChoiceQuestionEntity>quizService.quiz.questionList[component.questionIndex];
+  it('#attendeeDataForAnswer - RangedQuestion', async(() => {
+    const quizService: QuizService = TestBed.get(QuizService);
+    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
 
-      attendeeService.addMember(new Attendee({
-        id: '',
-        name: 'testNickname',
-        groupName: 'Default',
-        currentQuizName: '',
-        colorCode: '#00000',
-        responses: [],
-      }));
+    component.questionIndex = 2;
+    component.hideProgressbarCssStyle = false;
+    const question = <RangedQuestionEntity>quizService.quiz.questionList[component.questionIndex];
+    question.addDefaultAnswerOption();
 
-      questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
-      questionTextService.eventEmitter.subscribe((value) => {
-        if (Array.isArray(value)) {
-          component.data = value;
-          expect(component.attendeeDataForAnswer(0)).toBeTruthy();
-        }
-      });
-    })));
+    attendeeService.addMember(new Attendee({
+      id: '',
+      name: 'testNickname',
+      groupName: 'Default',
+      currentQuizName: '',
+      colorCode: '#00000',
+      responses: [],
+    }));
+
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.eventEmitter.subscribe((value) => {
+      if (Array.isArray(value)) {
+        component.data = value;
+        expect(component.attendeeDataForAnswer(0)).toBeTruthy();
+      }
+    });
+  }));
+
+  it('#attendeeDataForAnswer - RangedQuestion anonymous', async(() => {
+    const quizService: QuizService = TestBed.get(QuizService);
+    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+
+    component.questionIndex = 2;
+    const question = <RangedQuestionEntity>quizService.quiz.questionList[component.questionIndex];
+    question.addDefaultAnswerOption();
+
+    attendeeService.addMember(new Attendee({
+      id: '',
+      name: 'testNickname',
+      groupName: 'Default',
+      currentQuizName: '',
+      colorCode: '#00000',
+      responses: [],
+    }));
+
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.eventEmitter.subscribe((value) => {
+      if (Array.isArray(value)) {
+        component.data = value;
+        expect(component.attendeeDataForAnswer(0)).toBeTruthy();
+      }
+    });
+  }));
+
+  it('#attendeeDataForAnswer - FreeTextQuestion', async(() => {
+    const quizService: QuizService = TestBed.get(QuizService);
+    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+
+    component.questionIndex = 1;
+    component.hideProgressbarCssStyle = false;
+    const question = <FreeTextQuestionEntity>quizService.quiz.questionList[component.questionIndex];
+    question.addDefaultAnswerOption();
+
+    attendeeService.addMember(new Attendee({
+      id: '',
+      name: 'testNickname',
+      groupName: 'Default',
+      currentQuizName: '',
+      colorCode: '#00000',
+      responses: [],
+    }));
+
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.eventEmitter.subscribe((value) => {
+      if (Array.isArray(value)) {
+        component.data = value;
+        expect(component.attendeeDataForAnswer(0)).toBeTruthy();
+      }
+    });
+  }));
+
+  it('#attendeeDataForAnswer - FreeTextQuestion anonymous', async(() => {
+    const quizService: QuizService = TestBed.get(QuizService);
+    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+
+    component.questionIndex = 1;
+    const question = <FreeTextQuestionEntity>quizService.quiz.questionList[component.questionIndex];
+    question.addDefaultAnswerOption();
+
+    attendeeService.addMember(new Attendee({
+      id: '',
+      name: 'testNickname',
+      groupName: 'Default',
+      currentQuizName: '',
+      colorCode: '#00000',
+      responses: [],
+    }));
+
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.eventEmitter.subscribe((value) => {
+      if (Array.isArray(value)) {
+        component.data = value;
+        expect(component.attendeeDataForAnswer(0)).toBeTruthy();
+      }
+    });
+  }));
 });

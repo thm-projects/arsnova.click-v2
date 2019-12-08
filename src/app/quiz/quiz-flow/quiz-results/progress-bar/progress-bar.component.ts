@@ -199,7 +199,9 @@ export class ProgressBarComponent {
 
     result.isCorrect = result.label === 'component.liveResults.guessed_correct' ? 1 : result.label === 'component.liveResults.guessed_in_range' ? 0
                                                                                                                                                 : -1;
-    result.label = this.translate.instant(`${result.label}`);
+    if (result.label) {
+      result.label = this.translate.instant(`${result.label}`);
+    }
     result.absolute = matches.length;
     result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberType.Percent);
   }
@@ -222,7 +224,9 @@ export class ProgressBarComponent {
     });
 
     result.isCorrect = result.label === 'component.liveResults.correct_answer' ? 1 : -1;
-    result.label = this.translate.instant(`${result.label}`);
+    if (result.label) {
+      result.label = this.translate.instant(`${result.label}`);
+    }
     result.absolute = matches.length;
     result.percent = this.i18nService.formatNumber(matches.length / this.attendeeService.attendees.length, NumberType.Percent);
   }
