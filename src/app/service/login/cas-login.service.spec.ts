@@ -3,10 +3,7 @@ import { PLATFORM_ID } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { of } from 'rxjs';
-import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
-import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 import { UserService } from '../user/user.service';
@@ -103,43 +100,4 @@ describe('CasLoginService', () => {
     });
   });
 
-  it('should not be loaded if cas login is required', done => {
-    const service: CasLoginService = TestBed.get(CasLoginService);
-    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
-
-    spyOn(quizApiService, 'getQuizStatus').and.callFake(() => of({
-      status: StatusProtocol.Failed,
-      step: MessageProtocol.CasLoginRequired,
-      payload: {
-        authorizeViaCas: true,
-      },
-    }));
-    service.quizName = 'test-quiz';
-    service.casLoginRequired = true;
-
-    service.canLoad().then(result => {
-      expect(result).toEqual(true);
-      done();
-    });
-  });
-
-  it('should be loaded if no cas login is required', done => {
-    const service: CasLoginService = TestBed.get(CasLoginService);
-    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
-
-    spyOn(quizApiService, 'getQuizStatus').and.callFake(() => of({
-      status: StatusProtocol.Failed,
-      step: MessageProtocol.CasLoginRequired,
-      payload: {
-        authorizeViaCas: false,
-      },
-    }));
-    service.quizName = 'test-quiz';
-    service.casLoginRequired = true;
-
-    service.canLoad().then(result => {
-      expect(result).toEqual(true);
-      done();
-    });
-  });
 });
