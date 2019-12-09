@@ -1,4 +1,4 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -69,11 +69,9 @@ export class QuizService {
   public cleanUp(): void {
     this._readingConfirmationRequested = false;
 
-    if (isPlatformBrowser(this.platformId)) {
-      this.close();
-      this.quiz = null;
-      this.isOwner = false;
-    }
+    this.close();
+    this.quiz = null;
+    this.isOwner = false;
   }
 
   public persist(): void {

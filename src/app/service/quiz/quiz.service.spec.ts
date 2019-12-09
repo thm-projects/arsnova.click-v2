@@ -1,17 +1,18 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
+import { of } from 'rxjs';
+import { QuizMock } from '../../../_mocks/_fixtures/quiz.mock';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
-import { DefaultSettings } from '../../lib/default.settings';
-import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { SessionConfigurationEntity } from '../../lib/entities/session-configuration/SessionConfigurationEntity';
+import { StatusProtocol } from '../../lib/enums/Message';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
+import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
@@ -22,6 +23,8 @@ import { StorageServiceMock } from '../storage/storage.service.mock';
 import { QuizService } from './quiz.service';
 
 describe('QuizService', () => {
+  let quizMock: QuizEntity;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -40,8 +43,7 @@ describe('QuizService', () => {
         }, RxStompService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        },
-        {
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {
@@ -52,30 +54,167 @@ describe('QuizService', () => {
     });
   }));
 
-  beforeEach(async(inject([QuizService], (service: QuizService) => {
-    service.quiz = new QuizEntity({
-      name: 'test',
-      sessionConfig: new SessionConfigurationEntity(DefaultSettings.defaultQuizSettings.sessionConfig),
-      questionList: [
-        new SingleChoiceQuestionEntity({}),
-      ],
-    });
-    service.isOwner = true;
-  })));
+  beforeEach(() => {
+    sessionStorage.clear();
+    quizMock = new QuizEntity(JSON.parse(JSON.stringify(QuizMock)));
+  });
 
-  it('should be created', async(inject([QuizService], (service: QuizService) => {
+  afterEach(() => {
+    sessionStorage.clear();
+  });
+
+  it('should be created', () => {
+    const service: QuizService = TestBed.get(QuizService);
     expect(service).toBeTruthy();
-  })));
+  });
 
-  it('#persist', async(inject([QuizService, StorageService], (service: QuizService) => {
+  it('should persist the current state', () => {
+    const service: QuizService = TestBed.get(QuizService);
+    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+
+    spyOn(quizApiService, 'putSavedQuiz').and.callFake(() => of(null));
+
+    service['_isInEditMode'] = true;
     service.persist();
-  })));
 
-  it('#updateFooterElementsState', async(inject([QuizService, FooterBarService], (service: QuizService, footerBarService: FooterBarService) => {
-    const defaultNickConfig = DefaultSettings.defaultQuizSettings.sessionConfig.nicks;
-    footerBarService['updateFooterElementsState']();
+    expect(quizApiService.putSavedQuiz).toHaveBeenCalled();
+  });
 
-    expect(footerBarService.footerElemEnableCasLogin.isActive).toEqual(defaultNickConfig.restrictToCasLogin);
-    expect(footerBarService.footerElemBlockRudeNicknames.isActive).toEqual(defaultNickConfig.blockIllegalNicks);
-  })));
+  it('should clean up the state', () => {
+    const service: QuizService = TestBed.get(QuizService);
+    service.isOwner = true;
+    service.cleanUp();
+
+    expect(service.isOwner).toBe(false);
+  });
+
+  it('should persist a quiz in edit mode', () => {
+    const service: QuizService = TestBed.get(QuizService);
+    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+
+    spyOn(quizApiService, 'putSavedQuiz').and.callFake(() => of(null));
+
+    service['_isInEditMode'] = true;
+    service.persistQuiz(quizMock);
+
+    expect(quizApiService.putSavedQuiz).toHaveBeenCalled();
+  });
+
+  it('should return the current question', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    expect(service.currentQuestion()).toEqual(quizMock.questionList[0]);
+  });
+
+  it('should deactivate an active quiz', () => {
+    const service: QuizService = TestBed.get(QuizService);
+    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+
+    spyOn(quizApiService, 'deleteActiveQuiz').and.callFake(() => of(null));
+
+    service.isOwner = true;
+    service.quiz = quizMock;
+    service.close();
+
+    expect(quizApiService.deleteActiveQuiz).toHaveBeenCalled();
+  });
+
+  it('should check if a quiz is valid', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    service.quiz = quizMock;
+
+    expect(service.isValid()).toEqual(quizMock.isValid());
+  });
+
+  it('should return all visible questions', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    expect(service.getVisibleQuestions().length).toEqual(0);
+  });
+
+  it('should check if a nick is selected', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    service.quiz = quizMock;
+    service.quiz.sessionConfig.nicks.selectedNicks.push('test-nick');
+
+    expect(service.hasSelectedNick('test-nick')).toEqual(true);
+  });
+
+  it('should select or deselect a given nick', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    service.quiz = quizMock;
+
+    expect(service.hasSelectedNick('test-nick')).toEqual(false);
+    service.toggleSelectedNick('test-nick');
+    expect(service.hasSelectedNick('test-nick')).toEqual(true);
+    service.toggleSelectedNick('test-nick');
+    expect(service.hasSelectedNick('test-nick')).toEqual(false);
+  });
+
+  it('should add a given nick', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    service.quiz = quizMock;
+
+    expect(service.hasSelectedNick('test-nick')).toEqual(false);
+    service.addSelectedNick('test-nick');
+    expect(service.hasSelectedNick('test-nick')).toEqual(true);
+  });
+
+  it('should remove a selected nick by name', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    service.quiz = quizMock;
+
+    service.quiz.sessionConfig.nicks.selectedNicks.push('test-nick');
+    expect(service.hasSelectedNick('test-nick')).toEqual(true);
+    service.removeSelectedNickByName('test-nick');
+    expect(service.hasSelectedNick('test-nick')).toEqual(false);
+  });
+
+  it('should load the quiz data to play it', done => {
+    const service: QuizService = TestBed.get(QuizService);
+    const storageService: StorageService = TestBed.get(StorageService);
+    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+
+    spyOn(storageService.db.Quiz, 'get').and.callFake((): any => new Promise<any>(resolve => resolve(quizMock)));
+    spyOn(quizApiService, 'getQuiz').and.callFake(() => of({
+      status: StatusProtocol.Success,
+      step: null,
+      payload: {
+        quiz: quizMock,
+      },
+    }));
+
+    service.loadDataToPlay('quiz-test').then(() => {
+      expect(service.quiz).toEqual(quizMock);
+      expect(storageService.db.Quiz.get).toHaveBeenCalled();
+      expect(quizApiService.getQuiz).toHaveBeenCalled();
+
+      done();
+    });
+  });
+
+  it('should load the quiz data to edit it', done => {
+    const service: QuizService = TestBed.get(QuizService);
+    const storageService: StorageService = TestBed.get(StorageService);
+
+    spyOn(storageService.db.Quiz, 'get').and.callFake((): any => new Promise<any>(resolve => resolve(quizMock)));
+
+    service.loadDataToEdit('quiz-test');
+    service.quizUpdateEmitter.subscribe(val => {
+      expect(service.quiz).toEqual(quizMock);
+      done();
+    });
+  });
+
+  it('should stop the edit mode', () => {
+    const service: QuizService = TestBed.get(QuizService);
+
+    service.stopEditMode();
+    expect(service['_isInEditMode']).toEqual(false);
+  });
 });
