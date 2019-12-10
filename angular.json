@@ -114,7 +114,10 @@
           },
           "configurations": {
             "production": {
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": false
+              },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
@@ -201,7 +204,10 @@
               ]
             },
             "thmStaging": {
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": false
+              },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
@@ -288,7 +294,10 @@
               ]
             },
             "thmBeta": {
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": false
+              },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
@@ -383,7 +392,10 @@
               ]
             },
             "westermann": {
-              "optimization": true,
+              "optimization": {
+                "scripts": true,
+                "styles": false
+              },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
