@@ -32,7 +32,6 @@ export class UpdateCheckService {
   }
 
   public reloadPage(): void {
-    console.trace('calling reload page');
     document.location.reload(true);
   }
 
