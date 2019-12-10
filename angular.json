@@ -335,58 +335,13 @@
                 "src/styles/styles.scss",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
                 {
-                  "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast",
-                  "lazy": true
-                },
-                {
                   "input": "src/styles/themes/theme-blackbeauty.scss",
                   "bundleName": "theme-blackbeauty",
                   "lazy": true
                 },
                 {
-                  "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime",
-                  "lazy": true
-                },
-                {
                   "input": "src/styles/themes/theme-westermann-blue.scss",
                   "bundleName": "theme-westermann-blue",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-default",
                   "lazy": true
                 }
               ]
@@ -433,58 +388,13 @@
                 "src/styles/styles.scss",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
                 {
-                  "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast",
-                  "lazy": true
-                },
-                {
                   "input": "src/styles/themes/theme-blackbeauty.scss",
                   "bundleName": "theme-blackbeauty",
                   "lazy": true
                 },
                 {
-                  "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime",
-                  "lazy": true
-                },
-                {
                   "input": "src/styles/themes/theme-westermann-blue.scss",
                   "bundleName": "theme-westermann-blue",
-                  "lazy": true
-                },
-                {
-                  "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-default",
                   "lazy": true
                 }
               ]
