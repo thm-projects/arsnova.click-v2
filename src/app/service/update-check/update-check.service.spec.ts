@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { TOAST_CONFIG, ToastrService } from 'ngx-toastr';
@@ -8,6 +8,8 @@ import { TranslateServiceMock } from '../../../_mocks/_services/TranslateService
 import { UpdateCheckService } from './update-check.service';
 
 describe('UpdateCheckService', () => {
+  let service: UpdateCheckService;
+
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [
@@ -37,18 +39,26 @@ describe('UpdateCheckService', () => {
     ],
   }));
 
+  beforeEach(() => {
+    service = TestBed.get(UpdateCheckService);
+    spyOn(service, 'reloadPage').and.callFake(() => {});
+    spyOn(service, 'clearCache').and.callFake(() => new Promise(resolve => resolve()));
+  });
+
+  afterEach(() => {
+    service = null;
+  });
+
   it('should be created', () => {
-    const service: UpdateCheckService = TestBed.get(UpdateCheckService);
     expect(service).toBeTruthy();
   });
 
-  it('should prompt a user when a new version is available', () => {
+  it('should prompt a user when a new version is available', async(() => {
     const toastService: ToastrService = TestBed.get(ToastrService);
     spyOn(toastService, 'remove').and.callFake(() => service['swUpdateToast'] = null);
     spyOn(toastService, 'info').and.callFake(() => (
       { onTap: of({}) } as any
     ));
-    const service: UpdateCheckService = TestBed.get(UpdateCheckService);
     // @ts-ignore
     service['INTERVAL_PERIOD'] = 1;
     service['swUpdateToast'] = { toastId: 1 } as any;
@@ -67,26 +77,18 @@ describe('UpdateCheckService', () => {
 
     expect(toastService.remove).toHaveBeenCalledWith(1);
     expect(toastService.info).toHaveBeenCalled();
-  });
+  }));
 
   it('should check for updates', () => {
-    const service: UpdateCheckService = TestBed.get(UpdateCheckService);
     service.checkForUpdates();
     expect(service).toBeTruthy();
   });
 
-  it('should query for new updates', () => {
-    const service: UpdateCheckService = TestBed.get(UpdateCheckService);
+  it('should query for new updates', done => {
     const swUpdate: SwUpdate = TestBed.get(SwUpdate);
     spyOn(swUpdate, 'checkForUpdate').and.callThrough();
-    service.doCheck();
-    expect(swUpdate.checkForUpdate).toHaveBeenCalled();
-  });
-
-  it('should clear all window caches', done => {
-    const service: UpdateCheckService = TestBed.get(UpdateCheckService);
-    service.clearCache().finally(() => {
-      expect(service).toBeTruthy();
+    service.doCheck().then(() => {
+      expect(swUpdate.checkForUpdate).toHaveBeenCalled();
       done();
     });
   });

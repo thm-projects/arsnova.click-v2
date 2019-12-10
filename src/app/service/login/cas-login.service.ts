@@ -31,7 +31,7 @@ export class CasLoginService implements CanLoad, CanActivate {
     }
 
     if (!this.quizName) {
-      location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
+      this.navigateToAuthorize();
       return false;
     }
 
@@ -41,10 +41,14 @@ export class CasLoginService implements CanLoad, CanActivate {
     }
 
     if (data.payload.authorizeViaCas) {
-      location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
+      this.navigateToAuthorize();
       return false;
     }
 
     return true;
+  }
+
+  public navigateToAuthorize(): void {
+    location.href = `${DefaultSettings.httpLibEndpoint}/authorize`;
   }
 }

@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -81,52 +81,55 @@ describe('QuizManagerComponent', () => {
   }));
 
   describe('#addQuestion', () => {
-    it('should add a question', inject([QuizService], (quizService: QuizService) => {
+    it('should add a question', () => {
+      const quizService = TestBed.get(QuizService);
       const id = availableQuestionTypes[1].id;
 
       quizService.quiz.questionList.splice(1, quizService.quiz.questionList.length);
 
       expect(quizService.quiz.questionList.length).toEqual(1);
       expect(quizService.quiz.questionList[0].TYPE.toString()).toEqual(id);
-    }));
+    });
 
-    it('should not add an invalid question', inject([QuizService], (quizService: QuizService) => {
-      const id = 'NotExisting';
+    it('should not add an invalid question', () => {
+      const quizService = TestBed.get(QuizService);
 
       quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
 
       expect(quizService.quiz.questionList.length).toEqual(0);
-    }));
+    });
   });
 
   describe('#moveQuestionUp', () => {
-    it('should decrement the index of a question in the questionlist by 1', inject([QuizService], (quizService: QuizService) => {
+    it('should decrement the index of a question in the questionlist by 1', () => {
+      const quizService = TestBed.get(QuizService);
       const question = quizService.quiz.questionList[1];
       component.moveQuestionUp(1);
       expect(quizService.quiz.questionList[0]).toEqual(question);
-    }));
+    });
 
-    it('should not decrement the index of a question in the questionlist if it is at first position',
-      inject([QuizService], (quizService: QuizService) => {
-        const question = quizService.quiz.questionList[0];
-        component.moveQuestionUp(0);
-        expect(quizService.quiz.questionList[0]).toEqual(question);
-      }));
+    it('should not decrement the index of a question in the questionlist if it is at first position', () => {
+      const quizService = TestBed.get(QuizService);
+      const question = quizService.quiz.questionList[0];
+      component.moveQuestionUp(0);
+      expect(quizService.quiz.questionList[0]).toEqual(question);
+    });
   });
 
   describe('#moveQuestionDown', () => {
-    it('should increment the index of a question in the questionlist by 1', inject([QuizService], (quizService: QuizService) => {
+    it('should increment the index of a question in the questionlist by 1', () => {
+      const quizService = TestBed.get(QuizService);
       const question = quizService.quiz.questionList[1];
       component.moveQuestionDown(1);
       expect(quizService.quiz.questionList[2]).toEqual(question);
-    }));
+    });
 
-    it('should not increment the index of a question in the questionlist if it is at the last position',
-      inject([QuizService], (quizService: QuizService) => {
-        const lastIndex = quizService.quiz.questionList.length - 1;
-        const question = quizService.quiz.questionList[lastIndex];
-        component.moveQuestionDown(lastIndex);
-        expect(quizService.quiz.questionList[lastIndex]).toEqual(question);
-      }));
+    it('should not increment the index of a question in the questionlist if it is at the last position', () => {
+      const quizService = TestBed.get(QuizService);
+      const lastIndex = quizService.quiz.questionList.length - 1;
+      const question = quizService.quiz.questionList[lastIndex];
+      component.moveQuestionDown(lastIndex);
+      expect(quizService.quiz.questionList[lastIndex]).toEqual(question);
+    });
   });
 });

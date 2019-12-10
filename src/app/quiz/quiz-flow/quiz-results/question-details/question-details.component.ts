@@ -148,7 +148,9 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy.next();
     this._destroy.complete();
-    window['hs'].close();
+    if (window['hs']) {
+      window['hs'].close();
+    }
   }
 
   public getCurrentQuestionAsRanged(): RangedQuestionEntity {

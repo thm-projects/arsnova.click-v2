@@ -10,4 +10,8 @@ export class SwUpdateMock {
   public checkForUpdate(): Promise<void> {
     return new Promise<void>(resolve => resolve());
   }
+
+  public activateUpdate(): Promise<void> {
+    return new Promise<void>(resolve => resolve());
+  }
 }

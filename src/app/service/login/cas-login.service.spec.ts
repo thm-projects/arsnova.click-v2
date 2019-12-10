@@ -37,12 +37,13 @@ describe('CasLoginService', () => {
 
   it('should be created', () => {
     const service: CasLoginService = TestBed.get(CasLoginService);
+    spyOn(service, 'navigateToAuthorize').and.callFake(() => {});
     expect(service).toBeTruthy();
   });
 
   it('should be activated', () => {
     const service: CasLoginService = TestBed.get(CasLoginService);
-
+    spyOn(service, 'navigateToAuthorize').and.callFake(() => {});
     spyOn(service, 'canLoad').and.callFake(() => new Promise(resolve => resolve()));
 
     service.canActivate();
@@ -53,6 +54,7 @@ describe('CasLoginService', () => {
   it('should be loaded if the user is already logged in', done => {
     const service: CasLoginService = TestBed.get(CasLoginService);
     const userService: UserService = TestBed.get(UserService);
+    spyOn(service, 'navigateToAuthorize').and.callFake(() => {});
 
     userService.isLoggedIn = true;
 
@@ -64,6 +66,7 @@ describe('CasLoginService', () => {
 
   it('should be loaded if no cas login is required', done => {
     const service: CasLoginService = TestBed.get(CasLoginService);
+    spyOn(service, 'navigateToAuthorize').and.callFake(() => {});
 
     service.casLoginRequired = false;
 
@@ -76,6 +79,7 @@ describe('CasLoginService', () => {
   it('should be loaded if a ticket is provided', done => {
     const service: CasLoginService = TestBed.get(CasLoginService);
     const userService: UserService = TestBed.get(UserService);
+    spyOn(service, 'navigateToAuthorize').and.callFake(() => {});
 
     service.casLoginRequired = true;
     service.ticket = 'cas-ticket';
@@ -90,6 +94,7 @@ describe('CasLoginService', () => {
 
   it('should not be loaded if no quiz name is provided', done => {
     const service: CasLoginService = TestBed.get(CasLoginService);
+    spyOn(service, 'navigateToAuthorize').and.callFake(() => {});
 
     service.quizName = null;
     service.casLoginRequired = true;

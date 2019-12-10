@@ -104,28 +104,32 @@ describe('UserAdminComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async(() => {
     expect(component).toBeTruthy();
-  });
+  }));
 
-  it('should check if a user is currently deleted', () => {
+  it('should check if a user is currently deleted', async(() => {
     expect(component.isDeletingElem(UserMock)).toBeFalsy();
     component['_deletingElements'].push(UserMock.name);
     expect(component.isDeletingElem(UserMock)).toBeTruthy();
-  });
+  }));
 
-  it('should delete a given user by name', () => {
+  it('should delete a given user by name', async(() => {
     component.deleteElem(UserMock);
     expect(component.data).not.toContain(UserMock);
-  });
+  }));
 
   it('should show the adduser modal', async(() => done => {
-    component.showAddUserModal().then(() => done());
-    expect(component.data).toContain(newUser);
+    component.showAddUserModal().then(() => {
+      expect(component.data).toContain(newUser);
+      done();
+    });
   }));
 
   it('should edit an existing user', async(() => done => {
-    component.editElem(UserMock).then(() => done());
-    expect(component.data).toContain(newUser);
+    component.editElem(UserMock).then(() => {
+      expect(component.data).toContain(newUser);
+      done();
+    });
   }));
 });

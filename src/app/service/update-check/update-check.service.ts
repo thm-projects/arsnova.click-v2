@@ -26,7 +26,14 @@ export class UpdateCheckService {
   }
 
   public async clearCache(): Promise<Array<boolean>> {
-    return Promise.all((await window.caches.keys()).map(key => window.caches.delete(key)));
+    return Promise.all((
+      await window.caches.keys()
+    ).map(key => window.caches.delete(key)));
+  }
+
+  public reloadPage(): void {
+    console.trace('calling reload page');
+    document.location.reload(true);
   }
 
   private promptUser(availableEvent: UpdateAvailableEvent): void {
@@ -47,9 +54,9 @@ export class UpdateCheckService {
       toastClass: 'toast show ngx-toastr',
     });
 
-    this.swUpdateToast.onTap.subscribe(async () => {
+    this.swUpdateToast.onTap.subscribe(() => {
       this.clearCache().finally(() => {
-        this.updates.activateUpdate().then(() => document.location.reload(true));
+        this.updates.activateUpdate().then(() => this.reloadPage());
       });
     });
 

@@ -11,7 +11,6 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TOAST_CONFIG } from 'ngx-toastr';
-import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
@@ -78,7 +77,7 @@ describe('RootComponent', () => {
         }, {
           provide: UpdateCheckService,
           useValue: {
-            checkForUpdates: () => of(null),
+            checkForUpdates: () => {},
           },
         }, {
           provide: TOAST_CONFIG,

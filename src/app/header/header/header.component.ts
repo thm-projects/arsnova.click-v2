@@ -154,19 +154,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.updateCheckService.doCheck().then(() => {
         this.updateCheckService.clearCache().finally(() => {
           if (this._storage.quota >= this._storage.usage) {
-            location.reload(true);
+            this.reloadPage();
           }
         });
       }).catch(err => console.error(err)).finally(() => {
         this.isCheckingForUpdates = false;
-        location.reload(true);
+        this.reloadPage();
       });
     } else {
-      location.reload(true);
+      this.reloadPage();
     }
   }
 
   public round(number: number): number {
     return Math.round(number);
+  }
+
+  public reloadPage(): void {
+    location.reload(true);
   }
 }

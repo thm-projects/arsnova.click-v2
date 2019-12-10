@@ -57,6 +57,7 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
+    spyOn(component, 'reloadPage').and.callFake(() => {});
     fixture.detectChanges();
   }));
 
