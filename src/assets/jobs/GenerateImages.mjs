@@ -16,9 +16,9 @@ const languages = ['en', 'de', 'fr', 'it', 'es'];
 
 const __dirname = path.resolve();
 
-let themeData;
+let themeData = {};
 if (process.env.themes) {
-  themeData = JSON.parse(process.env.themes).map(t => rawThemes[t]);
+  JSON.parse(process.env.themes).forEach(t => themeData[t] = rawThemes[t]);
 } else {
   themeData = rawThemes;
 }
