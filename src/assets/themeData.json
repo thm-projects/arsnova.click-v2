@@ -240,7 +240,7 @@
     },
     "exportedAtRowStyle": {
       "fg": "#FFFFFF",
-      "bg": "transparent"
+      "bg": "#EFF4FA"
     },
     "statisticsRowStyle": {
       "fg": "#000000",
