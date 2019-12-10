@@ -343,6 +343,11 @@
                   "input": "src/styles/themes/theme-westermann-blue.scss",
                   "bundleName": "theme-westermann-blue",
                   "lazy": true
+                },
+                {
+                  "input": "src/styles/themes/theme-westermann-blue.scss",
+                  "bundleName": "theme-default",
+                  "lazy": true
                 }
               ]
             },
@@ -395,6 +400,11 @@
                 {
                   "input": "src/styles/themes/theme-westermann-blue.scss",
                   "bundleName": "theme-westermann-blue",
+                  "lazy": true
+                },
+                {
+                  "input": "src/styles/themes/theme-westermann-blue.scss",
+                  "bundleName": "theme-default",
                   "lazy": true
                 }
               ]
