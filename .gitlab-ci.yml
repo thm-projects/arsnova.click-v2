@@ -79,11 +79,13 @@ generate_assets:
     - cd dist
     - angular-http-server --path browser/ --silent -p 4711 &
     - cd browser/assets/jobs
+    - export themes='["Material","Material-blue","Material-hope","arsnova-dot-click-contrast","blackbeauty","decent-blue","elegant","GreyBlue-Lime","spiritual-purple"]'
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
     - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
     - cd ../../../..
+    - npm run purify
     - npm run compress
   artifacts:
     paths:
@@ -142,11 +144,13 @@ generate_assets-beta:
     - cd dist
     - angular-http-server --path browser/ --silent -p 4711 &
     - cd browser/assets/jobs
+    - export themes='["westermann-blue","blackbeauty"]'
     - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://beta.arsnova.click
     - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://beta.arsnova.click
     - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
     - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
     - cd ../../../..
+    - npm run purify
     - npm run compress
   artifacts:
     paths:

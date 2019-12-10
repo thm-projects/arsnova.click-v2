@@ -8,8 +8,15 @@ const mf = require('messageformat');
 const argv = minimist(process.argv.slice(2));
 
 const languages = ['en', 'de', 'fr', 'it', 'es'];
-const themeData = require('./../themeData');
+const rawThemes = require('./../themeData');
 const imageDerivates = require('./../imageDerivates');
+
+let themeData;
+if (process.env.themes) {
+  themeData = JSON.parse(process.env.themes).map(t => rawThemes[t]);
+} else {
+  themeData = rawThemes;
+}
 
 class GenerateMetaNodes {
 

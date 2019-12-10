@@ -3,7 +3,7 @@ import fs from 'fs';
 import sharp from 'sharp';
 
 import derivates from './../imageDerivates.json';
-import themeData from './../themeData.json';
+import rawThemes from './../themeData.json';
 import process from 'process';
 import minimist from 'minimist';
 import child_process from 'child_process';
@@ -15,6 +15,13 @@ const argv = minimist(process.argv.slice(2));
 const languages = ['en', 'de', 'fr', 'it', 'es'];
 
 const __dirname = path.resolve();
+
+let themeData;
+if (process.env.themes) {
+  themeData = JSON.parse(process.env.themes).map(t => rawThemes[t]);
+} else {
+  themeData = rawThemes;
+}
 
 class GenerateImages {
 

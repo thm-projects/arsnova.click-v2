@@ -22,7 +22,7 @@ function fromDir(startPath, filter, callback) {
   }
 }
 
-fromDir('./dist/browser', /\.css/, function (filename) {
+fromDir('./dist/browser', /theme-.*\.css$/, function (filename) {
   const content = ['./dist/browser/*.js', './dist/browser/*.html'];
   const css = [filename];
 

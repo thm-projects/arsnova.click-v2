@@ -32,7 +32,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e --port 4201",
     "purify": "node purifycss.js",
-    "postpurify": "npm run ngsw-config",
     "compress": "gzip dist/browser/** -r --best --keep",
     "http-startup": "angular-http-server dist/browser/ -p 4711",
     "prod-test": "npm run build:PROD:DEPLOY && npm run http-startup",
