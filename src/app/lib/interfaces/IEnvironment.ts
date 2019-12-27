@@ -6,7 +6,6 @@ export interface IEnvironment {
   enableCasLogin: boolean;
   sentryDSN?: string;
   version: string;
-  claimSrc?: string;
   production: boolean;
   ssrEndpoint: string;
   serverEndpoint: string;
