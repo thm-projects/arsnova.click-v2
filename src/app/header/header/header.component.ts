@@ -6,6 +6,8 @@ import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { Title } from '../../lib/enums/enums';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
@@ -21,6 +23,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public static TYPE = 'HeaderComponent';
   @Input() public showHeader = true;
   public isCheckingForUpdates: boolean;
+  public readonly logoStyle = {
+    height: '60px',
+    width: '60px',
+  };
+  public readonly logoXlStyle = environment.title === Title.Default ? {
+    height: '60px',
+    width: '60px',
+  } : {};
 
   private _origin: string = isPlatformBrowser(this.platformId) ? location.hostname : '';
 
@@ -53,7 +63,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
   @ViewChild('connectionIndicator', { static: true }) private connectionIndicator: ElementRef<SVGElement>;
-
   private readonly _destroy = new Subject();
 
   constructor(
@@ -87,7 +96,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     if (isPlatformBrowser(this.platformId)) {
       this.router.events.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe((url: any) => {
-        this.inHomeRoute = (location.pathname === '/home' || location.pathname === '/');
+        this.inHomeRoute = (
+          location.pathname === '/home' || location.pathname === '/'
+        );
       });
     }
 

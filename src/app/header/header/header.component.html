@@ -2,9 +2,12 @@
      id="header">
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
     <a [routerLink]="['/']">
-      <svg-icon [svgStyle]="{height: '60px', width: '60px'}"
-                class="text-white"
+      <svg-icon [svgStyle]="logoStyle"
+                class="text-white d-md-none"
                 src="/assets/images/logo.svg"></svg-icon>
+      <svg-icon [svgStyle]="logoXlStyle"
+                class="text-white d-none d-md-block"
+                src="/assets/images/logo.xl.svg"></svg-icon>
     </a>
   </div>
   <div *ngIf="showHeader"
