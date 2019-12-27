@@ -1,9 +1,10 @@
-import { LoginMechanism } from '../app/lib/enums/enums';
+import { LoginMechanism, Title } from '../app/lib/enums/enums';
 import { QuizTheme } from '../app/lib/enums/QuizTheme';
 import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: true,
+  title: Title.Westermann,
   enableCasLogin: false,
   version: 'VERSION',
   ssrEndpoint: 'https://test01.ars.sbzo.de',

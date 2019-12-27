@@ -1,7 +1,8 @@
-import { LoginMechanism } from '../enums/enums';
+import { LoginMechanism, Title } from '../enums/enums';
 import { QuizTheme } from '../enums/QuizTheme';
 
 export interface IEnvironment {
+  title: Title;
   enableCasLogin: boolean;
   sentryDSN?: string;
   version: string;

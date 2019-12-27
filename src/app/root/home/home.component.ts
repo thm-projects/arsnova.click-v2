@@ -12,7 +12,7 @@ import { AbstractAnswerEntity } from '../../lib/entities/answer/AbstractAnswerEn
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
 import { ABCDSingleChoiceQuestionEntity } from '../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { Language, StorageKey } from '../../lib/enums/enums';
+import { Language, StorageKey, Title } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
@@ -56,7 +56,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
   public showJoinableQuizzes: boolean = environment.showJoinableQuizzes;
   public isQueryingQuizState: boolean;
-  public readonly claimSrc = environment.claimSrc;
+  public Title = Title;
+  public readonly selectedTitle = environment.title;
 
   private _serverPassword = '';
 

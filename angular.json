@@ -47,6 +47,16 @@
                 "src/styles/themes"
               ]
             },
+            "fileReplacements": [
+              {
+                "replace": "src/assets/images/logo.svg",
+                "with": "src/assets/images/logo.westermann.svg"
+              },
+              {
+                "replace": "src/assets/images/logo_transparent.png",
+                "with": "src/assets/images/logo_transparent.westermann.png"
+              }
+            ],
             "styles": [
               "src/styles/styles.scss",
               "node_modules/prism-themes/themes/prism-ghcolors.css",

@@ -1,14 +1,30 @@
+<ng-template #arsclaim>
+  <span class="color-changing-ars logo-header-chars">a r s </span>
+  <span class="color-changing-nova logo-header-chars">n o v a </span>
+  <span class="color-changing-dot logo-header-dot">. </span>
+  <span class="color-changing-click logo-header-chars logo-header-margin-for-dot">c l i c k</span>
+</ng-template>
+
 <div class="row flex-column"
      id="landingPageContent">
   <div *ngIf="!isShowingQuiznameDatalist"
        class="col-12 text-center my-5 my-sm-5"
        id="arsnova-click-description">
-    <h1 class="text-center header-label text-bold my-0">
-      <span class="color-changing-ars logo-header-chars">a r s </span>
-      <span class="color-changing-nova logo-header-chars">n o v a </span>
-      <span class="color-changing-dot logo-header-dot">. </span>
-      <span class="color-changing-click logo-header-chars logo-header-margin-for-dot">c l i c k</span>
+    <h1 *ngIf="selectedTitle === Title.Default"
+        class="text-center header-label text-bold my-0">
+      <ng-container *ngTemplateOutlet="arsclaim"></ng-container>
     </h1>
+    <div *ngIf="selectedTitle === Title.Westermann"
+         class="row">
+      <div class="col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+        <h1>Westermann Quiz</h1>
+        <h6 class="text-right"
+            style="color: #5a5758; font-size: 90%;">
+          <span class="mr-2">Powered by</span>
+          <ng-container *ngTemplateOutlet="arsclaim"></ng-container>
+        </h6>
+      </div>
+    </div>
   </div>
   <div [class.mt-sm-5]="!isShowingQuiznameDatalist"
        class="col-md-10 col-xl-8 offset-md-1 offset-xl-2">
@@ -188,7 +204,8 @@
   </div>
   <ng-container *ngIf="!isShowingQuiznameDatalist">
     <div class="col-12 text-center mt-5">
-      <p [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"></p>
+      <p *ngIf="selectedTitle === Title.Default"
+         [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"></p>
       <p>
         <a *ngIf="canUsePublicQuizzes && publicQuizAmount > 0"
            [routerLink]="['/quiz', 'public']">{{'component.home.view-public' | translate:{amount: publicQuizAmount} }}
@@ -199,13 +216,6 @@
           <span *ngIf="!canUsePublicQuizzes || publicQuizAmount === 0">{{'component.home.view-own-public' | translate}}</span>
         </a>
       </p>
-    </div>
-
-    <div *ngIf="claimSrc"
-         class="col-12 mt-5 justify-content-center d-flex">
-      <img [src]="claimSrc"
-           alt="claim"
-           style="width: auto;height: 90px;"/>
     </div>
   </ng-container>
 </div>

@@ -93,3 +93,7 @@ export enum DeprecatedKeys {
 export enum DeprecatedDb {
   DEFAULT = 'DEFAULT', //
 }
+
+export enum Title {
+  Default, Westermann
+}

@@ -1,9 +1,10 @@
-import { LoginMechanism } from '../app/lib/enums/enums';
+import { LoginMechanism, Title } from '../app/lib/enums/enums';
 import { QuizTheme } from '../app/lib/enums/QuizTheme';
 import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
   production: true,
+  title: Title.Westermann,
   version: 'VERSION',
   enableCasLogin: false,
   sentryDSN: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
