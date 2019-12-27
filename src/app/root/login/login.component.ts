@@ -19,9 +19,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public username = '';
   public password = '';
   public token = '';
-  public hasUsernamePasswordLogin: boolean = environment.loginMechanism.includes(LoginMechanism.UsernamePassword);
-  public hasTokenLogin: boolean = environment.loginMechanism.includes(LoginMechanism.Token);
-  public hasMultipleLoginMethods: boolean = environment.loginMechanism.length > 1;
+  public hasUsernamePasswordLogin: boolean;
+  public hasTokenLogin: boolean;
   public isLoggingIn: string;
 
   private _authorizationFailed = false;
@@ -44,7 +43,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
-    private headerLabelService: HeaderLabelService, private footerBarService: FooterBarService, private storageServie: StorageService,
+    private headerLabelService: HeaderLabelService,
+    private footerBarService: FooterBarService,
+    private storageServie: StorageService,
   ) {
     this.userService.logout();
     this.headerLabelService.headerLabel = 'component.login.login';
@@ -59,6 +60,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       }
       this._isLoading = false;
       this.return = decodeURI(params['return'] || '%2F');
+
+      this.hasTokenLogin = environment.loginMechanism.includes(LoginMechanism.Token) && this.return.includes('/quiz/create');
+      this.hasUsernamePasswordLogin = environment.loginMechanism.includes(LoginMechanism.UsernamePassword) && !this.hasTokenLogin;
+
+      if (!this.hasTokenLogin && !this.hasUsernamePasswordLogin) {
+        this.router.navigate(['/']);
+      }
     });
   }
 
@@ -71,6 +79,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this._authorizationFailed = false;
     let authenticated = false;
     this.isLoggingIn = method;
+
+    this.username = this.username.trim();
+    this.password = this.password.trim();
+    this.token = this.token.trim();
 
     if (this.hasTokenLogin && this.token) {
       const tokenHash = this.userService.hashToken(this.token);

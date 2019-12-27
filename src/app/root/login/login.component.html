@@ -35,9 +35,6 @@
 
   <ng-container *ngIf="hasTokenLogin">
 
-    <h6 *ngIf="hasMultipleLoginMethods"
-        class="mt-5">{{'component.login.login-via-token' | translate}}</h6>
-
     <div class="input-group">
 
       <input (keydown.enter)="login('token')"
