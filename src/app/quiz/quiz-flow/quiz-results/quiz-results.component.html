@@ -1,16 +1,18 @@
-<div class="overflow-hidden mb-3 d-flex justify-content-between">
-  <h1>
+<div class="overflow-hidden my-3 d-flex justify-content-between">
+  <h3 class="mb-0">
     <fa-icon [icon]="'users'"></fa-icon>
     <span class="ml-2">{{attendeeService.attendees.length}}</span>
-  </h1>
-  <h1 *ngIf="countdown > 0">
+  </h3>
+  <h3 *ngIf="countdown > 0"
+      class="mb-0">
     <span class="mr-2">{{countdown}}</span>
     <fa-icon [icon]="'hourglass'"></fa-icon>
-  </h1>
+  </h3>
 </div>
 
 <ng-container *ngIf="quizService.getVisibleQuestions() as visibleQuestions">
-  <div class="overflow-auto btn-header">
+  <div *ngIf="visibleQuestions.length > 1 || showStartQuizButton || showStopCountdownButton || showStopQuizButton"
+       class="overflow-auto btn-header">
     <div class="my-3 btn-group">
       <button (click)="startQuiz()"
               *ngIf="showStartQuizButton && !(showStopCountdownButton || showStopQuizButton)"
@@ -60,7 +62,7 @@
                 *ngFor="let question of visibleQuestions; let i = index"
                 [class.disabled]="i === selectedQuestionIndex || countdown > 0"
                 [disabled]="i === selectedQuestionIndex || countdown > 0"
-                class="btn btn-info text-nowrap">
+                class="btn btn-primary text-nowrap">
           <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
         </button>
       </ng-container>
@@ -80,24 +82,24 @@
 
     <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
          class="d-flex">
-      <button *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
-              (click)="hasTriggeredNavigation = true"
-              [routerLink]="['/quiz', 'flow', 'leaderboard', visibleQuestions.length > 1 ? selectedQuestionIndex : 'all']"
+      <button (click)="hasTriggeredNavigation = true"
+              *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
               [class.mr-1]="showQuestionButton(selectedQuestionIndex)"
               [class.w-100]="!showQuestionButton(selectedQuestionIndex)"
               [class.w-50]="showQuestionButton(selectedQuestionIndex)"
+              [routerLink]="['/quiz', 'flow', 'leaderboard', visibleQuestions.length > 1 ? selectedQuestionIndex : 'all']"
               class="btn btn-light"
               type="button">
         <fa-icon [icon]="'trophy'"
                  class="mr-2"></fa-icon>
         <span>{{'component.liveResults.ranking' | translate}}</span>
       </button>
-      <button *ngIf="showQuestionButton(selectedQuestionIndex)"
-              (click)="hasTriggeredNavigation = true"
-              [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
+      <button (click)="hasTriggeredNavigation = true"
+              *ngIf="showQuestionButton(selectedQuestionIndex)"
               [class.ml-1]="showLeaderBoardButton(selectedQuestionIndex)"
               [class.w-100]="!showLeaderBoardButton(selectedQuestionIndex)"
               [class.w-50]="showLeaderBoardButton(selectedQuestionIndex)"
+              [routerLink]="['/quiz', 'flow', 'results', selectedQuestionIndex]"
               class="btn btn-light"
               type="button">
         <fa-icon [icon]="'question'"

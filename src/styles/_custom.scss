@@ -81,3 +81,7 @@ iframe {
   box-shadow: 0 0 .25rem $warning;
   pointer-events: none;
 }
+
+.text-secondary-inverted {
+  color: color-yiq($secondary);
+}

@@ -322,7 +322,7 @@
       "own-rank": {}
     },
     "liveResults": {
-      "title": "Résultats",
+      "title": "Résultats {QUESTION_INDEX}",
       "question": "Voir la question",
       "question_number": "Question",
       "ranking": "Classement",

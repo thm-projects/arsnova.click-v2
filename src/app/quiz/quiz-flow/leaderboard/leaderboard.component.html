@@ -1,6 +1,4 @@
-<h4 *ngIf="!isGlobalRanking">
-  {{'component.leaderboard.title.single_question' | translate:{QUESTION_ID: (questionIndex + 1)} }}
-</h4>
+<h4>{{'component.leaderboard.title.all_questions' | translate}}</h4>
 
 <h4 *ngIf="!leaderBoardCorrect.length"
     class="mt-5 text-center">
@@ -16,7 +14,7 @@
   <ng-container *ngFor="let group of memberGroupResults">
     <div class="row">
       <div class="col-12 col-sm-6">
-        <div class="bg-secondary text-dark rounded p-2 my-2 ">
+        <div class="bg-secondary text-secondary-inverted rounded p-2 my-2">
           <h6 class="text-center mb-0">{{'component.leaderboard.team-result.name' | translate:{TEAM_NAME: group.name} }}</h6>
           <hr/>
           <p>{{'component.leaderboard.team-result.overall-response-time' | translate:{RESPONSE_TIME: formatResponseTime(group.responseTime)} }}</p>
@@ -31,9 +29,8 @@
   <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
        [class.col-12]="!i"
        [class.col-sm-6]="!!i">
-    <div [class.own-nick]="!i || attendeeService.isOwnNick(attendee.name)"
-         [class.text-center]="!i"
-         class="bg-secondary text-dark rounded p-2 my-2">
+    <div [class.own-nick]="attendeeService.isOwnNick(attendee.name)"
+         class="bg-secondary text-secondary-inverted rounded p-2 my-2">
       <fa-icon *ngIf="!i"
                [icon]="'trophy'"
                class="mr-2"></fa-icon>

@@ -14,7 +14,7 @@
        class="header-title d-flex align-items-center">
     <div class="center-block">
       <div *ngIf="headerLabelService.headerLabel !== 'default'"
-           [innerHTML]="headerLabelService.headerLabel | translate"
+           [innerHTML]="headerLabelService.headerLabel | translate:headerLabelService.headerLabelParams"
            class="text-center header-label"></div>
     </div>
   </div>
@@ -28,6 +28,7 @@
          triggers="manual"
          version="1.1"
          viewBox="0 0 128 128"
+         [style.margin-top.px]="connectionService.lowSpeed ? -20 : connectionService.mediumSpeed ? -10 : 0"
          width="50px"
          xml:space="preserve"
          xmlns="http://www.w3.org/2000/svg">

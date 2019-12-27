@@ -365,7 +365,7 @@
       }
     },
     "liveResults": {
-      "title": "Results",
+      "title": "Results {QUESTION_INDEX}",
       "question": "Show question",
       "question_number": "Question",
       "ranking": "Ranking",

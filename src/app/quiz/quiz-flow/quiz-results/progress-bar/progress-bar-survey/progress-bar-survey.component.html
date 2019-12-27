@@ -2,7 +2,10 @@
 
   <div *ngIf="base"
        class="d-flex justify-content-between">
-    <span class="text-truncate mx-2">{{normalizedAnswerIndex}}:&nbsp;<span [innerHTML]="sanitizeHTML(label)"></span></span>
+    <span class="text-truncate mx-2">
+      <span>{{normalizedAnswerIndex}}</span>
+      <span *ngIf="label">:&nbsp;<span [innerHTML]="sanitizeHTML(label)"></span></span>
+    </span>
     <span class="mr-2">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}</span>
   </div>
 

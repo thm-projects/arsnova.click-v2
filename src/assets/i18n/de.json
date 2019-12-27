@@ -283,12 +283,12 @@
         "score": "Punkte: {SCORE}"
       },
       "own-rank": {
-        "own-data": "Du bist auf Rang {INDEX} mit einem Punktestand von {SCORE}",
+        "own-data": "Du bist auf Platz {INDEX} mit einem Punktestand von {SCORE}",
         "closest-opponent": " direkt nach {NAME} mit einem Punktestand von {SCORE}"
       }
     },
     "liveResults": {
-      "title": "Ergebnisse",
+      "title": "Frage {QUESTION_INDEX}",
       "question": "Frage anzeigen",
       "question_number": "Frage",
       "ranking": "Rangliste",
@@ -529,7 +529,7 @@
     "login": {
       "title": "Bitte gib deine Zugangsdaten ein",
       "login": "Einloggen",
-      "authorization_failed": "Authentifkation fehlgeschlagen",
+      "authorization_failed": "Authentifikation fehlgeschlagen",
       "token": "Token",
       "login-via-token": "Du kannst dich auch mit einem Token einloggen:",
       "password": "Passwort",

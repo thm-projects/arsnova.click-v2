@@ -323,7 +323,7 @@
       "own-rank": {}
     },
     "liveResults": {
-      "title": "Resultados",
+      "title": "Resultados {QUESTION_INDEX}",
       "question": "Presentar pregunta",
       "question_number": "Pregunta",
       "ranking": "Escalafón",

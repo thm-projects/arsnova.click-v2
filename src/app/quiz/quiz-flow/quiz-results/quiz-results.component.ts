@@ -59,6 +59,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return this._selectedQuestionIndex;
   }
 
+  set selectedQuestionIndex(value: number) {
+    this._selectedQuestionIndex = value;
+    this.headerLabelService.headerLabelParams = {
+      QUESTION_INDEX: (
+        value + 1
+      ),
+    };
+  }
+
   private _questionText: string;
 
   get questionText(): string {
@@ -97,7 +106,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     }
     if (index === this.quizService.quiz.currentQuestionIndex && //
         this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
-        (this.quizService.readingConfirmationRequested || (this.countdown))) {
+        (
+          this.quizService.readingConfirmationRequested || (
+            this.countdown
+          )
+        )) {
       return;
     }
 
@@ -112,7 +125,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     }
     if (index === this.quizService.quiz.currentQuestionIndex && //
         this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
-        (this.quizService.readingConfirmationRequested || (this.countdown))) {
+        (
+          this.quizService.readingConfirmationRequested || (
+            this.countdown
+          )
+        )) {
       return;
     }
 
@@ -143,7 +160,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       return;
     }
 
-    this._selectedQuestionIndex = index;
+    this.selectedQuestionIndex = index;
     this.generateAnswers(this.quizService.quiz.questionList[index]);
     this.cd.markForCheck();
   }
@@ -164,7 +181,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         return currentValue + nextValue;
       }) : 0;
       result.absolute = matches.length;
-      result.percent = this.i18nService.formatNumber(absoluteValues / (matches.length || 1) / 100, NumberType.Percent);
+      result.percent = this.i18nService.formatNumber(absoluteValues / (
+        matches.length || 1
+      ) / 100, NumberType.Percent);
     }
     this.cd.markForCheck();
     return result;
@@ -188,8 +207,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public showResponseProgress(): boolean {
     this.cd.markForCheck();
     const currentQuestion = this.quizService.currentQuestion();
-    return (this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress) || //
-           (currentQuestion && currentQuestion.timer && this.countdown === 0);
+    return (
+             this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress
+           ) || //
+           (
+             currentQuestion && currentQuestion.timer && this.countdown === 0
+           );
   }
 
   public getReadingConfirmationData(questionIndex: number): { base: number, absolute: number, percent: string } {
@@ -203,7 +226,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
       }).length;
       result.absolute = matchCount;
-      result.percent = this.i18nService.formatNumber(matchCount / (this.attendeeService.attendees.length || 1), NumberType.Percent);
+      result.percent = this.i18nService.formatNumber(matchCount / (
+        this.attendeeService.attendees.length || 1
+      ), NumberType.Percent);
     }
     this.cd.markForCheck();
     return result;
@@ -269,7 +294,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   public ngOnDestroy(): void {
-    sessionStorage.setItem(StorageKey.CurrentQuestionIndex, String(this._selectedQuestionIndex));
+    sessionStorage.setItem(StorageKey.CurrentQuestionIndex, String(this.selectedQuestionIndex));
 
     if (this.quizService.isOwner) {
       this.footerBarService.footerElemBack.restoreClickCallback();
@@ -318,7 +343,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
     if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
       this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack, this.footerBarService.footerElemLeaderboard,
+        this.footerBarService.footerElemBack,
       ]);
     }
 
@@ -446,7 +471,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.NextQuestion, payload => {
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
-        this._selectedQuestionIndex = payload.nextQuestionIndex;
+        this.selectedQuestionIndex = payload.nextQuestionIndex;
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
@@ -479,12 +504,21 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.showStopCountdownButton = false;
         this.showStopQuizButton = false;
         this.showStartQuizButton = this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+        if (!this.showStartQuizButton) {
+          this.addFooterElements();
+        }
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.showStopCountdownButton = payload.value > 0;
         this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+        if (!this.showStartQuizButton) {
+          this.addFooterElements();
+        }
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex
                                    + 1;
+        if (!this.showStartQuizButton) {
+          this.addFooterElements();
+        }
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         this.showStartQuizButton = true;
         this.showStopQuizButton = false;

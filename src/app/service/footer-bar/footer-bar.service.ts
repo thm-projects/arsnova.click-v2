@@ -1,6 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, Injector, PLATFORM_ID } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
@@ -14,6 +13,7 @@ import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { AttendeeService } from '../attendee/attendee.service';
 import { QuizService } from '../quiz/quiz.service';
+import { ThemesService } from '../themes/themes.service';
 import { UserService } from '../user/user.service';
 
 declare class Modernizr {
@@ -48,7 +48,9 @@ export function toggleFullScreen(): void {
     const fsDocElem = <IFsDocumentElement>document.documentElement;
 
     if (fsDocElem.requestFullscreen) {
-      (fsDocElem as any).requestFullscreen();
+      (
+        fsDocElem as any
+      ).requestFullscreen();
     } else if (fsDocElem.msRequestFullscreen) {
       fsDocElem.msRequestFullscreen();
     } else if (fsDocElem.mozRequestFullScreen) {
@@ -419,9 +421,11 @@ export class FooterBarService {
     @Inject(PLATFORM_ID) private platformId: Object,
     private userService: UserService,
     private rxStompService: RxStompService,
-    private quizService: QuizService, private attendeeService: AttendeeService,
+    private quizService: QuizService,
+    private attendeeService: AttendeeService,
     private quizApiService: QuizApiService,
-    private translateService: TranslateService, private route: ActivatedRoute, private injector: Injector,
+    private translateService: TranslateService,
+    private themesService: ThemesService,
   ) {
 
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz), switchMapTo(this.rxStompService.connectionState$)).subscribe(value => {
@@ -484,7 +488,6 @@ export class FooterBarService {
   }
 
   private toggleFooterElemState(isActive: boolean): void {
-    this.footerElemLeaderboard.isActive = isActive;
     this.footerElemImport.isActive = isActive;
     this.footerElemLogin.isActive = isActive;
     this.footerElemAdmin.isActive = isActive;
@@ -501,7 +504,7 @@ export class FooterBarService {
     this.footerElemExport.restoreClickCallback();
     this.footerElemExport.onClickCallback = async () => {
       const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.quizService.quiz.name}/${sessionStorage.getItem(
-        StorageKey.PrivateKey)}/${this.quizService.quiz.sessionConfig.theme}/${this.translateService.currentLang}`;
+        StorageKey.PrivateKey)}/${this.themesService.currentTheme}/${this.translateService.currentLang}`;
       window.open(link);
     };
 

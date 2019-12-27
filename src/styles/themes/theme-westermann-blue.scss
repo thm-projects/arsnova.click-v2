@@ -1,5 +1,5 @@
-$primary: #0085ca;
-$secondary: #0085ca;
+$primary: #3a8dc5;
+$secondary: #3a8dc5;
 $invers: rebeccapurple;
 $light: #a2c2e4;
 $dark: #000d6d;
@@ -39,6 +39,8 @@ $splash-screen-corner-radius: 10px;
 
 $small-font-size: 60%;
 
+$btn-disabled-opacity: 0.58;
+
 @import "prebuild";
 
 $modal-footer-border-color: $border-color;
@@ -66,11 +68,11 @@ $colorChangingBg: (
 );
 
 $colorChangingOwnNick: (
-  0: (fg: white, bg: $primary),
-  25: (fg: white, bg: $warning),
-  50: (fg: white, bg: $warning),
-  75: (fg: white, bg: $warning),
-  100: (fg: white, bg: $primary)
+  0: (fg: black, bg: #ffbb56),
+  25: (fg: black, bg: #ffa218),
+  50: (fg: black, bg: #ff9800),
+  75: (fg: black, bg: #ffa218),
+  100: (fg: black, bg: #ffbb56)
 );
 
 $colorChangingArs: (
