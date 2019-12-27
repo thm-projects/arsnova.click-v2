@@ -86,6 +86,10 @@ pre {
   }
 }
 
+.text-secondary-inverted {
+  color: color-yiq($secondary);
+}
+
 *::placeholder {
   opacity: 1;
   color: $footer-color;
