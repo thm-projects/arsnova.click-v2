@@ -29,7 +29,7 @@ export class QuizPublicComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([footerBarService.footerElemBack]);
   }
 
-  public playQuiz(index: number): void {
+  public copyQuiz(index: number): void {
     const session = this.availablePublicQuizzes[index];
     const blob = new Blob([JSON.stringify(session)], { type: 'application/json' });
     this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, session.name);
@@ -41,7 +41,7 @@ export class QuizPublicComponent implements OnInit, OnDestroy {
     .subscribe(() => this.availablePublicQuizzes.splice(index, 1));
   }
 
-  public copyQuiz(inputElement: HTMLInputElement): void {
+  public copyQuizLink(inputElement: HTMLInputElement): void {
     inputElement.select();
     document.execCommand('copy');
     inputElement.setSelectionRange(0, 0);
@@ -49,10 +49,6 @@ export class QuizPublicComponent implements OnInit, OnDestroy {
 
   public getQuizLink(index: number): string {
     return encodeURI(`${location.origin}/quiz/create/${this.availablePublicQuizzes[index].name}`);
-  }
-
-  public getTranslationForYesNo(value: boolean): string {
-    return value ? 'global.yes' : 'global.no';
   }
 
   public ngOnInit(): void {

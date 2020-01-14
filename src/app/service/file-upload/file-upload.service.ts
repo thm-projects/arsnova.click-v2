@@ -5,6 +5,7 @@ import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { IDuplicateQuiz } from '../../lib/interfaces/quizzes/IDuplicateQuiz';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
+import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -28,6 +29,7 @@ export class FileUploadService {
     private router: Router,
     private storageService: StorageService,
     private quizApiService: QuizApiService,
+    private quizService: QuizService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this._renameFilesQueue = new FormData();
@@ -50,14 +52,21 @@ export class FileUploadService {
       }
 
       if (data.payload.quizData.length) {
+        let quiz: QuizEntity;
         data.payload.quizData.forEach(quizData => {
-          const quiz = new QuizEntity(quizData.quiz);
+          quiz = new QuizEntity(quizData);
           this.storageService.db.Quiz.put(quiz);
           this.quizApiService.putSavedQuiz(quiz).subscribe();
         });
 
         if (!data.payload.duplicateQuizzes.length) {
-          this.router.navigate(['/']);
+          if (data.payload.quizData.length === 1) {
+            this.quizService.quiz = quiz;
+            this.quizService.isOwner = true;
+            this.router.navigate(['/quiz', 'manager', 'overview']);
+          } else {
+            this.router.navigate(['/']);
+          }
         }
       }
 
