@@ -76,25 +76,12 @@ build-beta:
     - *staging-server-env
     - *docker-push
 
-build-snapshot:
-  <<: *build-template
-  only:
-    - docker
-  variables:
-    VERSION: 2.0.0-beta
-    CI_COMMIT_REF_NAME: beta
-    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-beta
-  script:
-    - *staging-server-env
-    - *docker-push
-
 deploy:
   stage: deploy
   only:
     - master
     - staging
     - beta
-    - docker
   tags:
     - ssh
   script:
