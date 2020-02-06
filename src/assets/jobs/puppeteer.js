@@ -11,7 +11,7 @@ const format = argv.format === 'png' ? 'png' : 'jpeg';
 const viewportWidth = argv.viewportWidth || 1024;
 const viewportHeight = argv.viewportHeight || 576;
 const delay = argv.delay || 0;
-const params = argv.root ? {args: ['--no-sandbox', '--disable-setuid-sandbox']} : {};
+const params = argv.root ? {args: ['--no-sandbox', '--disable-setuid-sandbox'], executablePath: process.env.CHROMIUM_PATH} : {};
 const derivates = require('../imageDerivates').frontendPreview;
 
 async function asyncForEach(array, callback) {
@@ -41,7 +41,7 @@ async function asyncForEach(array, callback) {
 
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
-    await page.goto(url, {waitUntil: 'networkidle0'});
+    await page.goto(url, {waitUntil: 'networkidle2'});
     console.log('navigated to', url);
 
     const urlSeparated = url.split('/');
