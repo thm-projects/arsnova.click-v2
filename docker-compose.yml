@@ -15,7 +15,7 @@ services:
         CHROMIUM_PATH: "/usr/bin/chromium-browser"
         CHROME_BIN: "/usr/bin/chromium-browser"
     ports:
-      - 80:80
+      - 8080:80
   staging:
     image: arsnova/arsnova-click-frontend:2.0.0-staging
     hostname: arsnova-click-frontend
@@ -31,7 +31,7 @@ services:
         CHROMIUM_PATH: "/usr/bin/chromium-browser"
         CHROME_BIN: "/usr/bin/chromium-browser"
     ports:
-      - 80:80
+      - 8090:80
   beta:
     image: arsnova/arsnova-click-frontend:2.0.0-beta
     hostname: arsnova-click-frontend
@@ -47,7 +47,7 @@ services:
         CHROMIUM_PATH: "/usr/bin/chromium-browser"
         CHROME_BIN: "/usr/bin/chromium-browser"
     ports:
-      - 80:80
+      - 8100:80
   local:
     image: arsnova/arsnova-click-frontend:2.0.0-local
     hostname: arsnova-click-frontend
@@ -72,4 +72,4 @@ services:
         CHROMIUM_PATH: "/usr/bin/chromium-browser"
         CHROME_BIN: "/usr/bin/chromium-browser"
     ports:
-      - 80:80
+      - 8110:80
