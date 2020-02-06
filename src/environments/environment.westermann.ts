@@ -13,8 +13,8 @@ export const environment: IEnvironment = {
   httpLibEndpoint: 'https://test01.ars.sbzo.de/api/v1/lib',
   stompConfig: {
     endpoint: 'wss://test01.ars.sbzo.de/api/v1/rabbitmq/ws',
-    user: 'guest',
-    password: 'guest',
+    user: 'arsnova-click',
+    password: 'K3BHZQMHsxh6XQ5a',
     vhost: '/',
   },
   leaderboardAmount: 5,

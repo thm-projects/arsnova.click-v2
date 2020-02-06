@@ -14,8 +14,8 @@ export const environment: IEnvironment = {
   httpLibEndpoint: 'https://beta.arsnova.click/backend/lib',
   stompConfig: {
     endpoint: 'wss://beta.arsnova.click/rabbitmq/ws',
-    user: 'beta',
-    password: 'beta',
+    user: 'arsnova-click',
+    password: 'K3BHZQMHsxh6XQ5a',
     vhost: 'beta',
   },
   leaderboardAmount: 5,

@@ -14,8 +14,8 @@ export const environment: IEnvironment = {
   httpLibEndpoint: 'http://localhost:3010/lib',
   stompConfig: {
     endpoint: 'ws://localhost:15674/ws',
-    user: 'user',
-    password: 'bitnami',
+    user: 'arsnova-click',
+    password: 'K3BHZQMHsxh6XQ5a',
     vhost: '/',
   },
   leaderboardAmount: 5,
