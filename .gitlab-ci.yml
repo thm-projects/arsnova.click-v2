@@ -1,177 +1,106 @@
 stages:
-  - install
-  - test
   - build
-  - assets
   - deploy
-  - build-beta
-  - assets-beta
-  - deploy-beta
 
-# Cache modules in between jobs
-cache:
-  key: ${CI_COMMIT_REF_SLUG}
-  paths:
-    - node_modules/
-
-install_node_modules:
-  stage: install
-  except:
-    - /^i18n-change.*/ix
-  tags:
-    - nodejs
-  script:
-    - npm install
-
-ts_lint:
-  stage: test
-  except:
-    - /^i18n-change.*/ix
-  tags:
-    - nodejs
-  script:
-    - npm install
-    - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
-
-npm_test:
-  stage: test
-  tags:
-    - nodejs
-    - angular
-  script:
-    - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
-    - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
-    - apt-get -y update
-    - apt-get -y install --allow-unauthenticated google-chrome-stable
-    - npm install
-    - npm test
-
-build:
+.build-template: &build-template
   stage: build
-  only:
-    - master
+  services:
+    - name: docker:19.03.1-dind
+      alias: docker
+  variables:
+    DOCKER_TLS_CERTDIR: ""
   tags:
-    - nodejs
-    - angular
-  before_script:
-    - sed -ri "s|\"VERSION\"|\"$CI_COMMIT_SHA\"|" src/environments/environment.thm.staging.ts
-  script:
-    - npm install
-    - npm install typescript@3.5.3
-    - npm run build:STAGING_THM
+    - docker-compose
   artifacts:
+    expire_in: 2 mins
     paths:
-      - dist
+      - variables
+      - private_key
 
-generate_assets:
-  stage: assets
+.docker-push-template: &docker-push |
+  docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  docker-compose build $CI_COMMIT_REF_NAME
+  docker-compose up --no-deps -d $CI_COMMIT_REF_NAME
+  docker push "$CI_IMAGE_NAME:$VERSION"
+
+.staging-server-env-template: &staging-server-env |
+  echo "export CI_CONTAINER_INSTANCE_NAME=$CI_CONTAINER_INSTANCE_NAME" >> variables
+  echo "export SSH_URL=$STAGING_FRONTEND_URL" >> variables
+  echo "export SSH_CMD=$STAGING_SSH" >> variables
+  echo "export VERSION=$VERSION" >> variables
+  echo "$STAGING_SSH_PRIVATE_KEY" >> private_key
+
+.production-server-env-template: &production-server-env |
+  echo "export CI_CONTAINER_INSTANCE_NAME=$CI_CONTAINER_INSTANCE_NAME" >> variables
+  echo "export SSH_URL=$PRODUCTION_FRONTEND_URL" >> variables
+  echo "export SSH_CMD=$PRODUCTION_SSH" >> variables
+  echo "export VERSION=$VERSION" >> variables
+  echo "$PRODUCTION_SSH_PRIVATE_KEY" >> private_key
+
+build-master:
+  <<: *build-template
   only:
     - master
-  tags:
-    - nodejs
-  dependencies:
-    - build
+  environment:
+    name: Master
+  variables:
+    VERSION: 2.0.0
+    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend
   script:
-    - apt-get -y update
-    - apt-get -y install --allow-unauthenticated gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
-    - npm i
-    - npm install -g angular-http-server
-    - cd dist
-    - angular-http-server --path browser/ --silent -p 4711 &
-    - cd browser/assets/jobs
-    - export themes='["Material","Material-blue","Material-hope","arsnova-dot-click-contrast","blackbeauty","decent-blue","elegant","GreyBlue-Lime","spiritual-purple"]'
-    - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://staging.arsnova.click
-    - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://staging.arsnova.click
-    - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
-    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
-    - cd ../../../..
-    - npm run purify
-    - npm run compress
-  artifacts:
-    paths:
-      - dist
+    - *production-server-env
+    - *docker-push
+
+build-staging:
+  <<: *build-template
+  only:
+    - staging
+  environment:
+    name: Staging
+  variables:
+    VERSION: 2.0.0-staging
+    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-staging
+  script:
+    - *staging-server-env
+    - *docker-push
+
+build-beta:
+  <<: *build-template
+  only:
+    - beta
+  environment:
+    name: Beta
+  variables:
+    VERSION: 2.0.0-beta
+    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-beta
+  script:
+    - *staging-server-env
+    - *docker-push
+
+build-snapshot:
+  <<: *build-template
+  only:
+    - docker
+  variables:
+    VERSION: 2.0.0-beta
+    CI_COMMIT_REF_NAME: beta
+    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-beta
+  script:
+    - *staging-server-env
+    - *docker-push
 
 deploy:
   stage: deploy
   only:
     - master
+    - staging
+    - beta
+    - docker
   tags:
-    - rsync
-  dependencies:
-    - generate_assets
-  environment:
-    name: Staging
+    - ssh
   script:
-    - chmod -R a+rX,ug+w .
+    - source variables
     - eval $(ssh-agent -s)
     - mkdir ~/.ssh
-    - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
-    - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
-    #- rm dist/*.map
-    - rsync -rltgoDqv --delete -e "ssh" dist/* "$STAGING_FRONTEND_SCP_URL"
-    - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2/frontend/deploy.touch'
-
-build-beta:
-  stage: build-beta
-  only:
-    - beta
-  tags:
-    - nodejs
-    - angular
-  before_script:
-    - sed -ri "s|\"VERSION\"|\"$CI_COMMIT_SHA\"|" src/environments/environment.thm.beta.ts
-  script:
-    - npm install
-    - npm install typescript@3.5.3
-    - npm run build:BETA_THM
-  artifacts:
-    paths:
-      - dist
-
-generate_assets-beta:
-  stage: assets-beta
-  only:
-    - beta
-  tags:
-    - nodejs
-  dependencies:
-    - build-beta
-  script:
-    - apt-get -y update
-    - apt-get -y install --allow-unauthenticated gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
-    - npm i
-    - npm install -g angular-http-server
-    - cd dist
-    - angular-http-server --path browser/ --silent -p 4711 &
-    - cd browser/assets/jobs
-    - export themes='["westermann-blue","blackbeauty"]'
-    - node GenerateMetaNodes.js --command=generateLinkImages --baseUrl=https://beta.arsnova.click
-    - node GenerateMetaNodes.js --command=generateManifest --baseUrl=https://beta.arsnova.click
-    - node --experimental-modules GenerateImages.mjs --command=generateLogoImages
-    - node --experimental-modules GenerateImages.mjs --command=generateFrontendPreview --host=http://localhost:4711 --root=true
-    - cd ../../../..
-    - npm run purify
-    - npm run compress
-  artifacts:
-    paths:
-      - dist
-
-deploy-beta:
-  stage: deploy-beta
-  only:
-    - beta
-  tags:
-    - rsync
-  dependencies:
-    - generate_assets-beta
-  environment:
-    name: Beta
-  script:
-    - chmod -R a+rX,ug+w .
-    - eval $(ssh-agent -s)
-    - mkdir ~/.ssh
-    - ssh-keyscan "$STAGING_FRONTEND_URL" >> ~/.ssh/known_hosts
-    - ssh-add <(echo "$STAGING_SSH_PRIVATE_KEY")
-    #- rm dist/*.map
-    - rsync -rltgoDqv --delete -e "ssh" dist/* "$BETA_FRONTEND_SCP_URL"
-    - ssh $STAGING_SSH 'touch /home/arsnova/arsnova.click-v2-beta/frontend/deploy.touch'
+    - ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
+    - ssh-add <(cat private_key)
+    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME && docker run -d -p 8080:80 --name=$CI_CONTAINER_INSTANCE_NAME $CI_IMAGE_NAME:$VERSION && docker image prune -af"

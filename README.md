@@ -2,14 +2,22 @@
 
 ###### Global Dependencies
 
-CentOS / RHEL
-
-- `yum install google-chrome-stable gcc-c++ make clang libtiff libwmf-lite openjpeg2-devel libtool-ltdl-devel fftw3-devel djvulibre-devel OpenEXR-devel llibwebp4 libtool-ltdl-devel fftw3-devel djvulibre-devel libpng-devel`
-- Download `ImageMagick`and `ImageMagick-Libs` rpm packages from [https://www.imagemagick.org/script/download.php](https://www.imagemagick.org/script/download.php) and install them
-- Download `GraphicsMagick` from [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html) and install it (use ./configure CC=clang)
+- CentOS / RHEL
+    - `yum install google-chrome-stable gcc-c++ make clang libtiff libwmf-lite openjpeg2-devel libtool-ltdl-devel fftw3-devel djvulibre-devel OpenEXR-devel llibwebp4 libtool-ltdl-devel fftw3-devel djvulibre-devel libpng-devel`
+    - Download `ImageMagick`and `ImageMagick-Libs` rpm packages from [https://www.imagemagick.org/script/download.php](https://www.imagemagick.org/script/download.php) and install them
+    - Download `GraphicsMagick` from [http://www.graphicsmagick.org/download.html](http://www.graphicsmagick.org/download.html) and install it (use ./configure CC=clang)
+- Debian / Ubuntu
+    - `apt-get install --allow-unauthenticated gconf-service libasound2 libatk1.0-0 libatk-bridge2.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget`
+- Alpine Linux
+    - `apk add udev chromium ttf-freefont`
+- Windows
+    - Feel free to provide a guide :)
 
 ###### Environment Variables
-- `CHROME_BIN`: Points to the binary of the Google Chrome Browser
+- `themes`: List of the themes which should be built as serialized JSON Array containing string values
+- `PUPPETEER_SKIP_CHROMIUM_DOWNLOAD`: Set to prevent puppeteer from downloading a local version of chromium
+- `CHROMIUM_PATH`: Points to the binary of the Chromium Browser (required by puppeteer)
+- `CHROME_BIN`: Points to the binary of the Chromium Browser (required by karma)
 
 ###### Jobs
 Use `npm run job:images` or directly `node --experimental-modules jobs/GenerateImages.mjs` to generate the logo and preview images. Note, that the frontend must be running for the preview screenshots.
@@ -23,15 +31,7 @@ Enter `npm test` in the root directory to run the unit tests.
 It is required to define the location of a local Google Chrome installation to use the headless mode
 
 ###### Run (DEV)
-Go to the root directory and enter `npm start:DEV`.
+Go to the root directory and enter `npm run start:DEV` or use `docker-compose up -d local` to build the app for the local environment
 
 ###### Build (PROD)
-Go to the root directory and enter `npm run build:PROD`.
-To test the live build enter `npm run prod-test`. 
-This will build the regular production bundle and startup a simple http-server which will serve the files.
-
-###### Build (SSR)
-Go to the root directory and enter `npm run build:SSR`.
-This will trigger the serverside rendering build. 
-It will build the production app and a node server which will prerender the angular app before it is sent to the client.
-You can also enter `npm run prod-test:SSR` to build and startup the serverside rendering feature.
+Go to the root directory and enter `npm run build:PROD` or use a custom Dockerfile to run your environment

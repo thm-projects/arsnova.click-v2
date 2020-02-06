@@ -1,0 +1,75 @@
+version: '3.7'
+services:
+  master:
+    image: arsnova/arsnova-click-frontend:2.0.0
+    hostname: arsnova-click-frontend
+    container_name: arsnova-click-frontend-master
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        buildCmd: "PROD"
+        targetUrl: "https://arsnova.click"
+        themes: "[\"Material\",\"Material-blue\",\"Material-hope\",\"arsnova-dot-click-contrast\",\"blackbeauty\",\"decent-blue\",\"elegant\",\"GreyBlue-Lime\",\"spiritual-purple\"]"
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        CHROMIUM_PATH: "/usr/bin/chromium-browser"
+        CHROME_BIN: "/usr/bin/chromium-browser"
+    ports:
+      - 80:80
+  staging:
+    image: arsnova/arsnova-click-frontend:2.0.0-staging
+    hostname: arsnova-click-frontend
+    container_name: arsnova-click-frontend-staging
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        buildCmd: "STAGING_THM"
+        targetUrl: "https://staging.arsnova.click"
+        themes: "[\"Material\",\"Material-blue\",\"Material-hope\",\"arsnova-dot-click-contrast\",\"blackbeauty\",\"decent-blue\",\"elegant\",\"GreyBlue-Lime\",\"spiritual-purple\"]"
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        CHROMIUM_PATH: "/usr/bin/chromium-browser"
+        CHROME_BIN: "/usr/bin/chromium-browser"
+    ports:
+      - 80:80
+  beta:
+    image: arsnova/arsnova-click-frontend:2.0.0-beta
+    hostname: arsnova-click-frontend
+    container_name: arsnova-click-frontend-beta
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        buildCmd: "BETA_THM"
+        targetUrl: "https://beta.arsnova.click"
+        themes: "[\"westermann-blue\",\"blackbeauty\"]"
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        CHROMIUM_PATH: "/usr/bin/chromium-browser"
+        CHROME_BIN: "/usr/bin/chromium-browser"
+    ports:
+      - 80:80
+  local:
+    image: arsnova/arsnova-click-frontend:2.0.0-local
+    hostname: arsnova-click-frontend
+    container_name: arsnova-click-frontend-local
+    build:
+      context: .
+      dockerfile: Dockerfile-local
+    ports:
+      - 4210:4210
+  westermann:
+    image: arsnova/arsnova-click-frontend:2.0.0-westermann
+    hostname: arsnova-click-frontend
+    container_name: arsnova-click-frontend-westermann
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        buildCmd: "WESTERMANN"
+        targetUrl: "https://test01.ars.sbzo.de"
+        themes: "[\"westermann-blue\",\"blackbeauty\"]"
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        CHROMIUM_PATH: "/usr/bin/chromium-browser"
+        CHROME_BIN: "/usr/bin/chromium-browser"
+    ports:
+      - 80:80
