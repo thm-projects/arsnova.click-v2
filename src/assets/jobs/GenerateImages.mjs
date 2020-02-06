@@ -54,10 +54,10 @@ class GenerateImages {
     console.log('----------------------');
   }
 
-  all(host) {
+  all(host, isRoot) {
     console.log('----------------------');
     console.log(`generateLogoImages: Started with host: ${host}`);
-    this.generateFrontendPreview(host);
+    this.generateFrontendPreview(host, isRoot);
     console.log('----------------------');
     console.log(`generateLogoImages: Started`);
     this.generateLogoImages();
@@ -188,7 +188,7 @@ const init = () => {
           generateImages.help();
           break;
         }
-        generateImages.all(argv.host);
+        generateImages.all(argv.host, argv.root);
         break;
       case 'generateFrontendPreview':
         if (!argv.host) {
