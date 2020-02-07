@@ -95,4 +95,4 @@ deploy:
     - mkdir ~/.ssh
     - ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
     - ssh-add <(cat private_key)
-    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose up -d -f /home/arsnova/arsnova-click-docker/docker-compose-frontend.yml $SERVICE_NAME && docker image prune -af"
+    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /home/arsnova/arsnova-click-docker/docker-compose-frontend.yml up -d $SERVICE_NAME && docker image prune -af"
