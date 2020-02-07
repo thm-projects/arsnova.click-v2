@@ -2,10 +2,12 @@ import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { StorageKey } from '../../lib/enums/enums';
+import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { NoDataErrorComponent } from '../../shared/no-data-error/no-data-error.component';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { SettingsService } from '../settings/settings.service';
@@ -92,11 +94,15 @@ export class QuizService {
       return;
     }
 
-    this.storageService.db.Quiz.put(quiz);
-
     if (this._isInEditMode) {
-      this.quizApiService.putSavedQuiz(quiz).subscribe();
+      this.saveParsedQuiz(quiz);
     }
+  }
+
+  public saveParsedQuiz(quiz: QuizEntity): Observable<IMessage> {
+    return this.quizApiService.putSavedQuiz(quiz).pipe(tap(result => {
+      this.storageService.db.Quiz.put(result.payload);
+    }));
   }
 
   public currentQuestion(): AbstractQuestionEntity {

@@ -86,8 +86,14 @@ export enum TrackingCategoryType {
 }
 
 export enum DeprecatedKeys {
-  privateKey = 'privateKey', //
-  token      = 'token', //
+  privateKey                     = 'privateKey', //
+  token                          = 'token', //
+  language                       = 'language', //
+  showProductTour                = 'showProductTour', //
+  localStorageAvailable          = 'localStorageAvailable', //
+  intro_state                    = 'intro_state', //
+  lastPage                       = 'lastPage', //
+  '__amplify__tap-i18n-language' = '__amplify__tap-i18n-language', //
 }
 
 export enum DeprecatedDb {

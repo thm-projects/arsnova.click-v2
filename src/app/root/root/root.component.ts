@@ -6,7 +6,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
@@ -52,7 +52,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     private storageService: StorageService,
     private quizService: QuizService,
     private connectionService: ConnectionService,
-    private messageQueue: SimpleMQ, private trackingService: TrackingService,
+    private messageQueue: SimpleMQ,
+    private trackingService: TrackingService,
   ) {
     this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe(themeName => {
       if (String(themeName) === 'default') {
@@ -72,6 +73,22 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   public ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      if (localStorage.getItem('hashtags')) {
+        // Migrate arsnova.click v1 quizzes
+        try {
+          console.log('found old hashtags');
+          this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(1), takeUntil(this._destroy)).subscribe(() => {
+            console.log('db state notifier triggered');
+            const quizNames: Array<string> = JSON.parse(localStorage.getItem('hashtags'));
+            quizNames.forEach(quizName => {
+              const quiz = JSON.parse(localStorage.getItem(quizName));
+              console.log('persisting old quiz', quiz);
+              this.quizService.saveParsedQuiz(quiz).subscribe(() => localStorage.removeItem(quizName));
+            });
+          });
+        } catch {
+        }
+      }
       Object.values(DeprecatedKeys).forEach(deprecatedKey => {
         localStorage.removeItem(deprecatedKey);
         sessionStorage.removeItem(deprecatedKey);
