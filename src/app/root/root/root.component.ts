@@ -5,8 +5,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, take, takeUntil } from 'rxjs/operators';
+import { forkJoin, Subject, Subscription } from 'rxjs';
+import { distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
@@ -76,15 +76,12 @@ export class RootComponent implements OnInit, AfterViewInit {
       if (localStorage.getItem('hashtags')) {
         // Migrate arsnova.click v1 quizzes
         try {
-          console.log('found old hashtags');
           this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(1), takeUntil(this._destroy)).subscribe(() => {
-            console.log('db state notifier triggered');
             const quizNames: Array<string> = JSON.parse(localStorage.getItem('hashtags'));
-            quizNames.forEach(quizName => {
+            forkJoin(quizNames.map(quizName => {
               const quiz = JSON.parse(localStorage.getItem(quizName));
-              console.log('persisting old quiz', quiz);
-              this.quizService.saveParsedQuiz(quiz).subscribe(() => localStorage.removeItem(quizName));
-            });
+              return this.quizService.saveParsedQuiz(quiz).pipe(tap(() => localStorage.removeItem(quizName)));
+            })).subscribe(() => localStorage.removeItem('hashtags'));
           });
         } catch {
         }
