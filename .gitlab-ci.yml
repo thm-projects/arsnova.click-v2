@@ -28,6 +28,7 @@ stages:
   echo "export SSH_URL=$STAGING_FRONTEND_URL" >> variables
   echo "export SSH_CMD=$STAGING_SSH" >> variables
   echo "export VERSION=$VERSION" >> variables
+  echo "export SERVICE_NAME=$SERVICE_NAME" >> variables
   echo "$STAGING_SSH_PRIVATE_KEY" >> private_key
 
 .production-server-env-template: &production-server-env |
@@ -35,6 +36,7 @@ stages:
   echo "export SSH_URL=$PRODUCTION_FRONTEND_URL" >> variables
   echo "export SSH_CMD=$PRODUCTION_SSH" >> variables
   echo "export VERSION=$VERSION" >> variables
+  echo "export SERVICE_NAME=$SERVICE_NAME" >> variables
   echo "$PRODUCTION_SSH_PRIVATE_KEY" >> private_key
 
 build-master:
@@ -45,6 +47,7 @@ build-master:
     name: Master
   variables:
     VERSION: 2.0.0
+    SERVICE_NAME: master
     CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend
   script:
     - *production-server-env
@@ -58,6 +61,7 @@ build-staging:
     name: Staging
   variables:
     VERSION: 2.0.0-staging
+    SERVICE_NAME: staging
     CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-staging
   script:
     - *staging-server-env
@@ -71,6 +75,7 @@ build-beta:
     name: Beta
   variables:
     VERSION: 2.0.0-beta
+    SERVICE_NAME: beta
     CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-beta
   script:
     - *staging-server-env
@@ -90,4 +95,4 @@ deploy:
     - mkdir ~/.ssh
     - ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
     - ssh-add <(cat private_key)
-    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME && docker run -d -p 8080:80 --name=$CI_CONTAINER_INSTANCE_NAME $CI_IMAGE_NAME:$VERSION && docker image prune -af"
+    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME && docker-compose up -d -f /home/arsnova/arsnova-click-docker/docker-compose-frontend.yml $SERVICE_NAME && docker image prune -af"
