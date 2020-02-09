@@ -5,10 +5,8 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { DefaultSettings } from '../../lib/default.settings';
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
 import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
@@ -28,6 +26,7 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { QuizOverviewComponent } from './quiz-overview.component';
 
@@ -77,7 +76,7 @@ describe('QuizOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        JwtModule.forRoot({
+        I18nTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -103,10 +102,7 @@ describe('QuizOverviewComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, RxStompService,
+        }, SharedService, RxStompService,
       ],
       declarations: [QuizOverviewComponent, TranslatePipeMock],
     }).compileComponents();

@@ -12,7 +12,7 @@ describe('NickApiService', () => {
       providers: [NickApiService],
     });
 
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   it('should be created', inject([NickApiService], (service: NickApiService) => {

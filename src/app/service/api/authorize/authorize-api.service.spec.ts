@@ -11,7 +11,7 @@ describe('AuthorizeApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [AuthorizeApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

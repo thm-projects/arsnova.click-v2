@@ -29,7 +29,7 @@ describe('ProgressBarSingleChoiceComponent', () => {
   }));
 
   beforeEach(async(() => {
-    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faSpinner);
     fixture = TestBed.createComponent(ProgressBarSingleChoiceComponent);
     component = fixture.componentInstance;

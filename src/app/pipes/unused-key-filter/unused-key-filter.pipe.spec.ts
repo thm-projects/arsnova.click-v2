@@ -17,12 +17,10 @@ describe('UnusedKeyFilterPipe', () => {
     {
       key: 'test1key',
       value: 'test1value',
-    },
-    {
+    }, {
       key: 'test2key',
       value: 'test2value',
-    },
-    {
+    }, {
       key: 'unused-key',
       value: 'unused-value',
     },
@@ -60,7 +58,7 @@ describe('UnusedKeyFilterPipe', () => {
   }));
 
   beforeEach(async(() => {
-    pipe = new UnusedKeyFilterPipe(TestBed.get(LanguageLoaderService));
+    pipe = new UnusedKeyFilterPipe(TestBed.inject(LanguageLoaderService));
   }));
 
   it('create an instance', () => {

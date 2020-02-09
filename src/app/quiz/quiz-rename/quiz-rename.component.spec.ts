@@ -4,10 +4,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -20,6 +18,7 @@ import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { QuizRenameComponent } from './quiz-rename.component';
 
@@ -27,52 +26,56 @@ describe('QuizRenameComponent', () => {
   let component: QuizRenameComponent;
   let fixture: ComponentFixture<QuizRenameComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule, HttpClientTestingModule, FormsModule, JwtModule.forRoot({
-          jwtOptionsProvider: {
-            provide: JWT_OPTIONS,
-            useFactory: jwtOptionsFactory,
-            deps: [PLATFORM_ID],
-          },
-        }),
-      ],
-      providers: [
-        RxStompService,
-        {
-          provide: StorageService,
-          useClass: StorageServiceMock,
-        }, {
-          provide: FileUploadService,
-          useClass: FileUploadMockService,
-        }, {
-          provide: QuizService,
-          useClass: QuizMockService,
-        }, FooterBarService, SettingsService, {
-          provide: ConnectionService,
-          useClass: ConnectionMockService,
-        }, SharedService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
-      ],
-      declarations: [QuizRenameComponent, TranslatePipeMock],
-    }).compileComponents();
-  }));
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          I18nTestingModule, RouterTestingModule, HttpClientTestingModule, FormsModule, JwtModule.forRoot({
+            jwtOptionsProvider: {
+              provide: JWT_OPTIONS,
+              useFactory: jwtOptionsFactory,
+              deps: [PLATFORM_ID],
+            },
+          }),
+        ],
+        providers: [
+          RxStompService, {
+            provide: StorageService,
+            useClass: StorageServiceMock,
+          }, {
+            provide: FileUploadService,
+            useClass: FileUploadMockService,
+          }, {
+            provide: QuizService,
+            useClass: QuizMockService,
+          }, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, SharedService,
+        ],
+        declarations: [QuizRenameComponent, TranslatePipeMock],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(QuizRenameComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(QuizRenameComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
-  it('should contain a TYPE reference', (() => {
-    expect(QuizRenameComponent.TYPE).toEqual('QuizRenameComponent');
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(QuizRenameComponent.TYPE).toEqual('QuizRenameComponent');
+    }
+  ));
 
   describe('#sendRecommendation', () => {
     it('should parse and send the recommendation for a duplicate quiz', () => {

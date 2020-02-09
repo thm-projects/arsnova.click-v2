@@ -10,7 +10,7 @@ describe('StatisticsApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [StatisticsApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

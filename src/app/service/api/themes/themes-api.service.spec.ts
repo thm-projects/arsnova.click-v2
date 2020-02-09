@@ -10,7 +10,7 @@ describe('ThemesApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [ThemesApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

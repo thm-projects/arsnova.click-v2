@@ -7,11 +7,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHourglass } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
@@ -23,6 +21,7 @@ import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { CountdownComponent } from './countdown.component';
 
 describe('CountdownComponent', () => {
@@ -32,7 +31,7 @@ describe('CountdownComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
+        I18nTestingModule, HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -51,9 +50,6 @@ describe('CountdownComponent', () => {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
           provide: ActivatedRoute,
           useValue: {
             paramMap: of({
@@ -67,7 +63,7 @@ describe('CountdownComponent', () => {
   }));
 
   beforeEach(async(() => {
-    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faHourglass);
     fixture = TestBed.createComponent(CountdownComponent);
     component = fixture.componentInstance;
@@ -75,13 +71,17 @@ describe('CountdownComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
 
-  it('should contain a TYPE reference', (() => {
-    expect(CountdownComponent.TYPE).toEqual('CountdownComponent');
-  }));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(CountdownComponent.TYPE).toEqual('CountdownComponent');
+    }
+  ));
 
   it('should update the countdown', inject([QuizService], (quizService: QuizService) => {
     const initValue = quizService.quiz.questionList[0].timer;

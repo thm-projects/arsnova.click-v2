@@ -14,7 +14,7 @@ describe('MemberApiService', () => {
       ],
       providers: [MemberApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

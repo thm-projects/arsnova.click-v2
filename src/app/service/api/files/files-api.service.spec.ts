@@ -11,7 +11,7 @@ describe('FilesApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [FilesApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

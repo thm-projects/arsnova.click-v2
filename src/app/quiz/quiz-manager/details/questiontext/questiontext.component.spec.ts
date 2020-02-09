@@ -7,7 +7,6 @@ import { SwUpdate } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
@@ -15,7 +14,6 @@ import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../../../_mocks/_services/SwUpdateMock';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { HeaderComponent } from '../../../../header/header/header.component';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { LivePreviewComponent } from '../../../../live-preview/live-preview/live-preview.component';
@@ -34,81 +32,92 @@ import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuestiontextComponent } from './questiontext.component';
 
 describe('QuestiontextComponent', () => {
   let component: QuestiontextComponent;
   let fixture: ComponentFixture<QuestiontextComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule, RouterTestingModule, NgbModalModule, AngularSvgIconModule, NgbPopoverModule, FontAwesomeModule, JwtModule.forRoot({
-          jwtOptionsProvider: {
-            provide: JWT_OPTIONS,
-            useFactory: jwtOptionsFactory,
-            deps: [PLATFORM_ID],
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          I18nTestingModule,
+          HttpClientTestingModule,
+          RouterTestingModule,
+          NgbModalModule,
+          AngularSvgIconModule,
+          NgbPopoverModule,
+          FontAwesomeModule,
+          JwtModule.forRoot({
+            jwtOptionsProvider: {
+              provide: JWT_OPTIONS,
+              useFactory: jwtOptionsFactory,
+              deps: [PLATFORM_ID],
+            },
+          }),
+        ],
+        providers: [
+          MarkdownService, {
+            provide: MarkedOptions,
+            useValue: {},
+          }, RxStompService, {
+            provide: StorageService,
+            useClass: StorageServiceMock,
+          }, {
+            provide: QuizService,
+            useClass: QuizMockService,
+          }, HeaderLabelService, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, {
+            provide: ActivatedRoute,
+            useValue: {
+              paramMap: of({
+                get: () => 0,
+              }),
+            },
+          }, SharedService, QuestionTextService, {
+            provide: TrackingService,
+            useClass: TrackingMockService,
+          }, I18nService, {
+            provide: SwUpdate,
+            useClass: SwUpdateMock,
+          }, {
+            provide: TOAST_CONFIG,
+            useValue: {
+              default: {},
+              config: {},
+            },
           },
-        }),
-      ],
-      providers: [
-        MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
-        },
-        RxStompService,
-        {
-          provide: StorageService,
-          useClass: StorageServiceMock,
-        }, {
-          provide: QuizService,
-          useClass: QuizMockService,
-        }, HeaderLabelService, FooterBarService, SettingsService, {
-          provide: ConnectionService,
-          useClass: ConnectionMockService,
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
-          provide: ActivatedRoute,
-          useValue: {
-            paramMap: of({
-              get: () => 0,
-            }),
-          },
-        }, SharedService, QuestionTextService, {
-          provide: TrackingService,
-          useClass: TrackingMockService,
-        }, I18nService, {
-          provide: SwUpdate,
-          useClass: SwUpdateMock,
-        }, {
-          provide: TOAST_CONFIG,
-          useValue: {
-            default: {},
-            config: {},
-          },
-        },
-      ],
-      declarations: [
-        HeaderComponent, LivePreviewComponent, MarkdownBarComponent, QuestiontextComponent, TranslatePipeMock,
-      ],
-    }).compileComponents();
-  }));
+        ],
+        declarations: [
+          HeaderComponent, LivePreviewComponent, MarkdownBarComponent, QuestiontextComponent, TranslatePipeMock,
+        ],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(QuestiontextComponent);
-    component = fixture.componentInstance;
-    component['_questionIndex'] = 0;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(QuestiontextComponent);
+      component = fixture.componentInstance;
+      component['_questionIndex'] = 0;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
-  it('should contain a TYPE reference', (() => {
-    expect(QuestiontextComponent.TYPE).toEqual('QuestiontextComponent');
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(QuestiontextComponent.TYPE).toEqual('QuestiontextComponent');
+    }
+  ));
 
   describe('#connector', () => {
     it('should call the markdown interpreter if a markdown button is pressed', () => {

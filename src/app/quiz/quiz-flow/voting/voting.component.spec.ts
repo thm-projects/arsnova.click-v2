@@ -7,12 +7,10 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHourglass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -28,6 +26,7 @@ import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { VotingQuestionComponent } from './voting-question/voting-question.component';
 
 import { VotingComponent } from './voting.component';
@@ -39,7 +38,7 @@ describe('VotingComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, FontAwesomeModule, HttpClientTestingModule, NgbModalModule, JwtModule.forRoot({
+        I18nTestingModule, RouterTestingModule, FontAwesomeModule, HttpClientTestingModule, NgbModalModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -51,9 +50,7 @@ describe('VotingComponent', () => {
         MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
-        },
-        RxStompService,
-        {
+        }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -65,17 +62,14 @@ describe('VotingComponent', () => {
         }, FooterBarService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, MemberApiService, QuizApiService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, SimpleMQ, QuestionTextService, HeaderLabelService,
+        }, MemberApiService, QuizApiService, SimpleMQ, QuestionTextService, HeaderLabelService,
       ],
       declarations: [VotingComponent, VotingQuestionComponent, ServerUnavailableModalComponent, TranslatePipeMock],
     }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ServerUnavailableModalComponent] } }).compileComponents();
   }));
 
   beforeEach(async(() => {
-    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faHourglass);
     library.addIcons(faSpinner);
     fixture = TestBed.createComponent(VotingComponent);

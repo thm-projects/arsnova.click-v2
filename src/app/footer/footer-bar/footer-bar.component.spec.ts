@@ -40,8 +40,7 @@ describe('FooterBarComponent', () => {
         }),
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, FooterBarService, SharedService, {
@@ -78,20 +77,26 @@ describe('FooterBarComponent', () => {
     expect(FooterBarComponent.TYPE).toEqual('FooterBarComponent');
   }));
 
-  it('#getLinkTarget', (inject([FooterBarService], (footerBarService: FooterBarService) => {
-    expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'tos']));
-  })));
+  it('#getLinkTarget', (
+    inject([FooterBarService], (footerBarService: FooterBarService) => {
+      expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'tos']));
+    })
+  ));
 
-  it('#toggleSetting', (inject([FooterBarService, TrackingService], (footerBarService: FooterBarService, trackingService: TrackingService) => {
-    const elem = footerBarService.footerElemAbout;
-    spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
-    component.toggleSetting(elem);
-    expect(trackingService.trackClickEvent).toHaveBeenCalled();
-  })));
+  it('#toggleSetting', (
+    inject([FooterBarService, TrackingService], (footerBarService: FooterBarService, trackingService: TrackingService) => {
+      const elem = footerBarService.footerElemAbout;
+      spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
+      component.toggleSetting(elem);
+      expect(trackingService.trackClickEvent).toHaveBeenCalled();
+    })
+  ));
 
-  it('#fileChange', (inject([FileUploadService], (fileUploadService: FileUploadService) => {
-    spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
-    component.fileChange({ target: { files: [new File([], 'testFile')] } });
-    expect(fileUploadService.uploadFile).toHaveBeenCalled();
-  })));
+  it('#fileChange', (
+    inject([FileUploadService], (fileUploadService: FileUploadService) => {
+      spyOn(fileUploadService, 'uploadFile').and.callFake(() => {});
+      component.fileChange({ target: { files: [new File([], 'testFile')] } });
+      expect(fileUploadService.uploadFile).toHaveBeenCalled();
+    })
+  ));
 });

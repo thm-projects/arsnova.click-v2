@@ -49,13 +49,13 @@ describe('UserService', () => {
   });
 
   it('should be created', () => {
-    const service = TestBed.get(UserService);
+    const service = TestBed.inject(UserService);
     expect(service).toBeTruthy();
   });
 
   it('should set the username if a login token is provided', () => {
-    const service: UserService = TestBed.get(UserService);
-    const jwtHelper: JwtHelperService = TestBed.get(JwtHelperService);
+    const service: UserService = TestBed.inject(UserService);
+    const jwtHelper: JwtHelperService = TestBed.inject(JwtHelperService);
     spyOn(jwtHelper, 'decodeToken').and.callFake(() => (
       { name: 'test-name' }
     ));
@@ -67,8 +67,8 @@ describe('UserService', () => {
   });
 
   it('should logout a user', () => {
-    const service: UserService = TestBed.get(UserService);
-    const jwtHelper: JwtHelperService = TestBed.get(JwtHelperService);
+    const service: UserService = TestBed.inject(UserService);
+    const jwtHelper: JwtHelperService = TestBed.inject(JwtHelperService);
     spyOn(jwtHelper, 'decodeToken').and.callFake(() => (
       { name: 'test-name' }
     ));
@@ -80,8 +80,8 @@ describe('UserService', () => {
   });
 
   it('should succeed if a casTicket is provided', done => {
-    const service: UserService = TestBed.get(UserService);
-    const jwtHelper: JwtHelperService = TestBed.get(JwtHelperService);
+    const service: UserService = TestBed.inject(UserService);
+    const jwtHelper: JwtHelperService = TestBed.inject(JwtHelperService);
     spyOn(jwtHelper, 'decodeToken').and.callFake(() => (
       { name: 'test-name' }
     ));
@@ -96,7 +96,7 @@ describe('UserService', () => {
   });
 
   it('should not succeed if no casTicket is provided', done => {
-    const service: UserService = TestBed.get(UserService);
+    const service: UserService = TestBed.inject(UserService);
 
     service.authenticateThroughCas('no-token').then(succeeded => {
       expect(succeeded).toBe(false);
@@ -107,8 +107,8 @@ describe('UserService', () => {
   });
 
   it('should authenticate through the username:password login', done => {
-    const service: UserService = TestBed.get(UserService);
-    const jwtHelper: JwtHelperService = TestBed.get(JwtHelperService);
+    const service: UserService = TestBed.inject(UserService);
+    const jwtHelper: JwtHelperService = TestBed.inject(JwtHelperService);
     spyOn(jwtHelper, 'decodeToken').and.callFake(() => (
       { name: 'test-name' }
     ));
@@ -122,8 +122,8 @@ describe('UserService', () => {
   });
 
   it('should authenticate with a login token', done => {
-    const service: UserService = TestBed.get(UserService);
-    const jwtHelper: JwtHelperService = TestBed.get(JwtHelperService);
+    const service: UserService = TestBed.inject(UserService);
+    const jwtHelper: JwtHelperService = TestBed.inject(JwtHelperService);
     spyOn(jwtHelper, 'decodeToken').and.callFake(() => (
       { name: service.username }
     ));
@@ -138,17 +138,17 @@ describe('UserService', () => {
   });
 
   it('should hash a password', () => {
-    const service: UserService = TestBed.get(UserService);
+    const service: UserService = TestBed.inject(UserService);
     expect(service.hashPassword('my-user', 'my-password')).toEqual('25f4044f7c85492260cbae4b7d66c1c9a2e50bce');
   });
 
   it('should hash a token', () => {
-    const service: UserService = TestBed.get(UserService);
+    const service: UserService = TestBed.inject(UserService);
     expect(service.hashToken('my-token')).toEqual('6578fca8b62f49457e4cd7e66554a310a1a64be8');
   });
 
   it('should return true if a user is authorized for a role', () => {
-    const service: UserService = TestBed.get(UserService);
+    const service: UserService = TestBed.inject(UserService);
     service['_staticLoginTokenContent'] = {
       name: null,
       passwordHash: null,
@@ -160,7 +160,7 @@ describe('UserService', () => {
   });
 
   it('should return false if a user is not authorized for a role', () => {
-    const service: UserService = TestBed.get(UserService);
+    const service: UserService = TestBed.inject(UserService);
     service['_staticLoginTokenContent'] = {
       name: null,
       passwordHash: null,

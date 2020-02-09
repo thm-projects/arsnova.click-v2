@@ -28,7 +28,7 @@ describe('AudioPlayerComponent', () => {
   }));
 
   beforeEach(async(() => {
-    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faStop);
     library.addIcons(faPlay);
     fixture = TestBed.createComponent(AudioPlayerComponent);

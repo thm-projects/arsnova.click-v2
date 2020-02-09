@@ -1,24 +1,20 @@
 import { async, TestBed } from '@angular/core/testing';
 import { SwUpdate } from '@angular/service-worker';
-import { TranslateService } from '@ngx-translate/core';
 import { TOAST_CONFIG, ToastrService } from 'ngx-toastr';
 import { of, Subject } from 'rxjs';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { UpdateCheckService } from './update-check.service';
 
 describe('UpdateCheckService', () => {
   let service: UpdateCheckService;
 
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [],
+    imports: [I18nTestingModule],
     providers: [
       {
         provide: SwUpdate,
         useClass: SwUpdateMock,
-      }, {
-        provide: TranslateService,
-        useClass: TranslateServiceMock,
       }, {
         provide: TOAST_CONFIG,
         useValue: {
@@ -40,7 +36,7 @@ describe('UpdateCheckService', () => {
   }));
 
   beforeEach(() => {
-    service = TestBed.get(UpdateCheckService);
+    service = TestBed.inject(UpdateCheckService);
     spyOn(service, 'reloadPage').and.callFake(() => {});
     spyOn(service, 'clearCache').and.callFake(() => new Promise(resolve => resolve()));
   });
@@ -54,7 +50,7 @@ describe('UpdateCheckService', () => {
   });
 
   it('should prompt a user when a new version is available', async(() => {
-    const toastService: ToastrService = TestBed.get(ToastrService);
+    const toastService: ToastrService = TestBed.inject(ToastrService);
     spyOn(toastService, 'remove').and.callFake(() => service['swUpdateToast'] = null);
     spyOn(toastService, 'info').and.callFake(() => (
       { onTap: of({}) } as any
@@ -85,7 +81,7 @@ describe('UpdateCheckService', () => {
   });
 
   it('should query for new updates', done => {
-    const swUpdate: SwUpdate = TestBed.get(SwUpdate);
+    const swUpdate: SwUpdate = TestBed.inject(SwUpdate);
     spyOn(swUpdate, 'checkForUpdate').and.callThrough();
     service.doCheck().then(() => {
       expect(swUpdate.checkForUpdate).toHaveBeenCalled();

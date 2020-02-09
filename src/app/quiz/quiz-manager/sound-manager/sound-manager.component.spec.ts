@@ -5,10 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -20,57 +18,62 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { SoundManagerComponent } from './sound-manager.component';
 
 describe('SoundManagerComponent', () => {
   let component: SoundManagerComponent;
   let fixture: ComponentFixture<SoundManagerComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule, HttpClientTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
-          jwtOptionsProvider: {
-            provide: JWT_OPTIONS,
-            useFactory: jwtOptionsFactory,
-            deps: [PLATFORM_ID],
-          },
-        }),
-      ],
-      providers: [
-        RxStompService,
-        {
-          provide: StorageService,
-          useClass: StorageServiceMock,
-        }, {
-          provide: QuizService,
-          useClass: QuizMockService,
-        }, FooterBarService, SettingsService, {
-          provide: ConnectionService,
-          useClass: ConnectionMockService,
-        }, SharedService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
-      ],
-      declarations: [
-        SoundManagerComponent, TranslatePipeMock, AudioPlayerComponent,
-      ],
-    }).compileComponents();
-  }));
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          I18nTestingModule, RouterTestingModule, HttpClientTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
+            jwtOptionsProvider: {
+              provide: JWT_OPTIONS,
+              useFactory: jwtOptionsFactory,
+              deps: [PLATFORM_ID],
+            },
+          }),
+        ],
+        providers: [
+          RxStompService, {
+            provide: StorageService,
+            useClass: StorageServiceMock,
+          }, {
+            provide: QuizService,
+            useClass: QuizMockService,
+          }, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, SharedService,
+        ],
+        declarations: [
+          SoundManagerComponent, TranslatePipeMock, AudioPlayerComponent,
+        ],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(SoundManagerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(SoundManagerComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
-  it('should contain a TYPE reference', (() => {
-    expect(SoundManagerComponent.TYPE).toEqual('SoundManagerComponent');
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(SoundManagerComponent.TYPE).toEqual('SoundManagerComponent');
+    }
+  ));
 
   describe('#selectSound', () => {
     it('should select a given sound title', inject([QuizService], (quizService: QuizService) => {

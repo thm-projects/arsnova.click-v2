@@ -16,7 +16,7 @@ export abstract class AbstractQuestionEntity {
   protected constructor(data) {
     this.questionText = data.questionText ? data.questionText : this.questionText;
     this.timer = typeof data.timer === 'number' ? data.timer : this.timer;
-    this.displayAnswerText = typeof data.displayAnswerText !== 'undefined' ? data.displayAnswerText : this.displayAnswerText;
+    this.displayAnswerText = data.displayAnswerText ?? this.displayAnswerText;
 
     if (data.answerOptionList) {
       if (data.TYPE === QuestionType.FreeTextQuestion) {

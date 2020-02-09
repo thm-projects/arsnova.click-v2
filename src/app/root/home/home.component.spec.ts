@@ -9,10 +9,8 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
@@ -36,6 +34,7 @@ import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { HomeComponent } from './home.component';
 
 @Pipe({
@@ -47,7 +46,9 @@ class SearchFilterPipeMock implements PipeTransform {
   }
 }
 
-(window as any).Modernizr = {};
+(
+  window as any
+).Modernizr = {};
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -62,11 +63,10 @@ describe('HomeComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), RouterTestingModule, HttpClientTestingModule, NgbModule, FontAwesomeModule, FormsModule,
+        }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, NgbModule, FontAwesomeModule, FormsModule,
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, FooterBarService, {
@@ -90,30 +90,31 @@ describe('HomeComponent', () => {
         }, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         },
       ],
       declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock],
     }).compileComponents();
   });
 
-  beforeEach((() => {
-    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
-    library.addIcons(faThumbsUp);
-    fixture = TestBed.createComponent(HomeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
+      library.addIcons(faThumbsUp);
+      fixture = TestBed.createComponent(HomeComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
   it('should be created', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain a TYPE reference', (() => {
-    expect(HomeComponent.TYPE).toEqual('HomeComponent');
-  }));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(HomeComponent.TYPE).toEqual('HomeComponent');
+    }
+  ));
 
   it('should render \'arsnova.click\' in the main view', () => {
     const compiled = fixture.debugElement.nativeElement;

@@ -74,7 +74,8 @@ describe('ProgressBarComponent', () => {
         ProgressBarSurveyComponent,
         ProgressBarRangedComponent,
         ProgressBarFreetextComponent,
-        ProgressBarComponent, ProgressBarAnonymousComponent,
+        ProgressBarComponent,
+        ProgressBarAnonymousComponent,
       ],
     }).compileComponents();
   }));
@@ -98,9 +99,9 @@ describe('ProgressBarComponent', () => {
   ));
 
   it('#attendeeDataForAnswer', async(() => {
-    const quizService: QuizService = TestBed.get(QuizService);
-    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
-    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+    const quizService: QuizService = TestBed.inject(QuizService);
+    const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
 
     component.questionIndex = 0;
     component.hideProgressbarCssStyle = false;
@@ -126,9 +127,9 @@ describe('ProgressBarComponent', () => {
   }));
 
   it('#attendeeDataForAnswer anonymous', async(() => {
-    const quizService: QuizService = TestBed.get(QuizService);
-    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
-    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+    const quizService: QuizService = TestBed.inject(QuizService);
+    const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
 
     component.questionIndex = 0;
     const question = <SingleChoiceQuestionEntity>quizService.quiz.questionList[component.questionIndex];
@@ -153,9 +154,9 @@ describe('ProgressBarComponent', () => {
   }));
 
   it('#attendeeDataForAnswer - RangedQuestion', async(() => {
-    const quizService: QuizService = TestBed.get(QuizService);
-    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
-    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+    const quizService: QuizService = TestBed.inject(QuizService);
+    const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
 
     component.questionIndex = 2;
     component.hideProgressbarCssStyle = false;
@@ -181,9 +182,9 @@ describe('ProgressBarComponent', () => {
   }));
 
   it('#attendeeDataForAnswer - RangedQuestion anonymous', async(() => {
-    const quizService: QuizService = TestBed.get(QuizService);
-    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
-    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+    const quizService: QuizService = TestBed.inject(QuizService);
+    const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
 
     component.questionIndex = 2;
     const question = <RangedQuestionEntity>quizService.quiz.questionList[component.questionIndex];
@@ -208,9 +209,9 @@ describe('ProgressBarComponent', () => {
   }));
 
   it('#attendeeDataForAnswer - FreeTextQuestion', async(() => {
-    const quizService: QuizService = TestBed.get(QuizService);
-    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
-    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+    const quizService: QuizService = TestBed.inject(QuizService);
+    const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
 
     component.questionIndex = 1;
     component.hideProgressbarCssStyle = false;
@@ -236,9 +237,9 @@ describe('ProgressBarComponent', () => {
   }));
 
   it('#attendeeDataForAnswer - FreeTextQuestion anonymous', async(() => {
-    const quizService: QuizService = TestBed.get(QuizService);
-    const attendeeService: AttendeeService = TestBed.get(AttendeeService);
-    const questionTextService: QuestionTextService = TestBed.get(QuestionTextService);
+    const quizService: QuizService = TestBed.inject(QuizService);
+    const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
+    const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
 
     component.questionIndex = 1;
     const question = <FreeTextQuestionEntity>quizService.quiz.questionList[component.questionIndex];

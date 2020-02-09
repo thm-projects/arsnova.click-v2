@@ -13,7 +13,7 @@ describe('QuizApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [QuizApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

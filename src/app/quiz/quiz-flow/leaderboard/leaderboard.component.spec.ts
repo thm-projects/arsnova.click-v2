@@ -80,7 +80,7 @@ describe('LeaderboardComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(LeaderboardComponent);
     component = fixture.componentInstance;
-    i18nService = TestBed.get(I18nService);
+    i18nService = TestBed.inject(I18nService);
     i18nService.currentLanguage = Language.DE;
     fixture.detectChanges();
   }));

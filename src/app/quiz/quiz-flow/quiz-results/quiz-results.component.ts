@@ -150,7 +150,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     const matches = this.attendeeService.attendees.filter(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].confidence > -1 : false;
     });
-    const hasConfidenceSet = typeof this.quizService.quiz.sessionConfig.confidenceSliderEnabled !== 'undefined';
+    const hasConfidenceSet = this.quizService.quiz.sessionConfig.confidenceSliderEnabled ?? false;
     const isConfidenceEnabled = typeof hasConfidenceSet ? this.quizService.quiz.sessionConfig.confidenceSliderEnabled : false;
     return hasConfidenceSet ? matches.length > 0 || isConfidenceEnabled : matches.length > 0;
   }
@@ -199,7 +199,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
     }).length;
     const readingConfirmationStatus = this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
-    const isReadingConfirmationEnabled = typeof readingConfirmationStatus === 'undefined' ? false : readingConfirmationStatus;
+    const isReadingConfirmationEnabled = readingConfirmationStatus ?? false;
     this.cd.markForCheck();
     return matchCount > 0 || isReadingConfirmationEnabled;
   }
@@ -211,7 +211,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
              this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress
            ) || //
            (
-             currentQuestion && currentQuestion.timer && this.countdown === 0
+             currentQuestion?.timer && this.countdown === 0
            );
   }
 

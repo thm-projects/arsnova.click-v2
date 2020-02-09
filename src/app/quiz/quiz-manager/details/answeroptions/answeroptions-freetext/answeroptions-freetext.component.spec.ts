@@ -2,10 +2,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../../../_mocks/_services/TranslateServiceMock';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
 import { ConnectionMockService } from '../../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../../service/connection/connection.service';
@@ -15,53 +13,59 @@ import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../../service/settings/settings.service';
 import { SharedService } from '../../../../../service/shared/shared.service';
+import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { AnsweroptionsFreetextComponent } from './answeroptions-freetext.component';
 
 describe('AnsweroptionsFreetextComponent', () => {
   let component: AnsweroptionsFreetextComponent;
   let fixture: ComponentFixture<AnsweroptionsFreetextComponent>;
 
-  beforeEach((() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule, HttpClientTestingModule,
-      ],
-      providers: [
-        {
-          provide: QuizService,
-          useClass: QuizMockService,
-        }, HeaderLabelService, FooterBarService, SettingsService, {
-          provide: ConnectionService,
-          useClass: ConnectionMockService,
-        }, SharedService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
-          provide: ActivatedRoute,
-          useValue: {
-            paramMap: of({
-              get: () => 1,
-            }),
+  beforeEach((
+    () => {
+      TestBed.configureTestingModule({
+        imports: [
+          I18nTestingModule, RouterTestingModule, HttpClientTestingModule,
+        ],
+        providers: [
+          {
+            provide: QuizService,
+            useClass: QuizMockService,
+          }, HeaderLabelService, FooterBarService, SettingsService, {
+            provide: ConnectionService,
+            useClass: ConnectionMockService,
+          }, SharedService, {
+            provide: ActivatedRoute,
+            useValue: {
+              paramMap: of({
+                get: () => 1,
+              }),
+            },
           },
-        }
-      ],
-      declarations: [AnsweroptionsFreetextComponent, TranslatePipeMock],
-    }).compileComponents();
-  }));
+        ],
+        declarations: [AnsweroptionsFreetextComponent, TranslatePipeMock],
+      }).compileComponents();
+    }
+  ));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(AnsweroptionsFreetextComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(AnsweroptionsFreetextComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
-  it('should be created', (() => {
-    expect(component).toBeTruthy();
-  }));
+  it('should be created', (
+    () => {
+      expect(component).toBeTruthy();
+    }
+  ));
 
-  it('should contain a TYPE reference', (() => {
-    expect(AnsweroptionsFreetextComponent.TYPE).toEqual('AnsweroptionsFreetextComponent');
-  }));
+  it('should contain a TYPE reference', (
+    () => {
+      expect(AnsweroptionsFreetextComponent.TYPE).toEqual('AnsweroptionsFreetextComponent');
+    }
+  ));
 
   it('should add a test input', () => {
     const value = 'Testinputvalue';
@@ -108,9 +112,13 @@ describe('AnsweroptionsFreetextComponent', () => {
   });
 
   it('should set a validation configuration of the question', () => {
-    const initValue = (component.question.answerOptionList[0] as FreeTextAnswerEntity).getConfig()[0];
+    const initValue = (
+      component.question.answerOptionList[0] as FreeTextAnswerEntity
+    ).getConfig()[0];
     component.setConfig(initValue.id, !initValue.enabled);
-    const newValue = (component.question.answerOptionList[0] as FreeTextAnswerEntity).getConfig()[0];
+    const newValue = (
+      component.question.answerOptionList[0] as FreeTextAnswerEntity
+    ).getConfig()[0];
     expect(newValue.id).toEqual(initValue.id);
     expect(newValue.enabled).not.toEqual(initValue.enabled);
   });

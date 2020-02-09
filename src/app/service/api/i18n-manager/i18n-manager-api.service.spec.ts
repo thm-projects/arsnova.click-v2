@@ -25,7 +25,7 @@ describe('I18nManagerService', () => {
         },
       ],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

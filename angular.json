@@ -65,59 +65,59 @@
               "src/styles/styles.scss",
               "node_modules/prism-themes/themes/prism-ghcolors.css",
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                "bundleName": "theme-arsnova-dot-click-contrast",
-                "lazy": true
+                "bundleName": "theme-arsnova-dot-click-contrast"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-blackbeauty.scss",
-                "bundleName": "theme-blackbeauty",
-                "lazy": true
+                "bundleName": "theme-blackbeauty"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-elegant.scss",
-                "bundleName": "theme-elegant",
-                "lazy": true
+                "bundleName": "theme-elegant"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-Material.scss",
-                "bundleName": "theme-Material",
-                "lazy": true
+                "bundleName": "theme-Material"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-Material-hope.scss",
-                "bundleName": "theme-Material-hope",
-                "lazy": true
+                "bundleName": "theme-Material-hope"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-decent-blue.scss",
-                "bundleName": "theme-decent-blue",
-                "lazy": true
+                "bundleName": "theme-decent-blue"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-Material-blue.scss",
-                "bundleName": "theme-Material-blue",
-                "lazy": true
+                "bundleName": "theme-Material-blue"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-spiritual-purple.scss",
-                "bundleName": "theme-spiritual-purple",
-                "lazy": true
+                "bundleName": "theme-spiritual-purple"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                "bundleName": "theme-GreyBlue-Lime",
-                "lazy": true
+                "bundleName": "theme-GreyBlue-Lime"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-westermann-blue.scss",
-                "bundleName": "theme-westermann-blue",
-                "lazy": true
+                "bundleName": "theme-westermann-blue"
               },
               {
+                "inject": false,
                 "input": "src/styles/themes/theme-Material.scss",
-                "bundleName": "theme-default",
-                "lazy": true
+                "bundleName": "theme-default"
               }
             ],
             "scripts": [
@@ -128,6 +128,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": {
                 "scripts": true,
                 "styles": false
@@ -161,63 +167,69 @@
                 "src/styles/styles.scss",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast",
-                  "lazy": true
+                  "bundleName": "theme-arsnova-dot-click-contrast"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty",
-                  "lazy": true
+                  "bundleName": "theme-blackbeauty"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant",
-                  "lazy": true
+                  "bundleName": "theme-elegant"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material",
-                  "lazy": true
+                  "bundleName": "theme-Material"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope",
-                  "lazy": true
+                  "bundleName": "theme-Material-hope"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue",
-                  "lazy": true
+                  "bundleName": "theme-decent-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue",
-                  "lazy": true
+                  "bundleName": "theme-Material-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple",
-                  "lazy": true
+                  "bundleName": "theme-spiritual-purple"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime",
-                  "lazy": true
+                  "bundleName": "theme-GreyBlue-Lime"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue",
-                  "lazy": true
+                  "bundleName": "theme-westermann-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-default",
-                  "lazy": true
+                  "bundleName": "theme-default"
                 }
               ]
             },
             "thmStaging": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": {
                 "scripts": true,
                 "styles": false
@@ -251,63 +263,69 @@
                 "src/styles/styles.scss",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast",
-                  "lazy": true
+                  "bundleName": "theme-arsnova-dot-click-contrast"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty",
-                  "lazy": true
+                  "bundleName": "theme-blackbeauty"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant",
-                  "lazy": true
+                  "bundleName": "theme-elegant"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material",
-                  "lazy": true
+                  "bundleName": "theme-Material"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope",
-                  "lazy": true
+                  "bundleName": "theme-Material-hope"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue",
-                  "lazy": true
+                  "bundleName": "theme-decent-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue",
-                  "lazy": true
+                  "bundleName": "theme-Material-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple",
-                  "lazy": true
+                  "bundleName": "theme-spiritual-purple"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime",
-                  "lazy": true
+                  "bundleName": "theme-GreyBlue-Lime"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue",
-                  "lazy": true
+                  "bundleName": "theme-westermann-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-default",
-                  "lazy": true
+                  "bundleName": "theme-default"
                 }
               ]
             },
             "thmBeta": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": {
                 "scripts": true,
                 "styles": false
@@ -353,23 +371,29 @@
                 "src/styles/styles.scss",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty",
-                  "lazy": true
+                  "bundleName": "theme-blackbeauty"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue",
-                  "lazy": true
+                  "bundleName": "theme-westermann-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-default",
-                  "lazy": true
+                  "bundleName": "theme-default"
                 }
               ]
             },
             "westermann": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": {
                 "scripts": true,
                 "styles": false
@@ -415,19 +439,19 @@
                 "src/styles/styles.scss",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty",
-                  "lazy": true
+                  "bundleName": "theme-blackbeauty"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue",
-                  "lazy": true
+                  "bundleName": "theme-westermann-blue"
                 },
                 {
+                  "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-default",
-                  "lazy": true
+                  "bundleName": "theme-default"
                 }
               ]
             }

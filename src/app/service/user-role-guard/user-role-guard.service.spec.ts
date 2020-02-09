@@ -15,7 +15,7 @@ describe('UserRoleGuardService', () => {
   }));
 
   it('should be created', () => {
-    const service: UserRoleGuardService = TestBed.get(UserRoleGuardService);
+    const service: UserRoleGuardService = TestBed.inject(UserRoleGuardService);
     expect(service).toBeTruthy();
   });
 });

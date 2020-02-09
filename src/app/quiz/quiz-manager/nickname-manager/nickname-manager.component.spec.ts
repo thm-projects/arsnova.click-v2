@@ -4,13 +4,11 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { JustafewPipeMock } from '../../../../_mocks/_pipes/JustafewPipeMock';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -21,6 +19,7 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { NicknameManagerComponent } from './nickname-manager.component';
 
 describe('NicknameManagerComponent', () => {
@@ -63,7 +62,7 @@ describe('NicknameManagerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientTestingModule, JwtModule.forRoot({
+        I18nTestingModule, RouterTestingModule, HttpClientTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -75,9 +74,7 @@ describe('NicknameManagerComponent', () => {
         MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
-        },
-        RxStompService,
-        {
+        }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -86,10 +83,7 @@ describe('NicknameManagerComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
+        }, SharedService,
       ],
       declarations: [NicknameManagerComponent, TranslatePipeMock, JustafewPipeMock],
     }).compileComponents();

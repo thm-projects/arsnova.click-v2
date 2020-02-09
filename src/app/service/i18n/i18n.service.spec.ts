@@ -1,8 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 
@@ -12,13 +11,10 @@ describe('I18nService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, RouterTestingModule,
+        I18nTestingModule, HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
         {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, I18nService,

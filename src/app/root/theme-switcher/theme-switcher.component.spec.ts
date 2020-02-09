@@ -3,10 +3,8 @@ import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -22,6 +20,7 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { ThemeSwitcherComponent } from './theme-switcher.component';
 
 describe('ThemeSwitcherComponent', () => {
@@ -31,7 +30,7 @@ describe('ThemeSwitcherComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientTestingModule, JwtModule.forRoot({
+        I18nTestingModule, RouterTestingModule, HttpClientTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -40,8 +39,7 @@ describe('ThemeSwitcherComponent', () => {
         }),
       ],
       providers: [
-        RxStompService,
-        I18nService, {
+        RxStompService, I18nService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, ThemesService, {
@@ -53,10 +51,7 @@ describe('ThemeSwitcherComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
+        }, SharedService,
       ],
       declarations: [
         ThemeSwitcherComponent, TranslatePipeMock,

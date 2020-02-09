@@ -7,16 +7,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
@@ -32,7 +31,7 @@ describe('LoginComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), FormsModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
+        }), I18nTestingModule, FormsModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
         RxStompService, {
@@ -45,9 +44,6 @@ describe('LoginComponent', () => {
             authenticateThroughLogin: () => new Promise(resolve => resolve()),
             hashPassword: () => '8c430f5e2df2fdd422c4719b884e9d525110fcf5',
           },
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         },
       ],
       declarations: [LoginComponent, TranslatePipeMock],
@@ -56,7 +52,7 @@ describe('LoginComponent', () => {
   }));
 
   beforeEach(() => {
-    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faSpinner);
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;

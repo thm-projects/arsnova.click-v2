@@ -6,12 +6,10 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -25,6 +23,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { NicknameSelectComponent } from './nickname-select.component';
 
@@ -41,15 +40,13 @@ describe('NicknameSelectComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
+        }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
         MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
-        },
-        RxStompService,
-        {
+        }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -64,9 +61,6 @@ describe('NicknameSelectComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         }, SimpleMQ,
       ],
       declarations: [NicknameSelectComponent, TranslatePipeMock],

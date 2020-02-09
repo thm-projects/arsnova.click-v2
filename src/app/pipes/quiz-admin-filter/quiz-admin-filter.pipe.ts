@@ -34,7 +34,7 @@ export class QuizAdminFilterPipe implements PipeTransform {
 
       if (isFiltered && args.filterQuizName && args.filterQuizName.length) {
         const match = quiz.name.trim().toLowerCase().match(new RegExp(args.filterQuizName, 'i'));
-        isFiltered = match && match.length > 0;
+        isFiltered = match?.length > 0;
       }
 
       if (isFiltered && args.filterActiveQuiz) {

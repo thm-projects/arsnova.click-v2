@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateStore } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
@@ -44,8 +44,7 @@ describe('QuizManagerComponent', () => {
         }), HttpClientTestingModule, RouterTestingModule, FooterModule, FontAwesomeModule, NgbPopoverModule, NgbTooltipModule,
       ],
       providers: [
-        RxStompService,
-        UserService, {
+        RxStompService, UserService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
@@ -57,7 +56,7 @@ describe('QuizManagerComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService, {
+        }, SharedService, TranslateStore, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         },
@@ -66,11 +65,13 @@ describe('QuizManagerComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach((() => {
-    fixture = TestBed.createComponent(QuizManagerComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+  beforeEach((
+    () => {
+      fixture = TestBed.createComponent(QuizManagerComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    }
+  ));
 
   it('should be created', async(() => {
     expect(component).toBeTruthy();
@@ -82,7 +83,7 @@ describe('QuizManagerComponent', () => {
 
   describe('#addQuestion', () => {
     it('should add a question', () => {
-      const quizService = TestBed.get(QuizService);
+      const quizService = TestBed.inject(QuizService);
       const id = availableQuestionTypes[1].id;
 
       quizService.quiz.questionList.splice(1, quizService.quiz.questionList.length);
@@ -92,7 +93,7 @@ describe('QuizManagerComponent', () => {
     });
 
     it('should not add an invalid question', () => {
-      const quizService = TestBed.get(QuizService);
+      const quizService = TestBed.inject(QuizService);
 
       quizService.quiz.questionList.splice(0, quizService.quiz.questionList.length);
 
@@ -102,14 +103,14 @@ describe('QuizManagerComponent', () => {
 
   describe('#moveQuestionUp', () => {
     it('should decrement the index of a question in the questionlist by 1', () => {
-      const quizService = TestBed.get(QuizService);
+      const quizService = TestBed.inject(QuizService);
       const question = quizService.quiz.questionList[1];
       component.moveQuestionUp(1);
       expect(quizService.quiz.questionList[0]).toEqual(question);
     });
 
     it('should not decrement the index of a question in the questionlist if it is at first position', () => {
-      const quizService = TestBed.get(QuizService);
+      const quizService = TestBed.inject(QuizService);
       const question = quizService.quiz.questionList[0];
       component.moveQuestionUp(0);
       expect(quizService.quiz.questionList[0]).toEqual(question);
@@ -118,14 +119,14 @@ describe('QuizManagerComponent', () => {
 
   describe('#moveQuestionDown', () => {
     it('should increment the index of a question in the questionlist by 1', () => {
-      const quizService = TestBed.get(QuizService);
+      const quizService = TestBed.inject(QuizService);
       const question = quizService.quiz.questionList[1];
       component.moveQuestionDown(1);
       expect(quizService.quiz.questionList[2]).toEqual(question);
     });
 
     it('should not increment the index of a question in the questionlist if it is at the last position', () => {
-      const quizService = TestBed.get(QuizService);
+      const quizService = TestBed.inject(QuizService);
       const lastIndex = quizService.quiz.questionList.length - 1;
       const question = quizService.quiz.questionList[lastIndex];
       component.moveQuestionDown(lastIndex);

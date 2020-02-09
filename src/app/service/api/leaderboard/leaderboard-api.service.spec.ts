@@ -12,7 +12,7 @@ describe('LeaderboardApiService', () => {
       ],
       providers: [LeaderboardApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

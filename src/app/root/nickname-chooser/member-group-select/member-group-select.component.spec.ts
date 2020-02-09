@@ -2,10 +2,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -18,6 +16,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { MemberGroupSelectComponent } from './member-group-select.component';
 
@@ -28,11 +27,10 @@ describe('MemberGroupSelectComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, RouterTestingModule,
+        I18nTestingModule, HttpClientTestingModule, RouterTestingModule,
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
@@ -47,9 +45,6 @@ describe('MemberGroupSelectComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         },
       ],
       declarations: [MemberGroupSelectComponent, TranslatePipeMock],

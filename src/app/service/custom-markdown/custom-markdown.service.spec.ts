@@ -14,7 +14,7 @@ describe('CustomMarkdownService', () => {
   }));
 
   it('should be created', () => {
-    const service: CustomMarkdownService = TestBed.get(CustomMarkdownService);
+    const service: CustomMarkdownService = TestBed.inject(CustomMarkdownService);
     expect(service).toBeTruthy();
   });
 });

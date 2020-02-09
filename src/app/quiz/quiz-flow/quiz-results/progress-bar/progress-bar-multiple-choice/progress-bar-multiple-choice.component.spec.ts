@@ -29,7 +29,7 @@ describe('ProgressBarMultipleChoiceComponent', () => {
   }));
 
   beforeEach(async(() => {
-    const library: FaIconLibrary = TestBed.get(FaIconLibrary);
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faSpinner);
     fixture = TestBed.createComponent(ProgressBarMultipleChoiceComponent);
     component = fixture.componentInstance;

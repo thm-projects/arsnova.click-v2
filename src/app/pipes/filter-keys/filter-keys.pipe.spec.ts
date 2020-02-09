@@ -63,7 +63,7 @@ describe('FilterKeysPipe', () => {
   }));
 
   beforeEach(async(() => {
-    pipe = new FilterKeysPipe(TestBed.get(LanguageLoaderService));
+    pipe = new FilterKeysPipe(TestBed.inject(LanguageLoaderService));
   }));
 
   it('create an instance', () => {

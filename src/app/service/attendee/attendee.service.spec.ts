@@ -62,19 +62,19 @@ describe('AttendeeService', () => {
   });
 
   it('should be created', () => {
-    const service = TestBed.get(AttendeeService);
+    const service = TestBed.inject(AttendeeService);
 
     expect(service).toBeTruthy();
   });
 
   it('should get all member groups', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
 
     expect(service.getMemberGroups()).toContain('Default');
   });
 
   it('should get all members of a group', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
 
     memberMock.groupName = 'Default';
 
@@ -83,7 +83,7 @@ describe('AttendeeService', () => {
   });
 
   it('should clean up all the local data', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
 
     service.addMember(memberMock);
 
@@ -92,7 +92,7 @@ describe('AttendeeService', () => {
   });
 
   it('should add a member', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
 
     memberMock.name = 'testname';
 
@@ -101,7 +101,7 @@ describe('AttendeeService', () => {
   });
 
   it('should remove a member', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
     memberMock.name = 'testname';
     service.addMember(memberMock);
     service.removeMember(memberMock.name);
@@ -109,7 +109,7 @@ describe('AttendeeService', () => {
   });
 
   it('should clear all responses', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
     const response = {
       value: [0, 1, 2],
       responseTime: 47,
@@ -126,14 +126,14 @@ describe('AttendeeService', () => {
   });
 
   it('should return true if the provided value equals the own nick', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
     const nick = 'testname';
     service.ownNick = nick;
     expect(service.isOwnNick(nick)).toBe(true);
   });
 
   it('should update the response', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
     const response = {
       value: [0, 1, 2],
       responseTime: 47,
@@ -153,7 +153,7 @@ describe('AttendeeService', () => {
   });
 
   it('should check if a response is set', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
     const response = {
       value: [0, 1, 2],
       responseTime: 47,
@@ -176,7 +176,7 @@ describe('AttendeeService', () => {
   });
 
   it('should check if a reading confirmation is set', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
     const response = {
       value: [0, 1, 2],
       responseTime: 47,
@@ -199,7 +199,7 @@ describe('AttendeeService', () => {
   });
 
   it('should check if a confidence value is set', () => {
-    const service: AttendeeService = TestBed.get(AttendeeService);
+    const service: AttendeeService = TestBed.inject(AttendeeService);
     const response = {
       value: [0, 1, 2],
       responseTime: 47,

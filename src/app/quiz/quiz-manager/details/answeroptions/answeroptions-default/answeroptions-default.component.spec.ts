@@ -5,14 +5,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../../../../_mocks/_services/SwUpdateMock';
-import { TranslateServiceMock } from '../../../../../../_mocks/_services/TranslateServiceMock';
 import { HeaderComponent } from '../../../../../header/header/header.component';
 import { SurveyQuestionEntity } from '../../../../../lib/entities/question/SurveyQuestionEntity';
 import { LivePreviewComponent } from '../../../../../live-preview/live-preview/live-preview.component';
@@ -28,6 +26,7 @@ import { SettingsService } from '../../../../../service/settings/settings.servic
 import { SharedService } from '../../../../../service/shared/shared.service';
 import { TrackingMockService } from '../../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../../service/tracking/tracking.service';
+import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { AnsweroptionsDefaultComponent } from './answeroptions-default.component';
 
 describe('AnsweroptionsDefaultComponent', () => {
@@ -37,14 +36,13 @@ describe('AnsweroptionsDefaultComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, NgbModalModule, AngularSvgIconModule, NgbPopoverModule, FontAwesomeModule, HttpClientTestingModule,
+        I18nTestingModule, RouterTestingModule, NgbModalModule, AngularSvgIconModule, NgbPopoverModule, FontAwesomeModule, HttpClientTestingModule,
       ],
       providers: [
         MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
-        },
-        {
+        }, {
           provide: QuizService,
           useClass: QuizMockService,
         }, FooterBarService, SettingsService, {
@@ -53,9 +51,6 @@ describe('AnsweroptionsDefaultComponent', () => {
         }, SharedService, HeaderLabelService, QuestionTextService, {
           provide: TrackingService,
           useClass: TrackingMockService,
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         }, {
           provide: ActivatedRoute,
           useValue: {
@@ -126,8 +121,12 @@ describe('AnsweroptionsDefaultComponent', () => {
   });
 
   it('should toggle the multipleSelectionEnabled option of a survey question', () => {
-    const initValue = (<SurveyQuestionEntity>component.question).multipleSelectionEnabled;
+    const initValue = (
+      <SurveyQuestionEntity>component.question
+    ).multipleSelectionEnabled;
     component.toggleMultipleSelectionSurvey();
-    expect((<SurveyQuestionEntity>component.question).multipleSelectionEnabled).not.toEqual(initValue);
+    expect((
+      <SurveyQuestionEntity>component.question
+    ).multipleSelectionEnabled).not.toEqual(initValue);
   });
 });

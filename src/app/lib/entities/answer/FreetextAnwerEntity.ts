@@ -14,10 +14,10 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
   constructor(props) {
     super(props);
 
-    this.configCaseSensitive = typeof props.configCaseSensitive !== 'undefined' ? props.configCaseSensitive : this.configCaseSensitive;
-    this.configTrimWhitespaces = typeof props.configTrimWhitespaces !== 'undefined' ? props.configTrimWhitespaces : this.configTrimWhitespaces;
-    this.configUseKeywords = typeof props.configUseKeywords !== 'undefined' ? props.configUseKeywords : this.configUseKeywords;
-    this.configUsePunctuation = typeof props.configUsePunctuation !== 'undefined' ? props.configUsePunctuation : this.configUsePunctuation;
+    this.configCaseSensitive = props.configCaseSensitive ?? this.configCaseSensitive;
+    this.configTrimWhitespaces = props.configTrimWhitespaces ?? this.configTrimWhitespaces;
+    this.configUseKeywords = props.configUseKeywords ?? this.configUseKeywords;
+    this.configUsePunctuation = props.configUsePunctuation ?? this.configUsePunctuation;
   }
 
   public isCorrectInput(ref: string): boolean {
@@ -75,22 +75,30 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
     return [
       {
         configTitle: 'component.answeroptions.free_text_question.config_case_sensitive',
-        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configCaseSensitive ? 'onText' : 'offText'),
+        configEnabledString: 'component.answeroptions.free_text_question.' + (
+          this.configCaseSensitive ? 'onText' : 'offText'
+        ),
         enabled: this.configCaseSensitive,
         id: 'config_case_sensitive_switch',
       }, {
         configTitle: 'component.answeroptions.free_text_question.config_trim_whitespaces',
-        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configTrimWhitespaces ? 'onText' : 'offText'),
+        configEnabledString: 'component.answeroptions.free_text_question.' + (
+          this.configTrimWhitespaces ? 'onText' : 'offText'
+        ),
         enabled: this.configTrimWhitespaces,
         id: 'config_trim_whitespaces_switch',
       }, {
         configTitle: 'component.answeroptions.free_text_question.config_use_keywords',
-        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configUseKeywords ? 'onText' : 'offText'),
+        configEnabledString: 'component.answeroptions.free_text_question.' + (
+          this.configUseKeywords ? 'onText' : 'offText'
+        ),
         enabled: this.configUseKeywords,
         id: 'config_use_keywords_switch',
       }, {
         configTitle: 'component.answeroptions.free_text_question.config_use_punctuation',
-        configEnabledString: 'component.answeroptions.free_text_question.' + (this.configUsePunctuation ? 'onText' : 'offText'),
+        configEnabledString: 'component.answeroptions.free_text_question.' + (
+          this.configUsePunctuation ? 'onText' : 'offText'
+        ),
         enabled: this.configUsePunctuation,
         id: 'config_use_punctuation_switch',
       },

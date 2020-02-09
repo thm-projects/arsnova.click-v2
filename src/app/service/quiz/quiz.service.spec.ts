@@ -3,15 +3,14 @@ import { PLATFORM_ID } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { of } from 'rxjs';
 import { QuizMock } from '../../../_mocks/_fixtures/quiz.mock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { StatusProtocol } from '../../lib/enums/Message';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
@@ -28,7 +27,7 @@ describe('QuizService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, RouterTestingModule, JwtModule.forRoot({
+        I18nTestingModule, HttpClientTestingModule, RouterTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -41,9 +40,6 @@ describe('QuizService', () => {
           provide: MarkedOptions,
           useValue: {},
         }, RxStompService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, SharedService, {
@@ -64,13 +60,13 @@ describe('QuizService', () => {
   });
 
   it('should be created', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
     expect(service).toBeTruthy();
   });
 
   it('should persist the current state', () => {
-    const service: QuizService = TestBed.get(QuizService);
-    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+    const service: QuizService = TestBed.inject(QuizService);
+    const quizApiService: QuizApiService = TestBed.inject(QuizApiService);
 
     spyOn(quizApiService, 'putSavedQuiz').and.callFake(() => of(null));
 
@@ -81,7 +77,7 @@ describe('QuizService', () => {
   });
 
   it('should clean up the state', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
     service.isOwner = true;
     service.cleanUp();
 
@@ -89,8 +85,8 @@ describe('QuizService', () => {
   });
 
   it('should persist a quiz in edit mode', () => {
-    const service: QuizService = TestBed.get(QuizService);
-    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+    const service: QuizService = TestBed.inject(QuizService);
+    const quizApiService: QuizApiService = TestBed.inject(QuizApiService);
 
     spyOn(quizApiService, 'putSavedQuiz').and.callFake(() => of(null));
 
@@ -101,14 +97,14 @@ describe('QuizService', () => {
   });
 
   it('should return the current question', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     expect(service.currentQuestion()).toEqual(quizMock.questionList[0]);
   });
 
   it('should deactivate an active quiz', () => {
-    const service: QuizService = TestBed.get(QuizService);
-    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+    const service: QuizService = TestBed.inject(QuizService);
+    const quizApiService: QuizApiService = TestBed.inject(QuizApiService);
 
     spyOn(quizApiService, 'deleteActiveQuiz').and.callFake(() => of(null));
 
@@ -120,7 +116,7 @@ describe('QuizService', () => {
   });
 
   it('should check if a quiz is valid', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     service.quiz = quizMock;
 
@@ -128,13 +124,13 @@ describe('QuizService', () => {
   });
 
   it('should return all visible questions', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     expect(service.getVisibleQuestions().length).toEqual(0);
   });
 
   it('should check if a nick is selected', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     service.quiz = quizMock;
     service.quiz.sessionConfig.nicks.selectedNicks.push('test-nick');
@@ -143,7 +139,7 @@ describe('QuizService', () => {
   });
 
   it('should select or deselect a given nick', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     service.quiz = quizMock;
 
@@ -155,7 +151,7 @@ describe('QuizService', () => {
   });
 
   it('should add a given nick', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     service.quiz = quizMock;
 
@@ -165,7 +161,7 @@ describe('QuizService', () => {
   });
 
   it('should remove a selected nick by name', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     service.quiz = quizMock;
 
@@ -176,9 +172,9 @@ describe('QuizService', () => {
   });
 
   it('should load the quiz data to play it', done => {
-    const service: QuizService = TestBed.get(QuizService);
-    const storageService: StorageService = TestBed.get(StorageService);
-    const quizApiService: QuizApiService = TestBed.get(QuizApiService);
+    const service: QuizService = TestBed.inject(QuizService);
+    const storageService: StorageService = TestBed.inject(StorageService);
+    const quizApiService: QuizApiService = TestBed.inject(QuizApiService);
 
     spyOn(storageService.db.Quiz, 'get').and.callFake((): any => new Promise<any>(resolve => resolve(quizMock)));
     spyOn(quizApiService, 'getQuiz').and.callFake(() => of({
@@ -199,8 +195,8 @@ describe('QuizService', () => {
   });
 
   it('should load the quiz data to edit it', done => {
-    const service: QuizService = TestBed.get(QuizService);
-    const storageService: StorageService = TestBed.get(StorageService);
+    const service: QuizService = TestBed.inject(QuizService);
+    const storageService: StorageService = TestBed.inject(StorageService);
 
     spyOn(storageService.db.Quiz, 'get').and.callFake((): any => new Promise<any>(resolve => resolve(quizMock)));
 
@@ -212,7 +208,7 @@ describe('QuizService', () => {
   });
 
   it('should stop the edit mode', () => {
-    const service: QuizService = TestBed.get(QuizService);
+    const service: QuizService = TestBed.inject(QuizService);
 
     service.stopEditMode();
     expect(service['_isInEditMode']).toEqual(false);

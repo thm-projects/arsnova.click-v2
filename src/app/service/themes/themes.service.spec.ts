@@ -1,11 +1,10 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { DefaultSettings } from '../../lib/default.settings';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
 import { FooterBarService } from '../footer-bar/footer-bar.service';
@@ -35,7 +34,7 @@ describe('ThemesService', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientTestingModule,
+        I18nTestingModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
         I18nService, {
@@ -47,10 +46,7 @@ describe('ThemesService', () => {
         }, FooterBarService, SettingsService, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, SharedService, ThemesService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
+        }, SharedService, ThemesService,
       ],
     });
   }));
@@ -62,22 +58,23 @@ describe('ThemesService', () => {
     }
   });
 
-  it('should be created', (inject([ThemesService], (service: ThemesService) => {
-    expect(service).toBeTruthy();
+  it('should be created', (
+    inject([ThemesService], (service: ThemesService) => {
+      expect(service).toBeTruthy();
+    })
+  ));
+
+  it('#updateCurrentlyUsedTheme', async(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
+    spyOnProperty(service, 'currentTheme').and.returnValue('Material');
+    spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
+    spyOn(connectionService.dataEmitter, 'subscribe').and.callFake(() => of({ status: StatusProtocol.Failed }).subscribe());
+
+    expect(document.getElementById('link-manifest')).toBe(null);
+    expect(service.currentTheme).toEqual('Material');
+    service.updateCurrentlyUsedTheme().then(() => {
+      expect(service.reloadLinkNodes).toHaveBeenCalled();
+    });
   })));
-
-  it('#updateCurrentlyUsedTheme',
-    async(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
-      spyOnProperty(service, 'currentTheme').and.returnValue('Material');
-      spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
-      spyOn(connectionService.dataEmitter, 'subscribe').and.callFake(() => of({ status: StatusProtocol.Failed }).subscribe());
-
-      expect(document.getElementById('link-manifest')).toBe(null);
-      expect(service.currentTheme).toEqual('Material');
-      service.updateCurrentlyUsedTheme().then(() => {
-        expect(service.reloadLinkNodes).toHaveBeenCalled();
-      });
-    })));
 
   it('#reloadLinkNodes', async(inject([ThemesService], (service: ThemesService) => {
 

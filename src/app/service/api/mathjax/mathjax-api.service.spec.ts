@@ -10,7 +10,7 @@ describe('MathjaxApiService', () => {
       imports: [HttpClientTestingModule],
       providers: [MathjaxApiService],
     });
-    backend = TestBed.get(HttpTestingController);
+    backend = TestBed.inject(HttpTestingController);
   });
 
   afterEach(() => {

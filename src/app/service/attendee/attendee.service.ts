@@ -108,7 +108,7 @@ export class AttendeeService {
     }
 
     const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
-    if (typeof response === 'undefined' || typeof response.value === 'undefined') {
+    if (typeof response?.value === 'undefined') {
       return false;
     }
 
@@ -125,7 +125,7 @@ export class AttendeeService {
     }
 
     const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
-    return response && response.readingConfirmation;
+    return response?.readingConfirmation;
   }
 
   public hasConfidenceValue(): boolean {
@@ -155,7 +155,7 @@ export class AttendeeService {
   private loadData(): void {
     this._ownNick = sessionStorage.getItem(StorageKey.CurrentNickName);
     this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (!quiz || typeof quiz.state === 'undefined' || quiz.state === QuizState.Inactive) {
+      if (typeof quiz?.state === 'undefined' || quiz.state === QuizState.Inactive) {
         return;
       }
 

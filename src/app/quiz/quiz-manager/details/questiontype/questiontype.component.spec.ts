@@ -4,11 +4,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
@@ -21,6 +19,7 @@ import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuestiontypeComponent } from './questiontype.component';
 
 describe('QuestiontypeComponent', () => {
@@ -31,7 +30,7 @@ describe('QuestiontypeComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule, RouterTestingModule, JwtModule.forRoot({
+        I18nTestingModule, HttpClientTestingModule, RouterTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -40,8 +39,7 @@ describe('QuestiontypeComponent', () => {
         }),
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
@@ -50,9 +48,6 @@ describe('QuestiontypeComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         }, {
           provide: ActivatedRoute,
           useValue: {
@@ -67,7 +62,7 @@ describe('QuestiontypeComponent', () => {
   }));
 
   beforeEach(async(() => {
-    quizService = TestBed.get(QuizService);
+    quizService = TestBed.inject(QuizService);
     fixture = TestBed.createComponent(QuestiontypeComponent);
     component = fixture.componentInstance;
     component['_questionType'] = QuestionType.SingleChoiceQuestion;

@@ -9,7 +9,7 @@ export abstract class AbstractAnswerEntity {
 
   protected constructor(props) {
     this.answerText = props.answerText ? props.answerText : this.answerText;
-    this.isCorrect = typeof props.isCorrect !== 'undefined' ? props.isCorrect : this.isCorrect;
+    this.isCorrect = props.isCorrect ?? this.isCorrect;
   }
 
   public getAnswerTextLengthWithoutMarkdownChars(): number {
@@ -35,7 +35,9 @@ export abstract class AbstractAnswerEntity {
   }
 
   public getValidationStackTrace(): Array<IValidationStackTrace> {
-    return (this.answerText.length === 0) ? [
+    return (
+             this.answerText.length === 0
+           ) ? [
       {
         occurredAt: { type: 'answerOption' },
         reason: 'component.quiz_summary.validation_errors.reasons.answer_text_empty',
