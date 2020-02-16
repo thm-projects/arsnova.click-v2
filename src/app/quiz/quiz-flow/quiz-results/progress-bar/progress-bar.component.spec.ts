@@ -26,6 +26,7 @@ import { StorageServiceMock } from '../../../../service/storage/storage.service.
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { SharedModule } from '../../../../shared/shared.module';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { ProgressBarAnonymousComponent } from './progress-bar-anonymous/progress-bar-anonymous.component';
 import { ProgressBarFreetextComponent } from './progress-bar-freetext/progress-bar-freetext.component';
 import { ProgressBarMultipleChoiceComponent } from './progress-bar-multiple-choice/progress-bar-multiple-choice.component';
@@ -42,7 +43,7 @@ describe('ProgressBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientTestingModule,
+        I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
         MarkdownService, {

@@ -27,6 +27,7 @@ import { TrackingMockService } from '../../service/tracking/tracking.mock.servic
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { UserAdminComponent } from './user-admin.component';
 
@@ -41,7 +42,7 @@ describe('UserAdminComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientTestingModule, JwtModule.forRoot({
+        I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,

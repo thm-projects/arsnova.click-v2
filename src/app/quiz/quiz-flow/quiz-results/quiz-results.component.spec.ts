@@ -28,6 +28,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { VotingQuestionComponent } from '../voting/voting-question/voting-question.component';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { ProgressBarAnonymousComponent } from './progress-bar/progress-bar-anonymous/progress-bar-anonymous.component';
@@ -48,7 +49,7 @@ describe('QuizResultsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, JwtModule.forRoot({
+        I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,

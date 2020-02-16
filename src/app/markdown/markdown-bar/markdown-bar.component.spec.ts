@@ -8,6 +8,7 @@ import { TranslateServiceMock } from '../../../_mocks/_services/TranslateService
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { SharedModule } from '../../shared/shared.module';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { MarkdownBarComponent } from './markdown-bar.component';
 
@@ -18,7 +19,7 @@ describe('MarkdownBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientTestingModule,
+        I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
         {

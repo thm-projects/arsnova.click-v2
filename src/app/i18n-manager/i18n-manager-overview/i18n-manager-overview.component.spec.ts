@@ -18,6 +18,7 @@ import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { KeyOutputComponent } from '../key-output/key-output.component';
 
 import { I18nManagerOverviewComponent } from './i18n-manager-overview.component';
@@ -29,7 +30,7 @@ describe('I18nManagerOverviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        JwtModule.forRoot({
+        I18nTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -38,8 +39,7 @@ describe('I18nManagerOverviewComponent', () => {
         }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, InfiniteScrollModule,
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, {

@@ -32,6 +32,7 @@ import { TrackingMockService } from '../../../service/tracking/tracking.mock.ser
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { UserService } from '../../../service/user/user.service';
 import { SharedModule } from '../../../shared/shared.module';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { QuizLobbyComponent } from './quiz-lobby.component';
 
@@ -42,7 +43,7 @@ describe('QuizLobbyComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, SharedModule, QRCodeModule, NgbModule, HttpClientTestingModule,
+        I18nTestingModule, RouterTestingModule, SharedModule, QRCodeModule, NgbModule, HttpClientTestingModule,
       ],
       providers: [
         MarkdownService, {

@@ -21,6 +21,7 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { SharedModule } from '../../shared/shared.module';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { AvailableQuizzesComponent } from './available-quizzes.component';
 
@@ -31,7 +32,7 @@ describe('AvailableQuizzesComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule, NgbModule,
+        I18nTestingModule, SharedModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule, NgbModule,
       ],
       providers: [
         {
@@ -102,18 +103,20 @@ describe('AvailableQuizzesComponent', () => {
     expect(activeModal.close).toHaveBeenCalled();
   })));
 
-  it('#startQuiz', (inject([QuizService, TrackingService], (quizService: QuizService, trackingService: TrackingService) => {
-    const quiz = quizService.quiz;
+  it('#startQuiz', (
+    inject([QuizService, TrackingService], (quizService: QuizService, trackingService: TrackingService) => {
+      const quiz = quizService.quiz;
 
-    spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
+      spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
 
-    component.startQuiz(quiz);
+      component.startQuiz(quiz);
 
-    expect(trackingService.trackClickEvent).toHaveBeenCalled();
-  })));
+      expect(trackingService.trackClickEvent).toHaveBeenCalled();
+    })
+  ));
 
-  it('#editQuiz',
-    (inject([QuizService, TrackingService, QuizService, Router], (quizService: QuizService, trackingService: TrackingService, router: Router) => {
+  it('#editQuiz', (
+    inject([QuizService, TrackingService, QuizService, Router], (quizService: QuizService, trackingService: TrackingService, router: Router) => {
       const quiz = quizService.quiz;
 
       spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});
@@ -124,5 +127,6 @@ describe('AvailableQuizzesComponent', () => {
       expect(trackingService.trackClickEvent).toHaveBeenCalled();
       expect(quizService.quiz).toEqual(quiz);
       expect(component.next).toHaveBeenCalled();
-    })));
+    })
+  ));
 });

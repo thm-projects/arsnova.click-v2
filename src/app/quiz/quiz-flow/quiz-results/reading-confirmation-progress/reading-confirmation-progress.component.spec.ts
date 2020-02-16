@@ -7,6 +7,7 @@ import { I18nService } from '../../../../service/i18n/i18n.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { SharedModule } from '../../../../shared/shared.module';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { ReadingConfirmationProgressComponent } from './reading-confirmation-progress.component';
 
@@ -17,14 +18,13 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule,
+        I18nTestingModule, SharedModule, RouterTestingModule,
       ],
       providers: [
         MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
-        },
-        {
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, I18nService, {

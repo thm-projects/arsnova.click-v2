@@ -72,7 +72,6 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
-    console.log(this.translateService);
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('hashtags')) {
         // Migrate arsnova.click v1 quizzes

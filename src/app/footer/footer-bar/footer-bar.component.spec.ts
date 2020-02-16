@@ -21,6 +21,7 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { SharedModule } from '../../shared/shared.module';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { FooterBarComponent } from './footer-bar.component';
 
@@ -31,7 +32,7 @@ describe('FooterBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, HttpClientTestingModule, NgbModule, JwtModule.forRoot({
+        I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule, NgbModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,

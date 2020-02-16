@@ -29,6 +29,7 @@ import { StorageServiceMock } from '../../../../service/storage/storage.service.
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { SharedModule } from '../../../../shared/shared.module';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuestionDetailsComponent } from './question-details.component';
 
 describe('QuestionDetailsComponent', () => {
@@ -38,7 +39,7 @@ describe('QuestionDetailsComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, JwtModule.forRoot({
+        I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,

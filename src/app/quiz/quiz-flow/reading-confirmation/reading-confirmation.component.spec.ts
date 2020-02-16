@@ -25,6 +25,7 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { ReadingConfirmationComponent } from './reading-confirmation.component';
 
@@ -35,7 +36,7 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule, JwtModule.forRoot({
+        I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,

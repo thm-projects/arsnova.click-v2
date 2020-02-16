@@ -17,8 +17,8 @@ export class TranslateServiceMock extends TranslateService {
     const currentLoader: TranslateLoader = new TranslateFakeLoader();
     const compiler: TranslateCompiler = new TranslateFakeCompiler();
     const parser: TranslateParser = new TranslateDefaultParser();
-    const missingTranslationParser: MissingTranslationHandler = new FakeMissingTranslationHandler();
+    const missingTranslationHandler: MissingTranslationHandler = new FakeMissingTranslationHandler();
 
-    super(translateStore, currentLoader, compiler, parser, missingTranslationParser);
+    super(translateStore, currentLoader, compiler, parser, missingTranslationHandler, true, true, true, 'en');
   }
 }

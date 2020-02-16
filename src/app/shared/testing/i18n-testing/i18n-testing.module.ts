@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import {
+  DEFAULT_LANGUAGE,
   FakeMissingTranslationHandler,
   MissingTranslationHandler,
   TranslateCompiler,
@@ -35,6 +36,9 @@ import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServ
     }, {
       provide: MissingTranslationHandler,
       useClass: FakeMissingTranslationHandler,
+    }, {
+      provide: DEFAULT_LANGUAGE,
+      useValue: 'en',
     }, {
       provide: USE_DEFAULT_LANG,
       useValue: 'en',

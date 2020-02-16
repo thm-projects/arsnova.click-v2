@@ -21,6 +21,7 @@ import { StorageServiceMock } from '../../../../service/storage/storage.service.
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { SharedModule } from '../../../../shared/shared.module';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { ConfidenceRateComponent } from './confidence-rate.component';
 
@@ -31,14 +32,13 @@ describe('QuizResults: ConfidenceRateComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule, RouterTestingModule,
+        I18nTestingModule, SharedModule, RouterTestingModule,
       ],
       providers: [
         MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
-        },
-        {
+        }, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, NgbActiveModal, {

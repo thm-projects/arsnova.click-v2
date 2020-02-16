@@ -24,6 +24,7 @@ import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { LivePreviewComponent } from './live-preview.component';
 
@@ -34,14 +35,13 @@ describe('LivePreviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule, HttpClientTestingModule, HeaderModule, NgbModule,
+        I18nTestingModule, RouterTestingModule, HttpClientTestingModule, HeaderModule, NgbModule,
       ],
       providers: [
         MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
-        },
-        QuestionTextService, {
+        }, QuestionTextService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, {

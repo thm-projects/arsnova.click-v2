@@ -24,6 +24,7 @@ import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { UserService } from '../../../service/user/user.service';
 import { SharedModule } from '../../../shared/shared.module';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { NicknameInputComponent } from './nickname-input.component';
 
@@ -34,7 +35,7 @@ describe('NicknameInputComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        JwtModule.forRoot({
+        I18nTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -43,8 +44,7 @@ describe('NicknameInputComponent', () => {
         }), RouterTestingModule, HttpClientTestingModule, FontAwesomeModule, SharedModule,
       ],
       providers: [
-        RxStompService,
-        {
+        RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, {
