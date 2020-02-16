@@ -2,7 +2,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SecurityContext, TemplateRef } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -76,7 +75,7 @@ describe('QuizLobbyComponent', () => {
         }, SimpleMQ,
       ],
       declarations: [QuizLobbyComponent, ServerUnavailableModalComponent],
-    }).overrideModule(BrowserDynamicTestingModule, { set: { entryComponents: [ServerUnavailableModalComponent] } }).compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(async(() => {
@@ -97,7 +96,9 @@ describe('QuizLobbyComponent', () => {
     const modalContent = '<div></div>' as unknown as TemplateRef<any>;
     const nickToRemove = 'TestNick';
 
-    spyOn(modalService, 'open').and.callFake(() => ({} as NgbModalRef));
+    spyOn(modalService, 'open').and.callFake(() => (
+      {} as NgbModalRef
+    ));
 
     component.openKickMemberModal(modalContent, nickToRemove);
 
@@ -113,7 +114,11 @@ describe('QuizLobbyComponent', () => {
     spyOn(component, 'kickMember').and.callThrough();
 
     component.openKickMemberModal(modalContent, nickToRemove);
-    ((async () => await component.kickMember(nickToRemove))());
+    (
+      (
+        async () => await component.kickMember(nickToRemove)
+      )()
+    );
 
     expect(component.kickMember).toHaveBeenCalled();
   }));

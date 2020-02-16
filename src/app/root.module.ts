@@ -12,13 +12,12 @@ import { Angulartics2Module } from 'angulartics2';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { environment } from '../environments/environment';
 import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
 import { jwtOptionsFactory } from './lib/jwt.factory';
 import { RoutePreloader } from './lib/route-preloader';
-import { createTranslateLoader } from './lib/translation.factory';
+import { createTranslateCompiler, createTranslateLoader } from './lib/translation.factory';
 import { ModalsModule } from './modals/modals.module';
 import { PipesModule } from './pipes/pipes.module';
 import { HomeComponent } from './root/home/home.component';
@@ -126,18 +125,23 @@ export function markedOptionsFactory(): MarkedOptions {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
+        useFactory: (
+          createTranslateLoader
+        ),
         deps: [HttpClient],
       },
       compiler: {
         provide: TranslateCompiler,
-        useClass: TranslateMessageFormatCompiler,
+        useFactory: (
+          createTranslateCompiler
+        ),
       },
     }),
     RouterModule.forRoot(appRoutes, {
       preloadingStrategy: RoutePreloader,
       enableTracing: false, // <-- debugging purposes only
-    }), FooterModule,
+    }),
+    FooterModule,
     SharedModule,
     Angulartics2Module.forRoot(),
     JwtModule.forRoot({
@@ -146,10 +150,16 @@ export function markedOptionsFactory(): MarkedOptions {
         useFactory: jwtOptionsFactory,
         deps: [PLATFORM_ID],
       },
-    }), PipesModule, HeaderModule, HttpClientModule, MarkdownModule.forRoot({
+    }),
+    PipesModule,
+    HeaderModule,
+    HttpClientModule,
+    MarkdownModule.forRoot({
       markedOptions: {
         provide: MarkedOptions,
-        useFactory: (markedOptionsFactory),
+        useFactory: (
+          markedOptionsFactory
+        ),
       },
     }),
   ],

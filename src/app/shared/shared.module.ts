@@ -85,7 +85,6 @@ import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
   ],
   providers: [TranslateStore],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent],
-  entryComponents: [NoDataErrorComponent],
   bootstrap: [],
 })
 export class SharedModule {

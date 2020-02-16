@@ -1,7 +1,7 @@
 #!/bin/sh
 
 echo "Installing npm modules"
-npm install --verbose
+npm install
 echo "Running tslint"
 node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 echo "Running unit tests"
@@ -28,7 +28,8 @@ echo "Generating preview screenshots"
 node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4711 --root=true
 
 cd /usr/src/app
-echo "Purifying css"
-npm run purify
+# Disabled for now since purifyCSS removes nearly all css with Angular 9
+# echo "Purifying css"
+# npm run purify
 echo "Gzipping app files"
 find dist/browser -name "*.*" -type f -print0 | xargs -0 gzip -9 -k

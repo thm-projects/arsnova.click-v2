@@ -28,8 +28,9 @@ fromDir('./dist/browser', /theme-.*\.css$/, function (filename) {
 
   const options = {
     output: filename,
-    minify: true,
+    minify: false,
     info: true,
+    rejected: true,
   };
   console.log('-- found: ', filename);
   purifycss(content, css, options);

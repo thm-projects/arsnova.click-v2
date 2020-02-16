@@ -13,7 +13,6 @@ import { ServerUnavailableModalComponent } from './server-unavailable-modal/serv
   declarations: [
     AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent,
   ],
-  entryComponents: [AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent],
   exports: [AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent],
 })
 export class ModalsModule {
