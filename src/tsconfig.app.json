@@ -13,5 +13,8 @@
   },
   "include": [
     "**/*.d.ts"
+  ],
+  "exclude": [
+    "**/testing"
   ]
 }

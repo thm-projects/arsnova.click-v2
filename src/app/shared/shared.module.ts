@@ -61,7 +61,7 @@ import {
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule, TranslateStore } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
@@ -83,7 +83,6 @@ import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
     AngularSvgIconModule,
     NoDataErrorComponent,
   ],
-  providers: [TranslateStore],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent],
   bootstrap: [],
 })

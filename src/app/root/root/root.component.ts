@@ -72,6 +72,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    console.log(this.translateService);
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('hashtags')) {
         // Migrate arsnova.click v1 quizzes
@@ -175,7 +176,9 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private fetchChildComponent(route: ActivatedRoute): INamedType {
-    return <INamedType>(route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component);
+    return <INamedType>(
+      route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component
+    );
   }
 
   private loadExternalStyles(styleUrl: string): Promise<void> {
@@ -202,7 +205,9 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private initializeCookieConsent(theme: QuizTheme): void {
-    if (!(<IWindow>window).cookieconsent || !theme || document.cookie.includes('cookieconsent_status=dismiss')) {
+    if (!(
+      <IWindow>window
+    ).cookieconsent || !theme || document.cookie.includes('cookieconsent_status=dismiss')) {
       return;
     }
 
@@ -213,7 +218,9 @@ export class RootComponent implements OnInit, AfterViewInit {
 
     console.log('initializing cookie consent with theme', theme);
 
-    (<IWindow>window).cookieconsent.initialise({
+    (
+      <IWindow>window
+    ).cookieconsent.initialise({
       palette: {
         popup: {
           background: themeData[theme].quizNameRowStyle.bg,

@@ -125,16 +125,12 @@ export function markedOptionsFactory(): MarkedOptions {
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (
-          createTranslateLoader
-        ),
+        useFactory: createTranslateLoader,
         deps: [HttpClient],
       },
       compiler: {
         provide: TranslateCompiler,
-        useFactory: (
-          createTranslateCompiler
-        ),
+        useFactory: createTranslateCompiler,
       },
     }),
     RouterModule.forRoot(appRoutes, {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { SharedModule } from '../../shared/shared.module';
 import { InfoComponent } from './info.component';
 
@@ -9,23 +10,19 @@ const infoRoutes: Routes = [
     path: 'about',
     component: InfoComponent,
     data: { content: 'about' },
-  },
-  {
+  }, {
     path: 'tos',
     component: InfoComponent,
     data: { content: 'tos' },
-  },
-  {
+  }, {
     path: 'imprint',
     component: InfoComponent,
     data: { content: 'imprint' },
-  },
-  {
+  }, {
     path: 'dataprivacy',
     component: InfoComponent,
     data: { content: 'dataprivacy' },
-  },
-  {
+  }, {
     path: '',
     redirectTo: 'about',
     pathMatch: 'full',
@@ -34,8 +31,7 @@ const infoRoutes: Routes = [
 
 @NgModule({
   imports: [
-    SharedModule,
-    RouterModule.forChild(infoRoutes),
+    SharedModule, RouterModule.forChild(infoRoutes), TranslateModule,
   ],
   declarations: [InfoComponent],
 })

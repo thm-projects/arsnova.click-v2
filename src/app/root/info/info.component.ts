@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -24,10 +24,11 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private footerBarService: FooterBarService,
-    private translateService: TranslateService,
     private trackingService: TrackingService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
+    private translate: TranslateService,
+    private cdRef: ChangeDetectorRef,
   ) {
 
     headerLabelService.headerLabel = 'region.footer.about.title';
@@ -36,6 +37,8 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemHome, this.footerBarService.footerElemTranslation, this.footerBarService.footerElemTheme,
     ]);
+
+    console.log(this.translate, this.cdRef);
 
     if (environment.infoAboutTabEnabled) {
       this.infoButtons.push({
