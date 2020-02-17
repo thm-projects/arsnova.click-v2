@@ -157,10 +157,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "src/assets/piwik/piwik.js",
-                  "with": "src/assets/piwik/piwik.prod.js"
                 }
               ],
               "styles": [
@@ -253,10 +249,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.thm.staging.ts"
-                },
-                {
-                  "replace": "src/assets/piwik/piwik.js",
-                  "with": "src/assets/piwik/piwik.staging.js"
                 }
               ],
               "styles": [
@@ -349,22 +341,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.thm.beta.ts"
-                },
-                {
-                  "replace": "src/assets/piwik/piwik.js",
-                  "with": "src/assets/piwik/piwik.beta.js"
-                },
-                {
-                  "replace": "src/assets/images/logo.svg",
-                  "with": "src/assets/images/logo.westermann.svg"
-                },
-                {
-                  "replace": "src/assets/images/logo.xl.svg",
-                  "with": "src/assets/images/logo.westermann.xl.svg"
-                },
-                {
-                  "replace": "src/assets/images/logo_transparent.png",
-                  "with": "src/assets/images/logo_transparent.westermann.png"
                 }
               ],
               "styles": [
@@ -417,22 +393,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.westermann.ts"
-                },
-                {
-                  "replace": "src/assets/piwik/piwik.js",
-                  "with": "src/assets/piwik/piwik.westermann.js"
-                },
-                {
-                  "replace": "src/assets/images/logo.svg",
-                  "with": "src/assets/images/logo.westermann.svg"
-                },
-                {
-                  "replace": "src/assets/images/logo.xl.svg",
-                  "with": "src/assets/images/logo.westermann.xl.svg"
-                },
-                {
-                  "replace": "src/assets/images/logo_transparent.png",
-                  "with": "src/assets/images/logo_transparent.westermann.png"
                 }
               ],
               "styles": [

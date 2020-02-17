@@ -13,6 +13,9 @@ npm install -g angular-http-server
 echo "Building the app"
 npm run build:"$1"
 
+echo "Copying assets"
+npm run copy:"$1"
+
 cd /usr/src/app/dist
 echo "Starting the http server"
 angular-http-server --path browser/ --silent -p 4711 &
