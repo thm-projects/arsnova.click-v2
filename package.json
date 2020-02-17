@@ -28,7 +28,7 @@
     "copy:piwik:WESTERMANN": "cp src/assets/piwik/piwik.westermann.js dist/browser/assets/piwik/piwik.js",
     "copy:images:PROD": "",
     "copy:images:STAGING_THM": "",
-    "copy:images:BETA_THM": "",
+    "copy:images:BETA_THM": "npm run copy:images:WESTERMANN",
     "copy:images:WESTERMANN": "cp src/assets/images/logo.westermann.svg dist/browser/assets/images/logo.svg; cp src/assets/images/logo.westermann.xl.svg dist/browser/assets/images/logo.xl.svg; cp src/assets/images/logo_transparent.westermann.png dist/browser/assets/images/logo_transparent.png",
     "copy:PROD": "npm run copy:piwik:PROD; npm run copy:images:PROD",
     "copy:STAGING_THM": "npm run copy:piwik:STAGING_THM; npm run copy:images:STAGING_THM",
