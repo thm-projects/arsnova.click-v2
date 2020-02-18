@@ -1,23 +1,24 @@
 <div id="mathjaxStyle"></div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.ANSWEROPTIONS"
-     id="answer-option-preview"
-     [class]="'preview-frame overflow-auto position-relative ' + deviceClass()">
+     [class]="'preview-frame overflow-auto position-relative ' + deviceClass()"
+     id="answer-option-preview">
   <img alt="phone-preview"
-       src="/assets/images/phone_empty.png"
        class="w-100 position-absolute"
-       draggable="false"/>
+       draggable="false"
+       src="/assets/images/phone_empty.png"/>
   <div class="px-4 preview-content position-relative overflow-auto">
-    <app-header [showHeader]="false"></app-header>
+    <app-header [logoSize]="'xs'"
+                [showHeader]="false"></app-header>
 
     <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-      <div id="answer-option-element-wrapper"
-           class="d-flex justify-content-around align-items-center flex-wrap">
+      <div class="d-flex justify-content-around align-items-center flex-wrap"
+           id="answer-option-element-wrapper">
         <div *ngFor="let elem of dataSource; let i = index"
-             class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer"
-             [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()">
+             [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()"
+             class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer">
           <p *ngIf="question.displayAnswerText"
-             class="mb-0 markdown-answer text-dark mathjax-container overflow-hidden"
-             [innerHTML]="sanitizeHTML(elem)"></p>
+             [innerHTML]="sanitizeHTML(elem)"
+             class="mb-0 markdown-answer text-dark mathjax-container overflow-hidden"></p>
           <p *ngIf="!question.displayAnswerText"
              class="mb-0 text-dark">{{normalizeAnswerOptionIndex(i)}}</p>
         </div>
@@ -26,17 +27,18 @@
   </div>
 </div>
 <div *ngIf="targetEnvironment === ENVIRONMENT_TYPE.QUESTION"
-     id="question-preview"
-     [class]="'preview-frame overflow-auto position-relative ' + deviceClass()">
+     [class]="'preview-frame overflow-auto position-relative ' + deviceClass()"
+     id="question-preview">
   <img alt="phone-preview"
-       src="/assets/images/phone_empty.png"
        class="w-100 position-absolute"
-       draggable="false"/>
+       draggable="false"
+       src="/assets/images/phone_empty.png"/>
   <div class="px-4 preview-content position-relative overflow-auto">
-    <app-header [showHeader]="false"></app-header>
+    <app-header [logoSize]="'xs'"
+                [showHeader]="false"></app-header>
     <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-      <p class="mb-0 overflow-hidden mathjax-container"
-         [innerHTML]="sanitizeHTML(dataSource)"></p>
+      <p [innerHTML]="sanitizeHTML(dataSource)"
+         class="mb-0 overflow-hidden mathjax-container"></p>
     </ng-container>
   </div>
 </div>

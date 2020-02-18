@@ -2,10 +2,12 @@
      id="header">
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
     <a [routerLink]="['/']">
-      <svg-icon [svgStyle]="logoStyle"
-                class="text-white d-md-none"
+      <svg-icon [class.d-md-none]="logoSize !== 'xs'"
+                [svgStyle]="logoStyle"
+                class="text-white"
                 src="/assets/images/logo.svg"></svg-icon>
-      <svg-icon [svgStyle]="logoXlStyle"
+      <svg-icon *ngIf="logoSize !== 'xs'"
+                [svgStyle]="logoXlStyle"
                 class="text-white d-none d-md-block"
                 src="/assets/images/logo.xl.svg"></svg-icon>
     </a>
@@ -23,12 +25,12 @@
          #connectionIndicatorPopover="ngbPopover"
          (click)="openConnectionQualityModal(connectionQualityModal)"
          [ngbPopover]="'region.header.connection_status.disconnected' | translate"
+         [style.margin-top.px]="connectionService.lowSpeed ? -20 : connectionService.mediumSpeed ? -10 : 0"
          height="50px"
          id="connection-indicator"
          triggers="manual"
          version="1.1"
          viewBox="0 0 128 128"
-         [style.margin-top.px]="connectionService.lowSpeed ? -20 : connectionService.mediumSpeed ? -10 : 0"
          width="50px"
          xml:space="preserve"
          xmlns="http://www.w3.org/2000/svg">

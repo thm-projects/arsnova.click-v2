@@ -1,4 +1,3 @@
-import { isPlatformBrowser } from '@angular/common';
 import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -21,7 +20,10 @@ import { UpdateCheckService } from '../../service/update-check/update-check.serv
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   public static TYPE = 'HeaderComponent';
+
   @Input() public showHeader = true;
+  @Input() public logoSize = 'auto';
+
   public isCheckingForUpdates: boolean;
   public readonly logoStyle = {
     height: '60px',
@@ -31,29 +33,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     height: '60px',
     width: '60px',
   } : {};
-
-  private _origin: string = isPlatformBrowser(this.platformId) ? location.hostname : '';
-
-  get origin(): string {
-    switch (this._origin) {
-      case 'beta.arsnova.click':
-        return 'Beta';
-      case 'staging.arsnova.click':
-        return 'Staging';
-      default:
-        return '';
-    }
-  }
-
-  private _inHomeRoute: boolean;
-
-  get inHomeRoute(): boolean {
-    return this._inHomeRoute;
-  }
-
-  set inHomeRoute(value: boolean) {
-    this._inHomeRoute = value;
-  }
 
   private _storage: StorageEstimate;
 
@@ -93,14 +72,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.generateConnectionQualityColor();
-
-    if (isPlatformBrowser(this.platformId)) {
-      this.router.events.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe((url: any) => {
-        this.inHomeRoute = (
-          location.pathname === '/home' || location.pathname === '/'
-        );
-      });
-    }
 
     this.connectionService.serverStatusEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(() => {
       if (!this.showHeader) {

@@ -9,9 +9,9 @@ export const environment: IEnvironment = {
   enableCasLogin: true,
   sentryDSN: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
   ssrEndpoint: 'http://localhost:4000',
-  serverEndpoint: 'http://localhost:3030',
-  httpApiEndpoint: 'http://localhost:3030/api/v1',
-  httpLibEndpoint: 'http://localhost:3030/lib',
+  serverEndpoint: 'http://localhost:3010',
+  httpApiEndpoint: 'http://localhost:3010/api/v1',
+  httpLibEndpoint: 'http://localhost:3010/lib',
   stompConfig: {
     endpoint: 'ws://localhost:15674/ws',
     user: 'arsnova-click',
