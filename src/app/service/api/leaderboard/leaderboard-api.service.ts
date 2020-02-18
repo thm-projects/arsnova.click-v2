@@ -13,7 +13,8 @@ export class LeaderboardApiService {
   constructor(private http: HttpClient) { }
 
   public LEADERBOARD_GET_DATA_URL(quizName: string, amount: number, questionIndex?: number): string {
-    return `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${quizName}/${amount}/${questionIndex}`;
+    return `${DefaultSettings.httpApiEndpoint}/quiz/leaderboard/${encodeURIComponent(quizName)}/${encodeURIComponent(amount)}/${encodeURIComponent(
+      questionIndex)}`;
   }
 
   public getLeaderboardData(quizName: string, amount: number, questionIndex?: number): Observable<IMessage> {

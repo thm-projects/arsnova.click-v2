@@ -12,7 +12,7 @@ export class AuthorizeApiService {
   constructor(private http: HttpClient) { }
 
   public AUTHORIZE_TOKEN_GET_URL(token: string): string {
-    return `${DefaultSettings.httpLibEndpoint}/authorize/${token}`;
+    return `${DefaultSettings.httpLibEndpoint}/authorize/${encodeURIComponent(token)}`;
   }
 
   public AUTHORIZE_STATIC_POST_URL(): string {
@@ -20,7 +20,7 @@ export class AuthorizeApiService {
   }
 
   public AUTHORIZE_VALIDATE_TOKEN_GET_URL(username, token: string): string {
-    return `${DefaultSettings.httpLibEndpoint}/authorize/validate/${username}/${token}`;
+    return `${DefaultSettings.httpLibEndpoint}/authorize/validate/${encodeURIComponent(username)}/${encodeURIComponent(token)}`;
   }
 
   public getAuthorizationForToken(token: string): Observable<IMessage> {

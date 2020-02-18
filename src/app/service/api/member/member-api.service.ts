@@ -67,17 +67,17 @@ export class MemberApiService {
       return of(null);
     }
 
-    return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${quizName}/${nickName}`,
+    return this.http.delete<IMessage>(`${this._deleteMemberUrl}/${encodeURIComponent(quizName)}/${encodeURIComponent(nickName)}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getMembers(quizname: string): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getMembersUrl}/${quizname}`,
+    return this.http.get<IMessage>(`${this._getMembersUrl}/${encodeURIComponent(quizname)}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getAvailableNames(quizName: string): Observable<Array<string>> {
-    return this.http.get<Array<string>>(`${this._getAvailableMemberNamesUrl}/${quizName}`);
+    return this.http.get<Array<string>>(`${this._getAvailableMemberNamesUrl}/${encodeURIComponent(quizName)}`);
   }
 
   public putConfidenceValue(confidenceValue: number): Observable<IMessage> {

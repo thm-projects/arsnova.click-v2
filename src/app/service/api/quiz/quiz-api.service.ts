@@ -12,7 +12,6 @@ import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 })
 export class QuizApiService {
   private _getFreeMemberGroupUrl: string;
-  private _getFullQuizStatusDataUrl: string;
 
   get getFreeMemberGroupUrl(): string {
     return this._getFreeMemberGroupUrl;
@@ -58,6 +57,7 @@ export class QuizApiService {
     return this._getQuizStatusUrl;
   }
 
+  private _getFullQuizStatusDataUrl: string;
   private _initQuizInstanceUrl: string;
   private _getQuizUrl: string;
   private _setQuizAsPrivateUrl: string;
@@ -99,12 +99,12 @@ export class QuizApiService {
   }
 
   public deleteQuiz(quiz: QuizEntity): Observable<IMessage> {
-    return this.http.delete<IMessage>(`${this._deleteQuizUrl}/${quiz.name}`,
+    return this.http.delete<IMessage>(`${this._deleteQuizUrl}/${encodeURIComponent(quiz.name)}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public resetQuiz(quiz: QuizEntity): Observable<IMessage> {
-    return this.http.post<IMessage>(`${this._postResetQuizUrl}/${quiz.name}`, {},
+    return this.http.post<IMessage>(`${this._postResetQuizUrl}/${encodeURIComponent(quiz.name)}`, {},
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
@@ -121,7 +121,7 @@ export class QuizApiService {
   }
 
   public getQuizSettings(quizName: string): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getQuizSettingsUrl}/${quizName}`);
+    return this.http.get<IMessage>(`${this._getQuizSettingsUrl}/${encodeURIComponent(quizName)}`);
   }
 
   public postQuizUpload(formData: FormData): Observable<IMessage> {
@@ -140,7 +140,8 @@ export class QuizApiService {
   }
 
   public getQuiz(quizName: string): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getQuizUrl}/${quizName}`, { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
+    return this.http.get<IMessage>(`${this._getQuizUrl}/${encodeURIComponent(quizName)}`,
+      { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getQuizStartTime(): Observable<number> {
@@ -149,20 +150,20 @@ export class QuizApiService {
   }
 
   public getFreeMemberGroup(quizName: string): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getFreeMemberGroupUrl}/${quizName}`,
+    return this.http.get<IMessage>(`${this._getFreeMemberGroupUrl}/${encodeURIComponent(quizName)}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) || sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public generateABCDQuiz(language: string, length: number): Observable<QuizEntity> {
-    return this.http.get<QuizEntity>(`${this._getAbcdQuizUrl}/${language}/${length}`);
+    return this.http.get<QuizEntity>(`${this._getAbcdQuizUrl}/${encodeURIComponent(language)}/${encodeURIComponent(length)}`);
   }
 
   public generateDemoQuiz(language: string): Observable<QuizEntity> {
-    return this.http.get<QuizEntity>(`${this._getDemoQuizUrl}/${language}`);
+    return this.http.get<QuizEntity>(`${this._getDemoQuizUrl}/${encodeURIComponent(language)}`);
   }
 
   public deleteActiveQuiz(quiz: QuizEntity): Observable<void> {
-    return this.http.delete<void>(`${this._deleteActiveQuizUrl}/${quiz.name}`,
+    return this.http.delete<void>(`${this._deleteActiveQuizUrl}/${encodeURIComponent(quiz.name)}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 

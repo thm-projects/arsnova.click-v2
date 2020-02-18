@@ -44,7 +44,8 @@ export class AdminApiService {
   }
 
   public getQuiz(quizname: string): Observable<QuizEntity> {
-    return this.http.get<QuizEntity>(`${this._getQuizUrl}/${quizname}`, { headers: { authorization: this.userService.staticLoginToken } });
+    return this.http.get<QuizEntity>(`${this._getQuizUrl}/${encodeURIComponent(quizname)}`,
+      { headers: { authorization: this.userService.staticLoginToken } });
   }
 
   public deactivateQuiz(quizname: string): Observable<void> {

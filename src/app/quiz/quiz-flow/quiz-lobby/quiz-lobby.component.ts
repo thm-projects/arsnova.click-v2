@@ -69,7 +69,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     private ngbModal: NgbModal,
     private sharedService: SharedService,
     private userService: UserService,
-    private messageQueue: SimpleMQ, private customMarkdownService: CustomMarkdownService,
+    private messageQueue: SimpleMQ,
+    private customMarkdownService: CustomMarkdownService,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
@@ -145,7 +146,15 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   public transformForegroundColor(rgbObj: { r: number, g: number, b: number }): string {
-    const o = Math.round(((rgbObj.r * 299) + (rgbObj.g * 587) + (rgbObj.b * 114)) / 1000);
+    const o = Math.round((
+                           (
+                             rgbObj.r * 299
+                           ) + (
+                             rgbObj.g * 587
+                           ) + (
+                             rgbObj.b * 114
+                           )
+                         ) / 1000);
     return o < 125 ? 'ffffff' : '000000';
   }
 
@@ -154,10 +163,11 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   public parseNickname(value: string): string {
-    if (value.match(/:[\w\+\-]+:/g)) {
-      return this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(value));
-    }
-    return value;
+    return this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(value));
+  }
+
+  public isHtmlNickname(value: string): boolean {
+    return Boolean(value.match(/:[\w\+\-]+:/g));
   }
 
   public ngOnDestroy(): void {

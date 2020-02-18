@@ -14,8 +14,11 @@
            [style.background-color]="'#' + sanitizeHTML(elem.colorCode)"
            [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
            class="member-wrapper rounded h-100 d-flex align-items-center justify-content-center">
-        <p [innerHTML]="parseNickname(elem.name)"
-           class="mb-0 p-2 break-word"></p>
+        <p class="mb-0 p-2 break-word">
+          <span *ngIf="isHtmlNickname(elem.name)"
+                [innerHTML]="parseNickname(elem.name)"></span>
+          <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>
+        </p>
       </div>
     </div>
   </ng-container>
@@ -47,8 +50,11 @@
                  [style.color]="'#' + sanitizeHTML(elem.colorCode)"
                  class="member-wrapper rounded px-1 py-1 fa-2x">>
         </fa-icon>
-        <p [innerHTML]="parseNickname(elem.name)"
-           class="ml-2 attendee-text text-truncate mb-0 align-self-center"></p>
+        <p class="ml-2 attendee-text text-truncate mb-0 align-self-center">
+          <span *ngIf="isHtmlNickname(elem.name)"
+                [innerHTML]="parseNickname(elem.name)"></span>
+          <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>
+        </p>
       </div>
     </div>
   </div>
@@ -70,7 +76,10 @@
 
   <div class="modal-body">
     <p class="d-inline-flex">
-      {{'component.lobby.kick_member_confirmation' | translate:{NAME: parseNickname(nickToRemove)} }}</p>
+      <span *ngIf="isHtmlNickname(nickToRemove)"
+            [innerHTML]="'component.lobby.kick_member_confirmation' | translate:{NAME: parseNickname(nickToRemove)}"></span>
+      <span *ngIf="!isHtmlNickname(nickToRemove)">{{'component.lobby.kick_member_confirmation' | translate:{NAME: nickToRemove} }}</span>
+    </p>
   </div>
 
   <div class="modal-footer">

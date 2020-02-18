@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   @Input() public showHeader = true;
   @Input() public logoSize = 'auto';
+  @Input() public interactiveLogo = true;
 
   public isCheckingForUpdates: boolean;
   public readonly logoStyle = {

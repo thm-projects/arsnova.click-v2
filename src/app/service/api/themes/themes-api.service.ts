@@ -12,7 +12,7 @@ export class ThemesApiService {
 
   public THEMES_PREVIEW_GET_URL(id: string, langRef: string): Array<string> {
     return frontendPreview.map(derivate => {
-      return `/assets/images/theme/${id}/preview_${langRef}_s${derivate}.png`;
+      return `/assets/images/theme/${encodeURIComponent(id)}/preview_${langRef}_s${derivate}.png`;
     });
   }
 

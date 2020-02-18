@@ -37,7 +37,7 @@ describe('QuizApiService', () => {
     };
 
     service.getQuizStatus(quizName).subscribe();
-    backend.expectOne(`${service.getQuizStatusUrl}/${quizName}`).flush(quizStatusData);
+    backend.expectOne(`${service.getQuizStatusUrl}/${encodeURIComponent(quizName)}`).flush(quizStatusData);
 
     expect(service).toBeTruthy();
   }));
@@ -47,7 +47,7 @@ describe('QuizApiService', () => {
     const langKey = 'en';
 
     service.generateDemoQuiz(langKey).subscribe();
-    backend.expectOne(`${service.getDemoQuizUrl}/${langKey}`).flush({});
+    backend.expectOne(`${service.getDemoQuizUrl}/${encodeURIComponent(langKey)}`).flush({});
 
     expect(service).toBeTruthy();
   }));
@@ -58,7 +58,7 @@ describe('QuizApiService', () => {
     const length = 4;
 
     service.generateABCDQuiz(langKey, length).subscribe();
-    backend.expectOne(`${service.getAbcdQuizUrl}/${langKey}/${length}`).flush({});
+    backend.expectOne(`${service.getAbcdQuizUrl}/${encodeURIComponent(langKey)}/${encodeURIComponent(length)}`).flush({});
 
     expect(service).toBeTruthy();
   }));
@@ -83,7 +83,7 @@ describe('QuizApiService', () => {
     const quizName = 'test';
 
     service.getQuizStatus(quizName).subscribe();
-    backend.expectOne(`${service.getQuizStatusUrl}/${quizName}`).flush({});
+    backend.expectOne(`${service.getQuizStatusUrl}/${encodeURIComponent(quizName)}`).flush({});
 
     expect(service).toBeTruthy();
   }));

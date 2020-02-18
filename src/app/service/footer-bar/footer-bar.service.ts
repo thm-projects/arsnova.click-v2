@@ -503,8 +503,9 @@ export class FooterBarService {
 
     this.footerElemExport.restoreClickCallback();
     this.footerElemExport.onClickCallback = async () => {
-      const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${this.quizService.quiz.name}/${sessionStorage.getItem(
-        StorageKey.PrivateKey)}/${this.themesService.currentTheme}/${this.translateService.currentLang}`;
+      const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${encodeURIComponent(this.quizService.quiz.name)}/${encodeURIComponent(
+        sessionStorage.getItem(StorageKey.PrivateKey))}/${encodeURIComponent(this.themesService.currentTheme)}/${encodeURIComponent(
+        this.translateService.currentLang)}`;
       window.open(link);
     };
 

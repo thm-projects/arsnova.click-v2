@@ -97,7 +97,7 @@ const appRoutes: Routes = [
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
-  renderer.paragraph = (text) => `${text}<br/>`;
+  renderer.paragraph = (text) => `${text}`;
 
   return {
     renderer: renderer,

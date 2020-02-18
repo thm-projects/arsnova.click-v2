@@ -7,7 +7,8 @@
        draggable="false"
        src="/assets/images/phone_empty.png"/>
   <div class="px-4 preview-content position-relative overflow-auto">
-    <app-header [logoSize]="'xs'"
+    <app-header [interactiveLogo]="false"
+                [logoSize]="'xs'"
                 [showHeader]="false"></app-header>
 
     <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
@@ -34,7 +35,8 @@
        draggable="false"
        src="/assets/images/phone_empty.png"/>
   <div class="px-4 preview-content position-relative overflow-auto">
-    <app-header [logoSize]="'xs'"
+    <app-header [interactiveLogo]="false"
+                [logoSize]="'xs'"
                 [showHeader]="false"></app-header>
     <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
       <p [innerHTML]="sanitizeHTML(dataSource)"

@@ -7,11 +7,9 @@ import { DefaultSettings } from '../../../lib/default.settings';
 })
 export class FilesApiService {
 
-  constructor(
-    private http: HttpClient,
-  ) { }
+  constructor(private http: HttpClient) { }
 
   public SOUND_FILE_GET_URL(target: 'lobby' | 'countdownRunning' | 'countdownEnd', fileName: string): string {
-    return `${DefaultSettings.httpApiEndpoint}/files/sound/${target}/${fileName}.mp3`;
+    return `${DefaultSettings.httpApiEndpoint}/files/sound/${encodeURIComponent(target)}/${encodeURIComponent(fileName)}.mp3`;
   }
 }

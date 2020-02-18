@@ -1,7 +1,7 @@
 <nav class="navbar navbar-header flex-nowrap"
      id="header">
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
-    <a [routerLink]="['/']">
+    <a [routerLink]="interactiveLogo ? ['/'] : null">
       <svg-icon [class.d-md-none]="logoSize !== 'xs'"
                 [svgStyle]="logoStyle"
                 class="text-white"
