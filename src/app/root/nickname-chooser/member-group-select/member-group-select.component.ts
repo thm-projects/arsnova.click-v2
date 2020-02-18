@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
@@ -14,7 +14,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   templateUrl: './member-group-select.component.html',
   styleUrls: ['./member-group-select.component.scss'],
 })
-export class MemberGroupSelectComponent {
+export class MemberGroupSelectComponent implements OnDestroy {
   public static TYPE = 'MemberGroupSelectComponent';
 
   private _memberGroups: Array<string> = [];
@@ -62,9 +62,16 @@ export class MemberGroupSelectComponent {
     if (isPlatformBrowser(this.platformId)) {
       sessionStorage.setItem(StorageKey.CurrentMemberGroupName, groupName);
       this.router.navigate([
-        '/nicks', (this.quizService.quiz.sessionConfig.nicks.selectedNicks.length ? 'select' : 'input'),
+        '/nicks',
+        (
+          this.quizService.quiz.sessionConfig.nicks.selectedNicks.length ? 'select' : 'input'
+        ),
       ]);
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.footerBarService.footerElemBack.restoreClickCallback();
   }
 
 }

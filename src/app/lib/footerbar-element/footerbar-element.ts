@@ -37,7 +37,9 @@ export class FooterbarElement implements IFooterBarElement {
   }
 
   set onClickCallback(value: Function) {
-    this._restoreOnClickCallback = this._onClickCallback;
+    if (!this._restoreOnClickCallback) {
+      this._restoreOnClickCallback = this._onClickCallback;
+    }
     this._onClickCallback = value;
   }
 
