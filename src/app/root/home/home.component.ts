@@ -120,8 +120,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.updateFooterElements(this.userService.isLoggedIn);
     this.canModifyQuiz = !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin);
-    this.canUsePublicQuizzes = (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin))
-                               && !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz);
+    this.canUsePublicQuizzes = (
+                               environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)
+                               ) && !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz);
 
     this.quizService.stopEditMode();
   }
@@ -137,8 +138,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.userService.loginNotifier.pipe(takeUntil(this._destroy), distinctUntilChanged()).subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
-      this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin));
-      this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz));
+      this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (
+        isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin)
+      );
+      this.canUsePublicQuizzes = !environment.requireLoginToCreateQuiz || (
+        isLoggedIn && this.userService.isAuthorizedFor(UserRole.CreateQuiz)
+      );
     });
 
     this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(async params => {
@@ -149,7 +154,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
         if (this._ownQuizzes.length && //
             environment.showJoinableQuizzes && //
-            (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz))) {
+            (
+              !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz)
+            )) {
           const ref = this.modalService.open(AvailableQuizzesComponent);
           this._destroy.subscribe(() => ref.close());
         }
@@ -221,7 +228,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public setPassword(event: Event): void {
-    this._serverPassword = (<HTMLInputElement>event.target).value;
+    this._serverPassword = (
+      <HTMLInputElement>event.target
+    ).value;
   }
 
   public handleClick(id: string): boolean {
@@ -288,7 +297,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       return null;
     }
 
-    if (this.passwordRequired && !(this._serverPassword && this._serverPassword.length)) {
+    if (this.passwordRequired && !(
+        this._serverPassword && this._serverPassword.length
+    )) {
       return;
     }
 
@@ -334,13 +345,17 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemFullscreen,
     ];
 
-    if (!environment.requireLoginToCreateQuiz && (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin))) {
+    if (!environment.requireLoginToCreateQuiz && (
+      environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)
+    )) {
       footerElements.push(this.footerBarService.footerElemHashtagManagement);
       footerElements.push(this.footerBarService.footerElemImport);
     }
 
     if (isLoggedIn) {
-      if (environment.requireLoginToCreateQuiz && (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin))) {
+      if (environment.requireLoginToCreateQuiz && (
+        environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)
+      )) {
         if (this.userService.isAuthorizedFor(UserRole.CreateQuiz)) {
           footerElements.push(this.footerBarService.footerElemHashtagManagement);
         }
@@ -371,7 +386,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private async reserveQuiz(questionGroup: QuizEntity, routingTarget: Array<string>): Promise<void> {
     this.quizApiService.setQuiz(questionGroup).subscribe(modifiedQuestionGroup => {
-      this.quizService.persistQuiz(new QuizEntity(questionGroup));
+      this.quizService.quiz = new QuizEntity(questionGroup);
+      this.quizService.persist();
 
       this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
       this.quizService.isOwner = true;
@@ -440,7 +456,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.canAddQuiz = false;
     this.canEditQuiz = true;
     this.canStartQuiz = this.connectionService.serverAvailable && //
-                        (this.settingsService.serverSettings && !this.settingsService.serverSettings.createQuizPasswordRequired) && //
+                        (
+                        this.settingsService.serverSettings && !this.settingsService.serverSettings.createQuizPasswordRequired
+                        ) && //
                         currentQuiz.isValid();
     this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
     this.isQueryingQuizState = false;
@@ -469,7 +487,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.isQueryingQuizState = false;
 
       if (value.status === StatusProtocol.Success) {
-        if (value.step === MessageProtocol.AlreadyTaken || (value.payload.state && value.payload.state !== QuizState.Active)) {
+        if (value.step === MessageProtocol.AlreadyTaken || (
+          value.payload.state && value.payload.state !== QuizState.Active
+        )) {
           this.canAddQuiz = false;
           this.canJoinQuiz = false;
           this.passwordRequired = false;
@@ -541,7 +561,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
     if (hasMatchedABCDQuiz) {
       const questionGroup = await this.storageService.db.Quiz.get(hasMatchedABCDQuiz);
-      const answerOptionList = (<Array<AbstractAnswerEntity>>[]);
+      const answerOptionList = (
+        <Array<AbstractAnswerEntity>>[]
+      );
 
       answerList.forEach((character, index) => {
         answerOptionList.push(new DefaultAnswerEntity({
@@ -568,11 +590,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       Object.assign({}, DefaultSettings.defaultQuizSettings.sessionConfig, value.sessionConfig);
 
       const questionGroup = value;
-      const answerOptionList = (<Array<AbstractAnswerEntity>>[]);
+      const answerOptionList = (
+        <Array<AbstractAnswerEntity>>[]
+      );
 
       answerList.forEach((character, index) => {
         answerOptionList.push(new DefaultAnswerEntity({
-          answerText: (String.fromCharCode(index + 65)),
+          answerText: (
+            String.fromCharCode(index + 65)
+          ),
         }));
       });
       this.enteredSessionName = questionGroup.name;
