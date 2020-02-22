@@ -444,7 +444,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         });
       };
     } else {
-      footerElems = [this.footerBarService.footerElemShowToken, this.footerBarService.footerElemTwitterTweet];
+      footerElems = [this.footerBarService.footerElemShowToken];
+      if (environment.enableTwitter) {
+        footerElems.push(this.footerBarService.footerElemTwitterTweet);
+      }
       this.footerBarService.footerElemShowToken.onClickCallback = async () => {
         this.ngbModal.open(BonusTokenComponent);
       };

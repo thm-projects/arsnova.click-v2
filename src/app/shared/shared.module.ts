@@ -1,8 +1,9 @@
-import {CommonModule} from '@angular/common';
-import {NgModule} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
-import {FaIconLibrary, FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import {
   faAlignLeft,
   faAppleAlt,
@@ -32,6 +33,7 @@ import {
   faImage,
   faInfoCircle,
   faItalic,
+  faKey,
   faLanguage,
   faListUl,
   faLock,
@@ -59,39 +61,39 @@ import {
   faUpload,
   faUsers,
   faWrench,
-  faKey
 } from '@fortawesome/free-solid-svg-icons';
-import {faTwitter} from '@fortawesome/free-brands-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { environment } from '../../environments/environment';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
-import { from } from 'rxjs';
 
 @NgModule({
-    imports: [
-        FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(),
-    ],
-    exports: [
-        FormsModule,
-        CommonModule,
-        FontAwesomeModule,
-        TranslateModule,
-        NgbModule,
-        RouterModule,
-        AudioPlayerComponent,
-        GamificationAnimationComponent,
-        AngularSvgIconModule,
-        NoDataErrorComponent,
-    ],
-    declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent],
-    bootstrap: [],
+  imports: [
+    FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(),
+  ],
+  exports: [
+    FormsModule,
+    CommonModule,
+    FontAwesomeModule,
+    TranslateModule,
+    NgbModule,
+    RouterModule,
+    AudioPlayerComponent,
+    GamificationAnimationComponent,
+    AngularSvgIconModule,
+    NoDataErrorComponent,
+  ],
+  declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent],
+  bootstrap: [],
 })
 export class SharedModule {
   constructor(library: FaIconLibrary) {
-    library.addIcons(faTwitter);
+    if (environment.enableTwitter) {
+      library.addIcons(faTwitter);
+    }
     library.addIcons(faTimes);
     library.addIcons(faSpinner);
     library.addIcons(faInfoCircle);

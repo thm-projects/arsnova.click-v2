@@ -33,8 +33,8 @@ import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { TwitterService } from '../../service/twitter/twitter.service';
 import { UserService } from '../../service/user/user.service';
-import {TwitterService} from '../../service/twitter/twitter.service';
 
 @Component({
   selector: 'app-home',
@@ -59,6 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public isQueryingQuizState: boolean;
   public Title = Title;
   public readonly selectedTitle = environment.title;
+  public readonly twitterEnabled = environment.enableTwitter;
 
   private _serverPassword = '';
 
@@ -113,7 +114,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     public connectionService: ConnectionService,
     public sharedService: SharedService,
     public memberApiService: MemberApiService,
-    public twitterService: TwitterService
+    public twitterService: TwitterService,
   ) {
 
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
