@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IconName } from '@fortawesome/fontawesome-svg-core';
+import { IconPathData, IconPrefix } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { INamedType } from '../../lib/interfaces/interfaces';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -75,9 +75,9 @@ export class FooterBarComponent implements OnInit {
     });
   }
 
-  public getIconClass(elem: IFooterBarElement): IconName {
+  public getIconClass(elem: IFooterBarElement): [IconPrefix, IconPathData] {
     if (elem.isLoading) {
-      return 'spinner';
+      return ['fas', 'spinner'];
     }
 
     return elem.iconClass;
@@ -97,6 +97,8 @@ export class FooterBarComponent implements OnInit {
   }
 
   private fetchChildComponent(route: ActivatedRoute): INamedType {
-    return <INamedType>(route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component);
+    return <INamedType>(
+      route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component
+    );
   }
 }

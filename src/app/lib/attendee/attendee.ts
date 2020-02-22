@@ -75,6 +75,16 @@ export class Attendee implements IMemberSerialized {
     this._colorCode = value;
   }
 
+  private _isActive: boolean;
+
+  get isActive(): boolean {
+    return this._isActive;
+  }
+
+  set isActive(value: boolean) {
+    this._isActive = value;
+  }
+
   constructor(member: IMemberSerialized) {
     this._id = member.id;
     this._name = member.name;
@@ -83,5 +93,6 @@ export class Attendee implements IMemberSerialized {
     this._colorCode = member.colorCode;
     this._responses = member.responses || [];
     this._ticket = member.ticket;
+    this._isActive = member.isActive;
   }
 }

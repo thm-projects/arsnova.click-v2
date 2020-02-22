@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -34,6 +34,7 @@ import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
+import {TwitterService} from '../../service/twitter/twitter.service';
 
 @Component({
   selector: 'app-home',
@@ -87,6 +88,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this._ownQuizzes;
   }
 
+  @ViewChild('enteredSessionNameInput', { static: true }) private enteredSessionNameInput: HTMLInputElement;
   private readonly _destroy = new Subject();
   private _isPerformingClick: Array<string> = [];
 
@@ -111,6 +113,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     public connectionService: ConnectionService,
     public sharedService: SharedService,
     public memberApiService: MemberApiService,
+    public twitterService: TwitterService
   ) {
 
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
@@ -436,8 +439,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.ownQuizzes.find(quiz => quiz === quizName)) {
-      this.selectQuizAsExisting(quizName);
+    const localQuiz = this.ownQuizzes.find(quiz => quiz.toLowerCase().trim() === quizName.toLowerCase().trim());
+    if (localQuiz) {
+      if (localQuiz !== quizName) {
+        this.selectQuizByName(localQuiz);
+        return;
+      }
+      this.selectQuizAsExisting(localQuiz);
     } else if (quizName.toLowerCase() === 'demo quiz') {
       this.selectQuizAsDemoQuiz();
     } else if (checkABCDOrdering(quizName)) {
@@ -462,6 +470,7 @@ export class HomeComponent implements OnInit, OnDestroy {
                         currentQuiz.isValid();
     this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
     this.isQueryingQuizState = false;
+    this.enteredSessionName = currentQuiz.name;
   }
 
   private selectQuizAsDemoQuiz(): void {
@@ -561,9 +570,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
     if (hasMatchedABCDQuiz) {
       const questionGroup = await this.storageService.db.Quiz.get(hasMatchedABCDQuiz);
-      const answerOptionList = (
-        <Array<AbstractAnswerEntity>>[]
-      );
+      const answerOptionList: Array<AbstractAnswerEntity> = [];
 
       answerList.forEach((character, index) => {
         answerOptionList.push(new DefaultAnswerEntity({
@@ -590,9 +597,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       Object.assign({}, DefaultSettings.defaultQuizSettings.sessionConfig, value.sessionConfig);
 
       const questionGroup = value;
-      const answerOptionList = (
-        <Array<AbstractAnswerEntity>>[]
-      );
+      const answerOptionList: Array<AbstractAnswerEntity> = [];
 
       answerList.forEach((character, index) => {
         answerOptionList.push(new DefaultAnswerEntity({

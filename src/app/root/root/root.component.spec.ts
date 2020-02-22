@@ -31,6 +31,8 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { TwitterService } from '../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { UserService } from '../../service/user/user.service';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
@@ -82,7 +84,10 @@ describe('RootComponent', () => {
               default: {},
               config: {},
             },
-          }, RxStompService, SimpleMQ,
+          }, RxStompService, SimpleMQ, {
+            provide: TwitterService,
+            useClass: TwitterServiceMock,
+          },
         ],
         declarations: [
           HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent, TranslatePipeMock,

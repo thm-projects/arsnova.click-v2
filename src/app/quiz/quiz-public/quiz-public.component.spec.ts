@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -13,6 +14,8 @@ import { FileUploadService } from '../../service/file-upload/file-upload.service
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
+import { TwitterService } from '../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuizPublicComponent } from './quiz-public.component';
 
@@ -32,7 +35,7 @@ describe('QuizPublicComponent', () => {
         }),
       ],
       providers: [
-        RxStompService, FooterBarService, {
+        RxStompService, SimpleMQ, FooterBarService, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
         }, {
@@ -45,6 +48,9 @@ describe('QuizPublicComponent', () => {
               get: () => 0,
             }),
           },
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
         },
       ],
       declarations: [QuizPublicComponent, TranslatePipeMock],

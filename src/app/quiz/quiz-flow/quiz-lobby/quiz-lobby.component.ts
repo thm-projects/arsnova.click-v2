@@ -79,6 +79,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   public ngOnInit(): void {
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       console.log('QuizLobbyComponent: quizUpdateEmitter fired', quiz);
+      this.attendeeService.reloadData();
       if (!quiz) {
         return;
       }

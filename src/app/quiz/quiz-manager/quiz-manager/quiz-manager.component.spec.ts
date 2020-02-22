@@ -7,6 +7,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService, TranslateStore } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { FooterModule } from '../../../footer/footer.module';
@@ -24,6 +25,8 @@ import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
+import { TwitterService } from '../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { UserService } from '../../../service/user/user.service';
 
 import { QuizManagerComponent } from './quiz-manager.component';
@@ -44,7 +47,7 @@ describe('QuizManagerComponent', () => {
         }), HttpClientTestingModule, RouterTestingModule, FooterModule, FontAwesomeModule, NgbPopoverModule, NgbTooltipModule,
       ],
       providers: [
-        RxStompService, UserService, {
+        RxStompService, SimpleMQ, UserService, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
@@ -59,6 +62,9 @@ describe('QuizManagerComponent', () => {
         }, SharedService, TranslateStore, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
         },
       ],
       declarations: [QuizManagerComponent, TranslatePipeMock],

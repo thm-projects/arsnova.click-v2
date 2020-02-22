@@ -17,6 +17,8 @@ import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { TwitterService } from '../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { LanguageSwitcherComponent } from './language-switcher.component';
 
@@ -45,6 +47,9 @@ describe('LanguageSwitcherComponent', () => {
         }, SharedService, HeaderLabelService, {
           provide: TrackingService,
           useClass: TrackingMockService,
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
         },
       ],
       declarations: [LanguageSwitcherComponent, TranslatePipeMock],

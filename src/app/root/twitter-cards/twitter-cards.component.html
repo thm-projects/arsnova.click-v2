@@ -1,0 +1,38 @@
+<div class="tweet-container row gutters-2">
+
+  <div *ngFor="let tweet of twitterService.tweets | slice:0:4"
+       class="col-xl-6 mb-2">
+    <div class="card tweet">
+      <div (click)="tweet.url ? goToTwitter(tweet.url) : null"
+           class="card-body">
+        <div class="header">
+          <img alt="Avatar"
+               class="avatar"
+               src="{{tweet.profile_image_url_https}}">
+          <div class="name">{{tweet.name}}</div>
+          <div class="username">
+            <a href=#>@{{tweet.screen_name}}</a>
+          </div>
+          <div class="tw-icon-container">
+            <a *ngIf="tweet.url"
+               class="color-twitter"
+               href="{{tweet.url}}">
+              <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
+            </a>
+            <span
+              *ngIf="!tweet.url"
+              class="tw-icon">
+              <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
+            </span>
+          </div>
+        </div>
+
+        <p class="card-text">{{tweet.text}}</p>
+        <div class="footer">
+          <div class="follower">Follower: {{tweet.followers_count}}</div>
+          <div class="date">{{tweet.created_at | date:"MMM d, y, h:mm a"}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

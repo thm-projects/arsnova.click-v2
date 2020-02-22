@@ -6,6 +6,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -16,6 +17,8 @@ import { CasLoginService } from '../../service/login/cas-login.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
+import { TwitterService } from '../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
@@ -39,7 +42,7 @@ describe('I18nManagerOverviewComponent', () => {
         }), HttpClientTestingModule, NgbModalModule, SharedModule, PipesModule, RouterTestingModule, InfiniteScrollModule,
       ],
       providers: [
-        RxStompService, {
+        RxStompService, SimpleMQ, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, {
@@ -48,7 +51,10 @@ describe('I18nManagerOverviewComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
-        }, CasLoginService, FooterBarService, HeaderLabelService, ModalOrganizerService,
+        }, CasLoginService, FooterBarService, HeaderLabelService, ModalOrganizerService, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
+        },
       ],
       declarations: [KeyOutputComponent, I18nManagerOverviewComponent],
     })

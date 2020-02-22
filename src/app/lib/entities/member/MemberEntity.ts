@@ -10,6 +10,7 @@ export class MemberEntity {
   public responses: Array<IQuizResponse>;
   public casProfile: ICasData;
   public ticket: string;
+  public isActive: boolean;
 
   constructor(data) {
     this.currentQuizName = data.currentQuizName;
@@ -20,5 +21,6 @@ export class MemberEntity {
     this.responses = data.responses;
     this.casProfile = data.casProfile;
     this.ticket = data.ticket;
+    this.isActive = data.isActive;
   }
 }

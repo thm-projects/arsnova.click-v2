@@ -8,12 +8,14 @@ import { environment } from '../../../environments/environment';
 import { DefaultSettings } from '../../lib/default.settings';
 import { StorageKey } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
+import { QuizState } from '../../lib/enums/QuizState';
 import { FooterbarElement } from '../../lib/footerbar-element/footerbar-element';
 import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
 import { AttendeeService } from '../attendee/attendee.service';
 import { QuizService } from '../quiz/quiz.service';
 import { ThemesService } from '../themes/themes.service';
+import { TwitterService } from '../twitter/twitter.service';
 import { UserService } from '../user/user.service';
 
 declare class Modernizr {
@@ -84,7 +86,7 @@ export class FooterBarService {
 
   public footerElemTranslation: IFooterBarElement = new FooterbarElement({
     id: 'translation',
-    iconClass: 'globe',
+    iconClass: ['fas', 'globe'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.languages',
     selectable: false,
@@ -95,7 +97,7 @@ export class FooterBarService {
   });
   public footerElemSound: IFooterBarElement = new FooterbarElement({
     id: 'sound',
-    iconClass: 'music',
+    iconClass: ['fas', 'music'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.sound',
     selectable: false,
@@ -107,7 +109,7 @@ export class FooterBarService {
   });
   public footerElemReadingConfirmation: IFooterBarElement = new FooterbarElement({
     id: 'reading-confirmation',
-    iconClass: 'eye',
+    iconClass: ['fas', 'eye'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.reading-confirmation',
     selectable: true,
@@ -119,7 +121,7 @@ export class FooterBarService {
   });
   public footerElemTheme: IFooterBarElement = new FooterbarElement({
     id: 'theme',
-    iconClass: 'apple-alt',
+    iconClass: ['fas', 'apple-alt'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.style',
     selectable: false,
@@ -131,7 +133,7 @@ export class FooterBarService {
   });
   public footerElemImport: IFooterBarElement = new FooterbarElement({
     id: 'import',
-    iconClass: 'upload',
+    iconClass: ['fas', 'upload'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.import',
     selectable: false,
@@ -145,7 +147,7 @@ export class FooterBarService {
   });
   public footerElemHashtagManagement: IFooterBarElement = new FooterbarElement({
     id: 'sessionManagement',
-    iconClass: 'wrench',
+    iconClass: ['fas', 'wrench'],
     textClass: 'footerElementText',
     textName: 'component.name_management.session_management',
     selectable: false,
@@ -157,7 +159,7 @@ export class FooterBarService {
   });
   public footerElemFullscreen: IFooterBarElement = new FooterbarElement({
     id: 'fullscreen',
-    iconClass: 'arrows-alt',
+    iconClass: ['fas', 'arrows-alt'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.fullscreen',
     selectable: true,
@@ -171,7 +173,7 @@ export class FooterBarService {
   });
   public footerElemHome: IFooterBarElement = new FooterbarElement({
     id: 'home',
-    iconClass: 'home',
+    iconClass: ['fas', 'home'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.home',
     selectable: false,
@@ -183,7 +185,7 @@ export class FooterBarService {
   });
   public footerElemAbout: IFooterBarElement = new FooterbarElement({
     id: 'about',
-    iconClass: 'info-circle',
+    iconClass: ['fas', 'info-circle'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.info',
     selectable: false,
@@ -195,7 +197,7 @@ export class FooterBarService {
   });
   public footerElemQRCode: IFooterBarElement = new FooterbarElement({
     id: 'qr-code',
-    iconClass: 'qrcode',
+    iconClass: ['fas', 'qrcode'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.qr_code',
     selectable: false,
@@ -206,7 +208,7 @@ export class FooterBarService {
   });
   public footerElemNicknames: IFooterBarElement = new FooterbarElement({
     id: 'nicknames',
-    iconClass: 'users',
+    iconClass: ['fas', 'users'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.nicknames',
     selectable: false,
@@ -224,7 +226,7 @@ export class FooterBarService {
   });
   public footerElemEditQuiz: IFooterBarElement = new FooterbarElement({
     id: 'edit-quiz',
-    iconClass: 'edit',
+    iconClass: ['fas', 'edit'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.edit_quiz',
     selectable: false,
@@ -236,7 +238,7 @@ export class FooterBarService {
   });
   public footerElemResponseProgress: IFooterBarElement = new FooterbarElement({
     id: 'response-progress',
-    iconClass: 'align-left',
+    iconClass: ['fas', 'align-left'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.show_response_progress',
     selectable: true,
@@ -248,7 +250,7 @@ export class FooterBarService {
   });
   public footerElemConfidenceSlider: IFooterBarElement = new FooterbarElement({
     id: 'confidence-slider',
-    iconClass: 'sliders-h',
+    iconClass: ['fas', 'sliders-h'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.show_confidence_slider',
     selectable: true,
@@ -260,7 +262,7 @@ export class FooterBarService {
   });
   public footerElemBack: IFooterBarElement = new FooterbarElement({
     id: 'back',
-    iconClass: 'undo',
+    iconClass: ['fas', 'undo'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.back',
     selectable: false,
@@ -272,7 +274,7 @@ export class FooterBarService {
   });
   public footerElemStartQuiz: IFooterBarElement = new FooterbarElement({
     id: 'startQuiz',
-    iconClass: 'paper-plane',
+    iconClass: ['fas', 'paper-plane'],
     textClass: 'footerElementText',
     textName: 'component.lobby.start_quiz',
     selectable: true,
@@ -282,7 +284,7 @@ export class FooterBarService {
   });
   public footerElemSaveQuiz: IFooterBarElement = new FooterbarElement({
     id: 'saveQuiz',
-    iconClass: 'save',
+    iconClass: ['fas', 'save'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.save_quiz',
     selectable: true,
@@ -292,7 +294,7 @@ export class FooterBarService {
   });
   public footerElemExport: IFooterBarElement = new FooterbarElement({
     id: 'exportQuiz',
-    iconClass: 'download',
+    iconClass: ['fas', 'download'],
     textClass: 'footerElementText',
     textName: 'component.leaderboard.export',
     selectable: false,
@@ -307,7 +309,7 @@ export class FooterBarService {
    */
   public footerElemSaveAssets: IFooterBarElement = new FooterbarElement({
     id: 'saveAssets',
-    iconClass: 'cloud',
+    iconClass: ['fas', 'cloud'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.cache_assets',
     selectable: true,
@@ -319,7 +321,7 @@ export class FooterBarService {
 
   public footerElemBlockRudeNicknames: IFooterBarElement = new FooterbarElement({
     id: 'blockRudeNicknames',
-    iconClass: 'lock',
+    iconClass: ['fas', 'lock'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.block_rude_nicknames',
     selectable: true,
@@ -330,7 +332,7 @@ export class FooterBarService {
   });
   public footerElemEnableCasLogin: IFooterBarElement = new FooterbarElement({
     id: 'enableCasLogin',
-    iconClass: 'sign-in-alt',
+    iconClass: ['fas', 'sign-in-alt'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.enable_cas_login',
     selectable: true,
@@ -341,7 +343,7 @@ export class FooterBarService {
   });
   public footerElemLeaderboard: IFooterBarElement = new FooterbarElement({
     id: 'leaderboard',
-    iconClass: 'trophy',
+    iconClass: ['fas', 'trophy'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.global_leaderboard',
     selectable: false,
@@ -352,7 +354,7 @@ export class FooterBarService {
   });
   public footerElemMemberGroup: IFooterBarElement = new FooterbarElement({
     id: 'memberGroup',
-    iconClass: 'users',
+    iconClass: ['fas', 'users'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.member_group',
     selectable: false,
@@ -363,7 +365,7 @@ export class FooterBarService {
   });
   public footerElemLogin: IFooterBarElement = new FooterbarElement({
     id: 'login',
-    iconClass: 'sign-in-alt',
+    iconClass: ['fas', 'sign-in-alt'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.login',
     selectable: false,
@@ -374,7 +376,7 @@ export class FooterBarService {
   });
   public footerElemLogout: IFooterBarElement = new FooterbarElement({
     id: 'logout',
-    iconClass: 'sign-out-alt',
+    iconClass: ['fas', 'sign-out-alt'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.logout',
     selectable: false,
@@ -388,7 +390,7 @@ export class FooterBarService {
   });
   public footerElemEditI18n: IFooterBarElement = new FooterbarElement({
     id: 'edit-i18n',
-    iconClass: 'language',
+    iconClass: ['fas', 'language'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.edit-i18n',
     selectable: false,
@@ -399,7 +401,7 @@ export class FooterBarService {
   });
   public footerElemAdmin: IFooterBarElement = new FooterbarElement({
     id: 'admin',
-    iconClass: 'unlock',
+    iconClass: ['fas', 'unlock'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.admin',
     selectable: false,
@@ -407,6 +409,30 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.description.admin',
     linkTarget: ['/', 'admin'],
   }, function (): void {
+  });
+  public footerElemShowToken: IFooterBarElement = new FooterbarElement({
+    id: 'showToken',
+    iconClass: ['fas', 'key'],
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.showToken',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.showToken',
+    linkTarget: null,
+  }, function (): void {
+  });
+  public footerElemTwitterTweet: IFooterBarElement = new FooterbarElement({
+    id: 'twitter-tweet',
+    iconClass: ['fab', 'twitter'],
+    iconColorClass: 'color-twitter',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.twitter.tweet',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.twitter.tweet',
+    linkTarget: null,
+  }, () => {
+    this.twitterService.tweet();
   });
 
   private _footerElements: Array<IFooterBarElement> = [];
@@ -426,15 +452,26 @@ export class FooterBarService {
     private quizApiService: QuizApiService,
     private translateService: TranslateService,
     private themesService: ThemesService,
+    private twitterService: TwitterService,
   ) {
 
-    this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz), switchMapTo(this.rxStompService.connectionState$)).subscribe(value => {
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz && [QuizState.Active, QuizState.Running].includes(quiz.state)),
+      switchMapTo(this.attendeeService.attendeeAmount), filter(attendeeAmount => attendeeAmount > 0),
+      switchMapTo(this.rxStompService.connectionState$)).subscribe(value => {
       this._connectionState = value;
       this.updateFooterElementsState();
     });
 
-    document.onfullscreenchange = () => {};
-    document.onfullscreenerror = () => {};
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz && ![QuizState.Active, QuizState.Running].includes(quiz.state)),
+      switchMapTo(this.rxStompService.connectionState$)).subscribe(value => {
+      this._connectionState = value;
+      this.updateFooterElementsState();
+    });
+
+    document.onfullscreenchange = () => {
+    };
+    document.onfullscreenerror = () => {
+    };
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
@@ -485,14 +522,6 @@ export class FooterBarService {
     if (backIndex > -1 && history.length < 2) {
       elements.splice(backIndex, 1);
     }
-  }
-
-  private toggleFooterElemState(isActive: boolean): void {
-    this.footerElemImport.isActive = isActive;
-    this.footerElemLogin.isActive = isActive;
-    this.footerElemAdmin.isActive = isActive;
-    this.footerElemStartQuiz.isActive = this.quizService.isValid() && isActive;
-    this.footerElemNicknames.isActive = isActive;
   }
 
   private updateFooterElementsState(): void {

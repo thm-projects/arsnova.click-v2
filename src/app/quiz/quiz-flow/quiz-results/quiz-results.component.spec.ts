@@ -38,14 +38,13 @@ import { ProgressBarRangedComponent } from './progress-bar/progress-bar-ranged/p
 import { ProgressBarSingleChoiceComponent } from './progress-bar/progress-bar-single-choice/progress-bar-single-choice.component';
 import { ProgressBarSurveyComponent } from './progress-bar/progress-bar-survey/progress-bar-survey.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
-
 import { QuizResultsComponent } from './quiz-results.component';
 import { ReadingConfirmationProgressComponent } from './reading-confirmation-progress/reading-confirmation-progress.component';
-
+import {TrackingMockService} from '../../../service/tracking/tracking.mock.service';
+import {TrackingService} from '../../../service/tracking/tracking.service';
 describe('QuizResultsComponent', () => {
   let component: QuizResultsComponent;
   let fixture: ComponentFixture<QuizResultsComponent>;
-
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -76,7 +75,9 @@ describe('QuizResultsComponent', () => {
         }, HeaderLabelService, I18nService, QuestionTextService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        }, SimpleMQ,
+        }, SimpleMQ, {
+        provide: TrackingService,
+        useClass: TrackingMockService}
       ],
       declarations: [
         ConfidenceRateComponent,
@@ -94,28 +95,22 @@ describe('QuizResultsComponent', () => {
       ],
     }).compileComponents();
   }));
-
   beforeEach(async(inject([QuizService], (quizService: QuizService) => {
     fixture = TestBed.createComponent(QuizResultsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
     quizService.quiz.currentQuestionIndex = 0;
   })));
-
   it(`should be created`, () => {
     expect(component).toBeTruthy();
   });
-
   it(`should container a TYPE reference`, () => {
     expect(QuizResultsComponent.TYPE).toEqual('QuizResultsComponent');
   });
-
   it(`#showLeaderBoardButton`, inject([QuizService], (quizService: QuizService) => {
     expect(quizService.quiz.questionList[quizService.quiz.currentQuestionIndex] instanceof SurveyQuestionEntity).toBeFalsy();
     expect(component.showLeaderBoardButton(quizService.quiz.currentQuestionIndex)).toBeTruthy();
   }));
-
   it(`#showStopQuizButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     quizService.isOwner = true;
     quizService.currentQuestion().timer = 0;
@@ -128,10 +123,8 @@ describe('QuizResultsComponent', () => {
       currentQuizName: '',
       ticket: '',
     }));
-
     expect(component.showStopQuizButton).toBeFalsy();
   }));
-
   it(`#showStopCountdownButton`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     quizService.currentQuestion().timer = 10;
     quizService['_isOwner'] = true;
@@ -145,24 +138,19 @@ describe('QuizResultsComponent', () => {
       ticket: '',
     }));
     component.countdown = quizService.currentQuestion().timer;
-
     expect(component.countdown).toBeTruthy();
     expect(component.showStopCountdownButton).toBeFalsy();
   }));
-
   it(`#showStartQuizButton`, inject([QuizService], (quizService: QuizService) => {
     quizService['_isOwner'] = true;
     quizService.readingConfirmationRequested = true;
-
     expect(component.showStartQuizButton).toBeFalsy();
   }));
-
   it(`#hideProgressbarCssStyle`, inject([QuizService], (quizService: QuizService) => {
     quizService.readingConfirmationRequested = false;
     quizService.quiz.currentQuestionIndex = 0;
     expect(component.hideProgressbarStyle).toBeTruthy();
   }));
-
   it(`#showConfidenceRate`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     attendeeService.addMember(new Attendee({
       id: '',
@@ -180,17 +168,13 @@ describe('QuizResultsComponent', () => {
       ],
     }));
     quizService.quiz.sessionConfig.confidenceSliderEnabled = true;
-
     expect(component.showConfidenceRate(0)).toBeFalsy();
   }));
-
   it(`#modifyVisibleQuestion`, inject([QuestionTextService], async (questionTextService: QuestionTextService) => {
     spyOn(questionTextService, 'changeMultiple').and.callFake(() => new Promise<void>(resolve => resolve()));
-
     await component.modifyVisibleQuestion(0);
     expect(questionTextService.changeMultiple).toHaveBeenCalled();
   }));
-
   it(`#getConfidenceData`, inject([AttendeeService, I18nService], (attendeeService: AttendeeService, i18nService: I18nService) => {
     attendeeService.addMember(new Attendee({
       id: '',
@@ -207,7 +191,6 @@ describe('QuizResultsComponent', () => {
         },
       ],
     }));
-
     const result = component.getConfidenceData(0);
     expect(result.base).toEqual(1);
     expect(result.absolute).toEqual(1);
@@ -217,7 +200,6 @@ describe('QuizResultsComponent', () => {
       expect(result.percent).toEqual('20%');
     }
   }));
-
   it(`#showReadingConfirmation`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     attendeeService.addMember(new Attendee({
       id: '',
@@ -235,15 +217,11 @@ describe('QuizResultsComponent', () => {
       ],
     }));
     quizService.quiz.sessionConfig.readingConfirmationEnabled = true;
-
     expect(component.showReadingConfirmation(0)).toBeFalsy();
   }));
-
   it(`#showResponseProgress`, inject([QuizService], (quizService: QuizService) => {
-
     expect(component.showResponseProgress()).toEqual(quizService.quiz.sessionConfig.showResponseProgress);
   }));
-
   it(`#getReadingConfirmationData`, inject([AttendeeService, I18nService], (attendeeService: AttendeeService, i18nService: I18nService) => {
     attendeeService.addMember(new Attendee({
       id: '',
@@ -260,7 +238,6 @@ describe('QuizResultsComponent', () => {
         },
       ],
     }));
-
     const result = component.getReadingConfirmationData(0);
     expect(result.base).toEqual(1);
     expect(result.absolute).toEqual(1);

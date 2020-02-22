@@ -28,7 +28,11 @@
       "load-to-play": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier ggf. Daten verloren gehen können. Die Quiz Runde muss für dich beendet werden. Du kannst nur zur Startseite zurückkehren.",
       "homepage": "Zur Startseite",
       "to-quiz-overview": "Zur Quiz Übersicht"
-    }
+    },
+    "copy-to-clipboard": "Zwischenablage",
+    "mail-to": "Per Mail senden",
+    "copied": "Kopiert",
+    "mail": "mailto:?subject=Meine%20Tokennummer&body=Hallo,%0D%0Ameine%20Tokennummer%20ist "
   },
   "region": {
     "footer": {
@@ -71,7 +75,11 @@
         "login": "Einloggen",
         "logout": "Ausloggen",
         "save_quiz": "Quiz speichern",
-        "admin": "Administration"
+        "admin": "Administration",
+        "showToken": "Token anzeigen",
+        "twitter": {
+          "tweet": "Tweet"
+        }
       },
       "about": {
         "title": "arsnova.click",
@@ -200,6 +208,18 @@
     }
   },
   "component": {
+    "twitter": {
+      "optin": {
+        "check": "Für Social Media Features anklicken",
+        "share": "Auf Social Media teilen",
+        "warning": " Ich bin damit einverstanden, dass Inhalte von Twitter angezeigt werden."
+      },
+      "tweet": {
+        "content": {
+          "0": "Grade das Quiz \"{NAME}\" auf arsnova.click gespielt ❤️\n"
+        }
+      }
+    },
     "answeroptions": {
       "new_answer": "Neue Antwortoption",
       "correct": "Korrekt",
@@ -321,7 +341,11 @@
       "guessed_in_range": "Nicht korrekt geraten, aber akzeptabel",
       "wrong_answer": "Falsche Antwort",
       "no_data": "Keine Daten verfügbar",
-      "neutral_answer": "Antworten"
+      "neutral_answer": "Antworten",
+      "bonus-token": {
+        "title": "Bonustoken",
+        "your-bonus-token": "Deine Tokennummer ist "
+      }
     },
     "lobby": {
       "start_quiz": "Los geht's!",
@@ -663,7 +687,7 @@
       "reminder_leaderboard_data": {},
       "return_to_lobby": {
         "title": "Warnung",
-        "text": "Wenn du zur Quiz-Lobby zurückkehrst, werden alle bereits durchgeführten Quizrunden zurückgesetzt.",
+        "text": "Wenn du zur Quiz-Lobby zurückkehrst, werden alle bereits durchgeführten Quizrunden zurückgesetzt.\n\nFalls du die aktuellen Daten des Quizzes weiterhin benötigst, solltest du sie exportieren, bevor du fortfährst.",
         "continue": "Fortfahren?"
       }
     }

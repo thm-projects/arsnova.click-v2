@@ -7,6 +7,7 @@ import { MessageProtocol } from '../../lib/enums/Message';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
 import { SharedService } from '../shared/shared.service';
+import {SimpleMQ} from 'ng2-simple-mq';
 
 @Injectable({
   providedIn: 'root',
@@ -74,6 +75,7 @@ export class ConnectionService {
     @Inject(PLATFORM_ID) private platformId: Object,
     private sharedService: SharedService,
     private statisticsApiService: StatisticsApiService, private rxStompService: RxStompService,
+    private messageQueue: SimpleMQ,
   ) {
     this.initWebsocket();
   }
@@ -168,6 +170,9 @@ export class ConnectionService {
             break;
           case MessageProtocol.SetInactive:
             this.sharedService.activeQuizzes.splice(this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName), 1);
+            break;
+          default:
+            this.messageQueue.publish(parsedMessage.step, parsedMessage.payload, false);
             break;
         }
       } catch (ex) {

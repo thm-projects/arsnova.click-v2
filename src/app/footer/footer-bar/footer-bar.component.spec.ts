@@ -7,6 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
+import { environment } from '../../../environments/environment';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -20,6 +21,8 @@ import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { TwitterService } from '../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { SharedModule } from '../../shared/shared.module';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
@@ -56,6 +59,9 @@ describe('FooterBarComponent', () => {
         }, FileUploadService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
         },
       ],
       declarations: [
@@ -80,7 +86,11 @@ describe('FooterBarComponent', () => {
 
   it('#getLinkTarget', (
     inject([FooterBarService], (footerBarService: FooterBarService) => {
-      expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'tos']));
+      if (environment.infoAboutTabEnabled) {
+        expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'about']));
+      } else {
+        expect(component.getLinkTarget(footerBarService.footerElemAbout)).toEqual(jasmine.arrayContaining(['info', 'tos']));
+      }
     })
   ));
 

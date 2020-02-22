@@ -1,24 +1,9 @@
 @import "prebuild";
 
-#content-container {
-  @include media-breakpoint-down(xs) {
-    z-index: 1040;
-  }
-  @include media-breakpoint-up(sm) {
-    top: 20vh;
-  }
-  @include media-breakpoint-up(md) {
-    min-height: 90vh;
-  }
-  @include media-breakpoint-only(sm) {
-    min-height: 70vh;
-  }
-  @include media-breakpoint-only(lg) {
-    max-width: calc(#{map_get($container-max-widths, lg)} - 30vw);
-  }
-  @include media-breakpoint-only(xl) {
-    max-width: 60vw;
-  }
+.container-margin-fix {
+  margin-left: -15px;
+  margin-right: -15px;
+  padding: 0;
 }
 
 .footer-bar-wrapper {

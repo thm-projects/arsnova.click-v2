@@ -25,6 +25,7 @@ import { LanguageSwitcherComponent } from './root/language-switcher/language-swi
 import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
+import { TwitterCardsComponent } from './root/twitter-cards/twitter-cards.component';
 import rxStompConfig from './rx-stomp.config';
 import { InitDbGuard } from './service/init-db-guard/init-db.guard';
 import { StaticLoginService } from './service/login/static-login.service';
@@ -97,7 +98,7 @@ const appRoutes: Routes = [
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
   const renderer = new MarkedRenderer();
-  renderer.paragraph = (text) => `${text}`;
+  renderer.paragraph = (text) => `${text}<br/>`;
 
   return {
     renderer: renderer,
@@ -113,7 +114,7 @@ export function markedOptionsFactory(): MarkedOptions {
 
 @NgModule({
   declarations: [
-    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent,
+    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'frontend' }),

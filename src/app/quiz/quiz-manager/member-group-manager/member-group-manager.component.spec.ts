@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -17,6 +18,8 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { TwitterService } from '../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { MemberGroupManagerComponent } from './member-group-manager.component';
 
@@ -37,7 +40,7 @@ describe('MemberGroupManagerComponent', () => {
           }),
         ],
         providers: [
-          RxStompService, {
+          RxStompService, SimpleMQ, {
             provide: StorageService,
             useClass: StorageServiceMock,
           }, FooterBarService, HeaderLabelService, {
@@ -46,6 +49,9 @@ describe('MemberGroupManagerComponent', () => {
           }, SettingsService, {
             provide: ConnectionService,
             useClass: ConnectionMockService,
+          }, {
+            provide: TwitterService,
+            useClass: TwitterServiceMock,
           },
         ],
         declarations: [MemberGroupManagerComponent, TranslatePipeMock],

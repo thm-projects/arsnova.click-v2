@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
@@ -20,6 +21,8 @@ import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
+import { TwitterService } from '../../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuizManagerDetailsOverviewComponent } from './quiz-manager-details-overview.component';
 
@@ -40,7 +43,7 @@ describe('QuizManagerDetailsOverviewComponent', () => {
           }),
         ],
         providers: [
-          RxStompService, {
+          RxStompService, SimpleMQ, {
             provide: StorageService,
             useClass: StorageServiceMock,
           }, HeaderLabelService, {
@@ -59,6 +62,9 @@ describe('QuizManagerDetailsOverviewComponent', () => {
           }, SharedService, {
             provide: TrackingService,
             useClass: TrackingMockService,
+          }, {
+            provide: TwitterService,
+            useClass: TwitterServiceMock,
           },
         ],
         declarations: [QuizManagerDetailsOverviewComponent, TranslatePipeMock],

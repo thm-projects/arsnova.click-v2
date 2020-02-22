@@ -29,4 +29,5 @@ export interface IEnvironment {
   availableQuizThemes: Array<QuizTheme>;
   defaultTheme: QuizTheme;
   darkModeCheckEnabled: boolean;
+  enableTwitter: boolean;
 }

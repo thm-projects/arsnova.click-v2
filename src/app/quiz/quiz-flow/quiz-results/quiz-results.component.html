@@ -1,7 +1,7 @@
 <div class="overflow-hidden my-3 d-flex justify-content-between">
   <h3 class="mb-0">
     <fa-icon [icon]="'users'"></fa-icon>
-    <span class="ml-2">{{attendeeService.attendees.length}}</span>
+    <span class="ml-2">{{attendeeService.getActiveMembers().length}}</span>
   </h3>
   <h3 *ngIf="countdown > 0"
       class="mb-0">
@@ -143,4 +143,3 @@
     <app-gamification-animation [countdownValue]="countdown"></app-gamification-animation>
   </ng-container>
 </ng-container>
-

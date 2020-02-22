@@ -5,6 +5,11 @@ import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipe
 import { TranslateServiceMock } from '../../../../../../_mocks/_services/TranslateServiceMock';
 
 import { ToLobbyConfirmComponent } from './to-lobby-confirm.component';
+import {I18nTestingModule} from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
+import {QuizService} from '../../../../../service/quiz/quiz.service';
+import {QuizMockService} from '../../../../../service/quiz/quiz-mock.service';
+import {ThemesService} from '../../../../../service/themes/themes.service';
+import {ThemesMockService} from '../../../../../service/themes/themes.mock.service';
 
 describe('ToLobbyConfirmComponent', () => {
   let component: ToLobbyConfirmComponent;
@@ -12,10 +17,17 @@ describe('ToLobbyConfirmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [I18nTestingModule],
       providers: [
         {
           provide: TranslateService,
           useClass: TranslateServiceMock,
+        }, {
+          provide: QuizService,
+          useClass: QuizMockService
+        }, {
+          provide: ThemesService,
+          useClass: ThemesMockService
         }, NgbActiveModal,
       ],
       declarations: [ToLobbyConfirmComponent, TranslatePipeMock],
