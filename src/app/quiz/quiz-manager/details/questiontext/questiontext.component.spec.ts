@@ -32,6 +32,8 @@ import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
 import { TrackingMockService } from '../../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
+import { TwitterService } from '../../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuestiontextComponent } from './questiontext.component';
 
@@ -90,6 +92,9 @@ describe('QuestiontextComponent', () => {
               default: {},
               config: {},
             },
+          }, {
+            provide: TwitterService,
+            useClass: TwitterServiceMock,
           },
         ],
         declarations: [

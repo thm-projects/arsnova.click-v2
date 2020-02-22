@@ -1,4 +1,4 @@
-import { IconName } from '@fortawesome/fontawesome-svg-core';
+import { IconPathData, IconPrefix } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from './interfaces';
 
 export class FooterbarElement implements IFooterBarElement {
@@ -18,8 +18,12 @@ export class FooterbarElement implements IFooterBarElement {
     return this._id;
   }
 
-  get iconClass(): IconName {
+  get iconClass(): [IconPrefix, IconPathData] {
     return this._iconClass;
+  }
+
+  get iconColorClass(): string {
+    return this._iconColorClass;
   }
 
   get textClass(): string {
@@ -80,19 +84,31 @@ export class FooterbarElement implements IFooterBarElement {
   private readonly _introTranslate: string;
   private _restoreOnClickCallback: Function;
   private readonly _id: string;
-  private readonly _iconClass: IconName;
+  private readonly _iconClass: [IconPrefix, IconPathData];
+  private readonly _iconColorClass: string;
   private readonly _textClass: string;
   private readonly _textName: string;
   private readonly _selectable: boolean;
   private readonly _showIntro: boolean;
   private readonly _queryParams: object;
 
-  constructor(
-    { id, iconClass, textClass, textName, selectable, showIntro, introTranslate, isActive, linkTarget, queryParams, isLoading }: IFooterBarElement,
-    onClickCallback?: Function,
-  ) {
+  constructor({
+                id, //
+                iconClass, //
+                iconColorClass, //
+                textClass, //
+                textName, //
+                selectable, //
+                showIntro, //
+                introTranslate, //
+                isActive, //
+                linkTarget, //
+                queryParams, //
+                isLoading, //
+              }: IFooterBarElement, onClickCallback?: Function) {
     this._id = id;
     this._iconClass = iconClass;
+    this._iconColorClass = iconColorClass;
     this._textClass = textClass;
     this._textName = textName;
     this._selectable = selectable;

@@ -165,7 +165,7 @@ describe('QuizLobbyComponent', () => {
     spyOn(component, 'sanitizeHTML').and.callFake((value: string) => value);
 
     component.parseNickname(nicknameDefault);
-    expect(component.sanitizeHTML).toHaveBeenCalledTimes(0);
+    expect(component.sanitizeHTML).toHaveBeenCalled();
 
     component.parseNickname(nicknameEmoji);
 

@@ -23,6 +23,8 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { TwitterService } from '../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { ConfidenceRateComponent } from './confidence-rate.component';
@@ -58,6 +60,9 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
         }, HeaderLabelService, FooterBarService, SharedService, SettingsService, MemberApiService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
         },
       ],
       declarations: [ConfidenceRateComponent, ServerUnavailableModalComponent],

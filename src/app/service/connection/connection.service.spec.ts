@@ -7,6 +7,8 @@ import { SharedService } from '../shared/shared.service';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
 import { ConnectionService } from './connection.service';
+import {SimpleMQ} from 'ng2-simple-mq';
+
 
 describe('ConnectionService', () => {
   beforeEach(async(() => {
@@ -14,7 +16,7 @@ describe('ConnectionService', () => {
       imports: [
         RouterTestingModule, HttpClientTestingModule,
       ],
-      providers: [
+      providers: [SimpleMQ,
         {
           provide: StorageService,
           useClass: StorageServiceMock,

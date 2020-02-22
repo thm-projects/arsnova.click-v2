@@ -3,9 +3,8 @@
     <app-header></app-header>
   </div>
 
-  <div class="container-fluid d-flex flex-column flex-md-row position-relative p-0">
-    <div [class.mx-sm-auto]="isInQuizManager"
-         class="row flex-sm-nowrap mx-0 mx-md-0">
+  <div class="d-flex flex-column flex-md-row">
+    <div>
       <div class="footer-bar-wrapper flex-grow-0 flex-shrink-0 p-0 w-100">
         <app-footer-bar></app-footer-bar>
         <ng-container *ngIf="isInQuizManager">
@@ -14,8 +13,7 @@
       </div>
     </div>
 
-    <main class="container pb-4"
-          id="content-container">
+    <main class="container pb-4">
       <router-outlet>
       </router-outlet>
     </main>

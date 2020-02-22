@@ -5,31 +5,36 @@
   <span class="color-changing-click logo-header-chars logo-header-margin-for-dot">c l i c k</span>
 </ng-template>
 
-<div class="row flex-column"
+<div class="row"
      id="landingPageContent">
-  <div *ngIf="!isShowingQuiznameDatalist"
-       class="col-12 text-center my-5 my-sm-5"
-       id="arsnova-click-description">
-    <h1 *ngIf="selectedTitle === Title.Default"
-        class="text-center header-label text-bold my-0">
-      <ng-container *ngTemplateOutlet="arsclaim"></ng-container>
-    </h1>
-    <div *ngIf="selectedTitle === Title.Westermann"
-         class="row">
-      <div class="col-md-8 col-xl-6 offset-md-2 offset-xl-3">
-        <h1>Westermann Quiz</h1>
-        <h6 class="text-right"
-            style="color: #5a5758; font-size: 90%;">
-          <span class="mr-2">Powered by</span>
+
+  <div class="col-12">
+    <div class="row">
+
+      <div *ngIf="!isShowingQuiznameDatalist"
+           class="col-12 text-center my-5 my-sm-5"
+           id="arsnova-click-description">
+        <h1 *ngIf="selectedTitle === Title.Default"
+            class="text-center header-label text-bold my-0">
           <ng-container *ngTemplateOutlet="arsclaim"></ng-container>
-        </h6>
+        </h1>
+        <div *ngIf="selectedTitle === Title.Westermann"
+             class="row">
+          <div class="col-md-8 col-xl-6 offset-md-2 offset-xl-3">
+            <h1>Westermann Quiz</h1>
+            <h6 class="text-right"
+                style="color: #5a5758; font-size: 90%;">
+              <span class="mr-2">Powered by</span>
+              <ng-container *ngTemplateOutlet="arsclaim"></ng-container>
+            </h6>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div [class.mt-sm-5]="!isShowingQuiznameDatalist"
-       class="col-md-10 col-xl-8 offset-md-1 offset-xl-2">
-    <div class="row no-gutters">
-      <div class="col-12 mb-2">
+
+      <div [class.mt-sm-5]="!isShowingQuiznameDatalist"
+           class="col-md-10 col-xl-8 offset-md-1 offset-xl-2">
+        <div class="row no-gutters">
+          <div class="col-12 mb-2">
         <span (click)="resetSessionName()"
               *ngIf="enteredSessionName"
               [class.rounded-left]="showJoinableQuizzes && !isShowingQuiznameDatalist"
@@ -38,184 +43,210 @@
           <fa-icon [icon]="'times'"
                    class="d-flex"></fa-icon>
         </span>
-        <input #enteredSessionNameInput
-               (focus)="showQuiznameDatalist()"
-               (ngModelChange)="parseQuiznameInput(enteredSessionNameInput.value)"
-               [(ngModel)]="enteredSessionName"
-               [class.rounded-top]="showJoinableQuizzes && isShowingQuiznameDatalist"
-               [class.rounded]="!showJoinableQuizzes || !isShowingQuiznameDatalist"
-               [placeholder]="'component.name_management.enter_quiz_name' | translate"
-               [title]="'component.name_management.enter_quiz_name' | translate"
-               autocomplete="off"
-               class="text-center w-100 border-0 input-field bg-warning"
-               id="name-input-field"
-               spellcheck="false"
-               type="text"/>
-        <span (click)="hideQuiznameDatalist()"
-              *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
-              class="position-absolute text-light px-2 cursor-pointer d-flex justify-content-center align-items-center"
-              id="collapse-quiz-name-datalist">
+            <input #enteredSessionNameInput
+                   (focus)="showQuiznameDatalist()"
+                   (ngModelChange)="parseQuiznameInput(enteredSessionNameInput.value)"
+                   [(ngModel)]="enteredSessionName"
+                   [class.rounded-top]="showJoinableQuizzes && isShowingQuiznameDatalist"
+                   [class.rounded]="!showJoinableQuizzes || !isShowingQuiznameDatalist"
+                   [placeholder]="'component.name_management.enter_quiz_name' | translate"
+                   [title]="'component.name_management.enter_quiz_name' | translate"
+                   autocomplete="off"
+                   class="text-center w-100 border-0 input-field bg-warning"
+                   id="name-input-field"
+                   spellcheck="false"
+                   type="text"/>
+            <span (click)="hideQuiznameDatalist()"
+                  *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
+                  class="position-absolute text-light px-2 cursor-pointer d-flex justify-content-center align-items-center"
+                  id="collapse-quiz-name-datalist">
           <fa-icon [icon]="'caret-up'"
                    class="d-flex"></fa-icon>
         </span>
-        <ul *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
-            class="list-group list-group-flush quiz-list">
-          <li (click)="autoJoinToSession(quizname)"
-              *ngFor="let quizname of sharedService.activeQuizzes | searchFilter:enteredSessionName"
-              [class.list-group-item-success]="canModifyQuiz"
-              class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.join' | translate:{name: quizname} }}</li>
+            <ul *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
+                class="list-group list-group-flush quiz-list">
+              <li (click)="autoJoinToSession(quizname)"
+                  *ngFor="let quizname of sharedService.activeQuizzes | searchFilter:enteredSessionName"
+                  [class.list-group-item-success]="canModifyQuiz"
+                  class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.join' | translate:{name: quizname} }}</li>
 
-          <ng-container *ngIf="canUsePublicQuizzes">
-            <li (click)="selectQuizByList(quizname)"
-                *ngFor="let quizname of ownQuizzes | searchFilter:enteredSessionName"
-                class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</li>
-          </ng-container>
+              <ng-container *ngIf="canUsePublicQuizzes">
+                <li (click)="selectQuizByList(quizname)"
+                    *ngFor="let quizname of ownQuizzes | searchFilter:enteredSessionName"
+                    class="list-group-item list-group-item-action text-capitalize cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</li>
+              </ng-container>
 
-          <ng-container *ngIf="canModifyQuiz">
-            <li (click)="selectQuizByList('Demo Quiz')"
-                class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-demo-quiz' | translate}}</li>
-            <li (click)="selectQuizByList('ABCD')"
-                class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-abcd-quiz' | translate}}</li>
-          </ng-container>
-        </ul>
+              <ng-container *ngIf="canModifyQuiz">
+                <li (click)="selectQuizByList('Demo Quiz')"
+                    class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-demo-quiz' | translate}}</li>
+                <li (click)="selectQuizByList('ABCD')"
+                    class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-abcd-quiz' | translate}}</li>
+              </ng-container>
+            </ul>
+          </div>
+          <div *ngIf="passwordRequired"
+               class="col-12">
+            <input (input)="setPassword($event)"
+                   [placeholder]="'component.name_management.enter_server_password' | translate"
+                   [title]="'component.name_management.enter_server_password' | translate"
+                   autocomplete="off"
+                   class="text-center rounded w-100 mb-2 border-0 input-field"
+                   id="server-password-input-field"
+                   spellcheck="false"
+                   type="password"/>
+          </div>
+        </div>
+        <div class="row no-gutters">
+          <div [class.col-12]="!canModifyQuiz"
+               [class.col-6]="canModifyQuiz"
+               [class.pr-1]="canModifyQuiz"
+               class="col-join-session pl-0">
+
+            <button *ngIf="isQueryingQuizState"
+                    class="btn btn-block btn-outline-secondary px-1"
+                    disabled>
+              <fa-icon icon="spinner"
+                       spin></fa-icon>
+            </button>
+
+            <button (click)="handleClick('joinSession') && joinQuiz()"
+                    *ngIf="!isQueryingQuizState && !canStartQuiz"
+                    [class.btn-outline-secondary]="!canJoinQuiz"
+                    [class.btn-secondary]="canJoinQuiz"
+                    [disabled]="!canJoinQuiz"
+                    [routerLink]="['/quiz', enteredSessionName]"
+                    class="btn btn-block px-1">
+              <fa-icon *ngIf="isPerformingClick('joinSession')"
+                       [icon]="'spinner'"
+                       [spin]="true"></fa-icon>
+              <fa-icon *ngIf="!isPerformingClick('joinSession')"
+                       [icon]="'thumbs-up'"></fa-icon>
+              <span class="ml-1">{{'component.name_management.join_session' | translate}}</span>
+            </button>
+
+            <button (click)="handleClick('startSession') && runQuiz(['/quiz', 'flow'])"
+                    *ngIf="!isQueryingQuizState && canStartQuiz"
+                    [class.btn-outline-secondary]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
+                    [class.btn-secondary]="canStartQuiz && (!passwordRequired || serverPassword.length)"
+                    [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
+                    class="btn btn-success btn-block px-1">
+              <fa-icon *ngIf="isPerformingClick('startSession')"
+                       [icon]="'spinner'"
+                       [spin]="true"></fa-icon>
+              <fa-icon *ngIf="!isPerformingClick('startSession')"
+                       [icon]="'thumbs-up'"></fa-icon>
+              <span class="ml-1">{{'component.name_management.start_session' | translate}}</span>
+            </button>
+          </div>
+          <div *ngIf="!isQueryingQuizState && canModifyQuiz"
+               class="col-6 col-create-session p-0">
+            <ng-container *ngIf="!enteredSessionName.length">
+              <button (click)="enteredSessionNameInput.focus()"
+                      class="btn btn-block btn-secondary px-1">
+                <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
+                <fa-icon [icon]="'edit'"></fa-icon>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="enteredSessionName.length">
+              <button (click)="handleClick('addSession') && addQuiz()"
+                      *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
+                      [class.btn-outline-secondary]="!canAddQuiz || !connectionService.serverAvailable"
+                      [class.btn-secondary]="canAddQuiz && connectionService.serverAvailable"
+                      [disabled]="!canAddQuiz || !connectionService.serverAvailable"
+                      class="btn btn-block px-1"
+                      id="addSession">
+                <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
+                <fa-icon *ngIf="isPerformingClick('addSession')"
+                         [icon]="'spinner'"
+                         [spin]="true"></fa-icon>
+                <fa-icon *ngIf="!isPerformingClick('addSession')"
+                         [icon]="'edit'"></fa-icon>
+              </button>
+              <button (click)="handleClick('editSession') && editQuiz()"
+                      *ngIf="canEditQuiz"
+                      class="btn btn-secondary btn-block px-1"
+                      id="editSession">
+                <span class="mr-1">{{'component.name_management.edit_session' | translate}}</span>
+                <fa-icon *ngIf="isPerformingClick('editSession')"
+                         [icon]="'spinner'"
+                         [spin]="true"></fa-icon>
+                <fa-icon *ngIf="!isPerformingClick('editSession')"
+                         [icon]="'edit'"></fa-icon>
+              </button>
+              <button (click)="handleClick('add-demo-quiz') && runQuiz(['/quiz', 'flow'])"
+                      *ngIf="isAddingDemoQuiz"
+                      [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
+                      [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
+                      [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
+                      class="btn btn-block px-1"
+                      id="runDemoQuizSession">
+                <span>{{'component.name_management.create_demo_session' | translate}}</span>
+                <fa-icon *ngIf="isPerformingClick('add-demo-quiz')"
+                         [icon]="'spinner'"
+                         [spin]="true"
+                         class="ml-1"></fa-icon>
+              </button>
+              <button (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
+                      *ngIf="isAddingABCDQuiz"
+                      [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
+                      [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
+                      [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
+                      class="btn btn-block px-1"
+                      id="runABCDQuizSession">
+                <span>{{'component.name_management.create_abcd_session' | translate}}</span>
+                <fa-icon *ngIf="isPerformingClick('add-abcd-quiz')"
+                         [icon]="'spinner'"
+                         [spin]="true"
+                         class="ml-1"></fa-icon>
+              </button>
+            </ng-container>
+          </div>
+        </div>
       </div>
-      <div *ngIf="passwordRequired"
-           class="col-12">
-        <input (input)="setPassword($event)"
-               [placeholder]="'component.name_management.enter_server_password' | translate"
-               [title]="'component.name_management.enter_server_password' | translate"
-               autocomplete="off"
-               class="text-center rounded w-100 mb-2 border-0 input-field"
-               id="server-password-input-field"
-               spellcheck="false"
-               type="password"/>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div [class.col-12]="!canModifyQuiz"
-           [class.pr-1]="canModifyQuiz"
-           [class.col-6]="canModifyQuiz"
-           class="col-join-session pl-0">
 
-        <button *ngIf="isQueryingQuizState"
-                class="btn btn-block btn-outline-secondary px-1"
-                disabled>
-          <fa-icon icon="spinner"
-                   spin></fa-icon>
-        </button>
-
-        <button (click)="handleClick('joinSession') && joinQuiz()"
-                *ngIf="!isQueryingQuizState && !canStartQuiz"
-                [class.btn-outline-secondary]="!canJoinQuiz"
-                [class.btn-secondary]="canJoinQuiz"
-                [disabled]="!canJoinQuiz"
-                [routerLink]="['/quiz', enteredSessionName]"
-                class="btn btn-block px-1">
-          <fa-icon *ngIf="isPerformingClick('joinSession')"
-                   [icon]="'spinner'"
-                   [spin]="true"></fa-icon>
-          <fa-icon *ngIf="!isPerformingClick('joinSession')"
-                   [icon]="'thumbs-up'"></fa-icon>
-          <span class="ml-1">{{'component.name_management.join_session' | translate}}</span>
-        </button>
-
-        <button (click)="handleClick('startSession') && runQuiz(['/quiz', 'flow'])"
-                *ngIf="!isQueryingQuizState && canStartQuiz"
-                [class.btn-outline-secondary]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
-                [class.btn-secondary]="canStartQuiz && (!passwordRequired || serverPassword.length)"
-                [disabled]="!canStartQuiz || (passwordRequired && !serverPassword.length)"
-                class="btn btn-success btn-block px-1">
-          <fa-icon *ngIf="isPerformingClick('startSession')"
-                   [icon]="'spinner'"
-                   [spin]="true"></fa-icon>
-          <fa-icon *ngIf="!isPerformingClick('startSession')"
-                   [icon]="'thumbs-up'"></fa-icon>
-          <span class="ml-1">{{'component.name_management.start_session' | translate}}</span>
-        </button>
+      <div *ngIf="hasErrors"
+           class="col-12 mt-5">
+        <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
       </div>
-      <div *ngIf="!isQueryingQuizState && canModifyQuiz"
-           class="col-6 col-create-session p-0">
-        <ng-container *ngIf="!enteredSessionName.length">
-          <button (click)="enteredSessionNameInput.focus()"
-                  class="btn btn-block btn-secondary px-1">
-            <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
-            <fa-icon [icon]="'edit'"></fa-icon>
-          </button>
-        </ng-container>
-        <ng-container *ngIf="enteredSessionName.length">
-          <button (click)="handleClick('addSession') && addQuiz()"
-                  *ngIf="!canEditQuiz && !isAddingDemoQuiz && !isAddingABCDQuiz"
-                  [class.btn-outline-secondary]="!canAddQuiz || !connectionService.serverAvailable"
-                  [class.btn-secondary]="canAddQuiz && connectionService.serverAvailable"
-                  [disabled]="!canAddQuiz || !connectionService.serverAvailable"
-                  class="btn btn-block px-1"
-                  id="addSession">
-            <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
-            <fa-icon *ngIf="isPerformingClick('addSession')"
-                     [icon]="'spinner'"
-                     [spin]="true"></fa-icon>
-            <fa-icon *ngIf="!isPerformingClick('addSession')"
-                     [icon]="'edit'"></fa-icon>
-          </button>
-          <button (click)="handleClick('editSession') && editQuiz()"
-                  *ngIf="canEditQuiz"
-                  class="btn btn-secondary btn-block px-1"
-                  id="editSession">
-            <span class="mr-1">{{'component.name_management.edit_session' | translate}}</span>
-            <fa-icon *ngIf="isPerformingClick('editSession')"
-                     [icon]="'spinner'"
-                     [spin]="true"></fa-icon>
-            <fa-icon *ngIf="!isPerformingClick('editSession')"
-                     [icon]="'edit'"></fa-icon>
-          </button>
-          <button (click)="handleClick('add-demo-quiz') && runQuiz(['/quiz', 'flow'])"
-                  *ngIf="isAddingDemoQuiz"
-                  [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                  [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
-                  [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                  class="btn btn-block px-1"
-                  id="runDemoQuizSession">
-            <span>{{'component.name_management.create_demo_session' | translate}}</span>
-            <fa-icon *ngIf="isPerformingClick('add-demo-quiz')"
-                     [icon]="'spinner'"
-                     [spin]="true"
-                     class="ml-1"></fa-icon>
-          </button>
-          <button (click)="handleClick('add-abcd-quiz') && runQuiz(['/quiz', 'flow'])"
-                  *ngIf="isAddingABCDQuiz"
-                  [class.btn-outline-secondary]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                  [class.btn-secondary]="(!passwordRequired || serverPassword.length) && connectionService.serverAvailable"
-                  [disabled]="(passwordRequired && !serverPassword.length) || !connectionService.serverAvailable"
-                  class="btn btn-block px-1"
-                  id="runABCDQuizSession">
-            <span>{{'component.name_management.create_abcd_session' | translate}}</span>
-            <fa-icon *ngIf="isPerformingClick('add-abcd-quiz')"
-                     [icon]="'spinner'"
-                     [spin]="true"
-                     class="ml-1"></fa-icon>
-          </button>
-        </ng-container>
-      </div>
+
+      <ng-container *ngIf="!isShowingQuiznameDatalist">
+        <div class="col-12 text-center my-5">
+          <p *ngIf="selectedTitle === Title.Default"
+             [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"
+             class="mb-0"></p>
+          <p *ngIf="(canUsePublicQuizzes && publicQuizAmount > 0) || ownPublicQuizAmount > 0">
+            <a *ngIf="canUsePublicQuizzes && publicQuizAmount > 0"
+               [routerLink]="['/quiz', 'public']">{{'component.home.view-public' | translate:{amount: publicQuizAmount} }}
+            </a>
+            <a *ngIf="ownPublicQuizAmount > 0"
+               [routerLink]="['/quiz', 'public', 'own']">
+              <span *ngIf="canUsePublicQuizzes && publicQuizAmount > 0"><br/>{{'component.home.view-all-public' | translate}}</span>
+              <span *ngIf="!canUsePublicQuizzes || publicQuizAmount === 0">{{'component.home.view-own-public' | translate}}</span>
+            </a>
+          </p>
+        </div>
+
+        <div *ngIf="!twitterService.getOptIn()"
+             class="opt-in col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-sm-5">
+          <div class="p-2 rounded d-flex align-items-center bg-light text-primary">
+            <input (click)="twitterService.setOptIn()"
+                   class=""
+                   id="defaultCheck1"
+                   type="checkbox"
+                   value="">
+            <label class="d-inline mb-0 text-left ml-2"
+                   for="defaultCheck1">
+              {{'component.twitter.optin.warning' | translate}}
+            </label>
+          </div>
+        </div>
+
+      </ng-container>
     </div>
   </div>
-  <div *ngIf="hasErrors"
-       class="col-12 mt-5">
-    <h4 class="text-warning text-center text-bold">{{hasErrors | translate}}</h4>
-  </div>
-  <ng-container *ngIf="!isShowingQuiznameDatalist">
-    <div class="col-12 text-center mt-5">
-      <p *ngIf="selectedTitle === Title.Default"
-         [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"></p>
-      <p>
-        <a *ngIf="canUsePublicQuizzes && publicQuizAmount > 0"
-           [routerLink]="['/quiz', 'public']">{{'component.home.view-public' | translate:{amount: publicQuizAmount} }}
-        </a>
-        <a *ngIf="ownPublicQuizAmount > 0"
-           [routerLink]="['/quiz', 'public', 'own']">
-          <span *ngIf="canUsePublicQuizzes && publicQuizAmount > 0"><br/>{{'component.home.view-all-public' | translate}}</span>
-          <span *ngIf="!canUsePublicQuizzes || publicQuizAmount === 0">{{'component.home.view-own-public' | translate}}</span>
-        </a>
-      </p>
-    </div>
-  </ng-container>
+
+  <app-twitter-cards *ngIf="!isShowingQuiznameDatalist"
+                     class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2"></app-twitter-cards>
+
 </div>
+

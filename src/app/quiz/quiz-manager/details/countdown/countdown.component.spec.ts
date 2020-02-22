@@ -21,6 +21,8 @@ import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
+import { TwitterService } from '../../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { CountdownComponent } from './countdown.component';
 
@@ -56,7 +58,10 @@ describe('CountdownComponent', () => {
               get: () => 0,
             }),
           },
-        }, SharedService,
+        }, SharedService, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
+        },
       ],
       declarations: [CountdownComponent, TranslatePipeMock],
     }).compileComponents();

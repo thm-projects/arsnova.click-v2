@@ -1,4 +1,5 @@
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
+import {MemberEntity} from '../../lib/entities/member/MemberEntity';
 
 export class AttendeeMockService {
   public attendees = [];
@@ -26,5 +27,9 @@ export class AttendeeMockService {
 
   public hasReadingConfirmation(): boolean {
     return false;
+  }
+
+  public getActiveMembers(): Array<MemberEntity> {
+    return [];
   }
 }

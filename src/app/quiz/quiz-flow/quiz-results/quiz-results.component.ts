@@ -21,6 +21,7 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { I18nService } from '../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
+import { BonusTokenComponent } from './modals/bonus-token/bonus-token.component';
 import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-confirm.component';
 
 @Component({
@@ -298,6 +299,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
     if (this.quizService.isOwner) {
       this.footerBarService.footerElemBack.restoreClickCallback();
+    } else {
+      this.footerBarService.footerElemShowToken.restoreClickCallback();
     }
 
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
@@ -437,12 +440,17 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.quizApiService.resetQuiz(this.quizService.quiz).subscribe(() => {
             this.quizService.quiz.currentQuestionIndex = -1;
           });
-        }).catch(() => {});
+        }).catch(() => {
+        });
       };
     } else {
-      footerElems = [];
+      footerElems = [this.footerBarService.footerElemShowToken, this.footerBarService.footerElemTwitterTweet];
+      this.footerBarService.footerElemShowToken.onClickCallback = async () => {
+        this.ngbModal.open(BonusTokenComponent);
+      };
     }
     this.footerBarService.replaceFooterElements(footerElems);
+    this.cd.markForCheck();
   }
 
   private handleMessages(): void {
@@ -485,6 +493,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
         this.hasTriggeredNavigation = true;
+        this.ngbModal.dismissAll();
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
         this.hasTriggeredNavigation = true;

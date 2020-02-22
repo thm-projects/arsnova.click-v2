@@ -13,7 +13,6 @@
 
   @include media-breakpoint-up(md) {
     opacity: 0.95;
-    position: absolute;
     max-width: 20vw;
   }
 
@@ -22,6 +21,7 @@
       &:nth-child(2n) {
         padding-left: map_get($spacers, 1);
       }
+
       &:nth-child(2n + 1) {
         padding-right: map_get($spacers, 1);
       }

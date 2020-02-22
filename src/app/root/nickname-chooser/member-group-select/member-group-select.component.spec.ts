@@ -15,6 +15,8 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { TwitterService } from '../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { UserService } from '../../../service/user/user.service';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
@@ -45,6 +47,9 @@ describe('MemberGroupSelectComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
         },
       ],
       declarations: [MemberGroupSelectComponent, TranslatePipeMock],

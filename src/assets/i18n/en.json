@@ -34,7 +34,11 @@
       "load-to-play": "The data for the requested page could not be loaded. Please do not use the browser's navigation as data loss is possible. The quiz round must be quit now. You can only return to the home page.",
       "homepage": "To the home page",
       "to-quiz-overview": "To the quiz overview"
-    }
+    },
+    "copy-to-clipboard": "Copy to clipboard",
+    "mail-to": "Send as E-Mail",
+    "copied": "Copied",
+    "mail": "mailto:?subject=My%20Tokennumber&body=Hello,%0D%0Amy%20Tokennumber%20is "
   },
   "region": {
     "footer": {
@@ -79,7 +83,11 @@
         "login": "Login",
         "logout": "Logout",
         "save_quiz": "Save Quiz",
-        "admin": "Administrate"
+        "admin": "Administrate",
+        "showToken": "Show Token",
+        "twitter": {
+          "tweet": "Tweet"
+        }
       },
       "about": {
         "title": "About arsnova.click",
@@ -244,6 +252,18 @@
     }
   },
   "component": {
+    "twitter": {
+      "optin": {
+        "check": "Check if you want enable Twitter features",
+        "share": "Share on social media",
+        "warning": "I agree that content from Twitter will be displayed"
+      },
+      "tweet": {
+        "content": {
+          "0": "Just played the quiz \"{NAME}\" at arsnova.click ❤️\n"
+        }
+      }
+    },
     "answeroptions": {
       "new_answer": "New answer option",
       "correct": "Correct",
@@ -398,7 +418,11 @@
       "guessed_in_range": "Not correctly estimated, but acceptable",
       "wrong_answer": "Wrong answer",
       "no_data": "No data available",
-      "neutral_answer": "Reponses"
+      "neutral_answer": "Reponses",
+      "bonus-token": {
+        "title": "Bonustoken",
+        "your-bonus-token": "Your tokennumber is "
+      }
     },
     "lobby": {
       "start_quiz": "Let's go!",
@@ -871,7 +895,7 @@
       },
       "return_to_lobby": {
         "title": "Warning",
-        "text": "If you proceed to the quiz lobby all played quiz rounds will be reset.",
+        "text": "If you proceed to the quiz lobby all played quiz rounds will be reset.\n\nIf you need the current quiz-data, you should export it before continuing.",
         "continue": "Continue?"
       }
     }

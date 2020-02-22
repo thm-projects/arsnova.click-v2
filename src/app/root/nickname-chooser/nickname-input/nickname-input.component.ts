@@ -10,6 +10,7 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { UserService } from '../../../service/user/user.service';
+import {BonusTokenService} from 'src/app/service/user/bonus-token/bonus-token.service';
 
 @Component({
   selector: 'app-nickname-input',
@@ -36,6 +37,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private attendeeService: AttendeeService,
     private userService: UserService,
     private quizService: QuizService, private memberApiService: MemberApiService, private messageQueue: SimpleMQ,
+    private bonusTokenService: BonusTokenService
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -113,6 +115,13 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
       })).subscribe(data => {
         if (data.status !== StatusProtocol.Success || data.step !== MessageProtocol.Added) {
           reject(data);
+        } else {
+          this.bonusTokenService.getBonusToken().subscribe(
+              nextResult => {
+                this.attendeeService.bonusToken = nextResult;
+              },
+              err => console.error('Observer got an error: ' + err)
+          );
         }
       }, (error) => {
         reject({

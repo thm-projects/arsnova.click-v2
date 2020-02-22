@@ -22,6 +22,8 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { TwitterService } from '../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { UserService } from '../../../service/user/user.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
@@ -62,7 +64,10 @@ describe('NicknameInputComponent', () => {
         }, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        }, SimpleMQ,
+        }, SimpleMQ, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
+        },
       ],
       declarations: [NicknameInputComponent, TranslatePipeMock],
     }).compileComponents();

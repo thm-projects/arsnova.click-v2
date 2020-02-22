@@ -20,6 +20,8 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { TwitterService } from '../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { ThemeSwitcherComponent } from './theme-switcher.component';
 
@@ -51,7 +53,10 @@ describe('ThemeSwitcherComponent', () => {
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
-        }, SharedService,
+        }, SharedService, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
+        },
       ],
       declarations: [
         ThemeSwitcherComponent, TranslatePipeMock,

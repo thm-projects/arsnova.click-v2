@@ -36,6 +36,8 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 import { UserService } from '../../service/user/user.service';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { HomeComponent } from './home.component';
+import {TwitterService} from '../../service/twitter/twitter.service';
+import {TwitterServiceMock} from '../../service/twitter/twitter.service.mock';
 
 @Pipe({
   name: 'searchFilter',
@@ -90,7 +92,10 @@ describe('HomeComponent', () => {
         }, {
           provide: FileUploadService,
           useClass: FileUploadMockService,
-        },
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock
+        }
       ],
       declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock],
     }).compileComponents();

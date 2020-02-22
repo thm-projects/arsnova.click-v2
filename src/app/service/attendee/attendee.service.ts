@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { ReplaySubject } from 'rxjs';
 import { Attendee } from '../../lib/attendee/attendee';
 import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../lib/enums/enums';
@@ -8,9 +9,12 @@ import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberS
 import { MemberApiService } from '../api/member/member-api.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
+import { BonusTokenService } from '../user/bonus-token/bonus-token.service';
 
 @Injectable({ providedIn: 'root' })
 export class AttendeeService {
+  public readonly attendeeAmount = new ReplaySubject<number>(1);
+
   private _attendees: Array<MemberEntity> = [];
 
   get attendees(): Array<MemberEntity> {
@@ -32,11 +36,23 @@ export class AttendeeService {
     sessionStorage.setItem(StorageKey.CurrentNickName, value);
   }
 
+  private _bonusToken: string;
+
+  get bonusToken(): string {
+    return this._bonusToken;
+  }
+
+  set bonusToken(value: string) {
+    this._bonusToken = value;
+    sessionStorage.setItem(StorageKey.CurrentBonusToken, value);
+  }
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private quizService: QuizService,
     private storageService: StorageService,
     private memberApiService: MemberApiService,
+    private bonusTokenService: BonusTokenService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.loadData();
@@ -137,6 +153,14 @@ export class AttendeeService {
     return response && !isNaN(response.confidence);
   }
 
+  public getActiveMembers(): Array<MemberEntity> {
+    return this.attendees.filter((member) => member.isActive);
+  }
+
+  public reloadData(): void {
+    this.restoreMembers();
+  }
+
   private restoreMembers(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {
@@ -147,6 +171,14 @@ export class AttendeeService {
         this._attendees = data.payload.members.map((attendee) => {
           return new Attendee(attendee);
         });
+
+        this.attendeeAmount.next(this._attendees.length);
+
+        if (!this.quizService.isOwner) {
+          this.bonusTokenService.getBonusToken().subscribe(nextResult => {
+            this.bonusToken = nextResult;
+          }, err => console.error('Observer got an error: ' + err));
+        }
         resolve();
       }, () => reject());
     });
@@ -167,4 +199,5 @@ export class AttendeeService {
   private getMember(nickname: string): MemberEntity {
     return this._attendees.find(value => value.name === nickname);
   }
+
 }

@@ -19,6 +19,8 @@ import { SettingsService } from '../../../../service/settings/settings.service';
 import { SharedService } from '../../../../service/shared/shared.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../../service/storage/storage.service.mock';
+import { TwitterService } from '../../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuestiontypeComponent } from './questiontype.component';
 
@@ -55,7 +57,10 @@ describe('QuestiontypeComponent', () => {
               get: () => 0,
             }),
           },
-        }, SharedService,
+        }, SharedService, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
+        },
       ],
       declarations: [QuestiontypeComponent, TranslatePipeMock],
     }).compileComponents();
