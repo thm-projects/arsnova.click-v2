@@ -5,8 +5,8 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 export const environment: IEnvironment = {
   production: true,
   title: Title.Westermann,
-  version: 'VERSION',
   enableCasLogin: false,
+  version: 'VERSION',
   sentryDSN: 'https://f16c02fdefe64c018f5d580d1cf05b56@sentry.io/1819496',
   ssrEndpoint: 'https://beta.arsnova.click/backend',
   serverEndpoint: 'https://beta.arsnova.click/backend',
@@ -33,7 +33,7 @@ export const environment: IEnvironment = {
   availableQuizThemes: [QuizTheme.WestermannBlue, QuizTheme.Blackbeauty],
   defaultTheme: QuizTheme.WestermannBlue,
   darkModeCheckEnabled: false,
-  enableTwitter: true,
+  enableTwitter: false,
 };
 
 export enum DEVICE_TYPES {
