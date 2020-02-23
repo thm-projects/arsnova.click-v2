@@ -27,6 +27,10 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
+import { TrackingService } from '../../../service/tracking/tracking.service';
+import { TwitterService } from '../../../service/twitter/twitter.service';
+import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { VotingQuestionComponent } from '../voting/voting-question/voting-question.component';
@@ -40,8 +44,7 @@ import { ProgressBarSurveyComponent } from './progress-bar/progress-bar-survey/p
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { QuizResultsComponent } from './quiz-results.component';
 import { ReadingConfirmationProgressComponent } from './reading-confirmation-progress/reading-confirmation-progress.component';
-import {TrackingMockService} from '../../../service/tracking/tracking.mock.service';
-import {TrackingService} from '../../../service/tracking/tracking.service';
+
 describe('QuizResultsComponent', () => {
   let component: QuizResultsComponent;
   let fixture: ComponentFixture<QuizResultsComponent>;
@@ -76,8 +79,12 @@ describe('QuizResultsComponent', () => {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, SimpleMQ, {
-        provide: TrackingService,
-        useClass: TrackingMockService}
+          provide: TrackingService,
+          useClass: TrackingMockService,
+        }, {
+          provide: TwitterService,
+          useClass: TwitterServiceMock,
+        },
       ],
       declarations: [
         ConfidenceRateComponent,

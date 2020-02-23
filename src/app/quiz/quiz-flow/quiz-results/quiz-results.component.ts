@@ -21,6 +21,7 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { I18nService } from '../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
+import { TwitterService } from '../../../service/twitter/twitter.service';
 import { BonusTokenComponent } from './modals/bonus-token/bonus-token.component';
 import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-confirm.component';
 
@@ -67,6 +68,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         value + 1
       ),
     };
+    this.twitterService.questionIndex = value;
   }
 
   private _questionText: string;
@@ -93,6 +95,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     private ngbModal: NgbModal,
     private cd: ChangeDetectorRef,
     private messageQueue: SimpleMQ,
+    private twitterService: TwitterService,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuizResultsComponent.TYPE;
@@ -445,7 +448,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       };
     } else {
       footerElems = [this.footerBarService.footerElemShowToken];
-      if (environment.enableTwitter) {
+      if (environment.enableTwitter && this.twitterService.getOptIn()) {
         footerElems.push(this.footerBarService.footerElemTwitterTweet);
       }
       this.footerBarService.footerElemShowToken.onClickCallback = async () => {

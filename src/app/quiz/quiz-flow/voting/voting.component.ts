@@ -129,7 +129,12 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   public showSendResponseButton(): boolean {
-    return this.selectedAnswers !== null && typeof this.selectedAnswers !== 'undefined';
+    if (Array.isArray(this.selectedAnswers)) {
+      return !this.toggleSelectedAnswers() && this.selectedAnswers.length > 0;
+    }
+
+    return this.selectedAnswers !== null && //
+           typeof this.selectedAnswers !== 'undefined';
   }
 
   public toggleSelectAnswer(index: number): void {

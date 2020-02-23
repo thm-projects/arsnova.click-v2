@@ -18,6 +18,14 @@ export class TwitterService {
   public tweets: ITweetEntry[] = [];
   public readonly strWindowFeatures = 'location=yes,resizable=yes,scrollbars=yes,status=yes,width=500,height=500';
   public readonly genericMessages: Array<string> = ['component.twitter.tweet.content.0'];
+
+  private _questionIndex = -1;
+
+  set questionIndex(value: number) {
+    this._questionIndex = value;
+    this.rebuildTwitterMessage();
+  }
+
   private _digest: string;
   private _quizName: string;
 
@@ -34,12 +42,7 @@ export class TwitterService {
     });
 
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz && [QuizState.Running].includes(quiz.state)))).subscribe(quiz => {
-      const questionText = this.quizService.currentQuestion().questionText;
-      const htmlContent: string = this.customMarkdown.parseGithubFlavoredMarkdown(questionText);
-      const theme: string = this.themesService.currentTheme;
-
       this._quizName = quiz.name;
-      this.twitterApiService.getQuestionImageDigest(htmlContent, theme).subscribe(digest => this._digest = digest);
     });
   }
 
@@ -71,6 +74,18 @@ export class TwitterService {
   private selectMessage(): string {
     const random: number = Math.floor(Math.random() * this.genericMessages.length);
     return this.translate.instant(this.genericMessages[random], { NAME: this._quizName });
+  }
+
+  private rebuildTwitterMessage(): void {
+    if (this._questionIndex === -1 || !this.quizService.quiz) {
+      return;
+    }
+
+    const questionText = this.quizService.quiz.questionList[this._questionIndex].questionText;
+    const htmlContent: string = this.customMarkdown.parseGithubFlavoredMarkdown(questionText);
+    const theme: string = this.themesService.currentTheme;
+
+    this.twitterApiService.getQuestionImageDigest(htmlContent, theme).subscribe(digest => this._digest = digest);
   }
 
   private getUrl(): string {
