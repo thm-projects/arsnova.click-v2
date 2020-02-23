@@ -78,6 +78,8 @@ describe('QuestionDetailsComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(QuestionDetailsComponent);
     component = fixture.componentInstance;
+    const quizService = TestBed.inject(QuizService);
+    component['_question'] = quizService.quiz.questionList[0];
     fixture.detectChanges();
   }));
 
