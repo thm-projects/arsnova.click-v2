@@ -193,6 +193,12 @@ export class ProgressBarComponent {
       } else if (result.label === 'component.liveResults.guessed_in_range') {
         return responseValue !== question.correctValue && responseValue >= question.rangeMin && responseValue <= question.rangeMax;
       } else {
+        const valueString = String(value.responses[this.questionIndex].value);
+        if (value.responses[this.questionIndex].value === null || //
+            typeof value.responses[this.questionIndex].value === 'undefined' || //
+            !valueString) {
+          return true;
+        }
         return responseValue < question.rangeMin || responseValue > question.rangeMax;
       }
     });

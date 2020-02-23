@@ -78,7 +78,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     private headerLabelService: HeaderLabelService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private quizApiService: QuizApiService, private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private quizApiService: QuizApiService,
+    private memberApiService: MemberApiService,
+    private ngbModal: NgbModal,
+    private messageQueue: SimpleMQ,
   ) {
     sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
@@ -110,15 +113,15 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   public isSelected(index: number): boolean {
-    return (Array.isArray(this._selectedAnswers) && this._selectedAnswers.indexOf(index) > -1) || this._selectedAnswers === index;
+    return (
+             Array.isArray(this._selectedAnswers) && this._selectedAnswers.indexOf(index) > -1
+           ) || this._selectedAnswers === index;
   }
 
   public parseTextInput(event: Event): void {
-    this._selectedAnswers = (<HTMLInputElement>event.target).value;
-  }
-
-  public parseNumberInput(event: Event): void {
-    this._selectedAnswers = parseInt((<HTMLInputElement>event.target).value, 10);
+    this._selectedAnswers = (
+      <HTMLInputElement>event.target
+    ).value;
   }
 
   public isNumber(value: any): boolean {
@@ -126,17 +129,20 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   public showSendResponseButton(): boolean {
-    return this.isNumber(this.selectedAnswers) || (Array.isArray(this.selectedAnswers) && !!this.selectedAnswers.length)
-           || (typeof this.selectedAnswers === 'string' && !!this.selectedAnswers.length);
+    return this.selectedAnswers !== null && typeof this.selectedAnswers !== 'undefined';
   }
 
   public toggleSelectAnswer(index: number): void {
     if (!Array.isArray(this._selectedAnswers)) {
       return;
     }
-    this.isSelected(index) ? this._selectedAnswers.splice(this._selectedAnswers.indexOf(index), 1) : this.toggleSelectedAnswers()
-                                                                                                     ? this._selectedAnswers = [index]
-                                                                                                     : this._selectedAnswers.push(index);
+
+    this.isSelected(index) ? //
+    this._selectedAnswers.splice(this._selectedAnswers.indexOf(index), 1) : //
+    this.toggleSelectedAnswers() ? //
+    this._selectedAnswers = [index] : //
+    this._selectedAnswers.push(index);
+
     if (this.toggleSelectedAnswers()) {
       this.sendResponses();
     }
@@ -238,6 +244,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     return this.quizService.currentQuestion() as SurveyQuestionEntity;
   }
 
+  public setResponse(value: string | number): void {
+    this._selectedAnswers = value;
+  }
+
   private handleMessages(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
@@ -275,7 +285,9 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   private toggleSelectedAnswers(): boolean {
-    if (this._currentQuestion.TYPE === QuestionType.SurveyQuestion && !(this._currentQuestion as SurveyQuestionEntity).multipleSelectionEnabled) {
+    if (this._currentQuestion.TYPE === QuestionType.SurveyQuestion && !(
+      this._currentQuestion as SurveyQuestionEntity
+    ).multipleSelectionEnabled) {
       return true;
     }
 

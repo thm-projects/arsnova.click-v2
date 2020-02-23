@@ -161,8 +161,12 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     return this.quizService.quiz.questionList[this.questionIndex] as RangedQuestionEntity;
   }
 
-  public getCorrectAnswerIndex(): number {
-    return this.question.answerOptionList.findIndex(a => a.isCorrect);
+  public isCorrectAnswerIndex(i): boolean {
+    return this.question.answerOptionList[i] && this.question.answerOptionList[i].isCorrect;
+  }
+
+  public removeBreakFromAnswer(answer: string): string {
+    return answer.substring(0, answer.lastIndexOf('<br/>'));
   }
 
   private handleMessages(): void {

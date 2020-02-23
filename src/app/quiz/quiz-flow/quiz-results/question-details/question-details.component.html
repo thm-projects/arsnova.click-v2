@@ -3,11 +3,11 @@
 
 <hr/>
 
-<ng-container *ngIf="answers?.length === 1; else defaultAnswerView">
-  <h5>{{'component.answeroptions.free_text_question.title' | translate}} {{answers[0]}}</h5>
+<ng-container *ngIf="question.TYPE === 'FreeTextQuestion'; else defaultAnswerView">
+  <h5>{{'component.answeroptions.free_text_question.title' | translate}} {{removeBreakFromAnswer(answers[0])}}</h5>
 </ng-container>
 
-<ng-container *ngIf="!answers?.length">
+<ng-container *ngIf="question.TYPE === 'RangedQuestion'">
   <h5>{{'component.answeroptions.ranged_question.min_range' | translate}}: {{getCurrentQuestionAsRanged()?.rangeMin}}</h5>
   <h5>{{'component.answeroptions.ranged_question.correct_value' | translate}}: {{getCurrentQuestionAsRanged()?.correctValue}}</h5>
   <h5>{{'component.answeroptions.ranged_question.max_range' | translate}}: {{getCurrentQuestionAsRanged()?.rangeMax}}</h5>
@@ -16,7 +16,8 @@
 <ng-template #defaultAnswerView>
   <p *ngFor="let elem of answers; let i = index"
      class="mb-0">
-    <fa-icon [icon]="(i === getCorrectAnswerIndex() ? 'check-square' : 'square')"
+    <fa-icon *ngIf="question.TYPE !== 'SurveyQuestion'"
+             [icon]="(isCorrectAnswerIndex(i) ? 'check-square' : 'square')"
              class="mr-2"></fa-icon>
     <span>{{normalizeAnswerIndex(i)}}:&nbsp;</span>
     <span [innerHTML]="sanitizeHTML(elem)"></span>

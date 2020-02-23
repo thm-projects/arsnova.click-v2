@@ -43,7 +43,8 @@
 <div *ngIf="displayRangedButtons()"
      [class.mb-5]="showSendResponseButton()"
      class="mt-5">
-  <input (input)="parseNumberInput($event)"
+  <input #rangedInputElement
+         (input)="setResponse(rangedInputElement.value)"
          (keyup.enter)="sendResponses()"
          [placeholder]="'component.voting.ranged_question.title' | translate"
          autofocus
@@ -65,6 +66,7 @@
 <div *ngIf="showSendResponseButton()"
      class="position-fixed fixed-bottom py-2 d-flex bg-primary">
   <button (click)="sendResponses()"
+          [disabled]="isSendingResponse"
           class="btn btn-info btn-lg mx-3 px-sm-5 mx-sm-auto flex-grow-1 flex-sm-grow-0">
     <span class="mr-2">{{'component.voting.send' | translate}}</span>
     <fa-icon *ngIf="isSendingResponse"
