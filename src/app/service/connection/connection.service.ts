@@ -2,12 +2,12 @@ import { isPlatformServer } from '@angular/common';
 import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { ReplaySubject } from 'rxjs';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
 import { SharedService } from '../shared/shared.service';
-import {SimpleMQ} from 'ng2-simple-mq';
 
 @Injectable({
   providedIn: 'root',
@@ -74,7 +74,8 @@ export class ConnectionService {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private sharedService: SharedService,
-    private statisticsApiService: StatisticsApiService, private rxStompService: RxStompService,
+    private statisticsApiService: StatisticsApiService,
+    private rxStompService: RxStompService,
     private messageQueue: SimpleMQ,
   ) {
     this.initWebsocket();
@@ -90,7 +91,9 @@ export class ConnectionService {
     }
 
     return new Promise(async (resolve) => {
-      if ((this.pending || this.serverAvailable) && !overrideCurrentState) {
+      if ((
+            this.pending || this.serverAvailable
+          ) && !overrideCurrentState) {
         resolve();
         return;
       }
@@ -172,7 +175,7 @@ export class ConnectionService {
             this.sharedService.activeQuizzes.splice(this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName), 1);
             break;
           default:
-            this.messageQueue.publish(parsedMessage.step, parsedMessage.payload, false);
+            this.messageQueue.publish(parsedMessage.step, parsedMessage.payload, true);
             break;
         }
       } catch (ex) {

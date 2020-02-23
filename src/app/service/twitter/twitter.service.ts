@@ -36,7 +36,7 @@ export class TwitterService {
     private customMarkdown: CustomMarkdownService,
     private translate: TranslateService,
   ) {
-    this.messageQueue.subscribe(MessageProtocol.RequestTweets, payload => {
+    this.messageQueue.subscribe(MessageProtocol.RequestTweets, () => {
       this.refreshTweets();
     });
 
