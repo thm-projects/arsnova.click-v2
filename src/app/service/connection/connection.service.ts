@@ -175,7 +175,7 @@ export class ConnectionService {
             this.sharedService.activeQuizzes.splice(this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName), 1);
             break;
           default:
-            this.messageQueue.publish(parsedMessage.step, parsedMessage.payload, true);
+            this.messageQueue.publish(parsedMessage.step, parsedMessage.payload || {}, false);
             break;
         }
       } catch (ex) {

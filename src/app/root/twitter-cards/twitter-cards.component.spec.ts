@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
@@ -33,7 +34,7 @@ describe('TwitterCardsComponent', () => {
       declarations: [TwitterCardsComponent, TranslatePipeMock, SearchFilterPipeMock],
       imports: [I18nTestingModule, FormsModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule, NgbModule],
       providers: [
-        TwitterApiService, SimpleMQ, MarkdownService, {
+        TwitterApiService, RxStompService, SimpleMQ, MarkdownService, {
           provide: MarkedOptions,
           useValue: {},
         }, {

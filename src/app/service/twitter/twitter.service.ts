@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { SimpleMQ } from 'ng2-simple-mq';
 import { filter } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
-import { MessageProtocol } from '../../lib/enums/Message';
 import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
 import { TwitterApiService } from '../api/twitter/twitter-api.service';
 import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
@@ -29,17 +27,12 @@ export class TwitterService {
   private _quizName: string;
 
   constructor(
-    private messageQueue: SimpleMQ,
     private twitterApiService: TwitterApiService,
     private quizService: QuizService,
     private themesService: ThemesService,
     private customMarkdown: CustomMarkdownService,
     private translate: TranslateService,
   ) {
-    this.messageQueue.subscribe(MessageProtocol.RequestTweets, () => {
-      this.refreshTweets();
-    });
-
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz))).subscribe(quiz => {
       this._quizName = quiz.name;
     });
