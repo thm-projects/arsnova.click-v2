@@ -4,6 +4,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { filter } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
 import { MessageProtocol } from '../../lib/enums/Message';
+import { QuizState } from '../../lib/enums/QuizState';
 import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
 import { TwitterApiService } from '../api/twitter/twitter-api.service';
 import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
@@ -32,7 +33,7 @@ export class TwitterService {
       this.refreshTweets();
     });
 
-    this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz && !this.quizService.isInEditMode))).subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz && [QuizState.Running].includes(quiz.state)))).subscribe(quiz => {
       const questionText = this.quizService.currentQuestion().questionText;
       const htmlContent: string = this.customMarkdown.parseGithubFlavoredMarkdown(questionText);
       const theme: string = this.themesService.currentTheme;
