@@ -39,7 +39,9 @@ export class QuizService {
     if (value) {
       sessionStorage.setItem(StorageKey.CurrentQuizName, value.name);
       // noinspection SuspiciousInstanceOfGuard
-      if (!(value instanceof QuizEntity)) {
+      if (!(
+        value instanceof QuizEntity
+      )) {
         value = new QuizEntity(value);
       }
     }
@@ -59,12 +61,17 @@ export class QuizService {
 
   private _isInEditMode = false;
 
+  get isInEditMode(): boolean {
+    return this._isInEditMode;
+  }
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
     private storageService: StorageService,
     private settingsService: SettingsService,
-    private quizApiService: QuizApiService, private ngbModal: NgbModal,
+    private quizApiService: QuizApiService,
+    private ngbModal: NgbModal,
   ) {
   }
 

@@ -33,6 +33,13 @@ body {
   width: auto;
 }
 
+.device_xs.preview-frame {
+  .thumbnail {
+    max-width: inherit;
+    width: 100%;
+  }
+}
+
 #theme-wrapper {
   z-index: 1000;
 }
@@ -80,4 +87,8 @@ iframe {
 .box-shadow-warning {
   box-shadow: 0 0 .25rem $warning;
   pointer-events: none;
+}
+
+.color-twitter {
+  color: #1DA1F2;
 }

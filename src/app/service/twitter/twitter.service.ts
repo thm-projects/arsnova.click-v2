@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { filter } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
@@ -31,11 +32,7 @@ export class TwitterService {
       this.refreshTweets();
     });
 
-    this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (!quiz) {
-        return;
-      }
-
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz && !this.quizService.isInEditMode))).subscribe(quiz => {
       const questionText = this.quizService.currentQuestion().questionText;
       const htmlContent: string = this.customMarkdown.parseGithubFlavoredMarkdown(questionText);
       const theme: string = this.themesService.currentTheme;
