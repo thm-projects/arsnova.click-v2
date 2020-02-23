@@ -14,16 +14,11 @@
             <a href=#>@{{tweet.screen_name}}</a>
           </div>
           <div class="tw-icon-container">
-            <a *ngIf="tweet.url"
-               class="color-twitter"
-               href="{{tweet.url}}">
+            <a class="color-twitter"
+               href="{{tweet.url}}"
+               target="_blank">
               <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
             </a>
-            <span
-              *ngIf="!tweet.url"
-              class="tw-icon">
-              <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
-            </span>
           </div>
         </div>
 

@@ -4,7 +4,6 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { filter } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
 import { MessageProtocol } from '../../lib/enums/Message';
-import { QuizState } from '../../lib/enums/QuizState';
 import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
 import { TwitterApiService } from '../api/twitter/twitter-api.service';
 import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
@@ -41,7 +40,7 @@ export class TwitterService {
       this.refreshTweets();
     });
 
-    this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz && [QuizState.Running].includes(quiz.state)))).subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz))).subscribe(quiz => {
       this._quizName = quiz.name;
     });
   }
@@ -68,7 +67,7 @@ export class TwitterService {
   public tweet(): void {
     window.open(
       `https://twitter.com/compose/tweet?text=${encodeURIComponent(this.selectMessage())}&url=${this.getUrl()}&hashtags=${encodeURIComponent(
-        'arsnova')}&related=ArsnovaC`, 'newwindow', this.strWindowFeatures);
+        'arsnova')}&related=arsnovaclick`, 'newwindow', this.strWindowFeatures);
   }
 
   private selectMessage(): string {
