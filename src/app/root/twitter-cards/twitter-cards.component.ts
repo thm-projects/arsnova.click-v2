@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { TwitterService } from '../../service/twitter/twitter.service';
@@ -8,10 +8,12 @@ import { TwitterService } from '../../service/twitter/twitter.service';
   templateUrl: './twitter-cards.component.html',
   styleUrls: ['./twitter-cards.component.scss'],
 })
-export class TwitterCardsComponent implements OnInit {
+export class TwitterCardsComponent implements OnInit, OnDestroy {
 
   public static TYPE = 'TwitterCardsComponent';
   public warning: string;
+
+  private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(public twitterService: TwitterService, private messageQueue: SimpleMQ) {}
 
@@ -22,8 +24,12 @@ export class TwitterCardsComponent implements OnInit {
   public ngOnInit(): void {
     this.twitterService.refreshTweets();
 
-    this.messageQueue.subscribe(MessageProtocol.RequestTweets, () => {
+    this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.RequestTweets, () => {
       this.twitterService.refreshTweets();
-    });
+    }));
+  }
+
+  public ngOnDestroy(): void {
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 }
