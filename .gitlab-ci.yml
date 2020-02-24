@@ -81,6 +81,35 @@ build-beta:
     - *staging-server-env
     - *docker-push
 
+ts_lint:
+  stage: test
+  except:
+    - staging
+    - master
+    - beta
+  tags:
+    - nodejs
+  script:
+    - npm install
+    - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
+
+npm_test:
+  stage: test
+  except:
+    - staging
+    - master
+    - beta
+  tags:
+    - nodejs
+    - angular
+  script:
+    - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
+    - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+    - apt-get -y update
+    - apt-get -y install --allow-unauthenticated google-chrome-stable
+    - npm install
+    - npm test
+
 deploy:
   stage: deploy
   only:

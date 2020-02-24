@@ -5,9 +5,9 @@
 </head>
 <body style="font-size:18px;font-size: 1.2rem;">
 <p lang="en"
-   style="font-size:22px;font-size: 1.4rem;display: none;">Your browser is unsupported!<br/>Please check which browser supports the required features (click on Details of every item) to use arsnova.click</p>
+   style="font-size:22px;font-size: 1.4rem;display: none;">Your browser is unsupported!<br/>Please check which browser supports the required features (click on Details of every item) to use arsnova.click. Please make also sure that you are not using the incognito / private browsing mode since the access to necessary features may be blocked.</p>
 <p lang="de"
-   style="font-size:22px;font-size: 1.4rem;display: none;">Dein Browser wird nicht unterst&uuml;tzt!<br/>Bitte pr&uuml;fe, welcher Browser die erforderlichen Features unterst&uuml;tzt (klicke auf Details in jedem Element der Liste) um arsnova.click nutzen zu k&ouml;nnen</p>
+   style="font-size:22px;font-size: 1.4rem;display: none;">Dein Browser wird nicht unterst&uuml;tzt!<br/>Bitte pr&uuml;fe, welcher Browser die erforderlichen Features unterst&uuml;tzt (klicke auf Details in jedem Element der Liste) um arsnova.click nutzen zu k&ouml;nnen. Bitte stelle auch sicher, dass du nicht den Incognito / Privat Modus deines Browsers verwendest, da hierbei möglicherweise der Zugriff auf notwendige Features blockiert wird.</p>
 <p lang="en"
    style="display: none;">Your browser is missing the following mandatory features&colon;</p>
 <p lang="de"
@@ -15,10 +15,13 @@
 <ul id="list-required"></ul>
 
 <p lang="en"
+   class="optional-features"
    style="display: none;">Additional it is missing the following optional features&colon;</p>
 <p lang="de"
+   class="optional-features"
    style="display: none;">Zus&auml;tzlich unterst&uuml;tzt er nicht die folgenden optionalen Features&colon;</p>
-<ul id="list-optional"></ul>
+<ul class="optional-features"
+    id="list-optional"></ul>
 
 <script>
   var lang = navigator.language.split('-')[0];
@@ -40,7 +43,7 @@
     }
     var list = [{label: 'Audio', value: Modernizr.audio, required: false, linkRef: '#feat=audio'},
         {label: 'BlobConstructor', value: Modernizr.blobconstructor, required: false, linkRef: '#feat=blobbuilder'},
-        {label: 'IndexedDB', value: 'indexedDB' in window, required: true, linkRef: '#feat=indexeddb'}, // TODO: Value resolves to a promise
+        {label: 'IndexedDB', value: (window.indexedDB !== null && Modernizr.indexeddb), required: true, linkRef: '#feat=indexeddb'}, // TODO: Value resolves to a promise
         {label: 'ClassList', value: Modernizr.classlist, required: true, linkRef: '#feat=classlist'},
         {label: 'CORS', value: Modernizr.cors, required: true, linkRef: '#feat=cors'},
         {label: 'CSS-Calc', value: Modernizr.csscalc, required: true, linkRef: '#feat=calc'},
@@ -58,9 +61,9 @@
         {label: 'Video', value: Modernizr.video, required: false, linkRef: '#feat=video'},
         {label: 'WebSockets', value: Modernizr.websockets, required: true, linkRef: '#feat=websockets'},
         {label: 'XHR-Response', value: Modernizr.xhrresponsetype, required: true, linkRef: '#feat=xhr2'},
-        {label: 'Uint8Array', value: 'Uint8Array' in window, required: true, linkRef: '#feat=mdn-javascript_builtins_uint8array'},
-        {label: 'TextEncoder', value: 'TextEncoder' in window, required: true, linkRef: '#feat=textencoder'},
-        {label: 'TextDecoder', value: 'TextDecoder' in window, required: true, linkRef: '#feat=mdn-api_textdecoder'},
+        {label: 'Uint8Array', value: typeof window.Uint8Array === 'function', required: true, linkRef: '#feat=mdn-javascript_builtins_uint8array'},
+        {label: 'TextEncoder', value: typeof window.TextEncoder === 'function', required: true, linkRef: '#feat=textencoder'},
+        {label: 'TextDecoder', value: typeof window.TextDecoder === 'function', required: true, linkRef: '#feat=mdn-api_textdecoder'},
         {label: 'Object.assign', value: 'assign' in Object, required: false, linkRef: '#feat=es6'},
       ]
     ;
@@ -77,6 +80,13 @@
       node.className = 'failed';
       document.getElementById('list-' + (elem.required ? 'required' : 'optional')).appendChild(node);
     });
+
+    if (!document.getElementById('list-optional').childElementCount) {
+      var elements = document.getElementsByClassName('optional-features');
+      for (var i = 0; i < elements.length; i++) {
+        elements.item(i).setAttribute('style', 'display:none');
+      }
+    }
   };
 
   document.addEventListener('DOMContentLoaded', fn, false);

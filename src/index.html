@@ -126,12 +126,18 @@
       Modernizr.video,
       Modernizr.websockets,
       Modernizr.xhrresponsetype,
-      'indexedDB' in window,
-      'Uint8Array' in window,
-      'TextEncoder' in window,
-      'TextDecoder' in window,
+      window.indexedDB !== null,
+      typeof window.Uint8Array === 'function',
+      typeof window.TextEncoder === 'function',
+      typeof window.TextDecoder === 'function',
     ].forEach(function (test) {
       if (!test) {
+        location.href = '/assets/static/unsupported.html';
+      }
+    });
+
+    Modernizr.on('indexeddb', function (result) {
+      if (!result) {
         location.href = '/assets/static/unsupported.html';
       }
     });
