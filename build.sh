@@ -2,10 +2,6 @@
 
 echo "Installing npm modules"
 npm install
-echo "Running tslint"
-node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
-echo "Running unit tests"
-npm test
 
 echo "Installing angular-http-server"
 npm install -g angular-http-server
