@@ -1,4 +1,6 @@
 stages:
+  - ts_lint
+  - npm_test
   - build
   - deploy
 
