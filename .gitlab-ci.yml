@@ -84,10 +84,6 @@ build-beta:
 
 ts_lint:
   stage: test
-  except:
-    - staging
-    - master
-    - beta
   tags:
     - nodejs
   script:
@@ -96,10 +92,6 @@ ts_lint:
 
 npm_test:
   stage: test
-  except:
-    - staging
-    - master
-    - beta
   tags:
     - nodejs
     - angular
