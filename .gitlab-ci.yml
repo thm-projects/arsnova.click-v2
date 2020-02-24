@@ -87,7 +87,7 @@ ts_lint:
   tags:
     - nodejs
   script:
-    - npm install tslint@5.20.1
+    - npm install tslint@5.20.1 typescript@3.7.5
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
 npm_test:
