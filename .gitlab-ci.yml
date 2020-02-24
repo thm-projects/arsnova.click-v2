@@ -87,7 +87,7 @@ ts_lint:
   tags:
     - nodejs
   script:
-    - npm install tslint@5.20.1 typescript@3.7.5 codelyzer@5.1.2 @angular/compiler@^9.0.0 @angular/core@9.0.0
+    - npm install
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
 npm_test:
