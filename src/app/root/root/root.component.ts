@@ -55,7 +55,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private messageQueue: SimpleMQ,
     private trackingService: TrackingService,
   ) {
-    this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe(themeName => {
+    this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe((themeName: QuizTheme) => {
       if (String(themeName) === 'default') {
         themeName = environment.defaultTheme;
       }
@@ -66,7 +66,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       });
     });
     this.updateCheckService.checkForUpdates();
-    this.sharedService.isLoadingEmitter.pipe(takeUntil(this._destroy)).subscribe(isLoading => {
+    this.sharedService.isLoadingEmitter.pipe(takeUntil(this._destroy)).subscribe((isLoading: boolean) => {
       setTimeout(() => this.isLoading = isLoading);
     });
   }
@@ -115,7 +115,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       this.themeService.updateCurrentlyUsedTheme();
     });
 
-    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
+    this.quizService.quizUpdateEmitter.pipe(filter(() => !this.quizService.isInEditMode), takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
       if (this._stompSubscription) {
         this._stompSubscription.unsubscribe();
       }
