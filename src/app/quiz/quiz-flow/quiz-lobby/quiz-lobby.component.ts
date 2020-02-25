@@ -259,7 +259,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       });
     };
     this.footerBarService.footerElemQRCode.onClickCallback = () => {
-      this.ngbModal.open(QrCodeContentComponent, { centered: true });
+      this.ngbModal.open(QrCodeContentComponent, {
+        centered: true,
+        windowClass: 'qr-code-dialog',
+      });
     };
     this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
       const promise = this.attendeeService.attendees.length ? this.ngbModal.open(EditModeConfirmComponent).result : new Promise<any>(

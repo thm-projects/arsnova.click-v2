@@ -13,7 +13,7 @@
       [background]="'#000000'"
       [canvas]="true"
       [foreground]="'#ffffff'"
-      [size]="400"
+      [size]="calculateQRCodeSize()"
       [value]="qrCodeContent"
       class="px-3 pb-4"></qr-code>
     <h6 class="mb-0 text-break text-center">{{qrCodeContent}}</h6>

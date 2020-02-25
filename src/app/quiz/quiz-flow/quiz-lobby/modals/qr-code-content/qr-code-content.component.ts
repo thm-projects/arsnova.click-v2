@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 
@@ -24,5 +24,19 @@ export class QrCodeContentComponent {
 
   public dismiss(): void {
     this.activeModal.dismiss();
+  }
+
+  @HostListener('window:resize', [])
+  public calculateQRCodeSize(): number {
+    const size = Math.round((
+                              window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth
+                            ) * (
+                            0.7 * window.devicePixelRatio
+                            ));
+    const elem = document.getElementsByClassName('qr-code-dialog').item(0);
+    if (elem) {
+      elem.getElementsByClassName('modal-dialog').item(0).setAttribute('style', `max-width: ${size * 1.1}px;`);
+    }
+    return size;
   }
 }

@@ -1,0 +1,9 @@
+::ng-deep {
+  .qr-code-dialog {
+    .modal-dialog {
+      max-width: calc(100% * 0.75);
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
