@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeModule } from 'angular2-qrcode';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 
 import { QrCodeContentComponent } from './qr-code-content.component';
