@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { QRCodeModule } from 'angularx-qrcode';
+import { QRCodeModule } from 'angular2-qrcode';
 import { MarkdownModule } from 'ngx-markdown';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { ShowUnloadWarningGuard } from '../../service/show-unload-warning-guard/show-unload-warning.guard';

@@ -9,10 +9,13 @@
 </div>
 <div class="modal-body pt-0">
   <div class="d-flex flex-column align-items-center qrCodeContent">
-    <qrcode [level]="'M'"
-            [qrdata]="qrCodeContent"
-            [size]="512"
-            class="px-3 pb-4"></qrcode>
+    <qr-code
+      [background]="'#000000'"
+      [canvas]="true"
+      [foreground]="'#ffffff'"
+      [size]="400"
+      [value]="qrCodeContent"
+      class="px-3 pb-4"></qr-code>
     <h6 class="mb-0 text-break text-center">{{qrCodeContent}}</h6>
   </div>
 </div>
