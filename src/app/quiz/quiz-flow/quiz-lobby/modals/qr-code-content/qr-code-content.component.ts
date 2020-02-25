@@ -30,7 +30,9 @@ export class QrCodeContentComponent {
   public calculateQRCodeSize(): number {
     const size = Math.round((
                               window.innerWidth > window.innerHeight ? window.innerHeight : window.innerWidth
-                            ) * 0.7);
+                            ) * 0.7 * (
+                              window.devicePixelRatio > 1 ? 1 : window.devicePixelRatio
+                            ));
     const elem = document.getElementsByClassName('qr-code-dialog').item(0);
     if (elem) {
       elem.getElementsByClassName('modal-dialog').item(0).setAttribute('style', `max-width: ${size * 1.1}px;`);
