@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -33,8 +33,6 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
   }
 
   private readonly _destroy = new Subject();
-  // noinspection JSMismatchedCollectionQueryUpdate
-  private readonly _subscriptions: Array<Subscription> = [];
 
   constructor(
     private headerLabelService: HeaderLabelService,
@@ -49,8 +47,6 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
     ]);
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public ngOnInit(): void {
@@ -64,6 +60,7 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
       this._questionIndex = questionIndex;
       this._question = this.quizService.quiz.questionList[this._questionIndex];
     });
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public ngOnDestroy(): void {
@@ -83,7 +80,10 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
   }
 
   public getAnswerAsFreetext(abstractAnswerEntity: AbstractAnswerEntity): FreeTextAnswerEntity {
-    return abstractAnswerEntity as FreeTextAnswerEntity;
+    if (!abstractAnswerEntity) {
+      return;
+    }
+    return new FreeTextAnswerEntity(abstractAnswerEntity);
   }
 
   public toString(correctValue: number): string {

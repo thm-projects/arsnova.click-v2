@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="row mb-3">
-      <div *ngFor="let elem of answer[0].getConfig()"
+      <div *ngFor="let elem of getTypesafeAnswer().getConfig()"
            class="col-12 col-sm-6 mb-2 d-flex"
            [attr.data-intro]="elem.configTitle | translate">
         <p class="mb-0 mr-2 align-self-center w-100"
@@ -24,6 +24,7 @@
         </p>
         <label class="btn cursor-pointer mb-0 align-self-center"
                [class.btn-success]="elem.enabled"
+               (click)="setConfig(elem.id, !elem.enabled)"
                [class.btn-danger]="!elem.enabled">
           <input [id]="elem.id"
                  type="checkbox"
@@ -31,8 +32,7 @@
                  [attr.aria-label]="elem.configTitle | translate"
                  autocomplete="off"
                  role="switch"
-                 [checked]="elem.enabled"
-                 (change)="setConfig(elem.id, !elem.enabled)"/>
+                 [checked]="elem.enabled"/>
           <span *ngIf="elem.enabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
           <span *ngIf="!elem.enabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
         </label>

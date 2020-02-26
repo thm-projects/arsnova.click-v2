@@ -197,28 +197,34 @@ export class QuizService {
     });
   }
 
-  public loadDataToEdit(quizName: string): void {
-    if (!quizName) {
-      const instance = this.ngbModal.open(NoDataErrorComponent, {
-        keyboard: false,
-        backdrop: 'static',
-      });
-      instance.componentInstance.target = ['/quiz/overview'];
-      instance.componentInstance.targetMessage = 'global.no-data-error.load-to-edit';
-      instance.componentInstance.targetButton = 'global.no-data-error.to-quiz-overview';
-      instance.result.catch(() => {});
-      return;
-    }
-
-    this.storageService.db.Quiz.get(quizName).then(quiz => {
-      if (!quiz) {
+  public loadDataToEdit(quizName: string): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      if (!quizName) {
+        const instance = this.ngbModal.open(NoDataErrorComponent, {
+          keyboard: false,
+          backdrop: 'static',
+        });
+        instance.componentInstance.target = ['/quiz/overview'];
+        instance.componentInstance.targetMessage = 'global.no-data-error.load-to-edit';
+        instance.componentInstance.targetButton = 'global.no-data-error.to-quiz-overview';
+        instance.result.catch(() => {});
+        reject();
         return;
       }
 
-      this.isOwner = true;
-      this._isInEditMode = true;
-      this.quiz = new QuizEntity(quiz);
-      console.log('QuizService: loadDataToEdit finished', quiz, quizName);
+      this.storageService.db.Quiz.get(quizName).then(quiz => {
+        if (!quiz) {
+          reject();
+          return;
+        }
+
+        this.isOwner = true;
+        this._isInEditMode = true;
+        this.quiz = new QuizEntity(quiz);
+        this.quizUpdateEmitter.next(this.quiz);
+        console.log('QuizService: loadDataToEdit finished', quiz, quizName);
+        resolve();
+      });
     });
   }
 

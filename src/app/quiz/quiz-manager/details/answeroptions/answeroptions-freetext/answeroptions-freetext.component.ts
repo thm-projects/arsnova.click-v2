@@ -1,9 +1,10 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
-import { AbstractQuestionEntity } from '../../../../../lib/entities/question/AbstractQuestionEntity';
+import { FreeTextQuestionEntity } from '../../../../../lib/entities/question/FreeTextQuestionEntity';
+import { StorageKey } from '../../../../../lib/enums/enums';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 
@@ -11,13 +12,14 @@ import { QuizService } from '../../../../../service/quiz/quiz.service';
   selector: 'app-answeroptions-freetext',
   templateUrl: './answeroptions-freetext.component.html',
   styleUrls: ['./answeroptions-freetext.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsFreetextComponent';
 
-  private _question: AbstractQuestionEntity;
+  private _question: FreeTextQuestionEntity;
 
-  get question(): AbstractQuestionEntity {
+  get question(): FreeTextQuestionEntity {
     return this._question;
   }
 
@@ -25,12 +27,6 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
 
   get matchText(): string {
     return this._matchText;
-  }
-
-  private _answer: Array<FreeTextAnswerEntity>;
-
-  get answer(): Array<FreeTextAnswerEntity> {
-    return this._answer;
   }
 
   private _testInput = '';
@@ -52,7 +48,9 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   public setMatchText(event: Event): void {
-    this._question.answerOptionList[0].answerText = (<HTMLTextAreaElement>event.target).value;
+    this.getTypesafeAnswer().answerText = (
+      <HTMLTextAreaElement>event.target
+    ).value;
   }
 
   public hasTestInput(): boolean {
@@ -60,11 +58,11 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   public isTestInputCorrect(): boolean {
-    return (<FreeTextAnswerEntity>this._question.answerOptionList[0]).isCorrectInput(this._testInput);
+    return this.getTypesafeAnswer().isCorrectInput(this._testInput);
   }
 
   public setConfig(configIdentifier: string, configValue: boolean): void {
-    (<FreeTextAnswerEntity>this._question.answerOptionList[0]).setConfig(configIdentifier, configValue);
+    this.getTypesafeAnswer().setConfig(configIdentifier, configValue);
   }
 
   public ngOnInit(): void {
@@ -73,22 +71,23 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
       this._questionIndex = questionIndex;
 
       if (this.quizService.quiz) {
-        this._question = this.quizService.quiz.questionList[this._questionIndex];
-      }
-      this._answer = <Array<FreeTextAnswerEntity>>this._question.answerOptionList;
+        this._question = this.quizService.quiz.questionList[this._questionIndex] as FreeTextQuestionEntity;
 
-      if (!this._question.answerOptionList.length) {
-        this._question.answerOptionList.push(new FreeTextAnswerEntity({
-          answerText: '',
-          configCaseSensitive: false,
-          configTrimWhitespaces: false,
-          configUseKeywords: false,
-          configUsePunctuation: false,
-        }));
+        if (!this._question.answerOptionList.length) {
+          this._question.answerOptionList.push(new FreeTextAnswerEntity({
+            answerText: '',
+            configCaseSensitive: false,
+            configTrimWhitespaces: false,
+            configUseKeywords: false,
+            configUsePunctuation: false,
+          }));
+        }
       }
 
-      this._matchText = this._question.answerOptionList[0].answerText;
+      this._matchText = this.getTypesafeAnswer().answerText;
     });
+
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   @HostListener('window:beforeunload', [])
@@ -98,5 +97,9 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
 
     this._destroy.next();
     this._destroy.complete();
+  }
+
+  public getTypesafeAnswer(): FreeTextAnswerEntity {
+    return this.question.answerOptionList[0] as FreeTextAnswerEntity;
   }
 }

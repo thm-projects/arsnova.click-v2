@@ -21,10 +21,7 @@ export abstract class AbstractQuestionEntity {
     if (data.answerOptionList) {
       if (data.TYPE === QuestionType.FreeTextQuestion) {
         this.answerOptionList = data.answerOptionList.map(answer => {
-          if (answer.TYPE === AnswerType.FreeTextAnswerOption) {
-            return getAnswerForType(answer.TYPE, answer);
-          }
-          return getAnswerForType(AnswerType.FreeTextAnswerOption, {});
+          return getAnswerForType(answer.TYPE, answer);
         });
       } else if (data.TYPE === QuestionType.RangedQuestion) {
         this.answerOptionList = [];
