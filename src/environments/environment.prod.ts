@@ -7,7 +7,7 @@ export const environment: IEnvironment = {
   title: Title.Default,
   version: 'VERSION',
   enableCasLogin: true,
-  sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@176.9.117.91:9000/2',
+  sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
   ssrEndpoint: 'https://staging.arsnova.click/backend',
   serverEndpoint: 'https://staging.arsnova.click/backend',
   httpApiEndpoint: 'https://staging.arsnova.click/backend/api/v1',
