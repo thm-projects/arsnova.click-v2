@@ -7,7 +7,7 @@ export const environment: IEnvironment = {
   title: Title.Default,
   version: 'VERSION',
   enableCasLogin: true,
-  sentryDSN: 'http://14415a5e358f4c04b6a878072d352c4e@176.9.117.91:9000/2',
+  sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@176.9.117.91:9000/2',
   ssrEndpoint: 'http://localhost:4000',
   serverEndpoint: 'http://localhost:3010',
   httpApiEndpoint: 'http://localhost:3010/api/v1',
