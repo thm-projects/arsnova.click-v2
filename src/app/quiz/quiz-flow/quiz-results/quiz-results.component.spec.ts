@@ -8,6 +8,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
+import { environment } from '../../../../environments/environment';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
 import { Language } from '../../../lib/enums/enums';
@@ -175,7 +176,8 @@ describe('QuizResultsComponent', () => {
       ],
     }));
     quizService.quiz.sessionConfig.confidenceSliderEnabled = true;
-    expect(component.showConfidenceRate(0)).toBeFalsy();
+    environment.confidenceSliderEnabled = true;
+    expect(component.showConfidenceRate(0)).toBeTruthy();
   }));
   it(`#modifyVisibleQuestion`, inject([QuestionTextService], async (questionTextService: QuestionTextService) => {
     spyOn(questionTextService, 'changeMultiple').and.callFake(() => new Promise<void>(resolve => resolve()));
@@ -224,7 +226,8 @@ describe('QuizResultsComponent', () => {
       ],
     }));
     quizService.quiz.sessionConfig.readingConfirmationEnabled = true;
-    expect(component.showReadingConfirmation(0)).toBeFalsy();
+    environment.readingConfirmationEnabled = true;
+    expect(component.showReadingConfirmation(0)).toBeTruthy();
   }));
   it(`#showResponseProgress`, inject([QuizService], (quizService: QuizService) => {
     expect(component.showResponseProgress()).toEqual(quizService.quiz.sessionConfig.showResponseProgress);
