@@ -165,8 +165,12 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     return this.question.answerOptionList[i] && this.question.answerOptionList[i].isCorrect;
   }
 
-  public removeBreakFromAnswer(answer: string): string {
-    return answer.substring(0, answer.lastIndexOf('<br/>'));
+  public removeBreakFromAnswer(answers: Array<string>): string {
+    if (!Array.isArray(answers) || !answers.length) {
+      return;
+    }
+
+    return answers[0].substring(0, answers[0].lastIndexOf('<br/>'));
   }
 
   private handleMessages(): void {
