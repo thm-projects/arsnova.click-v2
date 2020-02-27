@@ -99,9 +99,9 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
   }
 
   public ngOnDestroy(): void {
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy.next();
     this._destroy.complete();
-    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
   }
 
   public getConfidenceLevelTranslation(): string {
@@ -135,9 +135,6 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
-      }), this.messageQueue.subscribe(MessageProtocol.Stop, () => {
-        this.hasTriggeredNavigation = true;
-        this.router.navigate(['/quiz', 'flow', 'results']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
         console.log('ConfidenceRateComponent: modify response data for nickname', payload.nickname);
         this.attendeeService.modifyResponse(payload);

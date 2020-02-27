@@ -235,12 +235,13 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   public ngOnDestroy(): void {
+    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
+
     if (this.countdown) {
       this.countdown.onChange.unsubscribe();
       this.countdown.stop();
     }
 
-    this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy.next();
     this._destroy.complete();
   }

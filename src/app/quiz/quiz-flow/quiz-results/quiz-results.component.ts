@@ -177,10 +177,18 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     };
     if (questionIndex >= 0) {
       const matches = this.attendeeService.attendees.filter(value => {
-        return value.responses[questionIndex] ? value.responses[questionIndex].confidence : false;
+        return value.responses[questionIndex] ? //
+               value.responses[questionIndex].confidence > -1 ? //
+               value.responses[questionIndex].confidence : //
+               0 : //
+               false;
       });
       const absoluteValues = matches.length ? this.attendeeService.attendees.map(value => {
-        return value.responses[questionIndex] ? value.responses[questionIndex].confidence : 0;
+        return value.responses[questionIndex] ? //
+               value.responses[questionIndex].confidence > -1 ? //
+               value.responses[questionIndex].confidence : //
+               0 : //
+               0;
       }).reduce((currentValue, nextValue) => {
         return currentValue + nextValue;
       }) : 0;
@@ -342,6 +350,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
     if (environment.readingConfirmationEnabled && startQuizData.step === MessageProtocol.ReadingConfirmationRequested) {
       this.quizService.readingConfirmationRequested = true;
+      this.isStarting = false;
       return;
     }
 

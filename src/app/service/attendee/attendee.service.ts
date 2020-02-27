@@ -150,7 +150,7 @@ export class AttendeeService {
     }
 
     const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
-    return response && !isNaN(response.confidence);
+    return response && !isNaN(response.confidence) && response.confidence > -1;
   }
 
   public getActiveMembers(): Array<MemberEntity> {
