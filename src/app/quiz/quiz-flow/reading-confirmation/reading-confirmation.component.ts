@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -55,7 +55,8 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
   }
 
   public sanitizeHTML(value: string): string {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+    // sanitizer.bypassSecurityTrustHtml is required for highslide
+    return this.sanitizer.bypassSecurityTrustHtml(`${value}`) as string;
   }
 
   public ngOnInit(): void {

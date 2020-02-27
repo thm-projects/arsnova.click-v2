@@ -151,12 +151,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       return;
     }
 
-    const matches = this.attendeeService.attendees.filter(value => {
+    const matches = this.attendeeService.attendees.find(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].confidence > -1 : false;
     });
     const hasConfidenceSet = this.quizService.quiz.sessionConfig.confidenceSliderEnabled ?? false;
-    const isConfidenceEnabled = typeof hasConfidenceSet ? this.quizService.quiz.sessionConfig.confidenceSliderEnabled : false;
-    return hasConfidenceSet ? matches.length > 0 || isConfidenceEnabled : matches.length > 0;
+    const isConfidenceEnabled = hasConfidenceSet ? this.quizService.quiz.sessionConfig.confidenceSliderEnabled : false;
+    return hasConfidenceSet ? Boolean(matches) || isConfidenceEnabled : Boolean(matches);
   }
 
   public modifyVisibleQuestion(index: number): void {
@@ -392,8 +392,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.hideProgressbarStyle = false;
           this.showStopQuizButton = this.quizService.isOwner;
         } else {
-          this.showStartQuizButton = this.quizService.isOwner && //
-                                     this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+          if (currentStateData.payload.readingConfirmationRequested) {
+            this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
+                                       >= this.quizService.quiz.currentQuestionIndex;
+          } else {
+            this.showStartQuizButton = this.quizService.isOwner && //
+                                       this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+          }
           this.hideProgressbarStyle = false;
         }
 
@@ -417,7 +422,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.countdown = 0;
           this.hideProgressbarStyle = false;
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
-                                     > this.quizService.quiz.currentQuestionIndex + 1;
+                                     >= this.quizService.quiz.currentQuestionIndex;
         } else {
           console.log('QuizResultsComponent: Countdown is proceeding');
           this.hideProgressbarStyle = currentStateData.payload.startTimestamp > -1;
@@ -534,12 +539,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.showStopCountdownButton = payload.value > 0;
         this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
-        if (!this.showStartQuizButton) {
-          this.addFooterElements();
-        }
-      }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
-        this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex
-                                   + 1;
         if (!this.showStartQuizButton) {
           this.addFooterElements();
         }
