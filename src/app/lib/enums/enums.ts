@@ -49,7 +49,7 @@ export enum Project {
 }
 
 export enum StorageKey {
-  CurrentBonusToken = 'CurrentBonusToken',
+  CurrentBonusToken      = 'CurrentBonusToken', //
   CurrentQuestionIndex   = 'CurrentQuestionIndex', //
   PrivateKey             = 'PrivateKey', //
   LoginToken             = 'LoginToken', //
@@ -94,6 +94,7 @@ export enum DeprecatedKeys {
   localStorageAvailable          = 'localStorageAvailable', //
   intro_state                    = 'intro_state', //
   lastPage                       = 'lastPage', //
+  theme                          = 'theme', //
   '__amplify__tap-i18n-language' = '__amplify__tap-i18n-language', //
 }
 
