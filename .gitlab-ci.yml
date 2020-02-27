@@ -20,8 +20,7 @@ stages:
 
 .docker-push-template: &docker-push |
   docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  docker-compose build $CI_COMMIT_REF_NAME
-  docker-compose up --no-deps -d $CI_COMMIT_REF_NAME
+  docker build -t $CI_IMAGE_NAME:$VERSION .
   docker push "$CI_IMAGE_NAME:$VERSION"
 
 .staging-server-env-template: &staging-server-env |
