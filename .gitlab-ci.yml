@@ -98,7 +98,7 @@ npm_install:
   script:
     - npm install
   cache:
-    key: $CI_JOB_STAGE-$CI_COMMIT_REF_SLUG
+    key: install-$CI_COMMIT_REF_SLUG
     policy: pull-push
     paths:
       - node_modules/
@@ -111,7 +111,7 @@ ts_lint:
   script:
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
   cache:
-    key: $CI_JOB_STAGE-$CI_COMMIT_REF_SLUG
+    key: install-$CI_COMMIT_REF_SLUG
 
 npm_test:
   stage: test
@@ -125,7 +125,7 @@ npm_test:
     - apt-get -y install --allow-unauthenticated google-chrome-stable
     - npm test
   cache:
-    key: $CI_JOB_STAGE-$CI_COMMIT_REF_SLUG
+    key: install-$CI_COMMIT_REF_SLUG
 
 deploy:
   stage: deploy
