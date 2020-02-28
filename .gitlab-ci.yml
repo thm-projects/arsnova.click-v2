@@ -1,4 +1,5 @@
 stages:
+  - install
   - test
   - build
   - deploy
@@ -12,6 +13,7 @@ stages:
     DOCKER_TLS_CERTDIR: ""
   tags:
     - docker-compose
+  dependencies: []
   artifacts:
     expire_in: 2 mins
     paths:
@@ -39,6 +41,13 @@ stages:
   echo "export SERVICE_NAME=$SERVICE_NAME" >> variables
   echo "$PRODUCTION_SSH_PRIVATE_KEY" >> private_key
 
+.server-deploy-template: &server-deploy |
+  - source variables
+  - eval $(ssh-agent -s)
+  - mkdir ~/.ssh
+  - ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
+  - ssh-add <(cat private_key)
+
 build-master:
   <<: *build-template
   only:
@@ -48,7 +57,7 @@ build-master:
   variables:
     VERSION: 2.0.0
     SERVICE_NAME: master
-    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend
+    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-master
   script:
     - *production-server-env
     - *docker-push
@@ -81,12 +90,23 @@ build-beta:
     - *staging-server-env
     - *docker-push
 
+npm_install:
+  stage: install
+  tags:
+    - nodejs
+  script:
+    - npm install
+  artifacts:
+    expire_in: 5 mins
+    paths:
+      - node_modules/
+      - package-lock.json
+
 ts_lint:
   stage: test
   tags:
     - nodejs
   script:
-    - npm install
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
 npm_test:
@@ -99,21 +119,25 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install --allow-unauthenticated google-chrome-stable
-    - npm install
     - npm test
 
 deploy:
   stage: deploy
   only:
-    - master
     - staging
     - beta
   tags:
     - ssh
   script:
-    - source variables
-    - eval $(ssh-agent -s)
-    - mkdir ~/.ssh
-    - ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
-    - ssh-add <(cat private_key)
+    - *server-deploy
     - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /home/arsnova/arsnova-click-docker/docker-compose-frontend.yml -p arsnova-click-frontend up --no-deps -d $SERVICE_NAME && docker image prune -af"
+
+deploy-master:
+  stage: deploy
+  only:
+    - master
+  tags:
+    - ssh
+  script:
+    - *server-deploy
+    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose up -d frontend && docker image prune -af"
