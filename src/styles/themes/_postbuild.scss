@@ -77,6 +77,10 @@ pre {
     fill: $success;
   }
 
+  &.fill-warning {
+    fill: $warning;
+  }
+
   &.fill-danger {
     fill: $danger;
   }

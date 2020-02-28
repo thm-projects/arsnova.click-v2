@@ -95,6 +95,7 @@ export enum DeprecatedKeys {
   intro_state                    = 'intro_state', //
   lastPage                       = 'lastPage', //
   theme                          = 'theme', //
+  hashtags                       = 'hashtags', //
   '__amplify__tap-i18n-language' = '__amplify__tap-i18n-language', //
 }
 

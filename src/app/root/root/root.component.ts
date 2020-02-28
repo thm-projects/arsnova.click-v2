@@ -74,22 +74,8 @@ export class RootComponent implements OnInit, AfterViewInit {
   public ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('hashtags')) {
-        // Migrate arsnova.click v1 quizzes
-        try {
-          this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(1), takeUntil(this._destroy)).subscribe(() => {
-            const quizNames: Array<string> = JSON.parse(localStorage.getItem('hashtags'));
-            forkJoin(quizNames.map(quizName => {
-              const quiz = JSON.parse(localStorage.getItem(quizName));
-              return this.quizService.saveParsedQuiz(quiz).pipe(tap(() => localStorage.removeItem(quizName)));
-            })).subscribe(() => localStorage.removeItem('hashtags'));
-          });
-        } catch {
-        }
+        this.migrateLegacyQuizData();
       }
-      Object.values(DeprecatedKeys).forEach(deprecatedKey => {
-        localStorage.removeItem(deprecatedKey);
-        sessionStorage.removeItem(deprecatedKey);
-      });
       Object.values(DeprecatedDb).forEach(deprecatedDb => {
         indexedDB.deleteDatabase(deprecatedDb).addEventListener('success', () => {});
       });
@@ -239,5 +225,31 @@ export class RootComponent implements OnInit, AfterViewInit {
         href: 'dataprivacy',
       },
     });
+  }
+
+  private migrateLegacyQuizData(): void {
+    try {
+      this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(1), takeUntil(this._destroy)).subscribe(() => {
+        const quizNames: Array<string> = JSON.parse(localStorage.getItem('hashtags'));
+        new Promise(resolve => {
+          if (!Array.isArray(quizNames)) {
+            resolve();
+            return;
+          }
+          forkJoin(quizNames.map(quizName => {
+            const quiz = JSON.parse(localStorage.getItem(quizName));
+            return this.quizService.saveParsedQuiz(quiz).pipe(tap(() => localStorage.removeItem(quizName)));
+          })).subscribe(() => {
+            resolve();
+          });
+        }).then(() => {
+          Object.values(DeprecatedKeys).forEach(deprecatedKey => {
+            localStorage.removeItem(deprecatedKey);
+            sessionStorage.removeItem(deprecatedKey);
+          });
+        });
+      });
+    } catch {
+    }
   }
 }

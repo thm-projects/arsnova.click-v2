@@ -41,6 +41,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     return this._storage;
   }
 
+  private isThemePreview: boolean;
   @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
   @ViewChild('connectionIndicator', { static: true }) private connectionIndicator: ElementRef<SVGElement>;
   private readonly _destroy = new Subject();
@@ -60,22 +61,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public generateConnectionQualityColor(): void {
-    const cssClass = this.connectionService.lowSpeed || //
-                     this.connectionService.mediumSpeed ? 'fill-danger' : //
+    const cssClass = this.isThemePreview ? 'fill-success' : //
                      (
                        !this.connectionService.serverAvailable || !this.connectionService.websocketAvailable
                      ) ? 'fill-grey' : //
+                     this.connectionService.mediumSpeed ? 'fill-warning' : //
+                     this.connectionService.lowSpeed ? 'fill-danger' : //
                      'fill-success';
 
-    this.connectionIndicator.nativeElement.classList.remove(...['fill-danger', 'fill-grey', 'fill-success']);
+    this.connectionIndicator.nativeElement.classList.remove(...['fill-danger', 'fill-warning', 'fill-grey', 'fill-success']);
     this.connectionIndicator.nativeElement.classList.add(cssClass);
   }
 
   public ngOnInit(): void {
+    this.isThemePreview = location.pathname.startsWith('/preview');
     this.generateConnectionQualityColor();
 
     this.connectionService.serverStatusEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(() => {
-      if (!this.showHeader) {
+      if (!this.showHeader || this.isThemePreview) {
         return;
       }
 
