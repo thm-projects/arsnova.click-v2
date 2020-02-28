@@ -43,11 +43,11 @@ stages:
   echo "$PRODUCTION_SSH_PRIVATE_KEY" >> private_key
 
 .server-deploy-template: &server-deploy |
-  - source variables
-  - eval $(ssh-agent -s)
-  - mkdir ~/.ssh
-  - ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
-  - ssh-add <(cat private_key)
+  source variables
+  eval $(ssh-agent -s)
+  mkdir ~/.ssh
+  ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
+  ssh-add <(cat private_key)
 
 build-master:
   <<: *build-template
