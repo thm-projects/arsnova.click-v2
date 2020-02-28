@@ -112,6 +112,10 @@ ts_lint:
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
   cache:
     key: install-$CI_COMMIT_REF_SLUG
+    policy: pull
+    paths:
+      - node_modules/
+      - package-lock.json
 
 npm_test:
   stage: test
@@ -126,6 +130,10 @@ npm_test:
     - npm test
   cache:
     key: install-$CI_COMMIT_REF_SLUG
+    policy: pull
+    paths:
+      - node_modules/
+      - package-lock.json
 
 deploy:
   stage: deploy
