@@ -91,33 +91,13 @@ build-beta:
     - *staging-server-env
     - *docker-push
 
-npm_install:
-  stage: install
-  tags:
-    - nodejs
-    - angular
-  script:
-    - npm install
-  cache:
-    key: install-$CI_COMMIT_REF_SLUG
-    policy: pull-push
-    paths:
-      - node_modules/
-      - package-lock.json
-
 ts_lint:
   stage: test
   tags:
     - nodejs
-    - angular
   script:
+    - npm install
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
-  cache:
-    key: install-$CI_COMMIT_REF_SLUG
-    policy: pull
-    paths:
-      - node_modules/
-      - package-lock.json
 
 npm_test:
   stage: test
@@ -129,13 +109,8 @@ npm_test:
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
     - apt-get -y update
     - apt-get -y install --allow-unauthenticated google-chrome-stable
+    - npm install
     - npm test
-  cache:
-    key: install-$CI_COMMIT_REF_SLUG
-    policy: pull
-    paths:
-      - node_modules/
-      - package-lock.json
 
 deploy:
   stage: deploy
