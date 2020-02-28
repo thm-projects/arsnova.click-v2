@@ -14,6 +14,7 @@ stages:
   tags:
     - docker-compose
   dependencies: []
+  cache: {}
   artifacts:
     expire_in: 2 mins
     paths:
@@ -96,8 +97,9 @@ npm_install:
     - nodejs
   script:
     - npm install
-  artifacts:
-    expire_in: 5 mins
+  cache:
+    key: $CI_JOB_STAGE-$CI_COMMIT_REF_SLUG
+    policy: pull-push
     paths:
       - node_modules/
       - package-lock.json
@@ -108,6 +110,8 @@ ts_lint:
     - nodejs
   script:
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
+  cache:
+    key: $CI_JOB_STAGE-$CI_COMMIT_REF_SLUG
 
 npm_test:
   stage: test
@@ -120,6 +124,8 @@ npm_test:
     - apt-get -y update
     - apt-get -y install --allow-unauthenticated google-chrome-stable
     - npm test
+  cache:
+    key: $CI_JOB_STAGE-$CI_COMMIT_REF_SLUG
 
 deploy:
   stage: deploy
