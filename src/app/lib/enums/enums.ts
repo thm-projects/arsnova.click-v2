@@ -49,6 +49,7 @@ export enum Project {
 }
 
 export enum StorageKey {
+  TwitterOptIn           = 'TwitterOptIn', //
   CurrentBonusToken      = 'CurrentBonusToken', //
   CurrentQuestionIndex   = 'CurrentQuestionIndex', //
   PrivateKey             = 'PrivateKey', //
@@ -61,7 +62,6 @@ export enum StorageKey {
   Language               = 'Language', //
   QuizTheme              = 'QuizTheme', //
   DefaultTheme           = 'DefaultTheme', //
-  ChunkError             = 'ChunkError', //
 }
 
 export enum DbState {

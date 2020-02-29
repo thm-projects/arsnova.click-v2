@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
+import { StorageKey } from '../../lib/enums/enums';
 import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
 import { TwitterApiService } from '../api/twitter/twitter-api.service';
 import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
@@ -39,7 +40,7 @@ export class TwitterService {
   }
 
   public setOptIn(): void {
-    sessionStorage.setItem('optin', 'true');
+    localStorage.setItem(StorageKey.TwitterOptIn, 'true');
     this.refreshTweets();
   }
 
@@ -54,7 +55,7 @@ export class TwitterService {
   }
 
   public getOptIn(): boolean {
-    return JSON.parse(sessionStorage.getItem('optin'));
+    return JSON.parse(localStorage.getItem(StorageKey.TwitterOptIn));
   }
 
   public tweet(): void {
