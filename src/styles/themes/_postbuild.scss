@@ -91,7 +91,7 @@ pre {
 }
 
 .text-secondary-inverted {
-  color: color-yiq($secondary);
+  color: color-yiq($secondary) !important;
 }
 
 *::placeholder {
