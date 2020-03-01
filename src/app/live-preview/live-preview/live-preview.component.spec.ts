@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
@@ -14,6 +14,8 @@ import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/en
 import { HeaderModule } from '../../header/header.module';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
@@ -35,12 +37,12 @@ describe('LivePreviewComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        I18nTestingModule, RouterTestingModule, HttpClientTestingModule, HeaderModule, NgbModule,
+        I18nTestingModule, RouterTestingModule, HttpClientTestingModule, HeaderModule, NgbModule, AngularSvgIconModule.forRoot(),
       ],
       providers: [
-        MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
+        {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         }, QuestionTextService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,

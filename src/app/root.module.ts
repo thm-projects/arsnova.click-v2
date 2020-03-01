@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ErrorHandler, Inject, NgModule, PLATFORM_ID } from '@angular/core';
+import { ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
@@ -163,6 +163,7 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
           markedOptionsFactory
         ),
       },
+      sanitize: SecurityContext.NONE,
     }),
     AngularSvgIconModule.forRoot({
       loader: {

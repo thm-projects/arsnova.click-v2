@@ -1,7 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
+import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../custom-markdown/CustomMarkdownServiceMock';
 import { QuestionTextService } from './question-text.service';
 
 describe('QuestionTextService', () => {
@@ -11,9 +12,9 @@ describe('QuestionTextService', () => {
         RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
-        MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
+        {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         }, QuestionTextService,
       ],
     });
