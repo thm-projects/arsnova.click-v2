@@ -5,13 +5,13 @@ describe('RootModule', () => {
   let rootModule: RootModule;
 
   it('should create an instance', () => {
-    rootModule = new RootModule();
+    rootModule = new RootModule({});
     expect(rootModule).toBeTruthy();
   });
 
   it('should create an prod instance', () => {
     environment.production = true;
-    rootModule = new RootModule();
+    rootModule = new RootModule({});
     expect(rootModule).toBeTruthy();
   });
 });

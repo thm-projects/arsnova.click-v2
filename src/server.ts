@@ -2,6 +2,7 @@ import { APP_BASE_HREF } from '@angular/common';
 
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
+import { Express } from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import 'zone.js/dist/zone-node';
@@ -44,7 +45,7 @@ function getMockMutationObserver(): any {
 }
 
 // The Express app is exported so that it can be used by serverless Functions.
-export function app() {
+export function app(): Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/frontend/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
@@ -80,7 +81,7 @@ export function app() {
   return server;
 }
 
-function run() {
+function run(): void {
   const port = process.env.PORT || 4000;
 
   // Start up the Node server
