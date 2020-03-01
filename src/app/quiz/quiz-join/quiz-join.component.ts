@@ -65,7 +65,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.quizService.quiz = quizStatusData.payload.quiz.quiz;
+    this.quizService.quiz = quizStatusData.payload.quiz;
     this.quizService.isOwner = false;
 
     this.casService.casLoginRequired = quizStatusData.payload.status.authorizeViaCas;
