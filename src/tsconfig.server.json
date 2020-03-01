@@ -1,20 +1,17 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "./tsconfig.app.json",
   "compilerOptions": {
-    "outDir": "../out-tsc/app",
-    "baseUrl": "./",
+    "outDir": "../out-tsc/app-server",
     "module": "commonjs",
-    "types": []
+    "types": [
+      "node"
+    ]
   },
-  "include": [
-    "../node_modules/arsnova-click-v2-types/dist/**/*.js",
-    "**/*.ts"
-  ],
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
+  "files": [
+    "main.server.ts",
+    "server.ts"
   ],
   "angularCompilerOptions": {
-    "entryModule": "app/root.server.module#RootServerModule"
+    "entryModule": "./app/app.server.module#AppServerModule"
   }
 }

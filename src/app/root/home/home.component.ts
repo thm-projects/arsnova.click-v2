@@ -414,16 +414,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       this.router.navigate(routingTarget);
-    }, error => {
-      if (error === MessageProtocol.TooMuchActiveQuizzes) {
-        this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
-      } else if (error === MessageProtocol.ServerPasswordRequired) {
-        this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
-      } else if (error === MessageProtocol.InsufficientPermissions) {
-        this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
-      } else {
-        console.log('HomeComponent: SetQuiz failed', error);
-      }
+    }, () => {
+      this._isPerformingClick.splice(0);
     });
   }
 

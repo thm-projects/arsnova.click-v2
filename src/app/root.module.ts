@@ -1,6 +1,7 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ErrorHandler, NgModule, PLATFORM_ID } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { ErrorHandler, Inject, NgModule, PLATFORM_ID } from '@angular/core';
+import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -8,6 +9,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
 import { Angulartics2Module } from 'angulartics2';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
@@ -17,6 +19,7 @@ import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
 import { jwtOptionsFactory } from './lib/jwt.factory';
 import { RoutePreloader } from './lib/route-preloader';
+import { SvgBrowserLoader } from './lib/SvgBrowserLoader';
 import { createTranslateCompiler, createTranslateLoader } from './lib/translation.factory';
 import { ModalsModule } from './modals/modals.module';
 import { PipesModule } from './pipes/pipes.module';
@@ -103,13 +106,15 @@ export function markedOptionsFactory(): MarkedOptions {
   return {
     renderer: renderer,
     gfm: true,
-    tables: true,
     breaks: true,
     pedantic: false,
-    sanitize: false,
     smartLists: true,
     smartypants: false,
   };
+}
+
+export function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBrowserLoader {
+  return new SvgBrowserLoader(transferState, http);
 }
 
 @NgModule({
@@ -117,7 +122,7 @@ export function markedOptionsFactory(): MarkedOptions {
     HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'frontend' }),
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
@@ -159,6 +164,13 @@ export function markedOptionsFactory(): MarkedOptions {
         ),
       },
     }),
+    AngularSvgIconModule.forRoot({
+      loader: {
+        provide: SvgLoader,
+        useFactory: svgLoaderFactory,
+        deps: [HttpClient, TransferState],
+      },
+    }),
   ],
   providers: [
     {
@@ -176,8 +188,8 @@ export function markedOptionsFactory(): MarkedOptions {
   bootstrap: [RootComponent],
 })
 export class RootModule {
-  constructor() {
-    if (environment.production) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(platformId) && environment.production) {
       (
         window as any
       ).console = {

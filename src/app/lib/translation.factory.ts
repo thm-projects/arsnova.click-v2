@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { TranslateCompiler } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import MessageFormat from 'messageformat';
+import * as MessageFormat from 'messageformat';
 import { MessageFormatConfig, TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 
 // AoT requires an exported function for factories
