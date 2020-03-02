@@ -68,7 +68,7 @@ export class I18nService {
       return;
     }
 
-    this.currentLanguage = Language[language.toString().toUpperCase()];
+    this.currentLanguage = Language[language.toString().toUpperCase()] ?? Language.EN;
     if (isPlatformServer(this.platformId)) {
       return;
     }
