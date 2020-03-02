@@ -101,7 +101,7 @@ export class I18nService {
       lang = navigator.language.match(/([A-Z]{2})/);
     }
 
-    if (!lang || !lang.length) {
+    if (!Array.isArray(lang) || !lang[0]) {
       this.setLanguage(Language.EN);
     } else {
       this.setLanguage(lang[0]);

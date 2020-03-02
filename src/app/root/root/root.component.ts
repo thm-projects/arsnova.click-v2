@@ -60,7 +60,6 @@ export class RootComponent implements OnInit, AfterViewInit {
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
-    this.i18nService.initLanguage();
 
     this.themeService.themeChanged.pipe(filter(t => !!t && isPlatformBrowser(this.platformId)), distinctUntilChanged(), takeUntil(this._destroy))
     .subscribe((themeName: QuizTheme) => {
@@ -83,6 +82,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    this.i18nService.initLanguage();
     this.themeService.initTheme();
 
     if (isPlatformBrowser(this.platformId)) {

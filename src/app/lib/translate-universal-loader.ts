@@ -32,8 +32,6 @@ export class TranslateUniversalLoader implements TranslateLoader {
           const jsonData = JSON.parse(fs.readFileSync(`${assets_folder}${lang}${this.suffix}`, 'utf8'));
 
           this.transferState.set(key, jsonData);
-        } else {
-          console.log('having data and not server', this.transferState.get(key, null));
         }
 
         observer.next(this.transferState.get(key, null));
