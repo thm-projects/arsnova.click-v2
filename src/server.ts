@@ -1,5 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 import * as express from 'express';
 import { Express } from 'express';
 import { existsSync } from 'fs';
@@ -36,6 +37,10 @@ export function app(): Express {
         {
           provide: APP_BASE_HREF,
           useValue: req.baseUrl,
+        },
+        {
+          provide: REQUEST,
+          useValue: req,
         },
       ],
     });

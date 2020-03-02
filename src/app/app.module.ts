@@ -20,7 +20,7 @@ import { HeaderModule } from './header/header.module';
 import { jwtOptionsFactory } from './lib/jwt.factory';
 import { RoutePreloader } from './lib/route-preloader';
 import { SvgBrowserLoader } from './lib/SvgBrowserLoader';
-import { createTranslateCompiler, createTranslateLoader } from './lib/translation.factory';
+import { createTranslateCompiler, createUniversalTranslateLoader } from './lib/translation.factory';
 import { ModalsModule } from './modals/modals.module';
 import { PipesModule } from './pipes/pipes.module';
 import { HomeComponent } from './root/home/home.component';
@@ -68,8 +68,8 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient],
+        useFactory: createUniversalTranslateLoader,
+        deps: [TransferState, PLATFORM_ID, HttpClient],
       },
       compiler: {
         provide: TranslateCompiler,

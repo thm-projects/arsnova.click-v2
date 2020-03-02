@@ -146,5 +146,10 @@
     "arsnova.click",
     "Audience Response System"
   ],
-  "author": "Christopher Fullarton"
+  "author": "Christopher Fullarton",
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
+  }
 }

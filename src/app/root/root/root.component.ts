@@ -60,6 +60,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
+    this.i18nService.initLanguage();
 
     this.themeService.themeChanged.pipe(filter(t => !!t && isPlatformBrowser(this.platformId)), distinctUntilChanged(), takeUntil(this._destroy))
     .subscribe((themeName: QuizTheme) => {
@@ -82,6 +83,8 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+    this.themeService.initTheme();
+
     if (isPlatformBrowser(this.platformId)) {
       if (localStorage.getItem('hashtags')) {
         this.migrateLegacyQuizData();
@@ -103,9 +106,6 @@ export class RootComponent implements OnInit, AfterViewInit {
 
       this.sharedService.isLoadingEmitter.next(false);
     });
-
-    this.themeService.initTheme();
-    this.i18nService.initLanguage();
 
     this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy && isPlatformBrowser(this.platformId)), takeUntil(this._destroy))
     .subscribe(() => {

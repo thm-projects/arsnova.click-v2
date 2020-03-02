@@ -1,6 +1,8 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { TranslateService } from '@ngx-translate/core';
+import { Request } from 'express';
 import { CurrencyType, Language, NumberType, StorageKey } from '../../lib/enums/enums';
 import { StorageService } from '../storage/storage.service';
 
@@ -28,7 +30,12 @@ export class I18nService {
     this._currentLanguage = value;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService, private storageService: StorageService) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private translateService: TranslateService,
+    private storageService: StorageService,
+    @Optional() @Inject(REQUEST) protected request?: Request,
+  ) {}
 
   public formatNumber(number: number, type: NumberType = NumberType.Decimal, locale?: string): string {
     if (isNaN(number)) {
@@ -57,6 +64,10 @@ export class I18nService {
   }
 
   public setLanguage(language: Language | string): void {
+    if (this.currentLanguage === language) {
+      return;
+    }
+
     this.currentLanguage = Language[language.toString().toUpperCase()];
     if (isPlatformServer(this.platformId)) {
       return;
@@ -83,8 +94,20 @@ export class I18nService {
   }
 
   public initLanguage(): void {
+    let lang;
     if (isPlatformServer(this.platformId)) {
+      lang = this.request.header('accept-language').match(/([A-Z]{2})/);
+    } else {
+      lang = navigator.language.match(/([A-Z]{2})/);
+    }
+
+    if (!lang || !lang.length) {
       this.setLanguage(Language.EN);
+    } else {
+      this.setLanguage(lang[0]);
+    }
+
+    if (isPlatformServer(this.platformId)) {
       return;
     }
 
