@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -467,14 +467,13 @@ export class FooterBarService {
       this._connectionState = value;
       this.updateFooterElementsState();
     });
-
-    document.onfullscreenchange = () => {
-    };
-    document.onfullscreenerror = () => {
-    };
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.removeUnsupportedElements(elements);
     this._footerElements = elements;
   }

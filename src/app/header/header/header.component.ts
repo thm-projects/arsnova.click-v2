@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component, ElementRef, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -74,7 +75,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.isThemePreview = location.pathname.startsWith('/preview');
+    this.isThemePreview = isPlatformBrowser(this.platformId) && location.pathname.startsWith('/preview');
     this.generateConnectionQualityColor();
 
     this.connectionService.serverStatusEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(() => {

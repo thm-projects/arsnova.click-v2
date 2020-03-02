@@ -1,5 +1,5 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -37,6 +37,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   public isLoading = false;
   private _stompSubscription: Subscription;
   private readonly _destroy = new Subject();
+  private _rendererInstance: Renderer2;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -54,8 +55,14 @@ export class RootComponent implements OnInit, AfterViewInit {
     private connectionService: ConnectionService,
     private messageQueue: SimpleMQ,
     private trackingService: TrackingService,
+    private rendererFactory: RendererFactory2,
+    @Inject(DOCUMENT) private document: Document,
   ) {
-    this.themeService.themeChanged.pipe(takeUntil(this._destroy), distinctUntilChanged(), filter(t => !!t)).subscribe((themeName: QuizTheme) => {
+
+    this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
+
+    this.themeService.themeChanged.pipe(filter(t => !!t && isPlatformBrowser(this.platformId)), distinctUntilChanged(), takeUntil(this._destroy))
+    .subscribe((themeName: QuizTheme) => {
       if (String(themeName) === 'default') {
         themeName = environment.defaultTheme;
       }
@@ -65,8 +72,11 @@ export class RootComponent implements OnInit, AfterViewInit {
         console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
       });
     });
-    this.updateCheckService.checkForUpdates();
-    this.sharedService.isLoadingEmitter.pipe(takeUntil(this._destroy)).subscribe((isLoading: boolean) => {
+    if (isPlatformBrowser(this.platformId)) {
+      this.updateCheckService.checkForUpdates();
+    }
+    this.sharedService.isLoadingEmitter.pipe(filter(() => isPlatformBrowser(this.platformId)), takeUntil(this._destroy))
+    .subscribe((isLoading: boolean) => {
       setTimeout(() => this.isLoading = isLoading);
     });
   }
@@ -81,7 +91,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       });
     }
 
-    this.translateService.onLangChange.pipe(takeUntil(this._destroy)).subscribe(() => {
+    this.translateService.onLangChange.pipe(filter(() => isPlatformBrowser(this.platformId)), takeUntil(this._destroy)).subscribe(() => {
       this.initializeCookieConsent(this.themeService.currentTheme);
     });
 
@@ -97,11 +107,13 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.themeService.initTheme();
     this.i18nService.initLanguage();
 
-    this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy), takeUntil(this._destroy)).subscribe(() => {
+    this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy && isPlatformBrowser(this.platformId)), takeUntil(this._destroy))
+    .subscribe(() => {
       this.themeService.updateCurrentlyUsedTheme();
     });
 
-    this.quizService.quizUpdateEmitter.pipe(filter(() => !this.quizService.isInEditMode), takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
+    this.quizService.quizUpdateEmitter.pipe(filter(() => !this.quizService.isInEditMode && isPlatformBrowser(this.platformId)),
+      takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
       if (this._stompSubscription) {
         this._stompSubscription.unsubscribe();
       }
@@ -168,24 +180,13 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   private loadExternalStyles(styleUrl: string): Promise<void> {
     return new Promise(resolve => {
-      const styleCollection = document.getElementsByClassName('theme-styles');
-
-      let existingNode;
-      existingNode = styleCollection.item(0);
+      const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
       if (existingNode.href.includes(styleUrl)) {
         resolve();
         return;
       }
-
-      const styleElement = document.createElement('link') as HTMLLinkElement;
-      styleElement.classList.add('theme-styles');
-      styleElement.rel = 'stylesheet';
-      styleElement.href = styleUrl;
-      styleElement.onload = () => {
-        document.head.removeChild(existingNode);
-        resolve();
-      };
-      document.head.appendChild(styleElement);
+      existingNode.href = styleUrl;
+      resolve();
     });
   }
 

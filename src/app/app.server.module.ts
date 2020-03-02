@@ -4,11 +4,12 @@ import { TransferState } from '@angular/platform-browser';
 import { ServerModule, ServerTransferStateModule } from '@angular/platform-server';
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
 import { join } from 'path';
+import { AppModule } from './app.module';
 import { UniversalInterceptor } from './interceptors/universal-interceptor';
 import { SvgServerLoader } from './lib/SvgServerLoader';
-
-import { RootModule } from './root.module';
 import { RootComponent } from './root/root/root.component';
+import { TrackingMockService } from './service/tracking/tracking.mock.service';
+import { TrackingService } from './service/tracking/tracking.service';
 
 export function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgServerLoader {
   return new SvgServerLoader(join(__dirname + '/../browser/assets/images'), transferState);
@@ -22,13 +23,16 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
         useFactory: svgLoaderFactory,
         deps: [HttpClient, TransferState],
       },
-    }), RootModule, ServerModule, ServerTransferStateModule,
+    }), AppModule, ServerModule, ServerTransferStateModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: UniversalInterceptor,
       multi: true,
+    }, {
+      provide: TrackingService,
+      useClass: TrackingMockService,
     },
   ],
   bootstrap: [RootComponent],

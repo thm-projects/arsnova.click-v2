@@ -117,7 +117,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     public twitterService: TwitterService,
   ) {
 
-    sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    }
+
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
 
     headerLabelService.headerLabel = 'default';
@@ -518,6 +521,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private cleanUpSessionStorage(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     if (this.quizService.quiz && this.attendeeService.ownNick) {
       this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
     }

@@ -1,9 +1,8 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule, Routes } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -15,6 +14,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
 import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
 import { jwtOptionsFactory } from './lib/jwt.factory';
@@ -30,73 +30,9 @@ import { RootComponent } from './root/root/root.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import { TwitterCardsComponent } from './root/twitter-cards/twitter-cards.component';
 import rxStompConfig from './rx-stomp.config';
-import { InitDbGuard } from './service/init-db-guard/init-db.guard';
-import { StaticLoginService } from './service/login/static-login.service';
 import { SentryErrorHandler } from './shared/sentry-error-handler';
 import { SharedModule } from './shared/shared.module';
 
-const appRoutes: Routes = [
-  {
-    path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    canActivate: [InitDbGuard, StaticLoginService],
-  }, {
-    path: 'info',
-    loadChildren: () => import('./root/info/info.module').then(m => m.InfoModule),
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'i18n-manager',
-    loadChildren: () => import('./i18n-manager/i18n-manager.module').then(m => m.I18nManagerModule),
-    canActivate: [InitDbGuard, StaticLoginService],
-  }, {
-    path: 'quiz/manager',
-    loadChildren: () => import('./quiz/quiz-manager/quiz-manager.module').then(m => m.QuizManagerModule),
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'quiz/flow',
-    loadChildren: () => import('./quiz/quiz-flow/quiz-flow.module').then(m => m.QuizFlowModule),
-    data: {
-      preload: false,
-    },
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'quiz',
-    loadChildren: () => import('./quiz/quiz.module').then(m => m.QuizModule),
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'nicks',
-    loadChildren: () => import('./root/nickname-chooser/nickname-chooser.module').then(m => m.NicknameChooserModule),
-    data: {
-      preload: false,
-    },
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'themes',
-    component: ThemeSwitcherComponent,
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'preview/:themeId/:languageId',
-    component: HomeComponent,
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'languages',
-    component: LanguageSwitcherComponent,
-    canActivate: [InitDbGuard],
-  }, {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [InitDbGuard],
-  }, {
-    path: '',
-    component: HomeComponent,
-    pathMatch: 'full',
-    canActivate: [InitDbGuard],
-  }, {
-    path: '**',
-    redirectTo: '/',
-    canActivate: [InitDbGuard],
-  },
-];
 
 // function that returns `MarkedOptions` with renderer override
 export function markedOptionsFactory(): MarkedOptions {
@@ -122,8 +58,9 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
     HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent,
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule.withServerTransition({ appId: 'arsnova-click' }),
     BrowserAnimationsModule,
+    AppRoutingModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
@@ -138,10 +75,6 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
         provide: TranslateCompiler,
         useFactory: createTranslateCompiler,
       },
-    }),
-    RouterModule.forRoot(appRoutes, {
-      preloadingStrategy: RoutePreloader,
-      enableTracing: false, // <-- debugging purposes only
     }),
     FooterModule,
     SharedModule,
@@ -188,8 +121,11 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
   ],
   bootstrap: [RootComponent],
 })
-export class RootModule {
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+export class AppModule {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private rxStompService: RxStompService) {
+    if (isPlatformServer(platformId)) {
+      this.rxStompService.deactivate();
+    }
     if (isPlatformBrowser(platformId) && environment.production) {
       (
         window as any
