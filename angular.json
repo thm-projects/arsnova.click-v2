@@ -63,6 +63,7 @@
             ],
             "styles": [
               "src/styles/styles.scss",
+              "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
               "node_modules/prism-themes/themes/prism-ghcolors.css",
               {
                 "inject": false,

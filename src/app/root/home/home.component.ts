@@ -344,6 +344,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isAddingABCDQuiz = false;
   }
 
+  public showTwitterElements(): boolean {
+    return this.twitterEnabled && this.twitterService.getOptIn() !== null && this.twitterService.getOptIn();
+  }
+
+  public navigateToTwitter(): void {
+    window.open('https://twitter.com/intent/follow?screen_name=@arsnovaclick', '_blank', 'noopener noreferrer');
+  }
+
   private updateFooterElements(isLoggedIn: boolean): void {
     const footerElements = [
       this.footerBarService.footerElemAbout,

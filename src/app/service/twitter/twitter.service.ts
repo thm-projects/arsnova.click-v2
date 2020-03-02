@@ -58,7 +58,7 @@ export class TwitterService {
 
   public getOptIn(): boolean {
     if (isPlatformServer(this.platformId)) {
-      return false;
+      return null;
     }
 
     return JSON.parse(localStorage.getItem(StorageKey.TwitterOptIn));

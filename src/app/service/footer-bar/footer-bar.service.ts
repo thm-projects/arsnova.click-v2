@@ -1,4 +1,4 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -470,10 +470,6 @@ export class FooterBarService {
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-
     this.removeUnsupportedElements(elements);
     this._footerElements = elements;
   }
@@ -513,12 +509,12 @@ export class FooterBarService {
 
   private removeUnsupportedElements(elements: Array<IFooterBarElement>): void {
     const fullscreenIndex = elements.findIndex(elem => elem.id === this.footerElemFullscreen.id);
-    if (fullscreenIndex > -1 && !Modernizr.fullscreen) {
+    if (fullscreenIndex > -1 && isPlatformBrowser(this.platformId) && !Modernizr.fullscreen) {
       elements.splice(fullscreenIndex, 1);
     }
 
     const backIndex = elements.findIndex(elem => elem.id === this.footerElemBack.id);
-    if (backIndex > -1 && history.length < 2) {
+    if (backIndex > -1 && isPlatformBrowser(this.platformId) && history.length < 2) {
       elements.splice(backIndex, 1);
     }
   }
