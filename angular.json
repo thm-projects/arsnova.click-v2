@@ -508,7 +508,7 @@
                 "scripts": true,
                 "styles": false
               },
-              "outputHashing": "all",
+              "outputHashing": "media",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -522,7 +522,7 @@
                 "scripts": true,
                 "styles": false
               },
-              "outputHashing": "all",
+              "outputHashing": "media",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -536,7 +536,7 @@
                 "scripts": true,
                 "styles": false
               },
-              "outputHashing": "all",
+              "outputHashing": "media",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -550,7 +550,7 @@
                 "scripts": true,
                 "styles": false
               },
-              "outputHashing": "all",
+              "outputHashing": "media",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
