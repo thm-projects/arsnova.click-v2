@@ -64,11 +64,11 @@ export class I18nService {
   }
 
   public setLanguage(language: Language | string): void {
-    if (this.currentLanguage === language) {
+    if (!Language[language.toString().toUpperCase()]) {
       return;
     }
 
-    this.currentLanguage = Language[language.toString().toUpperCase()] ?? Language.EN;
+    this.currentLanguage = Language[language.toString().toUpperCase()];
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -97,17 +97,11 @@ export class I18nService {
     let lang;
     if (isPlatformServer(this.platformId)) {
       lang = this.request.header('accept-language').match(/([A-Z]{2})/);
-    } else {
-      lang = navigator.language.match(/([A-Z]{2})/);
-    }
-
-    if (!Array.isArray(lang) || !lang[0]) {
-      this.setLanguage(Language.EN);
-    } else {
-      this.setLanguage(lang[0]);
-    }
-
-    if (isPlatformServer(this.platformId)) {
+      if (!Array.isArray(lang) || !lang[0]) {
+        this.setLanguage(Language.EN);
+      } else {
+        this.setLanguage(lang[0]);
+      }
       return;
     }
 
@@ -117,10 +111,13 @@ export class I18nService {
       } else if (Language[this.translateService.getBrowserLang().toUpperCase()]) {
         this.setLanguage(Language[this.translateService.getBrowserLang().toUpperCase()]);
       } else {
-        this.setLanguage(Language.EN);
+        lang = navigator.language.match(/([A-Z]{2})/);
+        if (!Array.isArray(lang) || !lang[0]) {
+          this.setLanguage(Language.EN);
+        } else {
+          this.setLanguage(lang[0]);
+        }
       }
     });
-
   }
-
 }
