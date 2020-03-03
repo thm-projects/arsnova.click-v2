@@ -135,3 +135,7 @@ iframe {
     padding-right: 7px;
   }
 }
+
+.sentry-error-embed-wrapper {
+  z-index: 2000 !important;
+}
