@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, switchMapTo, take, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -12,7 +12,7 @@ import { AbstractAnswerEntity } from '../../lib/entities/answer/AbstractAnswerEn
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
 import { ABCDSingleChoiceQuestionEntity } from '../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { Language, StorageKey, Title } from '../../lib/enums/enums';
+import { DbState, Language, StorageKey, Title } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
@@ -153,9 +153,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       );
     });
 
-    this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(async params => {
-      this.cleanUpSessionStorage();
+    let amount = 1;
+    this.storageService.stateNotifier.pipe(filter(val => val === DbState.Destroy), takeUntil(this._destroy)).subscribe(() => amount = 1);
+    const routerParamsInitialized$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
+    const dbInitialized$ = this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(amount), takeUntil(this._destroy));
 
+    routerParamsInitialized$.subscribe(() => {
+      this.cleanUpSessionStorage();
+    });
+
+    dbInitialized$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(async params => {
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
 

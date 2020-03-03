@@ -31,6 +31,7 @@ export class StorageService {
     if (this._db) {
       this._db.close();
       this._closeDb.next();
+      this.stateNotifier.next(DbState.Destroy);
     }
 
     this._db = new AppDb(dbName);
