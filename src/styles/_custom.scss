@@ -62,6 +62,15 @@ iframe {
   max-width: 100%;
 }
 
+.btn-header {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  button {
+    scroll-snap-align: start;
+  }
+}
+
 @include media-breakpoint-only(xs) {
   .btn-header {
     width: calc(100% + 30px);

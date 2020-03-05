@@ -37,6 +37,8 @@
 .navbar-footer {
   left: 0;
   z-index: 1040;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
 
   @include media-breakpoint-only(xs) {
     min-height: 50px;
@@ -58,6 +60,7 @@
 
   .footerElement {
     flex-shrink: 0;
+    scroll-snap-align: start;
 
     @include media-breakpoint-only(xs) {
       flex-grow: 1;
