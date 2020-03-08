@@ -8,7 +8,6 @@ import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
-import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 
 @Component({
@@ -27,7 +26,8 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     private router: Router,
     private casService: CasLoginService,
     private themesService: ThemesService,
-    private quizApiService: QuizApiService, private sharedService: SharedService, private storageService: StorageService,
+    private quizApiService: QuizApiService,
+    private sharedService: SharedService,
   ) {
   }
 
@@ -81,7 +81,10 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
 
     } else {
       this.router.navigate([
-        '/nicks', (quizStatusData.payload.status.provideNickSelection ? 'select' : 'input'),
+        '/nicks',
+        (
+          this.quizService.quiz.sessionConfig.nicks.selectedNicks.length > 0 ? 'select' : 'input'
+        ),
       ]);
     }
   }

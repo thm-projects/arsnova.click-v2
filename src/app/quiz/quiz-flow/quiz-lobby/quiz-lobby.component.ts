@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, TemplateRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -72,7 +73,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     private messageQueue: SimpleMQ,
     private customMarkdownService: CustomMarkdownService,
   ) {
-    sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    }
     this.footerBarService.TYPE_REFERENCE = QuizLobbyComponent.TYPE;
   }
 
@@ -101,8 +104,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       }
     });
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-    }).catch(() => this.hasTriggeredNavigation = true);
+    if (isPlatformBrowser(this.platformId)) {
+      this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      }).catch(() => this.hasTriggeredNavigation = true);
+    }
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
@@ -265,8 +270,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       });
     };
     this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
-      const promise = this.attendeeService.attendees.length ? this.ngbModal.open(EditModeConfirmComponent).result : new Promise<any>(
-        resolve => resolve());
+      const promise = this.attendeeService.attendees.length ? this.ngbModal.open(EditModeConfirmComponent).result : new Promise<any>(resolve => resolve());
       promise.then(() => {
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'manager', 'overview']).then(() => {
