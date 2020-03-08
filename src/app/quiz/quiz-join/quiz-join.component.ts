@@ -53,13 +53,11 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    console.log('ondestroy');
     this._destroy.next();
     this._destroy.complete();
   }
 
   private resolveQuizStatusData(quizStatusData: IMessage): void {
-    console.log('resolevstatus', quizStatusData);
     if (quizStatusData.status !== StatusProtocol.Success || quizStatusData.step !== MessageProtocol.Available) {
       this.router.navigate(['/']);
       return;
