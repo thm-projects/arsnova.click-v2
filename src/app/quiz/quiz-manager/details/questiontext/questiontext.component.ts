@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
@@ -14,6 +14,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-questiontext',
   templateUrl: './questiontext.component.html',
   styleUrls: ['./questiontext.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuestiontextComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestiontextComponent';
@@ -33,6 +34,7 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private questionTextService: QuestionTextService,
     private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
@@ -99,11 +101,13 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.questionTextService.change(this.textarea.nativeElement.value);
+    this.questionTextService.change(this.textarea.nativeElement.value).then(() => this.cd.markForCheck());
   }
 
   public fireEvent(event: Event): void {
-    this.questionTextService.change((<HTMLTextAreaElement>event.target).value);
+    this.questionTextService.change((
+      <HTMLTextAreaElement>event.target
+    ).value).then(() => this.cd.markForCheck());
   }
 
   public ngOnInit(): void {
@@ -114,14 +118,18 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
+    this.quizService.quizUpdateEmitter.pipe( //
+      switchMapTo(questionIndex$), //
+      distinctUntilChanged(), //
+      takeUntil(this._destroy), //
+    ).subscribe(questionIndex => {
       if (!this.quizService.quiz || isNaN(questionIndex)) {
         return;
       }
 
       this._questionIndex = questionIndex;
       this.textarea.nativeElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
-      this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText);
+      this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText).then(() => this.cd.markForCheck());
     });
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
