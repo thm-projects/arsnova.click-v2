@@ -11,7 +11,7 @@ import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
 import { Angulartics2Module } from 'angulartics2';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownModule, MarkedOptions, MarkedRenderer } from 'ngx-markdown';
+import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -33,14 +33,8 @@ import rxStompConfig from './rx-stomp.config';
 import { SentryErrorHandler } from './shared/sentry-error-handler';
 import { SharedModule } from './shared/shared.module';
 
-
-// function that returns `MarkedOptions` with renderer override
-export function markedOptionsFactory(): MarkedOptions {
-  const renderer = new MarkedRenderer();
-  renderer.paragraph = (text) => `${text}<br/>`;
-
+function markedOptionsFactory(): MarkedOptions {
   return {
-    renderer: renderer,
     gfm: true,
     breaks: true,
     pedantic: false,
@@ -49,7 +43,7 @@ export function markedOptionsFactory(): MarkedOptions {
   };
 }
 
-export function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBrowserLoader {
+function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBrowserLoader {
   return new SvgBrowserLoader(transferState, http);
 }
 

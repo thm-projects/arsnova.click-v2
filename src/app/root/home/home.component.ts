@@ -564,6 +564,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     value.sessionConfig = Object.assign({}, DefaultSettings.defaultQuizSettings.sessionConfig, value.sessionConfig);
     const questionGroup = new QuizEntity(value);
     this.enteredSessionName = questionGroup.name;
+    questionGroup.state = QuizState.Active;
 
     return questionGroup;
   }
@@ -627,6 +628,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         showOneAnswerPerRow: false,
       });
       questionGroup.questionList = [abcdQuestion];
+      questionGroup.state = QuizState.Active;
+
       return new QuizEntity(questionGroup);
     }
   }

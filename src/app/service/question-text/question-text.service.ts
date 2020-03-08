@@ -47,16 +47,12 @@ export class QuestionTextService {
       ));
     }
 
-    const matchForDollar = value.match(/(\${1,2}.*\$)/g);
-    const matchForBlock = value.match(/(\\(.)*\\.*)/g);
+    const matchForDollar = value.match(/(\${1,2}\n?([^\$]*)\n?\${1,2})/gi);
     let result = value;
     let mathjaxValues = [];
 
     if (matchForDollar) {
       mathjaxValues = mathjaxValues.concat(matchForDollar);
-    }
-    if (matchForBlock) {
-      mathjaxValues = mathjaxValues.concat(matchForBlock);
     }
 
     return new Promise(async (resolve) => {
@@ -65,18 +61,25 @@ export class QuestionTextService {
         result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
 
         mathjaxValues.forEach((mathjaxValue: string, index: number) => {
-          result = result.replace(mathjaxValue, mathjaxRendered[index].svg);
+          if (!mathjaxRendered[index]?.svg) {
+            return;
+          }
+
+          if (mathjaxValue.match(/\${2}\n?([^\$]*)/)) {
+            result = result.replace(this.customMarkdownService.compile(mathjaxValue), `<div>${mathjaxRendered[index].svg}</div>`);
+          } else {
+            const searchStr = this.customMarkdownService.compile(mathjaxValue).trim();
+            const searchStrWithoutParagraph = searchStr.replace('<p>', '').replace('</p>', '');
+            result = result.replace(searchStr, `<div class="d-inline-block">${mathjaxRendered[index].svg}</div>`);
+            result = result.replace(searchStrWithoutParagraph, `<div class="d-inline-block">${mathjaxRendered[index].svg}</div>`);
+          }
         });
-
-        this._inputCache[value] = result;
-        resolve(result);
-
       } else {
         result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
-        this._inputCache[value] = result;
-        resolve(result);
-
       }
+
+      this._inputCache[value] = result;
+      resolve(result);
     });
   }
 

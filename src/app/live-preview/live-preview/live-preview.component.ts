@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -56,6 +56,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     private quizService: QuizService,
     private sanitizer: DomSanitizer,
     private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {
   }
 
@@ -116,7 +117,8 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
         questionIndex$.subscribe(questionIndex => {
           this._questionIndex = questionIndex;
           this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
-          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText))
+          .then(() => this.cd.markForCheck());
         });
         break;
       case this.ENVIRONMENT_TYPE.QUESTION:
