@@ -1,4 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -51,8 +52,11 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   constructor(
     public questionTextService: QuestionTextService,
     public connectionService: ConnectionService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private quizService: QuizService,
-    private sanitizer: DomSanitizer, private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {
   }
 
@@ -113,7 +117,8 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
         questionIndex$.subscribe(questionIndex => {
           this._questionIndex = questionIndex;
           this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
-          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText))
+          .then(() => this.cd.markForCheck());
         });
         break;
       case this.ENVIRONMENT_TYPE.QUESTION:
@@ -126,7 +131,8 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy.next();
     this._destroy.complete();
-    if (window['hs']) {
+
+    if (isPlatformBrowser(this.platformId) && window['hs']) {
       window['hs'].close();
     }
   }

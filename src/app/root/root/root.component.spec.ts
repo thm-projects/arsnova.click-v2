@@ -52,7 +52,7 @@ describe('RootComponent', () => {
               useFactory: jwtOptionsFactory,
               deps: [PLATFORM_ID, StorageService],
             },
-          }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, NgbModule, AngularSvgIconModule, FontAwesomeModule,
+          }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, NgbModule, AngularSvgIconModule.forRoot(), FontAwesomeModule,
         ],
         providers: [
           {

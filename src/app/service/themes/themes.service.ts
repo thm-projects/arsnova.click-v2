@@ -44,7 +44,8 @@ export class ThemesService {
     private storageService: StorageService,
     private i18nService: I18nService,
   ) {
-    this._defaultTheme = environment.darkModeCheckEnabled && //
+    this._defaultTheme = isPlatformServer(this.platformId) ? environment.defaultTheme : //
+                         environment.darkModeCheckEnabled && //
                          window.matchMedia('(prefers-color-scheme: dark)').matches ? //
                          QuizTheme.Blackbeauty : environment.defaultTheme;
   }
@@ -111,17 +112,18 @@ export class ThemesService {
   }
 
   public initTheme(): void {
-
-    if (isPlatformBrowser(this.platformId)) {
-      this.storageService.db.Config.get(StorageKey.DefaultTheme).then(val => {
-        if (!val || val.value.startsWith('theme-')) {
-          this.storageService.db.Config.put({
-            value: this.defaultTheme,
-            type: StorageKey.DefaultTheme,
-          });
-        }
-      });
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
+
+    this.storageService.db.Config.get(StorageKey.DefaultTheme).then(val => {
+      if (!val || val.value.startsWith('theme-')) {
+        this.storageService.db.Config.put({
+          value: this.defaultTheme,
+          type: StorageKey.DefaultTheme,
+        });
+      }
+    });
 
     this.connectionService.dataEmitter.subscribe(data => {
       if (data.status === StatusProtocol.Success && data.step === MessageProtocol.UpdatedSettings) {

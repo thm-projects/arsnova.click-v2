@@ -468,17 +468,6 @@
       "restrict_to_cas": "Restrict to CAS users (THM University only)"
     },
     "question_type": {
-      "description": {
-        "SingleChoiceQuestion": "Single-choice questions contain as many answer options as you like, one of them must be marked as correct.",
-        "YesNoSingleChoiceQuestion": "Yes|No questions contain only two answers (yes and no), one of them must be marked as correct.",
-        "TrueFalseSingleChoiceQuestion": "True|False questions also contain only two answers (True and False), one of them must be marked as correct.",
-        "MultipleChoiceQuestion": "Multiple-choice questions contain as many answer options as you like, of which as many as you like (at least one) can be marked as correct.",
-        "RangedQuestion": "For the ranged question, an integer must be specified as correct. In addition, upper and lower tolerances can be entered.",
-        "FreeTextQuestion": "In the free text query, the participant must enter any text. This is matched with the provided reference value.",
-        "SurveyQuestion": "Surveys may contain any number of answers, none of them can be marked as right or wrong.",
-        "AbcdSingleChoiceQuestion": "ABCD questions contain at maximum 26 answers (from A - Z).",
-        "type_wrapper": "Here you can change the type of quiz question. Each type has different settings. Change the type by clicking on the respective box."
-      },
       "title": "Edit question type",
       "currentType": "Current question type:",
       "back": "Back to the quiz manager"
@@ -916,6 +905,17 @@
   },
   "view": {
     "question_type": {
+      "description": {
+        "SingleChoiceQuestion": "Single-choice questions contain as many answer options as you like, one of them must be marked as correct.",
+        "YesNoSingleChoiceQuestion": "Yes|No questions contain only two answers (yes and no), one of them must be marked as correct.",
+        "TrueFalseSingleChoiceQuestion": "True|False questions also contain only two answers (True and False), one of them must be marked as correct.",
+        "MultipleChoiceQuestion": "Multiple-choice questions contain as many answer options as you like, of which as many as you like (at least one) can be marked as correct.",
+        "RangedQuestion": "For the ranged question, an integer must be specified as correct. In addition, upper and lower tolerances can be entered.",
+        "FreeTextQuestion": "In the free text query, the participant must enter any text. This is matched with the provided reference value.",
+        "SurveyQuestion": "Surveys may contain any number of answers, none of them can be marked as right or wrong.",
+        "AbcdSingleChoiceQuestion": "ABCD questions contain at maximum 26 answers (from A - Z).",
+        "type_wrapper": "Here you can change the type of quiz question. Each type has different settings. Change the type by clicking on the respective box."
+      },
       "select-type": "Select Type",
       "current-type": "Current Type"
     }

@@ -4,7 +4,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, switchMapTo, take, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -12,7 +12,7 @@ import { AbstractAnswerEntity } from '../../lib/entities/answer/AbstractAnswerEn
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
 import { ABCDSingleChoiceQuestionEntity } from '../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { Language, StorageKey, Title } from '../../lib/enums/enums';
+import { DbState, Language, StorageKey, Title } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
@@ -117,7 +117,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     public twitterService: TwitterService,
   ) {
 
-    sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    }
+
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
 
     headerLabelService.headerLabel = 'default';
@@ -150,9 +153,16 @@ export class HomeComponent implements OnInit, OnDestroy {
       );
     });
 
-    this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(async params => {
-      this.cleanUpSessionStorage();
+    let amount = 1;
+    this.storageService.stateNotifier.pipe(filter(val => val === DbState.Destroy), takeUntil(this._destroy)).subscribe(() => amount = 1);
+    const routerParamsInitialized$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
+    const dbInitialized$ = this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(amount), takeUntil(this._destroy));
 
+    routerParamsInitialized$.subscribe(() => {
+      this.cleanUpSessionStorage();
+    });
+
+    dbInitialized$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(async params => {
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
 
@@ -341,6 +351,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isAddingABCDQuiz = false;
   }
 
+  public navigateToTwitter(): void {
+    window.open('https://twitter.com/intent/follow?screen_name=@arsnovaclick', '_blank', 'noopener noreferrer');
+  }
+
   private updateFooterElements(isLoggedIn: boolean): void {
     const footerElements = [
       this.footerBarService.footerElemAbout,
@@ -414,16 +428,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       this.router.navigate(routingTarget);
-    }, error => {
-      if (error === MessageProtocol.TooMuchActiveQuizzes) {
-        this._hasErrors = 'plugins.splashscreen.error.error_messages.too_much_active_quizzes';
-      } else if (error === MessageProtocol.ServerPasswordRequired) {
-        this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_required';
-      } else if (error === MessageProtocol.InsufficientPermissions) {
-        this._hasErrors = 'plugins.splashscreen.error.error_messages.server_password_invalid';
-      } else {
-        console.log('HomeComponent: SetQuiz failed', error);
-      }
+    }, () => {
+      this._isPerformingClick.splice(0);
     });
   }
 
@@ -526,6 +532,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private cleanUpSessionStorage(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     if (this.quizService.quiz && this.attendeeService.ownNick) {
       this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
     }
@@ -554,6 +564,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     value.sessionConfig = Object.assign({}, DefaultSettings.defaultQuizSettings.sessionConfig, value.sessionConfig);
     const questionGroup = new QuizEntity(value);
     this.enteredSessionName = questionGroup.name;
+    questionGroup.state = QuizState.Active;
 
     return questionGroup;
   }
@@ -617,6 +628,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         showOneAnswerPerRow: false,
       });
       questionGroup.questionList = [abcdQuestion];
+      questionGroup.state = QuizState.Active;
+
       return new QuizEntity(questionGroup);
     }
   }

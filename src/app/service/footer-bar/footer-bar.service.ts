@@ -467,11 +467,6 @@ export class FooterBarService {
       this._connectionState = value;
       this.updateFooterElementsState();
     });
-
-    document.onfullscreenchange = () => {
-    };
-    document.onfullscreenerror = () => {
-    };
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
@@ -514,12 +509,12 @@ export class FooterBarService {
 
   private removeUnsupportedElements(elements: Array<IFooterBarElement>): void {
     const fullscreenIndex = elements.findIndex(elem => elem.id === this.footerElemFullscreen.id);
-    if (fullscreenIndex > -1 && !Modernizr.fullscreen) {
+    if (fullscreenIndex > -1 && isPlatformBrowser(this.platformId) && !Modernizr.fullscreen) {
       elements.splice(fullscreenIndex, 1);
     }
 
     const backIndex = elements.findIndex(elem => elem.id === this.footerElemBack.id);
-    if (backIndex > -1 && history.length < 2) {
+    if (backIndex > -1 && isPlatformBrowser(this.platformId) && history.length < 2) {
       elements.splice(backIndex, 1);
     }
   }

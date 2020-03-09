@@ -3,12 +3,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { AttendeeMockService } from '../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
@@ -35,9 +36,9 @@ describe('QuizResults: ConfidenceRateComponent', () => {
         I18nTestingModule, SharedModule, RouterTestingModule,
       ],
       providers: [
-        MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
+        {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         }, {
           provide: StorageService,
           useClass: StorageServiceMock,

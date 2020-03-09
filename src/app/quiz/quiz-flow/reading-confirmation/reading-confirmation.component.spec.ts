@@ -8,7 +8,6 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
@@ -16,6 +15,8 @@ import { AttendeeMockService } from '../../../service/attendee/attendee.mock.ser
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
@@ -45,9 +46,9 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
         }), HttpClientTestingModule,
       ],
       providers: [
-        RxStompService, MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
+        RxStompService, {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         }, {
           provide: StorageService,
           useClass: StorageServiceMock,

@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
@@ -35,6 +36,7 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
   private readonly _destroy = new Subject();
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private headerLabelService: HeaderLabelService,
     private quizService: QuizService,
     private route: ActivatedRoute,
@@ -50,6 +52,10 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
 
     this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {

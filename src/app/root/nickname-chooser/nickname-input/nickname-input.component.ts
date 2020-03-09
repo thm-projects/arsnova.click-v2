@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { BonusTokenService } from 'src/app/service/user/bonus-token/bonus-token.service';
 import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
@@ -10,7 +11,6 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { UserService } from '../../../service/user/user.service';
-import {BonusTokenService} from 'src/app/service/user/bonus-token/bonus-token.service';
 
 @Component({
   selector: 'app-nickname-input',
@@ -85,14 +85,17 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     if (this.attendeeService.ownNick) {
       this.router.navigate(['/']);
     }
 
     this.handleMessages();
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-    });
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   public ngOnDestroy(): void {

@@ -8,7 +8,6 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { Language } from '../../../lib/enums/enums';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -17,6 +16,8 @@ import { AttendeeMockService } from '../../../service/attendee/attendee.mock.ser
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { I18nService } from '../../../service/i18n/i18n.service';
@@ -50,9 +51,9 @@ describe('LeaderboardComponent', () => {
         }), HttpClientTestingModule,
       ],
       providers: [
-        MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
+        {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         }, RxStompService, SimpleMQ, {
           provide: StorageService,
           useClass: StorageServiceMock,

@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -28,6 +29,7 @@ export class TwitterService {
   private _quizName: string;
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private twitterApiService: TwitterApiService,
     private quizService: QuizService,
     private themesService: ThemesService,
@@ -55,6 +57,10 @@ export class TwitterService {
   }
 
   public getOptIn(): boolean {
+    if (isPlatformServer(this.platformId)) {
+      return undefined;
+    }
+
     return JSON.parse(localStorage.getItem(StorageKey.TwitterOptIn));
   }
 

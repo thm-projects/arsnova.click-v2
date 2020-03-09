@@ -227,18 +227,17 @@
         </div>
 
         <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 d-flex">
-          <a *ngIf="twitterEnabled && twitterService.getOptIn()"
-             [title]="'global.follow-us-at-twitter' | translate"
-             class="btn-twitter-follow mx-auto mr-md-0"
-             href="https://twitter.com/intent/follow?screen_name=@arsnovaclick"
-             target="_blank">
+          <button (click)="navigateToTwitter()"
+                  *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && twitterService.getOptIn()"
+                  [title]="'global.follow-us-at-twitter' | translate"
+                  class="btn-twitter-follow mx-auto mr-md-0">
             <fa-icon [icon]="['fab', 'twitter']"
                      class="color-twitter"></fa-icon>
             <span class="label">{{'global.follow-us-at-twitter' | translate}}</span>
-          </a>
+          </button>
         </div>
 
-        <div *ngIf="twitterEnabled && !twitterService.getOptIn()"
+        <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !twitterService.getOptIn()"
              class="opt-in col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-sm-5">
           <div class="p-2 rounded d-flex align-items-center bg-light text-primary">
             <input (click)="twitterService.setOptIn()"
@@ -257,7 +256,7 @@
     </div>
   </div>
 
-  <app-twitter-cards *ngIf="twitterEnabled && !isShowingQuiznameDatalist"
+  <app-twitter-cards *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !isShowingQuiznameDatalist"
                      class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 mt-2"></app-twitter-cards>
 
 </div>

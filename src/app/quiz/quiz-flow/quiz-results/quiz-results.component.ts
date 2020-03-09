@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -85,6 +86,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   constructor(
     public quizService: QuizService,
     public attendeeService: AttendeeService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private i18nService: I18nService,
     private router: Router,
     private headerLabelService: HeaderLabelService,
@@ -247,6 +249,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
         this.answers = value;
@@ -306,6 +312,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   public ngOnDestroy(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     sessionStorage.setItem(StorageKey.CurrentQuestionIndex, String(this.selectedQuestionIndex));
 
     if (this.quizService.isOwner) {
