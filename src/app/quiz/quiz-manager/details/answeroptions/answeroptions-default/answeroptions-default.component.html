@@ -20,7 +20,7 @@
                class="col-12"
                data-step="1"
                role="list">
-            <div *ngFor="let elem of question.answerOptionList; let i = index"
+            <div *ngFor="let elem of question?.answerOptionList; let i = index"
                  class="btn-group mb-2 d-flex bg-light text-dark rounded">
               <span (click)="deleteAnswer(i)"
                     *ngIf="canDeleteAnswer"
@@ -80,41 +80,41 @@
             <p [innerHTML]="'component.answeroptions.show_one_answer_per_row' | translate"
                class="mb-0 mr-2 align-self-center w-100"
                style="line-height: 1.2;"></p>
-            <label [class.btn-danger]="!question.showOneAnswerPerRow"
-                   [class.btn-success]="question.showOneAnswerPerRow"
+            <label [class.btn-danger]="!question?.showOneAnswerPerRow"
+                   [class.btn-success]="question?.showOneAnswerPerRow"
                    class="btn cursor-pointer mb-0 align-self-center">
               <input (change)="toggleShowOneAnswerPerRow()"
                      [attr.aria-label]="'component.answeroptions.description.show_one_answer_per_row' | translate"
-                     [checked]="question.showOneAnswerPerRow"
+                     [checked]="question?.showOneAnswerPerRow"
                      [title]="'component.answeroptions.show_one_answer_per_row' | translate"
                      autocomplete="off"
                      class="d-none"
                      role="switch"
                      type="checkbox">
-              <span *ngIf="question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
-              <span *ngIf="!question.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+              <span *ngIf="question?.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!question?.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
-          <div *ngIf="question.TYPE === 'SurveyQuestion'"
+          <div *ngIf="question?.TYPE === 'SurveyQuestion'"
                [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate"
                class="col-12 mb-2 d-flex">
             <p class="mb-0 mr-2 align-self-center w-100"
                style="line-height: 1.2;">
               {{'component.answeroptions.multiple_selection_survey' | translate}}
             </p>
-            <label [class.btn-danger]="!getQuestionAsSurvey(question).multipleSelectionEnabled"
-                   [class.btn-success]="getQuestionAsSurvey(question).multipleSelectionEnabled"
+            <label [class.btn-danger]="!getQuestionAsSurvey(question)?.multipleSelectionEnabled"
+                   [class.btn-success]="getQuestionAsSurvey(question)?.multipleSelectionEnabled"
                    class="btn cursor-pointer mb-0 align-self-center">
               <input (change)="toggleMultipleSelectionSurvey()"
                      [attr.aria-label]="'component.answeroptions.description.multiple_selection_survey' | translate"
-                     [checked]="getQuestionAsSurvey(question).multipleSelectionEnabled"
+                     [checked]="getQuestionAsSurvey(question)?.multipleSelectionEnabled"
                      [title]="'component.answeroptions.multiple_selection_survey' | translate"
                      autocomplete="off"
                      class="d-none"
                      role="switch"
                      type="checkbox">
-              <span *ngIf="getQuestionAsSurvey(question).multipleSelectionEnabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
-              <span *ngIf="!getQuestionAsSurvey(question).multipleSelectionEnabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+              <span *ngIf="getQuestionAsSurvey(question)?.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+              <span *ngIf="!getQuestionAsSurvey(question)?.multipleSelectionEnabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
         </div>

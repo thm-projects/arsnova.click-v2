@@ -14,6 +14,7 @@ import { QuizManagerDetailsOverviewComponent } from './details/details-overview/
 import { QuestiontextComponent } from './details/questiontext/questiontext.component';
 import { QuestiontypeComponent } from './details/questiontype/questiontype.component';
 import { QuizManagerDetailsModule } from './details/quiz-manager-details.module';
+import { TagsComponent } from './details/tags/tags.component';
 import { MemberGroupManagerComponent } from './member-group-manager/member-group-manager.component';
 import { NicknameManagerComponent } from './nickname-manager/nickname-manager.component';
 import { QuizManagerComponent } from './quiz-manager/quiz-manager.component';
@@ -63,6 +64,10 @@ const quizManagerRoutes: Routes = [
       }, {
         path: 'questionType',
         component: QuestiontypeComponent,
+        data: {},
+      }, {
+        path: 'tags',
+        component: TagsComponent,
         data: {},
       },
     ],

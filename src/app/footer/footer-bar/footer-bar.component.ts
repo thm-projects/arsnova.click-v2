@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IconPathData, IconPrefix } from '@fortawesome/fontawesome-svg-core';
+import { IconPathData, IconPrefix, IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { INamedType } from '../../lib/interfaces/interfaces';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -75,7 +75,7 @@ export class FooterBarComponent implements OnInit {
     });
   }
 
-  public getIconClass(elem: IFooterBarElement): [IconPrefix, IconPathData] {
+  public getIconClass(elem: IFooterBarElement): IconProp {
     if (elem.isLoading) {
       return ['fas', 'spinner'];
     }

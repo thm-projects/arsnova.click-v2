@@ -51,6 +51,7 @@ export class QuizMockService {
         }),
       ],
     });
+    this.quizUpdateEmitter.next(this.quiz);
   }
 
   public currentQuestion(): AbstractQuestionEntity {

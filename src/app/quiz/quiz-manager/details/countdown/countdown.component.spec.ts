@@ -57,6 +57,9 @@ describe('CountdownComponent', () => {
             paramMap: of({
               get: () => 0,
             }),
+            queryParamMap: of({
+              get: () => 0,
+            }),
           },
         }, SharedService, {
           provide: TwitterService,

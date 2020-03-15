@@ -84,6 +84,30 @@ export class FooterBarService {
 
   public TYPE_REFERENCE: string;
 
+  public footerElemQuizpool: IFooterBarElement = new FooterbarElement({
+    id: 'quizpool',
+    iconLayer: [
+      {
+        classes: ['fas', 'question'],
+        transform: 'shrink-3' as any,
+      },
+      {
+        classes: ['fas', 'question'],
+        transform: 'shrink-6 right-7 rotate-50' as any,
+      },
+      {
+        classes: ['fas', 'question'],
+        transform: 'shrink-5 bottom-5 left-7 rotate--30' as any,
+      },
+    ],
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.questionpool',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.questionpool',
+    linkTarget: ['/', 'quiz', 'pool'],
+  }, function (): void {
+  });
   public footerElemTranslation: IFooterBarElement = new FooterbarElement({
     id: 'translation',
     iconClass: ['fas', 'globe'],

@@ -361,6 +361,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
       this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemQuizpool
     ];
 
     if (!environment.requireLoginToCreateQuiz && (

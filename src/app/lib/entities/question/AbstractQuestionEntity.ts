@@ -1,3 +1,4 @@
+import { CloudData } from 'angular-tag-cloud-module';
 import { getAnswerForType } from '../../AnswerValidator';
 import { DefaultSettings } from '../../default.settings';
 import { AnswerType } from '../../enums/AnswerType';
@@ -11,12 +12,14 @@ export abstract class AbstractQuestionEntity {
   public timer: number = DefaultSettings.defaultQuizSettings.question.timer;
   public displayAnswerText: boolean = DefaultSettings.defaultQuizSettings.question.dispayAnswerText;
   public answerOptionList: Array<AbstractAnswerEntity> = DefaultSettings.defaultQuizSettings.question.answerOptionList;
+  public tags: Array<string> = DefaultSettings.defaultQuizSettings.question.tags;
   public abstract TYPE: QuestionType;
 
   protected constructor(data) {
     this.questionText = data.questionText ? data.questionText : this.questionText;
-    this.timer = typeof data.timer === 'number' ? data.timer : this.timer;
+    this.timer = typeof data.timer === 'number' ? data.timer : parseInt(data.timer ?? this.timer, 10);
     this.displayAnswerText = data.displayAnswerText ?? this.displayAnswerText;
+    this.tags = data.tags ?? [];
 
     if (data.answerOptionList) {
       if (data.TYPE === QuestionType.FreeTextQuestion) {

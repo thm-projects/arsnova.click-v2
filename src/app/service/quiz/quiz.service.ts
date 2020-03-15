@@ -4,7 +4,9 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { DefaultSettings } from '../../lib/default.settings';
 import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
+import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { StorageKey } from '../../lib/enums/enums';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
@@ -18,6 +20,20 @@ import { StorageService } from '../storage/storage.service';
 })
 export class QuizService {
   public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
+
+  private _isAddingPoolQuestion = false;
+
+  get isAddingPoolQuestion(): boolean {
+    return this._isAddingPoolQuestion;
+  }
+
+  set isAddingPoolQuestion(value: boolean) {
+    if (value && !this._isAddingPoolQuestion) {
+      this._isInEditMode = true;
+      this.generatePoolQuiz();
+    }
+    this._isAddingPoolQuestion = value;
+  }
 
   private _isOwner = false;
 
@@ -84,7 +100,7 @@ export class QuizService {
   }
 
   public persist(): void {
-    if (isPlatformServer(this.platformId)) {
+    if (isPlatformServer(this.platformId) || this._isAddingPoolQuestion) {
       return;
     }
 
@@ -97,7 +113,7 @@ export class QuizService {
   }
 
   public persistQuiz(quiz: QuizEntity): void {
-    if (isPlatformServer(this.platformId)) {
+    if (isPlatformServer(this.platformId) || this._isAddingPoolQuestion) {
       return;
     }
 
@@ -230,6 +246,22 @@ export class QuizService {
 
   public stopEditMode(): void {
     this._isInEditMode = false;
+    this._isAddingPoolQuestion = false;
+  }
+
+  public editPoolQuestion(): void {
+    this._isInEditMode = true;
+    this._isAddingPoolQuestion = true;
+  }
+
+  public generatePoolQuiz(questionList?: Array<AbstractQuestionEntity>): void {
+    const defaultSettings = DefaultSettings.defaultQuizSettings;
+    this.quiz = new QuizEntity({
+      name: null,
+      currentQuestionIndex: 0,
+      questionList: questionList ?? [new SingleChoiceQuestionEntity({ answerOptionList: [] })],
+      ...defaultSettings,
+    });
   }
 
   private restoreSettings(quizName: string): Promise<boolean> {

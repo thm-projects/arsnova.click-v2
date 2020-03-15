@@ -17,6 +17,8 @@ export class AttendeeMockService {
     this.attendees.push(attendee);
   }
 
+  public reloadData(): void {}
+
   public cleanUp(): void {
     this.attendees = [];
   }
@@ -26,6 +28,10 @@ export class AttendeeMockService {
   }
 
   public hasReadingConfirmation(): boolean {
+    return false;
+  }
+
+  public hasReponse(): boolean {
     return false;
   }
 

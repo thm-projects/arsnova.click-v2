@@ -79,7 +79,8 @@
         "showToken": "Token anzeigen",
         "twitter": {
           "tweet": "Tweet"
-        }
+        },
+        "questionpool": "Quiz-Pool"
       },
       "about": {
         "title": "arsnova.click",
@@ -208,6 +209,28 @@
     }
   },
   "component": {
+    "quiz-pool": {
+      "select-tag": {
+        "label": "Tag auswählen",
+        "placeholder": "Wähle hier deinen gewünschten Tag aus, aus dem ein Quiz zusammengestellt werden soll"
+      },
+      "tag-question-amount": {
+        "label": "Anzahl der Quizfragen",
+        "placeholder": "Anzahl der Quizfragen",
+        "validation-error": {
+          "required": "Bitte gib die Anzahl der gewünschten Quizfragen ein",
+          "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen"
+        }
+      },
+      "tag-available": "{text} ({weight} verfügbar)",
+      "create-quiz": "Quiz erstellen",
+      "selected-tags": "Ausgewählte Tags",
+      "save-tag": "Tag speichern",
+      "create-own-question": {
+        "label": "Möchtest du eine neue Quizpool Frage einreichen?",
+        "button-label": "Neue Quizpool Frage"
+      }
+    },
     "twitter": {
       "optin": {
         "check": "Für Social Media Features anklicken",
@@ -407,8 +430,13 @@
         "timer": {
           "long": "Countdown",
           "short": "Countdown"
+        },
+        "tags": {
+          "long": "Tags",
+          "short": "Tags"
         }
       },
+      "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
         "available_questions": "Hier siehst du alle Fragetypen, aus denen du wählen kannst. Jeder Fragetyp bietet eigene Voreinstellungen und Optionen zur Gestaltung deines Quiz.",
         "added_questions": "Um eine Frage hinzuzufügen, ziehe eine Vorlage hierher oder klick auf sie. Wenn du die eingefügte Vorlage berührst, siehst du, was du damit machen kannst: Frage editieren, Reihenfolge der Fragen ändern oder die Frage löschen."
@@ -435,6 +463,7 @@
       "answer_configuration": "Formale Kriterien der Antwort",
       "timer": "Countdown",
       "second": "Sekunde",
+      "tags": "Tags",
       "validation": "Status",
       "validation_errors": {
         "types": {
@@ -451,7 +480,8 @@
           "invalid_correct_value": "Der korrekte Wert muss innerhalb des minimalen und maximalen Wertes liegen",
           "answer_text_empty": "Der Antworttext darf nicht leer sein",
           "no_answers_defined": "Es wurden noch keine Antworten angelegt",
-          "empty_question_text": "Der Text der Frage ist leer"
+          "empty_question_text": "Der Text der Frage ist leer",
+          "empty_question_type": "Der Typ der Frage wurde noch nicht gesetzt"
         }
       },
       "selected_nicks": "Nicknamen",

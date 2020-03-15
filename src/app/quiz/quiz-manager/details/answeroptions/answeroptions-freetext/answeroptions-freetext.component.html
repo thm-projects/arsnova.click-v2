@@ -10,7 +10,7 @@
                     [attr.data-intro]="'component.answeroptions.description.free_text_question_text' | translate"
                     (input)="setMatchText($event)"
                     [placeholder]="'component.answeroptions.free_text_question.text_placeholder' | translate">
-            {{question.answerOptionList[0]?.answerText}}
+            {{question?.answerOptionList[0]?.answerText}}
           </textarea>
       </div>
     </div>

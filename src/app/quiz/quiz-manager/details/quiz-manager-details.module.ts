@@ -7,13 +7,14 @@ import { CountdownComponent } from './countdown/countdown.component';
 import { QuizManagerDetailsOverviewComponent } from './details-overview/quiz-manager-details-overview.component';
 import { QuestiontextComponent } from './questiontext/questiontext.component';
 import { QuestiontypeComponent } from './questiontype/questiontype.component';
+import { TagsComponent } from './tags/tags.component';
 
 @NgModule({
   imports: [
     SharedModule, MarkdownBarModule, LivePreviewModule, AnsweroptionsModule,
   ],
   providers: [],
-  declarations: [QuizManagerDetailsOverviewComponent, CountdownComponent, QuestiontextComponent, QuestiontypeComponent],
+  declarations: [QuizManagerDetailsOverviewComponent, CountdownComponent, QuestiontextComponent, QuestiontypeComponent, TagsComponent],
 })
 export class QuizManagerDetailsModule {
 }
