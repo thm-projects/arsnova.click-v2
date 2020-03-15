@@ -596,7 +596,8 @@
           "no_answers_defined": "No answers have been defined",
           "no_valid_answer_required": "Correct or wrong answers are not allowed for this question type",
           "empty_question_text": "The text of the question is empty",
-          "empty_question_type": "No question type set"
+          "empty_question_type": "No question type set",
+          "empty-question-tags": "No tags have been assigned to the question yet"
         }
       },
       "selected_nicks": "Valid nicknames",

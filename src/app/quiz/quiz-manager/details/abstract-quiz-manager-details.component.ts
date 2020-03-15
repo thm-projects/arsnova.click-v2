@@ -1,21 +1,22 @@
 import { isPlatformServer } from '@angular/common';
-import { HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMap, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
-import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { QuizPoolApiService } from '../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 
 export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
+  public showSaveQuizButton = false;
+  protected initialized$ = new ReplaySubject(1);
+
   get queryParams(): Params {
     return this._queryParams;
   }
-  private _queryParams: Params = {};
 
   protected _question: AbstractQuestionEntity;
 
@@ -32,10 +33,9 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
   get destroy(): Subject<any> {
     return this._destroy;
   }
-  private readonly _destroy = new Subject();
 
-  protected showSaveQuizButton = false;
-  protected initialized$ = new ReplaySubject(1);
+  private _queryParams: Params = {};
+  private readonly _destroy = new Subject();
 
   protected constructor(
     protected platformId: Object,
@@ -81,7 +81,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
       }
 
       this._question = this.quizService.quiz.questionList[this._questionIndex];
-      this.footerBarService.footerElemSaveQuiz.isActive = this._question.isValid();
+      this.footerBarService.footerElemSaveQuiz.isActive = this._question.isValid() && this._question.tags.length > 0;
 
       this.initialized$.next(true);
     });

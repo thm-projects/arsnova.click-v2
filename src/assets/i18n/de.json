@@ -481,7 +481,8 @@
           "answer_text_empty": "Der Antworttext darf nicht leer sein",
           "no_answers_defined": "Es wurden noch keine Antworten angelegt",
           "empty_question_text": "Der Text der Frage ist leer",
-          "empty_question_type": "Der Typ der Frage wurde noch nicht gesetzt"
+          "empty_question_type": "Der Typ der Frage wurde noch nicht gesetzt",
+          "empty-question-tags": "Der Frage wurden noch keine Tags zugewiesen"
         }
       },
       "selected_nicks": "Nicknamen",

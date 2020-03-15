@@ -144,19 +144,20 @@
     <div class="mb-2 validation">
       <h4 class="bg-light p-2 rounded text-center">
         <span class="text-success"
-              *ngIf="question?.isValid()">{{'component.quiz_summary.question_successful' | translate}}</span>
+              *ngIf="question?.isValid() && !(showSaveQuizButton && !question?.tags?.length)">{{'component.quiz_summary.question_successful' | translate}}</span>
         <span class="text-danger"
-              *ngIf="!question?.isValid()">{{'component.quiz_summary.question_failed' | translate}}</span>
+              *ngIf="!question?.isValid() || showSaveQuizButton && !question?.tags?.length">{{'component.quiz_summary.question_failed' | translate}}</span>
       </h4>
-      <ul *ngIf="!question?.isValid()"
+      <ul *ngIf="!question?.isValid() || showSaveQuizButton && !question.tags?.length"
           id="quizSummaryValidationErrors"
           [attr.data-intro]="'component.quiz_summary.description.validation_errors' | translate"
           [attr.aria-label]="'component.quiz_summary.description.validation_errors' | translate">
         <li *ngFor="let validationError of question?.getValidationStackTrace()">
-          <span *ngIf="validationError.occurredAt?.type === 'question'">{{'component.quiz_summary.validation_errors.types.question' | translate}}:&nbsp;</span>
-          <span *ngIf="validationError.occurredAt?.type === 'answerOption'">{{'component.quiz_summary.validation_errors.types.answerOption' | translate}}:&nbsp;</span>
+          <span *ngIf="validationError.occurredAt?.type === 'question'">{{'component.quiz_summary.validation_errors.types.question' | translate}}:&nbsp;</span>
+          <span *ngIf="validationError.occurredAt?.type === 'answerOption'">{{'component.quiz_summary.validation_errors.types.answerOption' | translate}}:&nbsp;</span>
           <span>{{validationError.reason | translate}}</span>
         </li>
+        <li *ngIf="showSaveQuizButton && !question?.tags?.length">{{'component.quiz_summary.validation_errors.reasons.empty-question-tags' | translate}}</li>
       </ul>
     </div>
   </div>

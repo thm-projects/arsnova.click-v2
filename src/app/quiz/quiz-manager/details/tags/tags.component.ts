@@ -56,7 +56,7 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
 
   public resultFormatter(tag: CloudData): string { return `${tag.text}`; }
 
-  public inputFormatter(tag: CloudData): string { return `${tag.text}`; }
+  public inputFormatter(tag: CloudData): string { return `${tag.text ?? tag}`; }
 
   public search(text$: Observable<string>): Observable<Array<CloudData>> {
     const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
@@ -79,7 +79,7 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
   }
 
   public saveTag(): void {
-    this._selectedTags.push(this.tagName);
+    this._selectedTags.push(this.tagName.text ? this.tagName : { text: this.tagName as any } as CloudData);
     this.tagName = null;
   }
 
