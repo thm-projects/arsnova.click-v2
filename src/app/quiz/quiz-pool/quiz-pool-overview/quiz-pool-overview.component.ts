@@ -60,6 +60,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
 
   public ngOnInit(): void {
     this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/']);
   }
 
   public ngAfterContentInit(): void {
@@ -78,6 +79,8 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   public ngOnDestroy(): void {
     this._destroy.next();
     this._destroy.complete();
+
+    this.footerBarService.footerElemBack.restoreClickCallback();
   }
 
   public createQuiz(): void {
