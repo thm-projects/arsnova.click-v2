@@ -1,0 +1,64 @@
+<form [formGroup]="form"
+      class="bg-light p-3 text-primary form-row">
+
+  <div class="form-group col-md-6">
+    <label for="select-tag">{{'component.quiz-pool.select-tag.label' | translate}}</label>
+    <select [ngbPopover]="'component.quiz-pool.select-tag.placeholder' | translate"
+            class="form-control"
+            formControlName="selectedTag"
+            id="select-tag">
+      <option [defaultSelected]="true"
+              [value]="null"
+              disabled
+              hidden
+              selected>{{'component.quiz-pool.select-tag.label' | translate}}</option>
+      <option *ngFor="let tag of tags"
+              class="text-capitalize"
+              [value]="tag.text">{{'component.quiz-pool.tag-available' | translate:{text: tag.text, weight: tag.weight} }}</option>
+    </select>
+  </div>
+
+  <div class="form-group col-md-6">
+    <label for="questionAmount">{{'component.quiz-pool.tag-question-amount.label' | translate}}</label>
+    <input [placeholder]="'component.quiz-pool.tag-question-amount.placeholder' | translate"
+           class="form-control"
+           formControlName="questionAmount"
+           id="questionAmount"
+           min="0"
+           type="number"/>
+
+    <div *ngIf="form.get('questionAmount').invalid && (form.get('questionAmount').dirty || form.get('questionAmount').touched)"
+         class="alert alert-danger">
+
+      <div *ngIf="form.get('questionAmount').errors.required">
+        <div class="invalid-tooltip d-block">{{'component.quiz-pool.tag-question-amount.validation-error.required' | translate}}</div>
+      </div>
+      <div *ngIf="form.get('questionAmount').errors.max">
+        <div class="invalid-tooltip d-block">{{'component.quiz-pool.tag-question-amount.validation-error.max' | translate:{max: getSelectedTag()?.weight} }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 d-flex">
+    <button (click)="createQuiz()"
+            [disabled]="form.invalid"
+            class="btn btn-success ml-auto">
+      <span>{{'component.quiz-pool.create-quiz' | translate}}</span>
+    </button>
+  </div>
+</form>
+
+<div class="bg-light mt-5 p-3 text-primary form-row">
+  <p class="form-group w-100">{{'component.quiz-pool.create-own-question.label' | translate}}</p>
+
+  <button (click)="createQuestion()"
+          class="btn btn-success ml-auto d-flex">
+    <span>{{'component.quiz-pool.create-own-question.button-label' | translate}}</span>
+  </button>
+</div>
+
+<div class='mt-5 bg-white form-row'>
+  <app-word-cloud *ngIf="tags"
+                  [data]="tagsForCloud"
+                  class="d-block w-100"></app-word-cloud>
+</div>

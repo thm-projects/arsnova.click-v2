@@ -1,3 +1,4 @@
+import { CloudData } from 'angular-tag-cloud-module';
 import { QuizState } from '../enums/QuizState';
 import { QuizVisibility } from '../enums/QuizVisibility';
 import { getQuestionForType } from '../QuizValidator';
@@ -12,6 +13,7 @@ export class QuizEntity {
   public sessionConfig: SessionConfigurationEntity;
   public state: QuizState;
   public expiry: Date;
+  public tags: Array<string>;
   public currentStartTimestamp: number;
   public memberGroups: Array<MemberGroupEntity>;
   public visibility: QuizVisibility;

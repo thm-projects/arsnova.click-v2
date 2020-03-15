@@ -1,21 +1,23 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { switchMapTo, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { SurveyQuestionEntity } from '../../../../../lib/entities/question/SurveyQuestionEntity';
 import { QuestionType } from '../../../../../lib/enums/QuestionType';
+import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
+import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../../../service/question-text/question-text.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
+import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager-details.component';
 
 @Component({
   selector: 'app-answeroptions-default',
   templateUrl: './answeroptions-default.component.html',
   styleUrls: ['./answeroptions-default.component.scss'],
 })
-export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
+export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsDefaultComponent';
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
@@ -25,22 +27,23 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   public canShowAnswerContentOnButtons: boolean;
   public canInjectEmojis: boolean;
 
-  private _question: AbstractChoiceQuestionEntity;
+  protected _question: AbstractChoiceQuestionEntity;
 
   get question(): AbstractChoiceQuestionEntity {
     return this._question;
   }
 
-  private readonly _destroy = new Subject();
-  private _questionIndex: number;
-
   constructor(
-    private headerLabelService: HeaderLabelService,
-    private quizService: QuizService,
+    @Inject(PLATFORM_ID) platformId: Object,
+    headerLabelService: HeaderLabelService,
+    quizService: QuizService,
+    route: ActivatedRoute,
+    footerBarService: FooterBarService,
+    quizPoolApiService: QuizPoolApiService,
+    router: Router,
     private questionTextService: QuestionTextService,
-    private route: ActivatedRoute,
   ) {
-    headerLabelService.headerLabel = 'component.quiz_manager.title';
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
   }
 
   public addAnswer(): void {
@@ -54,12 +57,18 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   }
 
   public updateAnswerValue(event: Event, index: number): void {
-    this._question.answerOptionList[index].answerText = (<HTMLInputElement>event.target).value;
+    this._question.answerOptionList[index].answerText = (
+      <HTMLInputElement>event.target
+    ).value;
     this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
   }
 
   public toggleMultipleSelectionSurvey(): void {
-    (<SurveyQuestionEntity>this._question).multipleSelectionEnabled = !(<SurveyQuestionEntity>this._question).multipleSelectionEnabled;
+    (
+      <SurveyQuestionEntity>this._question
+    ).multipleSelectionEnabled = !(
+      <SurveyQuestionEntity>this._question
+    ).multipleSelectionEnabled;
   }
 
   public toggleShowOneAnswerPerRow(): void {
@@ -71,10 +80,12 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
-    .subscribe(questionIndex => {
-      this._questionIndex = questionIndex;
-      this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
+    super.ngOnInit();
+
+    this.initialized$.pipe(switchMapTo(this.quizService.quizUpdateEmitter), takeUntil(this.destroy)).subscribe(() => {
+      if (!this.quizService.quiz) {
+        return;
+      }
 
       this.canAddAnsweroptions = ![QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion].includes(this._question.TYPE);
       this.canDeleteAnswer = true;
@@ -88,11 +99,10 @@ export class AnsweroptionsDefaultComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
+    super.ngOnDestroy();
+
     this.quizService.quiz.questionList[this._questionIndex] = this.question;
     this.quizService.persist();
-
-    this._destroy.next();
-    this._destroy.complete();
   }
 
   public getQuestionAsSurvey(question: AbstractChoiceQuestionEntity): SurveyQuestionEntity {

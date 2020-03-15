@@ -24,16 +24,22 @@
 
     <div class="form-row">
 
-      <div class="col-12 col-sm-auto">
-        <span>{{elem.translationReferrer() | translate}}</span>
+      <div class="col-sm-9">
+        <p class="text-truncate">
+          <span>{{elem.translationReferrer() | translate}}</span>
 
-        <fa-icon *ngIf="!elem.isValid()"
-                 [icon]="'exclamation-triangle'"
-                 [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
-                 class="text-warning ml-2"></fa-icon>
+          <fa-icon *ngIf="!elem.isValid()"
+                   [icon]="'exclamation-triangle'"
+                   [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
+                   class="text-warning ml-2"></fa-icon>
+
+          <span class="font-italic ml-2" *ngIf="elem.tags?.length">
+            <ng-container *ngFor="let tag of elem.tags; let lastElem = last">{{tag}}<ng-container *ngIf="!lastElem">, </ng-container></ng-container>
+          </span>
+        </p>
       </div>
 
-      <div class="col-12 col-sm-auto ml-sm-auto mt-2 mt-sm-0">
+      <div class="col-sm-auto ml-sm-auto mt-2 mt-sm-0">
         <fa-icon (click)="moveQuestionUp(i)"
                  *ngIf="i"
                  [icon]="'arrow-up'"

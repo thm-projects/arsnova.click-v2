@@ -1,0 +1,35 @@
+<div class="input-group input-group-sm">
+  <input #inputElement
+         #instance="ngbTypeahead"
+         (click)="click$.next(inputElement.value)"
+         (focus)="focus$.next(inputElement.value)"
+         [(ngModel)]="tagName"
+         [editable]='true'
+         [inputFormatter]="inputFormatter.bind(self)"
+         [ngbTypeahead]="search.bind(self)"
+         [resultFormatter]="resultFormatter.bind(self)"
+         class="form-control"
+         type="text">
+
+  <div class="input-group-append">
+    <button (click)="saveTag()"
+            [disabled]="hasTagSelected()"
+            class="btn btn-success">
+      <span>{{'component.quiz-pool.save-tag' | translate}}</span>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="selectedTags?.length"
+     class="bg-light mt-3 p-3 text-primary">
+  <h5>{{'component.quiz-pool.selected-tags' | translate}}</h5>
+  <div (click)="removeTag(tag)"
+       (mouseenter)="hovered = i"
+       (mouseleave)="hovered = -1"
+       *ngFor="let tag of selectedTags; let i = index"
+       [class.badge-danger]="hovered === i"
+       [class.badge-primary]="hovered !== i"
+       class="cursor-pointer badge mr-2">
+    <span>{{tag.text}}</span>
+  </div>
+</div>

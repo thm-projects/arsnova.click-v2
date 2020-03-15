@@ -1,8 +1,9 @@
-import { IconPathData, IconPrefix } from '@fortawesome/fontawesome-svg-core';
+import { IconParams, IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export declare interface IFooterBarElement {
   id: string;
-  iconClass: [IconPrefix, IconPathData];
+  iconLayer?: Array<IconParams>;
+  iconClass?: IconProp;
   iconColorClass?: string;
   textClass: string;
   textName: string;

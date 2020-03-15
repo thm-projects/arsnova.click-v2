@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,6 +32,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   private readonly _destroy = new Subject();
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     public quizService: QuizService,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
@@ -71,6 +73,10 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 

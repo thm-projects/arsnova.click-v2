@@ -81,6 +81,9 @@ describe('QuestiontextComponent', () => {
               paramMap: of({
                 get: () => 0,
               }),
+              queryParamMap: of({
+                get: () => 0,
+              }),
             },
           }, SharedService, QuestionTextService, {
             provide: TrackingService,

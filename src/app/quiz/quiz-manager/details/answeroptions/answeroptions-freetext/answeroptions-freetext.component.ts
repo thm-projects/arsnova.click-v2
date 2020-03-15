@@ -1,12 +1,16 @@
-import { ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { isPlatformServer } from '@angular/common';
+import { ChangeDetectionStrategy, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
 import { FreeTextQuestionEntity } from '../../../../../lib/entities/question/FreeTextQuestionEntity';
 import { StorageKey } from '../../../../../lib/enums/enums';
+import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
+import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
+import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager-details.component';
 
 @Component({
   selector: 'app-answeroptions-freetext',
@@ -14,10 +18,10 @@ import { QuizService } from '../../../../../service/quiz/quiz.service';
   styleUrls: ['./answeroptions-freetext.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
+export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsFreetextComponent';
 
-  private _question: FreeTextQuestionEntity;
+  protected _question: FreeTextQuestionEntity;
 
   get question(): FreeTextQuestionEntity {
     return this._question;
@@ -35,16 +39,23 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
     return this._testInput;
   }
 
-  private readonly _destroy = new Subject();
-  private _questionIndex: number;
-
-  constructor(private headerLabelService: HeaderLabelService, private quizService: QuizService, private route: ActivatedRoute) {
-    headerLabelService.headerLabel = 'component.quiz_manager.title';
+  constructor(
+    @Inject(PLATFORM_ID) platformId: Object,
+    headerLabelService: HeaderLabelService,
+    quizService: QuizService,
+    route: ActivatedRoute,
+    footerBarService: FooterBarService,
+    quizPoolApiService: QuizPoolApiService,
+    router: Router,
+  ) {
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
   }
 
 
   public setTestInput(event: Event): void {
-    this._testInput = (<HTMLTextAreaElement>event.target).value;
+    this._testInput = (
+      <HTMLTextAreaElement>event.target
+    ).value;
   }
 
   public setMatchText(event: Event): void {
@@ -66,40 +77,36 @@ export class AnsweroptionsFreetextComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
-    .subscribe(questionIndex => {
-      this._questionIndex = questionIndex;
+    super.ngOnInit();
 
-      if (this.quizService.quiz) {
-        this._question = this.quizService.quiz.questionList[this._questionIndex] as FreeTextQuestionEntity;
+    this.quizService.quizUpdateEmitter.pipe(switchMapTo(this.initialized$), takeUntil(this.destroy)).subscribe(() => {
+      if (!this.quizService.quiz) {
+        return;
+      }
 
-        if (!this._question.answerOptionList.length) {
-          this._question.answerOptionList.push(new FreeTextAnswerEntity({
-            answerText: '',
-            configCaseSensitive: false,
-            configTrimWhitespaces: false,
-            configUseKeywords: false,
-            configUsePunctuation: false,
-          }));
-        }
+      if (!this._question.answerOptionList.length) {
+        this._question.answerOptionList.push(new FreeTextAnswerEntity({
+          answerText: '',
+          configCaseSensitive: false,
+          configTrimWhitespaces: false,
+          configUseKeywords: false,
+          configUsePunctuation: false,
+        }));
       }
 
       this._matchText = this.getTypesafeAnswer().answerText;
     });
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
+    super.ngOnDestroy();
+
     this.quizService.quiz.questionList[this._questionIndex] = this.question;
     this.quizService.persist();
-
-    this._destroy.next();
-    this._destroy.complete();
   }
 
   public getTypesafeAnswer(): FreeTextAnswerEntity {
-    return this.question.answerOptionList[0] as FreeTextAnswerEntity;
+    return this.question?.answerOptionList[0] as FreeTextAnswerEntity;
   }
 }

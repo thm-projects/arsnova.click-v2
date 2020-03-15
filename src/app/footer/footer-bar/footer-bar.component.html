@@ -20,7 +20,14 @@
        [title]="elem.textName | translate"
        class="footerElement px-2 px-sm-1 py-sm-2 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
     <p [class]="elem.iconColorClass + ' footerElemIcon mb-0'">
-      <fa-icon [icon]="getIconClass(elem)"
+      <fa-layers *ngIf="elem.iconLayer">
+        <fa-icon *ngFor="let icon of elem.iconLayer"
+                 [icon]="icon.classes"
+                 [mask]="icon.mask"
+                 [transform]="icon.transform"></fa-icon>
+      </fa-layers>
+      <fa-icon *ngIf="!elem.iconLayer"
+               [icon]="getIconClass(elem)"
                [spin]="elem.isLoading"></fa-icon>
     </p>
     <p class="footerElemText text-truncate text-left mb-0 ml-2">

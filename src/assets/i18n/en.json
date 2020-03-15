@@ -87,7 +87,8 @@
         "showToken": "Show Token",
         "twitter": {
           "tweet": "Tweet"
-        }
+        },
+        "questionpool": "Quiz-Pool"
       },
       "about": {
         "title": "About arsnova.click",
@@ -252,6 +253,28 @@
     }
   },
   "component": {
+    "quiz-pool": {
+      "select-tag": {
+        "label": "Select Tag",
+        "placeholder": "Select your preferred Tag here. The quiz will be built with questions with the selected Tag."
+      },
+      "tag-question-amount": {
+        "label": "Amount of questions",
+        "placeholder": "Amount of questions",
+        "validation-error": {
+          "required": "Please enter the amount of questions here",
+          "max": "You can select only {max, plural, =0{0 questions} one{one question} other{{max} questions}} with your selected Tag"
+        }
+      },
+      "tag-available": "{text} ({weight} available)",
+      "create-quiz": "Create Quiz",
+      "selected-tags": "Selected Tags",
+      "save-tag": "Save Tag",
+      "create-own-question": {
+        "label": "Do you want to create a new Quizpool question?",
+        "button-label": "New Quizpool question"
+      }
+    },
     "twitter": {
       "optin": {
         "check": "Check if you want enable Twitter features",
@@ -513,8 +536,13 @@
         "timer": {
           "long": "Edit timer",
           "short": "Timer"
+        },
+        "tags": {
+          "long": "Tags",
+          "short": "Tags"
         }
       },
+      "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
         "available_questions": "Here you can see all types of questions from which you can choose. Each question type offers different presets and possibilities for the design of the quizzes",
         "added_questions": "Here you will find all your quiz questions, which are available in the quiz. To add a quiz question to the quiz, either drag it from the left stack or click the quiz query in the left pile. By clicking on the inserted question, you can set the content of the question.",
@@ -548,6 +576,7 @@
       "answer_configuration": "Configuration of the answer",
       "timer": "Countdown",
       "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
+      "tags": "Tags",
       "validation": "Validation",
       "validation_errors": {
         "types": {
@@ -565,8 +594,9 @@
           "answer_text_empty": "The answer's text is not allowed to be empty",
           "timer_too_big": "The timer is too long",
           "no_answers_defined": "No answers have been defined",
-          "empty_question_text": "<none>",
-          "no_valid_answer_required": "Correct or wrong answers are not allowed for this question type"
+          "no_valid_answer_required": "Correct or wrong answers are not allowed for this question type",
+          "empty_question_text": "The text of the question is empty",
+          "empty_question_type": "No question type set"
         }
       },
       "selected_nicks": "Valid nicknames",

@@ -1,0 +1,42 @@
+<div *ngIf="questions"
+     class="row">
+  <div *ngFor="let question of questions"
+       class="col-12">
+    <div class="card mb-3 text-dark p-0">
+      <div class="card-body">
+        <div class="d-flex">
+          <div>
+            <p class="card-text">
+              <span>Type: </span>
+              <span>{{question.question.TYPE}}</span>
+            </p>
+            <p class="card-text">
+              <span>Tags: </span>
+              <span>
+                <ng-container *ngFor="let tag of question.question.tags; let lastElem = last">
+                  <span>{{tag}}</span>
+                  <ng-container *ngIf="!lastElem">, </ng-container></ng-container>
+              </span>
+            </p>
+          </div>
+          <div class="ml-auto">
+            <a [queryParams]="{id: question.id}"
+               [routerLink]="['/quiz', 'manager', 'quiz-pool', 'overview']"
+               class="nav-link text-dark p-0 ml-3">
+              <fa-icon [icon]="'edit'"
+                       class="cursor-pointer"></fa-icon>
+            </a>
+          </div>
+        </div>
+        <p class="card-text mt-2">
+          <button (click)="approveQuestion(question)"
+                  class="badge badge-primary">Approve Question
+          </button>
+          <button (click)="declineQuestion(question)"
+                  class="badge badge-danger ml-2">Decline Question
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

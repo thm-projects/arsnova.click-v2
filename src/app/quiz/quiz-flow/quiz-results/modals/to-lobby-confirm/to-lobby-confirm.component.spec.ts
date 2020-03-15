@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { faDownload, faHourglass } from '@fortawesome/free-solid-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
@@ -36,6 +38,8 @@ describe('ToLobbyConfirmComponent', () => {
   }));
 
   beforeEach(() => {
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
+    library.addIcons(faDownload);
     fixture = TestBed.createComponent(ToLobbyConfirmComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
