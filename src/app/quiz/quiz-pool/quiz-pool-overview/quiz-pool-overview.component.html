@@ -59,7 +59,7 @@
   </form>
 
   <ngb-alert (close)="displayQuestionAmountWarning = false"
-             *ngIf="displayQuestionAmountWarning && questionAmount() > 0"
+             *ngIf="displayQuestionAmountWarning && questionAmount() > 1"
              [type]="'warning'">{{'component.quiz-pool.question-amount-warning' | translate:{amount: questionAmount()} }}</ngb-alert>
 
   <div class="d-flex">
