@@ -223,6 +223,7 @@
         }
       },
       "tag-available": "{text} ({weight} verfügbar)",
+      "question-amount-warning": "Bitte beachte, dass Quizfragen mit mehreren Tags nur einmal im Quiz auftauchen werden. Die Gesamtanzahl der Fragen in deinem Quiz kann also geringer als die ausgewählten {amount} Fragen sein.",
       "create-quiz": "Quiz erstellen",
       "selected-tags": "Ausgewählte Tags",
       "save-tag": "Tag speichern",

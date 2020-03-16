@@ -20,7 +20,7 @@ import { SharedService } from '../../../service/shared/shared.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
-  public readonly form: FormGroup;
+  public readonly formGroups: Array<FormGroup> = [];
 
   private _tagsForCloud: Array<CloudData> = [];
 
@@ -47,15 +47,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     private router: Router,
     private fileUploadService: FileUploadService,
   ) {
-    this.form = this.formBuilder.group({
-      selectedTag: new FormControl(null, [Validators.required]),
-      questionAmount: new FormControl({
-        value: null,
-        disabled: true,
-      }, [Validators.required, this.maxQuestionAmountValidator.bind(this)]),
-    });
-
-    this.form.get('selectedTag').valueChanges.pipe(takeUntil(this._destroy)).subscribe(() => this.form.get('questionAmount').enable());
+    this.addTagRow(true);
   }
 
   public ngOnInit(): void {
@@ -84,12 +76,14 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   }
 
   public createQuiz(): void {
-    this.questionPoolApiService.getQuizpool([this.form.get('selectedTag').value], this.form.get('questionAmount').value).subscribe(questions => {
+    this.questionPoolApiService.getQuizpool(this.formGroups.map(fg => (
+      { tag: fg.get('selectedTag').value, amount: fg.get('questionAmount').value }
+    ))).subscribe(questions => {
       const defaultConfig = DefaultSettings.defaultQuizSettings.sessionConfig;
       const questionGroup = new QuizEntity({
         name: null,
         questionList: questions.payload,
-        sessionConfig: new SessionConfigurationEntity(defaultConfig)
+        sessionConfig: new SessionConfigurationEntity(defaultConfig),
       });
 
       const blob = new Blob([JSON.stringify(questionGroup)], { type: 'application/json' });
@@ -98,29 +92,67 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     });
   }
 
-  public getSelectedTag(): CloudData {
+  public getSelectedTag(row: FormGroup): CloudData {
     if (!(
-      this.form?.get('selectedTag')?.value ?? false
+      row?.get('selectedTag')?.value ?? false
     )) {
       return null;
     }
-    return this._tags.find(v => v.text === this.form.get('selectedTag').value);
+    return this._tags.find(v => v.text === row.get('selectedTag').value);
   }
 
   public createQuestion(): void {
     this.router.navigate(['/', 'quiz', 'manager', 'quiz-pool', 'overview']);
   }
 
+  public addTagRow(force?: boolean): void {
+    if (!force && this.formGroups.length === this.tags.length) {
+      return;
+    }
+
+    const index = this.formGroups.push(this.formBuilder.group({
+      selectedTag: new FormControl(null, [Validators.required]),
+      questionAmount: new FormControl({
+        value: null,
+        disabled: true,
+      }, [Validators.required, this.maxQuestionAmountValidator.bind(this)]),
+    })) - 1;
+
+    this.formGroups[index].get('selectedTag').valueChanges.pipe(takeUntil(this._destroy))
+    .subscribe(() => this.formGroups[index].get('questionAmount').enable());
+  }
+
+  public removeTagRow(row: FormGroup): void {
+    const index = this.formGroups.findIndex(fg => fg === row);
+    if (index === -1 || this.formGroups.length === 0) {
+      return;
+    }
+
+    this.formGroups.splice(index, 1);
+  }
+
+  public isFormInValid(): boolean {
+    return this.formGroups.some(fg => fg.invalid);
+  }
+
+  public questionAmount(): number {
+    return this.formGroups.map(fg => fg.get('questionAmount').value ?? 0).reduce((previous, current) => previous + current);
+  }
+
+  public isAlreadySelected(value: CloudData): boolean {
+    return this.formGroups.some(fg => fg.get('selectedTag').value === value.text);
+  }
+
   private maxQuestionAmountValidator(control): ValidationErrors {
     if (!(
-      this.form?.get('selectedTag')?.value ?? false
-    ) || !this.getSelectedTag()) {
+      control.parent?.get('selectedTag')?.value ?? false
+    ) || !this.getSelectedTag(control.parent)) {
       return {};
     }
     if (!control.value) {
       return { required: true };
     }
-    if (control.value <= 0 || control.value > this.getSelectedTag().weight) {
+    if (control.value <= 0 || control.value > this.getSelectedTag(control.parent).weight) {
       return { max: true };
     }
 

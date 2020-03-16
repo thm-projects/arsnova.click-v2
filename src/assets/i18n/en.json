@@ -267,6 +267,7 @@
         }
       },
       "tag-available": "{text} ({weight} available)",
+      "question-amount-warning": "Please notice that redundant questions with multiple Tags will only be included once in your quiz. The amount of questions in your quiz can be lower than the selected {amount} questions.",
       "create-quiz": "Create Quiz",
       "selected-tags": "Selected Tags",
       "save-tag": "Save Tag",

@@ -23,8 +23,8 @@ export class QuizPoolApiService {
     this.loadUrls();
   }
 
-  public getQuizpool(tags: Array<string>, amount: number): Observable<IMessage> {
-    return this.http.post<IMessage>(this._getQuizpoolUrl, { tags, amount });
+  public getQuizpool(data: Array<{ tag: string, amount: number }>): Observable<IMessage> {
+    return this.http.post<IMessage>(this._getQuizpoolUrl, { data });
   }
 
   public getQuizpoolTags(): Observable<IMessage> {
