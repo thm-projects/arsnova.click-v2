@@ -79,7 +79,11 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
   }
 
   public saveTag(): void {
-    this._selectedTags.push(this.tagName.text ? this.tagName : { text: this.tagName as any } as CloudData);
+    this._selectedTags.push(this.tagName.text ? this.tagName : {
+      text: (
+        this.tagName as unknown as string
+      ).trim(),
+    } as CloudData);
     this.tagName = null;
   }
 
