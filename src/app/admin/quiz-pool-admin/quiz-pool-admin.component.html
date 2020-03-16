@@ -14,13 +14,15 @@
               <span>Tags: </span>
               <span>
                 <ng-container *ngFor="let tag of question.question.tags; let lastElem = last">
-                  <span>{{tag}}</span>
-                  <ng-container *ngIf="!lastElem">, </ng-container></ng-container>
+                  <span>{{tag}}
+                    <ng-container *ngIf="!lastElem">, </ng-container></span>
+                </ng-container>
               </span>
             </p>
           </div>
           <div class="ml-auto">
             <a [queryParams]="{id: question.id}"
+               (click)="quizService.cleanUp()"
                [routerLink]="['/quiz', 'manager', 'quiz-pool', 'overview']"
                class="nav-link text-dark p-0 ml-3">
               <fa-icon [icon]="'edit'"

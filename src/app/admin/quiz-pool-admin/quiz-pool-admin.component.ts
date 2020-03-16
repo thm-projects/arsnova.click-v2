@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { QuizEntity } from '../../lib/entities/QuizEntity';
-import { IAdminQuiz } from '../../lib/interfaces/quizzes/IAdminQuiz';
 import { IQuizPoolQuestion } from '../../lib/interfaces/quizzes/IQuizPoolQuestion';
 import { QuizPoolApiService } from '../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -20,10 +17,9 @@ export class QuizPoolAdminComponent implements OnInit {
   private _questions: Array<IQuizPoolQuestion> = [];
 
   constructor(
+    public quizService: QuizService,
     private quizPoolApiService: QuizPoolApiService,
     private footerBarService: FooterBarService,
-    private quizService: QuizService,
-    private router: Router,
   ) {
     const footerElements = [
       this.footerBarService.footerElemBack,
@@ -58,14 +54,5 @@ export class QuizPoolAdminComponent implements OnInit {
 
       this._questions.splice(index, 1);
     });
-  }
-
-  public openQuestion(id: string): void {
-    const index = this._questions.findIndex(v => v.id === id);
-    if (index === -1) {
-      return;
-    }
-
-    this.router.navigate(['/', 'quiz', 'manager', 'quiz-pool', this._questions[index].id, 'overview']);
   }
 }
