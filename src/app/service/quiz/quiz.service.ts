@@ -93,6 +93,8 @@ export class QuizService {
 
   public cleanUp(): void {
     this._readingConfirmationRequested = false;
+    this._isAddingPoolQuestion = false;
+    this._isInEditMode = false;
 
     this.close();
     this.quiz = null;

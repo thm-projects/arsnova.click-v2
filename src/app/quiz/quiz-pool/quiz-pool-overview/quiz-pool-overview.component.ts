@@ -11,6 +11,7 @@ import { SessionConfigurationEntity } from '../../../lib/entities/session-config
 import { QuizPoolApiService } from '../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FileUploadService } from '../../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
+import { QuizService } from '../../../service/quiz/quiz.service';
 import { SharedService } from '../../../service/shared/shared.service';
 
 @Component({
@@ -47,6 +48,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     private sharedService: SharedService,
     private router: Router,
     private fileUploadService: FileUploadService,
+    private quizService: QuizService,
   ) {
     this.addTagRow(true);
   }
@@ -103,6 +105,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   }
 
   public createQuestion(): void {
+    this.quizService.cleanUp();
     this.router.navigate(['/', 'quiz', 'manager', 'quiz-pool', 'overview']);
   }
 

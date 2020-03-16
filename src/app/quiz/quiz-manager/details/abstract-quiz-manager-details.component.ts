@@ -96,23 +96,8 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     } else {
       this._questionIndex = 0;
       const footerElems = [this.footerBarService.footerElemBack];
-
-      if (this.queryParams.id) {
-        this.quizService.editPoolQuestion();
-        this.footerBarService.replaceFooterElements(footerElems);
-
-        if (!this.quizService.quiz) {
-          return this.quizPoolApiService.getQuizpoolQuestion(this.queryParams.id).pipe(tap(data => {
-            this.quizService.generatePoolQuiz([data.payload.question]);
-          }));
-        } else {
-          return of(true);
-        }
-
-      } else {
-        if (this.showSaveQuizButton) {
-          footerElems.push(this.footerBarService.footerElemSaveQuiz);
-        }
+      if (this.showSaveQuizButton) {
+        footerElems.push(this.footerBarService.footerElemSaveQuiz);
 
         this.footerBarService.footerElemSaveQuiz.onClickCallback = self => {
           if (!self.isActive) {
@@ -129,6 +114,21 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
             });
           }
         };
+      }
+
+      if (this.queryParams.id) {
+        this.quizService.editPoolQuestion();
+        this.footerBarService.replaceFooterElements(footerElems);
+
+        if (!this.quizService.quiz) {
+          return this.quizPoolApiService.getQuizpoolQuestion(this.queryParams.id).pipe(tap(data => {
+            this.quizService.generatePoolQuiz([data.payload.question]);
+          }));
+        } else {
+          return of(true);
+        }
+
+      } else {
 
         this.quizService.isAddingPoolQuestion = true;
         this.footerBarService.replaceFooterElements(footerElems);
