@@ -105,7 +105,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
           }
 
           if (this.queryParams.id) {
-            this.quizPoolApiService.putApproveQuestion(this.queryParams.id, this.quizService.currentQuestion()).subscribe(() => {
+            this.quizPoolApiService.putApproveQuestion(this.queryParams.id, this.quizService.currentQuestion(), false).subscribe(() => {
               this.router.navigate(['/admin', 'quiz', 'pool']);
             });
           } else {

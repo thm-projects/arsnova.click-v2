@@ -4,17 +4,26 @@ import { QuizPoolApiService } from '../../service/api/quiz-pool/quiz-pool-api.se
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 
+enum QuizPoolSource {
+  AllQuestions, //
+  PendingQuestions, //
+}
+
 @Component({
   selector: 'app-quiz-pool-admin',
   templateUrl: './quiz-pool-admin.component.html',
   styleUrls: ['./quiz-pool-admin.component.scss'],
 })
 export class QuizPoolAdminComponent implements OnInit {
+  private _allQuestions: Array<IQuizPoolQuestion> = [];
+  private _pendingQuestions: Array<IQuizPoolQuestion> = [];
+  private _currentSource = QuizPoolSource.PendingQuestions;
+
+  private _questions: Array<IQuizPoolQuestion> = [];
+
   get questions(): Array<IQuizPoolQuestion> {
     return this._questions;
   }
-
-  private _questions: Array<IQuizPoolQuestion> = [];
 
   constructor(
     public quizService: QuizService,
@@ -29,9 +38,7 @@ export class QuizPoolAdminComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.quizPoolApiService.getPendingQuizpool().subscribe(data => {
-      this._questions = data.payload;
-    });
+    this.loadData();
   }
 
   public approveQuestion(question: IQuizPoolQuestion): void {
@@ -41,7 +48,7 @@ export class QuizPoolAdminComponent implements OnInit {
         return;
       }
 
-      this._questions.splice(index, 1);
+      this.loadData();
     });
   }
 
@@ -53,6 +60,39 @@ export class QuizPoolAdminComponent implements OnInit {
       }
 
       this._questions.splice(index, 1);
+    });
+  }
+
+  public toggleSource(): void {
+    if (this._currentSource === QuizPoolSource.AllQuestions) {
+      this._questions = this._pendingQuestions;
+      this._currentSource = QuizPoolSource.PendingQuestions;
+    } else {
+      this._questions = this._allQuestions;
+      this._currentSource = QuizPoolSource.AllQuestions;
+    }
+  }
+
+  public getToggleSourceText(): string {
+    return this._currentSource === QuizPoolSource.AllQuestions ? 'Pending Questions' : 'All Questions';
+  }
+
+  public getNotFoundText(): string {
+    return this._currentSource === QuizPoolSource.AllQuestions ? 'No pool questions found' : 'No pending pool questions found';
+  }
+
+  private loadData(): void {
+    this.quizPoolApiService.getQuizpoolQuestions().subscribe(data => {
+      this._allQuestions = data.payload;
+      if (this._currentSource === QuizPoolSource.AllQuestions) {
+        this._questions = this._allQuestions;
+      }
+    });
+    this.quizPoolApiService.getPendingQuizpool().subscribe(data => {
+      this._pendingQuestions = data.payload;
+      if (this._currentSource === QuizPoolSource.PendingQuestions) {
+        this._questions = this._pendingQuestions;
+      }
     });
   }
 }

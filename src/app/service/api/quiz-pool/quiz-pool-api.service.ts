@@ -17,7 +17,8 @@ export class QuizPoolApiService {
   private _postNewQuestionUrl: string;
   private _putApproveQuestionUrl: string;
   private _deletePoolQuestionUrl: string;
-  private _getPendingQuizpoolQuestionUrl: string;
+  private _getQuizpoolQuestionUrl: string;
+  private _getQuizpoolQuestionsUrl: string;
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.loadUrls();
@@ -44,6 +45,10 @@ export class QuizPoolApiService {
     return this.http.get<IMessage>(this._getPendingQuizpoolUrl, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
+  public getQuizpoolQuestions(): Observable<IMessage> {
+    return this.http.get<IMessage>(this._getQuizpoolQuestionsUrl, { headers: { authorization: this.userService.staticLoginToken } });
+  }
+
   public postNewQuestion(question: AbstractQuestionEntity): Observable<IMessage> {
     return this.http.post<IMessage>(this._postNewQuestionUrl, {
       question,
@@ -63,14 +68,15 @@ export class QuizPoolApiService {
   }
 
   public getQuizpoolQuestion(id: string): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getPendingQuizpoolQuestionUrl}/${id}`, { headers: { authorization: this.userService.staticLoginToken } });
+    return this.http.get<IMessage>(`${this._getQuizpoolQuestionUrl}/${id}`, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
   private loadUrls(): void {
     this._getQuizpoolUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/generate`;
+    this._getQuizpoolQuestionsUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/all`;
     this._getQuizpoolTagsUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/tags`;
     this._getPendingQuizpoolUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/pending`;
-    this._getPendingQuizpoolQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/pending`;
+    this._getQuizpoolQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/all`;
     this._postNewQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool`;
     this._putApproveQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/pending`;
     this._deletePoolQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool`;
