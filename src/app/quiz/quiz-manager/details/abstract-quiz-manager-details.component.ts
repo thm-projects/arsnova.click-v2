@@ -89,34 +89,17 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
 
   protected loadPoolQuizData(questionIndex): Observable<any> {
     if (!isNaN(questionIndex)) {
+      this.showSaveQuizButton = false;
       this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
       this._questionIndex = questionIndex;
       return of(true);
     } else {
       this._questionIndex = 0;
-      if (this.showSaveQuizButton) {
-        this.footerBarService.replaceFooterElements([
-          this.footerBarService.footerElemBack, this.footerBarService.footerElemSaveQuiz,
-        ]);
-      }
-      this.footerBarService.footerElemSaveQuiz.onClickCallback = self => {
-        if (!self.isActive) {
-          return;
-        }
-
-        if (this.queryParams.id) {
-          this.quizPoolApiService.putApproveQuestion(this.queryParams.id, this.quizService.currentQuestion()).subscribe(() => {
-            this.router.navigate(['/admin', 'quiz', 'pool']);
-          });
-        } else {
-          this.quizPoolApiService.postNewQuestion(this.quizService.currentQuestion()).subscribe(() => {
-            this.router.navigate(['/quiz', 'pool']);
-          });
-        }
-      };
+      const footerElems = [this.footerBarService.footerElemBack];
 
       if (this.queryParams.id) {
         this.quizService.editPoolQuestion();
+        this.footerBarService.replaceFooterElements(footerElems);
 
         if (!this.quizService.quiz) {
           return this.quizPoolApiService.getQuizpoolQuestion(this.queryParams.id).pipe(tap(data => {
@@ -127,7 +110,28 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
         }
 
       } else {
+        if (this.showSaveQuizButton) {
+          footerElems.push(this.footerBarService.footerElemSaveQuiz);
+        }
+
+        this.footerBarService.footerElemSaveQuiz.onClickCallback = self => {
+          if (!self.isActive) {
+            return;
+          }
+
+          if (this.queryParams.id) {
+            this.quizPoolApiService.putApproveQuestion(this.queryParams.id, this.quizService.currentQuestion()).subscribe(() => {
+              this.router.navigate(['/admin', 'quiz', 'pool']);
+            });
+          } else {
+            this.quizPoolApiService.postNewQuestion(this.quizService.currentQuestion()).subscribe(() => {
+              this.router.navigate(['/quiz', 'pool']);
+            });
+          }
+        };
+
         this.quizService.isAddingPoolQuestion = true;
+        this.footerBarService.replaceFooterElements(footerElems);
         return of(true);
       }
     }

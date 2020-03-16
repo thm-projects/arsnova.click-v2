@@ -146,9 +146,9 @@
         <span class="text-success"
               *ngIf="question?.isValid() && !(showSaveQuizButton && !question?.tags?.length)">{{'component.quiz_summary.question_successful' | translate}}</span>
         <span class="text-danger"
-              *ngIf="!question?.isValid() || showSaveQuizButton && !question?.tags?.length">{{'component.quiz_summary.question_failed' | translate}}</span>
+              *ngIf="!question?.isValid() || (showSaveQuizButton && !question?.tags?.length)">{{'component.quiz_summary.question_failed' | translate}}</span>
       </h4>
-      <ul *ngIf="!question?.isValid() || showSaveQuizButton && !question.tags?.length"
+      <ul *ngIf="!question?.isValid() || (showSaveQuizButton && !question.tags?.length)"
           id="quizSummaryValidationErrors"
           [attr.data-intro]="'component.quiz_summary.description.validation_errors' | translate"
           [attr.aria-label]="'component.quiz_summary.description.validation_errors' | translate">
