@@ -73,6 +73,10 @@ export class QuizPoolAdminComponent implements OnInit {
     }
   }
 
+  public getCurrentSourceText(): string {
+    return this._currentSource === QuizPoolSource.AllQuestions ? 'All Questions' : 'Pending Questions';
+  }
+
   public getToggleSourceText(): string {
     return this._currentSource === QuizPoolSource.AllQuestions ? 'Pending Questions' : 'All Questions';
   }
