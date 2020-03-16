@@ -58,10 +58,9 @@
 
   </form>
 
-  <div *ngIf="questionAmount() > 1">
-    <p class="alert alert-warning text-break text-justify"
-       role="alert">{{'component.quiz-pool.question-amount-warning' | translate:{amount: questionAmount()} }}</p>
-  </div>
+  <ngb-alert (close)="displayQuestionAmountWarning = false"
+             *ngIf="displayQuestionAmountWarning && questionAmount() > 0"
+             [type]="'warning'">{{'component.quiz-pool.question-amount-warning' | translate:{amount: questionAmount()} }}</ngb-alert>
 
   <div class="d-flex">
     <button (click)="createQuiz()"

@@ -21,6 +21,7 @@ import { SharedService } from '../../../service/shared/shared.service';
 })
 export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
   public readonly formGroups: Array<FormGroup> = [];
+  public displayQuestionAmountWarning = true;
 
   private _tagsForCloud: Array<CloudData> = [];
 
