@@ -1,4 +1,4 @@
-import { IconParams, IconPathData, IconPrefix, IconProp } from '@fortawesome/fontawesome-svg-core';
+import { IconParams, IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from './interfaces';
 
 export class FooterbarElement implements IFooterBarElement {
