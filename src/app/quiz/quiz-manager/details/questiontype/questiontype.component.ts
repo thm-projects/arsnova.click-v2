@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { takeUntil } from 'rxjs/operators';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
-import { getQuestionForType } from '../../../../lib/QuizValidator';
+import { getDefaultQuestionForType } from '../../../../lib/QuizValidator';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -34,6 +35,7 @@ export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent i
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    private translateService: TranslateService,
   ) {
     super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
 
@@ -61,7 +63,7 @@ export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent i
   }
 
   public morphToQuestionType(type: QuestionType): void {
-    this._question = getQuestionForType(type, this._question);
+    this._question = getDefaultQuestionForType(this.translateService, type, this._question);
     this._questionType = type;
 
     this.quizService.quiz.removeQuestion(this._questionIndex);

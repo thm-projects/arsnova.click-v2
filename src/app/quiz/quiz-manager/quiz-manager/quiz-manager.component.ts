@@ -5,14 +5,10 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
-import { ABCDSingleChoiceQuestionEntity } from '../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
-import { TrueFalseSingleChoiceQuestionEntity } from '../../../lib/entities/question/TrueFalseSingleChoiceQuestionEntity';
-import { YesNoSingleChoiceQuestionEntity } from '../../../lib/entities/question/YesNoSingleChoiceQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
-import { getQuestionForType } from '../../../lib/QuizValidator';
+import { getDefaultQuestionForType } from '../../../lib/QuizValidator';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -87,61 +83,11 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   public addQuestion(id: QuestionType): void {
-    let question;
-
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
       label: `add-question`,
     });
-    switch (id) {
-      case QuestionType.TrueFalseSingleChoiceQuestion:
-        question = new TrueFalseSingleChoiceQuestionEntity({
-          answerOptionList: [
-            new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.true'),
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.false'),
-              isCorrect: false,
-            }),
-          ],
-        });
-        break;
-      case QuestionType.YesNoSingleChoiceQuestion:
-        question = new YesNoSingleChoiceQuestionEntity({
-          answerOptionList: [
-            new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.yes'),
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.no'),
-              isCorrect: false,
-            }),
-          ],
-        });
-        break;
-      case QuestionType.ABCDSingleChoiceQuestion:
-        question = new ABCDSingleChoiceQuestionEntity({
-          answerOptionList: [
-            new DefaultAnswerEntity({
-              answerText: 'A',
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: 'B',
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: 'C',
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: 'D',
-              isCorrect: false,
-            }),
-          ],
-        });
-        break;
-      default:
-        question = getQuestionForType(id);
-    }
+    const question = getDefaultQuestionForType(this.translateService, id);
     this.quizService.quiz.addQuestion(question);
     this.quizService.persist();
   }

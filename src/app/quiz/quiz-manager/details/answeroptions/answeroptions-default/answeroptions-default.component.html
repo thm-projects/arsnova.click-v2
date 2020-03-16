@@ -29,6 +29,7 @@
               </span>
               <input (input)="updateAnswerValue($event, i)"
                      [class.rounded-right]="['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"
+                     [class.rounded-left]="!canDeleteAnswer"
                      [readOnly]="!canEditAnswer"
                      [value]="elem.answerText"
                      class="btn-block text-left p-2 border-0"
