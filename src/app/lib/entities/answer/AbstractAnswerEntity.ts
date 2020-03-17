@@ -8,7 +8,7 @@ export abstract class AbstractAnswerEntity {
   public isCorrect: boolean = DefaultSettings.defaultQuizSettings.answers.isCorrect;
 
   protected constructor(props) {
-    this.answerText = props.answerText ? props.answerText : this.answerText;
+    this.answerText = props.answerText ?? this.answerText;
     this.isCorrect = props.isCorrect ?? this.isCorrect;
   }
 

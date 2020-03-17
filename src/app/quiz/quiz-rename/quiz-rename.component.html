@@ -6,7 +6,7 @@
           class="btn btn-secondary rounded p-2 my-2 rename-recommendation text-break text-left">{{renameRecommendation}}
   </button>
   <div class="mt-2">
-    <p>{{'component.quiz_rename.custom.title' | translate}}</p>
+    <p *ngIf="duplicateQuiz.renameRecommendation?.length">{{'component.quiz_rename.custom.title' | translate}}</p>
     <label class="d-block">
       <input type="text"
              class="p-2 border-0 w-100 rounded ng-touched"

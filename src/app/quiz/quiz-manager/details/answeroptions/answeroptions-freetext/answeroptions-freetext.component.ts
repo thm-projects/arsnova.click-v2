@@ -1,11 +1,8 @@
-import { isPlatformServer } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMapTo, takeUntil, tap } from 'rxjs/operators';
+import { switchMapTo, takeUntil } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
 import { FreeTextQuestionEntity } from '../../../../../lib/entities/question/FreeTextQuestionEntity';
-import { StorageKey } from '../../../../../lib/enums/enums';
 import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
@@ -82,16 +79,6 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
     this.quizService.quizUpdateEmitter.pipe(switchMapTo(this.initialized$), takeUntil(this.destroy)).subscribe(() => {
       if (!this.quizService.quiz) {
         return;
-      }
-
-      if (!this._question.answerOptionList.length) {
-        this._question.answerOptionList.push(new FreeTextAnswerEntity({
-          answerText: '',
-          configCaseSensitive: false,
-          configTrimWhitespaces: false,
-          configUseKeywords: false,
-          configUsePunctuation: false,
-        }));
       }
 
       this._matchText = this.getTypesafeAnswer().answerText;

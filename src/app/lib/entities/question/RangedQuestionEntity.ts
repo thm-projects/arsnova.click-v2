@@ -14,6 +14,7 @@ export class RangedQuestionEntity extends AbstractQuestionEntity {
     this.rangeMax = props.rangeMax;
     this.rangeMin = props.rangeMin;
     this.correctValue = props.correctValue;
+    this.answerOptionList = [];
   }
 
   public isValid(): boolean {

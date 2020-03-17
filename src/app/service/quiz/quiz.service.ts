@@ -9,6 +9,7 @@ import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQues
 import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { StorageKey } from '../../lib/enums/enums';
+import { QuizState } from '../../lib/enums/QuizState';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { NoDataErrorComponent } from '../../shared/no-data-error/no-data-error.component';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
@@ -144,6 +145,7 @@ export class QuizService {
     }
 
     if (this.isOwner && this._quiz) {
+      this._quiz.state = QuizState.Inactive;
       this.quizApiService.deleteActiveQuiz(this._quiz).subscribe();
     }
   }
@@ -229,6 +231,14 @@ export class QuizService {
         reject();
         return;
       }
+      if (this.quiz?.name === quizName) {
+        this._isInEditMode = true;
+        this._isOwner = true;
+        this.quizUpdateEmitter.next(this.quiz);
+        console.log('QuizService: loadDataToEdit already initialized', quizName);
+        resolve();
+        return;
+      }
 
       this.storageService.db.Quiz.get(quizName).then(quiz => {
         if (!quiz) {
@@ -239,7 +249,6 @@ export class QuizService {
         this.isOwner = true;
         this._isInEditMode = true;
         this.quiz = new QuizEntity(quiz);
-        this.quizUpdateEmitter.next(this.quiz);
         console.log('QuizService: loadDataToEdit finished', quiz, quizName);
         resolve();
       });

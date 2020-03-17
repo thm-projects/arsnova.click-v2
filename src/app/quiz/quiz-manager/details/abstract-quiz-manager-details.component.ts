@@ -90,9 +90,8 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
   protected loadPoolQuizData(questionIndex): Observable<any> {
     if (!isNaN(questionIndex)) {
       this.showSaveQuizButton = false;
-      this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
       this._questionIndex = questionIndex;
-      return of(true);
+      return of(this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)));
     } else {
       this._questionIndex = 0;
       const footerElems = [this.footerBarService.footerElemBack];
