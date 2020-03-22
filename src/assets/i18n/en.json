@@ -568,6 +568,11 @@
       "question_failed": "The question is still incomplete",
       "question_group_successful": "Your quiz is ready",
       "question_group_failed": "Your quiz is incomplete",
+      "upload-to-pool": {
+        "valid-upload": "Provide your question to the Quiz-Pool",
+        "invalid-question": "Only valid questions can be uploaded to the Quiz-Pool",
+        "no-tags": "You need to add some Tags to your question to upload it to the Quiz-Pool."
+      },
       "correct": "Correct",
       "wrong": "Wrong",
       "question": "Question",

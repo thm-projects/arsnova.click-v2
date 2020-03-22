@@ -455,6 +455,11 @@
       "question_failed": "Die Frage ist noch unvollständig",
       "question_group_successful": "Dein Quiz ist bereit",
       "question_group_failed": "Dein Quiz ist unvollständig",
+      "upload-to-pool": {
+        "valid-upload": "Stelle deine Frage für den Quiz-Pool zur Verfügung",
+        "invalid-question": "Nur gültige Fragen können in den Quiz-Pool hochgeladen werden",
+        "no-tags": "Damit deine Frage hochgeladen werden kann, musst du ihr noch ein paar Tags geben"
+      },
       "correct": "Korrekt",
       "wrong": "Falsch",
       "question": "Frage",

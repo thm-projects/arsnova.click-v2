@@ -12,8 +12,8 @@
 
 <ng-container *ngIf="quizService.getVisibleQuestions() as visibleQuestions">
   <div *ngIf="visibleQuestions.length > 1 || showStartQuizButton || showStopCountdownButton || showStopQuizButton"
-       class="overflow-auto btn-header">
-    <div class="my-3 btn-group">
+       class="my-3 overflow-auto btn-header">
+    <div class="btn-group">
       <button (click)="startQuiz()"
               *ngIf="showStartQuizButton && !(showStopCountdownButton || showStopQuizButton)"
               [class.w-100]="quizService.getVisibleQuestions().length"

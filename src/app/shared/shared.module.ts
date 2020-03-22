@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { TagCloudModule } from 'angular-tag-cloud-module';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import {
@@ -20,6 +19,7 @@ import {
   faCaretUp,
   faCheck,
   faCheckSquare,
+  faCloudUploadAlt,
   faCode,
   faCopy,
   faDownload,
@@ -37,7 +37,8 @@ import {
   faKey,
   faLanguage,
   faListUl,
-  faLock, faMinus,
+  faLock,
+  faMinus,
   faMusic,
   faPaperPlane,
   faPause,
@@ -67,6 +68,7 @@ import {
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { TagCloudModule } from 'angular-tag-cloud-module';
 import { environment } from '../../environments/environment';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
@@ -156,5 +158,6 @@ export class SharedModule {
     library.addIcons(faKey);
     library.addIcons(faPlus);
     library.addIcons(faMinus);
+    library.addIcons(faCloudUploadAlt);
   }
 }

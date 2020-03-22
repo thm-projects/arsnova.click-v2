@@ -5,10 +5,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
+import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { getDefaultQuestionForType } from '../../../lib/QuizValidator';
+import { QuizPoolApiService } from '../../../service/api/quiz-pool/quiz-pool-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -26,6 +28,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizManagerComponent';
 
   private readonly _destroy = new Subject();
+  private _uploading: Array<AbstractQuestionEntity> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -38,6 +41,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private connectionService: ConnectionService,
     private modalService: NgbModal,
+    private quizPoolApiService: QuizPoolApiService,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
@@ -139,7 +143,11 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   public openQuestionTypeModal(): void {
-    const instance = this.modalService.open(QuizTypeSelectModalComponent, { size: ('lg') });
+    const instance = this.modalService.open(QuizTypeSelectModalComponent, {
+      size: (
+        'lg'
+      ),
+    });
     instance.result.catch(() => {}).then(id => {
       if (!id) {
         return;
@@ -147,5 +155,38 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
 
       this.addQuestion(id);
     });
+  }
+
+  public updloadToQuizPool(elem: AbstractQuestionEntity): void {
+    if (!elem.isValid() || !elem.tags?.length || this.isUploading(elem)) {
+      return;
+    }
+
+    const removeQuestionFromUploadingQueue = () => {
+      const uploadingIndex = this._uploading.indexOf(elem);
+      if (uploadingIndex === -1) {
+        return;
+      }
+
+      this._uploading.splice(uploadingIndex, 1);
+    };
+
+    this._uploading.push(elem);
+    this.quizPoolApiService.postNewQuestion(elem, `${this.quizService.quiz.name}`).subscribe({
+      complete: removeQuestionFromUploadingQueue,
+      error: removeQuestionFromUploadingQueue,
+    });
+  }
+
+  public isUploading(elem: AbstractQuestionEntity): boolean {
+    return this._uploading.indexOf(elem) > -1;
+  }
+
+  public getTooltipForUpload(elem: AbstractQuestionEntity): string {
+    return !elem.isValid() ? //
+           'component.quiz_summary.upload-to-pool.invalid-question' : //
+           !elem.tags?.length ? //
+           'component.quiz_summary.upload-to-pool.no-tags' : //
+           'component.quiz_summary.upload-to-pool.valid-upload';
   }
 }
