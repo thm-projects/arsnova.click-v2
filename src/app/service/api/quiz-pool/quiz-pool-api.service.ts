@@ -56,7 +56,7 @@ export class QuizPoolApiService {
     });
   }
 
-  public putApproveQuestion(id: string, question?: AbstractQuestionEntity, approved?: boolean): Observable<IMessage> {
+  public putApproveQuestion(id: string, approved: boolean, question?: AbstractQuestionEntity): Observable<IMessage> {
     return this.http.put<IMessage>(this._putApproveQuestionUrl, {
       id,
       question,

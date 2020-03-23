@@ -42,7 +42,7 @@ export class QuizPoolAdminComponent implements OnInit {
   }
 
   public approveQuestion(question: IQuizPoolQuestion): void {
-    this.quizPoolApiService.putApproveQuestion(question.id, question.question, true).subscribe(() => {
+    this.quizPoolApiService.putApproveQuestion(question.id, true).subscribe(() => {
       const index = this._questions.findIndex(v => v.id === question.id);
       if (index === -1) {
         return;
