@@ -11,7 +11,7 @@
       <input type="text"
              class="p-2 border-0 w-100 rounded ng-touched"
              [(ngModel)]="quizName"
-             (keyup)="checkIsQuizNameAvailable()"
+             (ngModelChange)="checkIsQuizNameAvailable()"
              [placeholder]="'component.quiz_rename.custom.input' | translate"/>
     </label>
 

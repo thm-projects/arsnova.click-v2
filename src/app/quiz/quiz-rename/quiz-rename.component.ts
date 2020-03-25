@@ -59,15 +59,16 @@ export class QuizRenameComponent implements OnInit, OnDestroy {
   public checkIsQuizNameAvailable(): void {
     this.isQuiznameAvailable = false;
     this.isQuiznameMalformed = false;
+    this.isQueringQuizname = true;
     this._checkingQuizAvailable.next();
 
     const name = this.quizName.trim().toLowerCase();
     if (name.length < 3 || name.startsWith('demo quiz') || checkABCDOrdering(name)) {
+      this.isQueringQuizname = false;
       this.isQuiznameMalformed = true;
       return;
     }
 
-    this.isQueringQuizname = true;
     this.quizApiService.getQuizStatus(this.quizName).pipe(delay(500), takeUntil(this._checkingQuizAvailable)).subscribe(status => {
       this.isQueringQuizname = false;
       this.isQuiznameAvailable = status.step === MessageProtocol.Unavailable;
