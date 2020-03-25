@@ -760,15 +760,16 @@
       }
     },
     "quiz_rename": {
-      "rename": "The Quiz {NAME} is already taken",
+      "rename": "Please select a name for your quiz",
       "custom": {
         "title": "Alternativly you can enter a custom quiz name",
         "input": "Custom quiz name",
         "available": "Your quiz name is available",
         "select-quiz": "Select quiz name",
         "please-wait": "Please wait...",
-        "malformed": "Your quiz name is malformed",
-        "already-taken": "Your quiz name is already taken"
+        "malformed": "Your quiz name contains illegal characters. Please try again with a different name.",
+        "already-taken": "Your quiz name is already taken",
+        "min-keys": "The quiz name must contain at least 3 characters"
       },
       "title": "Choose an alternative"
     },

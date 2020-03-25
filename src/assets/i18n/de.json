@@ -625,8 +625,9 @@
         "available": "Der Quizname ist verfügbar",
         "select-quiz": "Verwende den Quiznamen",
         "please-wait": "Bitte warten...",
-        "malformed": "Der Quizname ist ungültig",
-        "already-taken": "Der Quizname ist bereits vergeben "
+        "malformed": "Der Quizname enhält ungültige Zeichenfolgen. Bitte versuche einen anderen Namen",
+        "already-taken": "Der Quizname ist bereits vergeben ",
+        "min-keys": "Der Quizname muss mindestens 3 Zeichen lang sein"
       }
     },
     "home": {
