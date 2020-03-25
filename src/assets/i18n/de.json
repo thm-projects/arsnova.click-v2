@@ -219,6 +219,7 @@
         "placeholder": "Anzahl der Quizfragen",
         "validation-error": {
           "required": "Bitte gib die Anzahl der gewünschten Quizfragen ein",
+          "min": "Bitte verwende mindestens eine Quizfrage für diesen Tag",
           "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen"
         }
       },

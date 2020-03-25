@@ -30,10 +30,16 @@
              class="form-control"
              formControlName="questionAmount"
              id="questionAmount"
-             min="0"
+             [max]="getSelectedTag(row)?.weight"
+             min="1"
              type="number"/>
 
       <ng-container *ngIf="row.get('questionAmount').invalid && (row.get('questionAmount').dirty || row.get('questionAmount').touched)">
+
+        <div *ngIf="row.get('questionAmount').errors.min">
+          <div class="invalid-tooltip d-block">{{'component.quiz-pool.tag-question-amount.validation-error.min' | translate}}</div>
+        </div>
+
         <div *ngIf="row.get('questionAmount').errors.required">
           <div class="invalid-tooltip d-block">{{'component.quiz-pool.tag-question-amount.validation-error.required' | translate}}</div>
         </div>

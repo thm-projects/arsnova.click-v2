@@ -119,7 +119,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
       questionAmount: new FormControl({
         value: null,
         disabled: true,
-      }, [Validators.required, this.maxQuestionAmountValidator.bind(this)]),
+      }, [this.maxQuestionAmountValidator.bind(this)]),
     })) - 1;
 
     this.formGroups[index].get('selectedTag').valueChanges.pipe(takeUntil(this._destroy))
@@ -153,10 +153,15 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     ) || !this.getSelectedTag(control.parent)) {
       return {};
     }
-    if (!control.value) {
+
+    const parsedValue = parseInt(control.value, 10);
+    if (isNaN(parsedValue)) {
       return { required: true };
     }
-    if (control.value <= 0 || control.value > this.getSelectedTag(control.parent).weight) {
+    if (parsedValue <= 0) {
+      return { min: true };
+    }
+    if (parsedValue > this.getSelectedTag(control.parent).weight) {
       return { max: true };
     }
 

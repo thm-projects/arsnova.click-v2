@@ -263,6 +263,7 @@
         "placeholder": "Amount of questions",
         "validation-error": {
           "required": "Please enter the amount of questions here",
+          "min": "Please use at least one question for this tag",
           "max": "You can select only {max, plural, =0{0 questions} one{one question} other{{max} questions}} with your selected Tag"
         }
       },
