@@ -300,6 +300,7 @@
       "start_session": "Quiz starten",
       "edit_session": "Quiz bearbeiten",
       "create_session": "Neues Quiz!",
+      "can_create_session": "Quiz erstellen",
       "create_demo_session": "Starte Demo Quiz",
       "quiz_management": "Quiz-Speicher",
       "session_management": "Quizze",
@@ -638,7 +639,15 @@
       "new-abcd-quiz": "Erstelle ein neues ABCD Quiz",
       "view-public": "Klicke hier um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes}} zu wählen!",
       "view-all-public": "... oder sieh dir deine eigenen veröffentlichten Quizze an!",
-      "view-own-public": "Klicke hier um deine eigenen veröffentlichten Quizze anzusehen!"
+      "view-own-public": "Klicke hier um deine eigenen veröffentlichten Quizze anzusehen!",
+      "errors": {
+        "already-taken": "Dieser Name wird bereits verwendet. Bitte nutze einen anderen Quiznamen",
+        "min-length": "Bitte gib für deinen Quiznamen mindestens 4 Zeichen ein"
+      },
+      "success": {
+        "can-join": "Diesem Quiz kannst du beitreten!",
+        "can-create": "Dieser Quizname ist verfügbar. Du kannst ein Quiz damit erstellen!"
+      }
     },
     "public-quizzes": {
       "own": {
