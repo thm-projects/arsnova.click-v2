@@ -12,7 +12,6 @@ import { CustomMarkdownService } from '../../../service/custom-markdown/custom-m
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { UserService } from '../../../service/user/user.service';
-import {BonusTokenService} from '../../../service/user/bonus-token/bonus-token.service';
 
 @Component({
   selector: 'app-nickname-select',
@@ -30,6 +29,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   private _messageSubscriptions: Array<string> = [];
+  public isLoading = true;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -42,7 +42,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     private memberApiService: MemberApiService,
     private messageQueue: SimpleMQ,
     private customMarkdownService: CustomMarkdownService,
-    private bonusTokenService: BonusTokenService
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameSelectComponent.TYPE;
@@ -94,6 +93,7 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.memberApiService.getAvailableNames(this.quizService.quiz.name).subscribe(data => {
         this._nicks = this._nicks.concat(data);
+        this.isLoading = false;
       });
     });
 
