@@ -21,6 +21,7 @@ import { UserService } from '../../../service/user/user.service';
 export class NicknameSelectComponent implements OnInit, OnDestroy {
   public static TYPE = 'NicknameSelectComponent';
   public isLoggingIn: string;
+  public isLoading = true;
 
   private _nicks: Array<string> = [];
 
@@ -29,7 +30,6 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   }
 
   private _messageSubscriptions: Array<string> = [];
-  public isLoading = true;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
