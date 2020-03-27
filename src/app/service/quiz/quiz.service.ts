@@ -146,6 +146,10 @@ export class QuizService {
 
     if (this.isOwner && this._quiz) {
       this._quiz.state = QuizState.Inactive;
+      this.storageService.db.Quiz.get(this.quiz.name).then(quiz => {
+        quiz.state = QuizState.Inactive;
+        return this.storageService.db.Quiz.put(quiz);
+      });
       this.quizApiService.deleteActiveQuiz(this._quiz).subscribe();
     }
   }

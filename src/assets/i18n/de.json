@@ -212,7 +212,7 @@
     "quiz-pool": {
       "select-tag": {
         "label": "Tag auswählen",
-        "placeholder": "Wähle hier deinen gewünschten Tag aus, aus dem ein Quiz zusammengestellt werden soll"
+        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll"
       },
       "tag-question-amount": {
         "label": "Anzahl der Quizfragen",
@@ -228,6 +228,7 @@
       "create-quiz": "Quiz erstellen",
       "selected-tags": "Ausgewählte Tags",
       "save-tag": "Tag speichern",
+      "delete-tag": "Tag löschen",
       "create-own-question": {
         "label": "Möchtest du eine neue Quizpool Frage einreichen?",
         "button-label": "Neue Quizpool Frage"

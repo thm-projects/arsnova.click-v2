@@ -256,7 +256,7 @@
     "quiz-pool": {
       "select-tag": {
         "label": "Select Tag",
-        "placeholder": "Select your preferred Tag here. The quiz will be built with questions with the selected Tag."
+        "placeholder": "Enter your preferred Tag here. The quiz will be built with questions with the selected Tags."
       },
       "tag-question-amount": {
         "label": "Amount of questions",
@@ -272,6 +272,7 @@
       "create-quiz": "Create Quiz",
       "selected-tags": "Selected Tags",
       "save-tag": "Save Tag",
+      "delete-tag": "Delete Tag",
       "create-own-question": {
         "label": "Do you want to create a new Quizpool question?",
         "button-label": "New Quizpool question"

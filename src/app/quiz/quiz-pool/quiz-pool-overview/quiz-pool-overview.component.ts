@@ -1,10 +1,22 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterContentInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { CloudData } from 'angular-tag-cloud-module';
-import { ReplaySubject, Subject } from 'rxjs';
-import { distinctUntilChanged, filter, switchMapTo, takeUntil } from 'rxjs/operators';
+import { merge, Observable, ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { SessionConfigurationEntity } from '../../../lib/entities/session-configuration/SessionConfigurationEntity';
@@ -21,8 +33,13 @@ import { SharedService } from '../../../service/shared/shared.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
-  public readonly formGroups: Array<FormGroup> = [];
+  public readonly formGroup: FormGroup;
   public displayQuestionAmountWarning = true;
+  public readonly self = this;
+  public focus$ = new Subject<string>();
+  public click$ = new Subject<string>();
+  @ViewChild('instance', { static: false }) public instance: NgbTypeahead;
+  public hovered: number;
 
   private _tagsForCloud: Array<CloudData> = [];
 
@@ -49,8 +66,77 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     private router: Router,
     private fileUploadService: FileUploadService,
     private quizService: QuizService,
+    private translate: TranslateService,
   ) {
-    this.addTagRow(true);
+    this.formGroup = this.formBuilder.group({
+      selectedTag: new FormControl(null, [Validators.required]),
+      selectedTags: new FormControl([]),
+      questionAmount: new FormControl({
+        value: null,
+        disabled: true,
+      }, [this.maxQuestionAmountValidator.bind(this)]),
+    });
+
+    this.formGroup.get('selectedTag').valueChanges.pipe(takeUntil(this._destroy))
+    .subscribe(() => this.formGroup.get('questionAmount').enable());
+  }
+
+  public resultFormatter(tag: CloudData): string {
+    return this.translate.instant('component.quiz-pool.tag-available', { text: tag.text, weight: tag.weight });
+  }
+
+  public inputFormatter(tag: CloudData): string {
+    return `${tag.text ?? tag}`;
+  }
+
+  public search(text$: Observable<string>): Observable<Array<CloudData>> {
+    const debouncedText$ = text$.pipe(debounceTime(200), map(term => (
+      { text: term }
+    )), distinctUntilChanged());
+    const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
+    const inputFocus$ = this.focus$;
+
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(map((term: CloudData) => {
+      let data: Array<CloudData>;
+
+      try {
+        // tslint:disable-next-line:no-unused-expression
+        new RegExp(term.text);
+        data = !term.text ? this._tags : this._tags.filter(v => new RegExp(term.text, 'mi').test(v.text));
+      } catch {
+        data = this._tags;
+      }
+
+      data = data.filter(v => !this.formGroup.get('selectedTags').value.some(selectedTag => new RegExp(selectedTag.tag, 'mi').test(v.text)));
+      return data.slice(0, 10);
+    }));
+  }
+
+  public saveTag(): void {
+    const index = this.formGroup.get('selectedTags').value.findIndex(v => v.tag === this.formGroup.get('selectedTag').value.text);
+    const data = {
+      tag: this.formGroup.get('selectedTag').value.text,
+      amount: this.formGroup.get('questionAmount').value,
+    };
+    if (index > -1) {
+      this.formGroup.get('selectedTags').value[index] = data;
+    } else {
+      this.formGroup.get('selectedTags').value.push(data);
+    }
+    this.formGroup.get('selectedTag').reset();
+    this.formGroup.get('questionAmount').reset();
+  }
+
+  public removeTag(): void {
+    const index = this.formGroup.get('selectedTags').value.findIndex(v => v.tag === this.formGroup.get('selectedTag').value.text);
+    if (index === -1) {
+      return;
+    }
+
+    this.formGroup.get('selectedTags').value.splice(index, 1);
+    this.hovered = -1;
+    this.formGroup.get('selectedTag').reset();
+    this.formGroup.get('questionAmount').reset();
   }
 
   public ngOnInit(): void {
@@ -79,9 +165,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   }
 
   public createQuiz(): void {
-    this.questionPoolApiService.getQuizpool(this.formGroups.map(fg => (
-      { tag: fg.get('selectedTag').value, amount: fg.get('questionAmount').value }
-    ))).subscribe(questions => {
+    this.questionPoolApiService.getQuizpool(this.formGroup.get('selectedTags').value).subscribe(questions => {
       const defaultConfig = DefaultSettings.defaultQuizSettings.sessionConfig;
       const questionGroup = new QuizEntity({
         name: null,
@@ -101,7 +185,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     )) {
       return null;
     }
-    return this._tags.find(v => v.text === row.get('selectedTag').value);
+    return row.get('selectedTag').value;
   }
 
   public createQuestion(): void {
@@ -109,48 +193,22 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     this.router.navigate(['/', 'quiz', 'manager', 'quiz-pool', 'overview']);
   }
 
-  public addTagRow(force?: boolean): void {
-    if (!force && this.formGroups.length === this.tags.length) {
-      return;
-    }
-
-    const index = this.formGroups.push(this.formBuilder.group({
-      selectedTag: new FormControl(null, [Validators.required]),
-      questionAmount: new FormControl({
-        value: null,
-        disabled: true,
-      }, [this.maxQuestionAmountValidator.bind(this)]),
-    })) - 1;
-
-    this.formGroups[index].get('selectedTag').valueChanges.pipe(takeUntil(this._destroy))
-    .subscribe(() => this.formGroups[index].get('questionAmount').enable());
-  }
-
-  public removeTagRow(row: FormGroup): void {
-    const index = this.formGroups.findIndex(fg => fg === row);
-    if (index === -1 || this.formGroups.length === 0) {
-      return;
-    }
-
-    this.formGroups.splice(index, 1);
-  }
-
-  public isFormInValid(): boolean {
-    return this.formGroups.some(fg => fg.invalid);
-  }
-
   public questionAmount(): number {
-    return this.formGroups.map(fg => fg.get('questionAmount').value ?? 0).reduce((previous, current) => previous + current);
+    return this.formGroup.get('selectedTags').value.reduce((a, b) => a.amount + b.amount, []);
   }
 
-  public isAlreadySelected(value: CloudData): boolean {
-    return this.formGroups.some(fg => fg.get('selectedTag').value === value.text);
+  public selectTag(tag: string): void {
+    const tagData = this.formGroup.get('selectedTags').value.find(v => v.tag === tag);
+    this.formGroup.get('selectedTag').setValue(this.tags.find(v => v.text === tag));
+    this.formGroup.get('questionAmount').setValue(tagData.amount);
+  }
+
+  public hasTagSelected(): boolean {
+    return this.formGroup.get('selectedTags').value.some(v => v.tag === this.formGroup.get('selectedTag').value?.text);
   }
 
   private maxQuestionAmountValidator(control): ValidationErrors {
-    if (!(
-      control.parent?.get('selectedTag')?.value ?? false
-    ) || !this.getSelectedTag(control.parent)) {
+    if (!this.getSelectedTag(control.parent)) {
       return {};
     }
 
