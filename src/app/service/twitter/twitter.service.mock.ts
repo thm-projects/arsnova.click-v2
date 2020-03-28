@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {ITweetEntry} from '../../lib/interfaces/ITweetEntry';
+import { Observable, of } from 'rxjs';
+import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TwitterServiceMock {
   public tweets: ITweetEntry[] = [];
@@ -12,7 +13,8 @@ export class TwitterServiceMock {
   public setOptIn(): void {
   }
 
-  public refreshTweets(): void {
+  public refreshTweets(): Observable<Array<ITweetEntry>> {
+    return of([]);
   }
 
   public getOptIn(): boolean {

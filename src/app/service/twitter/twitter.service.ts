@@ -49,7 +49,7 @@ export class TwitterService {
 
   public refreshTweets(): Observable<Array<ITweetEntry>> {
     if (!this.getOptIn()) {
-      return of(null);
+      return of([null]);
     }
 
     return this.twitterApiService.getTweets().pipe(tap((data) => {
