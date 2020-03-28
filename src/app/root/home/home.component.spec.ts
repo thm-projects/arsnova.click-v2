@@ -12,6 +12,7 @@ import { faEdit, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { LanguageFilterPipeMock } from '../../../_mocks/_pipes/LanguageFilterPipeMock';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
@@ -97,10 +98,10 @@ describe('HomeComponent', () => {
           useClass: FileUploadMockService,
         }, {
           provide: TwitterService,
-          useClass: TwitterServiceMock
-        }
+          useClass: TwitterServiceMock,
+        },
       ],
-      declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock, TwitterCardsComponent],
+      declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock, TwitterCardsComponent, LanguageFilterPipeMock],
     }).compileComponents();
   });
 

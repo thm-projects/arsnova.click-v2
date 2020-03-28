@@ -1,7 +1,8 @@
-<div class="tweet-container row gutters-2">
+<div *ngIf="twitterService.tweets | languageFilter:{selector: 'lang', fallback: Language.EN} as result"
+     class="tweet-container form-row">
 
-  <div *ngFor="let tweet of twitterService.tweets | slice:0:4"
-       class="col-xl-6 mb-2">
+  <div *ngFor="let tweet of result | slice:0:limit"
+       class="col-md-6 mb-2">
     <div class="card tweet">
       <div (click)="tweet.url ? goToTwitter(tweet.url) : null"
            class="card-body">
@@ -25,9 +26,16 @@
         <p class="card-text">{{tweet.text}}</p>
         <div class="footer">
           <div class="follower">Follower: {{tweet.followers_count}}</div>
-          <div class="date">{{tweet.created_at | date:"MMM d, y, h:mm a"}}</div>
+          <div class="date">{{tweet.created_at | date:"dd.MM.yyyy hh:mm:ss"}}</div>
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="result?.length && limit < result.length"
+       class="col">
+    <button (click)="limit = limit + 10"
+            class="btn btn-secondary mx-auto btn-block">More tweets
+    </button>
   </div>
 </div>
