@@ -70,7 +70,7 @@
     <div class="form-group col-md-12 col-lg-auto justify-content-end align-self-end d-flex d-lg-block">
       <div class="btn-group d-flex w-100">
         <button (click)="saveTag()"
-                [disabled]="formGroup.invalid"
+                [disabled]="formGroup.pristine || formGroup.invalid"
                 class="btn btn-success">
           <span>{{'component.quiz-pool.save-tag' | translate}}</span>
         </button>
