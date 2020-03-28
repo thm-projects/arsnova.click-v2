@@ -39,6 +39,7 @@ export const getDefaultQuestionForType = (translateService: TranslateService, ty
   switch (type) {
     case QuestionType.TrueFalseSingleChoiceQuestion:
       return new TrueFalseSingleChoiceQuestionEntity({
+        ...data,
         answerOptionList: [
           new DefaultAnswerEntity({
             answerText: translateService.instant('global.true'),
@@ -51,6 +52,7 @@ export const getDefaultQuestionForType = (translateService: TranslateService, ty
       });
     case QuestionType.YesNoSingleChoiceQuestion:
       return new YesNoSingleChoiceQuestionEntity({
+        ...data,
         answerOptionList: [
           new DefaultAnswerEntity({
             answerText: translateService.instant('global.yes'),
@@ -63,6 +65,7 @@ export const getDefaultQuestionForType = (translateService: TranslateService, ty
       });
     case QuestionType.ABCDSingleChoiceQuestion:
       return new ABCDSingleChoiceQuestionEntity({
+        ...data,
         answerOptionList: [
           new DefaultAnswerEntity({
             answerText: 'A',
@@ -81,6 +84,7 @@ export const getDefaultQuestionForType = (translateService: TranslateService, ty
       });
     case QuestionType.FreeTextQuestion:
       return new FreeTextQuestionEntity({
+        ...data,
         answerOptionList: [
           new FreeTextAnswerEntity({}),
         ],

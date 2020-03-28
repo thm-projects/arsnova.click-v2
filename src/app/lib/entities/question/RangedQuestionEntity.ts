@@ -11,9 +11,9 @@ export class RangedQuestionEntity extends AbstractQuestionEntity {
 
   constructor(props) {
     super(props);
-    this.rangeMax = props.rangeMax;
-    this.rangeMin = props.rangeMin;
-    this.correctValue = props.correctValue;
+    this.rangeMax = props.rangeMax ?? this.rangeMax;
+    this.rangeMin = props.rangeMin ?? this.rangeMin;
+    this.correctValue = props.correctValue ?? this.correctValue;
     this.answerOptionList = [];
   }
 
