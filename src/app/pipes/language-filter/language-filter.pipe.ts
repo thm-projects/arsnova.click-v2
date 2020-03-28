@@ -11,6 +11,7 @@ export class LanguageFilterPipe implements PipeTransform {
   constructor(private i18nService: I18nService) {}
 
   public transform<T>(value: Array<T>, options: { selector: string, fallback: Language }): Array<T> {
+    const undefinedLanguageData = value.filter(v => v[options.selector].toLowerCase() === 'und');
     let data = value.filter(v => {
       return v[options.selector].toLowerCase() === this.i18nService.currentLanguage;
     });
@@ -21,6 +22,6 @@ export class LanguageFilterPipe implements PipeTransform {
       });
     }
 
-    return data;
+    return data.concat(undefinedLanguageData);
   }
 }
