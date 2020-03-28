@@ -209,6 +209,10 @@
     }
   },
   "component": {
+    "twitter-card": {
+      "more-tweets": "Mehr Tweets",
+      "follower": "Follower: {count}"
+    },
     "quiz-pool": {
       "select-tag": {
         "label": "Tag auswählen",

@@ -25,7 +25,7 @@
 
         <p class="card-text">{{tweet.text}}</p>
         <div class="footer">
-          <div class="follower">Follower: {{tweet.followers_count}}</div>
+          <div class="follower">{{'component.twitter-card.follower' | translate:{count: tweet?.followers_count} }}</div>
           <div class="date">{{tweet.created_at | date:"dd.MM.yyyy hh:mm:ss"}}</div>
         </div>
       </div>
@@ -35,7 +35,7 @@
   <div *ngIf="result?.length && limit < result.length"
        class="col">
     <button (click)="limit = limit + 10"
-            class="btn btn-secondary mx-auto btn-block">More tweets
+            class="btn btn-secondary mx-auto btn-block">{{'component.twitter-card.more-tweets' | translate}}
     </button>
   </div>
 </div>
