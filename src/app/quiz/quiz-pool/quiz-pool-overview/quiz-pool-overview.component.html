@@ -85,11 +85,14 @@
 
   <ngb-alert (close)="displayQuestionAmountWarning = false"
              *ngIf="displayQuestionAmountWarning && questionAmount() > 1"
+             class="mt-5 mb-0"
              [type]="'warning'">{{'component.quiz-pool.question-amount-warning' | translate:{amount: questionAmount()} }}</ngb-alert>
 
   <button (click)="createQuiz()"
           [disabled]="!formGroup.get('selectedTags').value.length"
-          class="btn btn-success ml-auto mt-5 d-flex">
+          [class.mt-3]="displayQuestionAmountWarning && questionAmount() > 1"
+          [class.mt-5]="!displayQuestionAmountWarning || questionAmount() <= 1"
+          class="btn btn-success ml-auto d-flex">
     <span>{{'component.quiz-pool.create-quiz' | translate}}</span>
   </button>
 

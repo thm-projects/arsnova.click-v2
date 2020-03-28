@@ -194,7 +194,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   }
 
   public questionAmount(): number {
-    return this.formGroup.get('selectedTags').value.reduce((a, b) => a.amount + b.amount, []);
+    return this.formGroup.get('selectedTags').value.reduce((a, b) => a + b.amount, 0);
   }
 
   public selectTag(tag: string): void {
