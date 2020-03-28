@@ -37,9 +37,11 @@ export class TwitterCardsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.twitterService.refreshTweets();
+    this.cd.markForCheck();
 
     this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.RequestTweets, () => {
       this.twitterService.refreshTweets();
+      this.cd.markForCheck();
     }));
   }
 
