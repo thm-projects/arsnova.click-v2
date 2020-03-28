@@ -10,7 +10,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -68,7 +68,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     private translate: TranslateService,
   ) {
     this.formGroup = this.formBuilder.group({
-      selectedTag: new FormControl(null, [Validators.required]),
+      selectedTag: new FormControl(null, [Validators.required, this.hasValidTagSelected.bind(this)]),
       selectedTags: new FormControl([]),
       questionAmount: new FormControl({
         value: null,
@@ -77,7 +77,18 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     });
 
     this.formGroup.get('selectedTag').valueChanges.pipe(takeUntil(this._destroy))
-    .subscribe(() => this.formGroup.get('questionAmount').enable());
+    .subscribe((value) => {
+      const questionAmountControl = this.formGroup.get('questionAmount');
+      if (value) {
+        questionAmountControl.enable();
+        if (questionAmountControl.touched) {
+          questionAmountControl.markAsTouched();
+        }
+      } else {
+        questionAmountControl.reset();
+        questionAmountControl.disable();
+      }
+    });
   }
 
   public resultFormatter(tag: CloudData): string {
@@ -205,8 +216,8 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     return this.formGroup.get('selectedTags').value.some(v => v.tag === this.formGroup.get('selectedTag').value?.text);
   }
 
-  private maxQuestionAmountValidator(control): ValidationErrors {
-    if (!this.getSelectedTag(control.parent)) {
+  private maxQuestionAmountValidator(control: AbstractControl): ValidationErrors {
+    if (!this.getSelectedTag(control.parent as FormGroup)) {
       return {};
     }
 
@@ -217,8 +228,20 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     if (parsedValue <= 0) {
       return { min: true };
     }
-    if (parsedValue > this.getSelectedTag(control.parent).weight) {
+    if (parsedValue > this.getSelectedTag(control.parent as FormGroup).weight) {
       return { max: true };
+    }
+
+    return {};
+  }
+
+  private hasValidTagSelected(control: AbstractControl): ValidationErrors {
+    if (!control.value) {
+      return {};
+    }
+
+    if (!control.value?.hasOwnProperty('text')) {
+      return { invalid: true };
     }
 
     return {};

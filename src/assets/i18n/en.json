@@ -256,7 +256,10 @@
     "quiz-pool": {
       "select-tag": {
         "label": "Select Tag",
-        "placeholder": "Enter your preferred Tag here. The quiz will be built with questions with the selected Tags."
+        "placeholder": "Enter your preferred Tag here. The quiz will be built with questions with the selected Tags.",
+        "validation-error": {
+          "invalid-tag": "The entered Tag is not available. Please select one from the dropdown menu."
+        }
       },
       "tag-question-amount": {
         "label": "Amount of questions",
@@ -271,7 +274,7 @@
       "question-amount-warning": "Please notice that redundant questions with multiple Tags will only be included once in your quiz. The amount of questions in your quiz can be lower than the selected {amount} questions.",
       "create-quiz": "Create Quiz",
       "selected-tags": "Selected Tags",
-      "save-tag": "Save Tag",
+      "save-tag": "Use Tag",
       "delete-tag": "Delete Tag",
       "create-own-question": {
         "label": "Do you want to create a new Quizpool question?",

@@ -212,7 +212,10 @@
     "quiz-pool": {
       "select-tag": {
         "label": "Tag auswählen",
-        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll"
+        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll",
+        "validation-error": {
+          "invalid-tag": "Der eingegebene Tag ist leider nicht verfügbar. Bitte klicke auf einen Tag in der Auswahlliste."
+        }
       },
       "tag-question-amount": {
         "label": "Anzahl der Quizfragen",
@@ -227,7 +230,7 @@
       "question-amount-warning": "Bitte beachte, dass Quizfragen mit mehreren Tags nur einmal im Quiz auftauchen werden. Die Gesamtanzahl der Fragen in deinem Quiz kann also geringer als die ausgewählten {amount} Fragen sein.",
       "create-quiz": "Quiz erstellen",
       "selected-tags": "Ausgewählte Tags",
-      "save-tag": "Tag speichern",
+      "save-tag": "Tag verwenden",
       "delete-tag": "Tag löschen",
       "create-own-question": {
         "label": "Möchtest du eine neue Quizpool Frage einreichen?",
