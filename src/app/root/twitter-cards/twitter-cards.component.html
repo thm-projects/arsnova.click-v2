@@ -3,7 +3,7 @@
 
   <div *ngFor="let tweet of result | slice:0:limit"
        class="col-md-6 mb-2">
-    <div class="card tweet">
+    <div class="card mb-2 w-100 h-100 d-inline-block cursor-pointer">
       <div (click)="tweet.url ? goToTwitter(tweet.url) : null"
            class="card-body">
         <div class="header">
