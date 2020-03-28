@@ -100,19 +100,17 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   }
 
   public search(text$: Observable<string>): Observable<Array<CloudData>> {
-    const debouncedText$ = text$.pipe(debounceTime(200), map(term => (
-      { text: term }
-    )), distinctUntilChanged());
+    const debouncedText$ = text$.pipe(debounceTime(200), distinctUntilChanged());
     const clicksWithClosedPopup$ = this.click$.pipe(filter(() => !this.instance.isPopupOpen()));
     const inputFocus$ = this.focus$;
 
-    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(map((term: CloudData) => {
+    return merge(debouncedText$, inputFocus$, clicksWithClosedPopup$).pipe(map((term: string) => {
       let data: Array<CloudData>;
 
       try {
         // tslint:disable-next-line:no-unused-expression
-        new RegExp(term.text);
-        data = !term.text ? this._tags : this._tags.filter(v => new RegExp(term.text, 'mi').test(v.text));
+        new RegExp(term);
+        data = !term ? this._tags : this._tags.filter(v => new RegExp(term, 'mi').test(v.text));
       } catch {
         data = this._tags;
       }
