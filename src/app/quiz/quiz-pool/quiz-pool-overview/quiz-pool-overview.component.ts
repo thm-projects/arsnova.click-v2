@@ -10,7 +10,7 @@ import {
   PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -68,7 +68,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     private translate: TranslateService,
   ) {
     this.formGroup = this.formBuilder.group({
-      selectedTag: new FormControl(null, [Validators.required, this.hasValidTagSelected.bind(this)]),
+      selectedTag: new FormControl(null, { validators: [this.hasValidTagSelected.bind(this)], updateOn: 'change' }),
       selectedTags: new FormControl([]),
       questionAmount: new FormControl({
         value: null,
@@ -76,7 +76,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
       }, [this.maxQuestionAmountValidator.bind(this)]),
     });
 
-    this.formGroup.get('selectedTag').valueChanges.pipe(takeUntil(this._destroy))
+    this.formGroup.get('selectedTag').valueChanges.pipe(distinctUntilChanged(), takeUntil(this._destroy))
     .subscribe((value) => {
       const questionAmountControl = this.formGroup.get('questionAmount');
       if (value) {
@@ -236,7 +236,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   }
 
   private hasValidTagSelected(control: AbstractControl): ValidationErrors {
-    if (!control.value) {
+    if (control.pristine) {
       return {};
     }
 
