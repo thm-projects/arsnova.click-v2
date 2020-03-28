@@ -267,7 +267,7 @@
           "max": "You can select only {max, plural, =0{0 questions} one{one question} other{{max} questions}} with your selected Tag"
         }
       },
-      "tag-available": "{text} ({weight} available)",
+      "tag-available": "{weight, plural, =0{0 Questions} one{One Question} other{{weight} Questions}} available",
       "question-amount-warning": "Please notice that redundant questions with multiple Tags will only be included once in your quiz. The amount of questions in your quiz can be lower than the selected {amount} questions.",
       "create-quiz": "Create Quiz",
       "selected-tags": "Selected Tags",

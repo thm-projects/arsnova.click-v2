@@ -1,9 +1,22 @@
+<ng-template #resultTemplate
+             let-r="result"
+             let-t="term">
+  <p [title]="r.text"
+     class="text-truncate">
+    <ngb-highlight [result]="r.text"
+                   [term]="t"></ngb-highlight>
+  </p>
+  <p class="font-italic text-muted tag-amount">
+    <small>{{'component.quiz-pool.tag-available' | translate:{weight: r.weight} }}</small>
+  </p>
+</ng-template>
+
 <div *ngIf="tags?.length"
      class="bg-light p-3 text-primary">
 
   <form [formGroup]="formGroup"
         class="form-row">
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-6 col-lg">
       <label for="select-tag">{{'component.quiz-pool.select-tag.label' | translate}}</label>
 
       <input #inputElement
@@ -11,6 +24,7 @@
              (click)="click$.next(inputElement.value)"
              (focus)="focus$.next(inputElement.value)"
              [editable]='false'
+             [resultTemplate]="resultTemplate"
              [inputFormatter]="inputFormatter.bind(self)"
              [ngbPopover]="'component.quiz-pool.select-tag.placeholder' | translate"
              [ngbTypeahead]="search.bind(self)"
@@ -22,7 +36,7 @@
 
     </div>
 
-    <div class="form-group col">
+    <div class="form-group col-md-6 col-lg-3">
       <label for="questionAmount">{{'component.quiz-pool.tag-question-amount.label' | translate}}</label>
       <input [max]="formGroup.get('selectedTag').value?.weight"
              [placeholder]="'component.quiz-pool.tag-question-amount.placeholder' | translate"
@@ -48,8 +62,8 @@
       </ng-container>
     </div>
 
-    <div class="form-group col-auto align-self-end">
-      <div class="btn-group">
+    <div class="form-group col-md-12 col-lg-auto justify-content-end align-self-end d-flex d-lg-block">
+      <div class="btn-group d-flex w-100">
         <button (click)="saveTag()"
                 [disabled]="formGroup.invalid"
                 class="btn btn-success">
@@ -72,20 +86,18 @@
     </div>
     <div class="col-12">
       <div (click)="selectTag(tag.tag)"
-           (mouseenter)="hovered = i"
-           (mouseleave)="hovered = -1"
            *ngFor="let tag of formGroup.get('selectedTags').value; let i = index"
-           [class.badge-danger]="hovered === i"
-           [class.badge-primary]="hovered !== i"
-           class="cursor-pointer badge mr-2">
+           [class.badge-primary]="tag.tag !== formGroup.get('selectedTag').value?.text"
+           [class.badge-warning]="tag.tag === formGroup.get('selectedTag').value?.text"
+           class="cursor-pointer badge text-wrap mr-2">
         <span>{{tag.tag}} ({{tag.amount}})</span>
       </div>
     </div>
   </div>
 
   <ngb-alert (close)="displayQuestionAmountWarning = false"
-             *ngIf="displayQuestionAmountWarning && questionAmount() > 1"
-             class="mt-5 mb-0"
+             *ngIf="displayQuestionAmountWarning && formGroup.get('selectedTags').value?.length > 1 && questionAmount() > 1"
+             class="mt-3 mb-0"
              [type]="'warning'">{{'component.quiz-pool.question-amount-warning' | translate:{amount: questionAmount()} }}</ngb-alert>
 
   <button (click)="createQuiz()"

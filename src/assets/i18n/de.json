@@ -223,7 +223,7 @@
           "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen"
         }
       },
-      "tag-available": "{text} ({weight} verfügbar)",
+      "tag-available": "{weight, plural, =0{0 Fragen} one{Eine Frage} other{{weight} Fragen}} verfügbar",
       "question-amount-warning": "Bitte beachte, dass Quizfragen mit mehreren Tags nur einmal im Quiz auftauchen werden. Die Gesamtanzahl der Fragen in deinem Quiz kann also geringer als die ausgewählten {amount} Fragen sein.",
       "create-quiz": "Quiz erstellen",
       "selected-tags": "Ausgewählte Tags",

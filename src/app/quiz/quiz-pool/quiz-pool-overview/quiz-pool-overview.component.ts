@@ -39,7 +39,6 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   public focus$ = new Subject<string>();
   public click$ = new Subject<string>();
   @ViewChild('instance', { static: false }) public instance: NgbTypeahead;
-  public hovered: number;
 
   private _tagsForCloud: Array<CloudData> = [];
 
@@ -134,7 +133,6 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
     }
 
     this.formGroup.get('selectedTags').value.splice(index, 1);
-    this.hovered = -1;
     this.formGroup.get('selectedTag').reset();
     this.formGroup.get('questionAmount').reset();
   }
