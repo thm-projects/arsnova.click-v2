@@ -202,7 +202,8 @@
         </div>
       </div>
 
-      <div class="col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-5 text-center">
+      <div *ngIf="hasErrors || hasSuccess"
+           class="col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-5 text-center">
         <ngb-alert *ngIf="hasErrors"
                    [dismissible]="false"
                    [type]="'danger'">{{hasErrors | translate}}</ngb-alert>
@@ -213,7 +214,7 @@
       </div>
 
       <ng-container *ngIf="!isShowingQuiznameDatalist">
-        <div class="col-12 text-center my-5">
+        <div class="col-12 text-center my-4 my-sm-5">
           <p *ngIf="selectedTitle === Title.Default"
              [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"
              class="mb-0"></p>
