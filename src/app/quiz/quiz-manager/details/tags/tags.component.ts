@@ -74,7 +74,7 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
         data = this._tags;
       }
 
-      return data.filter(v => !this.selectedTags.some(selectedTag => new RegExp(selectedTag.text, 'mi').test(v.text)));
+      return data.filter(v => !this.selectedTags.some(selectedTag => new RegExp(selectedTag.text, 'mi').test(v.text))).slice(0, 10);
     }));
   }
 

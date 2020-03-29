@@ -611,7 +611,38 @@
     "member-group-select": {
       "title": "Wähle ein Team"
     },
-    "quiz_manager_details": {},
+    "quiz_manager_details": {
+      "tags": {
+        "description": {
+          "title": "Hier kannst du deiner Frage Tags hinzufügen. Welche du verwendest, ist dir überlassen.<br/>Einige Empfehlungen für Quiz-Tags an dieser Stelle:",
+          "dl": {
+            "0": {
+              "dt": "Verwende mehrere Tags mit grober, als auch feiner granularen Themengebieten",
+              "dd": "Ein gutes Beispiel wäre sowohl der Tag \"Mathematik\" als auch \"Differentialrechnung\"."
+            },
+            "1": {
+              "dt": "Für wen ist die Frage geeignet?",
+              "dd": "Bei Fragen für Schüler kannst du z.B. noch die Klassenstufe angeben. Generell sind Tags mit Themenbezug immer vorzuziehen."
+            },
+            "2": {
+              "dt": "Keine Modulnamen für Hochschulfragen",
+              "dd": "Hochschulmodulnamen sind inhaltlich manchmal nicht auf alle anderen Hochschulen übertragbar. Fragen, die thematisch nicht genau zugeordnet werden können, erzeugen Verwirrung. Verwende in diesem Falle Tags mit Themenbezug."
+            },
+            "3": {
+              "dt": "Sprache und Rechtschreibung",
+              "dd": "Wenn du eine Frage z.B. auf Englisch stellst, verwende keine deutschen Tags. Bitte achte auf eine korrekte Rechtschreibung. Nur so können Fragen mit gleichen Tags ohne großen Aufwand für ein Quiz bereitgestellt werden."
+            },
+            "4": {
+              "dt": "Welche Tags kann ich verwenden?",
+              "dd": "Eine Inspiration findest du in der Wortwolke unten. Falls du bei der Eingabe in das Suchfeld keine Treffer hast, schreibe einfach weiter und erstelle damit einen neuen Tag."
+            }
+          }
+        },
+        "tag-input": {
+          "placeholder": "Gib hier einen passenden Tag ein"
+        }
+      }
+    },
     "name_view": {
       "name_input": {},
       "demo_quiz": {
@@ -637,7 +668,7 @@
         "please-wait": "Bitte warten...",
         "malformed": "Der Quizname enhält ungültige Zeichenfolgen. Bitte versuche einen anderen Namen",
         "already-taken": "Der Quizname ist bereits vergeben ",
-        "min-keys": "Der Quizname muss mindestens 3 Zeichen lang sein"
+        "min-keys": "Der Quizname muss mindestens 4 Zeichen lang sein"
       }
     },
     "home": {

@@ -748,7 +748,37 @@
       "title": "Select a Team"
     },
     "quiz_manager_details": {
-      "back": "Back to the quiz overview"
+      "back": "Back to the quiz overview",
+      "tags": {
+        "description": {
+          "title": "You can add Tags to your question here. Which one you use is up to you.<br/>Some recommendations regarding Quiz-Tags:",
+          "dl": {
+            "0": {
+              "dt": "Use multiple Tags with coarse and fine granular subject areas",
+              "dd": "A good example would be both the Tags \"Mathematics\" and \"Differential Calculus\"."
+            },
+            "1": {
+              "dt": "Who is the question for?",
+              "dd": "For questions for pupils you can e.g. specify the grade level. In general, tags with a subject should always be preferred."
+            },
+            "2": {
+              "dt": "No module names for University questions",
+              "dd": "Subjects of Modules of Universities are usually not applicable to all other Universities. Questions which cannot be exactly associated by their subject are confusing. Use Tags related to a subject in this case."
+            },
+            "3": {
+              "dt": "Language and spelling",
+              "dd": "If you are writing a Question eg. in German, do not use Englisch Tags, then. Please make sure you are using correct spelling and grammar. Only then questions with the same Tags can be grouped to a quiz without unnecessary effort."
+            },
+            "4": {
+              "dt": "Which Tags can I use?",
+              "dd": "You can find and Inspiration in the word cloud below. If you have no match in the search field just keep on typing and create a new Tag."
+            }
+          }
+        },
+        "tag-input": {
+          "placeholder": "Enter an appropriate Tag here"
+        }
+      }
     },
     "name_view": {
       "name_input": {},
