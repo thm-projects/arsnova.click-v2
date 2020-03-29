@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public isQueryingQuizState: boolean;
   public Title = Title;
   public readonly selectedTitle = environment.title;
-  public readonly twitterEnabled = environment.enableTwitter;
+  public twitterEnabled: boolean;
 
   private _serverPassword = '';
 
@@ -216,6 +216,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         await this.themesService.updateCurrentlyUsedTheme();
         this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
       }
+    });
+
+    this.activatedRoute.data.pipe(takeUntil(this._destroy)).subscribe(data => {
+      this.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
     });
   }
 

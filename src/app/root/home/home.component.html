@@ -230,9 +230,9 @@
           </p>
         </div>
 
-        <div class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 d-flex">
+        <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && twitterService.getOptIn()"
+             class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 d-flex">
           <button (click)="navigateToTwitter()"
-                  *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && twitterService.getOptIn()"
                   [title]="'global.follow-us-at-twitter' | translate"
                   class="btn-twitter-follow mx-auto mr-md-0">
             <fa-icon [icon]="['fab', 'twitter']"
