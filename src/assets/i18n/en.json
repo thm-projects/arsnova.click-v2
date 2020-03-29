@@ -779,7 +779,7 @@
         "please-wait": "Please wait...",
         "malformed": "Your quiz name contains illegal characters. Please try again with a different name.",
         "already-taken": "Your quiz name is already taken",
-        "min-keys": "The quiz name must contain at least 3 characters"
+        "min-keys": "The quiz name must contain at least 4 characters"
       },
       "title": "Choose an alternative"
     },

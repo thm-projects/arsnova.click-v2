@@ -18,7 +18,7 @@
     <div class="mt-4">
 
       <ng-container *ngIf="!isQuiznameAvailable">
-        <p *ngIf="quizName.length < 3">{{'component.quiz_rename.custom.min-keys' | translate}}</p>
+        <p *ngIf="quizName.length < 4">{{'component.quiz_rename.custom.min-keys' | translate}}</p>
         <p *ngIf="isQueringQuizname">{{'component.quiz_rename.custom.please-wait' | translate}}</p>
         <ng-container *ngIf="quizName.length > 3 && !isQueringQuizname">
           <p *ngIf="isQuiznameMalformed">{{'component.quiz_rename.custom.malformed' | translate}}</p>

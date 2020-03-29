@@ -63,7 +63,7 @@ export class QuizRenameComponent implements OnInit, OnDestroy {
     this._checkingQuizAvailable.next();
 
     const name = this.quizName.trim().toLowerCase();
-    if (name.length < 3 || name.startsWith('demo quiz') || checkABCDOrdering(name)) {
+    if (name.length < 4 || name.startsWith('demo quiz') || checkABCDOrdering(name)) {
       this.isQueringQuizname = false;
       this.isQuiznameMalformed = true;
       return;
