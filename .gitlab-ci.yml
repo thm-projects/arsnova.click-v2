@@ -91,6 +91,19 @@ build-beta:
     - *staging-server-env
     - *docker-push
 
+build-westermann:
+  <<: *build-template
+  only:
+    - westermann
+  environment:
+    name: Westermann
+  variables:
+    VERSION: 2.0.0-westermann
+    SERVICE_NAME: westermann
+    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-westermann
+  script:
+    - *docker-push
+
 ts_lint:
   stage: test
   tags:
