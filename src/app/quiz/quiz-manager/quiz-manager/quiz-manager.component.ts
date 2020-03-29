@@ -1,17 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { DefaultAnswerEntity } from '../../../lib/entities/answer/DefaultAnswerEntity';
-import { ABCDSingleChoiceQuestionEntity } from '../../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
-import { TrueFalseSingleChoiceQuestionEntity } from '../../../lib/entities/question/TrueFalseSingleChoiceQuestionEntity';
-import { YesNoSingleChoiceQuestionEntity } from '../../../lib/entities/question/YesNoSingleChoiceQuestionEntity';
+import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
-import { getQuestionForType } from '../../../lib/QuizValidator';
+import { getDefaultQuestionForType } from '../../../lib/QuizValidator';
+import { QuizPoolApiService } from '../../../service/api/quiz-pool/quiz-pool-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -29,8 +28,10 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizManagerComponent';
 
   private readonly _destroy = new Subject();
+  private _uploading: Array<AbstractQuestionEntity> = [];
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     public quizService: QuizService,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
@@ -40,6 +41,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private connectionService: ConnectionService,
     private modalService: NgbModal,
+    private quizPoolApiService: QuizPoolApiService,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
@@ -71,6 +73,10 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
@@ -81,61 +87,11 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   public addQuestion(id: QuestionType): void {
-    let question;
-
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
       label: `add-question`,
     });
-    switch (id) {
-      case QuestionType.TrueFalseSingleChoiceQuestion:
-        question = new TrueFalseSingleChoiceQuestionEntity({
-          answerOptionList: [
-            new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.true'),
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.false'),
-              isCorrect: false,
-            }),
-          ],
-        });
-        break;
-      case QuestionType.YesNoSingleChoiceQuestion:
-        question = new YesNoSingleChoiceQuestionEntity({
-          answerOptionList: [
-            new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.yes'),
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: this.translateService.instant('global.no'),
-              isCorrect: false,
-            }),
-          ],
-        });
-        break;
-      case QuestionType.ABCDSingleChoiceQuestion:
-        question = new ABCDSingleChoiceQuestionEntity({
-          answerOptionList: [
-            new DefaultAnswerEntity({
-              answerText: 'A',
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: 'B',
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: 'C',
-              isCorrect: false,
-            }), new DefaultAnswerEntity({
-              answerText: 'D',
-              isCorrect: false,
-            }),
-          ],
-        });
-        break;
-      default:
-        question = getQuestionForType(id);
-    }
+    const question = getDefaultQuestionForType(this.translateService, id);
     this.quizService.quiz.addQuestion(question);
     this.quizService.persist();
   }
@@ -187,7 +143,11 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
   }
 
   public openQuestionTypeModal(): void {
-    const instance = this.modalService.open(QuizTypeSelectModalComponent, { size: ('lg') });
+    const instance = this.modalService.open(QuizTypeSelectModalComponent, {
+      size: (
+        'lg'
+      ),
+    });
     instance.result.catch(() => {}).then(id => {
       if (!id) {
         return;
@@ -195,5 +155,38 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
 
       this.addQuestion(id);
     });
+  }
+
+  public updloadToQuizPool(elem: AbstractQuestionEntity): void {
+    if (!elem.isValid() || !elem.tags?.length || this.isUploading(elem)) {
+      return;
+    }
+
+    const removeQuestionFromUploadingQueue = () => {
+      const uploadingIndex = this._uploading.indexOf(elem);
+      if (uploadingIndex === -1) {
+        return;
+      }
+
+      this._uploading.splice(uploadingIndex, 1);
+    };
+
+    this._uploading.push(elem);
+    this.quizPoolApiService.postNewQuestion(elem, `${this.quizService.quiz.name}`).subscribe({
+      complete: removeQuestionFromUploadingQueue,
+      error: removeQuestionFromUploadingQueue,
+    });
+  }
+
+  public isUploading(elem: AbstractQuestionEntity): boolean {
+    return this._uploading.indexOf(elem) > -1;
+  }
+
+  public getTooltipForUpload(elem: AbstractQuestionEntity): string {
+    return !elem.isValid() ? //
+           'component.quiz_summary.upload-to-pool.invalid-question' : //
+           !elem.tags?.length ? //
+           'component.quiz_summary.upload-to-pool.no-tags' : //
+           'component.quiz_summary.upload-to-pool.valid-upload';
   }
 }

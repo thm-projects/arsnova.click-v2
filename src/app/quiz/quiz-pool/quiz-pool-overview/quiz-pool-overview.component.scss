@@ -1,0 +1,24 @@
+:host ::ng-deep .dropdown-menu {
+  max-width: calc(100% - 10px);
+
+  .dropdown-item {
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    &.active {
+      .tag-amount {
+        color: #ffffff !important;
+      }
+    }
+
+    .tag-amount {
+      line-height: 1;
+
+      small {
+        font-size: 80%;
+      }
+    }
+  }
+}

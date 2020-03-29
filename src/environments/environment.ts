@@ -6,7 +6,7 @@ export const environment: IEnvironment = {
   production: false,
   title: Title.Default,
   version: 'VERSION',
-  enableCasLogin: true,
+  enableCasLogin: false,
   sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
   ssrEndpoint: 'http://localhost:4000',
   serverEndpoint: 'http://localhost:3010',

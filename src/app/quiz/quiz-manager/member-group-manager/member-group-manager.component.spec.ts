@@ -4,7 +4,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faEdit, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
@@ -61,6 +63,8 @@ describe('MemberGroupManagerComponent', () => {
 
   beforeEach((
     () => {
+      const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
+      library.addIcons(...[faTrash]);
       fixture = TestBed.createComponent(MemberGroupManagerComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();

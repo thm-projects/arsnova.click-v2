@@ -1,0 +1,132 @@
+<ng-template #resultTemplate
+             let-r="result"
+             let-t="term">
+  <p [title]="r.text"
+     class="text-truncate">
+    <ngb-highlight [result]="r.text"
+                   [term]="t"></ngb-highlight>
+  </p>
+  <p class="font-italic text-muted tag-amount">
+    <small>{{'component.quiz-pool.tag-available' | translate:{weight: r.weight} }}</small>
+  </p>
+</ng-template>
+
+<div *ngIf="tags?.length"
+     class="bg-light p-3 text-primary">
+
+  <form [formGroup]="formGroup"
+        class="form-row">
+    <div class="form-group col-md-6 col-lg">
+      <label for="select-tag">{{'component.quiz-pool.select-tag.label' | translate}}</label>
+
+      <input #inputElement
+             #instance="ngbTypeahead"
+             (click)="click$.next(inputElement.value)"
+             (focus)="focus$.next(inputElement.value)"
+             [editable]='false'
+             [resultTemplate]="resultTemplate"
+             [inputFormatter]="inputFormatter.bind(self)"
+             [ngbPopover]="'component.quiz-pool.select-tag.placeholder' | translate"
+             [ngbTypeahead]="search.bind(self)"
+             [resultFormatter]="resultFormatter.bind(self)"
+             class="form-control"
+             formControlName="selectedTag"
+             id="select-tag"
+             type="text"/>
+
+      <ng-container *ngIf="formGroup.get('selectedTag').invalid && formGroup.get('selectedTag').touched">
+        <div *ngIf="formGroup.get('selectedTag').errors.invalid">
+          <div class="invalid-tooltip d-block">{{'component.quiz-pool.select-tag.validation-error.invalid-tag' | translate}}</div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="form-group col-md-6 col-lg-3">
+      <label for="questionAmount">{{'component.quiz-pool.tag-question-amount.label' | translate}}</label>
+      <input [max]="formGroup.get('selectedTag').value?.weight"
+             [placeholder]="'component.quiz-pool.tag-question-amount.placeholder' | translate"
+             class="form-control"
+             formControlName="questionAmount"
+             id="questionAmount"
+             min="1"
+             type="number"/>
+
+      <ng-container *ngIf="formGroup.get('questionAmount').invalid && (formGroup.get('questionAmount').dirty || formGroup.get('questionAmount').touched)">
+
+        <div *ngIf="formGroup.get('questionAmount').errors.min">
+          <div class="invalid-tooltip d-block">{{'component.quiz-pool.tag-question-amount.validation-error.min' | translate}}</div>
+        </div>
+
+        <div *ngIf="formGroup.get('questionAmount').errors.required">
+          <div class="invalid-tooltip d-block">{{'component.quiz-pool.tag-question-amount.validation-error.required' | translate}}</div>
+        </div>
+
+        <div *ngIf="formGroup.get('questionAmount').errors.max">
+          <div class="invalid-tooltip d-block">{{'component.quiz-pool.tag-question-amount.validation-error.max' | translate:{max: formGroup.get('selectedTag').value?.weight} }}</div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="form-group col-md-12 col-lg-auto justify-content-end align-self-end d-flex d-lg-block">
+      <div class="btn-group d-flex w-100">
+        <button (click)="saveTag()"
+                [disabled]="formGroup.pristine || formGroup.invalid"
+                class="btn btn-success">
+          <span>{{'component.quiz-pool.save-tag' | translate}}</span>
+        </button>
+        <button (click)="removeTag()"
+                *ngIf="hasTagSelected()"
+                class="btn btn-danger">
+          <span>{{'component.quiz-pool.delete-tag' | translate}}</span>
+        </button>
+      </div>
+    </div>
+
+  </form>
+
+  <div *ngIf="formGroup.get('selectedTags')?.value?.length"
+       class="form-row">
+    <div class="col-12">
+      <label class="mb-0">{{'component.quiz-pool.selected-tags' | translate}}</label>
+    </div>
+    <div class="col-12">
+      <div (click)="selectTag(tag.tag)"
+           *ngFor="let tag of formGroup.get('selectedTags').value; let i = index"
+           [class.badge-primary]="tag.tag !== formGroup.get('selectedTag').value?.text"
+           [class.badge-warning]="tag.tag === formGroup.get('selectedTag').value?.text"
+           class="cursor-pointer badge text-wrap mr-2">
+        <span>{{tag.tag}} ({{tag.amount}})</span>
+      </div>
+    </div>
+  </div>
+
+  <ngb-alert (close)="displayQuestionAmountWarning = false"
+             *ngIf="displayQuestionAmountWarning && formGroup.get('selectedTags').value?.length > 1 && questionAmount() > 1"
+             class="mt-3 mb-0"
+             [type]="'warning'">{{'component.quiz-pool.question-amount-warning' | translate:{amount: questionAmount()} }}</ngb-alert>
+
+  <button (click)="createQuiz()"
+          [disabled]="!formGroup.get('selectedTags').value.length"
+          [class.mt-3]="displayQuestionAmountWarning && questionAmount() > 1"
+          [class.mt-5]="!displayQuestionAmountWarning || questionAmount() <= 1"
+          class="btn btn-success ml-auto d-flex">
+    <span>{{'component.quiz-pool.create-quiz' | translate}}</span>
+  </button>
+
+</div>
+
+<div [class.mt-5]="tags.length"
+     class="bg-light p-3 text-primary form-row">
+  <p class="form-group w-100">{{'component.quiz-pool.create-own-question.label' | translate}}</p>
+
+  <button (click)="createQuestion()"
+          class="btn btn-success ml-auto d-flex">
+    <span>{{'component.quiz-pool.create-own-question.button-label' | translate}}</span>
+  </button>
+</div>
+
+<div *ngIf="tags?.length"
+     class='mt-5 bg-secondary form-row'>
+  <app-word-cloud [data]="tagsForCloud"
+                  class="d-block w-100"></app-word-cloud>
+</div>

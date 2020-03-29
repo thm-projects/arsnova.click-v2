@@ -19,6 +19,8 @@ import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { LivePreviewComponent } from '../../../../live-preview/live-preview/live-preview.component';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
@@ -52,7 +54,7 @@ describe('AnsweroptionsComponent', () => {
         RouterTestingModule,
         FormsModule,
         NgbModalModule,
-        AngularSvgIconModule,
+        AngularSvgIconModule.forRoot(),
         NgbPopoverModule,
         FontAwesomeModule,
         JwtModule.forRoot({
@@ -79,6 +81,9 @@ describe('AnsweroptionsComponent', () => {
             paramMap: of({
               get: () => 0,
             }),
+            queryParamMap: of({
+              get: () => 0,
+            }),
           },
         }, SharedService, QuestionTextService, {
           provide: TrackingService,
@@ -95,6 +100,9 @@ describe('AnsweroptionsComponent', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         },
       ],
       declarations: [

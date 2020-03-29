@@ -100,15 +100,16 @@
     "ts-loader": "^6.2.1",
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
-    "zone.js": "~0.10.2"
+    "zone.js": "~0.10.2",
+    "angular-tag-cloud-module": "^3.8.1"
   },
   "devDependencies": {
+    "@angular-devkit/schematics": "^9.0.1",
     "@angular/cli": "^9.0.1",
     "@angular/compiler-cli": "^9.0.0",
     "@angular/language-service": "^9.0.0",
     "@nguniversal/builders": "^9.0.1",
     "@schematics/angular": "^9.0.1",
-    "@angular-devkit/schematics": "^9.0.1",
     "@types/express": "^4.17.0",
     "@types/jasmine": "^3.3.16",
     "@types/jasminewd2": "^2.0.8",

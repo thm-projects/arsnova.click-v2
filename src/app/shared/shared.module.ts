@@ -19,6 +19,7 @@ import {
   faCaretUp,
   faCheck,
   faCheckSquare,
+  faCloudUploadAlt,
   faCode,
   faCopy,
   faDownload,
@@ -37,10 +38,12 @@ import {
   faLanguage,
   faListUl,
   faLock,
+  faMinus,
   faMusic,
   faPaperPlane,
   faPause,
   faPlay,
+  faPlus,
   faQrcode,
   faQuestion,
   faSave,
@@ -65,14 +68,16 @@ import {
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { TagCloudModule } from 'angular-tag-cloud-module';
 import { environment } from '../../environments/environment';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
+import { WordCloudComponent } from './word-cloud/word-cloud.component';
 
 @NgModule({
   imports: [
-    FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(),
+    FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(), TagCloudModule
   ],
   exports: [
     FormsModule,
@@ -85,8 +90,9 @@ import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
     GamificationAnimationComponent,
     AngularSvgIconModule,
     NoDataErrorComponent,
+    WordCloudComponent
   ],
-  declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent],
+  declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent, WordCloudComponent],
   bootstrap: [],
 })
 export class SharedModule {
@@ -150,5 +156,8 @@ export class SharedModule {
     library.addIcons(faSquare);
     library.addIcons(faCheckSquare);
     library.addIcons(faKey);
+    library.addIcons(faPlus);
+    library.addIcons(faMinus);
+    library.addIcons(faCloudUploadAlt);
   }
 }

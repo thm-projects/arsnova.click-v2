@@ -79,7 +79,8 @@
         "showToken": "Token anzeigen",
         "twitter": {
           "tweet": "Tweet"
-        }
+        },
+        "questionpool": "Quiz-Pool"
       },
       "about": {
         "title": "arsnova.click",
@@ -208,6 +209,38 @@
     }
   },
   "component": {
+    "twitter-card": {
+      "more-tweets": "Mehr Tweets",
+      "follower": "Follower: {count}"
+    },
+    "quiz-pool": {
+      "select-tag": {
+        "label": "Tag auswählen",
+        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll",
+        "validation-error": {
+          "invalid-tag": "Der eingegebene Tag ist leider nicht verfügbar. Bitte klicke auf einen Tag in der Auswahlliste."
+        }
+      },
+      "tag-question-amount": {
+        "label": "Anzahl der Quizfragen",
+        "placeholder": "Anzahl der Quizfragen",
+        "validation-error": {
+          "required": "Bitte gib die Anzahl der gewünschten Quizfragen ein",
+          "min": "Bitte verwende mindestens eine Quizfrage für diesen Tag",
+          "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen"
+        }
+      },
+      "tag-available": "{weight, plural, =0{0 Fragen} one{Eine Frage} other{{weight} Fragen}} verfügbar",
+      "question-amount-warning": "Bitte beachte, dass Quizfragen mit mehreren Tags nur einmal im Quiz auftauchen werden. Die Gesamtanzahl der Fragen in deinem Quiz kann also geringer als die ausgewählten {amount} Fragen sein.",
+      "create-quiz": "Quiz erstellen",
+      "selected-tags": "Ausgewählte Tags",
+      "save-tag": "Tag verwenden",
+      "delete-tag": "Tag löschen",
+      "create-own-question": {
+        "label": "Möchtest du eine neue Quizpool Frage einreichen?",
+        "button-label": "Neue Quizpool Frage"
+      }
+    },
     "twitter": {
       "optin": {
         "check": "Für Social Media Features anklicken",
@@ -275,6 +308,7 @@
       "start_session": "Quiz starten",
       "edit_session": "Quiz bearbeiten",
       "create_session": "Neues Quiz!",
+      "can_create_session": "Quiz erstellen",
       "create_demo_session": "Starte Demo Quiz",
       "quiz_management": "Quiz-Speicher",
       "session_management": "Quizze",
@@ -407,8 +441,13 @@
         "timer": {
           "long": "Countdown",
           "short": "Countdown"
+        },
+        "tags": {
+          "long": "Tags",
+          "short": "Tags"
         }
       },
+      "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
         "available_questions": "Hier siehst du alle Fragetypen, aus denen du wählen kannst. Jeder Fragetyp bietet eigene Voreinstellungen und Optionen zur Gestaltung deines Quiz.",
         "added_questions": "Um eine Frage hinzuzufügen, ziehe eine Vorlage hierher oder klick auf sie. Wenn du die eingefügte Vorlage berührst, siehst du, was du damit machen kannst: Frage editieren, Reihenfolge der Fragen ändern oder die Frage löschen."
@@ -426,6 +465,11 @@
       "question_failed": "Die Frage ist noch unvollständig",
       "question_group_successful": "Dein Quiz ist bereit",
       "question_group_failed": "Dein Quiz ist unvollständig",
+      "upload-to-pool": {
+        "valid-upload": "Stelle deine Frage für den Quiz-Pool zur Verfügung",
+        "invalid-question": "Nur gültige Fragen können in den Quiz-Pool hochgeladen werden",
+        "no-tags": "Damit deine Frage hochgeladen werden kann, musst du ihr noch ein paar Tags geben"
+      },
       "correct": "Korrekt",
       "wrong": "Falsch",
       "question": "Frage",
@@ -435,6 +479,7 @@
       "answer_configuration": "Formale Kriterien der Antwort",
       "timer": "Countdown",
       "second": "Sekunde",
+      "tags": "Tags",
       "validation": "Status",
       "validation_errors": {
         "types": {
@@ -451,7 +496,9 @@
           "invalid_correct_value": "Der korrekte Wert muss innerhalb des minimalen und maximalen Wertes liegen",
           "answer_text_empty": "Der Antworttext darf nicht leer sein",
           "no_answers_defined": "Es wurden noch keine Antworten angelegt",
-          "empty_question_text": "Der Text der Frage ist leer"
+          "empty_question_text": "Der Text der Frage ist leer",
+          "empty_question_type": "Der Typ der Frage wurde noch nicht gesetzt",
+          "empty-question-tags": "Der Frage wurden noch keine Tags zugewiesen"
         }
       },
       "selected_nicks": "Nicknamen",
@@ -564,7 +611,38 @@
     "member-group-select": {
       "title": "Wähle ein Team"
     },
-    "quiz_manager_details": {},
+    "quiz_manager_details": {
+      "tags": {
+        "description": {
+          "title": "Hier kannst du deiner Frage Tags hinzufügen. Welche du verwendest, ist dir überlassen.<br/>Einige Empfehlungen für Quiz-Tags an dieser Stelle:",
+          "dl": {
+            "0": {
+              "dt": "Verwende mehrere Tags mit grober, als auch feiner granularen Themengebieten",
+              "dd": "Ein gutes Beispiel wäre sowohl der Tag \"Mathematik\" als auch \"Differentialrechnung\"."
+            },
+            "1": {
+              "dt": "Für wen ist die Frage geeignet?",
+              "dd": "Bei Fragen für Schüler kannst du z.B. noch die Klassenstufe angeben. Generell sind Tags mit Themenbezug immer vorzuziehen."
+            },
+            "2": {
+              "dt": "Keine Modulnamen für Hochschulfragen",
+              "dd": "Hochschulmodulnamen sind inhaltlich manchmal nicht auf alle anderen Hochschulen übertragbar. Fragen, die thematisch nicht genau zugeordnet werden können, erzeugen Verwirrung. Verwende in diesem Falle Tags mit Themenbezug."
+            },
+            "3": {
+              "dt": "Sprache und Rechtschreibung",
+              "dd": "Wenn du eine Frage z.B. auf Englisch stellst, verwende keine deutschen Tags. Bitte achte auf eine korrekte Rechtschreibung. Nur so können Fragen mit gleichen Tags ohne großen Aufwand für ein Quiz bereitgestellt werden."
+            },
+            "4": {
+              "dt": "Welche Tags kann ich verwenden?",
+              "dd": "Eine Inspiration findest du in der Wortwolke unten. Falls du bei der Eingabe in das Suchfeld keine Treffer hast, schreibe einfach weiter und erstelle damit einen neuen Tag."
+            }
+          }
+        },
+        "tag-input": {
+          "placeholder": "Gib hier einen passenden Tag ein"
+        }
+      }
+    },
     "name_view": {
       "name_input": {},
       "demo_quiz": {
@@ -588,8 +666,9 @@
         "available": "Der Quizname ist verfügbar",
         "select-quiz": "Verwende den Quiznamen",
         "please-wait": "Bitte warten...",
-        "malformed": "Der Quizname ist ungültig",
-        "already-taken": "Der Quizname ist bereits vergeben "
+        "malformed": "Der Quizname enhält ungültige Zeichenfolgen. Bitte versuche einen anderen Namen",
+        "already-taken": "Der Quizname ist bereits vergeben ",
+        "min-keys": "Der Quizname muss mindestens 4 Zeichen lang sein"
       }
     },
     "home": {
@@ -599,7 +678,15 @@
       "new-abcd-quiz": "Erstelle ein neues ABCD Quiz",
       "view-public": "Klicke hier um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes}} zu wählen!",
       "view-all-public": "... oder sieh dir deine eigenen veröffentlichten Quizze an!",
-      "view-own-public": "Klicke hier um deine eigenen veröffentlichten Quizze anzusehen!"
+      "view-own-public": "Klicke hier um deine eigenen veröffentlichten Quizze anzusehen!",
+      "errors": {
+        "already-taken": "Dieser Name wird bereits verwendet. Bitte nutze einen anderen Quiznamen",
+        "min-length": "Bitte gib für deinen Quiznamen mindestens 4 Zeichen ein"
+      },
+      "success": {
+        "can-join": "Diesem Quiz kannst du beitreten!",
+        "can-create": "Dieser Quizname ist verfügbar. Du kannst ein Quiz damit erstellen!"
+      }
     },
     "public-quizzes": {
       "own": {

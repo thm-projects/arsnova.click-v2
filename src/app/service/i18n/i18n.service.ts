@@ -96,7 +96,11 @@ export class I18nService {
   public initLanguage(): void {
     let lang;
     if (isPlatformServer(this.platformId)) {
-      lang = this.request.header('accept-language').match(/([A-Z]{2})/);
+      try {
+        lang = this.request.header('accept-language').match(/([A-Z]{2})/);
+      } catch {
+        lang = null;
+      }
       if (!Array.isArray(lang) || !lang[0]) {
         this.setLanguage(Language.EN);
       } else {

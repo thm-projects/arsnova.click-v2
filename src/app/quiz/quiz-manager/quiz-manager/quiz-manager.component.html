@@ -24,16 +24,24 @@
 
     <div class="form-row">
 
-      <div class="col-12 col-sm-auto">
-        <span>{{elem.translationReferrer() | translate}}</span>
+      <div class="col-md-8">
+        <p class="text-truncate">
+          <span>{{elem.translationReferrer() | translate}}</span>
 
-        <fa-icon *ngIf="!elem.isValid()"
-                 [icon]="'exclamation-triangle'"
-                 [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
-                 class="text-warning ml-2"></fa-icon>
+          <fa-icon *ngIf="!elem.isValid()"
+                   [icon]="'exclamation-triangle'"
+                   [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
+                   class="text-warning ml-2"></fa-icon>
+
+          <span class="font-italic ml-2"
+                *ngIf="elem.tags?.length">
+            <ng-container *ngFor="let tag of elem.tags; let lastElem = last">{{tag}}
+              <ng-container *ngIf="!lastElem">, </ng-container></ng-container>
+          </span>
+        </p>
       </div>
 
-      <div class="col-12 col-sm-auto ml-sm-auto mt-2 mt-sm-0">
+      <div class="col-sm-auto ml-sm-auto mt-2 mt-sm-0">
         <fa-icon (click)="moveQuestionUp(i)"
                  *ngIf="i"
                  [icon]="'arrow-up'"
@@ -43,6 +51,14 @@
         <fa-icon (click)="moveQuestionDown(i)"
                  *ngIf="i !== quizService.quiz?.questionList.length - 1"
                  [icon]="'arrow-down'"
+                 class="cursor-pointer mx-4 mx-md-2"
+                 role="button"></fa-icon>
+
+        <fa-icon (click)="updloadToQuizPool(elem)"
+                 [class.text-danger]="!elem.isValid() || !elem.tags?.length"
+                 [icon]="['fas', (isUploading(elem) ? 'spinner' : 'cloud-upload-alt')]"
+                 [ngbTooltip]="getTooltipForUpload(elem) | translate"
+                 [spin]="isUploading(elem)"
                  class="cursor-pointer mx-4 mx-md-2"
                  role="button"></fa-icon>
 

@@ -49,6 +49,7 @@ const routes: Routes = [
   }, {
     path: 'preview/:themeId/:languageId',
     component: HomeComponent,
+    data: { disableTwitter: true },
     canActivate: [InitDbGuard],
   }, {
     path: 'languages',

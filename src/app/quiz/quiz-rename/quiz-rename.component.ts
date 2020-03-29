@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { delay, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { MessageProtocol } from '../../lib/enums/Message';
@@ -23,6 +23,7 @@ export class QuizRenameComponent implements OnInit, OnDestroy {
   public quizName = '';
   public isQuiznameMalformed: boolean;
   private readonly _destroy = new Subject();
+  private readonly _checkingQuizAvailable = new Subject();
 
   constructor(
     public readonly fileUploadService: FileUploadService,
@@ -58,15 +59,17 @@ export class QuizRenameComponent implements OnInit, OnDestroy {
   public checkIsQuizNameAvailable(): void {
     this.isQuiznameAvailable = false;
     this.isQuiznameMalformed = false;
+    this.isQueringQuizname = true;
+    this._checkingQuizAvailable.next();
 
     const name = this.quizName.trim().toLowerCase();
-    if (name.length < 3 || name.startsWith('demo quiz') || checkABCDOrdering(name)) {
+    if (name.length < 4 || name.startsWith('demo quiz') || checkABCDOrdering(name)) {
+      this.isQueringQuizname = false;
       this.isQuiznameMalformed = true;
       return;
     }
 
-    this.isQueringQuizname = true;
-    this.quizApiService.getQuizStatus(this.quizName).subscribe(status => {
+    this.quizApiService.getQuizStatus(this.quizName).pipe(delay(500), takeUntil(this._checkingQuizAvailable)).subscribe(status => {
       this.isQueringQuizname = false;
       this.isQuiznameAvailable = status.step === MessageProtocol.Unavailable;
     });
@@ -105,5 +108,7 @@ export class QuizRenameComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy.next();
     this._destroy.complete();
+    this._checkingQuizAvailable.next();
+    this._checkingQuizAvailable.complete();
   }
 }

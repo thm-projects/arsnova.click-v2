@@ -1,3 +1,5 @@
+import { getAnswerForType } from '../../AnswerValidator';
+import { AnswerType } from '../../enums/AnswerType';
 import { QuestionType } from '../../enums/QuestionType';
 import { FreeTextAnswerEntity } from '../answer/FreetextAnwerEntity';
 import { AbstractQuestionEntity } from './AbstractQuestionEntity';
@@ -7,6 +9,12 @@ export class FreeTextQuestionEntity extends AbstractQuestionEntity {
 
   constructor(props) {
     super(props);
+
+    if (this.answerOptionList.length > 1) {
+      this.answerOptionList = [getAnswerForType(AnswerType.FreeTextAnswerOption, {})];
+    } else {
+      this.answerOptionList = [getAnswerForType(AnswerType.FreeTextAnswerOption, this.answerOptionList[0])];
+    }
   }
 
   /**

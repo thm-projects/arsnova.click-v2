@@ -20,9 +20,10 @@
       </ng-container>
     </button>
   </div>
-  <div *ngIf="failedLoginReason"
-       class="border border-danger rounded p-5 m-5 text-center text-uppercase"
-       style="border-width: 3px;">
+  <ngb-alert *ngIf="failedLoginReason"
+             [dismissible]="false"
+             [type]="'danger'"
+             class="mt-5">
     <span>{{failedLoginReason | translate}}</span>
-  </div>
+  </ngb-alert>
 </div>

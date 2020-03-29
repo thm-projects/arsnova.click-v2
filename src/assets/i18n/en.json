@@ -87,7 +87,8 @@
         "showToken": "Show Token",
         "twitter": {
           "tweet": "Tweet"
-        }
+        },
+        "questionpool": "Quiz-Pool"
       },
       "about": {
         "title": "About arsnova.click",
@@ -252,6 +253,38 @@
     }
   },
   "component": {
+    "twitter-card": {
+      "more-tweets": "More Tweets",
+      "follower": "Follower: {count}"
+    },
+    "quiz-pool": {
+      "select-tag": {
+        "label": "Select Tag",
+        "placeholder": "Enter your preferred Tag here. The quiz will be built with questions with the selected Tags.",
+        "validation-error": {
+          "invalid-tag": "The entered Tag is not available. Please select one from the dropdown menu."
+        }
+      },
+      "tag-question-amount": {
+        "label": "Amount of questions",
+        "placeholder": "Amount of questions",
+        "validation-error": {
+          "required": "Please enter the amount of questions here",
+          "min": "Please use at least one question for this tag",
+          "max": "You can select only {max, plural, =0{0 questions} one{one question} other{{max} questions}} with your selected Tag"
+        }
+      },
+      "tag-available": "{weight, plural, =0{0 Questions} one{One Question} other{{weight} Questions}} available",
+      "question-amount-warning": "Please notice that redundant questions with multiple Tags will only be included once in your quiz. The amount of questions in your quiz can be lower than the selected {amount} questions.",
+      "create-quiz": "Create Quiz",
+      "selected-tags": "Selected Tags",
+      "save-tag": "Use Tag",
+      "delete-tag": "Delete Tag",
+      "create-own-question": {
+        "label": "Do you want to create a new Quizpool question?",
+        "button-label": "New Quizpool question"
+      }
+    },
     "twitter": {
       "optin": {
         "check": "Check if you want enable Twitter features",
@@ -341,6 +374,7 @@
       "start_session": "Start the quiz",
       "edit_session": "Edit the quiz",
       "create_session": "Make a new one!",
+      "can_create_session": "Create Quiz",
       "create_demo_session": "Start demo quiz",
       "quiz_management": "Stored Quizzes",
       "session_management": "Quizzes",
@@ -513,8 +547,13 @@
         "timer": {
           "long": "Edit timer",
           "short": "Timer"
+        },
+        "tags": {
+          "long": "Tags",
+          "short": "Tags"
         }
       },
+      "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
         "available_questions": "Here you can see all types of questions from which you can choose. Each question type offers different presets and possibilities for the design of the quizzes",
         "added_questions": "Here you will find all your quiz questions, which are available in the quiz. To add a quiz question to the quiz, either drag it from the left stack or click the quiz query in the left pile. By clicking on the inserted question, you can set the content of the question.",
@@ -539,6 +578,11 @@
       "question_failed": "The question is still incomplete",
       "question_group_successful": "Your quiz is ready",
       "question_group_failed": "Your quiz is incomplete",
+      "upload-to-pool": {
+        "valid-upload": "Provide your question to the Quiz-Pool",
+        "invalid-question": "Only valid questions can be uploaded to the Quiz-Pool",
+        "no-tags": "You need to add some Tags to your question to upload it to the Quiz-Pool."
+      },
       "correct": "Correct",
       "wrong": "Wrong",
       "question": "Question",
@@ -548,6 +592,7 @@
       "answer_configuration": "Configuration of the answer",
       "timer": "Countdown",
       "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
+      "tags": "Tags",
       "validation": "Validation",
       "validation_errors": {
         "types": {
@@ -565,8 +610,10 @@
           "answer_text_empty": "The answer's text is not allowed to be empty",
           "timer_too_big": "The timer is too long",
           "no_answers_defined": "No answers have been defined",
-          "empty_question_text": "<none>",
-          "no_valid_answer_required": "Correct or wrong answers are not allowed for this question type"
+          "no_valid_answer_required": "Correct or wrong answers are not allowed for this question type",
+          "empty_question_text": "The text of the question is empty",
+          "empty_question_type": "No question type set",
+          "empty-question-tags": "No tags have been assigned to the question yet"
         }
       },
       "selected_nicks": "Valid nicknames",
@@ -701,7 +748,37 @@
       "title": "Select a Team"
     },
     "quiz_manager_details": {
-      "back": "Back to the quiz overview"
+      "back": "Back to the quiz overview",
+      "tags": {
+        "description": {
+          "title": "You can add Tags to your question here. Which one you use is up to you.<br/>Some recommendations regarding Quiz-Tags:",
+          "dl": {
+            "0": {
+              "dt": "Use multiple Tags with coarse and fine granular subject areas",
+              "dd": "A good example would be both the Tags \"Mathematics\" and \"Differential Calculus\"."
+            },
+            "1": {
+              "dt": "Who is the question for?",
+              "dd": "For questions for pupils you can e.g. specify the grade level. In general, tags with a subject should always be preferred."
+            },
+            "2": {
+              "dt": "No module names for University questions",
+              "dd": "Subjects of Modules of Universities are usually not applicable to all other Universities. Questions which cannot be exactly associated by their subject are confusing. Use Tags related to a subject in this case."
+            },
+            "3": {
+              "dt": "Language and spelling",
+              "dd": "If you are writing a Question eg. in German, do not use Englisch Tags, then. Please make sure you are using correct spelling and grammar. Only then questions with the same Tags can be grouped to a quiz without unnecessary effort."
+            },
+            "4": {
+              "dt": "Which Tags can I use?",
+              "dd": "You can find and Inspiration in the word cloud below. If you have no match in the search field just keep on typing and create a new Tag."
+            }
+          }
+        },
+        "tag-input": {
+          "placeholder": "Enter an appropriate Tag here"
+        }
+      }
     },
     "name_view": {
       "name_input": {},
@@ -723,15 +800,16 @@
       }
     },
     "quiz_rename": {
-      "rename": "The Quiz {NAME} is already taken",
+      "rename": "Please select a name for your quiz",
       "custom": {
         "title": "Alternativly you can enter a custom quiz name",
         "input": "Custom quiz name",
         "available": "Your quiz name is available",
         "select-quiz": "Select quiz name",
         "please-wait": "Please wait...",
-        "malformed": "Your quiz name is malformed",
-        "already-taken": "Your quiz name is already taken"
+        "malformed": "Your quiz name contains illegal characters. Please try again with a different name.",
+        "already-taken": "Your quiz name is already taken",
+        "min-keys": "The quiz name must contain at least 4 characters"
       },
       "title": "Choose an alternative"
     },
@@ -742,7 +820,15 @@
       "new-abcd-quiz": "Create a new ABCD Quiz",
       "view-public": "Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
       "view-all-public": "... or view your own public quizzes!",
-      "view-own-public": "Click here to view your own public quizzes!"
+      "view-own-public": "Click here to view your own public quizzes!",
+      "errors": {
+        "already-taken": "This name is already used. Please use another quiz name",
+        "min-length": "Please use at least 4 characters for your quiz name"
+      },
+      "success": {
+        "can-join": "You can join this quiz!",
+        "can-create": "This quiz name is available. You can create a quiz with it!"
+      }
     },
     "public-quizzes": {
       "own": {
