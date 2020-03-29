@@ -25,6 +25,7 @@ export const DefaultSettings = {
       rangeMax: 60,
       correctValue: 30,
       answerOptionList: [],
+      tags: [],
     },
     sessionConfig: {
       music: {

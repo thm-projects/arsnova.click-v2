@@ -60,7 +60,11 @@
     </div>
   </ng-container>
 
-  <h4 *ngIf="authorizationFailed"
-      class="text-danger text-center mt-5">{{'component.login.authorization_failed' | translate}}
-  </h4>
+  <div class="mt-5">
+    <ngb-alert *ngIf="authorizationFailed"
+               [dismissible]="false"
+               type="danger">
+      <h5 class="text-center mb-0">{{'component.login.authorization_failed' | translate}}</h5>
+    </ngb-alert>
+  </div>
 </ng-container>

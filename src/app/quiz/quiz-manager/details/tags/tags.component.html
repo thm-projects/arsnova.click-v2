@@ -1,0 +1,62 @@
+<ng-template #resultTemplate
+             let-r="result"
+             let-t="term">
+  <p [title]="r.text"
+     class="text-truncate">
+    <ngb-highlight [result]="r.text"
+                   [term]="t"></ngb-highlight>
+  </p>
+</ng-template>
+
+<div class="input-group">
+  <input #inputElement
+         #instance="ngbTypeahead"
+         (click)="click$.next(inputElement.value)"
+         (focus)="focus$.next(inputElement.value)"
+         [(ngModel)]="tagName"
+         [editable]='true'
+         [placeholder]="'component.quiz_manager_details.tags.tag-input.placeholder' | translate"
+         [inputFormatter]="inputFormatter.bind(self)"
+         [ngbTypeahead]="search.bind(self)"
+         [resultFormatter]="resultFormatter.bind(self)"
+         [resultTemplate]="resultTemplate"
+         class="form-control"
+         type="text">
+
+  <div class="input-group-append">
+    <button (click)="saveTag()"
+            [disabled]="hasTagSelected()"
+            class="btn btn-success">
+      <span>{{'component.quiz-pool.save-tag' | translate}}</span>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="selectedTags?.length"
+     class="bg-light mt-3 p-3 text-primary">
+  <h5>{{'component.quiz-pool.selected-tags' | translate}}</h5>
+  <div (click)="removeTag(tag)"
+       (mouseenter)="hovered = i"
+       (mouseleave)="hovered = -1"
+       *ngFor="let tag of selectedTags; let i = index"
+       [class.badge-danger]="hovered === i"
+       [class.badge-primary]="hovered !== i"
+       class="cursor-pointer badge mr-2">
+    <span>{{tag.text}}</span>
+  </div>
+</div>
+
+<ngb-alert [dismissible]="false"
+           [type]="'info'"
+           class="mt-3">
+  <h5 [innerHTML]="'component.quiz_manager_details.tags.description.title' | translate"></h5>
+  <dl>
+    <ng-container *ngFor="let index of [0,1,2,3,4]">
+      <dt>{{('component.quiz_manager_details.tags.description.dl.' + index + '.dt') | translate}}</dt>
+      <dd>{{('component.quiz_manager_details.tags.description.dl.' + index + '.dd') | translate}}</dd>
+    </ng-container>
+  </dl>
+</ngb-alert>
+
+<app-word-cloud [data]="tags"
+                class="d-block w-100 mt-3 bg-secondary"></app-word-cloud>

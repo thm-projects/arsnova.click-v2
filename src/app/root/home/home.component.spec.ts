@@ -11,6 +11,8 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faEdit, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
+import { LanguageFilterPipeMock } from '../../../_mocks/_pipes/LanguageFilterPipeMock';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
@@ -38,6 +40,7 @@ import { TwitterService } from '../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
+import { TwitterCardsComponent } from '../twitter-cards/twitter-cards.component';
 import { HomeComponent } from './home.component';
 
 @Pipe({
@@ -69,7 +72,7 @@ describe('HomeComponent', () => {
         }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, NgbModule, FontAwesomeModule, FormsModule,
       ],
       providers: [
-        RxStompService, {
+        RxStompService, SimpleMQ, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, FooterBarService, {
@@ -95,10 +98,10 @@ describe('HomeComponent', () => {
           useClass: FileUploadMockService,
         }, {
           provide: TwitterService,
-          useClass: TwitterServiceMock
-        }
+          useClass: TwitterServiceMock,
+        },
       ],
-      declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock],
+      declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock, TwitterCardsComponent, LanguageFilterPipeMock],
     }).compileComponents();
   });
 

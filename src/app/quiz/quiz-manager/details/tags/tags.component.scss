@@ -1,0 +1,27 @@
+@import "prebuild";
+
+.input-group {
+  @include media-breakpoint-only(xs) {
+    .input-group-append {
+      width: 100%;
+    }
+
+    button,
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+    }
+  }
+}
+
+:host ::ng-deep .dropdown-menu {
+  max-width: calc(100% - 10px);
+
+  .dropdown-item {
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #e2e2e2;
+      padding-bottom: 0.5rem;
+      padding-top: 0.5rem;
+    }
+  }
+}

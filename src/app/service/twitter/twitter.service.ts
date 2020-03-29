@@ -1,7 +1,8 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { filter } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
 import { StorageKey } from '../../lib/enums/enums';
 import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
@@ -46,14 +47,14 @@ export class TwitterService {
     this.refreshTweets();
   }
 
-  public refreshTweets(): void {
+  public refreshTweets(): Observable<Array<ITweetEntry>> {
     if (!this.getOptIn()) {
-      return;
+      return of([null]);
     }
 
-    this.twitterApiService.getTweets().subscribe((data) => {
+    return this.twitterApiService.getTweets().pipe(tap((data) => {
       this.tweets = data;
-    });
+    }));
   }
 
   public getOptIn(): boolean {

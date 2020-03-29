@@ -1,10 +1,13 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
+import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
@@ -12,6 +15,7 @@ import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipe
 import { SwUpdateMock } from '../../../../../../_mocks/_services/SwUpdateMock';
 import { HeaderComponent } from '../../../../../header/header/header.component';
 import { SurveyQuestionEntity } from '../../../../../lib/entities/question/SurveyQuestionEntity';
+import { jwtOptionsFactory } from '../../../../../lib/jwt.factory';
 import { LivePreviewComponent } from '../../../../../live-preview/live-preview/live-preview.component';
 import { ConnectionMockService } from '../../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../../service/connection/connection.service';
@@ -43,9 +47,16 @@ describe('AnsweroptionsDefaultComponent', () => {
         AngularSvgIconModule.forRoot(),
         NgbPopoverModule,
         FontAwesomeModule,
-        HttpClientTestingModule,
+        HttpClientTestingModule, JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [PLATFORM_ID],
+          },
+        }),
       ],
       providers: [
+        RxStompService,
         {
           provide: CustomMarkdownService,
           useClass: CustomMarkdownServiceMock,
@@ -64,8 +75,11 @@ describe('AnsweroptionsDefaultComponent', () => {
             paramMap: of({
               get: () => 0,
             }),
+            queryParamMap: of({
+              get: () => null,
+            }),
           },
-        }, I18nService, {
+        }, {
           provide: SwUpdate,
           useClass: SwUpdateMock,
         }, {

@@ -6,6 +6,7 @@ import { AdminOverviewComponent } from './admin-overview/admin-overview.componen
 import { QuizAdminComponent } from './quiz-admin/quiz-admin.component';
 import { QuizDetailsAdminComponent } from './quiz-details-admin/quiz-details-admin.component';
 import { UserAdminComponent } from './user-admin/user-admin.component';
+import { QuizPoolAdminComponent } from './quiz-pool-admin/quiz-pool-admin.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,9 @@ const routes: Routes = [
   }, {
     path: 'quiz',
     component: QuizAdminComponent,
+  }, {
+    path: 'quiz/pool',
+    component: QuizPoolAdminComponent,
   }, {
     path: 'quiz/:id',
     component: QuizDetailsAdminComponent,
@@ -24,7 +28,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [UserAdminComponent, QuizAdminComponent, AdminOverviewComponent, QuizDetailsAdminComponent],
+  declarations: [UserAdminComponent, QuizAdminComponent, AdminOverviewComponent, QuizDetailsAdminComponent, QuizPoolAdminComponent],
   imports: [
     SharedModule, RouterModule.forChild(routes), PipesModule,
   ],

@@ -6,29 +6,42 @@
           class="btn btn-secondary rounded p-2 my-2 rename-recommendation text-break text-left">{{renameRecommendation}}
   </button>
   <div class="mt-2">
-    <p>{{'component.quiz_rename.custom.title' | translate}}</p>
+    <p *ngIf="duplicateQuiz.renameRecommendation?.length">{{'component.quiz_rename.custom.title' | translate}}</p>
     <label class="d-block">
       <input type="text"
              class="p-2 border-0 w-100 rounded ng-touched"
              [(ngModel)]="quizName"
-             (keyup)="checkIsQuizNameAvailable()"
+             (ngModelChange)="checkIsQuizNameAvailable()"
              [placeholder]="'component.quiz_rename.custom.input' | translate"/>
-      <ng-container *ngIf="quizName.length > 3">
-        <ng-container *ngIf="isQuiznameAvailable">
-          <p>{{'component.quiz_rename.custom.available' | translate}}</p>
-          <button class="btn btn-secondary"
-                  (click)="sendQuizName(duplicateQuiz)">
-            <span>{{'component.quiz_rename.custom.select-quiz' | translate}}</span>
-          </button>
-        </ng-container>
-        <ng-container *ngIf="!isQuiznameAvailable">
-          <p *ngIf="isQueringQuizname">{{'component.quiz_rename.custom.please-wait' | translate}}</p>
-          <ng-container *ngIf="!isQueringQuizname">
-            <p *ngIf="isQuiznameMalformed">{{'component.quiz_rename.custom.malformed' | translate}}</p>
-            <p *ngIf="!isQuiznameMalformed">{{'component.quiz_rename.custom.already-taken' | translate}}</p>
-          </ng-container>
+    </label>
+
+    <div class="mt-4">
+
+      <ng-container *ngIf="!isQuiznameAvailable">
+        <p *ngIf="quizName.length < 4">{{'component.quiz_rename.custom.min-keys' | translate}}</p>
+        <p *ngIf="isQueringQuizname">{{'component.quiz_rename.custom.please-wait' | translate}}</p>
+        <ng-container *ngIf="quizName.length > 3 && !isQueringQuizname">
+          <p *ngIf="isQuiznameMalformed">{{'component.quiz_rename.custom.malformed' | translate}}</p>
+          <p *ngIf="!isQuiznameMalformed">{{'component.quiz_rename.custom.already-taken' | translate}}</p>
         </ng-container>
       </ng-container>
-    </label>
+
+      <ng-container *ngIf="isQuiznameAvailable">
+        <p>{{'component.quiz_rename.custom.available' | translate}}</p>
+      </ng-container>
+
+      <div class="mt-2">
+        <button (click)="sendQuizName(duplicateQuiz)"
+                [disabled]="!isQuiznameAvailable"
+                class="btn btn-secondary">
+          <span>{{'component.quiz_rename.custom.select-quiz' | translate}}</span>
+        </button>
+
+        <fa-icon *ngIf="isQueringQuizname"
+                 [icon]="'spinner'"
+                 [spin]="true"
+                 class="ml-3"></fa-icon>
+      </div>
+    </div>
   </div>
 </div>

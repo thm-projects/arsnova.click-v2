@@ -20,7 +20,7 @@ export class QuizMockService {
   constructor() {
     this.quiz = new QuizEntity({
       name: 'test',
-      sessionConfig: new SessionConfigurationEntity(DefaultSettings.defaultQuizSettings.sessionConfig),
+      sessionConfig: new SessionConfigurationEntity(JSON.parse(JSON.stringify(DefaultSettings.defaultQuizSettings.sessionConfig))),
       currentQuestionIndex: 0,
       questionList: [
         new SingleChoiceQuestionEntity({}), new FreeTextQuestionEntity({
@@ -51,6 +51,7 @@ export class QuizMockService {
         }),
       ],
     });
+    this.quizUpdateEmitter.next(this.quiz);
   }
 
   public currentQuestion(): AbstractQuestionEntity {

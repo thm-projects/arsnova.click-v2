@@ -4,9 +4,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { DefaultSettings } from '../../lib/default.settings';
 import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
+import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { StorageKey } from '../../lib/enums/enums';
+import { QuizState } from '../../lib/enums/QuizState';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { NoDataErrorComponent } from '../../shared/no-data-error/no-data-error.component';
 import { QuizApiService } from '../api/quiz/quiz-api.service';
@@ -18,6 +21,20 @@ import { StorageService } from '../storage/storage.service';
 })
 export class QuizService {
   public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
+
+  private _isAddingPoolQuestion = false;
+
+  get isAddingPoolQuestion(): boolean {
+    return this._isAddingPoolQuestion;
+  }
+
+  set isAddingPoolQuestion(value: boolean) {
+    if (value && !this._isAddingPoolQuestion) {
+      this._isInEditMode = true;
+      this.generatePoolQuiz();
+    }
+    this._isAddingPoolQuestion = value;
+  }
 
   private _isOwner = false;
 
@@ -77,6 +94,8 @@ export class QuizService {
 
   public cleanUp(): void {
     this._readingConfirmationRequested = false;
+    this._isAddingPoolQuestion = false;
+    this._isInEditMode = false;
 
     this.close();
     this.quiz = null;
@@ -84,7 +103,7 @@ export class QuizService {
   }
 
   public persist(): void {
-    if (isPlatformServer(this.platformId)) {
+    if (isPlatformServer(this.platformId) || this._isAddingPoolQuestion) {
       return;
     }
 
@@ -97,7 +116,7 @@ export class QuizService {
   }
 
   public persistQuiz(quiz: QuizEntity): void {
-    if (isPlatformServer(this.platformId)) {
+    if (isPlatformServer(this.platformId) || this._isAddingPoolQuestion) {
       return;
     }
 
@@ -126,6 +145,11 @@ export class QuizService {
     }
 
     if (this.isOwner && this._quiz) {
+      this._quiz.state = QuizState.Inactive;
+      this.storageService.db.Quiz.get(this.quiz.name).then(quiz => {
+        quiz.state = QuizState.Inactive;
+        return this.storageService.db.Quiz.put(quiz);
+      });
       this.quizApiService.deleteActiveQuiz(this._quiz).subscribe();
     }
   }
@@ -211,6 +235,14 @@ export class QuizService {
         reject();
         return;
       }
+      if (this.quiz?.name === quizName) {
+        this._isInEditMode = true;
+        this._isOwner = true;
+        this.quizUpdateEmitter.next(this.quiz);
+        console.log('QuizService: loadDataToEdit already initialized', quizName);
+        resolve();
+        return;
+      }
 
       this.storageService.db.Quiz.get(quizName).then(quiz => {
         if (!quiz) {
@@ -221,7 +253,6 @@ export class QuizService {
         this.isOwner = true;
         this._isInEditMode = true;
         this.quiz = new QuizEntity(quiz);
-        this.quizUpdateEmitter.next(this.quiz);
         console.log('QuizService: loadDataToEdit finished', quiz, quizName);
         resolve();
       });
@@ -230,6 +261,22 @@ export class QuizService {
 
   public stopEditMode(): void {
     this._isInEditMode = false;
+    this._isAddingPoolQuestion = false;
+  }
+
+  public editPoolQuestion(): void {
+    this._isInEditMode = true;
+    this._isAddingPoolQuestion = true;
+  }
+
+  public generatePoolQuiz(questionList?: Array<AbstractQuestionEntity>): void {
+    const defaultSettings = DefaultSettings.defaultQuizSettings;
+    this.quiz = new QuizEntity({
+      name: null,
+      currentQuestionIndex: 0,
+      questionList: questionList ?? [new SingleChoiceQuestionEntity({ answerOptionList: [] })],
+      ...defaultSettings,
+    });
   }
 
   private restoreSettings(quizName: string): Promise<boolean> {

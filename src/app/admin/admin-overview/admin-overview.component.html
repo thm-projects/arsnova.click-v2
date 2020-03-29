@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12">
-    <div class="card mb-3 cursor-pointer text-dark"
+    <div class="card cursor-pointer text-dark"
          [routerLink]="['/admin', 'quiz']">
       <div class="card-body">
         <p class="card-text">Quiz Admin</p>
@@ -15,6 +15,16 @@
       <div class="card-body">
         <p class="card-text">User Admin</p>
         <p class="card-subtitle">Administrate current users</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card mt-3 cursor-pointer text-dark"
+         [routerLink]="['/admin', 'quiz', 'pool']">
+      <div class="card-body">
+        <p class="card-text">Quiz-Pool Admin</p>
+        <p class="card-subtitle">Administrate Quiz-Pool questions</p>
       </div>
     </div>
   </div>
