@@ -59,4 +59,5 @@
 </ngb-alert>
 
 <app-word-cloud [data]="tags"
+                *ngIf="tags?.length"
                 class="d-block w-100 mt-3 bg-secondary"></app-word-cloud>
