@@ -1,5 +1,6 @@
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
@@ -18,6 +19,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 })
 export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent {
   public static TYPE = 'QuizManagerDetailsOverviewComponent';
+  public readonly environment = environment;
 
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,

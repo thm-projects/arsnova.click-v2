@@ -44,6 +44,7 @@ export const environment: IEnvironment = {
   defaultTheme: QuizTheme.Material,
   darkModeCheckEnabled: true,
   enableTwitter: true,
+  enableQuizPool: true,
 };
 
 export enum DEVICE_TYPES {
