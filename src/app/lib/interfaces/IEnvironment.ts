@@ -30,4 +30,5 @@ export interface IEnvironment {
   defaultTheme: QuizTheme;
   darkModeCheckEnabled: boolean;
   enableTwitter: boolean;
+  enableQuizPool: boolean;
 }

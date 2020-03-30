@@ -39,6 +39,7 @@
       <span class="d-block d-sm-none">{{'component.quiz_manager.details.question_type.short' | translate}}</span>
     </button>
     <button type="button"
+            *ngIf="environment.enableQuizPool"
             class="btn btn-light"
             (click)="trackDetailsTarget('tags')"
             [disabled]="!question?.TYPE"
