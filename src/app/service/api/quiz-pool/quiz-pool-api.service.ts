@@ -19,6 +19,7 @@ export class QuizPoolApiService {
   private _deletePoolQuestionUrl: string;
   private _getQuizpoolQuestionUrl: string;
   private _getQuizpoolQuestionsUrl: string;
+  private _postInitiateImportUrl: string;
 
   constructor(private http: HttpClient, private userService: UserService) {
     this.loadUrls();
@@ -72,6 +73,11 @@ export class QuizPoolApiService {
     return this.http.get<IMessage>(`${this._getQuizpoolQuestionUrl}/${id}`, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
+  public initiateImport(targetUrl: string): Observable<IMessage> {
+    return this.http.post<IMessage>(`${this._postInitiateImportUrl}`, { url: targetUrl },
+      { headers: { authorization: this.userService.staticLoginToken } });
+  }
+
   private loadUrls(): void {
     this._getQuizpoolUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/generate`;
     this._getQuizpoolQuestionsUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/all`;
@@ -81,5 +87,6 @@ export class QuizPoolApiService {
     this._postNewQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool`;
     this._putApproveQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/pending`;
     this._deletePoolQuestionUrl = `${DefaultSettings.httpApiEndpoint}/quizpool`;
+    this._postInitiateImportUrl = `${DefaultSettings.httpApiEndpoint}/quizpool/import`;
   }
 }
