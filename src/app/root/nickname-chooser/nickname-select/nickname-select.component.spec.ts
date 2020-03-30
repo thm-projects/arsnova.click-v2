@@ -5,16 +5,18 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
@@ -43,9 +45,9 @@ describe('NicknameSelectComponent', () => {
         }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
       ],
       providers: [
-        MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
+        {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
@@ -68,6 +70,8 @@ describe('NicknameSelectComponent', () => {
   }));
 
   beforeEach(async(() => {
+    const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
+    library.addIcons(faSpinner);
     fixture = TestBed.createComponent(NicknameSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

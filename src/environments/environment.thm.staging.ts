@@ -6,7 +6,7 @@ export const environment: IEnvironment = {
   production: true,
   title: Title.Default,
   version: 'VERSION',
-  enableCasLogin: true,
+  enableCasLogin: false,
   sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
   ssrEndpoint: 'https://staging.arsnova.click/backend',
   serverEndpoint: 'https://staging.arsnova.click/backend',
@@ -44,6 +44,7 @@ export const environment: IEnvironment = {
   defaultTheme: QuizTheme.Material,
   darkModeCheckEnabled: true,
   enableTwitter: true,
+  enableQuizPool: true,
 };
 
 export enum DEVICE_TYPES {

@@ -84,6 +84,30 @@ export class FooterBarService {
 
   public TYPE_REFERENCE: string;
 
+  public footerElemQuizpool: IFooterBarElement = new FooterbarElement({
+    id: 'quizpool',
+    iconLayer: [
+      {
+        classes: ['fas', 'question'],
+        transform: 'shrink-3' as any,
+      },
+      {
+        classes: ['fas', 'question'],
+        transform: 'shrink-6 right-7 rotate-50' as any,
+      },
+      {
+        classes: ['fas', 'question'],
+        transform: 'shrink-5 bottom-5 left-7 rotate--30' as any,
+      },
+    ],
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.questionpool',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.questionpool',
+    linkTarget: ['/', 'quiz', 'pool'],
+  }, function (): void {
+  });
   public footerElemTranslation: IFooterBarElement = new FooterbarElement({
     id: 'translation',
     iconClass: ['fas', 'globe'],
@@ -467,11 +491,6 @@ export class FooterBarService {
       this._connectionState = value;
       this.updateFooterElementsState();
     });
-
-    document.onfullscreenchange = () => {
-    };
-    document.onfullscreenerror = () => {
-    };
   }
 
   public replaceFooterElements(elements: Array<IFooterBarElement>): void {
@@ -514,12 +533,12 @@ export class FooterBarService {
 
   private removeUnsupportedElements(elements: Array<IFooterBarElement>): void {
     const fullscreenIndex = elements.findIndex(elem => elem.id === this.footerElemFullscreen.id);
-    if (fullscreenIndex > -1 && !Modernizr.fullscreen) {
+    if (fullscreenIndex > -1 && isPlatformBrowser(this.platformId) && !Modernizr.fullscreen) {
       elements.splice(fullscreenIndex, 1);
     }
 
     const backIndex = elements.findIndex(elem => elem.id === this.footerElemBack.id);
-    if (backIndex > -1 && history.length < 2) {
+    if (backIndex > -1 && isPlatformBrowser(this.platformId) && history.length < 2) {
       elements.splice(backIndex, 1);
     }
   }

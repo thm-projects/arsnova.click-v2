@@ -1,4 +1,4 @@
-import { IconPathData, IconPrefix } from '@fortawesome/fontawesome-svg-core';
+import { IconParams, IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from './interfaces';
 
 export class FooterbarElement implements IFooterBarElement {
@@ -18,7 +18,11 @@ export class FooterbarElement implements IFooterBarElement {
     return this._id;
   }
 
-  get iconClass(): [IconPrefix, IconPathData] {
+  get iconLayer(): Array<IconParams> {
+    return this._iconLayer;
+  }
+
+  get iconClass(): IconProp {
     return this._iconClass;
   }
 
@@ -84,7 +88,8 @@ export class FooterbarElement implements IFooterBarElement {
   private readonly _introTranslate: string;
   private _restoreOnClickCallback: Function;
   private readonly _id: string;
-  private readonly _iconClass: [IconPrefix, IconPathData];
+  private readonly _iconLayer: Array<IconParams>;
+  private readonly _iconClass: IconProp;
   private readonly _iconColorClass: string;
   private readonly _textClass: string;
   private readonly _textName: string;
@@ -94,6 +99,7 @@ export class FooterbarElement implements IFooterBarElement {
 
   constructor({
                 id, //
+                iconLayer, //
                 iconClass, //
                 iconColorClass, //
                 textClass, //
@@ -107,6 +113,7 @@ export class FooterbarElement implements IFooterBarElement {
                 isLoading, //
               }: IFooterBarElement, onClickCallback?: Function) {
     this._id = id;
+    this._iconLayer = iconLayer;
     this._iconClass = iconClass;
     this._iconColorClass = iconColorClass;
     this._textClass = textClass;

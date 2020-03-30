@@ -1,20 +1,24 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { isPlatformServer } from '@angular/common';
+import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { RangedQuestionEntity } from '../../../../../lib/entities/question/RangedQuestionEntity';
+import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
+import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
+import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager-details.component';
 
 @Component({
   selector: 'app-answeroptions-ranged',
   templateUrl: './answeroptions-ranged.component.html',
   styleUrls: ['./answeroptions-ranged.component.scss'],
 })
-export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
+export class AnsweroptionsRangedComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsRangedComponent';
 
-  private _question: RangedQuestionEntity;
+  protected _question: RangedQuestionEntity;
 
   get question(): RangedQuestionEntity {
     return this._question;
@@ -50,18 +54,22 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
     this._correctValue = value;
   }
 
-  private readonly _destroy = new Subject();
-  private _questionIndex: number;
-
-  constructor(private headerLabelService: HeaderLabelService, private quizService: QuizService, private route: ActivatedRoute) {
-    headerLabelService.headerLabel = 'component.quiz_manager.title';
+  constructor(
+    @Inject(PLATFORM_ID) platformId: Object,
+    headerLabelService: HeaderLabelService,
+    quizService: QuizService,
+    route: ActivatedRoute,
+    footerBarService: FooterBarService,
+    quizPoolApiService: QuizPoolApiService,
+    router: Router,
+  ) {
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
   }
 
   public ngOnInit(): void {
-    this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
-    .subscribe(questionIndex => {
+    super.ngOnInit();
 
-      this._questionIndex = questionIndex;
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(() => {
       this._question = this.quizService.quiz.questionList[this._questionIndex] as RangedQuestionEntity;
       this._minRange = String(this._question.rangeMin);
       this._maxRange = String(this._question.rangeMax);
@@ -71,15 +79,14 @@ export class AnsweroptionsRangedComponent implements OnInit, OnDestroy {
 
   @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
+    super.ngOnDestroy();
+
     this._question.rangeMin = parseInt(this._minRange, 10);
     this._question.rangeMax = parseInt(this._maxRange, 10);
     this._question.correctValue = parseInt(this._correctValue, 10);
 
     this.quizService.quiz.questionList[this._questionIndex] = this._question;
     this.quizService.persist();
-
-    this._destroy.next();
-    this._destroy.complete();
   }
 
 }

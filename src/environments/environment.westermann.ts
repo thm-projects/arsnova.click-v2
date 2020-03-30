@@ -33,6 +33,7 @@ export const environment: IEnvironment = {
   defaultTheme: QuizTheme.WestermannBlue,
   darkModeCheckEnabled: false,
   enableTwitter: false,
+  enableQuizPool: false,
 };
 
 export enum DEVICE_TYPES {

@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import {
   FakeMissingTranslationHandler,
   MissingTranslationHandler,
@@ -11,6 +12,7 @@ import {
   TranslateStore,
 } from '@ngx-translate/core';
 
+@Injectable()
 export class TranslateServiceMock extends TranslateService {
   constructor() {
     const translateStore: TranslateStore = new TranslateStore();

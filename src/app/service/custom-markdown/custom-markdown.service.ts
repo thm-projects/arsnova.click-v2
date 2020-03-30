@@ -8,7 +8,11 @@ export class CustomMarkdownService {
   constructor(private markdownService: MarkdownService) {}
 
   public parseGithubFlavoredMarkdown(value: string): string {
-    return this.postMarkdownRenderer(this.markdownService.compile(this.preMarkdownRenderer(value)));
+    return this.postMarkdownRenderer(this.compile(this.preMarkdownRenderer(value)));
+  }
+
+  public compile(value: string): string {
+    return this.markdownService.compile(value);
   }
 
   // noinspection JSMethodCanBeStatic

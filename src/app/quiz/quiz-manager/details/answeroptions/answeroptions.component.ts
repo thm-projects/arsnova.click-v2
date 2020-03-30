@@ -1,65 +1,37 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
-import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
-import { StorageKey } from '../../../../lib/enums/enums';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
+import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
+import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
 
 @Component({
   selector: 'app-answeroptions',
   templateUrl: './answeroptions.component.html',
   styleUrls: ['./answeroptions.component.scss'],
 })
-export class AnsweroptionsComponent implements OnInit, OnDestroy {
+export class AnsweroptionsComponent extends AbstractQuizManagerDetailsComponent {
   public static TYPE = 'AnsweroptionsComponent';
 
   public readonly questionType = QuestionType;
 
-  private _question: AbstractQuestionEntity;
-
-  get question(): AbstractQuestionEntity {
-    return this._question;
-  }
-
-  private _questionIndex: number;
-
-  private readonly _destroy = new Subject();
-
   constructor(
-    private headerLabelService: HeaderLabelService,
-    private quizService: QuizService,
-    private route: ActivatedRoute,
-    private footerBarService: FooterBarService,
+    @Inject(PLATFORM_ID) platformId: Object,
+    headerLabelService: HeaderLabelService,
+    quizService: QuizService,
+    route: ActivatedRoute,
+    footerBarService: FooterBarService,
+    quizPoolApiService: QuizPoolApiService,
+    router: Router,
   ) {
-    this.headerLabelService.headerLabel = 'component.quiz_manager.title';
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
 
-    this.footerBarService.TYPE_REFERENCE = AnsweroptionsComponent.TYPE;
-    this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
+    footerBarService.TYPE_REFERENCE = AnsweroptionsComponent.TYPE;
+    footerBarService.replaceFooterElements([
+      footerBarService.footerElemBack,
     ]);
-  }
-
-  public ngOnInit(): void {
-    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
-
-    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
-      if (!this.quizService.quiz || isNaN(questionIndex)) {
-        return;
-      }
-
-      this._questionIndex = questionIndex;
-      this._question = this.quizService.quiz.questionList[this._questionIndex];
-    });
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
-  }
-
-  public ngOnDestroy(): void {
-    this._destroy.next();
-    this._destroy.complete();
   }
 }

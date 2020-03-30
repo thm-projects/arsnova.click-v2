@@ -1,44 +1,56 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  HostListener,
+  Inject,
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+} from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../environments/environment';
-import { StorageKey } from '../../../../lib/enums/enums';
+import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
+import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
 
 @Component({
   selector: 'app-questiontext',
   templateUrl: './questiontext.component.html',
   styleUrls: ['./questiontext.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuestiontextComponent implements OnInit, OnDestroy {
+export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestiontextComponent';
 
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
 
-  private _questionIndex: number;
   @ViewChild('questionText', { static: true }) private textarea: ElementRef;
 
-  private readonly _destroy = new Subject();
-
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private headerLabelService: HeaderLabelService,
-    private quizService: QuizService,
-    private footerBarService: FooterBarService,
+    @Inject(PLATFORM_ID) platformId: Object,
+    headerLabelService: HeaderLabelService,
+    quizService: QuizService,
+    footerBarService: FooterBarService,
+    route: ActivatedRoute,
+    router: Router,
+    quizPoolApiService: QuizPoolApiService,
     private questionTextService: QuestionTextService,
-    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
 
-    this.footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
-    headerLabelService.headerLabel = 'component.quiz_manager.title';
-    this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
+    footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
+    footerBarService.replaceFooterElements([
+      footerBarService.footerElemBack,
     ]);
   }
 
@@ -99,32 +111,29 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
         break;
     }
 
-    this.questionTextService.change(this.textarea.nativeElement.value);
+    this.questionTextService.change(this.textarea.nativeElement.value).then(() => this.cd.markForCheck());
   }
 
   public fireEvent(event: Event): void {
-    this.questionTextService.change((<HTMLTextAreaElement>event.target).value);
+    this.questionTextService.change((
+      <HTMLTextAreaElement>event.target
+    ).value).then(() => this.cd.markForCheck());
   }
 
   public ngOnInit(): void {
-    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), takeUntil(this._destroy),
-      distinctUntilChanged());
+    super.ngOnInit();
 
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-
-    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
-      if (!this.quizService.quiz || isNaN(questionIndex)) {
+    this.quizService.quizUpdateEmitter.pipe( //
+      distinctUntilChanged(), //
+      takeUntil(this.destroy), //
+    ).subscribe(() => {
+      if (!this.quizService.quiz) {
         return;
       }
 
-      this._questionIndex = questionIndex;
       this.textarea.nativeElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
-      this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText);
+      this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText).then(() => this.cd.markForCheck());
     });
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
 
     const contentContainer = document.getElementById('content-container');
 
@@ -134,16 +143,16 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
+    super.ngOnDestroy();
+
     this.questionTextService.change(this.textarea.nativeElement.value);
 
     if (this.quizService.quiz) {
       this.quizService.quiz.questionList[this._questionIndex].questionText = this.textarea.nativeElement.value;
       this.quizService.persist();
     }
-
-    this._destroy.next();
-    this._destroy.complete();
 
     if (isPlatformBrowser(this.platformId)) {
       const contentContainer = document.getElementById('content-container');
@@ -181,9 +190,15 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     const scrollPos = this.textarea.nativeElement.scrollTop;
     const strPosBegin = this.textarea.nativeElement.selectionStart;
     const strPosEnd = this.textarea.nativeElement.selectionEnd;
-    const frontText = (this.textarea.nativeElement.value).substring(0, strPosBegin);
-    const backText = (this.textarea.nativeElement.value).substring(strPosEnd, this.textarea.nativeElement.value.length);
-    const selectedText = (this.textarea.nativeElement.value).substring(strPosBegin, strPosEnd);
+    const frontText = (
+      this.textarea.nativeElement.value
+    ).substring(0, strPosBegin);
+    const backText = (
+      this.textarea.nativeElement.value
+    ).substring(strPosEnd, this.textarea.nativeElement.value.length);
+    const selectedText = (
+      this.textarea.nativeElement.value
+    ).substring(strPosBegin, strPosEnd);
 
     this.textarea.nativeElement.value = frontText + textStart + selectedText + textEnd + backText;
     this.textarea.nativeElement.selectionStart = strPosBegin + textStart.length;
@@ -206,25 +221,37 @@ export class QuestiontextComponent implements OnInit, OnDestroy {
     let textStartExists = false;
 
     if (textEnd.length > 0) {
-      if ((this.textarea.nativeElement.value).substring(strPosEnd, strPosEnd + textEnd.length) === textEnd) {
+      if ((
+            this.textarea.nativeElement.value
+          ).substring(strPosEnd, strPosEnd + textEnd.length) === textEnd) {
         textEndExists = true;
       }
     } else {
       textEndExists = true;
     }
 
-    if ((this.textarea.nativeElement.value).substring(strPosBegin - textStart.length, strPosBegin) === textStart) {
+    if ((
+          this.textarea.nativeElement.value
+        ).substring(strPosBegin - textStart.length, strPosBegin) === textStart) {
       textStartExists = true;
     }
 
     if (textStartExists && textEndExists) {
-      const frontText = (this.textarea.nativeElement.value).substring(0, strPosBegin - textStart.length);
-      const middleText = (this.textarea.nativeElement.value).substring(strPosBegin, strPosEnd);
-      const backText = (this.textarea.nativeElement.value).substring(strPosEnd + textEnd.length, this.textarea.nativeElement.value.length);
+      const frontText = (
+        this.textarea.nativeElement.value
+      ).substring(0, strPosBegin - textStart.length);
+      const middleText = (
+        this.textarea.nativeElement.value
+      ).substring(strPosBegin, strPosEnd);
+      const backText = (
+        this.textarea.nativeElement.value
+      ).substring(strPosEnd + textEnd.length, this.textarea.nativeElement.value.length);
 
       this.textarea.nativeElement.value = frontText + middleText + backText;
       this.textarea.nativeElement.selectionStart = strPosBegin - textStart.length;
-      this.textarea.nativeElement.selectionEnd = strPosEnd - (textEnd.length === 0 ? textStart.length : textEnd.length);
+      this.textarea.nativeElement.selectionEnd = strPosEnd - (
+        textEnd.length === 0 ? textStart.length : textEnd.length
+      );
       this.textarea.nativeElement.focus();
       this.textarea.nativeElement.scrollTop = scrollPos;
 

@@ -5,11 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
@@ -20,6 +20,8 @@ import { LivePreviewComponent } from '../../../../live-preview/live-preview/live
 import { MarkdownBarComponent } from '../../../../markdown/markdown-bar/markdown-bar.component';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
@@ -49,7 +51,7 @@ describe('QuestiontextComponent', () => {
           HttpClientTestingModule,
           RouterTestingModule,
           NgbModalModule,
-          AngularSvgIconModule,
+          AngularSvgIconModule.forRoot(),
           NgbPopoverModule,
           FontAwesomeModule,
           JwtModule.forRoot({
@@ -61,9 +63,9 @@ describe('QuestiontextComponent', () => {
           }),
         ],
         providers: [
-          MarkdownService, {
-            provide: MarkedOptions,
-            useValue: {},
+          {
+            provide: CustomMarkdownService,
+            useClass: CustomMarkdownServiceMock,
           }, RxStompService, {
             provide: StorageService,
             useClass: StorageServiceMock,
@@ -77,6 +79,9 @@ describe('QuestiontextComponent', () => {
             provide: ActivatedRoute,
             useValue: {
               paramMap: of({
+                get: () => 0,
+              }),
+              queryParamMap: of({
                 get: () => 0,
               }),
             },
@@ -106,6 +111,8 @@ describe('QuestiontextComponent', () => {
 
   beforeEach((
     () => {
+      const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
+      library.addIcons(...[faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough]);
       fixture = TestBed.createComponent(QuestiontextComponent);
       component = fixture.componentInstance;
       component['_questionIndex'] = 0;

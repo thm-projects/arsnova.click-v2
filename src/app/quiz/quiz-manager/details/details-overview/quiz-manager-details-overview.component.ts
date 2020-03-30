@@ -1,71 +1,44 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../../../environments/environment';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
-import { StorageKey } from '../../../../lib/enums/enums';
+import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
+import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
 
 @Component({
   selector: 'app-quiz-manager-details-overview',
   templateUrl: './quiz-manager-details-overview.component.html',
   styleUrls: ['./quiz-manager-details-overview.component.scss'],
 })
-export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
+export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent {
   public static TYPE = 'QuizManagerDetailsOverviewComponent';
-
-  private _question: AbstractQuestionEntity;
-
-  get question(): AbstractQuestionEntity {
-    return this._question;
-  }
-
-  private _questionIndex: number;
-
-  get questionIndex(): number {
-    return this._questionIndex;
-  }
-
-  private readonly _destroy = new Subject();
+  public readonly environment = environment;
 
   constructor(
-    private headerLabelService: HeaderLabelService,
-    private quizService: QuizService,
-    private route: ActivatedRoute,
-    private footerBarService: FooterBarService,
+    @Inject(PLATFORM_ID) platformId: Object,
+    quizService: QuizService,
+    headerLabelService: HeaderLabelService,
+    route: ActivatedRoute,
+    footerBarService: FooterBarService,
+    quizPoolApiService: QuizPoolApiService,
+    router: Router,
     private trackingService: TrackingService,
   ) {
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
 
-    this.footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
-    headerLabelService.headerLabel = 'component.quiz_manager.title';
-    this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
+    footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
+    footerBarService.replaceFooterElements([
+      footerBarService.footerElemBack,
     ]);
-  }
 
-  public ngOnInit(): void {
-    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
-
-    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
-      if (!this.quizService.quiz || isNaN(questionIndex)) {
-        return;
-      }
-
-      this._questionIndex = questionIndex;
-      this._question = this.quizService.quiz.questionList[this._questionIndex];
-    });
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
-  }
-
-  public ngOnDestroy(): void {
-    this._destroy.next();
-    this._destroy.complete();
+    this.showSaveQuizButton = true;
   }
 
   public trackDetailsTarget(link: string): void {
@@ -86,7 +59,7 @@ export class QuizManagerDetailsOverviewComponent implements OnInit, OnDestroy {
     return new FreeTextAnswerEntity(abstractAnswerEntity);
   }
 
-  public toString(correctValue: number): string {
-    return String(correctValue);
+  public getQuizManagerDetailsRoutingTarget(): string | number {
+    return this.quizService.isAddingPoolQuestion ? 'quiz-pool' : this.questionIndex;
   }
 }

@@ -1,19 +1,22 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { isPlatformServer } from '@angular/common';
+import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
+import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
+import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
 
 @Component({
   selector: 'app-countdown',
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.scss'],
 })
-export class CountdownComponent implements OnInit, OnDestroy {
+export class CountdownComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'CountdownComponent';
   public minCountdownValue = '0';
 
@@ -64,22 +67,20 @@ export class CountdownComponent implements OnInit, OnDestroy {
     this.updateCountdown(parseInt(value, 10));
   }
 
-  private _questionIndex: number;
-  private _question: AbstractQuestionEntity;
-
-  private readonly _destroy = new Subject();
-
   constructor(
-    private headerLabelService: HeaderLabelService,
-    private quizService: QuizService,
-    private route: ActivatedRoute,
-    private footerBarService: FooterBarService,
+    @Inject(PLATFORM_ID) platformId: Object,
+    headerLabelService: HeaderLabelService,
+    quizService: QuizService,
+    route: ActivatedRoute,
+    footerBarService: FooterBarService,
+    quizPoolApiService: QuizPoolApiService,
+    router: Router,
   ) {
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
 
-    this.footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
-    headerLabelService.headerLabel = 'component.quiz_manager.title';
-    this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
+    footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
+    footerBarService.replaceFooterElements([
+      footerBarService.footerElemBack,
     ]);
   }
 
@@ -101,27 +102,22 @@ export class CountdownComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged());
+    super.ngOnInit();
 
-    this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
-      if (!this.quizService.quiz || isNaN(questionIndex)) {
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(() => {
+      if (!this.quizService.quiz) {
         return;
       }
 
-      this._questionIndex = questionIndex;
-      this._question = this.quizService.quiz.questionList[this._questionIndex];
       this.updateCountdown(this._question.timer);
     });
-
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 
   @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
-    this.quizService.persist();
-    this._destroy.next();
-    this._destroy.complete();
-  }
+    super.ngOnDestroy();
 
+    this.quizService.persist();
+  }
 }
 

@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
@@ -26,7 +27,7 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule, NgbModule,
+        I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule, NgbModule, AngularSvgIconModule.forRoot(),
       ],
       providers: [
         HeaderLabelService, {

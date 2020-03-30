@@ -1,6 +1,8 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { TranslateService } from '@ngx-translate/core';
+import { Request } from 'express';
 import { CurrencyType, Language, NumberType, StorageKey } from '../../lib/enums/enums';
 import { StorageService } from '../storage/storage.service';
 
@@ -28,7 +30,12 @@ export class I18nService {
     this._currentLanguage = value;
   }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private translateService: TranslateService, private storageService: StorageService) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private translateService: TranslateService,
+    private storageService: StorageService,
+    @Optional() @Inject(REQUEST) protected request?: Request,
+  ) {}
 
   public formatNumber(number: number, type: NumberType = NumberType.Decimal, locale?: string): string {
     if (isNaN(number)) {
@@ -57,6 +64,10 @@ export class I18nService {
   }
 
   public setLanguage(language: Language | string): void {
+    if (!Language[language.toString().toUpperCase()]) {
+      return;
+    }
+
     this.currentLanguage = Language[language.toString().toUpperCase()];
     if (isPlatformServer(this.platformId)) {
       return;
@@ -83,8 +94,18 @@ export class I18nService {
   }
 
   public initLanguage(): void {
+    let lang;
     if (isPlatformServer(this.platformId)) {
-      this.setLanguage(Language.EN);
+      try {
+        lang = this.request.header('accept-language').match(/([A-Z]{2})/);
+      } catch {
+        lang = null;
+      }
+      if (!Array.isArray(lang) || !lang[0]) {
+        this.setLanguage(Language.EN);
+      } else {
+        this.setLanguage(lang[0]);
+      }
       return;
     }
 
@@ -94,10 +115,13 @@ export class I18nService {
       } else if (Language[this.translateService.getBrowserLang().toUpperCase()]) {
         this.setLanguage(Language[this.translateService.getBrowserLang().toUpperCase()]);
       } else {
-        this.setLanguage(Language.EN);
+        lang = navigator.language.match(/([A-Z]{2})/);
+        if (!Array.isArray(lang) || !lang[0]) {
+          this.setLanguage(Language.EN);
+        } else {
+          this.setLanguage(lang[0]);
+        }
       }
     });
-
   }
-
 }

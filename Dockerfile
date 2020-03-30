@@ -16,9 +16,10 @@ WORKDIR /usr/src/app
 COPY . .
 RUN chmod +x build.sh && sh build.sh ${buildCmd} ${targetUrl}
 
-FROM nginx:1.15.8-alpine
-RUN rm -rf /usr/share/nginx/html/*
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /usr/src/app/dist/browser /usr/share/nginx/html
-RUN echo "nginx -g 'daemon off;'" > run.sh
-ENTRYPOINT ["sh", "run.sh"]
+FROM node:12.14-alpine
+WORKDIR /usr/src/app/dist/frontend/browser
+COPY --from=build /usr/src/app/dist/frontend/browser .
+WORKDIR /usr/src/app/dist/frontend/server
+COPY --from=build /usr/src/app/dist/frontend/server .
+WORKDIR /usr/src/app
+CMD ["node", "dist/frontend/server/main.js"]

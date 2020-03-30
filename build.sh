@@ -12,11 +12,11 @@ npm run build:"$1"
 echo "Copying assets"
 npm run copy:"$1"
 
-cd /usr/src/app/dist
+cd /usr/src/app/dist/frontend/
 echo "Starting the http server"
 angular-http-server --path browser/ --silent -p 4711 &
 
-cd /usr/src/app/dist/browser/assets/jobs
+cd /usr/src/app/dist/frontend/browser/assets/jobs
 echo "Generating link images"
 node GenerateMetaNodes.js --command=generateLinkImages --baseUrl="$2"
 
@@ -31,4 +31,4 @@ cd /usr/src/app
 # echo "Purifying css"
 # npm run purify
 echo "Gzipping app files"
-find dist/browser -name "*.*" -type f -print0 | xargs -0 gzip -9 -k
+find dist/frontend/browser -name "*.*" -type f -print0 | xargs -0 gzip -9 -k

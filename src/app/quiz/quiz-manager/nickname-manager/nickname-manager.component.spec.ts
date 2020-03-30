@@ -6,12 +6,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
-import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { JustafewPipeMock } from '../../../../_mocks/_pipes/JustafewPipeMock';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
@@ -73,9 +74,9 @@ describe('NicknameManagerComponent', () => {
         }), InfiniteScrollModule,
       ],
       providers: [
-        MarkdownService, {
-          provide: MarkedOptions,
-          useValue: {},
+        {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,

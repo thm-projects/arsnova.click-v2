@@ -12,6 +12,7 @@ import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { FooterModule } from '../../../footer/footer.module';
 import { availableQuestionTypes } from '../../../lib/available-question-types';
+import { QuestionType } from '../../../lib/enums/QuestionType';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -90,7 +91,7 @@ describe('QuizManagerComponent', () => {
   describe('#addQuestion', () => {
     it('should add a question', () => {
       const quizService = TestBed.inject(QuizService);
-      const id = availableQuestionTypes[1].id;
+      const id = availableQuestionTypes.find(q => q.id === QuestionType.SingleChoiceQuestion).id;
 
       quizService.quiz.questionList.splice(1, quizService.quiz.questionList.length);
 

@@ -1,10 +1,12 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
+import { StorageKey } from '../../lib/enums/enums';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -51,8 +53,11 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   constructor(
     public questionTextService: QuestionTextService,
     public connectionService: ConnectionService,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private quizService: QuizService,
-    private sanitizer: DomSanitizer, private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {
   }
 
@@ -105,15 +110,28 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe(value => {
       this.dataSource = Array.isArray(value) ? value : [value];
     });
-    const questionIndex$ = this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(),
-      takeUntil(this._destroy));
+
+    const questionIndex$ = this.route.paramMap.pipe( //
+      map(params => parseInt(params.get('questionIndex'), 10)), //
+      distinctUntilChanged(), //
+      tap(questionIndex => {
+        if (!isNaN(questionIndex)) {
+          this._questionIndex = questionIndex;
+          this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+        } else {
+          this.quizService.isAddingPoolQuestion = true;
+          this._questionIndex = 0;
+        }
+      }), //
+      takeUntil(this._destroy), //
+    );
 
     switch (this.targetEnvironment) {
       case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
-        questionIndex$.subscribe(questionIndex => {
-          this._questionIndex = questionIndex;
+        questionIndex$.subscribe(() => {
           this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
-          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText))
+          .then(() => this.cd.markForCheck());
         });
         break;
       case this.ENVIRONMENT_TYPE.QUESTION:
@@ -126,7 +144,8 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy.next();
     this._destroy.complete();
-    if (window['hs']) {
+
+    if (isPlatformBrowser(this.platformId) && window['hs']) {
       window['hs'].close();
     }
   }

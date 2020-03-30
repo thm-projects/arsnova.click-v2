@@ -1,6 +1,4 @@
-import { getAnswerForType } from '../../AnswerValidator';
 import { DefaultSettings } from '../../default.settings';
-import { AnswerType } from '../../enums/AnswerType';
 import { QuestionType } from '../../enums/QuestionType';
 import { IValidationStackTrace } from '../../interfaces/IValidationStackTrace';
 import { AbstractAnswerEntity } from '../answer/AbstractAnswerEntity';
@@ -10,33 +8,16 @@ export abstract class AbstractQuestionEntity {
   public questionText: string = DefaultSettings.defaultQuizSettings.question.questionText;
   public timer: number = DefaultSettings.defaultQuizSettings.question.timer;
   public displayAnswerText: boolean = DefaultSettings.defaultQuizSettings.question.dispayAnswerText;
-  public answerOptionList: Array<AbstractAnswerEntity> = DefaultSettings.defaultQuizSettings.question.answerOptionList;
+  public answerOptionList: Array<AbstractAnswerEntity>;
+  public tags: Array<string> = DefaultSettings.defaultQuizSettings.question.tags;
   public abstract TYPE: QuestionType;
 
   protected constructor(data) {
     this.questionText = data.questionText ? data.questionText : this.questionText;
-    this.timer = typeof data.timer === 'number' ? data.timer : this.timer;
+    this.timer = typeof data.timer === 'number' ? data.timer : parseInt(data.timer ?? this.timer, 10);
     this.displayAnswerText = data.displayAnswerText ?? this.displayAnswerText;
-
-    if (data.answerOptionList) {
-      if (data.TYPE === QuestionType.FreeTextQuestion) {
-        this.answerOptionList = data.answerOptionList.map(answer => {
-          if (answer.TYPE === AnswerType.FreeTextAnswerOption) {
-            return getAnswerForType(answer.TYPE, answer);
-          }
-          return getAnswerForType(AnswerType.FreeTextAnswerOption, {});
-        });
-      } else if (data.TYPE === QuestionType.RangedQuestion) {
-        this.answerOptionList = [];
-      } else {
-        this.answerOptionList = data.answerOptionList.map(answer => {
-          if (answer.TYPE === AnswerType.DefaultAnswerOption) {
-            return getAnswerForType(answer.TYPE, answer);
-          }
-          return getAnswerForType(AnswerType.DefaultAnswerOption, {});
-        });
-      }
-    }
+    this.answerOptionList = data.answerOptionList ?? [];
+    this.tags = data.tags ?? [];
   }
 
   public abstract translationReferrer(): string;

@@ -169,10 +169,15 @@ export class ConnectionService {
         const parsedMessage = JSON.parse(message.body);
         switch (parsedMessage.step) {
           case MessageProtocol.SetActive:
-            this.sharedService.activeQuizzes.push(parsedMessage.payload.quizName);
+            if (!this.sharedService.activeQuizzes.includes(parsedMessage.payload.quizName)) {
+              this.sharedService.activeQuizzes.push(parsedMessage.payload.quizName);
+            }
             break;
           case MessageProtocol.SetInactive:
-            this.sharedService.activeQuizzes.splice(this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName), 1);
+            const index = this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName);
+            if (index > -1) {
+              this.sharedService.activeQuizzes.splice(index, 1);
+            }
             break;
           default:
             this.messageQueue.publish(parsedMessage.step, parsedMessage.payload || {}, false);

@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { CanActivate } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { DbState } from '../../lib/enums/enums';
+import { Observable, of } from 'rxjs';
 import { StorageService } from '../storage/storage.service';
 
 @Injectable({
@@ -10,9 +9,20 @@ import { StorageService } from '../storage/storage.service';
 })
 export class InitDbGuard implements CanActivate {
 
-  constructor(private storageService: StorageService) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private storageService: StorageService) {}
 
   public canActivate(): Observable<boolean> {
-    return this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), map(() => true));
+    if (isPlatformServer(this.platformId)) {
+      return of(true);
+    }
+    return of(true);
+
+    /*
+     FIXME This does not work with ssr - the browser app is not bootstrapped then
+     return this.storageService.stateNotifier.pipe(filter(val => {
+     console.log('state notifier fired, will succeed:', val === DbState.Initialized);
+     return val === DbState.Initialized;
+     }), map(() => true));
+     */
   }
 }

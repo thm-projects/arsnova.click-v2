@@ -42,6 +42,10 @@
         href="/assets/js/highslide/highslide.min.js"
         rel="prefetch"/>
 
+  <link as="script"
+        href="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.4/d3.layout.cloud.js"
+        rel="prefetch"/>
+
   <link class="theme-styles"
         href="/theme-default.css"
         rel="stylesheet"
@@ -55,35 +59,6 @@
         rel="stylesheet"
         type="text/css"/>
 
-  <noscript>
-    <link href="/noscript.css"
-          rel="stylesheet"
-          type="text/css"/>
-    <main>
-      <img alt="logo"
-           src="/assets/images/logo_transparent.png"/>
-      <div>
-        <h1>JavaScript nicht aktiviert</h1>
-        <p>Um arsnova.click nutzen zu können, muss JavaScript aktiviert sein!</p>
-        <hr/>
-      </div>
-      <div>
-        <h1>JavaScript not activated</h1>
-        <p>JavaScript is required to run arsnova.click!</p>
-        <hr/>
-      </div>
-      <div>
-        <h1>JavaScript n'est pas activé</h1>
-        <p>JavaScript est nécessaire pour exécuter arsnova.click!</p>
-        <hr/>
-      </div>
-      <div>
-        <h1>JavaScript no activado</h1>
-        <p>JavaScript es necesario para ejecutar arsnova.click!</p>
-        <hr/>
-      </div>
-    </main>
-  </noscript>
 </head>
 <body>
 
@@ -104,6 +79,36 @@
     </app-root>
   </div>
 </div>
+
+<noscript>
+  <link href="/noscript.css"
+        rel="stylesheet"
+        type="text/css"/>
+  <main>
+    <img alt="logo"
+         src="/assets/images/logo_transparent.png"/>
+    <div>
+      <h1>JavaScript nicht aktiviert</h1>
+      <p>Um arsnova.click nutzen zu können, muss JavaScript aktiviert sein!</p>
+      <hr/>
+    </div>
+    <div>
+      <h1>JavaScript not activated</h1>
+      <p>JavaScript is required to run arsnova.click!</p>
+      <hr/>
+    </div>
+    <div>
+      <h1>JavaScript n'est pas activé</h1>
+      <p>JavaScript est nécessaire pour exécuter arsnova.click!</p>
+      <hr/>
+    </div>
+    <div>
+      <h1>JavaScript no activado</h1>
+      <p>JavaScript es necesario para ejecutar arsnova.click!</p>
+      <hr/>
+    </div>
+  </main>
+</noscript>
 
 <script type="text/javascript">
 
@@ -144,9 +149,8 @@
   }
 </script>
 
-<script async
-        defer
-        src="/assets/piwik/piwik.js"
+<script type="text/javascript">window['_paq'] = window['_paq'] || [];</script>
+<script src="/assets/piwik/piwik.js"
         type="text/javascript"></script>
 
 <!--suppress JSUnresolvedLibraryURL -->
@@ -172,6 +176,8 @@
   hs.maxHeight = 500;
   hs.zIndexCounter = 1040;
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.4/d3.layout.cloud.js"></script>
 
 </body>
 </html>
