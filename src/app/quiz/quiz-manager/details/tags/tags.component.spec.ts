@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
@@ -21,13 +21,15 @@ describe('TagsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule, I18nTestingModule, HttpClientTestingModule, RouterTestingModule, NgbTypeaheadModule, JwtModule.forRoot({
-        jwtOptionsProvider: {
-          provide: JWT_OPTIONS,
-          useFactory: jwtOptionsFactory,
-          deps: [PLATFORM_ID],
-        },
-      })],
+      imports: [
+        FormsModule, NgbAlertModule, I18nTestingModule, HttpClientTestingModule, RouterTestingModule, NgbTypeaheadModule, JwtModule.forRoot({
+          jwtOptionsProvider: {
+            provide: JWT_OPTIONS,
+            useFactory: jwtOptionsFactory,
+            deps: [PLATFORM_ID],
+          },
+        }),
+      ],
       providers: [RxStompService, SimpleMQ, {
         provide: CustomMarkdownService,
         useClass: CustomMarkdownServiceMock,

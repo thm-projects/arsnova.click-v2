@@ -18,6 +18,7 @@ describe('WordCloudComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(WordCloudComponent);
     component = fixture.componentInstance;
+    component.data = [];
     fixture.detectChanges();
   });
 

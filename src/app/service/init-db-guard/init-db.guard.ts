@@ -15,7 +15,7 @@ export class InitDbGuard implements CanActivate {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private storageService: StorageService,
-    _userService: UserService, // Required to initialize userService.isLoggedIn which initializes the StorageService
+    private _userService: UserService, // Required to initialize userService.isLoggedIn which initializes the StorageService
   ) {}
 
   public canActivate(): Observable<boolean> {
