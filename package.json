@@ -56,7 +56,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-devkit/build-angular": "~0.900.1",
+    "@angular-devkit/build-angular": "~0.901.0",
     "@angular/animations": "^9.0.0",
     "@angular/common": "^9.0.0",
     "@angular/compiler": "^9.0.0",
@@ -104,8 +104,8 @@
     "angular-tag-cloud-module": "^3.8.1"
   },
   "devDependencies": {
-    "@angular-devkit/schematics": "^9.0.1",
-    "@angular/cli": "^9.0.1",
+    "@angular-devkit/schematics": "^9.1.0",
+    "@angular/cli": "^9.1.0",
     "@angular/compiler-cli": "^9.0.0",
     "@angular/language-service": "^9.0.0",
     "@nguniversal/builders": "^9.0.1",
