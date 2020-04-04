@@ -130,7 +130,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "karma-mocha-reporter": "^2.2.5",
     "minimist": "^1.2.5",
-    "mkdirp": "^1.0.3",
+    "mkdirp": "^1.0.4",
     "protractor": "^5.4.2",
     "puppeteer": "^2.0.0",
     "purify-css": "~1.2.5",
