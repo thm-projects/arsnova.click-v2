@@ -1,17 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faDownload, faHourglass } from '@fortawesome/free-solid-svg-icons';
+import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../../../_mocks/_services/TranslateServiceMock';
+import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
+import { QuizService } from '../../../../../service/quiz/quiz.service';
+import { ThemesMockService } from '../../../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../../../service/themes/themes.service';
+import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { ToLobbyConfirmComponent } from './to-lobby-confirm.component';
-import {I18nTestingModule} from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
-import {QuizService} from '../../../../../service/quiz/quiz.service';
-import {QuizMockService} from '../../../../../service/quiz/quiz-mock.service';
-import {ThemesService} from '../../../../../service/themes/themes.service';
-import {ThemesMockService} from '../../../../../service/themes/themes.mock.service';
 
 describe('ToLobbyConfirmComponent', () => {
   let component: ToLobbyConfirmComponent;
@@ -19,17 +19,17 @@ describe('ToLobbyConfirmComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [I18nTestingModule],
+      imports: [I18nTestingModule, FontAwesomeModule],
       providers: [
         {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, {
           provide: QuizService,
-          useClass: QuizMockService
+          useClass: QuizMockService,
         }, {
           provide: ThemesService,
-          useClass: ThemesMockService
+          useClass: ThemesMockService,
         }, NgbActiveModal,
       ],
       declarations: [ToLobbyConfirmComponent, TranslatePipeMock],

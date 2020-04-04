@@ -545,7 +545,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canJoinQuiz = false;
           this.passwordRequired = false;
           this.canStartQuiz = false;
-          this._hasErrors = 'component.home.errors.already-taken';
+          if (this.canModifyQuiz) {
+            this._hasErrors = 'component.home.errors.already-taken';
+          }
         } else if (value.step === MessageProtocol.Available && value.payload.state === QuizState.Active) {
           this.canAddQuiz = false;
           this.canJoinQuiz = this.connectionService.serverAvailable;
@@ -561,7 +563,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canJoinQuiz = false;
           this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
           this.canStartQuiz = false;
-          this._hasSuccess = 'component.home.success.can-create';
+          if (this.canModifyQuiz) {
+            this._hasSuccess = 'component.home.success.can-create';
+          }
         } else {
           console.error('Invalid quiz status response in home component', value);
         }
