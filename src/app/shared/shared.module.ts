@@ -21,6 +21,7 @@ import {
   faCheckSquare,
   faCloudUploadAlt,
   faCode,
+  faCogs,
   faCopy,
   faDownload,
   faEdit,
@@ -39,6 +40,7 @@ import {
   faListUl,
   faLock,
   faMinus,
+  faMobileAlt,
   faMusic,
   faPaperPlane,
   faPause,
@@ -54,6 +56,7 @@ import {
   faSquare,
   faStop,
   faStrikethrough,
+  faTags,
   faThumbsUp,
   faTimes,
   faTrash,
@@ -62,6 +65,7 @@ import {
   faUndo,
   faUnlock,
   faUpload,
+  faUserFriends,
   faUsers,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
@@ -159,5 +163,9 @@ export class SharedModule {
     library.addIcons(faPlus);
     library.addIcons(faMinus);
     library.addIcons(faCloudUploadAlt);
+    library.addIcons(faCogs);
+    library.addIcons(faTags);
+    library.addIcons(faUserFriends);
+    library.addIcons(faMobileAlt);
   }
 }

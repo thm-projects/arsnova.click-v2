@@ -17,7 +17,7 @@ export class TwitterCardsComponent implements OnInit, OnDestroy {
 
   public static TYPE = 'TwitterCardsComponent';
   public warning: string;
-  public limit = 4;
+  public limit = 8;
   public readonly Language = Language;
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy$ = new Subject();

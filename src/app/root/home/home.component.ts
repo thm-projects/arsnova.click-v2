@@ -60,6 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public Title = Title;
   public readonly selectedTitle = environment.title;
   public twitterEnabled: boolean;
+  public disableStatistics: boolean;
 
   private _serverPassword = '';
 
@@ -220,6 +221,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.activatedRoute.data.pipe(takeUntil(this._destroy)).subscribe(data => {
       this.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
+      this.disableStatistics = data.disableStatistics;
     });
   }
 

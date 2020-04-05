@@ -2,8 +2,8 @@
      class="tweet-container form-row">
 
   <div *ngFor="let tweet of result | slice:0:limit"
-       class="col-md-6 mb-2">
-    <div class="card mb-2 w-100 h-100 d-inline-block cursor-pointer">
+       class="col-md-6 mb-1 mb-md-3">
+    <div class="card w-100 h-100 d-inline-block cursor-pointer">
       <div (click)="tweet.url ? goToTwitter(tweet.url) : null"
            class="card-body">
         <div class="header">

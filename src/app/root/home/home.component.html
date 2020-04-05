@@ -231,7 +231,7 @@
         </div>
 
         <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && twitterService.getOptIn()"
-             class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 d-flex">
+             class="col-12 d-flex mb-4 mb-md-3">
           <button (click)="navigateToTwitter()"
                   [title]="'global.follow-us-at-twitter' | translate"
                   class="btn-twitter-follow mx-auto mr-md-0">
@@ -260,8 +260,15 @@
     </div>
   </div>
 
-  <app-twitter-cards *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !isShowingQuiznameDatalist"
-                     class="col-lg-10 offset-lg-1 col-xl-8 offset-xl-2 mt-2"></app-twitter-cards>
+  <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !isShowingQuiznameDatalist"
+       class="full-xs">
+    <app-twitter-cards class="col-12 mt-2 d-block"></app-twitter-cards>
+  </div>
+
+  <div *ngIf="!disableStatistics && !isShowingQuiznameDatalist"
+       class="full-xs">
+    <app-statistics class="col-12 mt-2 d-block"></app-statistics>
+  </div>
 
 </div>
 

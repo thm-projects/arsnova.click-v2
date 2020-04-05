@@ -723,6 +723,36 @@
         "message": "Es ist eine neue Version von arsnova.click verfügbar. Bitte klicke hier um die Seite neuzuladen. Dies wird das Update automatisch installieren.",
         "title": "Neue Version verfügbar"
       }
+    },
+    "statistics": {
+      "users": {
+        "title": "Anzahl der Nutzer dieser Webseite",
+        "content": "Hier werden alle aktiven Verbindungen zu arsnova.click gewertet. Natürlich sind diese Daten anonymisiert. Es ist nicht möglich, aus diesen Daten Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist es aber ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
+      },
+      "total-quizzes": {
+        "title": "Quizze insgesamt",
+        "content": "Alle Quizze, die von Nutzern erstellt wurden, werden hier gezählt. Ja, auch deine! Natürlich sind deine Quizze weiterhin privat und nur du kannst sie starten. Keiner kann auf deine Quizdaten zugreifen!"
+      },
+      "active-quizzes": {
+        "title": "Aktive Quizze",
+        "content": "Dies ist die Anzahl aller gerade gespielten Quizze. Dazu werden alle Quizze gezählt, die gerade in der Quiz Lobby sind oder aktiv Quizrunden spielen."
+      },
+      "total-pool-questions": {
+        "title": "Quiz-Pool Fragen insgesamt",
+        "content": "Mit dem Quiz-Pool kann jeder Nutzer für alle anderen Fragen bereitstellen. Damit kann sich jeder eine Inspiration für sein Quiz holen. Auch können Schülerinnen und Schüler die Quizze zur Abfrage und Vertiefung des eigenen Wissens nutzen."
+      },
+      "total-pool-tags": {
+        "title": "Verschiedene Tags",
+        "content": "Quizfragen können Tags zugewiesen werden. Damit sind sie thematisch sortierbar und können im Quiz-Pool nach belieben zusammengestellt werden. Dabei bist du in der Auswahl der Tags für deine Quiz-Pool Fragen völlig frei. Einige Hinweise zur Vergabe von Tags für Fragen findest du im Quiz Manager im Reiter 'Tags'."
+      },
+      "active-participants": {
+        "title": "Aktuelle Teilnehmerzahl",
+        "content": "Hier findest du die aktuelle Anzahl aller Teilnehmer an den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß - es ist nicht möglich, auf einzelne Teilnehmer Rückschlüsse zu ziehen, sie zu identifizieren oder ihre Aktionen auf der Seite nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
+      },
+      "average-participants": {
+        "title": "Durchschnittliche Teilnehmer pro Quiz",
+        "content": "Dieser Wert gibt an, wieviele Teilnehmer durchschnittlich an den Quizzen teilgenommen haben. Auch diese Daten sind anonymisiert. Wir speichern auschließlich den Namen des Teilnehmers und das zugehörige Quiz. Damit sind keinerlei Rückschlüsse auf einzelne Personen oder Verbindungen möglich."
+      }
     }
   },
   "plugins": {

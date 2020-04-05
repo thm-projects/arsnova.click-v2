@@ -27,6 +27,7 @@ import { HomeComponent } from './root/home/home.component';
 import { LanguageSwitcherComponent } from './root/language-switcher/language-switcher.component';
 import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
+import { StatisticsComponent } from './root/statistics/statistics.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import { TwitterCardsComponent } from './root/twitter-cards/twitter-cards.component';
 import rxStompConfig from './rx-stomp.config';
@@ -49,7 +50,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
 
 @NgModule({
   declarations: [
-    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent,
+    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent, StatisticsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'arsnova-click' }),

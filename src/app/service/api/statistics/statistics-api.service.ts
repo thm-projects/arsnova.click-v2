@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/index';
+import { Observable } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 
 @Injectable({
@@ -22,6 +22,10 @@ export class StatisticsApiService {
 
   public getBaseStatistics(): Observable<any> {
     return this.http.get(this.BASE_STATISTICS_GET_URL());
+  }
+
+  public getBaseAppStatistics(): Observable<any> {
+    return this.http.get(`${DefaultSettings.serverEndpoint}/statistics`);
   }
 
   public optionsBaseStatistics(): Observable<void> {
