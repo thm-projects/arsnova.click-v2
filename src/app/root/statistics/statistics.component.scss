@@ -31,3 +31,9 @@
     margin-bottom: -1.5rem; // Removes pb-4 from main.container
   }
 }
+
+@include media-breakpoint-down(sm) {
+  :host ::ng-deep fa-layers svg.svg-inline--fa {
+    bottom: inherit;
+  }
+}
