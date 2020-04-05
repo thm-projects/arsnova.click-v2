@@ -5,6 +5,7 @@ import { faCogs, faMobileAlt, faQuestion, faTags, faUserFriends, faUsers } from 
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { StatisticsComponent } from './statistics.component';
 
@@ -14,7 +15,7 @@ describe('StatisticsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [HttpClientTestingModule, I18nTestingModule],
       declarations: [StatisticsComponent, TranslatePipeMock],
       providers: [RxStompService, SimpleMQ],
     })
