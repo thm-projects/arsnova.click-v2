@@ -138,19 +138,25 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         amount: this.statistics.quiz.pool.tags,
         title: 'component.statistics.total-pool-tags.title',
         content: 'component.statistics.total-pool-tags.content',
-      }, {
+      },
+    );
+
+    if (this.statistics.quiz.active) {
+      this.data.push({
         iconColor: 'var(--cyan)',
         icon: 'user-friends',
         amount: this.statistics.quiz.participants.active,
         title: 'component.statistics.active-participants.title',
         content: 'component.statistics.active-participants.content',
-      }, {
-        iconColor: 'var(--info)',
-        icon: 'mobile-alt',
-        amount: this.statistics.quiz.participants.average,
-        title: 'component.statistics.average-participants.title',
-        content: 'component.statistics.average-participants.content',
-      },
-    );
+      });
+    }
+
+    this.data.push({
+      iconColor: 'var(--info)',
+      icon: 'mobile-alt',
+      amount: this.statistics.quiz.participants.average,
+      title: 'component.statistics.average-participants.title',
+      content: 'component.statistics.average-participants.content',
+    });
   }
 }

@@ -100,7 +100,7 @@ export class I18nService {
     let lang;
     if (isPlatformServer(this.platformId)) {
       try {
-        lang = this.request.header('accept-language').match(/([A-Z]{2})/);
+        lang = this.request.header('accept-language').match(/([A-Z]{2})/i);
       } catch {
         lang = null;
       }
