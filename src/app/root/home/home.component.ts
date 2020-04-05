@@ -18,7 +18,6 @@ import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
 import { UserRole } from '../../lib/enums/UserRole';
 import { ITrackClickEvent } from '../../lib/interfaces/tracking/ITrackClickEvent';
-import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
@@ -182,14 +181,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
 
-        if (this._ownQuizzes.length && //
-            environment.showJoinableQuizzes && //
-            (
-              !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz)
-            )) {
-          const ref = this.modalService.open(AvailableQuizzesComponent);
-          this._destroy.subscribe(() => ref.close());
-        }
+        /*
+         TODO FIXME
+         Disabled since the scroll position cannot be set to the top because of the modal backdrop
+         if (this._ownQuizzes.length && //
+         environment.showJoinableQuizzes && //
+         (
+         !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz)
+         )) {
+         const ref = this.modalService.open(AvailableQuizzesComponent);
+         this._destroy.subscribe(() => ref.close());
+         }
+         */
       });
 
       if (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {

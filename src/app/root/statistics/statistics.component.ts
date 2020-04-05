@@ -10,6 +10,7 @@ import { MessageProtocol } from '../../lib/enums/Message';
 import { IServerStatistics } from '../../lib/interfaces/IServerStatistics';
 import { StatisticsApiService } from '../../service/api/statistics/statistics-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
+import { I18nService } from '../../service/i18n/i18n.service';
 
 interface IStatisticDataTile {
   iconColor: string;
@@ -38,6 +39,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     private connectionService: ConnectionService,
     private rxStompService: RxStompService,
     private messageQueue: SimpleMQ,
+    private i18nService: I18nService,
   ) {
     this.statistics = {
       quiz: {
@@ -66,6 +68,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       filter(value => Boolean(value)), //
       switchMapTo(this.rxStompService.connectionState$), //
       filter(value => value === RxStompState.OPEN), //
+      switchMapTo(this.i18nService.initialized), //
       switchMapTo(this.statisticsApiService.getBaseAppStatistics()), //
       takeUntil(this._destroy$), //
     ).subscribe(data => {

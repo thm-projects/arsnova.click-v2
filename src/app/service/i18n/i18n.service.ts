@@ -3,6 +3,7 @@ import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { TranslateService } from '@ngx-translate/core';
 import { Request } from 'express';
+import { ReplaySubject } from 'rxjs';
 import { CurrencyType, Language, NumberType, StorageKey } from '../../lib/enums/enums';
 import { StorageService } from '../storage/storage.service';
 
@@ -10,6 +11,7 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class I18nService {
+  public readonly initialized = new ReplaySubject<boolean>(1);
   private _currentLanguage: Language = Language.EN;
 
   get currentLanguage(): Language {
@@ -28,6 +30,7 @@ export class I18nService {
     this.translateService.use(value.toString());
 
     this._currentLanguage = value;
+    this.initialized.next(true);
   }
 
   constructor(

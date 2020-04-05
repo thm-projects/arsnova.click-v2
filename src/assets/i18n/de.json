@@ -80,7 +80,8 @@
         "twitter": {
           "tweet": "Tweet"
         },
-        "questionpool": "Quiz-Pool"
+        "questionpool": "Quiz-Pool",
+        "my-quizzes": "Meine Quizze"
       },
       "about": {
         "title": "arsnova.click",
