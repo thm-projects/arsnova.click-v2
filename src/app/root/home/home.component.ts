@@ -385,7 +385,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public navigateToTwitter(): void {
-    window.open('https://twitter.com/intent/follow?screen_name=@arsnovaclick', '_blank', 'noopener noreferrer');
+    window.open('https://twitter.com/intent/follow?screen_name=arsnovaclick', '_blank', 'noopener noreferrer');
   }
 
   private updateFooterElements(isLoggedIn: boolean): void {
