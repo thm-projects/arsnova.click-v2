@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Language } from '../../lib/enums/enums';
 import { MessageProtocol } from '../../lib/enums/Message';
+import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
 import { TwitterService } from '../../service/twitter/twitter.service';
 
 @Component({
@@ -23,7 +24,7 @@ export class TwitterCardsComponent implements OnInit, OnDestroy {
   private readonly _destroy$ = new Subject();
 
   constructor(
-    public twitterService: TwitterService,
+    private twitterService: TwitterService,
     private messageQueue: SimpleMQ,
     private cd: ChangeDetectorRef,
     private translateService: TranslateService,
@@ -47,5 +48,9 @@ export class TwitterCardsComponent implements OnInit, OnDestroy {
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  public getTweets(): Observable<Array<ITweetEntry>> {
+    return this.twitterService.tweets.asObservable();
   }
 }

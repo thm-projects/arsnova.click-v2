@@ -1,4 +1,4 @@
-<div *ngIf="twitterService.tweets | languageFilter:{selector: 'lang', fallback: Language.EN} as result"
+<div *ngIf="getTweets() | async | languageFilter:{selector: 'lang', fallback: Language.EN} as result"
      class="tweet-container form-row">
 
   <div *ngFor="let tweet of result | slice:0:limit"

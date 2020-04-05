@@ -1,7 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
 import { StorageKey } from '../../lib/enums/enums';
@@ -15,7 +15,7 @@ import { ThemesService } from '../themes/themes.service';
   providedIn: 'root',
 })
 export class TwitterService {
-  public tweets: ITweetEntry[] = [];
+  public readonly tweets = new ReplaySubject<Array<ITweetEntry>>(1);
   public readonly strWindowFeatures = 'location=yes,resizable=yes,scrollbars=yes,status=yes,width=500,height=500';
   public readonly genericMessages: Array<string> = ['component.twitter.tweet.content.0'];
 
@@ -44,7 +44,7 @@ export class TwitterService {
 
   public setOptIn(): void {
     localStorage.setItem(StorageKey.TwitterOptIn, 'true');
-    this.refreshTweets();
+    this.refreshTweets().subscribe();
   }
 
   public refreshTweets(): Observable<Array<ITweetEntry>> {
@@ -53,7 +53,7 @@ export class TwitterService {
     }
 
     return this.twitterApiService.getTweets().pipe(tap((data) => {
-      this.tweets = data;
+      this.tweets.next(data);
     }));
   }
 
