@@ -18,7 +18,6 @@ import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
 import { UserRole } from '../../lib/enums/UserRole';
 import { ITrackClickEvent } from '../../lib/interfaces/tracking/ITrackClickEvent';
-import { AvailableQuizzesComponent } from '../../modals/available-quizzes/available-quizzes.component';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
@@ -60,6 +59,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public Title = Title;
   public readonly selectedTitle = environment.title;
   public twitterEnabled: boolean;
+  public disableStatistics: boolean;
 
   private _serverPassword = '';
 
@@ -181,14 +181,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
 
-        if (this._ownQuizzes.length && //
-            environment.showJoinableQuizzes && //
-            (
-              !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz)
-            )) {
-          const ref = this.modalService.open(AvailableQuizzesComponent);
-          this._destroy.subscribe(() => ref.close());
-        }
+        /*
+         TODO FIXME
+         Disabled since the scroll position cannot be set to the top because of the modal backdrop
+         if (this._ownQuizzes.length && //
+         environment.showJoinableQuizzes && //
+         (
+         !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz)
+         )) {
+         const ref = this.modalService.open(AvailableQuizzesComponent);
+         this._destroy.subscribe(() => ref.close());
+         }
+         */
       });
 
       if (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
@@ -220,6 +224,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.activatedRoute.data.pipe(takeUntil(this._destroy)).subscribe(data => {
       this.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
+      this.disableStatistics = data.disableStatistics;
     });
   }
 
@@ -380,7 +385,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public navigateToTwitter(): void {
-    window.open('https://twitter.com/intent/follow?screen_name=@arsnovaclick', '_blank', 'noopener noreferrer');
+    window.open('https://twitter.com/intent/follow?screen_name=arsnovaclick', '_blank', 'noopener noreferrer');
   }
 
   private updateFooterElements(isLoggedIn: boolean): void {
@@ -545,7 +550,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canJoinQuiz = false;
           this.passwordRequired = false;
           this.canStartQuiz = false;
-          this._hasErrors = 'component.home.errors.already-taken';
+          if (this.canModifyQuiz) {
+            this._hasErrors = 'component.home.errors.already-taken';
+          }
         } else if (value.step === MessageProtocol.Available && value.payload.state === QuizState.Active) {
           this.canAddQuiz = false;
           this.canJoinQuiz = this.connectionService.serverAvailable;
@@ -561,7 +568,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canJoinQuiz = false;
           this.passwordRequired = this.settingsService.serverSettings.createQuizPasswordRequired;
           this.canStartQuiz = false;
-          this._hasSuccess = 'component.home.success.can-create';
+          if (this.canModifyQuiz) {
+            this._hasSuccess = 'component.home.success.can-create';
+          }
         } else {
           console.error('Invalid quiz status response in home component', value);
         }

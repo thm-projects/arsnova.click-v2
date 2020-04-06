@@ -113,3 +113,7 @@ $popover-body-color: black;
 $code-color: $primary_text_color;
 
 @import "postbuild";
+
+.card {
+  color: $secondary_text_color
+}

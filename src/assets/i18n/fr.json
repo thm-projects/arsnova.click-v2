@@ -274,14 +274,26 @@
     "name_management": {
       "enter_quiz_name": "Entrez un nom de quiz…",
       "join_session": "Une partie?",
-      "start_session": "Commencer",
-      "edit_session": "Modifier",
+      "start_session": {
+        "title": "Commencer",
+        "label": "Commencer"
+      },
+      "edit_session": {
+        "title": "Modifier",
+        "label": "Modifier"
+      },
       "create_session": "Créer un Quiz?",
       "create_demo_session": "Lancez la Demo",
       "quiz_management": "Mémoire de Quiz",
       "session_management": "Quiz",
-      "delete_session": "Supprimer ce Quiz?",
-      "export": "Exporter ce Quiz",
+      "delete_session": {
+        "title": "Supprimer ce Quiz?",
+        "label": "Supprimer ce Quiz?"
+      },
+      "export": {
+        "title": "Exporter ce Quiz",
+        "label": "Exporter ce Quiz"
+      },
       "no_sessions": "Aucun Quiz n’est enregistré sur ce navigateur.",
       "reenter_session": "Ouvrir",
       "available_sessions": "Ces Quiz sont sur votre navigateur:",
@@ -660,6 +672,36 @@
     "server-unavailable-modal": {},
     "toasts": {
       "swupdate": {}
+    },
+    "statistics": {
+      "users": {
+        "title": "Amount of Users on this page",
+        "content": "All active connections to arsnova.click are counted here. Of course all data is anonymized. It is not possible to link the data to unique persons. It's just a good hint for you how high the current load of arsnova.click is."
+      },
+      "total-quizzes": {
+        "title": "All Quizzes",
+        "content": "All quizzes from all users are counted here. Yes, even yours! Your quizzes are of course still private and only you can start them. No one can access your quiz data!"
+      },
+      "active-quizzes": {
+        "title": "Active Quizzes",
+        "content": "This is the amount of currently played quizzes. All quizzes are counted which are currently in the Quiz Lobby or playing quiz rounds."
+      },
+      "total-pool-questions": {
+        "title": "Quiz-Pool Questions",
+        "content": "With the Quiz-Pool every user can provide some questions for other users. You can get an inspiration for your own quiz here. Students can use the quizzes to strengthen their knowledge."
+      },
+      "total-pool-tags": {
+        "title": "Different Tags",
+        "content": "Questions can be tagged. With Tags they are sortable by their topic and can be used in the Quiz-Pool to custom quizzes. You are fully free in the selection of the Tags for your Quiz-Pool Questions. Some hints regarding the tagging of questions can be found in the Quiz Manager in the tab 'Tags'."
+      },
+      "active-participants": {
+        "title": "Current Attendees",
+        "content": "This is the amount of the current attendees of active quizzes. Data privacy is provided here aswell - it is not possible to track single attendees, identify them or their actions. It's just a hint how heavily arsnova.click is used currently."
+      },
+      "average-participants": {
+        "title": "Average Attendees per Quiz",
+        "content": "Here you can find the amount of average attendees per played quiz. This data is anonymized aswell. We only store the name of the attendee and the corresponding quiz. It is not possible to identify single persons or connections with this data."
+      }
     }
   },
   "plugins": {

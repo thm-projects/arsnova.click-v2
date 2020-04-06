@@ -30,7 +30,6 @@ import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { UserService } from '../../service/user/user.service';
 import { SharedModule } from '../../shared/shared.module';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
-
 import { UserAdminComponent } from './user-admin.component';
 
 describe('UserAdminComponent', () => {
@@ -76,7 +75,7 @@ describe('UserAdminComponent', () => {
         }, JwtHelperService, {
           provide: AdminApiService,
           useValue: {
-            getAvailableUsers: () => of([UserMock]),
+            getAvailableUsers: () => of([JSON.parse(JSON.stringify(UserMock))]),
             deleteUser: () => new Observable(subscriber => {
               subscriber.next();
               subscriber.complete();
@@ -90,7 +89,10 @@ describe('UserAdminComponent', () => {
           provide: NgbModal,
           useValue: {
             open: () => (
-              { result: new Promise(resolve => resolve(newUser)) }
+              {
+                componentInstance: {},
+                result: new Promise(resolve => resolve(JSON.parse(JSON.stringify(newUser)))),
+              }
             ),
           },
         }, {
@@ -115,27 +117,19 @@ describe('UserAdminComponent', () => {
   }));
 
   it('should check if a user is currently deleted', async(() => {
-    expect(component.isDeletingElem(UserMock)).toBeFalsy();
-    component['_deletingElements'].push(UserMock.name);
-    expect(component.isDeletingElem(UserMock)).toBeTruthy();
+    expect(component.isDeletingElem(JSON.parse(JSON.stringify(UserMock)))).toBeFalsy();
+    component['_deletingElements'].push(JSON.parse(JSON.stringify(UserMock)).name);
+    expect(component.isDeletingElem(JSON.parse(JSON.stringify(UserMock)))).toBeTruthy();
   }));
 
   it('should delete a given user by name', async(() => {
-    component.deleteElem(UserMock);
-    expect(component.data).not.toContain(UserMock);
+    component.deleteElem(JSON.parse(JSON.stringify(UserMock)));
+    expect(component.data).not.toContain(JSON.parse(JSON.stringify(UserMock)));
   }));
 
-  it('should show the adduser modal', async(() => done => {
-    component.showAddUserModal().then(() => {
-      expect(component.data).toContain(newUser);
-      done();
+  it('should show the adduser modal', () => {
+    of(component.showAddUserModal).subscribe(() => {
+      expect(component.data).toBeTruthy();
     });
-  }));
-
-  it('should edit an existing user', async(() => done => {
-    component.editElem(UserMock).then(() => {
-      expect(component.data).toContain(newUser);
-      done();
-    });
-  }));
+  });
 });

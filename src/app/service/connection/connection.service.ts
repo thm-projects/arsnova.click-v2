@@ -1,5 +1,5 @@
 import { isPlatformServer } from '@angular/common';
-import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -35,9 +35,9 @@ export class ConnectionService {
     this._websocketAvailable = value;
   }
 
-  private _serverStatusEmitter = new EventEmitter<boolean>();
+  private _serverStatusEmitter = new ReplaySubject<boolean>(1);
 
-  get serverStatusEmitter(): EventEmitter<boolean> {
+  get serverStatusEmitter(): ReplaySubject<boolean> {
     return this._serverStatusEmitter;
   }
 
@@ -138,12 +138,12 @@ export class ConnectionService {
         case RxStompState.OPEN:
           this._websocketAvailable = true;
           this._serverAvailable = true;
-          this._serverStatusEmitter.emit(true);
+          this._serverStatusEmitter.next(true);
           break;
         case RxStompState.CLOSED:
           this._websocketAvailable = false;
           this._serverAvailable = false;
-          this._serverStatusEmitter.emit(false);
+          this._serverStatusEmitter.next(false);
           break;
       }
     });

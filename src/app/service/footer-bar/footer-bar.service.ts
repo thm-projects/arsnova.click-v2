@@ -173,7 +173,7 @@ export class FooterBarService {
     id: 'sessionManagement',
     iconClass: ['fas', 'wrench'],
     textClass: 'footerElementText',
-    textName: 'component.name_management.session_management',
+    textName: 'region.footer.footer_bar.my-quizzes',
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.sessionManagement',

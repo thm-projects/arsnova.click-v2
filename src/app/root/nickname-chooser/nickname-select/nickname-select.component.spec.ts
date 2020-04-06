@@ -7,6 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
@@ -42,7 +43,7 @@ describe('NicknameSelectComponent', () => {
             useFactory: jwtOptionsFactory,
             deps: [PLATFORM_ID, StorageService],
           },
-        }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule,
+        }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule, NgbAlertModule,
       ],
       providers: [
         {

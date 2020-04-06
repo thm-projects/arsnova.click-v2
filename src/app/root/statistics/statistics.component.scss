@@ -1,0 +1,39 @@
+@import "prebuild";
+
+.form-row {
+  min-height: 350px;
+
+  @include media-breakpoint-up(md) {
+    &:nth-of-type(2n) {
+      .icon-wrapper {
+        left: 50%;
+      }
+    }
+  }
+
+  .icon-wrapper {
+    opacity: 0.2;
+    width: calc(100% - 2rem + 5px);
+
+    @include media-breakpoint-up(md) {
+      width: calc(50% - 3rem);
+    }
+  }
+
+  .fs-xxl {
+    font-size: 6rem;
+  }
+}
+
+@include media-breakpoint-only(xs) {
+  .card {
+    border-radius: 0;
+    margin-bottom: -1.5rem; // Removes pb-4 from main.container
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  :host ::ng-deep fa-layers svg.svg-inline--fa {
+    bottom: inherit;
+  }
+}
