@@ -128,7 +128,7 @@
                        [spin]="true"></fa-icon>
               <fa-icon *ngIf="!isQueryingQuizState && !isPerformingClick('startSession')"
                        [icon]="'thumbs-up'"></fa-icon>
-              <span class="ml-1">{{'component.name_management.start_session' | translate}}</span>
+              <span class="ml-1">{{'component.name_management.start_session.title' | translate}}</span>
             </button>
           </div>
 
@@ -164,7 +164,7 @@
                       [disabled]="isQueryingQuizState"
                       class="btn btn-secondary btn-block px-1"
                       id="editSession">
-                <span class="mr-1">{{'component.name_management.edit_session' | translate}}</span>
+                <span class="mr-1">{{'component.name_management.edit_session.title' | translate}}</span>
                 <fa-icon *ngIf="isQueryingQuizState || isPerformingClick('editSession')"
                          [icon]="'spinner'"
                          [spin]="true"></fa-icon>

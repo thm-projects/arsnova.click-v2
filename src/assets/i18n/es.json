@@ -275,14 +275,26 @@
     "name_management": {
       "enter_quiz_name": "¡Inserta el nombre del concurso o el PIN …!",
       "join_session": "¡Participa!",
-      "start_session": "¡Empieza el concurso!",
-      "edit_session": "Editar el concurso",
+      "start_session": {
+        "title": "¡Empieza el concurso!",
+        "label": "¡Empieza el concurso!"
+      },
+      "edit_session": {
+        "title": "Editar el concurso",
+        "label": "Editar el concurso"
+      },
       "create_session": "¡Crea un concurso nuevo!",
       "create_demo_session": "¡Empieza Demo Quiz",
       "quiz_management": "Memoria del concursos",
       "session_management": "Concursos",
-      "delete_session": "¿Borrar concurso?",
-      "export": "Exportar el concurso",
+      "delete_session": {
+        "title": "¿Borrar concurso?",
+        "label": "¿Borrar concurso?"
+      },
+      "export": {
+        "title": "Exportar el concurso",
+        "label": "Exportar el concurso"
+      },
       "no_sessions": "No concursos son memorizada en eso navegador.",
       "reenter_session": "Abrir",
       "available_sessions": "Esos concursos son en tu navegador:",

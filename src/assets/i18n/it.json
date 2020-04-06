@@ -286,14 +286,26 @@
     "name_management": {
       "enter_quiz_name": "Inserire il nome del quiz o il PIN …",
       "join_session": "Partecipa al quiz!",
-      "start_session": "Inizia il quiz",
-      "edit_session": "Modifica il quiz",
+      "start_session": {
+        "title": "Inizia il quiz",
+        "label": "Inizia il quiz"
+      },
+      "edit_session": {
+        "title": "Modifica il quiz",
+        "label": "Modifica il quiz"
+      },
       "create_session": "Crea un nuovo quiz!",
       "create_demo_session": "Inizia Demo Quiz",
       "quiz_management": "Memoria del quiz",
       "session_management": "Quiz",
-      "delete_session": "Cancellare il quiz?",
-      "export": "Esporta il quiz",
+      "delete_session": {
+        "title": "Cancellare il quiz?",
+        "label": "Cancellare il quiz?"
+      },
+      "export": {
+        "title": "Esporta il quiz",
+        "label": "Esporta il quiz"
+      },
       "no_sessions": "In questo browser non è stato salvato nessun quiz.",
       "reenter_session": "Apri",
       "available_sessions": "Questi quiz sono nel tuo browser:",

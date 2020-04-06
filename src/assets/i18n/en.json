@@ -372,15 +372,27 @@
     "name_management": {
       "enter_quiz_name": "Enter the quiz name here",
       "join_session": "Join now!",
-      "start_session": "Start the quiz",
-      "edit_session": "Edit the quiz",
+      "start_session": {
+        "title": "Start the quiz",
+        "label": "Start"
+      },
+      "edit_session": {
+        "title": "Edit the quiz",
+        "label": "Edit"
+      },
       "create_session": "Make a new one!",
       "can_create_session": "Create Quiz",
       "create_demo_session": "Start demo quiz",
       "quiz_management": "Stored Quizzes",
       "session_management": "Quizzes",
-      "delete_session": "Delete quiz",
-      "export": "Export quiz",
+      "delete_session": {
+        "title": "Delete quiz",
+        "label": "Delete"
+      },
+      "export": {
+        "title": "Export quiz",
+        "label": "Export"
+      },
       "no_sessions": "There are no quizzes stored in your browser.",
       "reenter_session": "Open",
       "available_sessions": "These quizzes are stored in your browser:",
@@ -397,7 +409,10 @@
       "create_abcd_session": "Start ABCD quiz",
       "enter_server_password": "Enter the server password here",
       "public-quizzes": "Looking for more? Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
-      "save_session": "Save Quiz"
+      "save_session": {
+        "title": "Save Quiz",
+        "label": "Save"
+      }
     },
     "leaderboard": {
       "header": "Leaderboard",

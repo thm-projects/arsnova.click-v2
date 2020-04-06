@@ -306,21 +306,36 @@
     "name_management": {
       "enter_quiz_name": "Gib hier den Quiznamen ein …",
       "join_session": "Mach mit!",
-      "start_session": "Quiz starten",
-      "edit_session": "Quiz bearbeiten",
+      "start_session": {
+        "title": "Quiz starten",
+        "label": "Starten"
+      },
+      "edit_session": {
+        "title": "Quiz bearbeiten",
+        "label": "Bearbeiten"
+      },
       "create_session": "Neues Quiz!",
       "can_create_session": "Quiz erstellen",
       "create_demo_session": "Starte Demo Quiz",
       "quiz_management": "Quiz-Speicher",
       "session_management": "Quizze",
-      "delete_session": "Quiz löschen?",
-      "export": "Quiz exportieren",
+      "delete_session": {
+        "title": "Quiz löschen",
+        "label": "Löschen"
+      },
+      "export": {
+        "title": "Quiz exportieren",
+        "label": "Exportieren"
+      },
       "no_sessions": "Es sind keine Quizze in diesem Browser gespeichert.",
       "aria_description": {},
       "create_abcd_session": "Starte ABCD Quiz",
       "enter_server_password": "Server Passwort eingeben",
       "public-quizzes": "Suchst du mehr? Klicke hier um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes} } zu wählen!",
-      "save_session": "Quiz speichern"
+      "save_session": {
+        "title": "Quiz speichern",
+        "label": "Speichern"
+      }
     },
     "leaderboard": {
       "header": "Rangliste",

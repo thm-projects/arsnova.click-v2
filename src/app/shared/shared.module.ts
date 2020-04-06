@@ -69,7 +69,7 @@ import {
   faUsers,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbModalModule, NgbPopoverModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TagCloudModule } from 'angular-tag-cloud-module';
@@ -81,20 +81,35 @@ import { WordCloudComponent } from './word-cloud/word-cloud.component';
 
 @NgModule({
   imports: [
-    FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(), TagCloudModule
+    FormsModule,
+    CommonModule,
+    FontAwesomeModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTooltipModule,
+    NgbTypeaheadModule,
+    NgbAlertModule,
+    RouterModule,
+    AngularSvgIconModule,
+    TranslateModule.forChild(),
+    TagCloudModule,
   ],
   exports: [
     FormsModule,
     CommonModule,
     FontAwesomeModule,
     TranslateModule,
-    NgbModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTooltipModule,
+    NgbTypeaheadModule,
+    NgbAlertModule,
     RouterModule,
     AudioPlayerComponent,
     GamificationAnimationComponent,
     AngularSvgIconModule,
     NoDataErrorComponent,
-    WordCloudComponent
+    WordCloudComponent,
   ],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent, WordCloudComponent],
   bootstrap: [],

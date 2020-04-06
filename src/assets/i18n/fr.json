@@ -274,14 +274,26 @@
     "name_management": {
       "enter_quiz_name": "Entrez un nom de quiz…",
       "join_session": "Une partie?",
-      "start_session": "Commencer",
-      "edit_session": "Modifier",
+      "start_session": {
+        "title": "Commencer",
+        "label": "Commencer"
+      },
+      "edit_session": {
+        "title": "Modifier",
+        "label": "Modifier"
+      },
       "create_session": "Créer un Quiz?",
       "create_demo_session": "Lancez la Demo",
       "quiz_management": "Mémoire de Quiz",
       "session_management": "Quiz",
-      "delete_session": "Supprimer ce Quiz?",
-      "export": "Exporter ce Quiz",
+      "delete_session": {
+        "title": "Supprimer ce Quiz?",
+        "label": "Supprimer ce Quiz?"
+      },
+      "export": {
+        "title": "Exporter ce Quiz",
+        "label": "Exporter ce Quiz"
+      },
       "no_sessions": "Aucun Quiz n’est enregistré sur ce navigateur.",
       "reenter_session": "Ouvrir",
       "available_sessions": "Ces Quiz sont sur votre navigateur:",
