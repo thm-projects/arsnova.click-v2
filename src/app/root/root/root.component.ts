@@ -85,14 +85,20 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.i18nService.initLanguage();
     this.themeService.initTheme();
 
-    if (isPlatformBrowser(this.platformId)) {
+    this.storageService.stateNotifier.pipe( //
+      filter(val => val === DbState.Initialized && isPlatformBrowser(this.platformId)), //
+      take(1), //
+      takeUntil(this._destroy), //
+    ).subscribe(() => {
       if (localStorage.getItem('hashtags')) {
+        console.log('[RootComponent] Migrating legacy quiz data');
         this.migrateLegacyQuizData();
       }
+      console.log('[RootComponent] Checking for deprecated databases');
       Object.values(DeprecatedDb).forEach(deprecatedDb => {
         indexedDB.deleteDatabase(deprecatedDb).addEventListener('success', () => {});
       });
-    }
+    });
 
     this.translateService.onLangChange.pipe(filter(() => isPlatformBrowser(this.platformId)), takeUntil(this._destroy)).subscribe(() => {
       this.initializeCookieConsent(this.themeService.currentTheme);
