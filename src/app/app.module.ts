@@ -2,10 +2,8 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
@@ -54,7 +52,6 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'arsnova-click' }),
-    BrowserAnimationsModule,
     AppRoutingModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
@@ -112,7 +109,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
-    }, SimpleMQ, RoutePreloader, NgbActiveModal,
+    }, SimpleMQ, RoutePreloader,
   ],
   bootstrap: [RootComponent],
 })
