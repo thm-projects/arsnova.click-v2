@@ -4,6 +4,7 @@ import { ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityContext } from '@a
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
@@ -55,6 +56,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     AppRoutingModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
+    TransferHttpCacheModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     ModalsModule,
     TranslateModule.forRoot({
