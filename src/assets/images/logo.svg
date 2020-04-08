@@ -3,17 +3,17 @@
      viewBox="0 0 60 60"
      width="60"
      xmlns="http://www.w3.org/2000/svg">
-   <text x="2"
-         y="20"
-         class="arsnova-logo-ars">ars
-   </text>
-   <text x="25"
-         y="20"
-         class="arsnova-logo-nova">nova
-   </text>
-   <text x="0"
-         y="45"
-         style="font-size: 1.7rem;"
-         class="arsnova-logo-click">.click
-   </text>
+  <text class="arsnova-logo-ars"
+        x="2"
+        y="20">ars
+  </text>
+  <text class="arsnova-logo-nova"
+        x="25"
+        y="20">nova
+  </text>
+  <text class="arsnova-logo-click"
+        style="font-size: 1.7rem;"
+        x="0"
+        y="45">.click
+  </text>
 </svg>

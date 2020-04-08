@@ -21,6 +21,7 @@ import {
   faCheckSquare,
   faCloudUploadAlt,
   faCode,
+  faCogs,
   faCopy,
   faDownload,
   faEdit,
@@ -39,6 +40,7 @@ import {
   faListUl,
   faLock,
   faMinus,
+  faMobileAlt,
   faMusic,
   faPaperPlane,
   faPause,
@@ -54,6 +56,7 @@ import {
   faSquare,
   faStop,
   faStrikethrough,
+  faTags,
   faThumbsUp,
   faTimes,
   faTrash,
@@ -62,10 +65,11 @@ import {
   faUndo,
   faUnlock,
   faUpload,
+  faUserFriends,
   faUsers,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbModalModule, NgbPopoverModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TagCloudModule } from 'angular-tag-cloud-module';
@@ -77,20 +81,35 @@ import { WordCloudComponent } from './word-cloud/word-cloud.component';
 
 @NgModule({
   imports: [
-    FormsModule, CommonModule, FontAwesomeModule, NgbModule, RouterModule, AngularSvgIconModule, TranslateModule.forChild(), TagCloudModule
+    FormsModule,
+    CommonModule,
+    FontAwesomeModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTooltipModule,
+    NgbTypeaheadModule,
+    NgbAlertModule,
+    RouterModule,
+    AngularSvgIconModule,
+    TranslateModule.forChild(),
+    TagCloudModule,
   ],
   exports: [
     FormsModule,
     CommonModule,
     FontAwesomeModule,
     TranslateModule,
-    NgbModule,
+    NgbModalModule,
+    NgbPopoverModule,
+    NgbTooltipModule,
+    NgbTypeaheadModule,
+    NgbAlertModule,
     RouterModule,
     AudioPlayerComponent,
     GamificationAnimationComponent,
     AngularSvgIconModule,
     NoDataErrorComponent,
-    WordCloudComponent
+    WordCloudComponent,
   ],
   declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent, WordCloudComponent],
   bootstrap: [],
@@ -159,5 +178,9 @@ export class SharedModule {
     library.addIcons(faPlus);
     library.addIcons(faMinus);
     library.addIcons(faCloudUploadAlt);
+    library.addIcons(faCogs);
+    library.addIcons(faTags);
+    library.addIcons(faUserFriends);
+    library.addIcons(faMobileAlt);
   }
 }

@@ -35,13 +35,13 @@
 
       <div class="card-footer">
 
-        <div class="d-flex justify-content-around">
+        <div class="d-flex">
           <ng-container *ngIf="elem.isValid() && connectionService.serverAvailable">
 
             <button (click)="saveQuiz(i)"
                     *ngIf="isAuthorizedToSaveQuiz() && isAuthorizedToModifyQuiz()"
-                    [title]="'component.name_management.save_session' | translate"
-                    class="btn btn-secondary">
+                    [ngbTooltip]="'component.name_management.save_session.title' | translate"
+                    class="btn btn-outline-invers btn-block mt-0 mr-2 d-flex justify-content-center">
               <fa-icon *ngIf="isSaved(i)"
                        [icon]="'check'"></fa-icon>
               <fa-icon *ngIf="!isSaved(i)"
@@ -49,8 +49,8 @@
             </button>
 
             <button (click)="startQuiz(elem)"
-                    [title]="'component.name_management.start_session' | translate"
-                    class="btn btn-secondary">
+                    [ngbTooltip]="'component.name_management.start_session.title' | translate"
+                    class="btn btn-outline-success btn-block mt-0 mr-2 d-flex justify-content-center">
               <fa-icon [icon]="isStartingQuiz === elem ? 'spinner' : 'paper-plane'"
                        [spin]="isStartingQuiz === elem"></fa-icon>
             </button>
@@ -59,22 +59,22 @@
 
           <button (click)="editQuiz(i)"
                   *ngIf="isAuthorizedToModifyQuiz()"
-                  [title]="'component.name_management.edit_session' | translate"
-                  class="btn btn-secondary">
+                  [ngbTooltip]="'component.name_management.edit_session.title' | translate"
+                  class="btn btn-outline-warning btn-block mt-0 mr-2 d-flex justify-content-center">
             <fa-icon [icon]="'edit'"></fa-icon>
           </button>
 
           <button (click)="exportQuiz(i)"
                   *ngIf="isAuthorizedToModifyQuiz()"
-                  [title]="'component.name_management.export' | translate"
-                  class="btn btn-secondary">
+                  [ngbTooltip]="'component.name_management.export.title' | translate"
+                  class="btn btn-outline-primary btn-block mt-0 mr-2 d-flex justify-content-center">
             <fa-icon [icon]="'download'"></fa-icon>
           </button>
 
           <button (click)="deleteQuiz(elem)"
                   [disabled]="!connectionService.serverAvailable"
-                  [title]="'component.name_management.delete_session' | translate"
-                  class="btn btn-secondary">
+                  [ngbTooltip]="'component.name_management.delete_session.title' | translate"
+                  class="btn btn-outline-danger btn-block mt-0 d-flex justify-content-center">
             <fa-icon [icon]="isDeletingQuiz === elem ? 'spinner' : 'trash'"
                      [spin]="isDeletingQuiz === elem"></fa-icon>
           </button>

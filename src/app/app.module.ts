@@ -2,10 +2,9 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { TransferHttpCacheModule } from '@nguniversal/common';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
@@ -27,6 +26,7 @@ import { HomeComponent } from './root/home/home.component';
 import { LanguageSwitcherComponent } from './root/language-switcher/language-switcher.component';
 import { LoginComponent } from './root/login/login.component';
 import { RootComponent } from './root/root/root.component';
+import { StatisticsComponent } from './root/statistics/statistics.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import { TwitterCardsComponent } from './root/twitter-cards/twitter-cards.component';
 import rxStompConfig from './rx-stomp.config';
@@ -49,14 +49,14 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
 
 @NgModule({
   declarations: [
-    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent,
+    HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent, StatisticsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'arsnova-click' }),
-    BrowserAnimationsModule,
     AppRoutingModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
+    TransferHttpCacheModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     ModalsModule,
     TranslateModule.forRoot({
@@ -111,7 +111,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
-    }, SimpleMQ, RoutePreloader, NgbActiveModal,
+    }, SimpleMQ, RoutePreloader,
   ],
   bootstrap: [RootComponent],
 })

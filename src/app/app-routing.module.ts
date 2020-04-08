@@ -49,7 +49,7 @@ const routes: Routes = [
   }, {
     path: 'preview/:themeId/:languageId',
     component: HomeComponent,
-    data: { disableTwitter: true },
+    data: { disableTwitter: true, disableStatistics: true },
     canActivate: [InitDbGuard],
   }, {
     path: 'languages',
@@ -71,7 +71,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { initialNavigation: 'enabled' })],
+  imports: [RouterModule.forRoot(routes, { initialNavigation: 'enabled', scrollPositionRestoration: 'enabled' })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {

@@ -29,7 +29,7 @@ export enum NumberType {
 
 export enum CurrencyType {
   DE = 'EUR', //
-  EN = 'EUR', //
+  EN = 'GBP', //
   FR = 'EUR', //
   IT = 'EUR', //
   ES = 'EUR', //

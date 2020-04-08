@@ -15,7 +15,7 @@ services:
         CHROMIUM_PATH: "/usr/bin/chromium-browser"
         CHROME_BIN: "/usr/bin/chromium-browser"
     ports:
-      - 8080:80
+      - 8080:4000
   staging:
     image: arsnova/arsnova-click-frontend:2.0.0-staging
     hostname: arsnova-click-frontend

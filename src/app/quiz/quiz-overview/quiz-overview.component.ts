@@ -59,9 +59,11 @@ export class QuizOverviewComponent implements OnInit {
 
     headerLabelService.headerLabel = 'component.name_management.session_management';
 
-    this.quizApiService.getPublicQuizAmount().subscribe(val => {
-      this.publicQuizAmount = val;
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.quizApiService.getPublicQuizAmount().subscribe(val => {
+        this.publicQuizAmount = val;
+      });
+    }
   }
 
   public startQuiz(elem: QuizEntity): Promise<void> {

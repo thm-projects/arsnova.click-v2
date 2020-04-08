@@ -37,8 +37,7 @@ export function app(): Express {
         {
           provide: APP_BASE_HREF,
           useValue: req.baseUrl,
-        },
-        {
+        }, {
           provide: REQUEST,
           useValue: req,
         },

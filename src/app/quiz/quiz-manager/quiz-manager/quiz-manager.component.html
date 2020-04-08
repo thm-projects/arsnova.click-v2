@@ -41,17 +41,17 @@
         </p>
       </div>
 
-      <div class="col-sm-auto ml-sm-auto mt-2 mt-sm-0">
+      <div class="col-sm-auto ml-sm-auto mt-2 mt-sm-0 d-flex d-sm-block justify-content-end justify-content-sm-start">
         <fa-icon (click)="moveQuestionUp(i)"
                  *ngIf="i"
                  [icon]="'arrow-up'"
-                 class="cursor-pointer mx-4 mx-md-2"
+                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
                  role="button"></fa-icon>
 
         <fa-icon (click)="moveQuestionDown(i)"
                  *ngIf="i !== quizService.quiz?.questionList.length - 1"
                  [icon]="'arrow-down'"
-                 class="cursor-pointer mx-4 mx-md-2"
+                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
                  role="button"></fa-icon>
 
         <fa-icon (click)="updloadToQuizPool(elem)"
@@ -59,18 +59,18 @@
                  [icon]="['fas', (isUploading(elem) ? 'spinner' : 'cloud-upload-alt')]"
                  [ngbTooltip]="getTooltipForUpload(elem) | translate"
                  [spin]="isUploading(elem)"
-                 class="cursor-pointer mx-4 mx-md-2"
+                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
                  role="button"></fa-icon>
 
         <fa-icon (click)="trackEditQuestion()"
                  [icon]="'edit'"
                  [routerLink]="['/quiz', 'manager', i,  'overview']"
-                 class="cursor-pointer mx-4 mx-md-2"
+                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
                  role="button"></fa-icon>
 
         <fa-icon (click)="deleteQuestion(i)"
                  [icon]="'trash'"
-                 class="cursor-pointer mx-4 mx-md-2"
+                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
                  role="button"></fa-icon>
 
       </div>

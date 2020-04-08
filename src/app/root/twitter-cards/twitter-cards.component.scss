@@ -1,3 +1,5 @@
+@import "prebuild";
+
 .header {
   display: grid;
   grid-template-columns: 50px 1fr 16px;
@@ -70,4 +72,10 @@
   height: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
+}
+
+@include media-breakpoint-only(xs) {
+  .card {
+    border-radius: 0;
+  }
 }

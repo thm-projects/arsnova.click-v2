@@ -1,0 +1,43 @@
+<div *ngIf="statistics"
+     class="card">
+  <div *ngFor="let elem of data; even as isEven"
+       [class.flex-column-reverse]="!isEven"
+       class="form-row position-relative px-3 px-md-5 py-3 py-md-0 my-4 my-lg-0 d-flex flex-md-row">
+    <ng-template #amountTemplate>
+      <div class="col-md-6 d-flex justify-content-center align-items-center flex-column my-auto my-md-0 flex-grow-1">
+        <h3 class="w-100 text-truncate text-center fs-xxl">{{elem.amount}}</h3>
+      </div>
+    </ng-template>
+
+    <ng-template #contentTemplate>
+      <div class="col-md-6 d-flex justify-content-center flex-column flex-grow-1">
+        <h4 class="text-center">{{elem.title | translate}}</h4>
+        <p class="text-hyphen text-justify">{{elem.content | translate}}</p>
+      </div>
+    </ng-template>
+
+    <div [style.color]="elem.iconColor"
+         class="position-absolute d-flex align-items-md-center justify-content-center h-100 icon-wrapper">
+      <fa-layers *ngIf="elem.iconLayer">
+        <fa-icon *ngFor="let icon of elem.iconLayer"
+                 [icon]="icon.classes"
+                 [mask]="icon.mask"
+                 [transform]="icon.transform"
+                 size="10x"></fa-icon>
+      </fa-layers>
+      <fa-icon *ngIf="!elem.iconLayer"
+               [icon]="elem.icon"
+               size="10x"></fa-icon>
+    </div>
+
+    <ng-container *ngIf="isEven">
+      <ng-container *ngTemplateOutlet="amountTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="!isEven">
+      <ng-container *ngTemplateOutlet="contentTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="amountTemplate"></ng-container>
+    </ng-container>
+  </div>
+</div>

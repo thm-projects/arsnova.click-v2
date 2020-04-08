@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { ITweetEntry } from '../../lib/interfaces/ITweetEntry';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TwitterServiceMock {
-  public tweets: ITweetEntry[] = [];
+  public tweets = new ReplaySubject<Array<ITweetEntry>>(1);
 
   constructor() { }
 

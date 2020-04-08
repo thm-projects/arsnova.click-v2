@@ -20,7 +20,11 @@ export class AppDb extends Dexie {
     .stores({
       [DbTable.Config]: null,
       [DbTable.Quiz]: null,
-    }).upgrade(trans => {
+    }).upgrade(async trans => {
+      console.log('Upgrading database');
+      const quizData = await trans.db.table(DbTable.Quiz).toArray();
+      localStorage.setItem('hashtags', JSON.stringify(quizData.map(quiz => quiz.name)));
+      quizData.forEach(quiz => localStorage.setItem(quiz.name, quiz));
       trans.idbtrans.db.deleteObjectStore(DbTable.Quiz);
       trans.idbtrans.db.deleteObjectStore(DbTable.Config);
     });
