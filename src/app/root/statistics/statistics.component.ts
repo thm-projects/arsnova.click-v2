@@ -80,7 +80,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       this.statistics = data;
       this.buildDataTiles();
       if (this.userService.isAuthorizedFor(UserRole.SuperAdmin)) {
-        this.notificationService.footerBadges['quizpool'] = this.statistics.quiz.pool.pendingQuestionAmount;
+        this.notificationService.footerBadges['admin'] = this.statistics.quiz.pool.pendingQuestionAmount;
       }
     });
 

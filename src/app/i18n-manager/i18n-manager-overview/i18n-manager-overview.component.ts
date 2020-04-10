@@ -17,6 +17,9 @@ import { UserService } from '../../service/user/user.service';
 export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'I18nManagerOverviewComponent';
   public readonly filters = Filter;
+  public unauthorized: boolean;
+  public loading = true;
+  public error: boolean;
 
   private _langRef = Object.values(Language);
 
@@ -146,6 +149,9 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public setProject(value: Project | string): void {
     this._selectedKey = null;
     this._searchFilter = '';
+    this.loading = true;
+    this.error = false;
+    this.unauthorized = false;
     this.languageLoaderService.reset();
     this.projectLoaderService.currentProject = value as Project;
 
@@ -183,6 +189,16 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   }
 
   private reloadLanguageData(): void {
-    this.languageLoaderService.getLangData();
+    this.languageLoaderService.getLangData().subscribe({
+      next: () => {
+        this.loading = false;
+        this.error = false;
+        this.unauthorized = false;
+      },
+      error: err => {
+        this.loading = false;
+        this.error = true;
+      },
+    });
   }
 }

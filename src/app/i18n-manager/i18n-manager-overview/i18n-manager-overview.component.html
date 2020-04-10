@@ -1,19 +1,19 @@
 <div class="row d-flex flex-wrap mb-md-2">
 
-  <div class="d-flex col-12 col-md mb-3 mb-md-0 text-nowrap">
-    <span class="d-inline-flex mx-md-2 align-items-center">Current Project:</span>
+  <div class="d-flex col-12 col-md-auto mb-3 mb-md-0 text-nowrap">
+    <span class="d-inline-flex align-items-center">Current Project:</span>
     <select #projectSelect
             (change)="setProject(projectSelect.value)"
-            class="border-0 bg-transparent text-secondary">
+            class="border-0 custom-select custom-select-sm ml-2">
       <option [value]="projectLoaderService.projects.Frontend">Frontend
       </option>
       <option [value]="projectLoaderService.projects.Backend">Backend
       </option>
     </select>
 
-    <span class="d-inline-flex mx-2 align-items-center"
-          [class.text-warning]="this.projectLoaderService.connected"
-          [class.text-danger]="!this.projectLoaderService.connected">
+    <span [class.badge-danger]="!this.projectLoaderService.connected"
+          [class.badge-warning]="this.projectLoaderService.connected"
+          class="d-inline-flex ml-2 align-items-center badge">
       <span *ngIf="!this.projectLoaderService.connected">Not&nbsp;</span>
       <span>Loaded</span>
       <span *ngIf="this.projectLoaderService.connected && !this.userService.staticLoginTokenContent.gitlabToken"
@@ -21,7 +21,8 @@
     </span>
   </div>
 
-  <div class="d-flex col-12 col-md mb-3 mb-md-0">
+  <div *ngIf="this.projectLoaderService.connected"
+       class="d-flex col-12 col-md mb-3 mb-md-0">
     <label class="d-inline-flex mx-md-2 align-items-center mb-0">
       <span class="mr-2">Show unused keys</span>
       <input type="checkbox"
@@ -29,9 +30,9 @@
     </label>
   </div>
 
-  <div class="col-12 col-md mb-3 mb-md-0">
-    <div *ngIf="this.projectLoaderService.connected"
-         class="btn-group ml-md-auto">
+  <div *ngIf="this.projectLoaderService.connected"
+       class="col-12 col-md mb-3 mb-md-0">
+    <div class="btn-group ml-md-auto">
       <button class="btn btn-secondary"
               [disabled]="!this.languageLoaderService.changedData"
               [title]="!this.userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''"
@@ -45,7 +46,7 @@
   </div>
 </div>
 
-<div *ngIf="this.projectLoaderService.connected;else loading"
+<div *ngIf="this.projectLoaderService.connected"
      class="row">
   <div class="d-flex sticky-top col-12 my-2">
     <div class="bg-secondary d-flex w-100 py-1">
@@ -108,5 +109,10 @@
   </div>
 </div>
 
-<ng-template #unauthorized><h4 class="text-danger text-center mt-5 bg-secondary d-flex justify-content-center py-3 mx-auto rounded">Not authorized to view this project</h4></ng-template>
-<ng-template #loading><h4 class="text-center mt-5">Loading...</h4></ng-template>
+<h5 *ngIf="loading"
+    class="text-center mt-5">Loading...</h5>
+<h5 *ngIf="error"
+    class="alert alert-danger mt-5 text-center">
+  <span *ngIf="unauthorized">Not authorized to view this project</span>
+  <span *ngIf="!unauthorized">Error while loading the project language definition</span>
+</h5>

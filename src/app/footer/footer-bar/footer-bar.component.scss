@@ -30,6 +30,7 @@
     .footerElemText {
       flex-shrink: 0;
       max-width: calc(20vw - 36px);
+      line-height: 1;
     }
   }
 }
@@ -61,13 +62,13 @@
   .footerElement {
     flex-shrink: 0;
     scroll-snap-align: start;
+    height: 40px;
 
     @include media-breakpoint-only(xs) {
       flex-grow: 1;
 
       .footerElemText {
-        display: block;
-        line-height: 40px;
+        display: flex;
       }
     }
 

@@ -19,7 +19,7 @@
        [routerLink]="getLinkTarget(elem)"
        [title]="elem.textName | translate"
        class="footerElement px-2 px-sm-1 py-sm-2 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
-    <p [class]="elem.iconColorClass + ' footerElemIcon mb-0'">
+    <p [class]="elem.iconColorClass + ' footerElemIcon mb-0 align-self-center'">
       <fa-layers *ngIf="elem.iconLayer">
         <fa-icon *ngFor="let icon of elem.iconLayer"
                  [icon]="icon.classes"
@@ -30,11 +30,11 @@
                [icon]="getIconClass(elem)"
                [spin]="elem.isLoading"></fa-icon>
     </p>
-    <p class="footerElemText text-truncate text-left mb-0 ml-2 d-flex align-items-start">
+    <p class="footerElemText flex-column text-truncate text-left mb-0 ml-2">
       <span [class]="elem.textClass"
             [innerHTML]="elem.textName | translate"></span>
       <span *ngIf="notificationService.footerBadges[elem.id]"
-            class="badge badge-danger ml-1">{{notificationService.footerBadges[elem.id]}}</span>
+            class="badge badge-danger ml-1 d-sm-block d-sm-inline-block align-self-md-start">{{notificationService.footerBadges[elem.id]}}</span>
     </p>
   </div>
 </nav>
