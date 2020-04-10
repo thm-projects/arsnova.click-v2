@@ -1057,5 +1057,12 @@
       "account": "Account",
       "any": "Any"
     }
+  },
+  "notification": {
+    "close": "Close",
+    "pending-pool-question": {
+      "title": "New Quiz-Pool {amount, plural, =0{questions} one{question} other{questions} }",
+      "body": "{amount, plural, =0{0 questions} one{One question} other{{amount} questions} } is waiting for approval in the Quiz-Pool"
+    }
   }
 }

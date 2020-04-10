@@ -18,6 +18,7 @@ import { IWindow } from '../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { NotificationService } from '../../service/notification/notification.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
@@ -57,6 +58,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private trackingService: TrackingService,
     private rendererFactory: RendererFactory2,
     @Inject(DOCUMENT) private document: Document,
+    private notificationService: NotificationService,
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
@@ -166,6 +168,8 @@ export class RootComponent implements OnInit, AfterViewInit {
         label: 'WebApp installed',
       });
     });
+
+    this.notificationService.subscribeToNotifications();
 
     this.router.events.pipe(takeUntil(this._destroy), filter(nav => nav instanceof NavigationEnd)).subscribe(() => {
       const currentComponent = this.fetchChildComponent(this.activatedRoute);

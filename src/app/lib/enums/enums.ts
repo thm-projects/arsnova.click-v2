@@ -49,6 +49,7 @@ export enum Project {
 }
 
 export enum StorageKey {
+  PushSubscription       = 'PushSubscription', //
   TwitterOptIn           = 'TwitterOptIn', //
   CurrentBonusToken      = 'CurrentBonusToken', //
   CurrentQuestionIndex   = 'CurrentQuestionIndex', //

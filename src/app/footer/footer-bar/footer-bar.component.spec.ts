@@ -2,10 +2,12 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SwPush } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { environment } from '../../../environments/environment';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -44,7 +46,8 @@ describe('FooterBarComponent', () => {
         }),
       ],
       providers: [
-        RxStompService, {
+        { provide: SwPush, useValue: {} },
+        RxStompService, SimpleMQ, {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, FooterBarService, SharedService, {

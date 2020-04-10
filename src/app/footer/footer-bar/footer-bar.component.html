@@ -30,9 +30,11 @@
                [icon]="getIconClass(elem)"
                [spin]="elem.isLoading"></fa-icon>
     </p>
-    <p class="footerElemText text-truncate text-left mb-0 ml-2">
+    <p class="footerElemText text-truncate text-left mb-0 ml-2 d-flex align-items-start">
       <span [class]="elem.textClass"
             [innerHTML]="elem.textName | translate"></span>
+      <span *ngIf="notificationService.footerBadges[elem.id]"
+            class="badge badge-danger ml-1">{{notificationService.footerBadges[elem.id]}}</span>
     </p>
   </div>
 </nav>
