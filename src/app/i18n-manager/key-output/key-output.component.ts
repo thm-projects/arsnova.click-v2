@@ -10,11 +10,9 @@ import { LanguageLoaderService } from '../../service/language-loader/language-lo
 })
 export class KeyOutputComponent {
   public static readonly TYPE = 'KeyOutputComponent';
-
   public readonly throttle = 0;
   public readonly scrollDistance = 4;
   public visibleData = 20;
-
   @Input() public filter = Filter.None;
   @Input() public searchFilter = '';
   @Input() public unusedKeyFilter: boolean;
@@ -32,7 +30,9 @@ export class KeyOutputComponent {
 
   @Output() private changeEmitter = new EventEmitter<Object>();
 
-  constructor(public languageLoaderService: LanguageLoaderService, private cd: ChangeDetectorRef) {}
+  constructor(public languageLoaderService: LanguageLoaderService, private cd: ChangeDetectorRef) {
+    this.languageLoaderService.changed.subscribe(() => this.cd.markForCheck());
+  }
 
   public selectKey(key: string): void {
     if (this.selectedKey === key) {
@@ -46,7 +46,13 @@ export class KeyOutputComponent {
     return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.language).length;
   }
 
-  public removeKey(key: string): void {
+  public removeKey(key: string, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!confirm('Really remove this key?')) {
+      return;
+    }
+
     this.languageLoaderService.parsedLangData.splice(this.languageLoaderService.parsedLangData.findIndex(val => val.key === key), 1);
     this.selectKey(undefined);
     this.languageLoaderService.changedData = true;

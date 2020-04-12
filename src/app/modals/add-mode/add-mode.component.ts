@@ -24,7 +24,7 @@ export class AddModeComponent {
   }
 
   public updateKey(event, langRef): void {
-    this.value[langRef] = event.target.value;
+    this.value[langRef.toLowerCase()] = event.target.value;
   }
 
   public getKeys(dataNode: object): Array<string> {
@@ -47,5 +47,9 @@ export class AddModeComponent {
 
     window.scroll(0, this.scrollY);
     this.activeModal.close();
+  }
+
+  public hasValues(): boolean {
+    return Boolean(Object.values(this.value).filter(v => Boolean(v)).length) && this.key.length > 0;
   }
 }

@@ -4,6 +4,7 @@ import { LanguageLoaderService } from '../../service/language-loader/language-lo
 
 @Pipe({
   name: 'filterKeys',
+  pure: false,
 })
 export class FilterKeysPipe implements PipeTransform {
 

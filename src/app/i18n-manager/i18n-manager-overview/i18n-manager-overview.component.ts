@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Filter, Language, Project } from '../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -20,6 +20,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public unauthorized: boolean;
   public loading = true;
   public error: boolean;
+  public isSubmitting: boolean;
 
   private _langRef = Object.values(Language);
 
@@ -100,6 +101,8 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this._hasAnyMatches = value;
   }
 
+  private changedData: EventEmitter<void> = new EventEmitter<void>();
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
@@ -108,6 +111,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     public modalOrganizerService: ModalOrganizerService,
     public projectLoaderService: ProjectLoaderService,
     public userService: UserService,
+    private cd: ChangeDetectorRef,
   ) {
     this.headerLabelService.headerLabel = 'I18Nator';
     this.footerBarService.replaceFooterElements([]);
@@ -117,28 +121,32 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this.setProject(Project.Frontend);
 
     if (isPlatformBrowser(this.platformId)) {
-      const contentContainer = document.getElementById('content-container');
+      const contentContainer = document.getElementsByClassName('container');
 
       if (contentContainer) {
-        contentContainer.classList.remove('container');
-        contentContainer.classList.add('container-fluid');
+        contentContainer[0].classList.add('container-lg');
+        contentContainer[0].classList.remove('container');
       }
     }
   }
 
   public ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId)) {
-      const contentContainer = document.getElementById('content-container');
+      const contentContainer = document.getElementsByClassName('container-lg');
 
       if (contentContainer) {
-        contentContainer.classList.add('container');
-        contentContainer.classList.remove('container-fluid');
+        contentContainer[0].classList.add('container');
+        contentContainer[0].classList.remove('container-lg');
       }
     }
   }
 
   public updateData(): void {
-    this.languageLoaderService.updateProject();
+    this.isSubmitting = true;
+    this.languageLoaderService.updateProject().subscribe({
+      next: () => this.isSubmitting = false,
+      error: () => this.isSubmitting = false,
+    });
   }
 
   public changeFilter(filter: string | number): void {
@@ -186,6 +194,11 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   public isUnusedKey(): boolean {
     return !!this.languageLoaderService.unusedKeys.find(unusedKey => unusedKey === this._selectedKey.key);
+  }
+
+  public addKey(): void {
+    this.modalOrganizerService.addKey().then(() => this.cd.markForCheck());
+    this.changedData.next();
   }
 
   private reloadLanguageData(): void {

@@ -1,22 +1,28 @@
-<div infinite-scroll
+<div (scrolled)="onScrollDown()"
      [infiniteScrollDistance]="scrollDistance"
      [infiniteScrollThrottle]="throttle"
-     (scrolled)="onScrollDown()">
+     infinite-scroll>
 
   <ng-container *ngIf="(languageLoaderService.parsedLangData | unusedKeyFilter:unusedKeyFilter | filterKeys:filter | searchFilter:searchFilter | sort) as results">
     <div *ngFor="let elem of results | justafew:visibleData"
-         class="p-2 cursor-pointer d-flex"
          [class.bg-warning]="selectedKey === elem.key"
+         class="p-2 cursor-pointer d-flex"
          (click)="selectKey(elem.key)">
       <fa-icon *ngIf="hasEmptyKeys(elem)"
-               class="text-danger mr-2"
-               [icon]="'exclamation-triangle'"></fa-icon>
-      <span class="text-truncate"
-            [title]="elem.key">{{elem.key}}</span>
-      <fa-icon *ngIf="selectedKey === elem.key"
-               class="ml-auto cursor-pointer"
-               (click)="removeKey(elem.key)"
-               [icon]="'trash'"></fa-icon>
+               [icon]="'exclamation-triangle'"
+               [ngbPopover]="'This key has empty translations'"
+               [placement]="'ri
+                    class="text-dang
+               bg-secondary empty-translation-icon text-center position-absolute"
+               triggers="hover"></fa-icon>
+      <p [class.ml-35px]="h
+         s(elem)"
+         [title]="elem.key"
+         class="text-truncate w-100">{{elem.key}}</p>
+      <fa-icon (click)="removeKey(elem.key, $event)"
+               *ngIf="selectedKey === elem.key"
+               [icon]="'trash'"
+               class="ml-auto cursor-pointer"></fa-icon>
     </div>
 
     <h5 *ngIf="results.length === 0"

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Language, LanguageTranslation } from '../../lib/enums/enums';
@@ -32,8 +32,11 @@ export class LanguageLoaderService {
     return this._changedData;
   }
 
+  public readonly changed = new EventEmitter<void>();
+
   set changedData(value: boolean) {
     this._changedData = value;
+    this.changed.emit();
   }
 
   constructor(private i18nManagerService: I18nManagerApiService, private projectLoaderService: ProjectLoaderService) {
@@ -56,13 +59,14 @@ export class LanguageLoaderService {
     }));
   }
 
-  public updateProject(): void {
-    this.i18nManagerService.postUpdateLangForProject(this.projectLoaderService.currentProject, this.parsedLangData).subscribe((response: any) => {
-      if (response.status !== StatusProtocol.Success) {
-        console.log('LanguageLoaderService: PostUpdateLangForProject failed', response);
-        return;
-      }
-      this._changedData = false;
-    });
+  public updateProject(): Observable<IMessage> {
+    return this.i18nManagerService.postUpdateLangForProject(this.projectLoaderService.currentProject, this.parsedLangData)
+      .pipe(tap((response: any) => {
+        if (response.status !== StatusProtocol.Success) {
+          console.log('LanguageLoaderService: PostUpdateLangForProject failed', response);
+          return;
+        }
+        this._changedData = false;
+      }));
   }
 }
