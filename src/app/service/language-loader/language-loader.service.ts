@@ -13,6 +13,7 @@ import { ProjectLoaderService } from '../project-loader/project-loader.service';
 export class LanguageLoaderService {
   public readonly language = Language;
   public readonly languageTranslation = LanguageTranslation;
+  public readonly changed = new EventEmitter<void>();
 
   private _parsedLangData = [];
 
@@ -31,8 +32,6 @@ export class LanguageLoaderService {
   get changedData(): boolean {
     return this._changedData;
   }
-
-  public readonly changed = new EventEmitter<void>();
 
   set changedData(value: boolean) {
     this._changedData = value;

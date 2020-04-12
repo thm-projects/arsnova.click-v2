@@ -123,7 +123,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       const contentContainer = document.getElementsByClassName('container');
 
-      if (contentContainer) {
+      if (contentContainer && contentContainer.length) {
         contentContainer[0].classList.add('container-lg');
         contentContainer[0].classList.remove('container');
       }
@@ -134,7 +134,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       const contentContainer = document.getElementsByClassName('container-lg');
 
-      if (contentContainer) {
+      if (contentContainer && contentContainer.length) {
         contentContainer[0].classList.add('container');
         contentContainer[0].classList.remove('container-lg');
       }
