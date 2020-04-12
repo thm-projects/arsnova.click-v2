@@ -14,10 +14,11 @@ export class LanguageLoaderService {
   public readonly language = Language;
   public readonly languageTranslation = LanguageTranslation;
   public readonly changed = new EventEmitter<void>();
+  public selectedKey: { key: string, value: { [key: string]: string } };
 
   private _parsedLangData = [];
 
-  get parsedLangData(): Array<any> {
+  get parsedLangData(): Array<{ key: string, value: { [key: string]: string } }> {
     return this._parsedLangData;
   }
 

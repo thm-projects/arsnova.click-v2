@@ -9,16 +9,10 @@ input[type=checkbox] {
   width: 1rem;
 }
 
-@include media-breakpoint-only(xs) {
-  .h-xs-50vh {
-    height: 50vh;
-  }
-}
-
 .value-list {
   top: 50px;
 
-  @include media-breakpoint-up(sm) {
+  @include media-breakpoint-up(md) {
     height: calc(100vh - 260px);
   }
 }

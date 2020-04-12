@@ -94,16 +94,25 @@
     </div>
   </div>
 
-  <div class="col-12 key-list overflow-auto"
-       [class.h-xs-50vh]="!!selectedKey"
-       [class.col-sm-6]="!!selectedKey">
+  <div [class.col-md-6]="!!this.languageLoaderService.selectedKey"
+       [class.d-none]="!!this.languageLoaderService.selectedKey"
+       class="col-12 d-md-block key-list overflow-auto">
     <app-key-output [filter]="filter"
                     [unusedKeyFilter]="unusedKeyFilter"
-                    [searchFilter]="searchFilter"
-                    (changeEmitter)="dataChanged($event)"></app-key-output>
+                    [searchFilter]="searchFilter"></app-key-output>
   </div>
-  <div class="col-sm-6 d-flex flex-column value-list sticky-top"
-       *ngIf="!!selectedKey">
+  <div *ngIf="!!this.languageLoaderService.selectedKey"
+       class="col-md-6 d-flex flex-column value-list sticky-top">
+    <hr class="bg-secondary w-100 d-md-none"/>
+    <div class="d-flex align-items-center mb-3 d-md-none">
+      <p [title]="this.languageLoaderService.selectedKey.key"
+         class="text-bold text-italic text-underline font-italic text-truncate">{{this.languageLoaderService.selectedKey.key}}</p>
+      <button (click)="dataChanged(null)"
+              class="btn btn-secondary ml-auto btn-sm">
+        <span class="mr-2">Close</span>
+        <fa-icon [icon]="'times'"></fa-icon>
+      </button>
+    </div>
     <div *ngIf="isUnusedKey()"
          class="mb-0 text-center badge badge-warning my-2">This key is currently unused!
     </div>
@@ -114,8 +123,8 @@
                 [class.cursor-not-allowed]="!userService.staticLoginTokenContent.gitlabToken"
                 [disabled]="!userService.staticLoginTokenContent.gitlabToken"
                 [title]="!userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''"
-                (keyup)="updateKey($event, langKey.toLowerCase(), selectedKey)"
-                [value]="selectedKey?.value[langKey.toLowerCase()] || ''"></textarea>
+                (keyup)="updateKey($event, langKey.toLowerCase(), this.languageLoaderService.selectedKey)"
+                [value]="this.languageLoaderService.selectedKey?.value[langKey.toLowerCase()] || ''"></textarea>
     </div>
   </div>
 </div>

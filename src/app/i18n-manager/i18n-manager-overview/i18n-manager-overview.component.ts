@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Filter, Language, Project } from '../../lib/enums/enums';
+import { Filter, Project } from '../../lib/enums/enums';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
@@ -22,18 +22,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public error: boolean;
   public isSubmitting: boolean;
 
-  private _langRef = Object.values(Language);
-
-  get langRef(): Array<string> {
-    return this._langRef;
-  }
-
-  private _selectedKey: { key: string, value: string };
-
-  get selectedKey(): { key: string; value: string } {
-    return this._selectedKey;
-  }
-
   private _searchFilter = '';
 
   get searchFilter(): string {
@@ -42,7 +30,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   set searchFilter(value: string) {
     this._searchFilter = value;
-    this._selectedKey = null;
+    this.languageLoaderService.selectedKey = null;
   }
 
   private _unusedKeyFilter: boolean;
@@ -52,7 +40,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   }
 
   set unusedKeyFilter(value: boolean) {
-    this._selectedKey = null;
+    this.languageLoaderService.selectedKey = null;
     this._unusedKeyFilter = value;
   }
 
@@ -151,11 +139,11 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
 
   public changeFilter(filter: string | number): void {
     this.filter = parseInt(String(filter), 10);
-    this._selectedKey = null;
+    this.languageLoaderService.selectedKey = null;
   }
 
   public setProject(value: Project | string): void {
-    this._selectedKey = null;
+    this.languageLoaderService.selectedKey = null;
     this._searchFilter = '';
     this.loading = true;
     this.error = false;
@@ -166,8 +154,9 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this.reloadLanguageData();
   }
 
-  public dataChanged(key: any): void {
-    this._selectedKey = key;
+  public dataChanged(key: { key: string; value: { [key: string]: string } }): void {
+    this.languageLoaderService.selectedKey = key;
+    this.languageLoaderService.changed.next();
   }
 
   public getKeys(dataNode: object): Array<string> {
@@ -193,7 +182,7 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   }
 
   public isUnusedKey(): boolean {
-    return !!this.languageLoaderService.unusedKeys.find(unusedKey => unusedKey === this._selectedKey.key);
+    return !!this.languageLoaderService.unusedKeys.find(unusedKey => unusedKey === this.languageLoaderService.selectedKey?.key);
   }
 
   public addKey(): void {

@@ -5,9 +5,9 @@
 
   <ng-container *ngIf="(languageLoaderService.parsedLangData | unusedKeyFilter:unusedKeyFilter | filterKeys:filter | searchFilter:searchFilter | sort) as results">
     <div *ngFor="let elem of results | justafew:visibleData"
-         [class.bg-warning]="selectedKey === elem.key"
+         (click)="selectKey(elem)"
          class="p-2 cursor-pointer d-flex"
-         (click)="selectKey(elem.key)">
+         [class.bg-warning]="languageLoaderService.selectedKey?.key === elem.key">
       <fa-icon *ngIf="hasEmptyKeys(elem)"
                [icon]="'exclamation-triangle'"
                [ngbPopover]="'This key has empty translations'"
@@ -18,7 +18,7 @@
          [title]="elem.key"
          class="text-truncate w-100">{{elem.key}}</p>
       <fa-icon (click)="removeKey(elem.key, $event)"
-               *ngIf="selectedKey === elem.key"
+               *ngIf="languageLoaderService.selectedKey?.key === elem.key"
                [icon]="'trash'"
                class="ml-auto cursor-pointer"></fa-icon>
     </div>
