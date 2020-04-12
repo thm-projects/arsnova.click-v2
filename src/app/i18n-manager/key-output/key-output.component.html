@@ -11,12 +11,10 @@
       <fa-icon *ngIf="hasEmptyKeys(elem)"
                [icon]="'exclamation-triangle'"
                [ngbPopover]="'This key has empty translations'"
-               [placement]="'ri
-                    class="text-dang
-               bg-secondary empty-translation-icon text-center position-absolute"
+               [placement]="'right'"
+               class="text-danger rounded-pill bg-secondary empty-translation-icon text-center position-absolute"
                triggers="hover"></fa-icon>
-      <p [class.ml-35px]="h
-         s(elem)"
+      <p [class.ml-35px]="hasEmptyKeys(elem)"
          [title]="elem.key"
          class="text-truncate w-100">{{elem.key}}</p>
       <fa-icon (click)="removeKey(elem.key, $event)"
