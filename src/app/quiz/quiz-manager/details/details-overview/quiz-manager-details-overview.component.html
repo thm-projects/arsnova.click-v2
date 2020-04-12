@@ -50,6 +50,11 @@
     </button>
   </div>
 
+  <div *ngIf="quizService.isAddingPoolQuestion"
+       class="alert alert-info mb-2 mb-sm-4 btn-header">
+    <span>{{'component.quiz_manager.details.pool-save-warning' | translate}}</span>
+  </div>
+
   <div role="listitem"
        [attr.data-intro]="'component.quiz_summary.description.question_item' | translate">
     <div class="mb-2 question">

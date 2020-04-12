@@ -461,7 +461,8 @@
         "tags": {
           "long": "Tags",
           "short": "Tags"
-        }
+        },
+        "pool-save-warning": "Bitte beachte, dass Quizfragen für den Quiz-Pool erst von einem Administrator überprüft und freigegeben werden müssen. Daher wird deine Frage nach dem Speichern nicht direkt im Quiz-Pool verfügbar sein."
       },
       "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {

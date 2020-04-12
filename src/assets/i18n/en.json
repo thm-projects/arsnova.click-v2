@@ -567,7 +567,8 @@
         "tags": {
           "long": "Tags",
           "short": "Tags"
-        }
+        },
+        "pool-save-warning": "Please notice that questions for the Quiz-Pool need to be reviewed by a moderator. Your question will not be available in the Quiz-Pool until the review is completed."
       },
       "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
