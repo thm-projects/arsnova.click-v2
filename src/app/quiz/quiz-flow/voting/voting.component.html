@@ -2,8 +2,8 @@
      class="overflow-hidden mb-3 d-flex"
      id="countdown-header">
   <div class="ml-auto">
-    <span *ngIf="countdown && countdown.isRunning">{{countdown.remainingTime}}</span>
-    <fa-icon *ngIf="!countdown || !countdown.isRunning"
+    <span *ngIf="countdown">{{countdown}}</span>
+    <fa-icon *ngIf="!countdown"
              [icon]="'spinner'"
              [spin]="true"></fa-icon>
     <fa-icon [icon]="'hourglass'"

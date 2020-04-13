@@ -6,7 +6,6 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { Countdown } from '../../../lib/countdown/countdown';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
@@ -34,21 +33,12 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   public static TYPE = 'VotingComponent';
   public isSendingResponse: boolean;
   public hasTriggeredNavigation: boolean;
+  public countdown: number;
 
   private _answers: Array<string> = [];
 
   get answers(): Array<string> {
     return this._answers;
-  }
-
-  private _countdown: Countdown;
-
-  get countdown(): Countdown {
-    return this._countdown;
-  }
-
-  set countdown(value: Countdown) {
-    this._countdown = value;
   }
 
   private _questionText: string;
@@ -238,8 +228,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
 
     if (this.countdown) {
-      this.countdown.onChange.unsubscribe();
-      this.countdown.stop();
+      this.countdown = 0;
     }
 
     this._destroy.next();
@@ -261,14 +250,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
-        if (!this.countdown) {
-          this.countdown = new Countdown(payload.value);
-          this.countdown.onChange.subscribe((value) => {
-            if (!value || value < 1) {
-              this.sendResponses('results');
-            }
-          });
-        }
+        this.countdown = payload.value;
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
