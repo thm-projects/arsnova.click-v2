@@ -12,7 +12,7 @@
           <div class="name">{{tweet.name}}</div>
           <div class="username">
             <a href="https://twitter.com/{{tweet.screen_name}}"
-               target="_blank">@{{tweet.screen_name}}</a>
+               target="_blank">@<span class="screen-name">{{tweet.screen_name}}</span></a>
           </div>
           <div class="tw-icon-container">
             <a class="color-twitter"
@@ -23,10 +23,11 @@
           </div>
         </div>
 
-        <p class="card-text">
+        <p class="card-text mb-3">
           {{tweet.text}}
         </p>
-        <div class="my-3">
+        <div *ngIf="tweet.extended_entities?.length"
+             class="mb-3">
           <a *ngFor="let img of tweet.extended_entities"
              [href]="img.media_url_https"
              class="highslide twitter-media-img"

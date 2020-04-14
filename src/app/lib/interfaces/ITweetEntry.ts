@@ -9,5 +9,5 @@ export interface ITweetEntry {
   profile_image_url_https: string;
   url: string;
   screen_name: string;
-  extended_entities: Array<{ media_url_https: string }>;
+  extended_entities?: Array<{ media_url_https: string }>;
 }
