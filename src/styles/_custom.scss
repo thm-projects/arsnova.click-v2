@@ -101,6 +101,10 @@ iframe {
 
 .color-twitter {
   color: #1DA1F2 !important;
+
+  &:hover {
+    color: #1393e2 !important;
+  }
 }
 
 .btn-twitter-follow {
