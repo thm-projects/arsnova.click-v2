@@ -85,6 +85,10 @@ export class TwitterService {
     const htmlContent: string = this.customMarkdown.parseGithubFlavoredMarkdown(questionText);
     const theme: string = this.themesService.currentTheme;
 
+    if (!htmlContent) {
+      return;
+    }
+
     this.twitterApiService.getQuestionImageDigest(htmlContent, theme).subscribe(digest => this._digest = digest);
   }
 
