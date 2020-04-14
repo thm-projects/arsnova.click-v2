@@ -137,7 +137,9 @@
             <ng-container *ngIf="!enteredSessionName.length">
               <button (click)="enteredSessionNameInput.focus()"
                       [disabled]="!enteredSessionName.length && isShowingQuiznameDatalist"
-                      class="btn btn-block btn-outline-secondary px-1">
+                      [class.btn-outline-secondary]="isShowingQuiznameDatalist"
+                      [class.btn-secondary]="!isShowingQuiznameDatalist"
+                      class="btn btn-block px-1">
                 <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
                 <fa-icon [icon]="'edit'"></fa-icon>
               </button>
