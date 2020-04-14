@@ -205,7 +205,7 @@
         </div>
       </div>
 
-      <div *ngIf="(enteredSessionName.length < 4 && isShowingQuiznameDatalist) || hasErrors || hasSuccess"
+      <div *ngIf="(enteredSessionName.length < 4 && isShowingQuiznameDatalist && !isAddingABCDQuiz) || hasErrors || hasSuccess"
            class="col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-5 text-center">
         <ngb-alert *ngIf="enteredSessionName.length < 4"
                    [dismissible]="false"
