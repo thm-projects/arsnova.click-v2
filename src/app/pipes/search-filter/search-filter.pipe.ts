@@ -17,12 +17,12 @@ export class SearchFilterPipe implements PipeTransform {
 
     return value.filter(val => {
       if (typeof val === 'string') {
-        return val.includes(searchFilter);
+        return val.toLowerCase().includes(searchFilter.toLowerCase());
       }
 
       return (
         val as ISearchType
-      ).key.includes(searchFilter);
+      ).key.toLowerCase().includes(searchFilter.toLowerCase());
     });
   }
 

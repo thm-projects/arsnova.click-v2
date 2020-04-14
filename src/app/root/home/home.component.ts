@@ -499,9 +499,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.selectQuizAsDefaultQuiz(quizName);
       } else {
         this.isQueryingQuizState = false;
-        if (quizName.length > 0) {
-          this._hasErrors = 'component.home.errors.min-length';
-        }
       }
     }
   }
