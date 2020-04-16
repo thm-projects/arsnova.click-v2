@@ -131,4 +131,4 @@ deploy-master:
     - ssh
   script:
     - *server-deploy
-    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /root/docker-compose.yml up --no-deps -d frontend"
+    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /root/docker-compose.yml up --no-deps -d frontend && docker image prune -af"
