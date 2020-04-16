@@ -44,17 +44,20 @@ export class NotificationService {
   }
 
   public async subscribeToNotifications(): Promise<void> {
-    if (!this.userService.isAuthorizedFor(UserRole.SuperAdmin) || await this.storageService.db.Config.get(StorageKey.PushSubscription)) {
+    if (!this._vapidPublicKey ||
+        !this.userService.isAuthorizedFor(UserRole.SuperAdmin) ||
+        await this.storageService.db.Config.get(StorageKey.PushSubscription)
+    ) {
       return;
     }
 
     this.swPush.requestSubscription({
-      serverPublicKey: this._vapidPublicKey,
-    })
-    .then(sub => this.notificationApiService.addPushSubscriber(sub).subscribe(() => {
-      this.storageService.db.Config.put({ type: StorageKey.PushSubscription, value: sub.toJSON() });
-    }))
-    .catch(err => console.error('Could not subscribe to notifications', err));
+        serverPublicKey: this._vapidPublicKey,
+      })
+      .then(sub => this.notificationApiService.addPushSubscriber(sub).subscribe(() => {
+        this.storageService.db.Config.put({ type: StorageKey.PushSubscription, value: sub.toJSON() });
+      }))
+      .catch(err => console.error('Could not subscribe to notifications', err));
   }
 
   public modifyBadge(amount: number): void {
