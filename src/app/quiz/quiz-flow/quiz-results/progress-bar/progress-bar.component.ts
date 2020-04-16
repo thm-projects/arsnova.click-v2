@@ -66,13 +66,14 @@ export class ProgressBarComponent {
       wrong: 0,
       neutral: 0,
     };
-    let base = this.attendeeService.attendees.length;
+    const base = this.attendeeService.attendees.length;
+    let storedBase = 0;
 
     this.attendeeService.attendees.forEach(value => {
       if (typeof value.responses[this.questionIndex] === 'undefined' || value.responses[this.questionIndex].responseTime === -1) {
         return false;
       }
-      const responseValue: Array<number> | string = value.responses[this.questionIndex].value;
+      const responseValue: Array<number | string> | string = value.responses[this.questionIndex].value;
       if (!Array.isArray(responseValue) && !['number', 'string'].includes(typeof responseValue)) {
         return false;
       }
@@ -97,49 +98,35 @@ export class ProgressBarComponent {
       } else if ([QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(question.TYPE)) {
         neutral++;
       } else {
-        const storedBase = base;
-        base--;
         question.answerOptionList.forEach((answer, answerIndex) => {
-          if (answer.isCorrect) {
-            if ((
-                  (
-                    responseValue as unknown as Array<string>
-                  ).indexOf(answerIndex)
-                ) > -1) {
+          const hasAnswerSelected = (responseValue as Array<string>).indexOf(answerIndex) > -1;
+          if (hasAnswerSelected) {
+            storedBase++;
+            if (answer.isCorrect) {
               correct++;
-              base++;
-            }
-          } else {
-            if ((
-                  (
-                    responseValue as unknown as Array<string>
-                  ).indexOf(answerIndex)
-                ) > -1) {
+            } else {
               wrong++;
-              base++;
             }
           }
         });
-        if (storedBase === base - 1) {
-          base++;
-        }
       }
     });
 
+    const usedBase = storedBase === 0 ? base : storedBase;
     return {
       correct: {
         absolute: correct,
-        percent: this.i18nService.formatNumber(correct / this.attendeeService.attendees.length, NumberType.Percent),
+        percent: this.i18nService.formatNumber(correct / usedBase, NumberType.Percent),
       },
       wrong: {
         absolute: wrong,
-        percent: this.i18nService.formatNumber(wrong / this.attendeeService.attendees.length, NumberType.Percent),
+        percent: this.i18nService.formatNumber(wrong / usedBase, NumberType.Percent),
       },
       neutral: {
         absolute: neutral,
-        percent: this.i18nService.formatNumber(neutral / this.attendeeService.attendees.length, NumberType.Percent),
+        percent: this.i18nService.formatNumber(neutral / usedBase, NumberType.Percent),
       },
-      base,
+      base: usedBase,
     };
   }
 
