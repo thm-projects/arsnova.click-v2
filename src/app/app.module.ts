@@ -57,7 +57,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
     TransferHttpCacheModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('/click-service-worker.js', { enabled: environment.production }),
     ModalsModule,
     TranslateModule.forRoot({
       loader: {
@@ -120,7 +120,10 @@ export class AppModule {
     if (isPlatformServer(platformId)) {
       this.rxStompService.deactivate();
     }
-    if (isPlatformBrowser(platformId) && environment.production) {
+    if (true) {
+      return;
+    }
+    if (isPlatformBrowser(platformId) && environment.production && false) {
       (
         window as any
       ).console = {

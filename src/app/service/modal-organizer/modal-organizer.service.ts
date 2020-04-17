@@ -9,7 +9,7 @@ export class ModalOrganizerService {
 
   constructor(private modalService: NgbModal) { }
 
-  public addKey(): void {
-    this.modalService.open(AddModeComponent).result.then(() => {}, (reason) => reason ? console.error(reason) : null);
+  public addKey(): Promise<void> {
+    return this.modalService.open(AddModeComponent).result.then(() => {}, (reason) => reason ? console.error(reason) : null);
   }
 }

@@ -1,3 +1,5 @@
+@import "prebuild";
+
 .key-textarea {
   resize: vertical;
 }
@@ -5,4 +7,12 @@
 input[type=checkbox] {
   height: 1rem;
   width: 1rem;
+}
+
+.value-list {
+  top: 50px;
+
+  @include media-breakpoint-up(md) {
+    height: calc(100vh - 260px);
+  }
 }

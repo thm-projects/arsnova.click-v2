@@ -3,16 +3,16 @@
 
   <div *ngFor="let tweet of result | slice:0:limit"
        class="col-md-6 mb-1 mb-md-3">
-    <div class="card w-100 h-100 d-inline-block cursor-pointer">
-      <div (click)="tweet.url ? goToTwitter(tweet.url) : null"
-           class="card-body">
+    <div class="card w-100 h-100 d-inline-block">
+      <div class="card-body">
         <div class="header">
           <img alt="Avatar"
                class="avatar"
                src="{{tweet.profile_image_url_https}}">
           <div class="name">{{tweet.name}}</div>
           <div class="username">
-            <a href=#>@{{tweet.screen_name}}</a>
+            <a href="https://twitter.com/{{tweet.screen_name}}"
+               target="_blank">@<span class="screen-name">{{tweet.screen_name}}</span></a>
           </div>
           <div class="tw-icon-container">
             <a class="color-twitter"
@@ -23,7 +23,20 @@
           </div>
         </div>
 
-        <p class="card-text">{{tweet.text}}</p>
+        <p class="card-text mb-3">
+          {{tweet.text}}
+        </p>
+        <div *ngIf="tweet.extended_entities?.length"
+             class="mb-3">
+          <a *ngFor="let img of tweet.extended_entities"
+             [href]="img.media_url_https"
+             class="highslide twitter-media-img"
+             onclick="return hs.expand(this);">
+            <img [src]="img.media_url_https"
+                 class="thumbnail cursor-zoom-in"/>
+          </a>
+        </div>
+
         <div class="footer">
           <div class="follower">{{'component.twitter-card.follower' | translate:{count: tweet?.followers_count} }}</div>
           <div class="date">{{tweet.created_at | date:"dd.MM.yyyy HH:mm:ss"}}</div>

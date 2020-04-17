@@ -2,7 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SwUpdate } from '@angular/service-worker';
+import { SwPush, SwUpdate } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -10,6 +10,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TOAST_CONFIG } from 'ngx-toastr';
+import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
 import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
@@ -55,12 +56,13 @@ describe('RootComponent', () => {
           }), I18nTestingModule, RouterTestingModule, HttpClientTestingModule, NgbModule, AngularSvgIconModule.forRoot(), FontAwesomeModule,
         ],
         providers: [
+          { provide: SwPush, useValue: {} },
           {
             provide: StorageService,
             useClass: StorageServiceMock,
           }, {
             provide: UserService,
-            useValue: { loadConfig: () => {} },
+            useValue: { loadConfig: () => {}, isAuthorizedFor: () => {}, loginNotifier: of(false) },
           }, HeaderLabelService, ThemesService, {
             provide: TrackingService,
             useClass: TrackingMockService,

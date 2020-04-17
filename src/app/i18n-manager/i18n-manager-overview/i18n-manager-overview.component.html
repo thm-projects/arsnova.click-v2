@@ -1,27 +1,30 @@
 <div class="row d-flex flex-wrap mb-md-2">
 
-  <div class="d-flex col-12 col-md mb-3 mb-md-0 text-nowrap">
-    <span class="d-inline-flex mx-md-2 align-items-center">Current Project:</span>
-    <select #projectSelect
-            (change)="setProject(projectSelect.value)"
-            class="border-0 bg-transparent text-secondary">
-      <option [value]="projectLoaderService.projects.Frontend">Frontend
-      </option>
-      <option [value]="projectLoaderService.projects.Backend">Backend
-      </option>
-    </select>
+  <div class="d-flex col-md-12 mb-2 text-nowrap">
+    <label class="d-inline-flex mx-md-2 align-items-center mb-0">
+      <span class="mr-2">Current Project:</span>
+      <select #projectSelect
+              (change)="setProject(projectSelect.value)"
+              class="border-0 custom-select custom-select-sm ml-2">
+        <option [value]="projectLoaderService.projects.Frontend">Frontend
+        </option>
+        <option [value]="projectLoaderService.projects.Backend">Backend
+        </option>
+      </select>
+    </label>
 
-    <span class="d-inline-flex mx-2 align-items-center"
-          [class.text-warning]="this.projectLoaderService.connected"
-          [class.text-danger]="!this.projectLoaderService.connected">
-      <span *ngIf="!this.projectLoaderService.connected">Not&nbsp;</span>
+    <span [class.badge-danger]="!projectLoaderService.connected"
+          [class.badge-warning]="projectLoaderService.connected"
+          class="d-inline-flex ml-2 align-items-center badge">
+      <span *ngIf="!projectLoaderService.connected">Not&nbsp;</span>
       <span>Loaded</span>
-      <span *ngIf="this.projectLoaderService.connected && !this.userService.staticLoginTokenContent.gitlabToken"
+      <span *ngIf="projectLoaderService.connected && !userService.staticLoginTokenContent.gitlabToken"
             class="text-danger">&nbsp;(Readonly - No Gitlab API Token set for user)</span>
     </span>
   </div>
 
-  <div class="d-flex col-12 col-md mb-3 mb-md-0">
+  <div *ngIf="projectLoaderService.connected"
+       class="d-flex col-md-4 mb-3 mb-md-0">
     <label class="d-inline-flex mx-md-2 align-items-center mb-0">
       <span class="mr-2">Show unused keys</span>
       <input type="checkbox"
@@ -29,23 +32,31 @@
     </label>
   </div>
 
-  <div class="col-12 col-md mb-3 mb-md-0">
-    <div *ngIf="this.projectLoaderService.connected"
-         class="btn-group ml-md-auto">
+  <div *ngIf="projectLoaderService.connected"
+       class="col-md-4 col-lg-3 d-flex offset-md-4 offset-lg-5">
+    <div class="btn-group w-100 btn-group-sm">
       <button class="btn btn-secondary"
-              [disabled]="!this.languageLoaderService.changedData"
-              [title]="!this.userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''"
-              (click)="updateData()"><span>Save Changes</span>
+              (click)="updateData()"
+              [disabled]="!languageLoaderService.changedData || isSubmitting"
+              [title]="!userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''">
+        <span *ngIf="!isSubmitting">Save Changes</span>
+        <span *ngIf="isSubmitting">
+          Please wait...
+          <fa-icon [icon]="'spinner'"
+                   [spin]="true"
+                   class="ml-1"></fa-icon>
+        </span>
       </button>
       <button class="btn btn-secondary"
-              (click)="modalOrganizerService.addKey()">
+              (click)="addKey()"
+              [disabled]="isSubmitting">
         <span>Add Key</span>
       </button>
     </div>
   </div>
 </div>
 
-<div *ngIf="this.projectLoaderService.connected;else loading"
+<div *ngIf="projectLoaderService.connected"
      class="row">
   <div class="d-flex sticky-top col-12 my-2">
     <div class="bg-secondary d-flex w-100 py-1">
@@ -75,7 +86,7 @@
         </option>
       </select>
       <input type="text"
-             class="d-flex flex-grow-1 border-0"
+             class="d-flex flex-grow-1 border-0 w-100"
              #searchBox
              [value]="searchFilter"
              (keyup)="searchFilter = (searchBox.value)"
@@ -83,30 +94,45 @@
     </div>
   </div>
 
-  <div class="col-12 key-list overflow-auto"
-       [class.col-sm-6]="!!selectedKey">
+  <div [class.col-md-6]="!!this.languageLoaderService.selectedKey"
+       [class.d-none]="!!this.languageLoaderService.selectedKey"
+       class="col-12 d-md-block key-list overflow-auto">
     <app-key-output [filter]="filter"
                     [unusedKeyFilter]="unusedKeyFilter"
-                    [searchFilter]="searchFilter"
-                    (changeEmitter)="dataChanged($event)"></app-key-output>
+                    [searchFilter]="searchFilter"></app-key-output>
   </div>
-  <div class="col-12 col-sm-6 d-flex flex-column h-100 sticky-top"
-       style="top: 50px;"
-       *ngIf="!!selectedKey">
-    <p class="mb-0 text-center text-warning"
-       *ngIf="isUnusedKey()">This key is currently unused!</p>
+  <div *ngIf="!!this.languageLoaderService.selectedKey"
+       class="col-md-6 d-flex flex-column value-list sticky-top">
+    <hr class="bg-secondary w-100 d-md-none"/>
+    <div class="d-flex align-items-center mb-3 d-md-none">
+      <p [title]="this.languageLoaderService.selectedKey.key"
+         class="text-bold text-italic text-underline font-italic text-truncate">{{this.languageLoaderService.selectedKey.key}}</p>
+      <button (click)="dataChanged(null)"
+              class="btn btn-secondary ml-auto btn-sm">
+        <span class="mr-2">Close</span>
+        <fa-icon [icon]="'times'"></fa-icon>
+      </button>
+    </div>
+    <div *ngIf="isUnusedKey()"
+         class="mb-0 text-center badge badge-warning my-2">This key is currently unused!
+    </div>
     <div class="d-flex flex-column flex-grow-1 mb-2"
          *ngFor="let langKey of getKeys(languageLoaderService.language)">
       <p class="mb-0">{{languageLoaderService.languageTranslation[langKey.toUpperCase()]}}</p>
       <textarea class="w-100 key-textarea flex-grow-1"
-                [disabled]="!this.userService.staticLoginTokenContent.gitlabToken"
-                [class.cursor-not-allowed]="!this.userService.staticLoginTokenContent.gitlabToken"
-                [title]="!this.userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''"
-                (keyup)="updateKey($event, langKey.toLowerCase(), selectedKey)"
-                [value]="selectedKey?.value[langKey.toLowerCase()] || ''"></textarea>
+                [class.cursor-not-allowed]="!userService.staticLoginTokenContent.gitlabToken"
+                [disabled]="!userService.staticLoginTokenContent.gitlabToken"
+                [title]="!userService.staticLoginTokenContent.gitlabToken ? 'No gitlab token set' : ''"
+                (keyup)="updateKey($event, langKey.toLowerCase(), this.languageLoaderService.selectedKey)"
+                [value]="this.languageLoaderService.selectedKey?.value[langKey.toLowerCase()] || ''"></textarea>
     </div>
   </div>
 </div>
 
-<ng-template #unauthorized><h4 class="text-danger text-center mt-5 bg-secondary d-flex justify-content-center py-3 mx-auto rounded">Not authorized to view this project</h4></ng-template>
-<ng-template #loading><h4 class="text-center mt-5">Loading...</h4></ng-template>
+<h5 *ngIf="loading"
+    class="text-center mt-5">Loading...</h5>
+<h5 *ngIf="error"
+    class="alert alert-danger mt-5 text-center">
+  <span *ngIf="unauthorized">Not authorized to view this project</span>
+  <span *ngIf="!unauthorized">Error while loading the project language definition</span>
+</h5>

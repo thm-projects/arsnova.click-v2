@@ -7,10 +7,13 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
 import { filter, switchMapTo, takeUntil } from 'rxjs/operators';
 import { MessageProtocol } from '../../lib/enums/Message';
+import { UserRole } from '../../lib/enums/UserRole';
 import { IServerStatistics } from '../../lib/interfaces/IServerStatistics';
 import { StatisticsApiService } from '../../service/api/statistics/statistics-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { I18nService } from '../../service/i18n/i18n.service';
+import { NotificationService } from '../../service/notification/notification.service';
+import { UserService } from '../../service/user/user.service';
 
 interface IStatisticDataTile {
   iconColor: string;
@@ -40,6 +43,8 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     private rxStompService: RxStompService,
     private messageQueue: SimpleMQ,
     private i18nService: I18nService,
+    private userService: UserService,
+    private notificationService: NotificationService,
   ) {
     this.statistics = {
       quiz: {
@@ -74,6 +79,9 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     ).subscribe(data => {
       this.statistics = data;
       this.buildDataTiles();
+      if (this.userService.isAuthorizedFor(UserRole.SuperAdmin)) {
+        this.notificationService.footerBadges['admin'] = this.statistics.quiz.pool.pendingQuestionAmount;
+      }
     });
 
     this._messageSubscriptions.push(...[

@@ -23,6 +23,7 @@ export interface IServerStatistics {
     'active': number,
     'pool': {
       'questions': number,
+      'pendingQuestionAmount': number,
       'tags': number
     },
     'participants': {

@@ -2,6 +2,7 @@ import { LoginMechanism, Title } from '../enums/enums';
 import { QuizTheme } from '../enums/QuizTheme';
 
 export interface IEnvironment {
+  vapidPublicKey: string;
   title: Title;
   enableCasLogin: boolean;
   sentryDSN?: string;

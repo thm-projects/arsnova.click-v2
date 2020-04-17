@@ -461,7 +461,8 @@
         "tags": {
           "long": "Tags",
           "short": "Tags"
-        }
+        },
+        "pool-save-warning": "Bitte beachte, dass Quizfragen für den Quiz-Pool erst von einem Administrator überprüft und freigegeben werden müssen. Daher wird deine Frage nach dem Speichern nicht direkt im Quiz-Pool verfügbar sein."
       },
       "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
@@ -854,6 +855,13 @@
     "quiz-visibility": {
       "account": "Account",
       "any": "Alle"
+    }
+  },
+  "notification": {
+    "close": "Schließen",
+    "pending-pool-question": {
+      "title": "Neue Quiz-Pool {amount, plural, =0{Fragen} one{Frage} other{Fragen} }",
+      "body": "Es {amount, plural, =0{warten 0 Fragen} one{wartet eine Frage} other{warten {amount} Fragen} } im Quiz-Pool auf eine Überprüfung"
     }
   }
 }

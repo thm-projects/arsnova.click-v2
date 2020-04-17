@@ -180,6 +180,7 @@ export class ConnectionService {
             }
             break;
           default:
+            console.log('Publishing message to queue', parsedMessage.step, parsedMessage.payload || {});
             this.messageQueue.publish(parsedMessage.step, parsedMessage.payload || {}, false);
             break;
         }

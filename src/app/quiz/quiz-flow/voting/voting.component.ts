@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -6,7 +7,6 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
-import { Countdown } from '../../../lib/countdown/countdown';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
@@ -34,21 +34,12 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   public static TYPE = 'VotingComponent';
   public isSendingResponse: boolean;
   public hasTriggeredNavigation: boolean;
+  public countdown: number;
 
   private _answers: Array<string> = [];
 
   get answers(): Array<string> {
     return this._answers;
-  }
-
-  private _countdown: Countdown;
-
-  get countdown(): Countdown {
-    return this._countdown;
-  }
-
-  set countdown(value: Countdown) {
-    this._countdown = value;
   }
 
   private _questionText: string;
@@ -83,7 +74,9 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     private ngbModal: NgbModal,
     private messageQueue: SimpleMQ,
   ) {
-    sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
+    }
     this.footerBarService.TYPE_REFERENCE = VotingComponent.TYPE;
 
     headerLabelService.headerLabel = 'component.voting.title';
@@ -191,7 +184,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       }
 
       this._currentQuestion = this.quizService.currentQuestion();
-      if (this.attendeeService.hasReponse()) {
+      if ( //
+        (this.quizService.quiz.currentQuestionIndex > -1 && this.quizService.quiz.currentStartTimestamp === -1) || //
+        this.attendeeService.hasReponse() //
+      ) {
         this.hasTriggeredNavigation = true;
         this.router.navigate(this.getNextRoute());
         return;
@@ -211,9 +207,11 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       this.questionTextService.change(this._currentQuestion.questionText);
     });
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-      this.handleMessages();
-    }).catch(() => this.hasTriggeredNavigation = true);
+    if (isPlatformBrowser(this.platformId)) {
+      this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+        this.handleMessages();
+      }).catch(() => this.hasTriggeredNavigation = true);
+    }
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
@@ -238,8 +236,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
 
     if (this.countdown) {
-      this.countdown.onChange.unsubscribe();
-      this.countdown.stop();
+      this.countdown = 0;
     }
 
     this._destroy.next();
@@ -261,13 +258,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        this.countdown = payload.value;
         if (!this.countdown) {
-          this.countdown = new Countdown(payload.value);
-          this.countdown.onChange.subscribe((value) => {
-            if (!value || value < 1) {
-              this.sendResponses('results');
-            }
-          });
+          this.hasTriggeredNavigation = true;
+          this.router.navigate(this.getNextRoute());
         }
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();

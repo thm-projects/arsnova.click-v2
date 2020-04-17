@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IconPathData, IconPrefix, IconProp } from '@fortawesome/fontawesome-svg-core';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { INamedType } from '../../lib/interfaces/interfaces';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
+import { NotificationService } from '../../service/notification/notification.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -21,6 +22,7 @@ export class FooterBarComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public footerBarService: FooterBarService,
+    public notificationService: NotificationService,
     private quizService: QuizService,
     private trackingService: TrackingService,
     private fileUploadService: FileUploadService,

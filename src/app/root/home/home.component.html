@@ -136,7 +136,10 @@
                class="col-6 p-0">
             <ng-container *ngIf="!enteredSessionName.length">
               <button (click)="enteredSessionNameInput.focus()"
-                      class="btn btn-block btn-secondary px-1">
+                      [disabled]="!enteredSessionName.length && isShowingQuiznameDatalist"
+                      [class.btn-outline-secondary]="isShowingQuiznameDatalist"
+                      [class.btn-secondary]="!isShowingQuiznameDatalist"
+                      class="btn btn-block px-1">
                 <span class="mr-1">{{'component.name_management.create_session' | translate}}</span>
                 <fa-icon [icon]="'edit'"></fa-icon>
               </button>
@@ -202,8 +205,12 @@
         </div>
       </div>
 
-      <div *ngIf="hasErrors || hasSuccess"
+      <div *ngIf="(enteredSessionName.length < 4 && isShowingQuiznameDatalist && !isAddingABCDQuiz) || hasErrors || hasSuccess"
            class="col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-5 text-center">
+        <ngb-alert *ngIf="enteredSessionName.length < 4"
+                   [dismissible]="false"
+                   [type]="'warning'">{{'component.home.errors.min-length' | translate}}</ngb-alert>
+
         <ngb-alert *ngIf="hasErrors"
                    [dismissible]="false"
                    [type]="'danger'">{{hasErrors | translate}}</ngb-alert>

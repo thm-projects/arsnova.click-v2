@@ -30,6 +30,12 @@
 .username {
   grid-column: 2;
   grid-row: 2;
+
+  a:hover {
+    .screen-name {
+      text-decoration: underline;
+    }
+  }
 }
 
 .tw-icon-container {
@@ -77,5 +83,12 @@
 @include media-breakpoint-only(xs) {
   .card {
     border-radius: 0;
+  }
+}
+
+.twitter-media-img {
+  img {
+    width: 50px;
+    height: auto;
   }
 }

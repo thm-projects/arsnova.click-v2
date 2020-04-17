@@ -567,7 +567,8 @@
         "tags": {
           "long": "Tags",
           "short": "Tags"
-        }
+        },
+        "pool-save-warning": "Please notice that questions for the Quiz-Pool need to be reviewed by a moderator. Your question will not be available in the Quiz-Pool until the review is completed."
       },
       "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
@@ -1056,6 +1057,13 @@
     "quiz-visibility": {
       "account": "Account",
       "any": "Any"
+    }
+  },
+  "notification": {
+    "close": "Close",
+    "pending-pool-question": {
+      "title": "New Quiz-Pool {amount, plural, =0{questions} one{question} other{questions} }",
+      "body": "{amount, plural, =0{0 questions} one{One question} other{{amount} questions} } is waiting for approval in the Quiz-Pool"
     }
   }
 }

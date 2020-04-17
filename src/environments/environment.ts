@@ -3,7 +3,7 @@ import { QuizTheme } from '../app/lib/enums/QuizTheme';
 import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 
 export const environment: IEnvironment = {
-  production: false,
+  production: true,
   title: Title.Default,
   version: 'VERSION',
   enableCasLogin: false,
@@ -45,6 +45,7 @@ export const environment: IEnvironment = {
   darkModeCheckEnabled: true,
   enableTwitter: true,
   enableQuizPool: true,
+  vapidPublicKey: 'BFy8kQxiV2p43Z8Xqs6isn7QRVDEvkqreDH3wH0QlDLDn8cZkbM41iOWwxUBsw_R0Y4Bv8AkI9sKj82P18q41z0',
 };
 
 export enum DEVICE_TYPES {

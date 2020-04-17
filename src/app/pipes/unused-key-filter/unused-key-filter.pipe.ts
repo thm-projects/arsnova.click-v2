@@ -3,6 +3,7 @@ import { LanguageLoaderService } from '../../service/language-loader/language-lo
 
 @Pipe({
   name: 'unusedKeyFilter',
+  pure: false,
 })
 export class UnusedKeyFilterPipe implements PipeTransform {
   constructor(private languageLoaderService: LanguageLoaderService) {}

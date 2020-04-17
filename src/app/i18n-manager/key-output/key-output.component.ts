@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Filter } from '../../lib/enums/enums';
 import { LanguageLoaderService } from '../../service/language-loader/language-loader.service';
 
@@ -10,35 +10,22 @@ import { LanguageLoaderService } from '../../service/language-loader/language-lo
 })
 export class KeyOutputComponent {
   public static readonly TYPE = 'KeyOutputComponent';
-
   public readonly throttle = 0;
   public readonly scrollDistance = 4;
   public visibleData = 20;
-
   @Input() public filter = Filter.None;
   @Input() public searchFilter = '';
   @Input() public unusedKeyFilter: boolean;
 
-  private _selectedKey: string;
-
-  get selectedKey(): string {
-    return this._selectedKey;
+  constructor(public languageLoaderService: LanguageLoaderService, private cd: ChangeDetectorRef) {
+    this.languageLoaderService.changed.subscribe(() => this.cd.markForCheck());
   }
 
-  set selectedKey(value: string) {
-    this._selectedKey = value;
-    this.changeEmitter.emit(this.languageLoaderService.parsedLangData.find(val => val.key === value));
-  }
-
-  @Output() private changeEmitter = new EventEmitter<Object>();
-
-  constructor(public languageLoaderService: LanguageLoaderService, private cd: ChangeDetectorRef) {}
-
-  public selectKey(key: string): void {
-    if (this.selectedKey === key) {
-      this.selectedKey = undefined;
+  public selectKey(data: { key: string; value: { [key: string]: string } }): void {
+    if (this.languageLoaderService.selectedKey?.key === data.key) {
+      this.languageLoaderService.selectedKey = null;
     } else {
-      this.selectedKey = key;
+      this.languageLoaderService.selectedKey = data;
     }
   }
 
@@ -46,9 +33,15 @@ export class KeyOutputComponent {
     return this.getKeys(elem.value).length < this.getKeys(this.languageLoaderService.language).length;
   }
 
-  public removeKey(key: string): void {
+  public removeKey(key: string, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!confirm('Really remove this key?')) {
+      return;
+    }
+
     this.languageLoaderService.parsedLangData.splice(this.languageLoaderService.parsedLangData.findIndex(val => val.key === key), 1);
-    this.selectKey(undefined);
+    this.selectKey(null);
     this.languageLoaderService.changedData = true;
   }
 

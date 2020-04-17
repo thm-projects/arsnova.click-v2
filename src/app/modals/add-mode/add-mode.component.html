@@ -11,15 +11,14 @@
 <div class="modal-body">
   <input #addKeyInput
          (keyup)="key = addKeyInput.value"
-         class="w-100"
-         id="add-key-input"
+         class="form-control mb-2"
          [value]="key"
          type="text"
-         placeholder="Enter the Key here"/>
+         placeholder="Enter the Key here, eg. component.name.group.title"/>
 
   <div *ngFor="let langKey of getKeys(languageLoaderService.languageTranslation)">
-    <p class="mb-0">{{langKey}}</p>
-    <textarea class="w-100 key-textarea"
+    <p class="mb-0">{{languageLoaderService.languageTranslation[langKey]}}</p>
+    <textarea class="key-textarea form-control mb-2"
               (keyup)="updateKey($event, langKey)"></textarea>
   </div>
 </div>
@@ -32,6 +31,7 @@
   <button type="button"
           class="btn btn-success cursor-pointer"
           data-dismiss="modal"
+          [disabled]="!hasValues()"
           (click)="save()">Save
   </button>
 </div>
