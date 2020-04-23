@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { UserRole } from '../../lib/enums/UserRole';
@@ -7,7 +8,7 @@ import { UserService } from '../user/user.service';
   providedIn: 'root',
 })
 export class UserRoleGuardService implements CanActivate {
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(private location: Location, private userService: UserService, private router: Router) { }
 
   public canActivate(): boolean {
     if (this.isAllowedToProceed()) {
@@ -16,7 +17,7 @@ export class UserRoleGuardService implements CanActivate {
 
     this.router.navigate(['/login'], {
       queryParams: {
-        return: location.pathname,
+        return: this.location.path(),
       },
     });
     return false;

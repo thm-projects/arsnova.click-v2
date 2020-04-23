@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
@@ -20,6 +21,7 @@ export class QuizPublicComponent implements OnInit, OnDestroy {
   private readonly _destroy = new Subject();
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private storageService: StorageService,
     private quizApiService: QuizApiService,
     private footerBarService: FooterBarService,
@@ -52,6 +54,10 @@ export class QuizPublicComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.router.paramMap.pipe(takeUntil(this._destroy), distinctUntilChanged()).subscribe(params => {
       if (params.get('own')) {
         this.quizApiService.getOwnPublicQuizzes().subscribe(val => this.availablePublicQuizzes = val);
