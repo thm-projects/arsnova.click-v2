@@ -42,7 +42,7 @@
   </div>
 
   <div class="col-12">
-    <h5 *ngIf="hasOwnResponse()"
+    <h5 *ngIf="!quizService.isOwner && hasOwnResponse()"
         class="mb-0 mt-5 text-center">
       <span>{{'component.leaderboard.own-rank.own-data' | translate:{INDEX: ownResponse.index + 1, SCORE: ownResponse.element?.score} }}</span>
       <span *ngIf="ownResponse.closestOpponent">{{'component.leaderboard.own-rank.closest-opponent' | translate:{NAME: ownResponse.closestOpponent?.name, SCORE: ownResponse.closestOpponent?.score} }}</span>
