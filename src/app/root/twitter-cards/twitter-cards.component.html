@@ -1,46 +1,44 @@
-<div *ngIf="getTweets() | async | languageFilter:{selector: 'lang', fallback: Language.EN} as result"
-     class="tweet-container form-row">
+<ng-container *ngIf="getTweets() | async | languageFilter:{selector: 'lang', fallback: Language.EN} as result">
 
-  <div *ngFor="let tweet of result | slice:0:limit"
-       class="col-md-6 mb-1 mb-md-3">
-    <div class="card w-100 h-100 d-inline-block">
-      <div class="card-body">
-        <div class="header">
-          <img alt="Avatar"
-               class="avatar"
-               src="{{tweet.profile_image_url_https}}">
-          <div class="name">{{tweet.name}}</div>
-          <div class="username">
-            <a href="https://twitter.com/{{tweet.screen_name}}"
-               target="_blank">@<span class="screen-name">{{tweet.screen_name}}</span></a>
-          </div>
-          <div class="tw-icon-container">
-            <a class="color-twitter"
-               href="{{tweet.url}}"
-               target="_blank">
-              <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
-            </a>
-          </div>
+  <div *ngFor="let tweet of result | slice:0:limit; let isFirst = first;"
+       [class.mt-1]="isFirst"
+       class="card">
+    <div class="card-body">
+      <div class="header">
+        <img alt="Avatar"
+             class="avatar"
+             src="{{tweet.profile_image_url_https}}">
+        <div class="name">{{tweet.name}}</div>
+        <div class="username">
+          <a href="https://twitter.com/{{tweet.screen_name}}"
+             target="_blank">@<span class="screen-name">{{tweet.screen_name}}</span></a>
         </div>
-
-        <p class="card-text mb-3">
-          {{tweet.text}}
-        </p>
-        <div *ngIf="tweet.extended_entities?.length"
-             class="mb-3">
-          <a *ngFor="let img of tweet.extended_entities"
-             [href]="img.media_url_https"
-             class="highslide twitter-media-img"
-             onclick="return hs.expand(this);">
-            <img [src]="img.media_url_https"
-                 class="thumbnail cursor-zoom-in"/>
+        <div class="tw-icon-container">
+          <a class="color-twitter"
+             href="{{tweet.url}}"
+             target="_blank">
+            <fa-icon [icon]="['fab', 'twitter']"></fa-icon>
           </a>
         </div>
+      </div>
 
-        <div class="footer">
-          <div class="follower">{{'component.twitter-card.follower' | translate:{count: tweet?.followers_count} }}</div>
-          <div class="date">{{tweet.created_at | date:"dd.MM.yyyy HH:mm:ss"}}</div>
-        </div>
+      <p class="card-text mb-3">
+        {{tweet.text}}
+      </p>
+      <div *ngIf="tweet.extended_entities?.length"
+           class="mb-3">
+        <a *ngFor="let img of tweet.extended_entities"
+           [href]="img.media_url_https"
+           class="highslide twitter-media-img"
+           onclick="return hs.expand(this);">
+          <img [src]="img.media_url_https"
+               class="thumbnail cursor-zoom-in"/>
+        </a>
+      </div>
+
+      <div class="footer">
+        <div class="follower">{{'component.twitter-card.follower' | translate:{count: tweet?.followers_count} }}</div>
+        <div class="date">{{tweet.created_at | date:"dd.MM.yyyy HH:mm:ss"}}</div>
       </div>
     </div>
   </div>
@@ -51,4 +49,4 @@
             class="btn btn-secondary mx-auto btn-block">{{'component.twitter-card.more-tweets' | translate}}
     </button>
   </div>
-</div>
+</ng-container>

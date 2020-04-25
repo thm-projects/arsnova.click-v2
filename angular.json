@@ -52,20 +52,7 @@
                 "src/styles/themes"
               ]
             },
-            "fileReplacements": [
-              {
-                "replace": "src/assets/images/logo.svg",
-                "with": "src/assets/images/logo.westermann.svg"
-              },
-              {
-                "replace": "src/assets/images/logo.xl.svg",
-                "with": "src/assets/images/logo.westermann.xl.svg"
-              },
-              {
-                "replace": "src/assets/images/logo_transparent.png",
-                "with": "src/assets/images/logo_transparent.westermann.png"
-              }
-            ],
+            "fileReplacements": [],
             "styles": [
               "src/styles/styles.scss",
               "node_modules/@fortawesome/fontawesome-svg-core/styles.css",

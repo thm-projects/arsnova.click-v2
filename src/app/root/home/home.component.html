@@ -32,6 +32,7 @@
       </div>
 
       <div [class.mt-sm-5]="!isShowingQuiznameDatalist"
+           [class.mt-5]="isShowingQuiznameDatalist"
            class="col-md-10 col-xl-8 offset-md-1 offset-xl-2">
         <div class="row no-gutters">
           <div class="col-12 mb-2">
@@ -237,39 +238,38 @@
           </p>
         </div>
 
-        <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && twitterService.getOptIn()"
-             class="col-12 d-flex mb-4 mb-md-3">
-          <button (click)="navigateToTwitter()"
-                  [title]="'global.follow-us-at-twitter' | translate"
-                  class="btn-twitter-follow mx-auto mr-md-0">
-            <fa-icon [icon]="['fab', 'twitter']"
-                     class="color-twitter"></fa-icon>
-            <span class="label">{{'global.follow-us-at-twitter' | translate}}</span>
-          </button>
-        </div>
+        <ng-container *ngIf="twitterService.twitterEnabled">
 
-        <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !twitterService.getOptIn()"
-             class="opt-in col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-sm-5">
-          <div class="p-2 rounded d-flex align-items-center bg-light text-primary">
-            <input (click)="twitterService.setOptIn()"
-                   class=""
-                   id="defaultCheck1"
-                   type="checkbox"
-                   value="">
-            <label class="d-inline mb-0 text-left ml-2"
-                   for="defaultCheck1">
-              {{'component.twitter.optin.warning' | translate}}
-            </label>
+          <div *ngIf="twitterService.getOptIn()"
+               class="col-12 d-flex mb-4 mb-md-3">
+            <button (click)="navigateToTwitter()"
+                    [title]="'global.follow-us-at-twitter' | translate"
+                    class="btn-twitter-follow mx-auto mr-md-0">
+              <fa-icon [icon]="['fab', 'twitter']"
+                       class="color-twitter"></fa-icon>
+              <span class="label">{{'global.follow-us-at-twitter' | translate}}</span>
+            </button>
           </div>
-        </div>
+
+          <div *ngIf="!twitterService.getOptIn()"
+               class="col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-sm-5 d-flex">
+            <div class="p-2 mx-auto rounded d-flex align-items-center bg-light text-primary">
+              <input (click)="setTwitterOptIn()"
+                     class=""
+                     id="twitter-optin-warning"
+                     type="checkbox"
+                     value="">
+              <label class="d-inline mb-0 text-left ml-2"
+                     for="twitter-optin-warning">
+                {{'component.twitter.optin.warning' | translate}}
+              </label>
+            </div>
+          </div>
+
+        </ng-container>
 
       </ng-container>
     </div>
-  </div>
-
-  <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !isShowingQuiznameDatalist"
-       class="full-xs">
-    <app-twitter-cards class="col-12 mt-2 d-block"></app-twitter-cards>
   </div>
 
   <div *ngIf="!disableStatistics && !isShowingQuiznameDatalist"

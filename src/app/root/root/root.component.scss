@@ -12,3 +12,78 @@
   }
 }
 
+.tweet-container {
+  top: 0;
+
+  @include media-breakpoint-only(xs) {
+    left: 0;
+
+    .close {
+      height: 40px;
+    }
+  }
+
+  @include media-breakpoint-up(sm) {
+    right: 0;
+  }
+
+  @include media-breakpoint-down(sm) {
+    width: 100%;
+  }
+
+  .tweet-opener {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+
+    @include media-breakpoint-up(sm) {
+      width: 35px;
+      height: 36px;
+      border-top-left-radius: $border-radius !important;
+      border-bottom-left-radius: $border-radius !important;
+    }
+
+    @include media-breakpoint-only(xs) {
+      width: 40px;
+      height: 41px;
+      border-top-right-radius: $border-radius !important;
+      border-bottom-right-radius: $border-radius !important;
+    }
+
+    &.tweets-closed-state {
+      position: absolute;
+      top: 70px;
+
+      @include media-breakpoint-up(sm) {
+        right: 0;
+        border-right: 0;
+      }
+
+      @include media-breakpoint-only(xs) {
+        left: 0;
+        top: 130px;
+        border-left: 0;
+      }
+    }
+
+    &.tweets-opened-state {
+      margin-right: -1px;
+      z-index: 10000;
+      border-right: 0;
+    }
+  }
+
+  .tweet-cards-container {
+    width: 500px;
+    z-index: 9000;
+
+    @include media-breakpoint-down(sm) {
+      height: calc(100vh - 24px);
+      width: 100%;
+    }
+
+    @include media-breakpoint-up(md) {
+      height: 100vh;
+      border-left: 1px solid rgba(0, 0, 0, 0.125);
+      box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.125) !important;
+    }
+  }
+}

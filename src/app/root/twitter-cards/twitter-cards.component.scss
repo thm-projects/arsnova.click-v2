@@ -50,6 +50,12 @@
 
 .card {
   color: #757575;
+  border: 0;
+  border-radius: 0;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+  }
 }
 
 .footer {
@@ -75,7 +81,6 @@
 }
 
 .card-body {
-  height: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
 }

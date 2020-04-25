@@ -1,4 +1,4 @@
-<nav class="navbar navbar-header flex-nowrap"
+<nav class="navbar navbar-header flex-nowrap align-items-center p-0"
      id="header">
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
     <a [routerLink]="interactiveLogo ? ['/'] : null">
@@ -13,7 +13,7 @@
     </a>
   </div>
   <div *ngIf="showHeader"
-       class="header-title d-flex align-items-center">
+       class="cursor-default d-flex align-items-center">
     <div class="center-block">
       <div *ngIf="headerLabelService.headerLabel !== 'default'"
            [innerHTML]="headerLabelService.headerLabel | translate:headerLabelService.headerLabelParams"

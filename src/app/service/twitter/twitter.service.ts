@@ -1,7 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
 import { StorageKey } from '../../lib/enums/enums';
@@ -15,10 +15,13 @@ import { ThemesService } from '../themes/themes.service';
   providedIn: 'root',
 })
 export class TwitterService {
+  public showTwitter = new Subject<boolean>();
+  public isShowingTwitter = false;
+  public twitterEnabled = false;
   public readonly tweets = new ReplaySubject<Array<ITweetEntry>>(1);
-  public readonly strWindowFeatures = 'location=yes,resizable=yes,scrollbars=yes,status=yes,width=500,height=500';
-  public readonly genericMessages: Array<string> = ['component.twitter.tweet.content.0'];
 
+  private readonly _twitterWindowFeatures = 'location=yes,resizable=yes,scrollbars=yes,status=yes,width=500,height=500';
+  private readonly _genericMessages: Array<string> = ['component.twitter.tweet.content.0'];
   private _questionIndex = -1;
 
   set questionIndex(value: number) {
@@ -40,6 +43,8 @@ export class TwitterService {
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz))).subscribe(quiz => {
       this._quizName = quiz.name;
     });
+
+    this.showTwitter.subscribe(value => this.isShowingTwitter = value);
   }
 
   public setOptIn(): void {
@@ -59,21 +64,21 @@ export class TwitterService {
 
   public getOptIn(): boolean {
     if (isPlatformServer(this.platformId)) {
-      return undefined;
+      return false;
     }
 
-    return JSON.parse(localStorage.getItem(StorageKey.TwitterOptIn));
+    return Boolean(JSON.parse(localStorage.getItem(StorageKey.TwitterOptIn)));
   }
 
   public tweet(): void {
     window.open(
       `https://twitter.com/compose/tweet?text=${encodeURIComponent(this.selectMessage())}&url=${this.getUrl()}&hashtags=${encodeURIComponent(
-        'arsnova')}&related=arsnovaclick`, 'newwindow', this.strWindowFeatures);
+        'arsnova')}&related=arsnovaclick`, 'newwindow', this._twitterWindowFeatures);
   }
 
   private selectMessage(): string {
-    const random: number = Math.floor(Math.random() * this.genericMessages.length);
-    return this.translate.instant(this.genericMessages[random], { NAME: this._quizName });
+    const random: number = Math.floor(Math.random() * this._genericMessages.length);
+    return this.translate.instant(this._genericMessages[random], { NAME: this._quizName });
   }
 
   private rebuildTwitterMessage(): void {
