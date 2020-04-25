@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -276,5 +276,10 @@ export class RootComponent implements OnInit, AfterViewInit {
       });
     } catch {
     }
+  }
+
+  @HostListener('document:keydown.escape', ['$event'])
+  private onKeydownHandler(event: KeyboardEvent): void {
+    this.twitterService.showTwitter.next(false);
   }
 }

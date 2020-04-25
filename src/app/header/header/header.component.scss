@@ -1,5 +1,5 @@
 #header {
-  height: 10vh;
+  height: 70px;
 
   .arsnova-logo {
     padding: 0;
@@ -11,15 +11,5 @@
 
   .header-label {
     font-size: 1.5rem;
-  }
-}
-
-.navbar-header {
-  flex-direction: row;
-  align-items: center;
-  padding: 0;
-
-  .header-title {
-    cursor: default;
   }
 }
