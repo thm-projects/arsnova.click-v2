@@ -390,6 +390,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public navigateToTwitter(): void {
+    this.trackingService.trackClickEvent({
+      action: HomeComponent.TYPE,
+      label: 'twitter-follow',
+    });
+
     window.open('https://twitter.com/intent/follow?screen_name=arsnovaclick', '_blank', 'noopener noreferrer');
   }
 
