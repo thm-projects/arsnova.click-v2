@@ -115,8 +115,8 @@ pre {
 }
 
 *::-webkit-scrollbar {
-  width: 5px;
-  height: 8px;
+  width: 11px;
+  height: 11px;
 }
 
 * {
@@ -131,4 +131,5 @@ pre {
 *::-webkit-scrollbar-thumb {
   background-color: $secondary;
   border-radius: 6px;
+  border: 3px solid rgba($primary, 0.8);
 }
