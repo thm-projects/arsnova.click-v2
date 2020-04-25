@@ -21,7 +21,7 @@
   </div>
 </div>
 
-<div *ngIf="twitterService.twitterEnabled && twitterService.getOptIn() !== undefined"
+<div *ngIf="twitterService.twitterEnabled && twitterService.getOptIn()"
      [class.flex-column]="twitterService.showTwitter | async"
      class="position-fixed d-flex flex-md-row tweet-container">
   <fa-icon (click)="toggleTweetsOpened()"

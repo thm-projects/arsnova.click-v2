@@ -95,7 +95,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   public isQueryingQuizState: boolean;
   public Title = Title;
   public readonly selectedTitle = environment.title;
-  public twitterEnabled: boolean;
   public disableStatistics: boolean;
 
   private _serverPassword = '';
