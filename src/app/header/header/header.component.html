@@ -13,7 +13,7 @@
     </a>
   </div>
   <div *ngIf="showHeader"
-       class="cursor-pointer d-flex align-items-center">
+       class="cursor-default d-flex align-items-center">
     <div class="center-block">
       <div *ngIf="headerLabelService.headerLabel !== 'default'"
            [innerHTML]="headerLabelService.headerLabel | translate:headerLabelService.headerLabelParams"
