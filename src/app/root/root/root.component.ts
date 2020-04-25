@@ -24,6 +24,7 @@ import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { TwitterService } from '../../service/twitter/twitter.service';
 import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { UserService } from '../../service/user/user.service';
 
@@ -36,6 +37,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   public static TYPE = 'RootComponent';
   public isInQuizManager = false;
   public isLoading = false;
+
   private _stompSubscription: Subscription;
   private readonly _destroy = new Subject();
   private _rendererInstance: Renderer2;
@@ -44,6 +46,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     public i18nService: I18nService, // Must be instantiated here to be available in all child components
     public sharedService: SharedService,
+    public twitterService: TwitterService,
     private translateService: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -64,23 +67,25 @@ export class RootComponent implements OnInit, AfterViewInit {
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
 
     this.themeService.themeChanged.pipe(filter(t => !!t && isPlatformBrowser(this.platformId)), distinctUntilChanged(), takeUntil(this._destroy))
-    .subscribe((themeName: QuizTheme) => {
-      if (String(themeName) === 'default') {
-        themeName = environment.defaultTheme;
-      }
-      this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
-        this.initializeCookieConsent(themeName);
-      }).catch(reason => {
-        console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
+      .subscribe((themeName: QuizTheme) => {
+        if (String(themeName) === 'default') {
+          themeName = environment.defaultTheme;
+        }
+        this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
+          this.initializeCookieConsent(themeName);
+        }).catch(reason => {
+          console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
+        });
       });
-    });
+
     if (isPlatformBrowser(this.platformId)) {
       this.updateCheckService.checkForUpdates();
     }
+
     this.sharedService.isLoadingEmitter.pipe(filter(() => isPlatformBrowser(this.platformId)), takeUntil(this._destroy))
-    .subscribe((isLoading: boolean) => {
-      setTimeout(() => this.isLoading = isLoading);
-    });
+      .subscribe((isLoading: boolean) => {
+        setTimeout(() => this.isLoading = isLoading);
+      });
   }
 
   public ngOnInit(): void {
@@ -116,9 +121,9 @@ export class RootComponent implements OnInit, AfterViewInit {
     });
 
     this.storageService.stateNotifier.pipe(filter(val => val !== DbState.Destroy && isPlatformBrowser(this.platformId)), takeUntil(this._destroy))
-    .subscribe(() => {
-      this.themeService.updateCurrentlyUsedTheme();
-    });
+      .subscribe(() => {
+        this.themeService.updateCurrentlyUsedTheme();
+      });
 
     this.quizService.quizUpdateEmitter.pipe(filter(() => !this.quizService.isInEditMode && isPlatformBrowser(this.platformId)),
       takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
@@ -131,10 +136,10 @@ export class RootComponent implements OnInit, AfterViewInit {
       }
 
       this._stompSubscription = this.rxStompService.watch(`/exchange/quiz_${encodeURI(quiz.name)}`).pipe(takeUntil(this._destroy))
-      .subscribe(message => {
-        console.log('Message in quiz channel received', message);
-        this.onReceivedMessage(message);
-      });
+        .subscribe(message => {
+          console.log('Message in quiz channel received', message);
+          this.onReceivedMessage(message);
+        });
     });
   }
 
@@ -180,6 +185,15 @@ export class RootComponent implements OnInit, AfterViewInit {
 
       this.isInQuizManager = [QuizManagerComponent.TYPE].includes(currentComponent.TYPE);
     });
+  }
+
+  public toggleTweetsOpened(): void {
+    this.trackingService.trackClickEvent({
+      action: RootComponent.TYPE,
+      label: this.twitterService.isShowingTwitter ? 'tweets-closed' : 'tweets-opened',
+    });
+
+    this.twitterService.showTwitter.next(!this.twitterService.isShowingTwitter);
   }
 
   private fetchChildComponent(route: ActivatedRoute): INamedType {

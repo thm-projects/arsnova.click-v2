@@ -12,3 +12,40 @@
   }
 }
 
+.tweet-container {
+  top: 0;
+  right: 0;
+
+  .tweet-opener {
+    width: 25px;
+    height: 26px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-right: 0;
+
+    &.tweets-closed-state {
+      position: absolute;
+      right: 0;
+      top: 10vh;
+
+      @include media-breakpoint-only(xs) {
+        top: 20vh;
+      }
+    }
+
+    &.tweets-opened-state {
+      margin-right: -1px;
+      z-index: 10000;
+    }
+  }
+
+  .tweet-cards-container {
+    width: 500px;
+    height: 100vh;
+    z-index: 9000;
+    border-left: 1px solid rgba(0, 0, 0, 0.125);
+
+    @include media-breakpoint-down(sm) {
+      width: 100%;
+    }
+  }
+}

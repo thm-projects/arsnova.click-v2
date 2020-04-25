@@ -41,6 +41,43 @@ import { UserService } from '../../service/user/user.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+
+  get serverPassword(): string {
+    return this._serverPassword;
+  }
+
+  get hasSuccess(): string {
+    return this._hasSuccess;
+  }
+
+  set hasSuccess(value: string) {
+    this._hasSuccess = value;
+  }
+
+  get hasErrors(): string {
+    return this._hasErrors;
+  }
+
+  set hasErrors(value: string) {
+    this._hasErrors = value;
+  }
+
+  get isShowingQuiznameDatalist(): boolean {
+    return this._isShowingQuiznameDatalist;
+  }
+
+  set isShowingQuiznameDatalist(value: boolean) {
+    this._isShowingQuiznameDatalist = value;
+
+    if (value) {
+      this.twitterService.showTwitter.next(false);
+    }
+  }
+
+  get ownQuizzes(): Array<string> {
+    return this._ownQuizzes;
+  }
+
   public static TYPE = 'HomeComponent';
   public canJoinQuiz = false;
   public canAddQuiz = false;
@@ -63,45 +100,13 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private _serverPassword = '';
 
-  get serverPassword(): string {
-    return this._serverPassword;
-  }
-
   private _hasSuccess = '';
-
-  get hasSuccess(): string {
-    return this._hasSuccess;
-  }
-
-  set hasSuccess(value: string) {
-    this._hasSuccess = value;
-  }
 
   private _hasErrors = '';
 
-  get hasErrors(): string {
-    return this._hasErrors;
-  }
-
-  set hasErrors(value: string) {
-    this._hasErrors = value;
-  }
-
   private _isShowingQuiznameDatalist = false;
 
-  get isShowingQuiznameDatalist(): boolean {
-    return this._isShowingQuiznameDatalist;
-  }
-
-  set isShowingQuiznameDatalist(value: boolean) {
-    this._isShowingQuiznameDatalist = value;
-  }
-
   private _ownQuizzes: Array<string> = [];
-
-  get ownQuizzes(): Array<string> {
-    return this._ownQuizzes;
-  }
 
   private readonly _queringQuizState$ = new Subject();
   @ViewChild('enteredSessionNameInput', { static: true }) private enteredSessionNameInput: HTMLInputElement;
@@ -223,7 +228,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
 
     this.activatedRoute.data.pipe(takeUntil(this._destroy)).subscribe(data => {
-      this.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
+      this.twitterService.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
       this.disableStatistics = data.disableStatistics;
     });
   }
@@ -233,6 +238,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._destroy.complete();
     this._queringQuizState$.next();
     this._queringQuizState$.complete();
+    this.twitterService.twitterEnabled = false;
   }
 
   public autoJoinToSession(quizname): void {
@@ -386,6 +392,15 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public navigateToTwitter(): void {
     window.open('https://twitter.com/intent/follow?screen_name=arsnovaclick', '_blank', 'noopener noreferrer');
+  }
+
+  public setTwitterOptIn(): void {
+    this.twitterService.setOptIn();
+
+    this.trackingService.trackConversionEvent({
+      action: HomeComponent.TYPE,
+      label: 'Twitter OptIn',
+    });
   }
 
   private updateFooterElements(isLoggedIn: boolean): void {

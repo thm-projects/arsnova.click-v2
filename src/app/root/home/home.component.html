@@ -251,7 +251,7 @@
         <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !twitterService.getOptIn()"
              class="opt-in col-md-10 col-xl-8 offset-md-1 offset-xl-2 mt-sm-5">
           <div class="p-2 rounded d-flex align-items-center bg-light text-primary">
-            <input (click)="twitterService.setOptIn()"
+            <input (click)="setTwitterOptIn()"
                    class=""
                    id="defaultCheck1"
                    type="checkbox"
@@ -265,11 +265,6 @@
 
       </ng-container>
     </div>
-  </div>
-
-  <div *ngIf="twitterEnabled && twitterService.getOptIn() !== undefined && !isShowingQuiznameDatalist"
-       class="full-xs">
-    <app-twitter-cards class="col-12 mt-2 d-block"></app-twitter-cards>
   </div>
 
   <div *ngIf="!disableStatistics && !isShowingQuiznameDatalist"
