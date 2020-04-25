@@ -113,3 +113,22 @@ pre {
   opacity: 1;
   color: $footer-color;
 }
+
+*::-webkit-scrollbar {
+  width: 5px;
+  height: 8px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: $secondary rgba($primary, 0.8);
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba($primary, 0.8);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: $secondary;
+  border-radius: 6px;
+}
