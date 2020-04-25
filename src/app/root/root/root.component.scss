@@ -35,8 +35,8 @@
     border: 1px solid rgba(0, 0, 0, 0.125);
 
     @include media-breakpoint-up(sm) {
-      width: 25px;
-      height: 26px;
+      width: 35px;
+      height: 36px;
       border-top-left-radius: $border-radius !important;
       border-bottom-left-radius: $border-radius !important;
     }
