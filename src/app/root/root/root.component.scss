@@ -81,7 +81,7 @@
     }
 
     @include media-breakpoint-up(md) {
-      height: 100vh;
+      max-height: 100vh;
       border-left: 1px solid rgba(0, 0, 0, 0.125);
       box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.125) !important;
     }
