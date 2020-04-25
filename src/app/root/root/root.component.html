@@ -23,7 +23,9 @@
 
 <div *ngIf="twitterService.twitterEnabled && twitterService.getOptIn()"
      [class.flex-column]="twitterService.showTwitter | async"
-     class="position-fixed d-flex flex-md-row tweet-container">
+     [class.position-absolute]="!(twitterService.showTwitter | async)"
+     [class.position-fixed]="twitterService.showTwitter | async"
+     class="d-flex flex-md-row tweet-container">
   <fa-icon (click)="toggleTweetsOpened()"
            [class.d-flex]="!(twitterService.showTwitter | async)"
            [class.d-md-flex]="twitterService.showTwitter | async"
@@ -31,7 +33,7 @@
            [class.tweets-closed-state]="!(twitterService.showTwitter | async)"
            [class.tweets-opened-state]="twitterService.showTwitter | async"
            [icon]="['fab', 'twitter']"
-           class="color-twitter tweet-opener bg-secondary rounded-left justify-content-center align-items-center cursor-pointer mt-md-2"></fa-icon>
+           class="color-twitter tweet-opener bg-secondary justify-content-center align-items-center cursor-pointer mt-md-2"></fa-icon>
 
   <div class="bg-secondary">
     <button (click)="toggleTweetsOpened()"
