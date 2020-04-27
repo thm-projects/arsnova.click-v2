@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -45,6 +45,7 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
     quizPoolApiService: QuizPoolApiService,
     private questionTextService: QuestionTextService,
     private cd: ChangeDetectorRef,
+    @Inject(DOCUMENT) private document: Document,
   ) {
     super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
 
@@ -135,7 +136,7 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
       this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText).then(() => this.cd.markForCheck());
     });
 
-    const contentContainer = document.getElementById('content-container');
+    const contentContainer = this.document.getElementById('content-container');
 
     if (contentContainer) {
       contentContainer.classList.remove('container');
@@ -155,7 +156,7 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
     }
 
     if (isPlatformBrowser(this.platformId)) {
-      const contentContainer = document.getElementById('content-container');
+      const contentContainer = this.document.getElementById('content-container');
 
       if (contentContainer) {
         contentContainer.classList.add('container');
