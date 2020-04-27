@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -102,9 +103,11 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
       this.addFooterElements();
     });
 
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-      this.handleMessages();
-    }).catch(() => this.hasTriggeredNavigation = true);
+    if (isPlatformBrowser(this.platformId)) {
+      this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+        this.handleMessages();
+      }).catch(() => this.hasTriggeredNavigation = true);
+    }
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
@@ -175,33 +178,33 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
   private initData(): void {
 
     this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
-    .subscribe(questionIndex => {
-      this._questionIndex = questionIndex;
-      this._isGlobalRanking = isNaN(this._questionIndex);
-      if (this._isGlobalRanking) {
-        this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
-        this._questionIndex = null;
-        if (!!questionIndex) {
-          this.hasTriggeredNavigation = true;
-          this.router.navigate(['/quiz', 'flow', 'leaderboard']);
-          return;
+      .subscribe(questionIndex => {
+        this._questionIndex = questionIndex;
+        this._isGlobalRanking = isNaN(this._questionIndex);
+        if (this._isGlobalRanking) {
+          this.headerLabelService.headerLabel = 'component.leaderboard.global_header';
+          this._questionIndex = null;
+          if (!!questionIndex) {
+            this.hasTriggeredNavigation = true;
+            this.router.navigate(['/quiz', 'flow', 'leaderboard']);
+            return;
+          }
+        } else {
+          this.headerLabelService.headerLabel = 'component.leaderboard.header';
         }
-      } else {
-        this.headerLabelService.headerLabel = 'component.leaderboard.header';
-      }
 
-      this.leaderboardApiService.getLeaderboardData(this._name, environment.leaderboardAmount, this.questionIndex).subscribe(lederboardData => {
-        this._leaderBoardCorrect = lederboardData.payload.correctResponses;
-        this._ownResponse = lederboardData.payload.ownResponse;
-        this._memberGroupResults = lederboardData.payload.memberGroupResults;
+        this.leaderboardApiService.getLeaderboardData(this._name, environment.leaderboardAmount, this.questionIndex).subscribe(lederboardData => {
+          this._leaderBoardCorrect = lederboardData.payload.correctResponses;
+          this._ownResponse = lederboardData.payload.ownResponse;
+          this._memberGroupResults = lederboardData.payload.memberGroupResults;
 
-        this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-          return memberGroupResult.correctQuestions.length > 0;
+          this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
+            return memberGroupResult.correctQuestions.length > 0;
+          });
+
+          this.isLoadingData = false;
         });
-
-        this.isLoadingData = false;
       });
-    });
   }
 
   private handleMessages(): void {

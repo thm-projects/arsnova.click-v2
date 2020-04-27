@@ -65,8 +65,9 @@ export class QuestionTextService {
             return;
           }
 
-          if (mathjaxValue.match(/\${2}\n?([^\$]*)/)) {
-            result = result.replace(this.customMarkdownService.compile(mathjaxValue), `<div>${mathjaxRendered[index].svg}</div>`);
+          if (mathjaxValue.match(/(\${1,2}\n?([^\$]*)\n?\${1,2})/)) {
+            const htmlNode = mathjaxValue.startsWith('$$') ? 'div' : 'span';
+            result = result.replace(mathjaxValue, `<${htmlNode}>${mathjaxRendered[index].svg}</${htmlNode}>`);
           } else {
             const searchStr = this.customMarkdownService.compile(mathjaxValue).trim();
             const searchStrWithoutParagraph = searchStr.replace('<p>', '').replace('</p>', '');

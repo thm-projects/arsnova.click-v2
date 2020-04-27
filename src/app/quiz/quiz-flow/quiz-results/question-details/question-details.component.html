@@ -4,7 +4,7 @@
 <hr/>
 
 <ng-container *ngIf="question?.TYPE === 'FreeTextQuestion'; else defaultAnswerView">
-  <h5>{{'component.answeroptions.free_text_question.title' | translate}} {{removeBreakFromAnswer(answers)}}</h5>
+  <h5>{{'component.answeroptions.free_text_question.title' | translate}} <span [innerHTML]="sanitizeHTML(removeBreakFromAnswer(answers))"></span></h5>
 </ng-container>
 
 <ng-container *ngIf="question?.TYPE === 'RangedQuestion'">

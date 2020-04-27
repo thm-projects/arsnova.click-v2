@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -84,8 +84,9 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     this.footerBarService.replaceFooterElements([]);
   }
 
-  public sanitizeHTML(value: string): string {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  public sanitizeHTML(value: string): SafeHtml {
+    // sanitizer.bypassSecurityTrustHtml is required for highslide and mathjax
+    return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 
   public displayAnswerButtons(): boolean {
@@ -115,10 +116,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     this._selectedAnswers = (
       <HTMLInputElement>event.target
     ).value;
-  }
-
-  public isNumber(value: any): boolean {
-    return +value === value && value !== -1;
   }
 
   public showSendResponseButton(): boolean {

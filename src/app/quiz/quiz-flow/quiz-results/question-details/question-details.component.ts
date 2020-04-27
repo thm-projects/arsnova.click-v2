@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -23,6 +24,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   selector: 'app-question-details',
   templateUrl: './question-details.component.html',
   styleUrls: ['./question-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'QuestionDetailsComponent';
@@ -61,6 +63,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
   private readonly _destroy = new Subject();
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private quizService: QuizService,
     private sanitizer: DomSanitizer,
@@ -71,6 +74,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     private footerBarService: FooterBarService,
     private ngbModal: NgbModal,
     private messageQueue: SimpleMQ,
+    private cd: ChangeDetectorRef,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = QuestionDetailsComponent.TYPE;
@@ -99,6 +103,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
       } else {
         this._questionText = value;
       }
+      this.cd.markForCheck();
     });
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
@@ -138,6 +143,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
       this.questionTextService.change(this._question.questionText);
     });
 
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
     }).catch(() => this.hasTriggeredNavigation = true);
@@ -148,7 +157,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
     this._destroy.next();
     this._destroy.complete();
-    if (window['hs']) {
+    if (isPlatformBrowser(this.platformId) && window['hs']) {
       window['hs'].close();
     }
   }
@@ -168,6 +177,11 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
   public removeBreakFromAnswer(answers: Array<string>): string {
     if (!Array.isArray(answers) || !answers.length) {
       return;
+    }
+
+    const lastBreakIndex = answers[0].lastIndexOf('<br/>');
+    if (lastBreakIndex === -1) {
+      return answers[0];
     }
 
     return answers[0].substring(0, answers[0].lastIndexOf('<br/>'));

@@ -1,5 +1,5 @@
 import { SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 export abstract class AbstractProgressBar {
   public absolute: number;
@@ -34,8 +34,9 @@ export abstract class AbstractProgressBar {
     return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 
-  public sanitizeHTML(value: string): string {
-    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  public sanitizeHTML(value: string): SafeHtml {
+    // sanitizer.bypassSecurityTrustHtml is required for highslide and mathjax
+    return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 
   protected initData(value: any): void {
