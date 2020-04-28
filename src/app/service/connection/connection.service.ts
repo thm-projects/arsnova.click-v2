@@ -3,7 +3,8 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { StatisticsApiService } from '../api/statistics/statistics-api.service';
@@ -131,8 +132,6 @@ export class ConnectionService {
       return;
     }
 
-    this.connectToGlobalChannel();
-
     this.rxStompService.connectionState$.subscribe(value => {
       switch (value) {
         case RxStompState.OPEN:
@@ -149,21 +148,8 @@ export class ConnectionService {
     });
   }
 
-  private calculateConnectionSpeedIndicator(): void {
-    if (this._rtt > 800) {
-      this._lowSpeed = true;
-      this._mediumSpeed = false;
-    } else if (this._rtt > 300) {
-      this._lowSpeed = false;
-      this._mediumSpeed = true;
-    } else {
-      this._lowSpeed = false;
-      this._mediumSpeed = false;
-    }
-  }
-
-  private connectToGlobalChannel(): void {
-    this.rxStompService.watch(encodeURI(`/exchange/global`)).subscribe(message => {
+  public connectToGlobalChannel(): Observable<any> {
+    return this.rxStompService.watch(encodeURI(`/exchange/global`)).pipe(tap(message => {
       console.log('Message in global channel received', message);
       try {
         const parsedMessage = JSON.parse(message.body);
@@ -187,6 +173,19 @@ export class ConnectionService {
       } catch (ex) {
         console.error('Invalid message received', ex);
       }
-    });
+    }));
+  }
+
+  private calculateConnectionSpeedIndicator(): void {
+    if (this._rtt > 800) {
+      this._lowSpeed = true;
+      this._mediumSpeed = false;
+    } else if (this._rtt > 300) {
+      this._lowSpeed = false;
+      this._mediumSpeed = true;
+    } else {
+      this._lowSpeed = false;
+      this._mediumSpeed = false;
+    }
   }
 }
