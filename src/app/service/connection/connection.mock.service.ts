@@ -1,4 +1,4 @@
-import { of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 
 export class ConnectionMockService {
@@ -34,6 +34,10 @@ export class ConnectionMockService {
     return new Promise<any>((resolve) => resolve({
       serverConfig: {},
     }));
+  }
+
+  public connectToGlobalChannel(): Observable<any> {
+    return of({});
   }
 
   public calculateConnectionSpeedIndicator(): void {
