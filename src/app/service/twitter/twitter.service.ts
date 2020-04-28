@@ -26,7 +26,10 @@ export class TwitterService {
 
   set questionIndex(value: number) {
     this._questionIndex = value;
-    this.rebuildTwitterMessage();
+    /*
+     FIXME Disabled due to performance impacts
+     this.rebuildTwitterMessage();
+     */
   }
 
   private _digest: string;

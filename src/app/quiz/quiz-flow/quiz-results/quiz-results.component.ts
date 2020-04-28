@@ -473,7 +473,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     } else {
       footerElems = [this.footerBarService.footerElemShowToken];
       if (environment.enableTwitter && this.twitterService.getOptIn()) {
-        footerElems.push(this.footerBarService.footerElemTwitterTweet);
+        /*
+         FIXME Disabled due to performance impacts
+         footerElems.push(this.footerBarService.footerElemTwitterTweet);
+         */
       }
       this.footerBarService.footerElemShowToken.onClickCallback = async () => {
         this.ngbModal.open(BonusTokenComponent);
