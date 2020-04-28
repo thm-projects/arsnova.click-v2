@@ -230,6 +230,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.twitterService.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
       this.disableStatistics = data.disableStatistics;
     });
+
+    this.connectionService.serverStatusEmitter.pipe(
+      filter(v => !!v),
+      switchMapTo(this.connectionService.connectToGlobalChannel()),
+      takeUntil(this._destroy),
+    ).subscribe();
   }
 
   public ngOnDestroy(): void {
