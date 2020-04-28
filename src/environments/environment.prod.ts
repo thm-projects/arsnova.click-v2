@@ -18,7 +18,7 @@ export const environment: IEnvironment = {
     password: 'K3BHZQMHsxh6XQ5a',
     vhost: '/',
   },
-  leaderboardAmount: 5,
+  leaderboardAmount: 10,
   readingConfirmationEnabled: false,
   confidenceSliderEnabled: false,
   infoAboutTabEnabled: true,
