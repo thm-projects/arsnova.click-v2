@@ -135,7 +135,7 @@ export class RootComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      this._stompSubscription = this.rxStompService.watch(`/exchange/quiz_${encodeURI(quiz.name)}`).pipe(takeUntil(this._destroy))
+      this._stompSubscription = this.rxStompService.watch(`/exchange/quiz_${encodeURIComponent(quiz.name)}`).pipe(takeUntil(this._destroy))
         .subscribe(message => {
           console.log('Message in quiz channel received', message);
           this.onReceivedMessage(message);
