@@ -1,12 +1,12 @@
-$primary: #00796B;
+$primary: #696d6d;
 $secondary: white;
 $invers: rebeccapurple;
 $light: #B2DFDB;
 $dark: black;
 $info: yellow;
-$success: #006000;
+$success: #00c700;
 $warning: #991d1d;
-$error: #f44336;
+$error: #ff5a6a;
 
 $primary_text_color: white;
 $secondary_text_color: #757575;
@@ -38,6 +38,8 @@ $corner-radius: 10px;
 $splash-screen-corner-radius: 10px;
 
 $small-font-size: 60%;
+
+$statistics-icon-opacity: 0.2;
 
 @import "prebuild";
 

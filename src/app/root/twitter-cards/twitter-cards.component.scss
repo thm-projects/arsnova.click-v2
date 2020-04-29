@@ -21,7 +21,6 @@
   grid-column: 2;
   grid-row: 1;
   font-weight: bold;
-  color: black;
   line-height: 1;
   font-size: large;
   align-self: end;
@@ -44,12 +43,7 @@
   padding: 5% 0;
 }
 
-.card-text {
-  color: black;
-}
-
 .card {
-  color: #757575;
   border: 0;
   border-radius: 0;
 
@@ -70,14 +64,6 @@
 .date {
   grid-column: 2;
   text-align: right;
-}
-
-.date a {
-  color: #757575;
-}
-
-.username a {
-  color: #757575;
 }
 
 .card-body {

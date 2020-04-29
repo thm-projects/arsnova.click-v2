@@ -159,7 +159,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
       const loading$ = this.sharedService.isLoadingEmitter.pipe(filter(() => isPlatformBrowser(this.platformId)));
       loading$.pipe(filter(v => !v), switchMapTo(this._viewInit$), distinctUntilChanged(), takeUntil(this._destroy)).subscribe(() => {
         this._tagsForCloud = this._tags;
-        setTimeout(() => this.cd.markForCheck(), 200);
+        setTimeout(() => this.cd.markForCheck(), 300);
       });
     });
   }

@@ -2,21 +2,21 @@
      role="group">
   <button type="button"
           class="btn"
-          [class.btn-primary]="isSelected('lobby')"
+          [class.btn-secondary]="isSelected('lobby')"
           [class.btn-light]="!isSelected('lobby')"
           (click)="openTab('lobby')">
     <span>{{'plugins.sound.lobby_music' | translate}}</span>
   </button>
   <button type="button"
           class="btn"
-          [class.btn-primary]="isSelected('countdownRunning')"
+          [class.btn-secondary]="isSelected('countdownRunning')"
           [class.btn-light]="!isSelected('countdownRunning')"
           (click)="openTab('countdownRunning')">
     <span>{{'plugins.sound.running_music' | translate}}</span>
   </button>
   <button type="button"
           class="btn"
-          [class.btn-primary]="isSelected('countdownEnd')"
+          [class.btn-secondary]="isSelected('countdownEnd')"
           [class.btn-light]="!isSelected('countdownEnd')"
           (click)="openTab('countdownEnd')">
     <span>{{'plugins.sound.finish_music' | translate}}</span>
