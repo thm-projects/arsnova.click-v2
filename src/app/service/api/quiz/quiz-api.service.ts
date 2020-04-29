@@ -130,12 +130,12 @@ export class QuizApiService {
   }
 
   public getQuizStatus(quizName): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getQuizStatusUrl}${quizName ? '/' + quizName : ''}`,
+    return this.http.get<IMessage>(`${this._getQuizStatusUrl}/${encodeURIComponent(quizName ? quizName : '')}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
   public getFullQuizStatusData(quizName): Observable<IMessage> {
-    return this.http.get<IMessage>(`${this._getFullQuizStatusDataUrl}${quizName ? '/' + quizName : ''}`,
+    return this.http.get<IMessage>(`${this._getFullQuizStatusDataUrl}/${encodeURIComponent(quizName ? quizName : '')}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
