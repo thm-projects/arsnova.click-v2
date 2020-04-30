@@ -12,6 +12,7 @@ import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 })
 export class QuizApiService {
   private _getFreeMemberGroupUrl: string;
+  private _getActiveQuizzesUrl: string;
 
   get getFreeMemberGroupUrl(): string {
     return this._getFreeMemberGroupUrl;
@@ -203,6 +204,10 @@ export class QuizApiService {
     });
   }
 
+  public getActiveQuizzes(): Observable<Array<string>> {
+    return this.http.get<Array<string>>(this._getActiveQuizzesUrl);
+  }
+
   private loadUrls(): void {
     this._putQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz`;
     this._putSaveQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/save`;
@@ -227,5 +232,6 @@ export class QuizApiService {
     this._getOwnPublicQuizAmountUrl = `${DefaultSettings.httpApiEndpoint}/quiz/public/amount/own`;
     this._deleteActiveQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/active`;
     this._initQuizInstanceUrl = `${DefaultSettings.httpApiEndpoint}/quiz/public/init`;
+    this._getActiveQuizzesUrl = `${DefaultSettings.httpApiEndpoint}/quiz/active`;
   }
 }
