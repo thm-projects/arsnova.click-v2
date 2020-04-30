@@ -106,6 +106,8 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
     }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
       this.attendeeService.removeMember(payload.name);
       this.nicks.push(payload.name);
+    }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+      this.router.navigate(['/']);
     }));
   }
 

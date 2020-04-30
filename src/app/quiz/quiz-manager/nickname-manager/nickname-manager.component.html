@@ -1,4 +1,4 @@
-<div class="row text-dark">
+<div class="row">
   <div class="col-12 nicknameFilter">
     <input (input)="filterForKeyword($event)"
            [placeholder]="'component.nickname_categories.filter' | translate"
@@ -17,11 +17,10 @@
            [class.col-sm-6]="!hasSelectedCategory()"
            [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
            [class.selectedCategory]="hasSelectedCategory(cat)"
-           class="nickCategory cursor-pointer col-6">
-        <div class="nickCategoryText bg-light cursor-pointer rounded p-2 m-1">
-          <p [innerHTML]="getCategoryTranslation(cat) | translate"
-             class="mb-0"></p>
-          <p class="mb-0">({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
+           class="cursor-pointer col-6">
+        <div class="card cursor-pointer rounded p-2 m-1">
+          <p [innerHTML]="getCategoryTranslation(cat) | translate"></p>
+          <p>({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
         </div>
       </div>
     </div>
@@ -32,7 +31,7 @@
        [infiniteScrollThrottle]="throttle"
        class="col-12 col-sm-8 col-md-6"
        infinite-scroll>
-    <div class="bg-light rounded pt-2 mt-2 mt-sm-0">
+    <div class="card rounded pt-2 mt-2 mt-sm-0">
       <div class="mx-2">
         <button (click)="toggleAllNicks()"
                 [class.btn-success]="!hasSelectedAllNicks()"
@@ -45,7 +44,7 @@
       <div (click)="selectNick(nick)"
            *ngFor="let nick of availableNicks[selectedCategory] | justafew:visibleData"
            [class.selectedNickName]="hasSelectedNick(nick)"
-           class="nickStyle rounded p-2 m-2 cursor-pointer border-bottom">
+           class="nickStyle p-2 m-2 cursor-pointer border-bottom">
       <span [innerHTML]="parseAvailableNick(nick)"
             class="nickName d-inline-block pb-1"></span>
       </div>

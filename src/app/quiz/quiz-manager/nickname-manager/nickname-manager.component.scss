@@ -11,10 +11,9 @@
 }
 
 .selectedNickName {
-  text-decoration: underline;
-
-  .nickName {
-    border-bottom: 1px solid;
+  .nickName:before {
+    content: "\2714";
+    margin-right: 0.5rem;
   }
 }
 

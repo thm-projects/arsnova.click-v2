@@ -36,7 +36,9 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private router: Router,
     private attendeeService: AttendeeService,
     private userService: UserService,
-    private quizService: QuizService, private memberApiService: MemberApiService, private messageQueue: SimpleMQ,
+    private quizService: QuizService,
+    private memberApiService: MemberApiService,
+    private messageQueue: SimpleMQ,
     private bonusTokenService: BonusTokenService
   ) {
 
@@ -136,6 +138,9 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
   }
 
   private handleMessages(): void {
+    this._messageSubscriptions.push(this.messageQueue.subscribe(MessageProtocol.Closed, () => {
+      this.router.navigate(['/']);
+    }));
   }
 
 }

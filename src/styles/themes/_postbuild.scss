@@ -45,6 +45,10 @@ body {
   @include transitionEffect();
 }
 
+.card {
+  @include transitionEffect();
+}
+
 pre {
   background: $bg-pre;
   padding: 1rem;
@@ -132,4 +136,12 @@ pre {
   background-color: $secondary;
   border-radius: 6px;
   border: 3px solid rgba($primary, 0.8);
+}
+
+.statistics-icon-opacity {
+  opacity: $statistics-icon-opacity;
+}
+
+.twitter-ancor a {
+  color: $secondary_text_color;
 }

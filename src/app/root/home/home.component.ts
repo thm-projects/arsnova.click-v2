@@ -236,6 +236,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       switchMapTo(this.connectionService.connectToGlobalChannel()),
       takeUntil(this._destroy),
     ).subscribe();
+
+    this.quizApiService.getActiveQuizzes().subscribe(value => this.sharedService.activeQuizzes = value);
   }
 
   public ngOnDestroy(): void {

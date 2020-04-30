@@ -1,7 +1,7 @@
-$primary: #00796B;
+$primary: #757575;
 $secondary: white;
 $invers: rebeccapurple;
-$light: #B2DFDB;
+$light: #2b2b2b;
 $dark: black;
 $info: yellow;
 $success: #00A000;
@@ -11,8 +11,8 @@ $error: #f44336;
 $primary_text_color: white;
 $secondary_text_color: #757575;
 
-$modal-content-bg: white;
-$modal-content-color: #000c19;
+$modal-content-bg: #2b2b2b;
+$modal-content-color: white;
 $modal-header-border-color: transparent;
 
 $body-bg: #010101;
@@ -38,6 +38,12 @@ $corner-radius: 10px;
 $splash-screen-corner-radius: 10px;
 
 $small-font-size: 60%;
+
+$card-bg: #000;
+$card-color: #fff;
+$card-border-color: rgba(white, .125) !default;
+
+$statistics-icon-opacity: 0.7;
 
 @import "prebuild";
 
@@ -113,7 +119,3 @@ $popover-body-color: black;
 $code-color: $primary_text_color;
 
 @import "postbuild";
-
-.card {
-  color: $secondary_text_color
-}
