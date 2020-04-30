@@ -114,7 +114,7 @@
           "title": "Manual?",
           "text": {
             "1": "You won't need that!",
-            "2": "Simply type in the name of the quiz. The buttons will discolour as soon as you've typed in the name of an active quiz (Join now!) or you can create a new quiz with the entered name (Make a new one!).",
+            "2": "Simply type in the name of the quiz. The buttons will discolour as soon as you've typed in the name of an active quiz (Join now!) or you can create a new quiz with the entered name (Create Quiz).",
             "3": "Now it is as simple as: Clicking. Looking. Quizzing."
           }
         }
@@ -380,7 +380,7 @@
         "title": "Edit the quiz",
         "label": "Edit"
       },
-      "create_session": "Make a new one!",
+      "create_session": "Create Quiz",
       "can_create_session": "Create Quiz",
       "create_demo_session": "Start demo quiz",
       "quiz_management": "Stored Quizzes",
