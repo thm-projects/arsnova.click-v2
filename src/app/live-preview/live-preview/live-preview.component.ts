@@ -110,6 +110,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe(value => {
       this.dataSource = Array.isArray(value) ? value : [value];
+      this.cd.markForCheck();
     });
 
     this.route.paramMap.pipe( //
