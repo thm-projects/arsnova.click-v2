@@ -289,7 +289,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     this.isLoadingQuestionData = true;
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.handleMessages();
-      this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
+      this.questionTextService.change(this.quizService.currentQuestion().questionText).subscribe(() => this.cd.markForCheck());
     }).catch(() => this.hasTriggeredNavigation = true);
 
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
@@ -356,7 +356,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
     const question = this.quizService.currentQuestion();
     this.generateAnswers(question);
-    this.questionTextService.change(this.quizService.currentQuestion().questionText).then(() => this.cd.markForCheck());
+    this.questionTextService.change(this.quizService.currentQuestion().questionText).subscribe(() => this.cd.markForCheck());
 
     if (environment.readingConfirmationEnabled && startQuizData.step === MessageProtocol.ReadingConfirmationRequested) {
       this.quizService.readingConfirmationRequested = true;
@@ -596,7 +596,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     } else {
       this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {
         return answer.answerText;
-      }));
+      })).subscribe();
     }
   }
 

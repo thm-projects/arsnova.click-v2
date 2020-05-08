@@ -272,10 +272,8 @@
     </div>
   </div>
 
-  <div *ngIf="!disableStatistics && !isShowingQuiznameDatalist"
-       class="full-xs">
-    <app-statistics class="col-12 mt-2 d-block"></app-statistics>
-  </div>
+  <app-statistics *ngIf="!disableStatistics && !isShowingQuiznameDatalist"
+                  class="col-12 px-0 px-sm-3 mt-2 d-block"></app-statistics>
 
 </div>
 

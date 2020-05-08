@@ -1,9 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { distinctUntilChanged, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { StorageKey } from '../../lib/enums/enums';
@@ -15,6 +15,7 @@ import { QuizService } from '../../service/quiz/quiz.service';
   selector: 'app-live-preview',
   templateUrl: './live-preview.component.html',
   styleUrls: ['./live-preview.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LivePreviewComponent implements OnInit, OnDestroy {
   public static TYPE = 'LivePreviewComponent';
@@ -103,7 +104,7 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     }
 
     // sanitizer.bypassSecurityTrustHtml is required for highslide
-    return this.sanitizer.bypassSecurityTrustHtml(`${value}`) as string;
+    return this.sanitizer.bypassSecurityTrustHtml(value || '') as string;
   }
 
   public ngOnInit(): void {
@@ -111,34 +112,40 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
       this.dataSource = Array.isArray(value) ? value : [value];
     });
 
-    const questionIndex$ = this.route.paramMap.pipe( //
+    this.route.paramMap.pipe( //
+      filter(() => isPlatformBrowser(this.platformId)), //
       map(params => parseInt(params.get('questionIndex'), 10)), //
       distinctUntilChanged(), //
-      tap(questionIndex => {
+      switchMap(questionIndex => {
         if (!isNaN(questionIndex)) {
           this._questionIndex = questionIndex;
-          this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+
+          return new Observable(subscriber => {
+            this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+              subscriber.next();
+              subscriber.complete();
+            });
+          }).pipe(switchMap(() => {
+            this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
+
+            switch (this.targetEnvironment) {
+              case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
+                const answers = this._question.answerOptionList.map(answer => answer.answerText);
+                return this.questionTextService.changeMultiple(answers);
+              case this.ENVIRONMENT_TYPE.QUESTION:
+                return this.questionTextService.change(this._question?.questionText);
+              default:
+                throw new Error(`Unsupported environment type in live preview: '${this.targetEnvironment}'`);
+            }
+          }));
         } else {
           this.quizService.isAddingPoolQuestion = true;
           this._questionIndex = 0;
+          return of();
         }
       }), //
       takeUntil(this._destroy), //
-    );
-
-    switch (this.targetEnvironment) {
-      case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
-        questionIndex$.subscribe(() => {
-          this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
-          this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText))
-          .then(() => this.cd.markForCheck());
-        });
-        break;
-      case this.ENVIRONMENT_TYPE.QUESTION:
-        break;
-      default:
-        throw new Error(`Unsupported environment type in live preview: '${this.targetEnvironment}'`);
-    }
+    ).subscribe(() => this.cd.markForCheck());
   }
 
   public ngOnDestroy(): void {

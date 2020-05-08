@@ -200,8 +200,8 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         }
       });
 
-      this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText));
-      this.questionTextService.change(this._currentQuestion.questionText);
+      this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText)).subscribe();
+      this.questionTextService.change(this._currentQuestion.questionText).subscribe();
     });
 
     if (isPlatformBrowser(this.platformId)) {

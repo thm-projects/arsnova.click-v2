@@ -112,13 +112,13 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
         break;
     }
 
-    this.questionTextService.change(this.textarea.nativeElement.value).then(() => this.cd.markForCheck());
+    this.questionTextService.change(this.textarea.nativeElement.value).subscribe(() => this.cd.markForCheck());
   }
 
   public fireEvent(event: Event): void {
     this.questionTextService.change((
       <HTMLTextAreaElement>event.target
-    ).value).then(() => this.cd.markForCheck());
+    ).value).subscribe(() => this.cd.markForCheck());
   }
 
   public ngOnInit(): void {
@@ -133,7 +133,7 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
       }
 
       this.textarea.nativeElement.value = this.quizService.quiz.questionList[this._questionIndex].questionText;
-      this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText).then(() => this.cd.markForCheck());
+      this.questionTextService.change(this.quizService.quiz.questionList[this._questionIndex].questionText).subscribe(() => this.cd.markForCheck());
     });
 
     const contentContainer = this.document.getElementById('content-container');
@@ -148,7 +148,7 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
   public ngOnDestroy(): void {
     super.ngOnDestroy();
 
-    this.questionTextService.change(this.textarea.nativeElement.value);
+    this.questionTextService.change(this.textarea.nativeElement.value).subscribe();
 
     if (this.quizService.quiz) {
       this.quizService.quiz.questionList[this._questionIndex].questionText = this.textarea.nativeElement.value;

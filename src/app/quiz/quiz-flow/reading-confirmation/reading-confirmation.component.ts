@@ -1,3 +1,4 @@
+import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -60,6 +61,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
   }
 
   public ngOnInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.connectionService.serverStatusEmitter.pipe(takeUntil(this._destroy)).subscribe(isConnected => {
       if (isConnected) {
         if (this._serverUnavailableModal) {
@@ -84,6 +89,14 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
       return;
     }
 
+    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+      this.handleMessages();
+    }).catch(() => this.hasTriggeredNavigation = true);
+
+    this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string) => {
+      this.questionText = value;
+    });
+
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
@@ -96,15 +109,7 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
       }
 
       this.questionIndex = this.quizService.quiz.currentQuestionIndex;
-      this.questionTextService.change(this.quizService.currentQuestion().questionText);
-    });
-
-    this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
-      this.handleMessages();
-    }).catch(() => this.hasTriggeredNavigation = true);
-
-    this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string) => {
-      this.questionText = value;
+      this.questionTextService.change(this.quizService.currentQuestion().questionText).subscribe();
     });
   }
 

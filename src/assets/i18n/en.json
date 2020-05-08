@@ -589,7 +589,7 @@
     },
     "quiz_summary": {
       "quiz_name": "Name of the quiz",
-      "question_amount": "Amount of all questions",
+      "answer_amount": "{amount, plural, =0{0 Answers} one{1 Answer} other{# Answers} }",
       "validation_question_group": "Validation for the complete quiz",
       "question_successful": "The question is valid",
       "question_failed": "The question is still incomplete",
