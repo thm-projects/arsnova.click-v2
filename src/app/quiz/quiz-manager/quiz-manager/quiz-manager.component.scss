@@ -5,3 +5,19 @@
 .mw-50 {
   max-width: 50%;
 }
+
+.mh-20vh {
+  max-height: 20vh;
+}
+
+.text-truncate-deep {
+  ::ng-deep > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  ::ng-deep * {
+    color: inherit;
+  }
+}

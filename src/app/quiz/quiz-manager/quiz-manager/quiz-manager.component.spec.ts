@@ -16,6 +16,8 @@ import { QuestionType } from '../../../lib/enums/QuestionType';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
@@ -66,6 +68,9 @@ describe('QuizManagerComponent', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         },
       ],
       declarations: [QuizManagerComponent, TranslatePipeMock],

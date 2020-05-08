@@ -6,6 +6,10 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import {
   faAlignLeft,
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faAngleDown,
+  faAngleUp,
   faAppleAlt,
   faArrowDown,
   faArrowsAlt,
@@ -182,5 +186,9 @@ export class SharedModule {
     library.addIcons(faTags);
     library.addIcons(faUserFriends);
     library.addIcons(faMobileAlt);
+    library.addIcons(faAngleUp);
+    library.addIcons(faAngleDoubleUp);
+    library.addIcons(faAngleDown);
+    library.addIcons(faAngleDoubleDown);
   }
 }

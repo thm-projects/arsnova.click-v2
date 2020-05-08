@@ -154,18 +154,3 @@ iframe {
   z-index: 2000 !important;
 }
 
-.full-xs {
-  @include media-breakpoint-only(xs) {
-    .col-12 {
-      padding: 0;
-
-      .row, .form-row {
-        margin: 0;
-
-        .col, [class*="col-"] {
-          padding: 0;
-        }
-      }
-    }
-  }
-}
