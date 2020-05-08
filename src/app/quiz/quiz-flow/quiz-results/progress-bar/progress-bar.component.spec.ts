@@ -119,7 +119,7 @@ describe('ProgressBarComponent', () => {
       responses: [],
     }));
 
-    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText)).subscribe();
     questionTextService.eventEmitter.subscribe((value) => {
       if (Array.isArray(value)) {
         component.data = value;
@@ -146,7 +146,7 @@ describe('ProgressBarComponent', () => {
       responses: [],
     }));
 
-    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText)).subscribe();
     questionTextService.eventEmitter.subscribe((value) => {
       if (Array.isArray(value)) {
         component.data = value;
@@ -174,7 +174,7 @@ describe('ProgressBarComponent', () => {
       responses: [],
     }));
 
-    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText)).subscribe();
     questionTextService.eventEmitter.subscribe((value) => {
       if (Array.isArray(value)) {
         component.data = value;
@@ -201,7 +201,7 @@ describe('ProgressBarComponent', () => {
       responses: [],
     }));
 
-    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText)).subscribe();
     questionTextService.eventEmitter.subscribe((value) => {
       if (Array.isArray(value)) {
         component.data = value;
@@ -229,7 +229,7 @@ describe('ProgressBarComponent', () => {
       responses: [],
     }));
 
-    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText)).subscribe();
     questionTextService.eventEmitter.subscribe((value) => {
       if (Array.isArray(value)) {
         component.data = value;
@@ -256,7 +256,7 @@ describe('ProgressBarComponent', () => {
       responses: [],
     }));
 
-    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText));
+    questionTextService.changeMultiple(question.answerOptionList.map(answer => answer.answerText)).subscribe();
     questionTextService.eventEmitter.subscribe((value) => {
       if (Array.isArray(value)) {
         component.data = value;

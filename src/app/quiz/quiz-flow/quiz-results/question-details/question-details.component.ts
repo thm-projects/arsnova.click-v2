@@ -139,8 +139,8 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
       }
 
       this._question = this.quizService.quiz.questionList[this._questionIndex];
-      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
-      this.questionTextService.change(this._question.questionText);
+      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText)).subscribe();
+      this.questionTextService.change(this._question.questionText).subscribe();
     });
 
     if (isPlatformServer(this.platformId)) {

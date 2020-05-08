@@ -1,5 +1,5 @@
 <button (click)="openQuestionTypeModal()"
-        class="btn btn-light btn-shadow my-4 mt-md-0">
+        class="btn btn-light btn-shadow my-4 mt-md-1 mx-auto mx-md-0 d-flex">
   <span>{{'component.quiz_manager.select-available-question' | translate}}</span>
 </button>
 
@@ -13,6 +13,19 @@
              popoverClass="text-dark"
              popoverTitle="{{'component.quiz_manager.added_questions_title' | translate}}"></fa-icon>
   </small>
+  <span *ngIf="quizService.quiz?.questionList.length"
+        class="ml-auto">
+    <fa-icon (click)="hideQuestionBody()"
+             *ngIf="!hasAllQuestionBodiesHidden()"
+             [icon]="'angle-double-up'"
+             class="ml-2 cursor-pointer"
+             role="button"></fa-icon>
+    <fa-icon (click)="showQuestionBody()"
+             *ngIf="hasAllQuestionBodiesHidden()"
+             [icon]="'angle-double-down'"
+             class="ml-2 cursor-pointer"
+             role="button"></fa-icon>
+  </span>
 </h2>
 
 <h4 *ngIf="!quizService.quiz?.questionList.length">{{'component.quiz_manager.no_added_questions' | translate}}</h4>
@@ -20,60 +33,75 @@
 <ul class="list-unstyled">
 
   <li *ngFor="let elem of quizService.quiz?.questionList; let i = index;"
-      class="btn btn-outline-secondary btn-block text-left">
+      class="card mb-3">
 
-    <div class="form-row">
-
-      <div class="col-md-8">
-        <p class="text-truncate">
-          <span>{{elem.translationReferrer() | translate}}</span>
-
-          <fa-icon *ngIf="!elem.isValid()"
-                   [icon]="'exclamation-triangle'"
-                   [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
-                   class="text-warning ml-2"></fa-icon>
-
-          <span class="font-italic ml-2"
-                *ngIf="elem.tags?.length">
-            <ng-container *ngFor="let tag of elem.tags; let lastElem = last">{{tag}}
-              <ng-container *ngIf="!lastElem">, </ng-container></ng-container>
+    <div class="card-header p-2 border-bottom-0">
+      <div class="d-flex">
+        <span>{{elem.translationReferrer() | translate}}</span>
+        <div class="ml-auto">
+          <span *ngIf="isChoiceQuestion(elem)">
+            {{'component.quiz_summary.answer_amount' | translate:{amount: elem.answerOptionList?.length} }}
           </span>
-        </p>
+          <fa-icon (click)="hideQuestionBody(elem)"
+                   *ngIf="!hasQuestionBodyHidden(elem)"
+                   [icon]="'angle-up'"
+                   class="ml-2 cursor-pointer"
+                   role="button"></fa-icon>
+          <fa-icon (click)="showQuestionBody(elem)"
+                   *ngIf="hasQuestionBodyHidden(elem)"
+                   [icon]="'angle-down'"
+                   class="ml-2 cursor-pointer"
+                   role="button"></fa-icon>
+        </div>
       </div>
 
-      <div class="col-sm-auto ml-sm-auto mt-2 mt-sm-0 d-flex d-sm-block justify-content-end justify-content-sm-start">
-        <fa-icon (click)="moveQuestionUp(i)"
-                 *ngIf="i"
-                 [icon]="'arrow-up'"
-                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
-                 role="button"></fa-icon>
+      <fa-icon *ngIf="!elem.isValid()"
+               [icon]="'exclamation-triangle'"
+               [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
+               class="text-warning ml-2"></fa-icon>
 
-        <fa-icon (click)="moveQuestionDown(i)"
-                 *ngIf="i !== quizService.quiz?.questionList.length - 1"
-                 [icon]="'arrow-down'"
-                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
-                 role="button"></fa-icon>
+      <small *ngIf="elem.tags?.length"
+             class="font-italic">
+        <span *ngFor="let tag of elem.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">,</span></span>
+      </small>
+    </div>
 
-        <fa-icon (click)="updloadToQuizPool(elem)"
-                 [class.text-danger]="!elem.isValid() || !elem.tags?.length"
-                 [icon]="['fas', (isUploading(elem) ? 'spinner' : 'cloud-upload-alt')]"
-                 [ngbTooltip]="getTooltipForUpload(elem) | translate"
-                 [spin]="isUploading(elem)"
-                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
-                 role="button"></fa-icon>
+    <p *ngIf="!hasQuestionBodyHidden(elem) && elem.questionText?.length"
+       [innerHtml]="renderQuestiontext(elem.questionText) | async"
+       class="font-italic text-truncate card-body mh-20vh text-truncate-deep p-2">
+    </p>
 
-        <fa-icon (click)="trackEditQuestion()"
-                 [icon]="'edit'"
-                 [routerLink]="['/quiz', 'manager', i,  'overview']"
-                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
-                 role="button"></fa-icon>
+    <div class="card-footer d-flex p-2">
+      <fa-icon (click)="moveQuestionUp(i)"
+               *ngIf="i"
+               [icon]="'arrow-up'"
+               class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+               role="button"></fa-icon>
 
-        <fa-icon (click)="deleteQuestion(i)"
-                 [icon]="'trash'"
-                 class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
-                 role="button"></fa-icon>
+      <fa-icon (click)="moveQuestionDown(i)"
+               *ngIf="i !== quizService.quiz?.questionList.length - 1"
+               [icon]="'arrow-down'"
+               class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+               role="button"></fa-icon>
 
-      </div>
+      <fa-icon (click)="updloadToQuizPool(elem)"
+               [class.text-danger]="!elem.isValid() || !elem.tags?.length"
+               [icon]="['fas', (isUploading(elem) ? 'spinner' : 'cloud-upload-alt')]"
+               [ngbTooltip]="getTooltipForUpload(elem) | translate"
+               [spin]="isUploading(elem)"
+               class="cursor-pointer ml-auto mr-3 mr-sm-4 mr-md-2"
+               role="button"></fa-icon>
+
+      <fa-icon (click)="trackEditQuestion()"
+               [icon]="'edit'"
+               [routerLink]="['/quiz', 'manager', i,  'overview']"
+               class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+               role="button"></fa-icon>
+
+      <fa-icon (click)="deleteQuestion(i)"
+               [icon]="'trash'"
+               class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+               role="button"></fa-icon>
 
     </div>
   </li>
