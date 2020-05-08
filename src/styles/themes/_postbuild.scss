@@ -55,6 +55,11 @@ pre {
   border-radius: 10px;
 }
 
+code[class*="language-"], pre[class*="language-"] {
+  /* Overrides color value from node_modules/prism-themes/themes/prism-ghcolors.css */
+  color: $pre-color !important;
+}
+
 .progress {
   border: 1px solid $gray-200;
   overflow: visible;
