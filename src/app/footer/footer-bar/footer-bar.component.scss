@@ -55,7 +55,7 @@
   @include media-breakpoint-up(md) {
     @include border-right-radius($border-radius);
     opacity: 0.95;
-    max-width: 20vw;
+    max-width: 100%;
   }
 
   .footerElement {

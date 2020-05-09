@@ -44,6 +44,11 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
     headerLabelService.headerLabel = 'component.theme_switcher.set_theme';
 
     let footerElements;
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     if (environment.forceQuizTheme && sessionStorage.getItem(StorageKey.CurrentQuizName)) {
       this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
       footerElements = [this.footerBarService.footerElemBack];

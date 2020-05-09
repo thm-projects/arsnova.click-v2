@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -57,6 +57,11 @@ export class MemberGroupSelectComponent implements OnInit, OnDestroy {
         this._memberGroups = this.quizService.quiz.sessionConfig.nicks.memberGroups;
       }
     });
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
 

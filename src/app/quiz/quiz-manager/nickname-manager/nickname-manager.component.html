@@ -10,7 +10,7 @@
   <div [class.col-md-6]="hasSelectedCategory()"
        [class.col-sm-4]="hasSelectedCategory()"
        class="col-12 nickCategoryWrapper">
-    <div class="row no-gutters">
+    <div class="form-row">
       <div (click)="toggleSelectedCategory(cat)"
            *ngFor="let cat of availableNickCategories()"
            [class.col-sm-12]="hasSelectedCategory()"
@@ -18,7 +18,7 @@
            [class.disabled]="!getNumberOfAvailableNicksForCategory(cat)"
            [class.selectedCategory]="hasSelectedCategory(cat)"
            class="cursor-pointer col-6">
-        <div class="card cursor-pointer rounded p-2 m-1">
+        <div class="card cursor-pointer rounded p-2 mb-2">
           <p [innerHTML]="getCategoryTranslation(cat) | translate"></p>
           <p>({{getNumberOfSelectedNicksOfCategory(cat)}} / {{getNumberOfAvailableNicksForCategory(cat)}})</p>
         </div>

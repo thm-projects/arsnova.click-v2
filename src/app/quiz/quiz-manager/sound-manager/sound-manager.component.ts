@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -56,6 +56,10 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
     ]);
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }
