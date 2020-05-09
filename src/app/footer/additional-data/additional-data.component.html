@@ -1,4 +1,4 @@
-<div class="mt-3 mt-sm-0 mt-md-3 px-md-0 mb-3"
+<div class="mt-3 mt-sm-0 mt-md-3 px-md-0"
      id="quizSummaryHeader">
 
   <div class="row no-gutters">
@@ -40,10 +40,23 @@
            [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
            class="element-wrapper bg-white text-dark px-2 py-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.quiz_url' | translate}}</h5>
-        <p class="mb-0 text-wrap"
-           role="listitem">
-          <span>{{getQuizUrl(quizService.quiz?.name)}}</span>
-        </p>
+        <div class="d-flex flex-wrap">
+          <p class="mb-0 text-wrap d-flex d-md-block align-items-center mw-100"
+             role="listitem">
+            <span>{{getQuizUrl(quizService.quiz?.name)}}</span>
+          </p>
+          <button (click)="copyQuizLink(getQuizUrl(quizService.quiz?.name))"
+                  [class.btn-primary]="clipboardText"
+                  [class.btn-success]="!clipboardText"
+                  [disabled]="!clipboardText"
+                  [title]="'global.copy-to-clipboard' | translate"
+                  class="btn btn-sm text-truncate ml-auto mr-auto mr-sm-0 mr-md-auto">
+            <fa-icon [icon]="'copy'"
+                     class="mr-2 cursor-pointer"></fa-icon>
+            <span *ngIf="clipboardText">{{'global.copy' | translate}}</span>
+            <span *ngIf="!clipboardText">{{'global.copied' | translate}}</span>
+          </button>
+        </div>
       </div>
     </div>
 

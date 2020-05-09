@@ -81,6 +81,18 @@ code[class*="language-"], pre[class*="language-"] {
   }
 }
 
+fa-icon {
+  &.cursor-pointer {
+    &:hover {
+      color: darken($secondary_text_color, 10)
+    }
+
+    &:active {
+      color: darken($secondary_text_color, 50)
+    }
+  }
+}
+
 #connection-indicator {
   &.fill-success {
     fill: $success;

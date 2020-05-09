@@ -41,18 +41,6 @@
   }
 }
 
-fa-icon {
-  &.cursor-pointer {
-    &:hover {
-      color: var(--secondary)
-    }
-
-    &:active {
-      color: var(--secondary)
-    }
-  }
-}
-
 .card.cursor-pointer {
   &:hover {
     .card-img-top {
