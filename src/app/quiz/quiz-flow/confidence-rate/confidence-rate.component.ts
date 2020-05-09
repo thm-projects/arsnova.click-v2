@@ -1,3 +1,4 @@
+import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -72,6 +73,10 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
     if (this.attendeeService.hasConfidenceValue()) {
       this.hasTriggeredNavigation = true;
       this.router.navigate(['/quiz', 'flow', 'results']);
+      return;
+    }
+
+    if (isPlatformServer(this.platformId)) {
       return;
     }
 

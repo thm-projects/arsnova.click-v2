@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -45,6 +46,7 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   private readonly _destroy = new Subject();
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private footerBarService: FooterBarService,
     private headerLabelService: HeaderLabelService,
     private translateService: TranslateService,
@@ -56,7 +58,9 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemBack,
     ]);
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    if (isPlatformBrowser(this.platformId)) {
+      this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    }
   }
 
   public ngOnInit(): void {
@@ -65,18 +69,20 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this._memberGroups = this.quizService.quiz.sessionConfig.nicks.memberGroups;
-      this._maxMembersPerGroup = this.quizService.quiz.sessionConfig.nicks.maxMembersPerGroup;
-      this._autoJoinToGroup = this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup;
+      this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups;
+      this._maxMembersPerGroup = this.quizService.quiz?.sessionConfig.nicks.maxMembersPerGroup;
+      this._autoJoinToGroup = this.quizService.quiz?.sessionConfig.nicks.autoJoinToGroup;
     });
   }
 
   public ngOnDestroy(): void {
-    this.quizService.quiz.sessionConfig.nicks.memberGroups = this.memberGroups;
-    this.quizService.quiz.sessionConfig.nicks.maxMembersPerGroup = this.maxMembersPerGroup;
-    this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup = this.autoJoinToGroup;
+    if (this.quizService.quiz) {
+      this.quizService.quiz.sessionConfig.nicks.memberGroups = this.memberGroups;
+      this.quizService.quiz.sessionConfig.nicks.maxMembersPerGroup = this.maxMembersPerGroup;
+      this.quizService.quiz.sessionConfig.nicks.autoJoinToGroup = this.autoJoinToGroup;
 
-    this.quizService.persist();
+      this.quizService.persist();
+    }
 
     this._destroy.next();
     this._destroy.complete();

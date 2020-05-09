@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -54,6 +55,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   private _previousSearchValue = '';
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private sanitizer: DomSanitizer,
     private quizService: QuizService,
     private footerBarService: FooterBarService,
@@ -68,6 +70,10 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
       footerElements.push(this.footerBarService.footerElemEnableCasLogin);
     }
     this.footerBarService.replaceFooterElements(footerElements);
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
   }

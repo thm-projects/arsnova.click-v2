@@ -1,3 +1,4 @@
+import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -88,6 +89,10 @@ export class NicknameSelectComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     if (this.attendeeService.ownNick) {
       this.router.navigate(['/']);
+    }
+
+    if (isPlatformServer(this.platformId)) {
+      return;
     }
 
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {

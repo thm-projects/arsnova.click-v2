@@ -36,14 +36,6 @@
            class="col-md-10 col-xl-8 offset-md-1 offset-xl-2">
         <div class="row no-gutters">
           <div class="col-12 mb-2">
-        <span (click)="resetSessionName()"
-              *ngIf="enteredSessionName"
-              [class.rounded-left]="showJoinableQuizzes && !isShowingQuiznameDatalist"
-              class="position-absolute text-light px-2 cursor-pointer d-flex flex-column justify-content-center align-items-center"
-              id="remove-quiz-name">
-          <fa-icon [icon]="'times'"
-                   class="d-flex"></fa-icon>
-        </span>
             <input #enteredSessionNameInput
                    (focus)="showQuiznameDatalist()"
                    (ngModelChange)="parseQuiznameInput(enteredSessionNameInput.value)"
@@ -57,13 +49,23 @@
                    id="name-input-field"
                    spellcheck="false"
                    type="text"/>
+
+            <span (click)="resetSessionName()"
+                  *ngIf="enteredSessionName"
+                  [class.rounded-left]="showJoinableQuizzes && !isShowingQuiznameDatalist"
+                  class="position-absolute text-light px-2 cursor-pointer d-flex flex-column justify-content-center align-items-center"
+                  id="remove-quiz-name">
+              <fa-icon [icon]="'times'"
+                       class="d-flex"></fa-icon>
+            </span>
             <span (click)="hideQuiznameDatalist()"
                   *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
                   class="position-absolute text-light px-2 cursor-pointer d-flex justify-content-center align-items-center"
                   id="collapse-quiz-name-datalist">
-          <fa-icon [icon]="'caret-up'"
-                   class="d-flex"></fa-icon>
-        </span>
+              <fa-icon [icon]="'caret-up'"
+                       class="d-flex"></fa-icon>
+            </span>
+
             <ul *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
                 class="list-group list-group-flush quiz-list">
               <li (click)="autoJoinToSession(quizname)"

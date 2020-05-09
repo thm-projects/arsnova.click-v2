@@ -88,7 +88,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
 
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.cdRef.markForCheck();
-    });
+    }).catch(() => {});
   }
 
   public ngOnDestroy(): void {

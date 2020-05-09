@@ -1,3 +1,4 @@
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, Inject, Input, OnDestroy, Output, PLATFORM_ID } from '@angular/core';
 import { FilesApiService } from '../../service/api/files/files-api.service';
 
@@ -18,6 +19,11 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
 
   @Input() set autostart(value: boolean) {
     this._autostart = value;
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.audioElement.autoplay = value;
   }
 
@@ -29,6 +35,10 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
 
   @Input() set target(value: 'lobby' | 'countdownRunning' | 'countdownEnd') {
     this._target = value;
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
     this.stopMusic();
     this.audioElement.src = this.getUrl();
@@ -53,6 +63,10 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
   @Input() set src(value: string) {
     this._src = value;
 
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.stopMusic();
     this.audioElement.src = this.getUrl();
   }
@@ -68,6 +82,10 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
       value = true;
     }
     this._loop = value ? true : null;
+
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
 
     this.audioElement.loop = this.loop;
   }
@@ -90,9 +108,12 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     return this._isPlaying;
   }
 
-  private readonly audioElement = new Audio();
+  private readonly audioElement: HTMLAudioElement;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private filesApiService: FilesApiService) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.audioElement = new Audio();
+    }
   }
 
   public getUrl(): string {
@@ -113,21 +134,35 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
   }
 
   public stopMusic(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.audioElement.pause();
     this.audioElement.currentTime = 0;
     this._isPlaying = false;
   }
 
   public isStopped(): boolean {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     return (!this.audioElement.currentTime && this.audioElement.paused) || this.audioElement.ended;
   }
 
   public ngAfterViewInit(): void {
+    if (isPlatformServer(this.platformId)) {
+      return;
+    }
+
     this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
   }
 
   public ngOnDestroy(): void {
-    this.stopMusic();
+    if (isPlatformBrowser(this.platformId)) {
+      this.stopMusic();
+    }
   }
 
 }
