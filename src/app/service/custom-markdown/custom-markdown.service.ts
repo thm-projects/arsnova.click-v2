@@ -25,6 +25,10 @@ export class CustomMarkdownService {
   }
 
   private emojiRenderer(value: string): string {
+    if (!value || typeof value !== 'string') {
+      return;
+    }
+
     const emojiMatch = value.match(/:([a-z0-9_\+\-]+):/g);
     if (emojiMatch) {
       emojiMatch.forEach(token => {
