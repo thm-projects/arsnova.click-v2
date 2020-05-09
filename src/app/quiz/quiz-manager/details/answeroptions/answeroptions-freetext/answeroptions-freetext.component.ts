@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMapTo, takeUntil } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -44,6 +44,7 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    private cd: ChangeDetectorRef,
   ) {
     super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
   }
@@ -53,12 +54,14 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
     this._testInput = (
       <HTMLTextAreaElement>event.target
     ).value;
+    this.cd.markForCheck();
   }
 
   public setMatchText(event: Event): void {
     this.getTypesafeAnswer().answerText = (
       <HTMLTextAreaElement>event.target
     ).value;
+    this.cd.markForCheck();
   }
 
   public hasTestInput(): boolean {
@@ -71,6 +74,7 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
 
   public setConfig(configIdentifier: string, configValue: boolean): void {
     this.getTypesafeAnswer().setConfig(configIdentifier, configValue);
+    this.cd.markForCheck();
   }
 
   public ngOnInit(): void {
@@ -82,6 +86,7 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
       }
 
       this._matchText = this.getTypesafeAnswer().answerText;
+      this.cd.markForCheck();
     });
   }
 

@@ -1,5 +1,6 @@
-import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
 import { switchMapTo, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
@@ -16,6 +17,7 @@ import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager
   selector: 'app-answeroptions-default',
   templateUrl: './answeroptions-default.component.html',
   styleUrls: ['./answeroptions-default.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'AnsweroptionsDefaultComponent';
@@ -28,6 +30,7 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
   public canInjectEmojis: boolean;
 
   protected _question: AbstractChoiceQuestionEntity;
+  public onChange = new Subject();
 
   get question(): AbstractChoiceQuestionEntity {
     return this._question;
@@ -41,6 +44,7 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    private cd: ChangeDetectorRef,
     private questionTextService: QuestionTextService,
   ) {
     super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
@@ -69,14 +73,17 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
     ).multipleSelectionEnabled = !(
       <SurveyQuestionEntity>this._question
     ).multipleSelectionEnabled;
+    this.onChange.next();
   }
 
   public toggleShowOneAnswerPerRow(): void {
     this._question.showOneAnswerPerRow = !this._question.showOneAnswerPerRow;
+    this.onChange.next();
   }
 
   public toggleShowAnswerContentOnButtons(): void {
     this._question.displayAnswerText = !this._question.displayAnswerText;
+    this.onChange.next();
   }
 
   public ngOnInit(): void {
@@ -103,6 +110,8 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
 
     this.quizService.quiz.questionList[this._questionIndex] = this.question;
     this.quizService.persist();
+
+    this.onChange.complete();
   }
 
   public getQuestionAsSurvey(question: AbstractChoiceQuestionEntity): SurveyQuestionEntity {
