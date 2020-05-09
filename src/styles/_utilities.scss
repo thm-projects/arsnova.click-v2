@@ -44,11 +44,11 @@
 fa-icon {
   &.cursor-pointer {
     &:hover {
-      color: lighten(#000, 50%)
+      color: var(--secondary)
     }
 
     &:active {
-      color: lighten(#000, 40%)
+      color: var(--secondary)
     }
   }
 }

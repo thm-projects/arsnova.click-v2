@@ -6,6 +6,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { of } from 'rxjs';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { environment } from '../../../../environments/environment';
 import { Attendee } from '../../../lib/attendee/attendee';
@@ -181,7 +182,7 @@ describe('QuizResultsComponent', () => {
     expect(component.showConfidenceRate(0)).toBeTruthy();
   }));
   it(`#modifyVisibleQuestion`, inject([QuestionTextService], async (questionTextService: QuestionTextService) => {
-    spyOn(questionTextService, 'changeMultiple').and.callFake(() => new Promise<void>(resolve => resolve()));
+    spyOn(questionTextService, 'changeMultiple').and.callFake(() => of([]));
     await component.modifyVisibleQuestion(0);
     expect(questionTextService.changeMultiple).toHaveBeenCalled();
   }));

@@ -70,7 +70,9 @@ export class QuizMockService {
     return of(this.quiz);
   }
 
-  public loadDataToEdit(val: string): void {}
+  public loadDataToEdit(val: string): Promise<void> {
+    return new Promise<void>(resolve => resolve());
+  }
 
   public generatePrivateKey(): string {
     return 'privateKey';

@@ -476,7 +476,7 @@
     },
     "quiz_summary": {
       "quiz_name": "Nom de quiz",
-      "question_amount": "Question",
+      "answer_amount": "{amount, plural, =0{0 Answers} one{1 Answer} other{# Answers} }",
       "validation_question_group": "Statut",
       "question_successful": "Question complète",
       "question_failed": "Question incomplète",

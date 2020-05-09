@@ -48,19 +48,19 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
 
   public addAnswer(): void {
     this._question.addDefaultAnswerOption();
-    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText)).subscribe();
   }
 
   public deleteAnswer(index: number): void {
     this._question.removeAnswerOption(index);
-    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText)).subscribe();
   }
 
   public updateAnswerValue(event: Event, index: number): void {
     this._question.answerOptionList[index].answerText = (
       <HTMLInputElement>event.target
     ).value;
-    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+    this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText)).subscribe();
   }
 
   public toggleMultipleSelectionSurvey(): void {
@@ -93,7 +93,7 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
       this.canShowAnswerContentOnButtons = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
       this.canInjectEmojis = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
 
-      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText));
+      this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText)).subscribe();
     });
   }
 

@@ -15,12 +15,12 @@
       <div class="d-flex justify-content-around align-items-center flex-wrap"
            id="answer-option-element-wrapper">
         <div *ngFor="let elem of dataSource; let i = index"
-             [style.flex-basis]="question.showOneAnswerPerRow ? '100%' : getComputedWidth()"
+             [style.flex-basis]="question?.showOneAnswerPerRow ? '100%' : getComputedWidth()"
              class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer">
-          <p *ngIf="question.displayAnswerText"
+          <p *ngIf="question?.displayAnswerText"
              [innerHTML]="sanitizeHTML(elem)"
              class="mb-0 markdown-answer text-dark mathjax-container overflow-hidden"></p>
-          <p *ngIf="!question.displayAnswerText"
+          <p *ngIf="!question?.displayAnswerText"
              class="mb-0 text-dark">{{normalizeAnswerOptionIndex(i)}}</p>
         </div>
       </div>
@@ -38,10 +38,9 @@
     <app-header [interactiveLogo]="false"
                 [logoSize]="'xs'"
                 [showHeader]="false"></app-header>
-    <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-      <p [innerHTML]="sanitizeHTML(dataSource)"
-         class="mb-0 overflow-hidden mathjax-container"></p>
-    </ng-container>
+    <div *ngIf="connectionService.serverAvailable;else notAvailableTmpl"
+         [innerHTML]="sanitizeHTML(dataSource)"
+         class="mb-0 overflow-hidden mathjax-container"></div>
   </div>
 </div>
 

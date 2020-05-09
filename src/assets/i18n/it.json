@@ -485,7 +485,7 @@
     },
     "quiz_summary": {
       "quiz_name": "Nome del quiz",
-      "question_amount": "Domande",
+      "answer_amount": "{amount, plural, =0{0 Answers} one{1 Answer} other{# Answers} }",
       "validation_question_group": "Status",
       "question_successful": "La domanda è completa",
       "question_failed": "La domanda è ancora incompleta",

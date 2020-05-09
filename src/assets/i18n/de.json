@@ -476,7 +476,7 @@
     },
     "quiz_summary": {
       "quiz_name": "Quizname",
-      "question_amount": "Fragen",
+      "answer_amount": "{amount, plural, =0{0 Antworten} one{1 Antwort} other{# Antworten} }",
       "validation_question_group": "Status",
       "question_successful": "Deine Frage ist gültig",
       "question_failed": "Die Frage ist noch unvollständig",

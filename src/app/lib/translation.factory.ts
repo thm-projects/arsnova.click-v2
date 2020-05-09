@@ -17,5 +17,5 @@ export function createUniversalTranslateLoader(transferState: TransferState, pla
 }
 
 export function createTranslateCompiler(): TranslateCompiler {
-  return new TranslateMessageFormatCompiler(new MessageFormat() as MessageFormatConfig);
+  return new TranslateMessageFormatCompiler(new MessageFormat() as unknown as MessageFormatConfig);
 }
