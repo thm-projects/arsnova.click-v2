@@ -46,7 +46,7 @@
             <span>{{getQuizUrl(quizService.quiz?.name)}}</span>
           </p>
           <button (click)="copyQuizLink(getQuizUrl(quizService.quiz?.name))"
-                  [class.btn-primary]="clipboardText"
+                  [class.btn-outline-primary]="clipboardText"
                   [class.btn-success]="!clipboardText"
                   [disabled]="!clipboardText"
                   [title]="'global.copy-to-clipboard' | translate"
