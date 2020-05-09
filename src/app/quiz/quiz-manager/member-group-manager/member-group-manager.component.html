@@ -62,12 +62,11 @@
 
     <ul *ngFor="let group of memberGroups"
         class="list-unstyled">
-      <li class="border-bottom p-2">
+      <li class="border-bottom p-2 d-flex">
         <span>{{group}}</span>
-        <span class="pointer float-right"
-              (click)="removeMemberGroup(group)">
-      <fa-icon [icon]="'trash'"></fa-icon>
-        </span>
+        <fa-icon (click)="removeMemberGroup(group)"
+                 [icon]="'trash'"
+                 class="cursor-pointer ml-auto"></fa-icon>
       </li>
     </ul>
   </div>
