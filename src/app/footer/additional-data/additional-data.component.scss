@@ -2,9 +2,9 @@
 
 #quizSummaryHeader {
 
-  @include media-breakpoint-down(sm) {
-    max-width: 540px;
-    margin: auto;
+  @include media-breakpoint-only(sm) {
+    margin-left: 15px;
+    margin-right: 15px;
   }
 
   @include media-breakpoint-down(xs) {
@@ -16,22 +16,7 @@
     max-width: 20vw;
   }
 
-  @include media-breakpoint-down(sm) {
-    > div > div {
-      &:nth-child(2n) {
-        padding-left: map_get($spacers, 1);
-      }
-
-      &:nth-child(2n + 1) {
-        padding-right: map_get($spacers, 1);
-      }
-    }
-  }
-
   .element-wrapper {
-    @include media-breakpoint-only(sm) {
-      @include border-radius;
-    }
     @include media-breakpoint-up(md) {
       @include border-right-radius($border-radius);
     }

@@ -1,4 +1,4 @@
-<div class="quizSummary mt-3 mt-sm-0 mt-md-3 px-md-0 mb-3"
+<div class="mt-3 mt-sm-0 mt-md-3 px-md-0 mb-3"
      id="quizSummaryHeader">
 
   <div class="row no-gutters">
@@ -35,7 +35,7 @@
     </div>
 
     <div *ngIf="isShowingMore"
-         class="col-6 col-md-12 mb-2 d-flex d-md-block">
+         class="col-12 col-md-12 mb-2 d-flex d-md-block">
       <div [attr.aria-label]="'component.quiz_summary.description.session_url' | translate"
            [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
            class="element-wrapper bg-white text-dark px-2 py-2 flex-grow-1 mw-100">
@@ -64,7 +64,8 @@
     </div>
 
     <div *ngIf="isShowingMore"
-         class="col-12 mb-2 d-flex d-md-block pr-0">
+         [class.col-12]="quizService.quiz?.sessionConfig.nicks.selectedNicks.length > 0"
+         class="col-6 col-md-12 mb-2 d-flex d-md-block">
       <div class="element-wrapper bg-white text-dark px-2 py-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.selected_nicks' | translate}}</h5>
 
