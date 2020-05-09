@@ -247,4 +247,12 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
       return this._hiddenQuestionBodies.length === this.quizService.quiz.questionList.length;
     }
   }
+
+  public toggleQuestionBody(elem: AbstractQuestionEntity): void {
+    if (this.hasQuestionBodyHidden(elem)) {
+      this.showQuestionBody(elem);
+    } else {
+      this.hideQuestionBody(elem);
+    }
+  }
 }

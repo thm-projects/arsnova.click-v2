@@ -38,10 +38,9 @@
     <app-header [interactiveLogo]="false"
                 [logoSize]="'xs'"
                 [showHeader]="false"></app-header>
-    <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-      <p [innerHTML]="sanitizeHTML(dataSource)"
-         class="mb-0 overflow-hidden mathjax-container"></p>
-    </ng-container>
+    <div *ngIf="connectionService.serverAvailable;else notAvailableTmpl"
+         [innerHTML]="sanitizeHTML(dataSource)"
+         class="mb-0 overflow-hidden mathjax-container"></div>
   </div>
 </div>
 

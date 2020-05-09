@@ -68,12 +68,9 @@ export class QuestionTextService {
         }
 
         if (mathjaxValue.match(/(\${1,2}\n?([^\$]*)\n?\${1,2})/)) {
-          let htmlNode = 'div';
-          if (!mathjaxValue.startsWith('$$')) {
-            result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
-            htmlNode = 'span';
-          }
-          result = result.replace(mathjaxValue, `<${htmlNode}>${mathjaxRendered[index].svg}</${htmlNode}>`);
+          const htmlNode = mathjaxValue.startsWith('$$') ? 'div' : 'span';
+          const htmlString = `<${htmlNode}>${mathjaxRendered[index].svg}</${htmlNode}>`;
+          result = this.customMarkdownService.parseGithubFlavoredMarkdown(result).replace(mathjaxValue, htmlString);
         } else {
           const searchStr = this.customMarkdownService.compile(mathjaxValue).trim();
           const searchStrWithoutParagraph = searchStr.replace('<p>', '').replace('</p>', '');

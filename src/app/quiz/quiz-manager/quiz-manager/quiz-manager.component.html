@@ -18,12 +18,12 @@
     <fa-icon (click)="hideQuestionBody()"
              *ngIf="!hasAllQuestionBodiesHidden()"
              [icon]="'angle-double-up'"
-             class="ml-2 cursor-pointer"
+             class="mx-2 cursor-pointer"
              role="button"></fa-icon>
     <fa-icon (click)="showQuestionBody()"
              *ngIf="hasAllQuestionBodiesHidden()"
              [icon]="'angle-double-down'"
-             class="ml-2 cursor-pointer"
+             class="mx-2 cursor-pointer"
              role="button"></fa-icon>
   </span>
 </h2>
@@ -35,22 +35,22 @@
   <li *ngFor="let elem of quizService.quiz?.questionList; let i = index;"
       class="card mb-3">
 
-    <div class="card-header p-2 border-bottom-0">
+    <div (click)="toggleQuestionBody(elem)"
+         class="card-header p-2 border-bottom-0 cursor-pointer">
       <div class="d-flex">
         <span>{{elem.translationReferrer() | translate}}</span>
+
         <div class="ml-auto">
           <span *ngIf="isChoiceQuestion(elem)">
             {{'component.quiz_summary.answer_amount' | translate:{amount: elem.answerOptionList?.length} }}
           </span>
-          <fa-icon (click)="hideQuestionBody(elem)"
-                   *ngIf="!hasQuestionBodyHidden(elem)"
+          <fa-icon *ngIf="!hasQuestionBodyHidden(elem)"
                    [icon]="'angle-up'"
-                   class="ml-2 cursor-pointer"
+                   class="ml-2"
                    role="button"></fa-icon>
-          <fa-icon (click)="showQuestionBody(elem)"
-                   *ngIf="hasQuestionBodyHidden(elem)"
+          <fa-icon *ngIf="hasQuestionBodyHidden(elem)"
                    [icon]="'angle-down'"
-                   class="ml-2 cursor-pointer"
+                   class="ml-2"
                    role="button"></fa-icon>
         </div>
       </div>
