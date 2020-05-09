@@ -130,6 +130,7 @@
   <div class="col-md-6">
     <div class="d-flex justify-content-center mt-5 mt-md-0">
       <app-live-preview
+        [revalidate]="onChange"
         [targetDevice]="DEVICE_TYPE.XS"
         [targetEnvironment]="ENVIRONMENT_TYPE.ANSWEROPTIONS"></app-live-preview>
     </div>

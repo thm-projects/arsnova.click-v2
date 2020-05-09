@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
@@ -23,6 +23,17 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   public dataSource: Array<string>;
 
   private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
+
+  private _revalidate: Subscription;
+
+  @Input() set revalidate(value: Subject<any>) {
+    if (this._revalidate) {
+      this._revalidate.unsubscribe();
+    }
+    if (value) {
+      this._revalidate = value.pipe(takeUntil(this._destroy)).subscribe(() => this.cd.markForCheck());
+    }
+  }
 
   get targetEnvironment(): LIVE_PREVIEW_ENVIRONMENT {
     return this._targetEnvironment;
