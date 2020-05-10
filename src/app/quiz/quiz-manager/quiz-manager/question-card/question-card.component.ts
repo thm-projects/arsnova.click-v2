@@ -131,7 +131,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   }
 
   public updloadToQuizPool(): void {
-    if (!this.elem.isValid() || !this.elem.tags?.length || this.isUploading) {
+    if (!this.elem?.isValid() || !this.elem?.tags?.length || this.isUploading) {
       return;
     }
 
@@ -149,9 +149,9 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   }
 
   public getTooltipForUpload(): string {
-    return !this.elem.isValid() ? //
+    return !this.elem?.isValid() ? //
            'component.quiz_summary.upload-to-pool.invalid-question' : //
-           !this.elem.tags?.length ? //
+           !this.elem?.tags?.length ? //
            'component.quiz_summary.upload-to-pool.no-tags' : //
            'component.quiz_summary.upload-to-pool.valid-upload';
   }
