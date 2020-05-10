@@ -31,8 +31,14 @@ import { TrackingService } from '../../../../service/tracking/tracking.service';
 })
 export class QuestionCardComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestionCardComponent';
-  private _revalidateSubscription: Subscription;
   private readonly _destroy = new Subject();
+  private _revalidateSubscription: Subscription;
+  private _elem: AbstractQuestionEntity;
+  private _canMoveUp: boolean;
+  private _canMoveDown: boolean;
+  private _isUploading: boolean;
+  private _isBodyHidden: boolean;
+
   @Input() public index: number;
   @Output() public readonly bodyVisibility = new EventEmitter<void>();
   @Output() public readonly moveUp = new EventEmitter<void>();
@@ -41,8 +47,6 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   @Output() public readonly delete = new EventEmitter<void>();
 
   public renderedQuestionText: SafeHtml;
-
-  private _elem: AbstractQuestionEntity;
 
   public get elem(): AbstractQuestionEntity {
     return this._elem;
@@ -58,7 +62,6 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _canMoveUp: boolean;
   get canMoveUp(): boolean {
     return this._canMoveUp;
   }
@@ -68,7 +71,6 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
-  private _canMoveDown: boolean;
   get canMoveDown(): boolean {
     return this._canMoveDown;
   }
@@ -88,13 +90,9 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _isUploading: boolean;
-
   public get isUploading(): boolean {
     return this._isUploading;
   }
-
-  private _isBodyHidden: boolean;
 
   public get isBodyHidden(): boolean {
     return this._isBodyHidden;

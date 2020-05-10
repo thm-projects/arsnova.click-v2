@@ -31,12 +31,12 @@
       true,
       {
         "order": [
-          "public-static-field",
           "private-static-field",
-          "public-instance-field",
+          "public-static-field",
           "private-instance-field",
-          "public-constructor",
+          "public-instance-field",
           "private-constructor",
+          "public-constructor",
           "public-instance-method",
           "protected-instance-method",
           "private-instance-method"
