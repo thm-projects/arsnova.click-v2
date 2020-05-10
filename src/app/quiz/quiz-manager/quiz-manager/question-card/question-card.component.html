@@ -1,0 +1,69 @@
+<div (click)="bodyVisibility.next()"
+     class="card-header p-2 border-bottom-0 cursor-pointer">
+  <div class="d-flex">
+    <span>{{elem.translationReferrer() | translate}}</span>
+
+    <div class="ml-auto">
+          <span *ngIf="isChoiceQuestion()">
+            {{'component.quiz_summary.answer_amount' | translate:{amount: elem.answerOptionList?.length} }}
+          </span>
+      <fa-icon *ngIf="!isBodyHidden"
+               [icon]="'angle-up'"
+               class="ml-2"
+               role="button"></fa-icon>
+      <fa-icon *ngIf="isBodyHidden"
+               [icon]="'angle-down'"
+               class="ml-2"
+               role="button"></fa-icon>
+    </div>
+  </div>
+
+  <fa-icon *ngIf="!elem.isValid()"
+           [icon]="'exclamation-triangle'"
+           [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
+           class="text-warning ml-2"></fa-icon>
+
+  <small *ngIf="elem.tags?.length"
+         class="font-italic">
+    <span *ngFor="let tag of elem.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">,</span></span>
+  </small>
+</div>
+
+<p *ngIf="!isBodyHidden && elem.questionText?.length"
+   [innerHtml]="renderedQuestionText"
+   class="font-italic card-body mh-20vh text-wrap p-2 overflow-hidden">
+</p>
+
+<div class="card-footer d-flex p-2">
+  <fa-icon (click)="moveUp.next()"
+           *ngIf="canMoveUp"
+           [icon]="'arrow-up'"
+           class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+           role="button"></fa-icon>
+
+  <fa-icon (click)="moveDown.next()"
+           *ngIf="canMoveDown"
+           [icon]="'arrow-down'"
+           class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+           role="button"></fa-icon>
+
+  <fa-icon (click)="updloadToQuizPool()"
+           [class.text-danger]="!elem.isValid() || !elem.tags?.length"
+           [icon]="['fas', (isUploading ? 'spinner' : 'cloud-upload-alt')]"
+           [ngbTooltip]="getTooltipForUpload() | translate"
+           [spin]="isUploading"
+           class="cursor-pointer ml-auto mr-3 mr-sm-4 mr-md-2"
+           role="button"></fa-icon>
+
+  <fa-icon (click)="edit.next()"
+           [icon]="'edit'"
+           [routerLink]="['/quiz', 'manager', index,  'overview']"
+           class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+           role="button"></fa-icon>
+
+  <fa-icon (click)="delete.next()"
+           [icon]="'trash'"
+           class="cursor-pointer mx-3 mx-sm-4 mx-md-2"
+           role="button"></fa-icon>
+
+</div>
