@@ -15,15 +15,17 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 })
 export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'MemberGroupManagerComponent';
-  public memberGroupName = '';
 
   private _memberGroups: Array<string> = [];
+  private _maxMembersPerGroup: number;
+  private _autoJoinToGroup: boolean;
+  private readonly _destroy = new Subject();
+
+  public memberGroupName = '';
 
   get memberGroups(): Array<string> {
     return this._memberGroups;
   }
-
-  private _maxMembersPerGroup: number;
 
   get maxMembersPerGroup(): number {
     return this._maxMembersPerGroup;
@@ -33,8 +35,6 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
     this._maxMembersPerGroup = value;
   }
 
-  private _autoJoinToGroup: boolean;
-
   get autoJoinToGroup(): boolean {
     return this._autoJoinToGroup;
   }
@@ -42,8 +42,6 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   set autoJoinToGroup(value: boolean) {
     this._autoJoinToGroup = value;
   }
-
-  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

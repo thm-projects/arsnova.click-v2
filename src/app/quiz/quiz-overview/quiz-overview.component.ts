@@ -23,17 +23,17 @@ import { UserService } from '../../service/user/user.service';
 })
 export class QuizOverviewComponent implements OnInit {
   public static TYPE = 'QuizOverviewComponent';
+
+  private _sessions: Array<QuizEntity> = [];
+  private _isSaving: Array<number> = [];
+
   public publicQuizAmount: number;
   public isStartingQuiz: QuizEntity;
   public isDeletingQuiz: QuizEntity;
 
-  private _sessions: Array<QuizEntity> = [];
-
   get sessions(): Array<QuizEntity> {
     return this._sessions;
   }
-
-  private _isSaving: Array<number> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

@@ -41,6 +41,37 @@ import { UserService } from '../../service/user/user.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  public static TYPE = 'HomeComponent';
+
+  private _serverPassword = '';
+  private _hasSuccess = '';
+  private _hasErrors = '';
+  private _isShowingQuiznameDatalist = false;
+  private _ownQuizzes: Array<string> = [];
+  private _isPerformingClick: Array<string> = [];
+
+  @ViewChild('enteredSessionNameInput', { static: true }) private enteredSessionNameInput: HTMLInputElement;
+
+  private readonly _queringQuizState$ = new Subject();
+  private readonly _destroy = new Subject();
+
+  public canJoinQuiz = false;
+  public canAddQuiz = false;
+  public canEditQuiz = false;
+  public canStartQuiz = false;
+  public passwordRequired = false;
+  public isAddingDemoQuiz = false;
+  public isAddingABCDQuiz = false;
+  public enteredSessionName = '';
+  public publicQuizAmount: number;
+  public ownPublicQuizAmount: number;
+  public canModifyQuiz: boolean = !environment.requireLoginToCreateQuiz;
+  public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
+  public showJoinableQuizzes: boolean = environment.showJoinableQuizzes;
+  public isQueryingQuizState: boolean;
+  public Title = Title;
+  public disableStatistics: boolean;
+  public readonly selectedTitle = environment.title;
 
   get serverPassword(): string {
     return this._serverPassword;
@@ -77,40 +108,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   get ownQuizzes(): Array<string> {
     return this._ownQuizzes;
   }
-
-  public static TYPE = 'HomeComponent';
-  public canJoinQuiz = false;
-  public canAddQuiz = false;
-  public canEditQuiz = false;
-  public canStartQuiz = false;
-  public passwordRequired = false;
-  public isAddingDemoQuiz = false;
-  public isAddingABCDQuiz = false;
-  public enteredSessionName = '';
-  public publicQuizAmount: number;
-  public ownPublicQuizAmount: number;
-  public canModifyQuiz: boolean = !environment.requireLoginToCreateQuiz;
-  public canUsePublicQuizzes: boolean = !environment.requireLoginToCreateQuiz;
-  public showJoinableQuizzes: boolean = environment.showJoinableQuizzes;
-  public isQueryingQuizState: boolean;
-  public Title = Title;
-  public readonly selectedTitle = environment.title;
-  public disableStatistics: boolean;
-
-  private _serverPassword = '';
-
-  private _hasSuccess = '';
-
-  private _hasErrors = '';
-
-  private _isShowingQuiznameDatalist = false;
-
-  private _ownQuizzes: Array<string> = [];
-
-  private readonly _queringQuizState$ = new Subject();
-  @ViewChild('enteredSessionNameInput', { static: true }) private enteredSessionNameInput: HTMLInputElement;
-  private readonly _destroy = new Subject();
-  private _isPerformingClick: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

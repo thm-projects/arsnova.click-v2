@@ -11,12 +11,14 @@ import { QuizService } from '../../../../../service/quiz/quiz.service';
   styleUrls: ['./bonus-token.component.scss'],
 })
 export class BonusTokenComponent implements OnInit, OnDestroy {
+  public static TYPE = 'BonusTokenComponent';
+
+  private readonly _destroy$ = new Subject();
+
   public bonusToken = '## you\'ve been to fast ##';
   public clipboardText = true;
   public quizname: string;
   public date = new Date().toLocaleDateString();
-
-  private readonly _destroy$ = new Subject();
 
   constructor(private activeModal: NgbActiveModal, private attendeeService: AttendeeService, private quizService: QuizService) {
     this.bonusToken = this.attendeeService.bonusToken;

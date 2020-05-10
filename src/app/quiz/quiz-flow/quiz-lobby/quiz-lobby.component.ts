@@ -39,19 +39,18 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
 export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'QuizLobbyComponent';
 
-  public hasTriggeredNavigation: boolean;
-
   private _nickToRemove: string;
-
-  get nickToRemove(): string {
-    return this._nickToRemove;
-  }
-
-  private readonly _messageSubscriptions: Array<string> = [];
   private _serverUnavailableModal: NgbModalRef;
   private _reconnectTimeout: any;
   private _kickMemberModalRef: NgbActiveModal;
   private readonly _destroy = new Subject();
+  private readonly _messageSubscriptions: Array<string> = [];
+
+  public hasTriggeredNavigation: boolean;
+
+  get nickToRemove(): string {
+    return this._nickToRemove;
+  }
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

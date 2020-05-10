@@ -1,10 +1,6 @@
-import { isPlatformServer } from '@angular/common';
 import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMapTo, takeUntil, tap } from 'rxjs/operators';
-import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
-import { StorageKey } from '../../../../lib/enums/enums';
+import { takeUntil } from 'rxjs/operators';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -18,45 +14,40 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 })
 export class CountdownComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'CountdownComponent';
-  public minCountdownValue = '0';
 
   private _parsedHours = '0';
+  private _parsedMinutes = '0';
+  private _parsedSeconds = '0';
+  private _plainHours = 0;
+  private _plainMinutes = 0;
+  private _plainSeconds = 0;
+
+  public minCountdownValue = '0';
+  public _countdown: string = this.minCountdownValue;
 
   get parsedHours(): string {
     return this._parsedHours;
   }
 
-  private _parsedMinutes = '0';
-
   get parsedMinutes(): string {
     return this._parsedMinutes;
   }
-
-  private _parsedSeconds = '0';
 
   get parsedSeconds(): string {
     return this._parsedSeconds;
   }
 
-  private _plainHours = 0;
-
   get plainHours(): number {
     return this._plainHours;
   }
-
-  private _plainMinutes = 0;
 
   get plainMinutes(): number {
     return this._plainMinutes;
   }
 
-  private _plainSeconds = 0;
-
   get plainSeconds(): number {
     return this._plainSeconds;
   }
-
-  private _countdown: string = this.minCountdownValue;
 
   get countdown(): string {
     return this._countdown;

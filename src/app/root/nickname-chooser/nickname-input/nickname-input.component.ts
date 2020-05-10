@@ -19,16 +19,16 @@ import { UserService } from '../../../service/user/user.service';
 })
 export class NicknameInputComponent implements OnInit, OnDestroy {
   public static TYPE = 'NicknameInputComponent';
-  public isLoggingIn: boolean;
-  public nickname: string;
 
   private _failedLoginReason = '';
+  private _messageSubscriptions: Array<string> = [];
+
+  public isLoggingIn: boolean;
+  public nickname: string;
 
   get failedLoginReason(): string {
     return this._failedLoginReason;
   }
-
-  private _messageSubscriptions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

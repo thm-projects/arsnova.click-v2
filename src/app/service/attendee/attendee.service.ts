@@ -13,9 +13,11 @@ import { BonusTokenService } from '../user/bonus-token/bonus-token.service';
 
 @Injectable({ providedIn: 'root' })
 export class AttendeeService {
-  public readonly attendeeAmount = new ReplaySubject<number>(1);
-
   private _attendees: Array<MemberEntity> = [];
+  private _ownNick: string;
+  private _bonusToken: string;
+
+  public readonly attendeeAmount = new ReplaySubject<number>(1);
 
   get attendees(): Array<MemberEntity> {
     return this._attendees;
@@ -25,8 +27,6 @@ export class AttendeeService {
     this._attendees = value;
   }
 
-  private _ownNick: string;
-
   get ownNick(): string {
     return this._ownNick;
   }
@@ -35,8 +35,6 @@ export class AttendeeService {
     this._ownNick = value;
     sessionStorage.setItem(StorageKey.CurrentNickName, value);
   }
-
-  private _bonusToken: string;
 
   get bonusToken(): string {
     return this._bonusToken;

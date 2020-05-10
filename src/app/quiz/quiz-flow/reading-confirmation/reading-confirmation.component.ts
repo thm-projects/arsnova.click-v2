@@ -28,14 +28,13 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'ReadingConfirmationComponent';
 
-  public hasTriggeredNavigation: boolean;
-
-  public questionIndex: number;
-  public questionText: string;
-
   private _serverUnavailableModal: NgbModalRef;
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy = new Subject();
+
+  public hasTriggeredNavigation: boolean;
+  public questionIndex: number;
+  public questionText: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

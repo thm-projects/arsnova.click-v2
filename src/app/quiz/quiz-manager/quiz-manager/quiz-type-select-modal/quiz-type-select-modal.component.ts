@@ -9,9 +9,9 @@ import { QuestionType } from '../../../../lib/enums/QuestionType';
   styleUrls: ['./quiz-type-select-modal.component.scss'],
 })
 export class QuizTypeSelectModalComponent {
-  public filterQuizType = '';
-
   private _selectableQuestionTypes: Array<IAvailableQuestionType> = availableQuestionTypes;
+
+  public filterQuizType = '';
 
   get selectableQuestionTypes(): Array<IAvailableQuestionType> {
     return this._selectableQuestionTypes;

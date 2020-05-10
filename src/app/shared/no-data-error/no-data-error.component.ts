@@ -10,12 +10,13 @@ import { filter, takeUntil } from 'rxjs/operators';
   styleUrls: ['./no-data-error.component.scss'],
 })
 export class NoDataErrorComponent implements OnInit, OnDestroy {
+  public static readonly TYPE = 'NoDataErrorComponent';
+
+  private readonly _destroy = new Subject();
 
   public target: Array<string>;
   public targetMessage: string;
   public targetButton: string;
-
-  private readonly _destroy = new Subject();
 
   constructor(private router: Router, private modalRef: NgbActiveModal) {}
 

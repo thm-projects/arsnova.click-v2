@@ -30,10 +30,10 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestiontextComponent';
 
+  @ViewChild('questionText', { static: true }) private textarea: ElementRef;
+
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
-
-  @ViewChild('questionText', { static: true }) private textarea: ElementRef;
 
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,

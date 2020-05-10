@@ -8,12 +8,12 @@ import { LanguageLoaderService } from '../../service/language-loader/language-lo
   styleUrls: ['./add-mode.component.scss'],
 })
 export class AddModeComponent {
-
   public static readonly TYPE = 'AddModeComponent';
+
+  private scrollY = window.scrollY;
 
   public key = '';
   public value = {};
-  private scrollY = window.scrollY;
 
   constructor(private activeModal: NgbActiveModal, public languageLoaderService: LanguageLoaderService) {
   }

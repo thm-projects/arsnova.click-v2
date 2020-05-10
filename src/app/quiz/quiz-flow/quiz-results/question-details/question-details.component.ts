@@ -28,15 +28,20 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
 })
 export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static TYPE = 'QuestionDetailsComponent';
-  public hasTriggeredNavigation: boolean;
 
   private _question: AbstractQuestionEntity;
+  private _questionIndex: number;
+  private _questionText: string;
+  private _answers: Array<string>;
+  private _serverUnavailableModal: NgbModalRef;
+  private readonly _messageSubscriptions: Array<string> = [];
+  private readonly _destroy = new Subject();
+
+  public hasTriggeredNavigation: boolean;
 
   get question(): AbstractQuestionEntity {
     return this._question;
   }
-
-  private _questionIndex: number;
 
   get questionIndex(): number {
     return this._questionIndex;
@@ -46,21 +51,13 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     this._questionIndex = value;
   }
 
-  private _questionText: string;
-
   get questionText(): string {
     return this._questionText;
   }
 
-  private _answers: Array<string>;
-
   get answers(): Array<string> {
     return this._answers;
   }
-
-  private _serverUnavailableModal: NgbModalRef;
-  private readonly _messageSubscriptions: Array<string> = [];
-  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

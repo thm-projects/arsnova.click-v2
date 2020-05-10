@@ -11,24 +11,22 @@ import { ProjectLoaderService } from '../project-loader/project-loader.service';
   providedIn: 'root',
 })
 export class LanguageLoaderService {
+  private _parsedLangData = [];
+  private _unusedKeys = [];
+  private _changedData = false;
+
+  public selectedKey: { key: string, value: { [key: string]: string } };
   public readonly language = Language;
   public readonly languageTranslation = LanguageTranslation;
   public readonly changed = new EventEmitter<void>();
-  public selectedKey: { key: string, value: { [key: string]: string } };
-
-  private _parsedLangData = [];
 
   get parsedLangData(): Array<{ key: string, value: { [key: string]: string } }> {
     return this._parsedLangData;
   }
 
-  private _unusedKeys = [];
-
   get unusedKeys(): Array<string> {
     return this._unusedKeys;
   }
-
-  private _changedData = false;
 
   get changedData(): boolean {
     return this._changedData;

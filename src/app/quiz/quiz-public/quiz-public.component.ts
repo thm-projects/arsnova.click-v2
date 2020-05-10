@@ -15,10 +15,12 @@ import { StorageService } from '../../service/storage/storage.service';
   styleUrls: ['./quiz-public.component.scss'],
 })
 export class QuizPublicComponent implements OnInit, OnDestroy {
-  public availablePublicQuizzes: Array<QuizEntity> = [];
-  public isViewingOwnQuizzes = false;
+  public static TYPE = 'QuizPublicComponent';
 
   private readonly _destroy = new Subject();
+
+  public availablePublicQuizzes: Array<QuizEntity> = [];
+  public isViewingOwnQuizzes = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

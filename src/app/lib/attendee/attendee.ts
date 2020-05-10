@@ -3,9 +3,16 @@ import { IQuizResponse } from '../interfaces/quizzes/IQuizResponse';
 import { ICasData } from '../interfaces/users/ICasData';
 
 export class Attendee implements IMemberSerialized {
-  public casProfile: ICasData;
-
   private _responses: Array<IQuizResponse>;
+  private _name: string;
+  private _currentQuizName: string;
+  private _ticket: string;
+  private _id: string;
+  private _groupName: string;
+  private _colorCode: string;
+  private _isActive: boolean;
+
+  public casProfile: ICasData;
 
   get responses(): Array<IQuizResponse> {
     return this._responses;
@@ -15,8 +22,6 @@ export class Attendee implements IMemberSerialized {
     this._responses = value;
   }
 
-  private _name: string;
-
   get name(): string {
     return this._name;
   }
@@ -24,8 +29,6 @@ export class Attendee implements IMemberSerialized {
   set name(value: string) {
     this._name = value;
   }
-
-  private _currentQuizName: string;
 
   get currentQuizName(): string {
     return this._currentQuizName;
@@ -35,8 +38,6 @@ export class Attendee implements IMemberSerialized {
     this._currentQuizName = value;
   }
 
-  private _ticket: string;
-
   get ticket(): string {
     return this._ticket;
   }
@@ -44,8 +45,6 @@ export class Attendee implements IMemberSerialized {
   set ticket(value: string) {
     this._ticket = value;
   }
-
-  private _id: string;
 
   get id(): string {
     return this._id;
@@ -55,8 +54,6 @@ export class Attendee implements IMemberSerialized {
     this._id = value;
   }
 
-  private _groupName: string;
-
   get groupName(): string {
     return this._groupName;
   }
@@ -65,8 +62,6 @@ export class Attendee implements IMemberSerialized {
     this._groupName = value;
   }
 
-  private _colorCode: string;
-
   get colorCode(): string {
     return this._colorCode;
   }
@@ -74,8 +69,6 @@ export class Attendee implements IMemberSerialized {
   set colorCode(value: string) {
     this._colorCode = value;
   }
-
-  private _isActive: boolean;
 
   get isActive(): boolean {
     return this._isActive;

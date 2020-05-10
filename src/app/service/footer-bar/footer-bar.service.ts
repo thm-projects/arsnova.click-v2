@@ -81,9 +81,10 @@ export function setFullScreen(full: boolean): void {
   providedIn: 'root',
 })
 export class FooterBarService {
+  private _footerElements: Array<IFooterBarElement> = [];
+  private _connectionState: RxStompState;
 
   public TYPE_REFERENCE: string;
-
   public footerElemQuizpool: IFooterBarElement = new FooterbarElement({
     id: 'quizpool',
     iconLayer: [
@@ -327,7 +328,6 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
   });
-
   /*
    * Currently unused since the server decides if it will cache the quiz contents
    */
@@ -342,7 +342,6 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
   });
-
   public footerElemBlockRudeNicknames: IFooterBarElement = new FooterbarElement({
     id: 'blockRudeNicknames',
     iconClass: ['fas', 'lock'],
@@ -459,13 +458,9 @@ export class FooterBarService {
     this.twitterService.tweet();
   });
 
-  private _footerElements: Array<IFooterBarElement> = [];
-
   get footerElements(): Array<IFooterBarElement> {
     return this._footerElements;
   }
-
-  private _connectionState: RxStompState;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

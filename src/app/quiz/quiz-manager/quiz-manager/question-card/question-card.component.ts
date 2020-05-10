@@ -31,6 +31,7 @@ import { TrackingService } from '../../../../service/tracking/tracking.service';
 })
 export class QuestionCardComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuestionCardComponent';
+
   private readonly _destroy = new Subject();
   private _revalidateSubscription: Subscription;
   private _elem: AbstractQuestionEntity;

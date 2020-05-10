@@ -11,8 +11,8 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class I18nService {
-  public readonly initialized = new ReplaySubject<boolean>(1);
   private _currentLanguage: Language = Language.EN;
+  public readonly initialized = new ReplaySubject<boolean>(1);
 
   get currentLanguage(): Language {
     return this._currentLanguage;

@@ -26,8 +26,10 @@ import { QuizTypeSelectModalComponent } from './quiz-type-select-modal/quiz-type
 })
 export class QuizManagerComponent implements OnInit, OnDestroy {
   public static TYPE = 'QuizManagerComponent';
+
   private _hiddenQuestionBodies: Array<AbstractQuestionEntity> = [];
   private readonly _destroy = new Subject();
+
   public readonly revalidate = new Subject<void>();
   public isLoaded: boolean;
 

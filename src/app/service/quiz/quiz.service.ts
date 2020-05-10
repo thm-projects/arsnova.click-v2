@@ -20,9 +20,13 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class QuizService {
-  public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
-
   private _isAddingPoolQuestion = false;
+  private _isOwner = false;
+  private _quiz: QuizEntity;
+  private _readingConfirmationRequested = false;
+  private _isInEditMode = false;
+
+  public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
   get isAddingPoolQuestion(): boolean {
     return this._isAddingPoolQuestion;
@@ -36,8 +40,6 @@ export class QuizService {
     this._isAddingPoolQuestion = value;
   }
 
-  private _isOwner = false;
-
   get isOwner(): boolean {
     return this._isOwner;
   }
@@ -45,8 +47,6 @@ export class QuizService {
   set isOwner(value: boolean) {
     this._isOwner = value;
   }
-
-  private _quiz: QuizEntity;
 
   get quiz(): QuizEntity {
     return this._quiz;
@@ -66,8 +66,6 @@ export class QuizService {
     this.quizUpdateEmitter.next(value);
   }
 
-  private _readingConfirmationRequested = false;
-
   get readingConfirmationRequested(): boolean {
     return this._readingConfirmationRequested;
   }
@@ -75,8 +73,6 @@ export class QuizService {
   set readingConfirmationRequested(value: boolean) {
     this._readingConfirmationRequested = value;
   }
-
-  private _isInEditMode = false;
 
   get isInEditMode(): boolean {
     return this._isInEditMode;

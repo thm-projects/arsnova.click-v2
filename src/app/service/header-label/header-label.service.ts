@@ -8,9 +8,10 @@ import { Title } from '../../lib/enums/enums';
   providedIn: 'root',
 })
 export class HeaderLabelService {
-  public isUnavailableModalOpen: boolean;
-
   private _headerLabelParams = {};
+  private _headerLabel = 'default';
+
+  public isUnavailableModalOpen: boolean;
 
   get headerLabelParams(): Object {
     return this._headerLabelParams;
@@ -20,8 +21,6 @@ export class HeaderLabelService {
     this._headerLabelParams = value;
     this.regenerateTitle();
   }
-
-  private _headerLabel = 'default';
 
   get headerLabel(): string {
     return this._headerLabel;

@@ -16,9 +16,11 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class ThemesService {
-  public readonly themeChanged: EventEmitter<QuizTheme> = new EventEmitter<QuizTheme>();
-
   private _currentTheme: QuizTheme;
+  private _themes: Array<ITheme> = environment.availableQuizThemes.map(t => themes.find(theme => theme.id === t));
+  private readonly _defaultTheme: QuizTheme;
+
+  public readonly themeChanged: EventEmitter<QuizTheme> = new EventEmitter<QuizTheme>();
 
   get currentTheme(): QuizTheme {
     return this._currentTheme;
@@ -28,13 +30,9 @@ export class ThemesService {
     return this._defaultTheme;
   }
 
-  private _themes: Array<ITheme> = environment.availableQuizThemes.map(t => themes.find(theme => theme.id === t));
-
   get themes(): Array<ITheme> {
     return this._themes;
   }
-
-  private readonly _defaultTheme: QuizTheme;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

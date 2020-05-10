@@ -10,9 +10,10 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 })
 export class AdditionalDataComponent {
   public static TYPE = 'AdditionalDataComponent';
-  public clipboardText = true;
 
   private _isShowingMore: boolean = window.innerWidth >= 768;
+
+  public clipboardText = true;
 
   get isShowingMore(): boolean {
     return this._isShowingMore;

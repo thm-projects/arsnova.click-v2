@@ -11,20 +11,22 @@ import { HeaderLabelService } from '../../../service/header-label/header-label.s
 import { QuizService } from '../../../service/quiz/quiz.service';
 
 export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public showSaveQuizButton = false;
+  private _queryParams: Params = {};
+  private readonly _destroy = new Subject();
+
   protected initialized$ = new ReplaySubject(1);
+  protected _question: AbstractQuestionEntity;
+  protected _questionIndex: number;
+
+  public showSaveQuizButton = false;
 
   get queryParams(): Params {
     return this._queryParams;
   }
 
-  protected _question: AbstractQuestionEntity;
-
   get question(): AbstractQuestionEntity {
     return this._question;
   }
-
-  protected _questionIndex: number;
 
   get questionIndex(): number {
     return this._questionIndex;
@@ -33,9 +35,6 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
   get destroy(): Subject<any> {
     return this._destroy;
   }
-
-  private _queryParams: Params = {};
-  private readonly _destroy = new Subject();
 
   protected constructor(
     protected platformId: Object,

@@ -2,12 +2,13 @@ import { SecurityContext } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 export abstract class AbstractProgressBar {
+  private _percent: number;
+  private _base: number;
+
   public absolute: number;
   public label: string;
   public normalizedAnswerIndex: string;
   public progressbarCssClass: string;
-
-  private _percent: number;
 
   get percent(): number {
     return this._percent;
@@ -16,8 +17,6 @@ export abstract class AbstractProgressBar {
   set percent(value: number) {
     this._percent = value;
   }
-
-  private _base: number;
 
   get base(): number {
     return this._base;
