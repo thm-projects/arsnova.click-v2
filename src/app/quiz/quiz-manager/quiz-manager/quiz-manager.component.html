@@ -68,7 +68,7 @@
 
     <p *ngIf="!hasQuestionBodyHidden(elem) && elem.questionText?.length"
        [innerHtml]="renderQuestiontext(elem.questionText) | async"
-       class="font-italic text-truncate card-body mh-20vh text-truncate-deep p-2">
+       class="font-italic card-body mh-20vh text-wrap p-2 overflow-hidden">
     </p>
 
     <div class="card-footer d-flex p-2">
