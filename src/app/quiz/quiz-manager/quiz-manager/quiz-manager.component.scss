@@ -9,3 +9,9 @@
 .mh-20vh {
   max-height: 20vh;
 }
+
+:host .card-body {
+  ::ng-deep code {
+    color: inherit;
+  }
+}
