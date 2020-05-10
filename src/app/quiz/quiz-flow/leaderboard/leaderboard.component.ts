@@ -28,7 +28,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./leaderboard.component.scss'],
 })
 export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'LeaderboardComponent';
+  public static readonly TYPE = 'LeaderboardComponent';
 
   private _questionIndex: number;
   private _leaderBoardCorrect: Array<ILeaderBoardItem> = [];

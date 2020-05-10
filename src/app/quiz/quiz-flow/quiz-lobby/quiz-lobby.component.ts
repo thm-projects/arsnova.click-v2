@@ -37,7 +37,7 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
   styleUrls: ['./quiz-lobby.component.scss'],
 })
 export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'QuizLobbyComponent';
+  public static readonly TYPE = 'QuizLobbyComponent';
 
   private _nickToRemove: string;
   private _serverUnavailableModal: NgbModalRef;

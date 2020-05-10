@@ -123,7 +123,7 @@ const ItalicMarkdownButton = new MarkdownBarElement({
   styleUrls: ['./markdown-bar.component.scss'],
 })
 export class MarkdownBarComponent {
-  public static TYPE = 'MarkdownBarComponent';
+  public static readonly TYPE = 'MarkdownBarComponent';
   public markdownBarElements = Array<MarkdownBarElement>();
   @Output() public connectorEmitter: EventEmitter<string> = new EventEmitter<string>();
 

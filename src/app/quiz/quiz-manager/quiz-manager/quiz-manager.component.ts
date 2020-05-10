@@ -25,7 +25,7 @@ import { QuizTypeSelectModalComponent } from './quiz-type-select-modal/quiz-type
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizManagerComponent implements OnInit, OnDestroy {
-  public static TYPE = 'QuizManagerComponent';
+  public static readonly TYPE = 'QuizManagerComponent';
 
   private _hiddenQuestionBodies: Array<AbstractQuestionEntity> = [];
   private readonly _destroy = new Subject();

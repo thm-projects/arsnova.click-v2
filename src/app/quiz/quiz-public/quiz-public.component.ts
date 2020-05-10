@@ -15,7 +15,7 @@ import { StorageService } from '../../service/storage/storage.service';
   styleUrls: ['./quiz-public.component.scss'],
 })
 export class QuizPublicComponent implements OnInit, OnDestroy {
-  public static TYPE = 'QuizPublicComponent';
+  public static readonly TYPE = 'QuizPublicComponent';
 
   private readonly _destroy = new Subject();
 

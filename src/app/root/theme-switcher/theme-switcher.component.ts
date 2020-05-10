@@ -20,7 +20,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   styleUrls: ['./theme-switcher.component.scss'],
 })
 export class ThemeSwitcherComponent implements OnInit, OnDestroy {
-  public static TYPE = 'ThemeSwitcherComponent';
+  public static readonly TYPE = 'ThemeSwitcherComponent';
 
   private _themeChangedEmitter = new EventEmitter<string>();
 

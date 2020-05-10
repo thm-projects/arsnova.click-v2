@@ -20,7 +20,7 @@ import { UserService } from '../../../service/user/user.service';
   styleUrls: ['./nickname-select.component.scss'],
 })
 export class NicknameSelectComponent implements OnInit, OnDestroy {
-  public static TYPE = 'NicknameSelectComponent';
+  public static readonly TYPE = 'NicknameSelectComponent';
 
   private _nicks: Array<string> = [];
   private _messageSubscriptions: Array<string> = [];

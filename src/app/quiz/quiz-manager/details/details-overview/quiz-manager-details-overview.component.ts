@@ -18,7 +18,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   styleUrls: ['./quiz-manager-details-overview.component.scss'],
 })
 export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent {
-  public static TYPE = 'QuizManagerDetailsOverviewComponent';
+  public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
   public readonly environment = environment;
 
   constructor(

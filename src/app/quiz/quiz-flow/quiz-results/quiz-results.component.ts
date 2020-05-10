@@ -33,7 +33,7 @@ import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-conf
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'QuizResultsComponent';
+  public static readonly TYPE = 'QuizResultsComponent';
 
   private _hideProgressbarStyle = true;
   private _selectedQuestionIndex: number;

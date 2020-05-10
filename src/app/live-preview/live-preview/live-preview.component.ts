@@ -18,7 +18,7 @@ import { QuizService } from '../../service/quiz/quiz.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LivePreviewComponent implements OnInit, OnDestroy {
-  public static TYPE = 'LivePreviewComponent';
+  public static readonly TYPE = 'LivePreviewComponent';
 
   private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
   private _revalidate: Subscription;

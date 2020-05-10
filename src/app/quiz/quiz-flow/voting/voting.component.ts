@@ -31,7 +31,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./voting.component.scss'],
 })
 export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'VotingComponent';
+  public static readonly TYPE = 'VotingComponent';
 
   private _answers: Array<string> = [];
   private _questionText: string;

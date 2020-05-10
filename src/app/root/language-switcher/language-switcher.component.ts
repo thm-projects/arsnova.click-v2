@@ -11,7 +11,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   styleUrls: ['./language-switcher.component.scss'],
 })
 export class LanguageSwitcherComponent {
-  public static TYPE = 'LanguageSwitcherComponent';
+  public static readonly TYPE = 'LanguageSwitcherComponent';
 
   private _availableLanguage: Array<{ text: LanguageTranslation, tag: string }> = [];
 

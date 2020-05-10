@@ -25,10 +25,11 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./confidence-rate.component.scss'],
 })
 export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'ConfidenceRateComponent';
+  public static readonly TYPE = 'ConfidenceRateComponent';
 
   private _confidenceValue = '100';
   private _serverUnavailableModal: NgbModalRef;
+
   private readonly _destroy = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
 

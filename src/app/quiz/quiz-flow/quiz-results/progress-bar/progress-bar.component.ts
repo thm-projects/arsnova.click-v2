@@ -14,7 +14,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   styleUrls: ['./progress-bar.component.scss'],
 })
 export class ProgressBarComponent {
-  public static TYPE = 'ProgressBarComponent';
+  public static readonly TYPE = 'ProgressBarComponent';
 
   @Input() public data: Array<string>;
   @Input() public questionIndex: number;

@@ -14,7 +14,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   styleUrls: ['./info.component.scss'],
 })
 export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
-  public static TYPE = 'InfoComponent';
+  public static readonly TYPE = 'InfoComponent';
 
   private readonly _destroy = new Subject();
   @ViewChild('buttonHeader', { static: true }) private buttonHeader: ElementRef;

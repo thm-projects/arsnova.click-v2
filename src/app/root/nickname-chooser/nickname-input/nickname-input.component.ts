@@ -18,7 +18,7 @@ import { UserService } from '../../../service/user/user.service';
   styleUrls: ['./nickname-input.component.scss'],
 })
 export class NicknameInputComponent implements OnInit, OnDestroy {
-  public static TYPE = 'NicknameInputComponent';
+  public static readonly TYPE = 'NicknameInputComponent';
 
   private _failedLoginReason = '';
   private _messageSubscriptions: Array<string> = [];

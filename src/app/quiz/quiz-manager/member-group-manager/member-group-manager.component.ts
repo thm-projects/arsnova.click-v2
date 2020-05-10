@@ -14,7 +14,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./member-group-manager.component.scss'],
 })
 export class MemberGroupManagerComponent implements OnInit, OnDestroy {
-  public static TYPE = 'MemberGroupManagerComponent';
+  public static readonly TYPE = 'MemberGroupManagerComponent';
 
   private _memberGroups: Array<string> = [];
   private _maxMembersPerGroup: number;

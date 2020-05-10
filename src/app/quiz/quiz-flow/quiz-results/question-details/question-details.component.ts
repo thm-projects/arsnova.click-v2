@@ -27,7 +27,7 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'QuestionDetailsComponent';
+  public static readonly TYPE = 'QuestionDetailsComponent';
 
   private _question: AbstractQuestionEntity;
   private _questionIndex: number;

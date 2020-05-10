@@ -20,7 +20,7 @@ import { UpdateCheckService } from '../../service/update-check/update-check.serv
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  public static TYPE = 'HeaderComponent';
+  public static readonly TYPE = 'HeaderComponent';
 
   private _storage: StorageEstimate;
   private isThemePreview: boolean;

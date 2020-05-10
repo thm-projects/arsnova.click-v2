@@ -9,10 +9,14 @@ import { I18nService } from '../../../../service/i18n/i18n.service';
   styleUrls: ['./confidence-rate.component.scss'],
 })
 export class ConfidenceRateComponent {
-  public static TYPE = 'ConfidenceRateComponent';
-  public absolute: number;
+  public static readonly TYPE = 'ConfidenceRateComponent';
 
   private _percent: string;
+  private _base: number;
+  private _data: Object;
+  private _name: string;
+
+  public absolute: number;
 
   get percent(): string {
     return this._percent;
@@ -22,8 +26,6 @@ export class ConfidenceRateComponent {
     this._percent = value;
   }
 
-  private _base: number;
-
   get base(): number {
     return this._base;
   }
@@ -32,8 +34,6 @@ export class ConfidenceRateComponent {
     this._base = value;
   }
 
-  private _data: Object;
-
   @Input() set data(value: any) {
     this._data = value;
     this.percent = value.percent;
@@ -41,8 +41,6 @@ export class ConfidenceRateComponent {
     this.absolute = value.absolute;
     this.cd.markForCheck();
   }
-
-  private _name: string;
 
   @Input() set name(value: string) {
     this._name = this.customMarkdownService.parseGithubFlavoredMarkdown(value);

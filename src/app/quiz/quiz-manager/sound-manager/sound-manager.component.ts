@@ -16,7 +16,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./sound-manager.component.scss'],
 })
 export class SoundManagerComponent implements OnInit, OnDestroy {
-  public static TYPE = 'SoundManagerComponent';
+  public static readonly TYPE = 'SoundManagerComponent';
 
   private _lobbySongs: Array<ISong> = [];
 

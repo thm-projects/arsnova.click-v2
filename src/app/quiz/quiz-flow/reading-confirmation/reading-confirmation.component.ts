@@ -26,7 +26,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./reading-confirmation.component.scss'],
 })
 export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'ReadingConfirmationComponent';
+  public static readonly TYPE = 'ReadingConfirmationComponent';
 
   private _serverUnavailableModal: NgbModalRef;
   private readonly _messageSubscriptions: Array<string> = [];

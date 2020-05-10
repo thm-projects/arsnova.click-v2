@@ -22,7 +22,7 @@ import { UserService } from '../../service/user/user.service';
   styleUrls: ['./quiz-overview.component.scss'],
 })
 export class QuizOverviewComponent implements OnInit {
-  public static TYPE = 'QuizOverviewComponent';
+  public static readonly TYPE = 'QuizOverviewComponent';
 
   private _sessions: Array<QuizEntity> = [];
   private _isSaving: Array<number> = [];

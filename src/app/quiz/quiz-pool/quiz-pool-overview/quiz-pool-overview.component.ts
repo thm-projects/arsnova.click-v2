@@ -33,7 +33,7 @@ import { SharedService } from '../../../service/shared/shared.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
-  public static TYPE = 'QuizPoolOverviewComponent';
+  public static readonly TYPE = 'QuizPoolOverviewComponent';
 
   private _tagsForCloud: Array<CloudData> = [];
   private _tags: Array<CloudData> = [];

@@ -30,7 +30,7 @@ import { TrackingService } from '../../../../service/tracking/tracking.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuestionCardComponent implements OnInit, OnDestroy {
-  public static TYPE = 'QuestionCardComponent';
+  public static readonly TYPE = 'QuestionCardComponent';
 
   private readonly _destroy = new Subject();
   private _revalidateSubscription: Subscription;

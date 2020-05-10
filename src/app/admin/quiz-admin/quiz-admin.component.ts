@@ -11,7 +11,7 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizAdminComponent implements OnInit {
-  public static TYPE = 'QuizAdminComponent';
+  public static readonly TYPE = 'QuizAdminComponent';
 
   private _quizzes: Array<IAdminQuiz> = [];
   private _deletingElements: Array<string> = [];

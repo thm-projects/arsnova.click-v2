@@ -28,7 +28,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'QuestiontextComponent';
+  public static readonly TYPE = 'QuestiontextComponent';
 
   @ViewChild('questionText', { static: true }) private textarea: ElementRef;
 

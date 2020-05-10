@@ -18,7 +18,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NicknameManagerComponent implements OnInit, OnDestroy {
-  public static TYPE = 'NicknameManagerComponent';
+  public static readonly TYPE = 'NicknameManagerComponent';
 
   private _availableNicks: IAvailableNicks;
   private _selectedCategory = '';

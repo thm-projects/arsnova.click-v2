@@ -15,7 +15,7 @@ import { TwitterService } from '../../service/twitter/twitter.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TwitterCardsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'TwitterCardsComponent';
+  public static readonly TYPE = 'TwitterCardsComponent';
 
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy$ = new Subject();

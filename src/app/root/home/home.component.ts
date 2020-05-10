@@ -41,7 +41,7 @@ import { UserService } from '../../service/user/user.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  public static TYPE = 'HomeComponent';
+  public static readonly TYPE = 'HomeComponent';
 
   private _serverPassword = '';
   private _hasSuccess = '';

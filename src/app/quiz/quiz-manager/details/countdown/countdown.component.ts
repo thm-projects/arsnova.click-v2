@@ -13,7 +13,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   styleUrls: ['./countdown.component.scss'],
 })
 export class CountdownComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'CountdownComponent';
+  public static readonly TYPE = 'CountdownComponent';
 
   private _parsedHours = '0';
   private _parsedMinutes = '0';

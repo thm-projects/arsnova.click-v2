@@ -9,7 +9,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   styleUrls: ['./additional-data.component.scss'],
 })
 export class AdditionalDataComponent {
-  public static TYPE = 'AdditionalDataComponent';
+  public static readonly TYPE = 'AdditionalDataComponent';
 
   private _isShowingMore: boolean = window.innerWidth >= 768;
 

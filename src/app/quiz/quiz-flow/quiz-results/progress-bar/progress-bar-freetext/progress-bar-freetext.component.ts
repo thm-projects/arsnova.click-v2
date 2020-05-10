@@ -8,7 +8,7 @@ import { AbstractProgressBar } from '../AbstractProgressBar';
   styleUrls: ['./progress-bar-freetext.component.scss'],
 })
 export class ProgressBarFreetextComponent extends AbstractProgressBar {
-  public static TYPE = 'ProgressBarFreetextComponent';
+  public static readonly TYPE = 'ProgressBarFreetextComponent';
 
   @Input() set attendeeData(value: any) {
     this.initData(value);

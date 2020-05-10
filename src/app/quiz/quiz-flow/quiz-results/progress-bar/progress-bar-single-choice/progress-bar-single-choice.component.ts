@@ -8,7 +8,7 @@ import { AbstractProgressBar } from '../AbstractProgressBar';
   styleUrls: ['./progress-bar-single-choice.component.scss'],
 })
 export class ProgressBarSingleChoiceComponent extends AbstractProgressBar {
-  public static TYPE = 'ProgressBarSingleChoiceComponent';
+  public static readonly TYPE = 'ProgressBarSingleChoiceComponent';
 
   @Input() set attendeeData(value: any) {
     this.initData(value);

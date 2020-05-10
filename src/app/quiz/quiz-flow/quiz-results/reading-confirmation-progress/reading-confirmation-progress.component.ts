@@ -9,7 +9,7 @@ import { I18nService } from '../../../../service/i18n/i18n.service';
   styleUrls: ['./reading-confirmation-progress.component.scss'],
 })
 export class ReadingConfirmationProgressComponent {
-  public static TYPE = 'ReadingConfirmationProgressComponent';
+  public static readonly TYPE = 'ReadingConfirmationProgressComponent';
 
   private _percent: string;
   private _base: number;

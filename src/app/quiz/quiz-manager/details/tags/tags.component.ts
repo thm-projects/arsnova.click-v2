@@ -16,7 +16,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   styleUrls: ['./tags.component.scss'],
 })
 export class TagsComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'TagsComponent';
+  public static readonly TYPE = 'TagsComponent';
 
   private _tags: Array<CloudData> = [];
   private _selectedTags: Array<CloudData> = [];

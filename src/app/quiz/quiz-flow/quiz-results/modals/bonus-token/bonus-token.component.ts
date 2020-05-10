@@ -11,7 +11,7 @@ import { QuizService } from '../../../../../service/quiz/quiz.service';
   styleUrls: ['./bonus-token.component.scss'],
 })
 export class BonusTokenComponent implements OnInit, OnDestroy {
-  public static TYPE = 'BonusTokenComponent';
+  public static readonly TYPE = 'BonusTokenComponent';
 
   private readonly _destroy$ = new Subject();
 
