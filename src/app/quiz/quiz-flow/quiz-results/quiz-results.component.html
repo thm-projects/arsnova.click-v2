@@ -14,6 +14,16 @@
   <div *ngIf="visibleQuestions.length > 1 || showStartQuizButton || showStopCountdownButton || showStopQuizButton"
        class="my-3 overflow-auto btn-header">
     <div class="btn-group">
+      <ng-container *ngIf="visibleQuestions.length > 1">
+        <button (click)="modifyVisibleQuestion(i)"
+                *ngFor="let question of visibleQuestions; let i = index"
+                [class.disabled]="i === selectedQuestionIndex || countdown > 0"
+                [disabled]="i === selectedQuestionIndex || countdown > 0"
+                class="btn btn-primary text-nowrap">
+          <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
+        </button>
+      </ng-container>
+
       <button (click)="startQuiz()"
               *ngIf="showStartQuizButton && !(showStopCountdownButton || showStopQuizButton)"
               [class.w-100]="quizService.getVisibleQuestions().length"
@@ -56,16 +66,6 @@
                  [icon]="'spinner'"
                  [spin]="true"></fa-icon>
       </button>
-
-      <ng-container *ngIf="visibleQuestions.length > 1">
-        <button (click)="modifyVisibleQuestion(i)"
-                *ngFor="let question of visibleQuestions; let i = index"
-                [class.disabled]="i === selectedQuestionIndex || countdown > 0"
-                [disabled]="i === selectedQuestionIndex || countdown > 0"
-                class="btn btn-primary text-nowrap">
-          <span>{{'component.liveResults.question_number' | translate}} {{i + 1}}</span>
-        </button>
-      </ng-container>
     </div>
   </div>
 

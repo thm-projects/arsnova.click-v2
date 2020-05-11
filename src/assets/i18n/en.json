@@ -442,7 +442,7 @@
       "ranking": "Ranking",
       "reading_confirmation": "Reading confirmation",
       "show_question": "Show next question",
-      "start_round": "Start Quiz",
+      "start_round": "Next question",
       "confirm_read": "Got that!",
       "title_reading_confirmation": "Question read...",
       "title_running_countdown": "Voting...",
@@ -583,7 +583,7 @@
       "connection_lost": "The connection to the server is lost",
       "back_to_quiz_administration": "Quiz Administration",
       "available-questions-filter": "Filter for your question",
-      "select-available-question": "Select now your question",
+      "select-available-question": "New question",
       "show_more": "Show more",
       "show_less": "Show less",
       "question_added": "To edit a question click on it."
