@@ -365,7 +365,7 @@
       "ranking": "Rangliste",
       "reading_confirmation": "Lesebestätigung",
       "show_question": "Nächste Frage",
-      "start_round": "Quiz starten",
+      "start_round": "Nächste Frage",
       "confirm_read": "Ich habe die Frage verstanden",
       "title_reading_confirmation": "Fragen gelesen...",
       "title_running_countdown": "Abstimmung...",
@@ -471,7 +471,7 @@
         "added_questions": "Um eine Frage hinzuzufügen, ziehe eine Vorlage hierher oder klick auf sie. Wenn du die eingefügte Vorlage berührst, siehst du, was du damit machen kannst: Frage editieren, Reihenfolge der Fragen ändern oder die Frage löschen."
       },
       "available-questions-filter": "Filtere nach deiner Vorlage",
-      "select-available-question": "Wähle jetzt deine Vorlage",
+      "select-available-question": "Neue Frage",
       "show_more": "Zeige mehr",
       "show_less": "Zeige weniger"
     },
