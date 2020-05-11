@@ -16,7 +16,7 @@ import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'AnsweroptionsFreetextComponent';
+  public static readonly TYPE = 'AnsweroptionsFreetextComponent';
 
   protected _question: FreeTextQuestionEntity;
 

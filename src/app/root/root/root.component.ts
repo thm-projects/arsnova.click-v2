@@ -34,13 +34,14 @@ import { UserService } from '../../service/user/user.service';
   styleUrls: ['./root.component.scss'],
 })
 export class RootComponent implements OnInit, AfterViewInit {
-  public static TYPE = 'RootComponent';
-  public isInQuizManager = false;
-  public isLoading = false;
+  public static readonly TYPE = 'RootComponent';
 
   private _stompSubscription: Subscription;
-  private readonly _destroy = new Subject();
   private _rendererInstance: Renderer2;
+  private readonly _destroy = new Subject();
+
+  public isInQuizManager = false;
+  public isLoading = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

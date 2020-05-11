@@ -16,7 +16,7 @@ import { ThemesService } from '../../service/themes/themes.service';
   styleUrls: ['./quiz-join.component.scss'],
 })
 export class QuizJoinComponent implements OnInit, OnDestroy {
-  public static TYPE = 'QuizJoinComponent';
+  public static readonly TYPE = 'QuizJoinComponent';
   private readonly _destroy = new Subject();
 
   constructor(

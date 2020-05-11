@@ -18,13 +18,17 @@ import { QuizService } from '../../service/quiz/quiz.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LivePreviewComponent implements OnInit, OnDestroy {
-  public static TYPE = 'LivePreviewComponent';
-  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
-  public dataSource: Array<string>;
+  public static readonly TYPE = 'LivePreviewComponent';
 
   private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
-
   private _revalidate: Subscription;
+  private _targetDevice: DEVICE_TYPES;
+  private _question: AbstractChoiceQuestionEntity;
+  private readonly _destroy = new Subject();
+  private _questionIndex: number;
+
+  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+  public dataSource: Array<string>;
 
   @Input() set revalidate(value: Subject<any>) {
     if (this._revalidate) {
@@ -43,8 +47,6 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     this._targetEnvironment = value;
   }
 
-  private _targetDevice: DEVICE_TYPES;
-
   get targetDevice(): DEVICE_TYPES {
     return this._targetDevice;
   }
@@ -53,14 +55,9 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     this._targetDevice = value;
   }
 
-  private _question: AbstractChoiceQuestionEntity;
-
   get question(): AbstractChoiceQuestionEntity {
     return this._question;
   }
-
-  private readonly _destroy = new Subject();
-  private _questionIndex: number;
 
   constructor(
     public questionTextService: QuestionTextService,

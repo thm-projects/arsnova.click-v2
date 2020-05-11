@@ -31,33 +31,31 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./voting.component.scss'],
 })
 export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'VotingComponent';
+  public static readonly TYPE = 'VotingComponent';
+
+  private _answers: Array<string> = [];
+  private _questionText: string;
+  private _selectedAnswers: Array<number> | string | number;
+  private _currentQuestion: AbstractQuestionEntity;
+  private _serverUnavailableModal: NgbModalRef;
+  private readonly _destroy = new Subject();
+  private readonly _messageSubscriptions: Array<string> = [];
+
   public isSendingResponse: boolean;
   public hasTriggeredNavigation: boolean;
   public countdown: number;
-
-  private _answers: Array<string> = [];
 
   get answers(): Array<string> {
     return this._answers;
   }
 
-  private _questionText: string;
-
   get questionText(): string {
     return this._questionText;
   }
 
-  private _selectedAnswers: Array<number> | string | number;
-
   get selectedAnswers(): Array<number> | string | number {
     return this._selectedAnswers;
   }
-
-  private readonly _destroy = new Subject();
-  private _currentQuestion: AbstractQuestionEntity;
-  private _serverUnavailableModal: NgbModalRef;
-  private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

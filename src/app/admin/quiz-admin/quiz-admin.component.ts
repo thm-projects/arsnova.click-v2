@@ -11,18 +11,19 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizAdminComponent implements OnInit {
+  public static readonly TYPE = 'QuizAdminComponent';
+
+  private _quizzes: Array<IAdminQuiz> = [];
+  private _deletingElements: Array<string> = [];
+
   public filterDemoQuiz = false;
   public filterAbcdQuiz = false;
   public filterActiveQuiz = false;
   public filterQuizName = '';
 
-  private _quizzes: Array<IAdminQuiz> = [];
-
   get quizzes(): Array<IAdminQuiz> {
     return this._quizzes;
   }
-
-  private _deletingElements: Array<string> = [];
 
   constructor(private footerBarService: FooterBarService, private adminApiService: AdminApiService, private cdRef: ChangeDetectorRef) {
     this.updateFooterElements();

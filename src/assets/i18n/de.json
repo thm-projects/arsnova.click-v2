@@ -365,7 +365,7 @@
       "ranking": "Rangliste",
       "reading_confirmation": "Lesebestätigung",
       "show_question": "Nächste Frage",
-      "start_round": "Quiz starten",
+      "start_round": "Nächste Frage",
       "confirm_read": "Ich habe die Frage verstanden",
       "title_reading_confirmation": "Fragen gelesen...",
       "title_running_countdown": "Abstimmung...",
@@ -438,7 +438,7 @@
       "title": "Quiz-Manager",
       "available_questions_title": "Vorlagen",
       "added_questions_title": "Quizfragen",
-      "no_added_questions": "Wähle zunächst eine Vorlage …",
+      "no_added_questions": "Füge zunächst eine Frage hinzu …",
       "details": {
         "aria": {
           "btn_group": "Auswahl an Einstellungen für das Quiz"
@@ -471,13 +471,22 @@
         "added_questions": "Um eine Frage hinzuzufügen, ziehe eine Vorlage hierher oder klick auf sie. Wenn du die eingefügte Vorlage berührst, siehst du, was du damit machen kannst: Frage editieren, Reihenfolge der Fragen ändern oder die Frage löschen."
       },
       "available-questions-filter": "Filtere nach deiner Vorlage",
-      "select-available-question": "Wähle jetzt deine Vorlage",
+      "select-available-question": "Neue Frage",
       "show_more": "Zeige mehr",
-      "show_less": "Zeige weniger"
+      "show_less": "Zeige weniger",
+      "question-card": {
+        "to-bottom": "Ans Ende",
+        "down": "Nach unten",
+        "to-top": "An den Anfang",
+        "up": "Nach oben",
+        "quiz-pool-upload": "Quiz-Pool Upload",
+        "edit": "Bearbeiten",
+        "delete": "Löschen"
+      }
     },
     "quiz_summary": {
       "quiz_name": "Quizname",
-      "answer_amount": "{amount, plural, =0{0 Antworten} one{1 Antwort} other{# Antworten} }",
+      "answer_amount": "{amount, plural, =0{Keine Antwortoptionen} one{1 Antwortoption} other{# Antwortoptionen} }",
       "validation_question_group": "Status",
       "question_successful": "Deine Frage ist gültig",
       "question_failed": "Die Frage ist noch unvollständig",

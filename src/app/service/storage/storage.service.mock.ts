@@ -6,8 +6,6 @@ import { DbTable, StorageKey } from '../../lib/enums/enums';
   providedIn: 'root',
 })
 export class StorageServiceMock {
-  public stateNotifier = of(null);
-
   private _db: any = {
     initialized: of(true),
     [DbTable.Quiz]: {
@@ -36,6 +34,7 @@ export class StorageServiceMock {
       return new Promise(resolve => resolve(Object.keys({}).map(key => key)));
     },
   };
+  public stateNotifier = of(null);
 
   get db(): any {
     return this._db;

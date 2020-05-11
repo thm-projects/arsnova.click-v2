@@ -1,6 +1,5 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { takeUntil } from 'rxjs/operators';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -14,7 +13,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   styleUrls: ['./answeroptions.component.scss'],
 })
 export class AnsweroptionsComponent extends AbstractQuizManagerDetailsComponent {
-  public static TYPE = 'AnsweroptionsComponent';
+  public static readonly TYPE = 'AnsweroptionsComponent';
 
   public readonly questionType = QuestionType;
 

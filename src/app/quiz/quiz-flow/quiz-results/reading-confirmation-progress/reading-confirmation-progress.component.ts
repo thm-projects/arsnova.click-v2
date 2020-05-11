@@ -9,10 +9,15 @@ import { I18nService } from '../../../../service/i18n/i18n.service';
   styleUrls: ['./reading-confirmation-progress.component.scss'],
 })
 export class ReadingConfirmationProgressComponent {
-  public static TYPE = 'ReadingConfirmationProgressComponent';
-  public absolute: number;
+  public static readonly TYPE = 'ReadingConfirmationProgressComponent';
 
   private _percent: string;
+  private _base: number;
+  private _data: Object;
+  private _name: string;
+  private _hasData = false;
+
+  public absolute: number;
 
   get percent(): string {
     return this._percent;
@@ -22,8 +27,6 @@ export class ReadingConfirmationProgressComponent {
     this._percent = value;
   }
 
-  private _base: number;
-
   get base(): number {
     return this._base;
   }
@@ -31,8 +34,6 @@ export class ReadingConfirmationProgressComponent {
   set base(value: number) {
     this._base = value;
   }
-
-  private _data: Object;
 
   @Input() set data(value: any) {
     this._data = value;
@@ -43,13 +44,9 @@ export class ReadingConfirmationProgressComponent {
     this.cd.markForCheck();
   }
 
-  private _name: string;
-
   @Input() set name(value: string) {
     this._name = this.customMarkdownService.parseGithubFlavoredMarkdown(value);
   }
-
-  private _hasData = false;
 
   constructor(
     private i18nService: I18nService,

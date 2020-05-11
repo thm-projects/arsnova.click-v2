@@ -8,7 +8,7 @@ import { AbstractProgressBar } from '../AbstractProgressBar';
   styleUrls: ['./progress-bar-survey.component.scss'],
 })
 export class ProgressBarSurveyComponent extends AbstractProgressBar {
-  public static TYPE = 'ProgressBarSurveyComponent';
+  public static readonly TYPE = 'ProgressBarSurveyComponent';
 
   @Input() set attendeeData(value: any) {
     this.initData(value);

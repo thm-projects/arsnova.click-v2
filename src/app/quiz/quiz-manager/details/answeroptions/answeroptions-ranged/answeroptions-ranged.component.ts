@@ -1,8 +1,6 @@
-import { isPlatformServer } from '@angular/common';
 import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, takeUntil, tap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { RangedQuestionEntity } from '../../../../../lib/entities/question/RangedQuestionEntity';
 import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
@@ -16,7 +14,7 @@ import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager
   styleUrls: ['./answeroptions-ranged.component.scss'],
 })
 export class AnsweroptionsRangedComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'AnsweroptionsRangedComponent';
+  public static readonly TYPE = 'AnsweroptionsRangedComponent';
 
   protected _question: RangedQuestionEntity;
 

@@ -14,12 +14,13 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   styleUrls: ['./info.component.scss'],
 })
 export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
-  public static TYPE = 'InfoComponent';
+  public static readonly TYPE = 'InfoComponent';
+
+  private readonly _destroy = new Subject();
+  @ViewChild('buttonHeader', { static: true }) private buttonHeader: ElementRef;
+
   public currentData: string;
   public readonly infoButtons: Array<{ id: string, i18nRef: string }> = [];
-  private readonly _destroy = new Subject();
-
-  @ViewChild('buttonHeader', { static: true }) private buttonHeader: ElementRef;
 
   constructor(
     private footerBarService: FooterBarService,

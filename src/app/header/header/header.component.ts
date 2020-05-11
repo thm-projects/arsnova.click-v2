@@ -20,7 +20,15 @@ import { UpdateCheckService } from '../../service/update-check/update-check.serv
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  public static TYPE = 'HeaderComponent';
+  public static readonly TYPE = 'HeaderComponent';
+
+  private _storage: StorageEstimate;
+  private isThemePreview: boolean;
+
+  @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
+  @ViewChild('connectionIndicator', { static: true }) private connectionIndicator: ElementRef<SVGElement>;
+
+  private readonly _destroy = new Subject();
 
   @Input() public showHeader = true;
   @Input() public logoSize = 'auto';
@@ -36,16 +44,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     width: '60px',
   } : {};
 
-  private _storage: StorageEstimate;
-
   get storage(): StorageEstimate {
     return this._storage;
   }
-
-  private isThemePreview: boolean;
-  @ViewChild('connectionIndicatorPopover', { static: true }) private connectionIndicatorPopover: NgbPopover;
-  @ViewChild('connectionIndicator', { static: true }) private connectionIndicator: ElementRef<SVGElement>;
-  private readonly _destroy = new Subject();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

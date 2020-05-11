@@ -18,12 +18,17 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NicknameManagerComponent implements OnInit, OnDestroy {
-  public static TYPE = 'NicknameManagerComponent';
+  public static readonly TYPE = 'NicknameManagerComponent';
+
+  private _availableNicks: IAvailableNicks;
+  private _selectedCategory = '';
+  private _availableNicksBackup: IAvailableNicks;
+  private _previousSearchValue = '';
+  private readonly _destroy = new Subject();
+
   public readonly throttle = 0;
   public readonly scrollDistance = 4;
   public visibleData = 20;
-
-  private _availableNicks: IAvailableNicks;
 
   get availableNicks(): IAvailableNicks {
     return this._availableNicks;
@@ -39,8 +44,6 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this.cd.markForCheck();
   }
 
-  private _selectedCategory = '';
-
   get selectedCategory(): string {
     return this._selectedCategory;
   }
@@ -49,10 +52,6 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     this._selectedCategory = value;
     this.visibleData = 20;
   }
-
-  private readonly _destroy = new Subject();
-  private _availableNicksBackup: IAvailableNicks;
-  private _previousSearchValue = '';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

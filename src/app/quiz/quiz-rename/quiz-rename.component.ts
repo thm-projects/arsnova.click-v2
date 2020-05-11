@@ -17,13 +17,15 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
   styleUrls: ['./quiz-rename.component.scss'],
 })
 export class QuizRenameComponent implements OnInit, OnDestroy {
-  public static TYPE = 'QuizRenameComponent';
+  public static readonly TYPE = 'QuizRenameComponent';
+
+  private readonly _destroy = new Subject();
+  private readonly _checkingQuizAvailable = new Subject();
+
   public isQuiznameAvailable: boolean;
   public isQueringQuizname: boolean;
   public quizName = '';
   public isQuiznameMalformed: boolean;
-  private readonly _destroy = new Subject();
-  private readonly _checkingQuizAvailable = new Subject();
 
   constructor(
     public readonly fileUploadService: FileUploadService,

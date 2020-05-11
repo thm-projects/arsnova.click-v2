@@ -28,44 +28,40 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./leaderboard.component.scss'],
 })
 export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'LeaderboardComponent';
-  public isLoadingData = true;
-  public hasTriggeredNavigation: boolean;
+  public static readonly TYPE = 'LeaderboardComponent';
 
   private _questionIndex: number;
+  private _leaderBoardCorrect: Array<ILeaderBoardItem> = [];
+  private _memberGroupResults: Array<ILeaderBoardItem>;
+  private _isGlobalRanking: boolean;
+  private _ownResponse: { index: number, element: ILeaderBoardItem, closestOpponent: ILeaderBoardItem };
+  private _serverUnavailableModal: NgbModalRef;
+  private _name: string;
+  private readonly _destroy = new Subject();
+  private readonly _messageSubscriptions: Array<string> = [];
+
+  public isLoadingData = true;
+  public hasTriggeredNavigation: boolean;
 
   get questionIndex(): number {
     return this._questionIndex;
   }
 
-  private _leaderBoardCorrect: Array<ILeaderBoardItem> = [];
-
   get leaderBoardCorrect(): Array<ILeaderBoardItem> {
     return this._leaderBoardCorrect;
   }
-
-  private _memberGroupResults: Array<ILeaderBoardItem>;
 
   get memberGroupResults(): Array<ILeaderBoardItem> {
     return this._memberGroupResults;
   }
 
-  private _isGlobalRanking: boolean;
-
   get isGlobalRanking(): boolean {
     return this._isGlobalRanking;
   }
 
-  private _ownResponse: { index: number, element: ILeaderBoardItem, closestOpponent: ILeaderBoardItem };
-
   get ownResponse(): { index: number; element: ILeaderBoardItem; closestOpponent: ILeaderBoardItem } {
     return this._ownResponse;
   }
-
-  private readonly _destroy = new Subject();
-  private _serverUnavailableModal: NgbModalRef;
-  private _name: string;
-  private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

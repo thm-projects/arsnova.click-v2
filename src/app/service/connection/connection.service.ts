@@ -14,9 +14,16 @@ import { SharedService } from '../shared/shared.service';
   providedIn: 'root',
 })
 export class ConnectionService {
-  public readonly dataEmitter: ReplaySubject<IMessage> = new ReplaySubject<IMessage>();
-
   private _serverAvailable: boolean;
+  private _websocketAvailable = false;
+  private _serverStatusEmitter = new ReplaySubject<boolean>(1);
+  private _rtt = 0;
+  private _lowSpeed = false;
+  private _mediumSpeed = false;
+  private _pending = false;
+  private _isWebSocketAuthorized = false;
+
+  public readonly dataEmitter: ReplaySubject<IMessage> = new ReplaySubject<IMessage>();
 
   get serverAvailable(): boolean {
     return this._serverAvailable;
@@ -26,41 +33,25 @@ export class ConnectionService {
     this._serverAvailable = value;
   }
 
-  private _websocketAvailable = false;
-
   get websocketAvailable(): boolean {
     return this._websocketAvailable;
   }
-
-  set websocketAvailable(value: boolean) {
-    this._websocketAvailable = value;
-  }
-
-  private _serverStatusEmitter = new ReplaySubject<boolean>(1);
 
   get serverStatusEmitter(): ReplaySubject<boolean> {
     return this._serverStatusEmitter;
   }
 
-  private _rtt = 0;
-
   get rtt(): number {
     return this._rtt;
   }
-
-  private _lowSpeed = false;
 
   get lowSpeed(): boolean {
     return this._lowSpeed;
   }
 
-  private _mediumSpeed = false;
-
   get mediumSpeed(): boolean {
     return this._mediumSpeed;
   }
-
-  private _pending = false;
 
   get pending(): boolean {
     return this._pending;
@@ -69,8 +60,6 @@ export class ConnectionService {
   set pending(value: boolean) {
     this._pending = value;
   }
-
-  private _isWebSocketAuthorized = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

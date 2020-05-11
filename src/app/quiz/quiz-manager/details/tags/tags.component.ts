@@ -16,22 +16,22 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   styleUrls: ['./tags.component.scss'],
 })
 export class TagsComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'TagsComponent';
+  public static readonly TYPE = 'TagsComponent';
+
+  private _tags: Array<CloudData> = [];
+  private _selectedTags: Array<CloudData> = [];
 
   public tagName: CloudData;
-  public readonly self = this;
-  @ViewChild('instance', { static: true }) public instance: NgbTypeahead;
   public focus$ = new Subject<string>();
   public click$ = new Subject<string>();
   public hovered: number;
+  public readonly self = this;
 
-  private _tags: Array<CloudData> = [];
+  @ViewChild('instance', { static: true }) public instance: NgbTypeahead;
 
   get tags(): Array<CloudData> {
     return this._tags;
   }
-
-  private _selectedTags: Array<CloudData> = [];
 
   public get selectedTags(): Array<CloudData> {
     return this._selectedTags;

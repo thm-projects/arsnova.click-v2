@@ -8,10 +8,18 @@ import { FilesApiService } from '../../service/api/files/files-api.service';
   styleUrls: ['./audio-player.component.scss'],
 })
 export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
-  public static TYPE = 'AudioPlayerComponent';
-  @Output() public volumeChange = new EventEmitter();
+  public static readonly TYPE = 'AudioPlayerComponent';
 
   private _autostart: boolean;
+  private _target: 'lobby' | 'countdownRunning' | 'countdownEnd';
+  private _original_volume: string;
+  private _src: string;
+  private _loop = true;
+  private _volume = '1';
+  private _isPlaying = false;
+  private readonly audioElement: HTMLAudioElement;
+
+  @Output() public volumeChange = new EventEmitter();
 
   get autostart(): boolean {
     return this._autostart;
@@ -26,8 +34,6 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
 
     this.audioElement.autoplay = value;
   }
-
-  private _target: 'lobby' | 'countdownRunning' | 'countdownEnd';
 
   get target(): 'lobby' | 'countdownRunning' | 'countdownEnd' {
     return this._target;
@@ -44,8 +50,6 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     this.audioElement.src = this.getUrl();
   }
 
-  private _original_volume: string;
-
   @Input() set original_volume(value: string) {
     this._original_volume = value;
     this._volume = this._original_volume;
@@ -53,8 +57,6 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
       this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
     }
   }
-
-  private _src: string;
 
   get src(): string {
     return this._src;
@@ -70,8 +72,6 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     this.stopMusic();
     this.audioElement.src = this.getUrl();
   }
-
-  private _loop = true;
 
   get loop(): boolean {
     return this._loop;
@@ -90,8 +90,6 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     this.audioElement.loop = this.loop;
   }
 
-  private _volume = '1';
-
   get volume(): string {
     return this._volume;
   }
@@ -102,13 +100,9 @@ export class AudioPlayerComponent implements AfterViewInit, OnDestroy {
     this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
   }
 
-  private _isPlaying = false;
-
   get isPlaying(): boolean {
     return this._isPlaying;
   }
-
-  private readonly audioElement: HTMLAudioElement;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private filesApiService: FilesApiService) {
     if (isPlatformBrowser(this.platformId)) {

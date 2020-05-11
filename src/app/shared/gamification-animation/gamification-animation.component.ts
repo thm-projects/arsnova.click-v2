@@ -8,7 +8,7 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GamificationAnimationComponent {
-  public static TYPE = 'GamificationAnimationComponent';
+  public static readonly TYPE = 'GamificationAnimationComponent';
 
   private _countdownValue: number;
 

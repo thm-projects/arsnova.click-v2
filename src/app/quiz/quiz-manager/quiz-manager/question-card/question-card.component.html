@@ -1,0 +1,110 @@
+<div (click)="triggerBodyVisibility()"
+     [class.cursor-pointer]="elem?.questionText.length"
+     class="card-header p-2 border-bottom-0">
+  <div class="d-flex">
+    <span>{{elem?.translationReferrer() | translate}}</span>
+
+    <fa-icon *ngIf="!elem?.isValid()"
+             [icon]="'exclamation-triangle'"
+             [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
+             class="text-warning ml-2"></fa-icon>
+
+    <div class="ml-auto">
+      <span *ngIf="isChoiceQuestion()">
+        {{'component.quiz_summary.answer_amount' | translate:{amount: elem?.answerOptionList?.length} }}
+      </span>
+      <ng-container *ngIf="elem?.questionText.length">
+        <fa-icon *ngIf="!isBodyHidden"
+                 [icon]="'angle-up'"
+                 class="ml-2"
+                 role="button"></fa-icon>
+        <fa-icon *ngIf="isBodyHidden"
+                 [icon]="'angle-down'"
+                 class="ml-2"
+                 role="button"></fa-icon>
+      </ng-container>
+    </div>
+  </div>
+
+  <small *ngIf="elem?.tags?.length"
+         class="font-italic">
+    <span *ngFor="let tag of elem?.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">,</span></span>
+  </small>
+</div>
+
+<p *ngIf="!isBodyHidden && elem?.questionText?.length"
+   [innerHtml]="renderedQuestionText"
+   class="card-body mh-20vh text-wrap p-2 overflow-hidden">
+</p>
+
+<div class="card-footer p-2">
+
+  <div class="d-flex overflow-auto pb-1">
+    <button (click)="moveAllUp.next()"
+            *ngIf="canMoveAllUp"
+            [ngbTooltip]="'component.quiz_manager.question-card.to-top' | translate"
+            class="btn btn-light btn-sm mr-2 flex-shrink-0">
+      <span class="d-none d-md-inline mr-2">{{'component.quiz_manager.question-card.to-top' | translate}}</span>
+      <fa-icon [icon]="'angle-double-up'"
+               role="button"></fa-icon>
+    </button>
+
+    <button (click)="moveUp.next()"
+            *ngIf="canMoveUp"
+            [ngbTooltip]="'component.quiz_manager.question-card.up' | translate"
+            class="btn btn-light btn-sm mr-2 flex-shrink-0">
+      <span class="d-none d-md-inline mr-2">{{'component.quiz_manager.question-card.up' | translate}}</span>
+      <fa-icon [icon]="'arrow-up'"
+               role="button"></fa-icon>
+    </button>
+
+    <button (click)="moveAllDown.next()"
+            *ngIf="canMoveAllDown"
+            [ngbTooltip]="'component.quiz_manager.question-card.to-bottom' | translate"
+            class="btn btn-light btn-sm mr-2 flex-shrink-0">
+      <span class="d-none d-md-inline mr-2">{{'component.quiz_manager.question-card.to-bottom' | translate}}</span>
+      <fa-icon [icon]="'angle-double-down'"
+               role="button"></fa-icon>
+    </button>
+
+    <button (click)="moveDown.next()"
+            *ngIf="canMoveDown"
+            [ngbTooltip]="'component.quiz_manager.question-card.down' | translate"
+            class="btn btn-light btn-sm mr-2 flex-shrink-0">
+      <span class="d-none d-md-inline mr-2">{{'component.quiz_manager.question-card.down' | translate}}</span>
+      <fa-icon [icon]="'arrow-down'"
+               role="button"></fa-icon>
+    </button>
+
+    <div [ngbTooltip]="getTooltipForUpload() | translate"
+         class="ml-auto">
+      <button (click)="updloadToQuizPool()"
+              [disabled]="!elem?.isValid() || !elem?.tags?.length"
+              class="btn btn-light btn-sm mr-2 flex-shrink-0">
+        <span class="d-none d-lg-inline mr-2">{{'component.quiz_manager.question-card.quiz-pool-upload' | translate}}</span>
+        <fa-icon [class.text-danger]="!elem?.isValid() || !elem?.tags?.length"
+                 [icon]="['fas', (isUploading ? 'spinner' : 'cloud-upload-alt')]"
+                 [spin]="isUploading"
+                 role="button"></fa-icon>
+      </button>
+    </div>
+
+    <button (click)="edit.next()"
+            [ngbTooltip]="'component.quiz_manager.question-card.edit' | translate"
+            [routerLink]="['/quiz', 'manager', index,  'overview']"
+            class="btn btn-light btn-sm mr-2 flex-shrink-0">
+      <span class="d-none d-lg-inline mr-2">{{'component.quiz_manager.question-card.edit' | translate}}</span>
+      <fa-icon [icon]="'edit'"
+               role="button"></fa-icon>
+    </button>
+
+    <button (click)="delete.next()"
+            [ngbTooltip]="'component.quiz_manager.question-card.delete' | translate"
+            class="btn btn-light btn-sm flex-shrink-0">
+      <span class="d-none d-lg-inline mr-2">{{'component.quiz_manager.question-card.delete' | translate}}</span>
+      <fa-icon [icon]="'trash'"
+               role="button"></fa-icon>
+    </button>
+  </div>
+
+</div>

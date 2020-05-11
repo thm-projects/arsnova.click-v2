@@ -16,6 +16,12 @@ import { UserService } from '../../service/user/user.service';
 })
 export class LoginComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'LoginComponent';
+
+  private _authorizationFailed = false;
+  private _isLoading = true;
+  private return = '';
+  private readonly _destroy = new Subject();
+
   public username = '';
   public password = '';
   public token = '';
@@ -23,21 +29,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   public hasTokenLogin: boolean;
   public isLoggingIn: string;
 
-  private _authorizationFailed = false;
-
   get authorizationFailed(): boolean {
     return this._authorizationFailed;
   }
 
-  private _isLoading = true;
-
   get isLoading(): boolean {
     return this._isLoading;
   }
-
-  private return = '';
-
-  private readonly _destroy = new Subject();
 
   constructor(
     private userService: UserService,

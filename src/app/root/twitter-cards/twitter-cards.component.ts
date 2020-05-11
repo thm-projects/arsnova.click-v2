@@ -15,13 +15,14 @@ import { TwitterService } from '../../service/twitter/twitter.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TwitterCardsComponent implements OnInit, OnDestroy {
+  public static readonly TYPE = 'TwitterCardsComponent';
 
-  public static TYPE = 'TwitterCardsComponent';
+  private readonly _messageSubscriptions: Array<string> = [];
+  private readonly _destroy$ = new Subject();
+
   public warning: string;
   public limit = 8;
   public readonly Language = Language;
-  private readonly _messageSubscriptions: Array<string> = [];
-  private readonly _destroy$ = new Subject();
 
   constructor(
     private twitterService: TwitterService,
@@ -30,10 +31,6 @@ export class TwitterCardsComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
   ) {
     this.translateService.onLangChange.pipe(takeUntil(this._destroy$)).subscribe(() => this.cd.markForCheck());
-  }
-
-  public goToTwitter(url: string): void {
-    window.open(url, '_blank');
   }
 
   public ngOnInit(): void {

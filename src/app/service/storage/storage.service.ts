@@ -8,10 +8,10 @@ import { DbState, StorageKey } from '../../lib/enums/enums';
   providedIn: 'root',
 })
 export class StorageService {
-  public readonly stateNotifier = new ReplaySubject<DbState>(1);
-
   private _db: AppDb;
   private readonly _closeDb = new Subject();
+
+  public readonly stateNotifier = new ReplaySubject<DbState>(1);
 
   get db(): AppDb {
     return this._db;

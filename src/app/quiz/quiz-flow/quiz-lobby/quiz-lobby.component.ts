@@ -37,21 +37,20 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
   styleUrls: ['./quiz-lobby.component.scss'],
 })
 export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'QuizLobbyComponent';
-
-  public hasTriggeredNavigation: boolean;
+  public static readonly TYPE = 'QuizLobbyComponent';
 
   private _nickToRemove: string;
-
-  get nickToRemove(): string {
-    return this._nickToRemove;
-  }
-
-  private readonly _messageSubscriptions: Array<string> = [];
   private _serverUnavailableModal: NgbModalRef;
   private _reconnectTimeout: any;
   private _kickMemberModalRef: NgbActiveModal;
   private readonly _destroy = new Subject();
+  private readonly _messageSubscriptions: Array<string> = [];
+
+  public hasTriggeredNavigation: boolean;
+
+  get nickToRemove(): string {
+    return this._nickToRemove;
+  }
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -275,8 +274,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
                       new Promise<any>(resolve => resolve());
       promise.then(() => {
         this.hasTriggeredNavigation = true;
-        this.router.navigate(['/quiz', 'manager', 'overview']).then(() => {
-          this.quizService.close();
+        this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName), false)
+          .then(() => this.router.navigate(['/quiz', 'manager', 'overview']))
+          .then(() => {
+            this.quizApiService.deleteActiveQuiz(this.quizService.quiz).subscribe();
           this.attendeeService.cleanUp();
         });
       }).catch(() => {});

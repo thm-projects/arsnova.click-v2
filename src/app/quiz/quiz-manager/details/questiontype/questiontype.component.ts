@@ -17,7 +17,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   styleUrls: ['./questiontype.component.scss'],
 })
 export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent implements OnInit {
-  public static TYPE = 'QuestiontypeComponent';
+  public static readonly TYPE = 'QuestiontypeComponent';
 
   private _selectableQuestionTypes = availableQuestionTypes;
 

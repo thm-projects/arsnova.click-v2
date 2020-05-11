@@ -26,16 +26,15 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./reading-confirmation.component.scss'],
 })
 export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'ReadingConfirmationComponent';
-
-  public hasTriggeredNavigation: boolean;
-
-  public questionIndex: number;
-  public questionText: string;
+  public static readonly TYPE = 'ReadingConfirmationComponent';
 
   private _serverUnavailableModal: NgbModalRef;
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy = new Subject();
+
+  public hasTriggeredNavigation: boolean;
+  public questionIndex: number;
+  public questionText: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

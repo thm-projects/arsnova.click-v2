@@ -17,10 +17,11 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   styleUrls: ['./available-quizzes.component.scss'],
 })
 export class AvailableQuizzesComponent {
-  public static TYPE = 'AvailableQuizzesComponent';
-  public startingQuiz: QuizEntity;
+  public static readonly TYPE = 'AvailableQuizzesComponent';
 
   private _sessions: Array<QuizEntity> = [];
+
+  public startingQuiz: QuizEntity;
 
   get sessions(): Array<QuizEntity> {
     return this._sessions;

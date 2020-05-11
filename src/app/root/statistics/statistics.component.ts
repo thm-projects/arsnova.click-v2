@@ -30,11 +30,13 @@ interface IStatisticDataTile {
   styleUrls: ['./statistics.component.scss'],
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
-  public statistics: IServerStatistics;
-  public readonly data: Array<IStatisticDataTile> = [];
+  public static readonly TYPE = 'StatisticsComponent';
 
   private readonly _destroy$ = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
+
+  public statistics: IServerStatistics;
+  public readonly data: Array<IStatisticDataTile> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

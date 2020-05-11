@@ -9,7 +9,7 @@ import { AbstractProgressBar } from '../AbstractProgressBar';
   styleUrls: ['./progress-bar-anonymous.component.scss'],
 })
 export class ProgressBarAnonymousComponent extends AbstractProgressBar {
-  public static TYPE = 'ProgressBarAnonymousComponent';
+  public static readonly TYPE = 'ProgressBarAnonymousComponent';
 
   public correct: { absolute: number; percent: string } = {
     absolute: 0,

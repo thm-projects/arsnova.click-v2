@@ -20,10 +20,11 @@ import { UserService } from '../user/user.service';
   providedIn: 'root',
 })
 export class NotificationService {
-  public readonly badge$: ReplaySubject<number> = new ReplaySubject<number>(1);
-  public readonly footerBadges = {};
   private _badgeAmount = 0;
   private readonly _vapidPublicKey = environment.vapidPublicKey;
+
+  public readonly badge$: ReplaySubject<number> = new ReplaySubject<number>(1);
+  public readonly footerBadges = {};
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

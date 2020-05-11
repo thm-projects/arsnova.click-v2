@@ -20,17 +20,17 @@ import { UserService } from '../../../service/user/user.service';
   styleUrls: ['./nickname-select.component.scss'],
 })
 export class NicknameSelectComponent implements OnInit, OnDestroy {
-  public static TYPE = 'NicknameSelectComponent';
-  public isLoggingIn: string;
-  public isLoading = true;
+  public static readonly TYPE = 'NicknameSelectComponent';
 
   private _nicks: Array<string> = [];
+  private _messageSubscriptions: Array<string> = [];
+
+  public isLoggingIn: string;
+  public isLoading = true;
 
   get nicks(): Array<string> {
     return this._nicks;
   }
-
-  private _messageSubscriptions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

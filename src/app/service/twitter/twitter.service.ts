@@ -15,14 +15,16 @@ import { ThemesService } from '../themes/themes.service';
   providedIn: 'root',
 })
 export class TwitterService {
+  private _questionIndex = -1;
+  private _digest: string;
+  private _quizName: string;
+  private readonly _twitterWindowFeatures = 'location=yes,resizable=yes,scrollbars=yes,status=yes,width=500,height=500';
+  private readonly _genericMessages: Array<string> = ['component.twitter.tweet.content.0'];
+
   public showTwitter = new Subject<boolean>();
   public isShowingTwitter = false;
   public twitterEnabled = false;
   public readonly tweets = new ReplaySubject<Array<ITweetEntry>>(1);
-
-  private readonly _twitterWindowFeatures = 'location=yes,resizable=yes,scrollbars=yes,status=yes,width=500,height=500';
-  private readonly _genericMessages: Array<string> = ['component.twitter.tweet.content.0'];
-  private _questionIndex = -1;
 
   set questionIndex(value: number) {
     this._questionIndex = value;
@@ -31,9 +33,6 @@ export class TwitterService {
      this.rebuildTwitterMessage();
      */
   }
-
-  private _digest: string;
-  private _quizName: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

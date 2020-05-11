@@ -1,0 +1,24 @@
+.mh-20vh {
+  max-height: 20vh;
+}
+
+.card-header {
+  touch-action: none;
+  user-select: none;
+}
+
+:host .card-body {
+  ::ng-deep code, ::ng-deep a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.card-footer > div {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+
+  button {
+    scroll-snap-align: start;
+  }
+}

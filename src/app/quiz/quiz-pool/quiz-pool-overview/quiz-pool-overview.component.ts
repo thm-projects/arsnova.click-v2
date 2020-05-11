@@ -33,27 +33,27 @@ import { SharedService } from '../../../service/shared/shared.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterContentInit {
-  public readonly formGroup: FormGroup;
-  public displayQuestionAmountWarning = true;
-  public readonly self = this;
-  public focus$ = new Subject<string>();
-  public click$ = new Subject<string>();
-  @ViewChild('instance', { static: false }) public instance: NgbTypeahead;
+  public static readonly TYPE = 'QuizPoolOverviewComponent';
 
   private _tagsForCloud: Array<CloudData> = [];
+  private _tags: Array<CloudData> = [];
+  private readonly _destroy = new Subject();
+  private readonly _viewInit$ = new ReplaySubject(1);
+
+  public displayQuestionAmountWarning = true;
+  public focus$ = new Subject<string>();
+  public click$ = new Subject<string>();
+  public readonly formGroup: FormGroup;
+  public readonly self = this;
+  @ViewChild('instance', { static: false }) public instance: NgbTypeahead;
 
   public get tagsForCloud(): Array<CloudData> {
     return this._tagsForCloud;
   }
 
-  private _tags: Array<CloudData> = [];
-
   public get tags(): Array<CloudData> {
     return this._tags;
   }
-
-  private readonly _destroy = new Subject();
-  private readonly _viewInit$ = new ReplaySubject(1);
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

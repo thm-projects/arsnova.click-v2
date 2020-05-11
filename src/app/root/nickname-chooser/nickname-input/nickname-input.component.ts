@@ -18,17 +18,17 @@ import { UserService } from '../../../service/user/user.service';
   styleUrls: ['./nickname-input.component.scss'],
 })
 export class NicknameInputComponent implements OnInit, OnDestroy {
-  public static TYPE = 'NicknameInputComponent';
-  public isLoggingIn: boolean;
-  public nickname: string;
+  public static readonly TYPE = 'NicknameInputComponent';
 
   private _failedLoginReason = '';
+  private _messageSubscriptions: Array<string> = [];
+
+  public isLoggingIn: boolean;
+  public nickname: string;
 
   get failedLoginReason(): string {
     return this._failedLoginReason;
   }
-
-  private _messageSubscriptions: Array<string> = [];
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

@@ -15,7 +15,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
   styleUrls: ['./footer-bar.component.scss'],
 })
 export class FooterBarComponent implements OnInit {
-  public static TYPE = 'FooterBarComponent';
+  public static readonly TYPE = 'FooterBarComponent';
 
   public collapsedNavbar: boolean;
 

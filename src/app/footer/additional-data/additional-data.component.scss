@@ -1,7 +1,6 @@
 @import "prebuild";
 
-#quizSummaryHeader {
-
+#wrapper {
   @include media-breakpoint-only(sm) {
     margin-left: 15px;
     margin-right: 15px;
@@ -13,16 +12,11 @@
 
   @include media-breakpoint-up(md) {
     opacity: 0.95;
-    max-width: 20vw;
   }
+}
 
-  .element-wrapper {
-    @include media-breakpoint-up(md) {
-      @include border-right-radius($border-radius);
-    }
-  }
-
-  span {
-    word-wrap: break-word;
+.element-wrapper {
+  @include media-breakpoint-up(md) {
+    @include border-right-radius($border-radius);
   }
 }

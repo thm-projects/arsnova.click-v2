@@ -5,9 +5,10 @@ import { Project } from '../../lib/enums/enums';
   providedIn: 'root',
 })
 export class ProjectLoaderService {
-  public readonly projects = Project;
-
   private _connected = false;
+  private _currentProject = Project.Frontend;
+
+  public readonly projects = Project;
 
   get connected(): boolean {
     return this._connected;
@@ -16,8 +17,6 @@ export class ProjectLoaderService {
   set connected(value: boolean) {
     this._connected = value;
   }
-
-  private _currentProject = Project.Frontend;
 
   get currentProject(): Project {
     return this._currentProject;

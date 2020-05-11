@@ -15,7 +15,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./member-group-select.component.scss'],
 })
 export class MemberGroupSelectComponent implements OnInit, OnDestroy {
-  public static TYPE = 'MemberGroupSelectComponent';
+  public static readonly TYPE = 'MemberGroupSelectComponent';
 
   private _memberGroups: Array<string> = [];
 

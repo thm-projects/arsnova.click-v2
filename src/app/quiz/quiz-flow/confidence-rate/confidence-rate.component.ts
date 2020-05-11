@@ -25,11 +25,15 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./confidence-rate.component.scss'],
 })
 export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'ConfidenceRateComponent';
-
-  public hasTriggeredNavigation: boolean;
+  public static readonly TYPE = 'ConfidenceRateComponent';
 
   private _confidenceValue = '100';
+  private _serverUnavailableModal: NgbModalRef;
+
+  private readonly _destroy = new Subject();
+  private readonly _messageSubscriptions: Array<string> = [];
+
+  public hasTriggeredNavigation: boolean;
 
   get confidenceValue(): string {
     return this._confidenceValue;
@@ -38,10 +42,6 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
   set confidenceValue(value: string) {
     this._confidenceValue = value;
   }
-
-  private _serverUnavailableModal: NgbModalRef;
-  private readonly _destroy = new Subject();
-  private readonly _messageSubscriptions: Array<string> = [];
 
   constructor(
     public quizService: QuizService,

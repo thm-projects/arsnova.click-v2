@@ -33,7 +33,15 @@ import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-conf
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static TYPE = 'QuizResultsComponent';
+  public static readonly TYPE = 'QuizResultsComponent';
+
+  private _hideProgressbarStyle = true;
+  private _selectedQuestionIndex: number;
+  private _questionText: string;
+  private _serverUnavailableModal: NgbModalRef;
+  private readonly _messageSubscriptions: Array<string> = [];
+  private readonly _destroy = new Subject();
+
   public hasTriggeredNavigation: boolean;
   public countdown: number;
   public answers: Array<string> = [];
@@ -45,8 +53,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public isLoadingQuestionData: boolean;
   public playCountdownEndSound: boolean;
 
-  private _hideProgressbarStyle = true;
-
   get hideProgressbarStyle(): boolean {
     return this._hideProgressbarStyle;
   }
@@ -55,8 +61,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     this._hideProgressbarStyle = value;
     this.cd.markForCheck();
   }
-
-  private _selectedQuestionIndex: number;
 
   get selectedQuestionIndex(): number {
     return this._selectedQuestionIndex;
@@ -72,16 +76,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     this.twitterService.questionIndex = value;
   }
 
-  private _questionText: string;
-
   get questionText(): string {
     return this._questionText;
   }
-
-  private readonly _messageSubscriptions: Array<string> = [];
-  private _serverUnavailableModal: NgbModalRef;
-
-  private readonly _destroy = new Subject();
 
   constructor(
     public quizService: QuizService,

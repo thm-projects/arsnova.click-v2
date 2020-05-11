@@ -16,13 +16,18 @@ import { UserService } from '../../service/user/user.service';
 })
 export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'I18nManagerOverviewComponent';
+
+  private _searchFilter = '';
+  private _unusedKeyFilter: boolean;
+  private _filter = Filter.None;
+  private _hasAnyMatches = of(false);
+  private changedData: EventEmitter<void> = new EventEmitter<void>();
+
   public readonly filters = Filter;
   public unauthorized: boolean;
   public loading = true;
   public error: boolean;
   public isSubmitting: boolean;
-
-  private _searchFilter = '';
 
   get searchFilter(): string {
     return this._searchFilter;
@@ -33,8 +38,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this.languageLoaderService.selectedKey = null;
   }
 
-  private _unusedKeyFilter: boolean;
-
   get unusedKeyFilter(): boolean {
     return this._unusedKeyFilter;
   }
@@ -43,8 +46,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     this.languageLoaderService.selectedKey = null;
     this._unusedKeyFilter = value;
   }
-
-  private _filter = Filter.None;
 
   get filter(): Filter {
     return this._filter;
@@ -79,8 +80,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _hasAnyMatches = of(false);
-
   get hasAnyMatches(): Observable<boolean> {
     return this._hasAnyMatches;
   }
@@ -88,8 +87,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
   set hasAnyMatches(value: Observable<boolean>) {
     this._hasAnyMatches = value;
   }
-
-  private changedData: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,

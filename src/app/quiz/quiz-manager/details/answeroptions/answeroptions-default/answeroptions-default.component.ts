@@ -20,7 +20,7 @@ import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
-  public static TYPE = 'AnsweroptionsDefaultComponent';
+  public static readonly TYPE = 'AnsweroptionsDefaultComponent';
   public readonly DEVICE_TYPE = DEVICE_TYPES;
   public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
   public canAddAnsweroptions = false;
