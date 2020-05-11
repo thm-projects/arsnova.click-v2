@@ -78,7 +78,8 @@
     </h5>
 
     <app-voting-question *ngIf="questionText && quizService?.currentQuestion()?.questionText && !!countdown"
-                         [questionText]="questionText"></app-voting-question>
+                         [questionText]="questionText"
+                         [tags]="quizService?.currentQuestion()?.tags"></app-voting-question>
 
     <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
          class="d-flex">

@@ -750,7 +750,10 @@
       },
       "question": "Show question",
       "seconds_left": "# {COUNT, plural, =0{Seconds} one{Second} other{Seconds}} left!",
-      "confidence-level": {}
+      "tags": {
+        "categories": "Topics",
+        "category": "Topic"
+      }
     },
     "membergroup-manager": {
       "title": "Organize members in Teams",

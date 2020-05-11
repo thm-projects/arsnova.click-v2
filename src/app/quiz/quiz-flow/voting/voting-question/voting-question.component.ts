@@ -9,6 +9,16 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class VotingQuestionComponent {
   private _questionText: string;
+  private _tags: Array<string>;
+
+  get tags(): Array<string> {
+    return this._tags;
+  }
+
+  @Input()
+  set tags(value: Array<string>) {
+    this._tags = value;
+  }
 
   get questionText(): string {
     return this._questionText;

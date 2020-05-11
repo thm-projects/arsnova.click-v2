@@ -37,16 +37,18 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
   public questionText: string;
 
   constructor(
+    public quizService: QuizService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private connectionService: ConnectionService,
     private attendeeService: AttendeeService,
     private router: Router,
-    private quizService: QuizService,
     private questionTextService: QuestionTextService,
     private sanitizer: DomSanitizer,
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
-    private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private memberApiService: MemberApiService,
+    private ngbModal: NgbModal,
+    private messageQueue: SimpleMQ,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = ReadingConfirmationComponent.TYPE;

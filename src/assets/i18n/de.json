@@ -615,7 +615,10 @@
         "very_sure": "Fest überzeugt!",
         "title": "Wie sicher bist du dir bei deiner Antwort?"
       },
-      "confidence-level": {}
+      "tags": {
+        "categories": "Themen",
+        "category": "Thema"
+      }
     },
     "membergroup-manager": {
       "title": "Organisiere deine Teilnehmer in Teams",
