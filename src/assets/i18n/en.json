@@ -544,7 +544,7 @@
       "title": "Quiz Manager",
       "available_questions_title": "Available questions",
       "added_questions_title": "Created questions",
-      "no_added_questions": "You haven't added any questions yet.",
+      "no_added_questions": "Add a question first …",
       "details": {
         "aria": {
           "btn_group": "List of settings for the quiz"
@@ -586,11 +586,19 @@
       "select-available-question": "New question",
       "show_more": "Show more",
       "show_less": "Show less",
-      "question_added": "To edit a question click on it."
+      "question-card": {
+        "to-bottom": "To the Bottom",
+        "down": "Down",
+        "to-top": "To the Top",
+        "up": "Up",
+        "quiz-pool-upload": "Quiz-Pool Upload",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
     },
     "quiz_summary": {
       "quiz_name": "Name of the quiz",
-      "answer_amount": "{amount, plural, =0{0 Answers} one{1 Answer} other{# Answers} }",
+      "answer_amount": "{amount, plural, =0{No Answer Items} one{1 Answer Item} other{# Answer Items} }",
       "validation_question_group": "Validation for the complete quiz",
       "question_successful": "The question is valid",
       "question_failed": "The question is still incomplete",

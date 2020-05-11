@@ -15,7 +15,7 @@
              popoverClass="text-dark"
              popoverTitle="{{'component.quiz_manager.added_questions_title' | translate}}"></fa-icon>
   </small>
-  <span *ngIf="quizService.quiz?.questionList.length"
+  <span *ngIf="quizService.quiz?.questionList.length > 1"
         class="ml-auto">
     <fa-icon (click)="hideQuestionBody()"
              *ngIf="!hasAllQuestionBodiesHidden()"
@@ -39,9 +39,13 @@
                        (edit)="trackEditQuestion()"
                        (moveDown)="moveQuestionDown(i)"
                        (moveUp)="moveQuestionUp(i)"
+                       (moveAllDown)="moveQuestionAllDown(i)"
+                       (moveAllUp)="moveQuestionAllUp(i)"
                        *ngFor="let elem of quizService.quiz?.questionList; let i = index;"
                        [canMoveDown]="i !== quizService.quiz?.questionList.length - 1"
+                       [canMoveAllDown]="i < quizService.quiz?.questionList.length - 2"
                        [canMoveUp]="i > 0"
+                       [canMoveAllUp]="i > 1"
                        [elem]="elem"
                        [index]="i"
                        [isBodyHidden]="hasQuestionBodyHidden(elem)"

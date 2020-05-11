@@ -36,14 +36,18 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   private _revalidateSubscription: Subscription;
   private _elem: AbstractQuestionEntity;
   private _canMoveUp: boolean;
+  private _canMoveAllUp: boolean;
   private _canMoveDown: boolean;
+  private _canMoveAllDown: boolean;
   private _isUploading: boolean;
   private _isBodyHidden: boolean;
 
   @Input() public index: number;
   @Output() public readonly bodyVisibility = new EventEmitter<void>();
   @Output() public readonly moveUp = new EventEmitter<void>();
+  @Output() public readonly moveAllUp = new EventEmitter<void>();
   @Output() public readonly moveDown = new EventEmitter<void>();
+  @Output() public readonly moveAllDown = new EventEmitter<void>();
   @Output() public readonly edit = new EventEmitter<void>();
   @Output() public readonly delete = new EventEmitter<void>();
 
@@ -72,12 +76,30 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
     this.cdRef.detectChanges();
   }
 
+  get canMoveAllUp(): boolean {
+    return this._canMoveAllUp;
+  }
+
+  @Input() set canMoveAllUp(value: boolean) {
+    this._canMoveAllUp = value;
+    this.cdRef.detectChanges();
+  }
+
   get canMoveDown(): boolean {
     return this._canMoveDown;
   }
 
   @Input() set canMoveDown(value: boolean) {
     this._canMoveDown = value;
+    this.cdRef.detectChanges();
+  }
+
+  get canMoveAllDown(): boolean {
+    return this._canMoveAllDown;
+  }
+
+  @Input() set canMoveAllDown(value: boolean) {
+    this._canMoveAllDown = value;
     this.cdRef.detectChanges();
   }
 
@@ -158,5 +180,13 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
 
   public isChoiceQuestion(): boolean {
     return this.elem instanceof AbstractChoiceQuestionEntity;
+  }
+
+  public triggerBodyVisibility(): void {
+    if (!this.elem?.questionText.length) {
+      return;
+    }
+
+    this.bodyVisibility.next();
   }
 }

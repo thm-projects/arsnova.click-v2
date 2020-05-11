@@ -438,7 +438,7 @@
       "title": "Quiz-Manager",
       "available_questions_title": "Vorlagen",
       "added_questions_title": "Quizfragen",
-      "no_added_questions": "Wähle zunächst eine Vorlage …",
+      "no_added_questions": "Füge zunächst eine Frage hinzu …",
       "details": {
         "aria": {
           "btn_group": "Auswahl an Einstellungen für das Quiz"
@@ -473,11 +473,20 @@
       "available-questions-filter": "Filtere nach deiner Vorlage",
       "select-available-question": "Neue Frage",
       "show_more": "Zeige mehr",
-      "show_less": "Zeige weniger"
+      "show_less": "Zeige weniger",
+      "question-card": {
+        "to-bottom": "Ans Ende",
+        "down": "Nach unten",
+        "to-top": "An den Anfang",
+        "up": "Nach oben",
+        "quiz-pool-upload": "Quiz-Pool Upload",
+        "edit": "Bearbeiten",
+        "delete": "Löschen"
+      }
     },
     "quiz_summary": {
       "quiz_name": "Quizname",
-      "answer_amount": "{amount, plural, =0{0 Antworten} one{1 Antwort} other{# Antworten} }",
+      "answer_amount": "{amount, plural, =0{Keine Antwortoptionen} one{1 Antwortoption} other{# Antwortoptionen} }",
       "validation_question_group": "Status",
       "question_successful": "Deine Frage ist gültig",
       "question_failed": "Die Frage ist noch unvollständig",

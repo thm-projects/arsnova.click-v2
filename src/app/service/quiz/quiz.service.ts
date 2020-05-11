@@ -219,7 +219,7 @@ export class QuizService {
     });
   }
 
-  public loadDataToEdit(quizName: string): Promise<boolean> {
+  public loadDataToEdit(quizName: string, checkExisting = true): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {
       if (!quizName) {
         const instance = this.ngbModal.open(NoDataErrorComponent, {
@@ -233,7 +233,7 @@ export class QuizService {
         reject();
         return;
       }
-      if (this.quiz?.name === quizName) {
+      if (checkExisting && this.quiz?.name === quizName) {
         this._isInEditMode = true;
         this._isOwner = true;
         this.quizUpdateEmitter.next(this.quiz);
