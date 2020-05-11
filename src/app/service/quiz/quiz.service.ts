@@ -33,7 +33,7 @@ export class QuizService {
   }
 
   set isAddingPoolQuestion(value: boolean) {
-    if (value && !this._isAddingPoolQuestion) {
+    if (value && !this.quiz) {
       this._isInEditMode = true;
       this.generatePoolQuiz();
     }
