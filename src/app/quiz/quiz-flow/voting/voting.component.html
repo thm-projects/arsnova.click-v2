@@ -19,7 +19,8 @@
   </h5>
 
   <app-voting-question *ngIf="questionText"
-                       [questionText]="questionText"></app-voting-question>
+                       [questionText]="questionText"
+                       [tags]="quizService?.currentQuestion()?.tags"></app-voting-question>
 </ng-container>
 
 <div *ngIf="displayAnswerButtons()"

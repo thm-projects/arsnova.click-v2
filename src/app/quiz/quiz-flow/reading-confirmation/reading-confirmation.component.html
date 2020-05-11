@@ -1,6 +1,8 @@
-<h5>{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h5>
+<h5 class="mb-3">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h5>
 
-<p [innerHTML]="sanitizeHTML(questionText)"></p>
+<app-voting-question *ngIf="questionText && quizService?.currentQuestion()?.questionText"
+                     [questionText]="questionText"
+                     [tags]="quizService?.currentQuestion()?.tags"></app-voting-question>
 
 <button (click)="confirmReading()"
         class="btn btn-light btn-block mt-5">
