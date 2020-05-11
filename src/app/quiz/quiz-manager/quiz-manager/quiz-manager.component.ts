@@ -1,4 +1,4 @@
-import { isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -93,6 +93,10 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
     this._destroy.next();
     this._destroy.complete();
+
+    if (isPlatformBrowser(this.platformId) && window['hs']) {
+      window['hs'].close();
+    }
   }
 
   public openQuestionTypeModal(): void {

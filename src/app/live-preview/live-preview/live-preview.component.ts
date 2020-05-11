@@ -2,8 +2,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, Subscription } from 'rxjs';
+import { distinctUntilChanged, filter, map, switchMap, switchMapTo, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { StorageKey } from '../../lib/enums/enums';
@@ -134,23 +134,11 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
               subscriber.next();
               subscriber.complete();
             });
-          }).pipe(switchMap(() => {
-            this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
-
-            switch (this.targetEnvironment) {
-              case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
-                const answers = this._question.answerOptionList.map(answer => answer.answerText);
-                return this.questionTextService.changeMultiple(answers);
-              case this.ENVIRONMENT_TYPE.QUESTION:
-                return this.questionTextService.change(this._question?.questionText);
-              default:
-                throw new Error(`Unsupported environment type in live preview: '${this.targetEnvironment}'`);
-            }
-          }));
+          }).pipe(switchMapTo(this.loadQuestionData()));
         } else {
           this.quizService.isAddingPoolQuestion = true;
           this._questionIndex = 0;
-          return of();
+          return this.loadQuestionData();
         }
       }), //
       takeUntil(this._destroy), //
@@ -163,6 +151,20 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
     if (isPlatformBrowser(this.platformId) && window['hs']) {
       window['hs'].close();
+    }
+  }
+
+  private loadQuestionData(): Observable<any> {
+    this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
+
+    switch (this.targetEnvironment) {
+      case this.ENVIRONMENT_TYPE.ANSWEROPTIONS:
+        const answers = this._question.answerOptionList.map(answer => answer.answerText);
+        return this.questionTextService.changeMultiple(answers);
+      case this.ENVIRONMENT_TYPE.QUESTION:
+        return this.questionTextService.change(this._question?.questionText);
+      default:
+        throw new Error(`Unsupported environment type in live preview: '${this.targetEnvironment}'`);
     }
   }
 }
