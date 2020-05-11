@@ -27,6 +27,16 @@
         </div>
       </div>
     </div>
+
+    <div class="col-12 d-flex align-items-center flex-column mt-3">
+      <label class="text-muted mb-0 align-self-start"
+             for="import-url">Search content</label>
+      <input #searchInput
+             class="form-control"
+             id="search"
+             placeholder="Search..."
+             type="text"/>
+    </div>
   </div>
 </div>
 
@@ -36,55 +46,62 @@
        class="col-12">
     <h5>Current View: {{getCurrentSourceText()}}</h5>
   </div>
-  <div *ngFor="let question of questions"
-       class="col-12">
-    <div class="card mb-3 p-0">
-      <div class="card-body">
-        <div class="d-flex">
-          <div>
-            <p class="card-text">
-              <span>Type: </span>
-              <span>{{question.question.TYPE}}</span>
-            </p>
-            <p class="card-text">
-              <span>Tags: </span>
-              <span>
+
+  <ng-container *ngIf="questions | genericFilter:{'question.questionText': searchInput.value} as result">
+    <div *ngFor="let question of result"
+         class="col-12">
+      <div class="card mb-3 p-0">
+        <div class="card-body">
+          <div class="d-flex">
+            <div class="w-100">
+              <p class="card-text d-flex">
+                <span>Type: </span>
+                <span>{{question.question.TYPE}}</span>
+                <span class="ml-auto">
+                <a (click)="quizService.cleanUp()"
+                   [queryParams]="{id: question.id}"
+                   [routerLink]="['/quiz', 'manager', 'quiz-pool', 'overview']"
+                   class="nav-link text-dark p-0 ml-3">
+                  <fa-icon [icon]="'edit'"
+                           class="cursor-pointer"></fa-icon>
+                </a>
+              </span>
+              </p>
+              <p class="card-text">
+                <span>Tags: </span>
+                <span>
                 <ng-container *ngFor="let tag of question.question.tags; let lastElem = last">
                   <span>{{tag}}</span>
                   <ng-container *ngIf="!lastElem">, </ng-container>
                 </ng-container>
               </span>
-            </p>
+              </p>
+              <p class="card-text">
+                <span>Question Text: </span>
+                <span>{{question.question.questionText}}</span>
+              </p>
+            </div>
           </div>
-          <div class="ml-auto">
-            <a [queryParams]="{id: question.id}"
-               (click)="quizService.cleanUp()"
-               [routerLink]="['/quiz', 'manager', 'quiz-pool', 'overview']"
-               class="nav-link text-dark p-0 ml-3">
-              <fa-icon [icon]="'edit'"
-                       class="cursor-pointer"></fa-icon>
-            </a>
-          </div>
+          <p class="card-text mt-2">
+            <button (click)="approveQuestion(question)"
+                    *ngIf="!question.approved"
+                    class="badge badge-primary">Approve Question
+            </button>
+            <button (click)="declineQuestion(question)"
+                    [class.ml-2]="!question.approved"
+                    class="badge badge-danger">
+              <span *ngIf="!question.approved">Decline&nbsp;</span>
+              <span *ngIf="question.approved">Delete&nbsp;</span>
+              <span>Question</span>
+            </button>
+          </p>
         </div>
-        <p class="card-text mt-2">
-          <button (click)="approveQuestion(question)"
-                  *ngIf="!question.approved"
-                  class="badge badge-primary">Approve Question
-          </button>
-          <button (click)="declineQuestion(question)"
-                  [class.ml-2]="!question.approved"
-                  class="badge badge-danger">
-            <span *ngIf="!question.approved">Decline&nbsp;</span>
-            <span *ngIf="question.approved">Delete&nbsp;</span>
-            <span>Question</span>
-          </button>
-        </p>
       </div>
     </div>
-  </div>
 
-  <div class="col-12">
-    <h5 *ngIf="!questions?.length"
-        class="mt-5 mb-0 text-center">{{getNotFoundText()}}</h5>
-  </div>
+    <div class="col-12">
+      <h5 *ngIf="!questions?.length || !result?.length"
+          class="mt-5 mb-0 text-center">{{getNotFoundText()}}</h5>
+    </div>
+  </ng-container>
 </div>

@@ -22,12 +22,13 @@ export class GenericFilterPipe implements PipeTransform {
 
     return value.filter(val => parsedArgs.every(arg => {
       const regex = new RegExp(arg[1], 'gi');
+      const parsedObjectValue = arg[0].split('.').reduce((o, i) => o[i], val);
 
       if (translateKeys) {
-        return this.translateService.instant(val[arg[0]]).match(regex);
+        return this.translateService.instant(parsedObjectValue).match(regex);
       }
 
-      return val[arg[0]].includes(regex);
+      return parsedObjectValue.match(regex);
     }));
   }
 
