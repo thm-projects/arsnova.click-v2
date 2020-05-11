@@ -274,10 +274,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
                       new Promise<any>(resolve => resolve());
       promise.then(() => {
         this.hasTriggeredNavigation = true;
+        this.quizApiService.deleteActiveQuiz(this.quizService.quiz).subscribe();
         this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName), false)
           .then(() => this.router.navigate(['/quiz', 'manager', 'overview']))
           .then(() => {
-            this.quizApiService.deleteActiveQuiz(this.quizService.quiz).subscribe();
           this.attendeeService.cleanUp();
         });
       }).catch(() => {});

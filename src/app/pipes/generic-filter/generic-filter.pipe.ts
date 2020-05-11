@@ -20,12 +20,16 @@ export class GenericFilterPipe implements PipeTransform {
     const translateKeys = args.$translateKeys;
     const parsedArgs = Object.entries(args).filter(arg => !['$translateKeys'].includes(arg[0]));
 
-    return value.filter(val => parsedArgs.every(arg => {
+    return value.filter(val => parsedArgs.some(arg => {
       const regex = new RegExp(arg[1], 'gi');
       const parsedObjectValue = arg[0].split('.').reduce((o, i) => o[i], val);
 
       if (translateKeys) {
         return this.translateService.instant(parsedObjectValue).match(regex);
+      }
+
+      if (Array.isArray(parsedObjectValue)) {
+        return parsedObjectValue.some(entry => entry.match(regex));
       }
 
       return parsedObjectValue.match(regex);

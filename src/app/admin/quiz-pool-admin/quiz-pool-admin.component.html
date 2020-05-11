@@ -47,7 +47,7 @@
     <h5>Current View: {{getCurrentSourceText()}}</h5>
   </div>
 
-  <ng-container *ngIf="questions | genericFilter:{'question.questionText': searchInput.value} as result">
+  <ng-container *ngIf="questions | genericFilter:{'question.questionText': searchInput.value, 'question.tags': searchInput.value} as result">
     <div *ngFor="let question of result"
          class="col-12">
       <div class="card mb-3 p-0">
