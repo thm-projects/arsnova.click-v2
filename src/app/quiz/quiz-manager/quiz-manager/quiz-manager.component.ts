@@ -199,13 +199,45 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     }
   }
 
+  public moveQuestionAllDown(id: number): void {
+    if (id === this.quizService.quiz.questionList.length - 1) {
+      return;
+    }
+
+    const question = this.quizService.quiz.questionList[id];
+    this.trackingService.trackClickEvent({
+      action: QuizManagerComponent.TYPE,
+      label: `move-question-all-down`,
+    });
+    this.quizService.quiz.removeQuestion(id);
+    this.quizService.quiz.addQuestion(question, this.quizService.quiz.questionList.length);
+    this.quizService.persist();
+    this.cdRef.markForCheck();
+  }
+
+  public moveQuestionAllUp(id: number): void {
+    if (!id) {
+      return;
+    }
+
+    const question = this.quizService.quiz.questionList[id];
+    this.trackingService.trackClickEvent({
+      action: QuizManagerComponent.TYPE,
+      label: `move-question-all-up`,
+    });
+    this.quizService.quiz.removeQuestion(id);
+    this.quizService.quiz.addQuestion(question, 0);
+    this.quizService.persist();
+    this.cdRef.markForCheck();
+  }
+
   private addQuestion(id: QuestionType): void {
     this.trackingService.trackClickEvent({
       action: QuizManagerComponent.TYPE,
       label: `add-question`,
     });
     const question = getDefaultQuestionForType(this.translateService, id);
-    this.quizService.quiz.addQuestion(question);
+    this.quizService.quiz.addQuestion(question, 0);
     this.quizService.persist();
     this.cdRef.markForCheck();
   }
