@@ -8,9 +8,9 @@ export const environment: IEnvironment = {
   enableCasLogin: false,
   version: 'VERSION',
   ssrEndpoint: 'https://test01.ars.sbzo.de',
-  serverEndpoint: 'https://test01.ars.sbzo.de/',
-  httpApiEndpoint: 'https://test01.ars.sbzo.de/api/v1/',
-  httpLibEndpoint: 'https://test01.ars.sbzo.de/lib',
+  serverEndpoint: 'https://test01.ars.sbzo.de/backend/',
+  httpApiEndpoint: 'https://test01.ars.sbzo.de/backend/api/v1/',
+  httpLibEndpoint: 'https://test01.ars.sbzo.de/backend/lib',
   stompConfig: {
     endpoint: 'wss://test01.ars.sbzo.de/rabbitmq/ws',
     user: 'arsnova-click',

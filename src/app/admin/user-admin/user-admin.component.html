@@ -34,6 +34,11 @@
           <span>Password-Hash:</span><br/>
           <span>{{user.passwordHash}}</span>
         </p>
+        <p class="card-text mb-0">
+          <span>Token-Hash:</span><br/>
+          <span *ngIf="!user.tokenHash">No login token set</span>
+          <span>{{user.tokenHash}}</span>
+        </p>
         <p *ngIf="user.privateKey"
            class="card-text mb-0">
           <span>Private Key:</span><br/>

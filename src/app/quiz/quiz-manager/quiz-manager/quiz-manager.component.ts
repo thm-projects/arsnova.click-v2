@@ -67,6 +67,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
       }
       self.isLoading = true;
       this.quizApiService.setQuiz(this.quizService.quiz).subscribe(updatedQuiz => {
+        this.quizService.loadDataToPlay(updatedQuiz.name);
         this.quizService.quiz = updatedQuiz;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
         self.isLoading = false;

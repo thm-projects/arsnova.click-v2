@@ -24,7 +24,8 @@ export class UserAdminComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private footerBarService: FooterBarService, private adminApiService: AdminApiService,
+    private footerBarService: FooterBarService,
+    private adminApiService: AdminApiService,
     private ngbModal: NgbModal,
     private storageService: StorageService,
   ) {
@@ -73,10 +74,16 @@ export class UserAdminComponent implements OnInit {
       value.passwordHash = this.userService.hashPassword(value.name, value.password);
       delete value.password;
 
+      if (value.tokenHash !== user.tokenHash) {
+        value.tokenHash = this.userService.hashToken(value.tokenHash);
+        delete value.tokenHash;
+      }
+
       this.adminApiService.updateUser(value).subscribe(() => {
         user.name = value.name;
         user.privateKey = value.privateKey;
         user.passwordHash = value.passwordHash;
+        user.tokenHash = value.tokenHash;
         user.gitlabToken = value.gitlabToken;
         user.userAuthorizations = value.userAuthorizations;
 

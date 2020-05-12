@@ -205,6 +205,7 @@ export class QuizService {
 
       if (this.quiz) {
         console.log('QuizService: aborting loadDataToPlay since the quiz is already present', quizName);
+        this._isInEditMode = false;
         resolve();
         return;
       }
@@ -212,6 +213,7 @@ export class QuizService {
       this.storageService.db.Quiz.get(quizName).then(quiz => {
 
         console.log('QuizService: loadDataToPlay finished', quizName);
+        this._isInEditMode = false;
         this.isOwner = !!quiz;
         console.log('QuizService: isOwner', this.isOwner);
         this.restoreSettings(quizName).then(() => resolve());
