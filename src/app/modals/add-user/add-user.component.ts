@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AppDb } from '../../lib/db/app.db';
 import { UserRole } from '../../lib/enums/UserRole';
-import { StorageService } from '../../service/storage/storage.service';
 
 @Component({
   selector: 'app-add-user',
@@ -11,6 +10,20 @@ import { StorageService } from '../../service/storage/storage.service';
 })
 export class AddUserComponent implements OnInit {
   private _name = '';
+  private _password = '';
+  private _gitlabToken = '';
+  private _userAuthorizations: Array<string> = [];
+  private _isSubmitting: boolean;
+  private _privateKey: string;
+  private _tokenHash: string;
+
+  get tokenHash(): string {
+    return this._tokenHash;
+  }
+
+  set tokenHash(value: string) {
+    this._tokenHash = value;
+  }
 
   get name(): string {
     return this._name;
@@ -20,8 +33,6 @@ export class AddUserComponent implements OnInit {
     this._name = value;
   }
 
-  private _password = '';
-
   get password(): string {
     return this._password;
   }
@@ -29,8 +40,6 @@ export class AddUserComponent implements OnInit {
   set password(value: string) {
     this._password = value;
   }
-
-  private _gitlabToken = '';
 
   get gitlabToken(): string {
     return this._gitlabToken;
@@ -40,8 +49,6 @@ export class AddUserComponent implements OnInit {
     this._gitlabToken = value;
   }
 
-  private _userAuthorizations: Array<string> = [];
-
   get userAuthorizations(): Array<string> {
     return this._userAuthorizations;
   }
@@ -50,13 +57,9 @@ export class AddUserComponent implements OnInit {
     this._userAuthorizations = value;
   }
 
-  private _isSubmitting: boolean;
-
   get isSubmitting(): boolean {
     return this._isSubmitting;
   }
-
-  private _privateKey: string;
 
   get privateKey(): string {
     return this._privateKey;
@@ -66,7 +69,7 @@ export class AddUserComponent implements OnInit {
     this._privateKey = value;
   }
 
-  constructor(private ngbModal: NgbActiveModal, private storageService: StorageService) {
+  constructor(private ngbModal: NgbActiveModal) {
     this.privateKey = AppDb.generatePrivateKey();
   }
 
@@ -89,6 +92,7 @@ export class AddUserComponent implements OnInit {
       name: this.name,
       privateKey: this.privateKey,
       password: this.password,
+      tokenHash: this.tokenHash,
       gitlabToken: this.gitlabToken,
       userAuthorizations: this.userAuthorizations,
     });

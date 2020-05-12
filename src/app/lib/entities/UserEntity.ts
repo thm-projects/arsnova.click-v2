@@ -5,6 +5,7 @@ export class UserEntity {
   public userAuthorizations: Array<UserRole>;
   public name: string;
   public passwordHash: string;
+  public tokenHash: string;
   public gitlabToken: string;
   public privateKey: string;
 
@@ -13,6 +14,7 @@ export class UserEntity {
     this.userAuthorizations = props.userAuthorizations;
     this.name = props.name;
     this.passwordHash = props.passwordHash;
+    this.tokenHash = props.tokenHash;
     this.gitlabToken = props.gitlabToken;
     this.privateKey = props.privateKey;
   }
