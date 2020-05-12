@@ -176,6 +176,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   public ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
+
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
 
     if (this.quizService.isOwner) {
@@ -185,9 +188,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     }
 
     clearTimeout(this._reconnectTimeout);
-
-    this._destroy.next();
-    this._destroy.complete();
   }
 
   public toString(value: number): string {
@@ -274,9 +274,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
                       new Promise<any>(resolve => resolve());
       promise.then(() => {
         this.hasTriggeredNavigation = true;
-        this.quizApiService.deleteActiveQuiz(this.quizService.quiz).subscribe();
+        this._destroy.next();
         this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName), false)
           .then(() => this.router.navigate(['/quiz', 'manager', 'overview']))
+          .then(() => this.quizApiService.deleteActiveQuiz(this.quizService.quiz).subscribe())
           .then(() => {
           this.attendeeService.cleanUp();
         });
