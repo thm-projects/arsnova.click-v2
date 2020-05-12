@@ -129,10 +129,12 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.quizService.quizUpdateEmitter.pipe(filter(() => !this.quizService.isInEditMode && isPlatformBrowser(this.platformId)),
       takeUntil(this._destroy)).subscribe((quiz: QuizEntity) => {
       if (this._stompSubscription) {
+        console.log('RootComponent: Unsubscribing existing rxstomp subscription');
         this._stompSubscription.unsubscribe();
       }
 
       if (!quiz) {
+        console.log('RootComponent: Quiz not found - not watching rxstomp channel');
         return;
       }
 

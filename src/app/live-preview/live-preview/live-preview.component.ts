@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, switchMapTo, takeUntil } from 'rxjs/operators';
 import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
@@ -155,6 +155,10 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
   }
 
   private loadQuestionData(): Observable<any> {
+    if (!this.quizService.quiz) {
+      return of();
+    }
+
     this._question = <AbstractChoiceQuestionEntity>this.quizService.quiz.questionList[this._questionIndex];
 
     switch (this.targetEnvironment) {
