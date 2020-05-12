@@ -79,6 +79,7 @@
 
     <app-voting-question *ngIf="questionText && quizService?.currentQuestion()?.questionText && !!countdown"
                          [questionText]="questionText"
+                         [answers]="quizService?.currentQuestion()?.displayAnswerText === false ? answers : null"
                          [tags]="quizService?.currentQuestion()?.tags"></app-voting-question>
 
     <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"

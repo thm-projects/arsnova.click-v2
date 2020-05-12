@@ -10,3 +10,12 @@
 
 <div [innerHTML]="sanitizeHTML(questionText)"
      class="mb-0 overflow-hidden mathjax-container"></div>
+
+<ng-container *ngIf="answers">
+  <hr/>
+
+  <div *ngFor="let answer of answers; let i = index"
+       class="mb-0 overflow-hidden mathjax-container d-flex flex-nowrap">
+    <b>{{getNormalizedAnswerIndex(i)}}</b>:&nbsp;<div [innerHTML]="sanitizeHTML(answer)"></div>
+  </div>
+</ng-container>
