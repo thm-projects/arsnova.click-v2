@@ -77,10 +77,10 @@
     </button>
 
     <div [ngbTooltip]="getTooltipForUpload() | translate"
-         class="ml-auto">
+         class="ml-auto flex-shrink-0">
       <button (click)="updloadToQuizPool()"
               [disabled]="!elem?.isValid() || !elem?.tags?.length"
-              class="btn btn-light btn-sm mr-2 flex-shrink-0">
+              class="btn btn-light btn-sm mr-2">
         <span class="d-none d-lg-inline mr-2">{{'component.quiz_manager.question-card.quiz-pool-upload' | translate}}</span>
         <fa-icon [class.text-danger]="!elem?.isValid() || !elem?.tags?.length"
                  [icon]="['fas', (isUploading ? 'spinner' : 'cloud-upload-alt')]"

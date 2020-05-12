@@ -20,12 +20,13 @@
 
   <app-voting-question *ngIf="questionText"
                        [questionText]="questionText"
+                       [answers]="quizService?.currentQuestion()?.displayAnswerText === false ? answers : null"
                        [tags]="quizService?.currentQuestion()?.tags"></app-voting-question>
 </ng-container>
 
 <div *ngIf="displayAnswerButtons()"
      [class.mb-5]="showSendResponseButton()"
-     class="d-flex justify-content-around align-items-center flex-wrap">
+     class="d-flex justify-content-around align-items-center flex-wrap mt-3">
   <button (click)="toggleSelectAnswer(i)"
           *ngFor="let elem of answers; let i = index"
           [class.btn-invers]="isSelected(i)"

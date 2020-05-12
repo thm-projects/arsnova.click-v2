@@ -10,6 +10,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class VotingQuestionComponent {
   private _questionText: string;
   private _tags: Array<string>;
+  private _answers: Array<string>;
 
   get tags(): Array<string> {
     return this._tags;
@@ -29,10 +30,23 @@ export class VotingQuestionComponent {
     this.cd.markForCheck();
   }
 
+  get answers(): Array<string> {
+    return this._answers;
+  }
+
+  @Input() set answers(value: Array<string>) {
+    this._answers = value;
+    this.cd.markForCheck();
+  }
+
   constructor(private sanitizer: DomSanitizer, private cd: ChangeDetectorRef) { }
 
   public sanitizeHTML(value: string): string {
     // sanitizer.bypassSecurityTrustHtml is required for highslide
     return this.sanitizer.bypassSecurityTrustHtml(`${value}`) as string;
+  }
+
+  public getNormalizedAnswerIndex(index: number): string {
+    return String.fromCharCode(65 + index);
   }
 }

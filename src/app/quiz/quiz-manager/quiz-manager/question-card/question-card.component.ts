@@ -41,8 +41,8 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   private _canMoveAllDown: boolean;
   private _isUploading: boolean;
   private _isBodyHidden: boolean;
+  private _index: number;
 
-  @Input() public index: number;
   @Output() public readonly bodyVisibility = new EventEmitter<void>();
   @Output() public readonly moveUp = new EventEmitter<void>();
   @Output() public readonly moveAllUp = new EventEmitter<void>();
@@ -65,6 +65,16 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
       this.renderedQuestionText = this.sanitizer.bypassSecurityTrustHtml(value);
       this.cdRef.detectChanges();
     });
+  }
+
+  public get index(): number {
+    return this._index;
+  }
+
+  @Input()
+  public set index(value: number) {
+    this._index = value;
+    this.cdRef.detectChanges();
   }
 
   get canMoveUp(): boolean {
