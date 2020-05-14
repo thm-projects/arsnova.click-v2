@@ -405,6 +405,7 @@
     "lobby": {
       "start_quiz": "Los geht's!",
       "kick_member_confirmation": "Soll die Person \"{NAME}\" aus dem Quiz entfernt werden?",
+      "own_nickname": "Dein Nickname:",
       "waiting_for_players": "Warten auf die Anderen…",
       "description": {}
     },

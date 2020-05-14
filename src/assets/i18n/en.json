@@ -482,6 +482,7 @@
     "lobby": {
       "start_quiz": "Let's go!",
       "kick_member_confirmation": "Shall the attendee \"{NAME}\" be removed from the session?",
+      "own_nickname": "Your nickname:",
       "waiting_for_players": "Waiting for the players...",
       "title": "Quiz Lobby",
       "yes": "Yes",

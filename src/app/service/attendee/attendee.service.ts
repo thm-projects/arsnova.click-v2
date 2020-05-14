@@ -15,9 +15,12 @@ import { StorageService } from '../storage/storage.service';
 export class AttendeeService {
   private _attendees: Array<MemberEntity> = [];
   private _ownNick: string;
-  private _bonusToken: string;
-
+  private _ownAttendee: MemberEntity;
   public readonly attendeeAmount = new ReplaySubject<number>(1);
+
+  get ownAttendee(): MemberEntity {
+    return this._ownAttendee;
+  }
 
   get attendees(): Array<MemberEntity> {
     return this._attendees;
@@ -166,6 +169,7 @@ export class AttendeeService {
         this._attendees = data.payload.members.map((attendee) => {
           return new Attendee(attendee);
         });
+        this._ownAttendee = this._attendees.find(attendee => this.isOwnNick(attendee.name));
 
         this.attendeeAmount.next(this._attendees.length);
         resolve();
