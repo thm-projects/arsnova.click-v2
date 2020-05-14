@@ -413,7 +413,8 @@
       "save_session": {
         "title": "Save Quiz",
         "label": "Save"
-      }
+      },
+      "used-pool-tags": "Used Tags"
     },
     "leaderboard": {
       "header": "Leaderboard",
@@ -546,7 +547,7 @@
     "quiz_manager": {
       "title": "Quiz Manager",
       "available_questions_title": "Available questions",
-      "added_questions_title": "Created questions",
+      "added_questions_title": "{amount, plural, =0{No quesitions created} one{1 question} other{# questions}}",
       "no_added_questions": "Add a question first …",
       "details": {
         "aria": {

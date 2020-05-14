@@ -336,7 +336,8 @@
       "save_session": {
         "title": "Quiz speichern",
         "label": "Speichern"
-      }
+      },
+      "used-pool-tags": "Verwendete Tags"
     },
     "leaderboard": {
       "header": "Rangliste",
@@ -440,7 +441,7 @@
     "quiz_manager": {
       "title": "Quiz-Manager",
       "available_questions_title": "Vorlagen",
-      "added_questions_title": "Quizfragen",
+      "added_questions_title": "{amount, plural, =0{Keine Quizfragen bisher} one{1 Quizfrage} other{# Quizfragen}}",
       "no_added_questions": "Füge zunächst eine Frage hinzu …",
       "details": {
         "aria": {
