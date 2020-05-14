@@ -603,7 +603,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     } else {
       this.questionTextService.changeMultiple(question.answerOptionList.map(answer => {
         return answer.answerText;
-      })).subscribe();
+      })).subscribe(() => this.cd.markForCheck());
     }
   }
 

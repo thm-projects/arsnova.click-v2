@@ -43,7 +43,9 @@ export class ConfidenceRateComponent {
     this.percent = value.percent;
     this.base = value.base;
     this.absolute = value.absolute;
-    this._ownConfidencePercent = value.ownConfidence;
+    if ((value.ownConfidence ? ? false) && value.ownConfidence > -1) {
+      this._ownConfidencePercent = value.ownConfidence;
+    }
     this.cd.markForCheck();
   }
 
