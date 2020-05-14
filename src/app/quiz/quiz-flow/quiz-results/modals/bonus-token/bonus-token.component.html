@@ -27,7 +27,7 @@
     <span *ngIf="clipboardText">{{'global.copy-to-clipboard' | translate}}</span>
     <span *ngIf="!clipboardText">{{'global.copied' | translate}}</span>
   </button>
-  <a href="{{'component.liveResults.bonus-token.mail' | translate:{token: bonusToken, quizname: quizname, date: date} }}"
+  <a href="{{'component.liveResults.bonus-token.mail' | translate:{token: bonusToken, quizname: quizname, date: date, nickname: nickname} }}"
      target="_blank">
     <button [attr.aria-label]="'global.mail-to' | translate"
             class="btn btn-primary">
