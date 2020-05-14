@@ -10,7 +10,6 @@ import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberS
 import { MemberApiService } from '../api/member/member-api.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
-import { BonusTokenService } from '../user/bonus-token/bonus-token.service';
 
 @Injectable({ providedIn: 'root' })
 export class AttendeeService {
@@ -35,21 +34,6 @@ export class AttendeeService {
   set ownNick(value: string) {
     this._ownNick = value;
     sessionStorage.setItem(StorageKey.CurrentNickName, value);
-
-    if (value) {
-      this.bonusTokenService.getBonusToken().subscribe(bonusToken => {
-        this.bonusToken = bonusToken;
-      });
-    }
-  }
-
-  get bonusToken(): string {
-    return this._bonusToken;
-  }
-
-  set bonusToken(value: string) {
-    this._bonusToken = value;
-    sessionStorage.setItem(StorageKey.CurrentBonusToken, value);
   }
 
   constructor(
@@ -57,7 +41,6 @@ export class AttendeeService {
     private quizService: QuizService,
     private storageService: StorageService,
     private memberApiService: MemberApiService,
-    private bonusTokenService: BonusTokenService,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.loadData();

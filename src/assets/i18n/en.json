@@ -474,6 +474,7 @@
         "title": "Bonustoken",
         "mail": "mailto:?subject=My%20Token%20({quizname})&body=Hello,%0D%0A%0D%0Afor%20the%20quiz%20{quizname}%20from%20{date}%20is%20my%20token%20''{token}''.%0D%0A%0D%0Ayour's%20sincerely%0D%0A",
         "your-bonus-token": "Your Token:",
+        "please-wait": "Please wait - your token is loading",
         "send-to-teacher": "Send this token to your teacher to gain some bonus points!"
       }
     },

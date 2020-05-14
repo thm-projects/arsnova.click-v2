@@ -613,7 +613,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     sessionStorage.removeItem(StorageKey.CurrentQuizName);
     sessionStorage.removeItem(StorageKey.CurrentNickName);
     sessionStorage.removeItem(StorageKey.QuizToken);
-    sessionStorage.removeItem(StorageKey.CurrentBonusToken);
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.db.Config.delete(StorageKey.QuizTheme);
     }

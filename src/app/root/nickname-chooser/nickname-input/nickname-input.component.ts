@@ -2,7 +2,6 @@ import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { BonusTokenService } from 'src/app/service/user/bonus-token/bonus-token.service';
 import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
@@ -39,7 +38,6 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     private quizService: QuizService,
     private memberApiService: MemberApiService,
     private messageQueue: SimpleMQ,
-    private bonusTokenService: BonusTokenService
   ) {
 
     this.footerBarService.TYPE_REFERENCE = NicknameInputComponent.TYPE;
@@ -120,12 +118,7 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
         if (data.status !== StatusProtocol.Success || data.step !== MessageProtocol.Added) {
           reject(data);
         } else {
-          this.bonusTokenService.getBonusToken().subscribe(
-              nextResult => {
-                this.attendeeService.bonusToken = nextResult;
-              },
-              err => console.error('Observer got an error: ' + err)
-          );
+          resolve();
         }
       }, (error) => {
         reject({
