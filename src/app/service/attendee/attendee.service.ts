@@ -65,6 +65,7 @@ export class AttendeeService {
 
   public cleanUp(): void {
     this.attendees = [];
+    this.attendeeAmount.next(0);
     this.ownNick = null;
   }
 
@@ -72,6 +73,7 @@ export class AttendeeService {
     console.log('AttendeeService: Adding member', attendee);
     if (!this.getMember(attendee.name)) {
       this._attendees.push(new Attendee(attendee));
+      this.attendeeAmount.next(this._attendees.length);
     }
   }
 
@@ -79,6 +81,7 @@ export class AttendeeService {
     const member = this.getMember(name);
     if (member) {
       this._attendees.splice(this._attendees.indexOf(member), 1);
+      this.attendeeAmount.next(this._attendees.length);
     }
   }
 

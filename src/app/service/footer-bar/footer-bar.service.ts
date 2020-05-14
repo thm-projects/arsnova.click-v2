@@ -539,6 +539,10 @@ export class FooterBarService {
   }
 
   private updateFooterElementsState(): void {
+    if (!this.quizService.quiz) {
+      return;
+    }
+
     this.footerElemReadingConfirmation.isActive = !!this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
     this.footerElemConfidenceSlider.isActive = !!this.quizService.quiz.sessionConfig.confidenceSliderEnabled;
     this.footerElemStartQuiz.isActive = this.quizService.isValid() && this._connectionState === RxStompState.OPEN;
