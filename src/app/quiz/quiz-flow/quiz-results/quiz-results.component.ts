@@ -259,7 +259,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       } else {
         this._questionText = value;
       }
-      this.showResponseProgress = this.quizService.quiz.sessionConfig.showResponseProgress;
+      this.showResponseProgress = true;
     });
 
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz)), takeUntil(this._destroy)).subscribe(async quiz => {
