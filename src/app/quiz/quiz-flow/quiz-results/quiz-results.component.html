@@ -116,7 +116,7 @@
     <app-confidence-rate *ngIf="showConfidenceRate(selectedQuestionIndex)"
                          [data]="getConfidenceData(selectedQuestionIndex)"></app-confidence-rate>
 
-    <app-progress-bar *ngIf="showResponseProgress()"
+    <app-progress-bar *ngIf="showResponseProgress"
                       [data]="answers"
                       [hideProgressbarCssStyle]="hideProgressbarStyle"
                       [questionIndex]="selectedQuestionIndex"

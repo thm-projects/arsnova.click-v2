@@ -59,7 +59,6 @@ export class NicknameInputComponent implements OnInit, OnDestroy {
     this.isLoggingIn = true;
 
     const token = await this.memberApiService.generateMemberToken(this.nickname, this.quizService.quiz.name).toPromise();
-
     sessionStorage.setItem(StorageKey.QuizToken, token);
 
     this.putMember(this.nickname).then(() => {

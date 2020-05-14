@@ -28,6 +28,10 @@ export class ProgressBarAnonymousComponent extends AbstractProgressBar {
   @Input() public type: QuestionType;
 
   @Input() set attendeeData(value: any) {
+    if (!value) {
+      return;
+    }
+
     this.correct = value.correct;
     this.wrong = value.wrong;
     this.base = value.base;

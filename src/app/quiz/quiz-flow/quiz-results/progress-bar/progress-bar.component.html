@@ -1,24 +1,24 @@
 <ng-container *ngIf="hideProgressbarCssStyle && data">
-  <app-progress-bar-anonymous [attendeeData]="attendeeDataForAnswer()"
+  <app-progress-bar-anonymous [attendeeData]="attendeeDataForAnswer() | async"
                               [type]="question?.TYPE"></app-progress-bar-anonymous>
 </ng-container>
 <ng-container *ngIf="!hideProgressbarCssStyle && data">
   <ng-container *ngFor="let answer of data; let i = index">
     <app-progress-bar-single-choice *ngIf="question?.TYPE === 'SingleChoiceQuestion'"
-                                    [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
+                                    [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-single-choice>
     <app-progress-bar-single-choice *ngIf="question?.TYPE === 'YesNoSingleChoiceQuestion'"
-                                    [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
+                                    [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-single-choice>
     <app-progress-bar-single-choice *ngIf="question?.TYPE === 'TrueFalseSingleChoiceQuestion'"
-                                    [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-single-choice>
+                                    [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-single-choice>
     <app-progress-bar-multiple-choice *ngIf="question?.TYPE === 'MultipleChoiceQuestion'"
-                                      [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-multiple-choice>
+                                      [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-multiple-choice>
     <app-progress-bar-survey *ngIf="question?.TYPE === 'SurveyQuestion'"
-                             [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-survey>
+                             [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-survey>
     <app-progress-bar-survey *ngIf="question?.TYPE === 'ABCDSingleChoiceQuestion'"
-                             [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-survey>
+                             [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-survey>
     <app-progress-bar-ranged *ngIf="question?.TYPE === 'RangedQuestion'"
-                             [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-ranged>
+                             [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-ranged>
     <app-progress-bar-freetext *ngIf="question?.TYPE === 'FreeTextQuestion'"
-                               [attendeeData]="attendeeDataForAnswer(i)"></app-progress-bar-freetext>
+                               [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-freetext>
   </ng-container>
 </ng-container>

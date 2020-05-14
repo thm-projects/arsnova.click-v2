@@ -39,6 +39,10 @@ export abstract class AbstractProgressBar {
   }
 
   protected initData(value: any): void {
+    if (!value) {
+      return;
+    }
+
     this.percent = value.percent;
     this.base = value.base;
     this.absolute = value.absolute;

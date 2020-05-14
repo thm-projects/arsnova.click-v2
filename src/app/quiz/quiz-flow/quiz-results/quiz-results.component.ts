@@ -4,13 +4,14 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { NumberType, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
+import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
@@ -39,6 +40,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   private _selectedQuestionIndex: number;
   private _questionText: string;
   private _serverUnavailableModal: NgbModalRef;
+  private _showResponseProgress: boolean;
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy = new Subject();
 
@@ -52,6 +54,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public isStopping: boolean;
   public isLoadingQuestionData: boolean;
   public playCountdownEndSound: boolean;
+
+  get showResponseProgress(): boolean {
+    return this._showResponseProgress;
+  }
+
+  set showResponseProgress(value: boolean) {
+    this._showResponseProgress = value;
+    this.cd.markForCheck();
+  }
 
   get hideProgressbarStyle(): boolean {
     return this._hideProgressbarStyle;
@@ -74,6 +85,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       ),
     };
     this.twitterService.questionIndex = value;
+    this.loadProgressbars();
+    this.cd.markForCheck();
   }
 
   get questionText(): string {
@@ -105,7 +118,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public showLeaderBoardButton(index: number): boolean {
     if (this.countdown > 0 || !this.quizService.quiz || typeof index === 'undefined' || index < 0 || index
         > this.quizService.quiz.questionList.length) {
-      return;
+      return false;
     }
     if (index === this.quizService.quiz.currentQuestionIndex && //
         this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
@@ -114,7 +127,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
             this.countdown
           )
         )) {
-      return;
+      return false;
     }
 
     this.cd.markForCheck();
@@ -122,18 +135,19 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   public showQuestionButton(index: number): boolean {
-    if (this.countdown > 0 || !this.quizService.quiz || typeof index === 'undefined' || index < 0 || index
-        > this.quizService.quiz.questionList.length) {
-      return;
+    if (this.countdown > 0 ||
+        !this.quizService.quiz ||
+        typeof index === 'undefined' ||
+        index < 0 ||
+        index > this.quizService.quiz.questionList.length
+    ) {
+      return false;
     }
     if (index === this.quizService.quiz.currentQuestionIndex && //
         this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
-        (
-          this.quizService.readingConfirmationRequested || (
-            this.countdown
-          )
-        )) {
-      return;
+        (this.quizService.readingConfirmationRequested || this.countdown) //
+    ) {
+      return false;
     }
 
     this.cd.markForCheck();
@@ -150,12 +164,12 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       return;
     }
 
-    const matches = this.attendeeService.attendees.find(value => {
+    const matchCount = this.attendeeService.attendees.filter(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].confidence > -1 : false;
-    });
-    const hasConfidenceSet = this.quizService.quiz.sessionConfig.confidenceSliderEnabled ?? false;
-    const isConfidenceEnabled = hasConfidenceSet ? this.quizService.quiz.sessionConfig.confidenceSliderEnabled : false;
-    return hasConfidenceSet ? Boolean(matches) || isConfidenceEnabled : Boolean(matches);
+    }).length;
+    const hasConfidenceSet = this.quizService.quiz.sessionConfig.confidenceSliderEnabled;
+    this.cd.markForCheck();
+    return matchCount > 0 || (hasConfidenceSet && this.selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex);
   }
 
   public modifyVisibleQuestion(index: number): void {
@@ -210,20 +224,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
     }).length;
     const readingConfirmationStatus = this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
-    const isReadingConfirmationEnabled = readingConfirmationStatus ?? false;
     this.cd.markForCheck();
-    return matchCount > 0 || isReadingConfirmationEnabled;
-  }
-
-  public showResponseProgress(): boolean {
-    this.cd.markForCheck();
-    const currentQuestion = this.quizService.currentQuestion();
-    return (
-             this.quizService.quiz && this.quizService.quiz.sessionConfig.showResponseProgress
-           ) || //
-           (
-             currentQuestion?.timer && this.countdown === 0
-           );
+    return matchCount > 0 || (readingConfirmationStatus && this.selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex);
   }
 
   public getReadingConfirmationData(questionIndex: number): { base: number, absolute: number, percent: string } {
@@ -256,13 +258,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       } else {
         this._questionText = value;
       }
+      this.showResponseProgress = this.quizService.quiz.sessionConfig.showResponseProgress;
     });
 
-    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(async quiz => {
-      if (!quiz) {
-        return;
-      }
-
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz)), takeUntil(this._destroy)).subscribe(async quiz => {
       if (this.quizService.quiz.state === QuizState.Inactive) {
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
@@ -390,55 +389,62 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         return;
       }
 
-      if (!this.countdown) {
-        this.countdown = 0;
-        const question = this.quizService.currentQuestion();
-        if (question && question.timer === 0 && !currentStateData.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
-          nick => nick.responses[this.quizService.quiz.currentQuestionIndex].responseTime === -1)) {
-          this.showStartQuizButton = false;
-          this.hideProgressbarStyle = false;
-          this.showStopQuizButton = this.quizService.isOwner;
-        } else {
-          if (currentStateData.payload.readingConfirmationRequested) {
-            this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
-                                       >= this.quizService.quiz.currentQuestionIndex;
-          } else {
-            this.showStartQuizButton = this.quizService.isOwner && //
-                                       this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
-          }
-          this.hideProgressbarStyle = false;
-        }
+      this.quizService.readingConfirmationRequested = currentStateData.payload.readingConfirmationRequested;
 
+      this.loadProgressbars(currentStateData);
+
+      this.isLoadingQuestionData = false;
+      this.cd.markForCheck();
+    });
+  }
+
+  private loadProgressbars(currentStateData?: IMessage): void {
+    if (!this.countdown) {
+      this.countdown = 0;
+      const question = this.quizService.currentQuestion();
+      if (question && question.timer === 0 && !currentStateData?.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
+        nick => nick.responses[this.quizService.quiz.currentQuestionIndex].responseTime === -1)) {
+        this.showStartQuizButton = false;
+        this.hideProgressbarStyle = false;
+        this.showStopQuizButton = this.quizService.isOwner;
       } else {
-        if (this.attendeeService.attendees.every(nick => {
-          const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
-          if (!val) {
-            return true;
-          }
-
-          return typeof val === 'number' ? val > -1 : val.length > 0;
-        })) {
-          console.log('QuizResultsComponent: Stopping countdown since all attendees have answered the current question');
-          this.countdown = 0;
-          this.hideProgressbarStyle = false;
-          this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
-                                     > this.quizService.quiz.currentQuestionIndex + 1;
-
-        } else if (currentStateData.payload.readingConfirmationRequested) {
-          console.log('QuizResultsComponent: Stopping countdown since reading confirmation is requested');
-          this.countdown = 0;
-          this.hideProgressbarStyle = false;
+        if (currentStateData?.payload.readingConfirmationRequested) {
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
                                      >= this.quizService.quiz.currentQuestionIndex;
+          this.hideProgressbarStyle = this.selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex;
         } else {
-          console.log('QuizResultsComponent: Countdown is proceeding');
-          this.hideProgressbarStyle = currentStateData.payload.startTimestamp > -1;
+          this.showStartQuizButton = this.quizService.isOwner && //
+                                     this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+          this.hideProgressbarStyle = false;
         }
       }
 
-      this.cd.markForCheck();
-      this.isLoadingQuestionData = false;
-    });
+    } else {
+      if (this.attendeeService.attendees.every(nick => {
+        const val = nick.responses[this.quizService.quiz.currentQuestionIndex].value;
+        if (!val) {
+          return true;
+        }
+
+        return typeof val === 'number' ? val > -1 : val.length > 0;
+      })) {
+        console.log('QuizResultsComponent: Stopping countdown since all attendees have answered the current question');
+        this.countdown = 0;
+        this.hideProgressbarStyle = false;
+        this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
+                                   > this.quizService.quiz.currentQuestionIndex + 1;
+
+      } else if (currentStateData?.payload.readingConfirmationRequested) {
+        console.log('QuizResultsComponent: Stopping countdown since reading confirmation is requested');
+        this.countdown = 0;
+        this.hideProgressbarStyle = this.selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex;
+        this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
+                                   >= this.quizService.quiz.currentQuestionIndex;
+      } else {
+        console.log('QuizResultsComponent: Countdown is proceeding');
+        this.hideProgressbarStyle = currentStateData?.payload.startTimestamp > -1;
+      }
+    }
   }
 
   private addFooterElements(): void {
@@ -555,6 +561,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         this.showStartQuizButton = true;
         this.showStopQuizButton = false;
+      }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
+        this.cd.markForCheck();
       }),
     ]);
   }
@@ -566,6 +574,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
+        this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {

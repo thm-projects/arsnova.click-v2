@@ -1,4 +1,7 @@
-importScripts('./ngsw-worker.js');
+try {
+  importScripts('./ngsw-worker.js');
+} catch {
+}
 
 const scope = self;
 

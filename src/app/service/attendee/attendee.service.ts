@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { Attendee } from '../../lib/attendee/attendee';
 import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../lib/enums/enums';
@@ -34,6 +35,12 @@ export class AttendeeService {
   set ownNick(value: string) {
     this._ownNick = value;
     sessionStorage.setItem(StorageKey.CurrentNickName, value);
+
+    if (value) {
+      this.bonusTokenService.getBonusToken().subscribe(bonusToken => {
+        this.bonusToken = bonusToken;
+      });
+    }
   }
 
   get bonusToken(): string {
@@ -161,22 +168,14 @@ export class AttendeeService {
 
   private restoreMembers(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      this.memberApiService.getMembers(this.quizService.quiz.name).subscribe((data) => {
-        if (!data || !data.payload) {
-          return;
-        }
-
+      this.memberApiService.getMembers(this.quizService.quiz.name).pipe(
+        filter(data => Array.isArray(data?.payload?.members)),
+      ).subscribe((data) => {
         this._attendees = data.payload.members.map((attendee) => {
           return new Attendee(attendee);
         });
 
         this.attendeeAmount.next(this._attendees.length);
-
-        if (!this.quizService.isOwner) {
-          this.bonusTokenService.getBonusToken().subscribe(nextResult => {
-            this.bonusToken = nextResult;
-          }, err => console.error('Observer got an error: ' + err));
-        }
         resolve();
       }, () => reject());
     });
@@ -184,11 +183,9 @@ export class AttendeeService {
 
   private loadData(): void {
     this._ownNick = sessionStorage.getItem(StorageKey.CurrentNickName);
-    this.quizService.quizUpdateEmitter.subscribe(quiz => {
-      if (typeof quiz?.state === 'undefined' || quiz.state === QuizState.Inactive) {
-        return;
-      }
-
+    this.quizService.quizUpdateEmitter.pipe(
+      filter(quiz => typeof quiz?.state !== 'undefined' && quiz.state !== QuizState.Inactive),
+    ).subscribe(quiz => {
       console.log('AttendeeService#loadData', 'quiz set', quiz);
       this.restoreMembers();
     });
