@@ -7,6 +7,10 @@
        [attr.aria-valuenow]="percent"
        aria-valuemin="0"
        aria-valuemax="100"></div>
+  <div *ngIf="ownConfidencePercent"
+       [ngbTooltip]="ownConfidenceTooltip"
+       [style.left]="'calc(' + ownConfidencePercent + '% - 5px)'"
+       class="position-absolute h-100 own-confidence"></div>
   <div *ngIf="base"
        class="align-self-center position-absolute"
        style="left: 10px;">{{'component.liveResults.confidence_grade' | translate}}
@@ -21,3 +25,8 @@
              [spin]="true"></fa-icon>
   </div>
 </div>
+
+<ng-template #ownConfidenceTooltip>
+  <span [innerHTML]="'component.liveResults.own_confidence_grade' | translate:{value: ownConfidencePercent}"
+        class="white-space-pre-line"></span>
+</ng-template>

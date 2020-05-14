@@ -389,6 +389,7 @@
       "abort_countdown": "Countdown abbrechen",
       "abort_question": "Quizrunde abbrechen",
       "confidence_grade": "Antwortsicherheit",
+      "own_confidence_grade": "Deine Antwortsicherheit&#10;({value} %)",
       "guessed_in_range": "Nicht korrekt geraten, aber akzeptabel",
       "wrong_answer": "Falsche Antwort",
       "no_data": "Keine Daten verfügbar",

@@ -466,6 +466,7 @@
       "abort_countdown": "Abort Countdown",
       "abort_question": "Abort question",
       "confidence_grade": "Confidence Grade",
+      "own_confidence_grade": "Your Confidence Grade&#10;({value}%)",
       "guessed_in_range": "Not correctly estimated, but acceptable",
       "wrong_answer": "Wrong answer",
       "no_data": "No data available",

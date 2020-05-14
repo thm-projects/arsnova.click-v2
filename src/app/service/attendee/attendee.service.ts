@@ -141,6 +141,15 @@ export class AttendeeService {
     return response && !isNaN(response.confidence) && response.confidence > -1;
   }
 
+  public getConfidenceValue(): number {
+    if (!this.getMember(this.ownNick)) {
+      return;
+    }
+
+    const response = this.getMember(this.ownNick).responses[this.quizService.quiz.currentQuestionIndex];
+    return response?.confidence;
+  }
+
   public getActiveMembers(): Array<MemberEntity> {
     return this.attendees.filter((member) => member.isActive);
   }

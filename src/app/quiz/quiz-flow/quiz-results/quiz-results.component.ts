@@ -187,6 +187,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       base: this.attendeeService.attendees.length,
       absolute: 0,
       percent: '0',
+      ownConfidence: this.attendeeService.getConfidenceValue(),
     };
     if (questionIndex >= 0) {
       const matches = this.attendeeService.attendees.filter(value => {
