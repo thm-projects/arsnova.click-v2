@@ -71,7 +71,8 @@ code[class*="language-"], pre[class*="language-"] {
   @include transitionEffect();
 }
 
-#logo-image {
+#logo-image,
+#logo-image-xl {
   background-color: $logo-bg;
 
   @each $selector, $colorCode in $logo-fg {
