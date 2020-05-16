@@ -6,7 +6,7 @@
 </button>
 
 <h2 class="d-flex align-items-center">
-  <span>{{'component.quiz_manager.added_questions_title' | translate:{amount: quizService.quiz?.questionList.length} }}</span>
+  <span *ngIf="quizService.quiz?.questionList.length">{{'component.quiz_manager.added_questions_title' | translate:{amount: quizService.quiz?.questionList.length} }}</span>
 
   <span *ngIf="quizService.quiz?.questionList.length > 1"
         class="ml-auto">

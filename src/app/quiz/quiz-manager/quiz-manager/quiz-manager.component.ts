@@ -242,8 +242,8 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
       label: `add-question`,
     });
     const question = getDefaultQuestionForType(this.translateService, id);
-    this.quizService.quiz.addQuestion(question, 0);
+    this.quizService.quiz.addQuestion(question);
     this.quizService.persist();
-    this.cdRef.markForCheck();
+    this.router.navigate(['/quiz', 'manager', this.quizService.quiz.questionList.length - 1,  'overview']);
   }
 }
