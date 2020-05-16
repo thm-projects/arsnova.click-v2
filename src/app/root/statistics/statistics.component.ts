@@ -35,7 +35,8 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   private readonly _destroy$ = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
 
-  public statistics: IServerStatistics;
+  public statistics: Partial<IServerStatistics>;
+  public isLoading = true;
   public readonly data: Array<IStatisticDataTile> = [];
 
   constructor(
@@ -62,7 +63,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         total: 0,
       },
       activeSockets: 0,
-    } as IServerStatistics;
+    };
     this.buildDataTiles();
   }
 
@@ -84,13 +85,16 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       if (this.userService.isAuthorizedFor(UserRole.SuperAdmin)) {
         this.notificationService.footerBadges['admin'] = this.statistics.quiz.pool.pendingQuestionAmount;
       }
+      this.isLoading = false;
     });
 
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.RequestStatistics, () => {
+        this.isLoading = true;
         this.statisticsApiService.getBaseAppStatistics().subscribe(data => {
           this.statistics = data;
           this.buildDataTiles();
+          this.isLoading = false;
         });
       }),
     ]);
