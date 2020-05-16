@@ -37,6 +37,24 @@
   ],
   "dataGroups": [
     {
+      "name": "api-freshness",
+      "urls": [
+        "/api/**",
+        "/lib/**",
+        "/backend/**",
+        "/rabbitmq/**",
+        "/rabbitmq-mgmt/**",
+        "https://polyfill.io/**",
+        "https://sentry.io/**"
+      ],
+      "cacheConfig": {
+        "strategy": "freshness",
+        "maxSize": 1,
+        "maxAge": "1u",
+        "timeout": "1s"
+      }
+    },
+    {
       "name": "api-performance",
       "urls": [
         "/*.css"

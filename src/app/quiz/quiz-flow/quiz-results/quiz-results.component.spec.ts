@@ -154,12 +154,12 @@ describe('QuizResultsComponent', () => {
   it(`#showStartQuizButton`, inject([QuizService], (quizService: QuizService) => {
     quizService['_isOwner'] = true;
     quizService.readingConfirmationRequested = true;
-    expect(component.showStartQuizButton).toBeFalsy();
+    expect(component.showStartQuizButton).toBeTrue();
   }));
   it(`#hideProgressbarCssStyle`, inject([QuizService], (quizService: QuizService) => {
     quizService.readingConfirmationRequested = false;
     quizService.quiz.currentQuestionIndex = 0;
-    expect(component.hideProgressbarStyle).toBeTruthy();
+    expect(component.hideProgressbarStyle).toBeFalse();
   }));
   it(`#showConfidenceRate`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     attendeeService.addMember(new Attendee({
@@ -230,9 +230,6 @@ describe('QuizResultsComponent', () => {
     quizService.quiz.sessionConfig.readingConfirmationEnabled = true;
     environment.readingConfirmationEnabled = true;
     expect(component.showReadingConfirmation(0)).toBeTruthy();
-  }));
-  it(`#showResponseProgress`, inject([QuizService], (quizService: QuizService) => {
-    expect(component.showResponseProgress()).toEqual(quizService.quiz.sessionConfig.showResponseProgress);
   }));
   it(`#getReadingConfirmationData`, inject([AttendeeService, I18nService], (attendeeService: AttendeeService, i18nService: I18nService) => {
     attendeeService.addMember(new Attendee({

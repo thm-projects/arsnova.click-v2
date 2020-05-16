@@ -222,6 +222,10 @@ export class QuizOverviewComponent implements OnInit {
     return !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin);
   }
 
+  public getUniqueTags(elem: QuizEntity): Array<string> {
+    return this.arrayUnique(this.getTags(elem));
+  }
+
   private loadData(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.db.Quiz.toCollection().each(session => this._sessions.push(new QuizEntity(session)));
@@ -233,9 +237,11 @@ export class QuizOverviewComponent implements OnInit {
     return [MessageProtocol.Editable, MessageProtocol.Unavailable].includes(quizStatusResponse.step);
   }
 
-  private async openLobby(session: QuizEntity): Promise<any> {
-    this.quizApiService.setQuiz(session).subscribe((updatedQuiz) => {
-      this.router.navigate(['/quiz', 'flow']);
-    });
+  private getTags(elem: QuizEntity): Array<string> {
+    return elem?.questionList?.reduce((previousValue, currentValue) => previousValue.concat(...(currentValue.tags || [])), []);
+  }
+
+  private arrayUnique<T>(value: Array<T>): Array<T> {
+    return value.filter((elem, index, array) => array.indexOf(elem) === index);
   }
 }

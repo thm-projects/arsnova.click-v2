@@ -11,13 +11,15 @@
   </h5>
 </div>
 
-<div class="row">
+<div class="form-row">
   <div *ngFor="let elem of sessions; let i = index"
-       class="col-12 col-lg-6">
-    <div class="card mb-3 p-0">
+       class="col-12 col-lg-6 mb-2">
+    <div class="card h-100">
 
       <div class="card-header">
         <h6 class="mb-0">{{elem.name}}</h6>
+
+        <small class="mb-0 text-muted">{{'component.quiz_manager.added_questions_title' | translate:{amount: elem.questionList.length} }}</small>
       </div>
 
       <div class="card-body text-break">
@@ -31,6 +33,17 @@
             {{'component.quiz_summary.question_group_failed' | translate}}
           </span>
         </p>
+
+        <ng-container *ngIf="getUniqueTags(elem).length">
+          <p class="card-text">
+            <small>{{'component.name_management.used-pool-tags' | translate}}:</small>
+          </p>
+          <small class="font-italic d-block">
+            <ng-container *ngFor="let tag of getUniqueTags(elem); let lastElem = last">{{tag}}
+              <ng-container *ngIf="!lastElem">,&nbsp;</ng-container>
+            </ng-container>
+          </small>
+        </ng-container>
       </div>
 
       <div class="card-footer">

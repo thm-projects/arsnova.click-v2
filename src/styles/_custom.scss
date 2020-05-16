@@ -10,6 +10,7 @@ body {
 * {
   backface-visibility: hidden;
   outline: none !important;
+  touch-action: manipulation;
 }
 
 .qrCodeContent {
@@ -81,6 +82,10 @@ iframe {
     .btn {
       border-radius: 0;
     }
+  }
+
+  .cc-window {
+    border-radius: 0 !important;
   }
 }
 

@@ -336,7 +336,8 @@
       "save_session": {
         "title": "Quiz speichern",
         "label": "Speichern"
-      }
+      },
+      "used-pool-tags": "Verwendete Tags"
     },
     "leaderboard": {
       "header": "Rangliste",
@@ -389,20 +390,23 @@
       "abort_countdown": "Countdown abbrechen",
       "abort_question": "Quizrunde abbrechen",
       "confidence_grade": "Antwortsicherheit",
+      "own_confidence_grade": "Deine Antwortsicherheit&#10;({value} %)",
       "guessed_in_range": "Nicht korrekt geraten, aber akzeptabel",
       "wrong_answer": "Falsche Antwort",
       "no_data": "Keine Daten verfügbar",
       "neutral_answer": "Antworten",
       "bonus-token": {
         "title": "Bonustoken",
-        "mail": "mailto:?subject=Mein%20Token%20({quizname})&body=Hallo,%0D%0A%0D%0Afür%20das%20Quiz%20{quizname}%20am%20{date}%20lautet%20mein%20Token%20''{token}''.%0D%0A%0D%0AViele%20Grüße%0D%0A",
+        "mail": "mailto:?subject=Mein%20Token%20({quizname})&body=Hallo,%0D%0A%0D%0Afür%20das%20Quiz%20{quizname}%20am%20{date}%20lautet%20mein%20Token%20''{token}''.%20Mein%20Nickname%20ist%20''{nickname}''.%0D%0A%0D%0AViele%20Grüße%0D%0A",
         "your-bonus-token": "Dein Token:",
+        "please-wait": "Bitte warte - dein Token wird geladen",
         "send-to-teacher": "Sende diesen Token an deinen Lehrer / deine Lehrerin und tausche ihn gegen Bonuspunkte ein"
       }
     },
     "lobby": {
       "start_quiz": "Los geht's!",
       "kick_member_confirmation": "Soll die Person \"{NAME}\" aus dem Quiz entfernt werden?",
+      "own_nickname": "Dein Nickname:",
       "waiting_for_players": "Warten auf die Anderen…",
       "description": {}
     },
@@ -437,7 +441,7 @@
     "quiz_manager": {
       "title": "Quiz-Manager",
       "available_questions_title": "Vorlagen",
-      "added_questions_title": "Quizfragen",
+      "added_questions_title": "{amount, plural, =0{Keine Quizfragen bisher} one{1 Quizfrage} other{# Quizfragen}}",
       "no_added_questions": "Füge zunächst eine Frage hinzu …",
       "details": {
         "aria": {

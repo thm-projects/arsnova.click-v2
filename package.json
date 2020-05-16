@@ -101,7 +101,10 @@
     "tslib": "^1.10.0",
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.10.2",
-    "angular-tag-cloud-module": "^3.8.1"
+    "compression": "^1.7.4",
+    "angular-tag-cloud-module": "^3.8.1",
+    "cookie-parser": "^1.4.5",
+    "source-map-support": "^0.5.19"
   },
   "devDependencies": {
     "@angular-devkit/schematics": "^9.1.0",

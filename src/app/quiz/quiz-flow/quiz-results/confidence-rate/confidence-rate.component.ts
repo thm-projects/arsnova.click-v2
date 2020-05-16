@@ -11,12 +11,16 @@ import { I18nService } from '../../../../service/i18n/i18n.service';
 export class ConfidenceRateComponent {
   public static readonly TYPE = 'ConfidenceRateComponent';
 
+  private _ownConfidencePercent: number;
   private _percent: string;
   private _base: number;
   private _data: Object;
   private _name: string;
-
   public absolute: number;
+
+  get ownConfidencePercent(): number {
+    return this._ownConfidencePercent;
+  }
 
   get percent(): string {
     return this._percent;
@@ -39,6 +43,9 @@ export class ConfidenceRateComponent {
     this.percent = value.percent;
     this.base = value.base;
     this.absolute = value.absolute;
+    if ((value.ownConfidence ?? false) && value.ownConfidence > -1) {
+      this._ownConfidencePercent = value.ownConfidence;
+    }
     this.cd.markForCheck();
   }
 

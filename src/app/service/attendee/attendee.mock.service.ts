@@ -1,5 +1,5 @@
+import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
-import {MemberEntity} from '../../lib/entities/member/MemberEntity';
 
 export class AttendeeMockService {
   public attendees = [];
@@ -25,6 +25,10 @@ export class AttendeeMockService {
 
   public hasConfidenceValue(): boolean {
     return false;
+  }
+
+  public getConfidenceValue(): number {
+    return 10;
   }
 
   public hasReadingConfirmation(): boolean {

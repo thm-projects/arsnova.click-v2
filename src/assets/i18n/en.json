@@ -413,7 +413,8 @@
       "save_session": {
         "title": "Save Quiz",
         "label": "Save"
-      }
+      },
+      "used-pool-tags": "Used Tags"
     },
     "leaderboard": {
       "header": "Leaderboard",
@@ -466,20 +467,23 @@
       "abort_countdown": "Abort Countdown",
       "abort_question": "Abort question",
       "confidence_grade": "Confidence Grade",
+      "own_confidence_grade": "Your Confidence Grade&#10;({value}%)",
       "guessed_in_range": "Not correctly estimated, but acceptable",
       "wrong_answer": "Wrong answer",
       "no_data": "No data available",
       "neutral_answer": "Reponses",
       "bonus-token": {
         "title": "Bonustoken",
-        "mail": "mailto:?subject=My%20Token%20({quizname})&body=Hello,%0D%0A%0D%0Afor%20the%20quiz%20{quizname}%20from%20{date}%20is%20my%20token%20''{token}''.%0D%0A%0D%0Ayour's%20sincerely%0D%0A",
+        "mail": "mailto:?subject=My%20Token%20({quizname})&body=Hello,%0D%0A%0D%0Afor%20the%20quiz%20{quizname}%20from%20{date}%20is%20my%20token%20''{token}''.%20My%20Nickname%20is%20''{nickname}''.%0D%0A%0D%0Ayour's%20sincerely%0D%0A",
         "your-bonus-token": "Your Token:",
+        "please-wait": "Please wait - your token is loading",
         "send-to-teacher": "Send this token to your teacher to gain some bonus points!"
       }
     },
     "lobby": {
       "start_quiz": "Let's go!",
       "kick_member_confirmation": "Shall the attendee \"{NAME}\" be removed from the session?",
+      "own_nickname": "Your nickname:",
       "waiting_for_players": "Waiting for the players...",
       "title": "Quiz Lobby",
       "yes": "Yes",
@@ -543,7 +547,7 @@
     "quiz_manager": {
       "title": "Quiz Manager",
       "available_questions_title": "Available questions",
-      "added_questions_title": "Created questions",
+      "added_questions_title": "{amount, plural, =0{No quesitions created} one{1 question} other{# questions}}",
       "no_added_questions": "Add a question first …",
       "details": {
         "aria": {

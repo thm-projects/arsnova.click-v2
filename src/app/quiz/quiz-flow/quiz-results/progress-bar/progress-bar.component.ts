@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Observable, Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { NumberType } from '../../../../lib/enums/enums';
@@ -13,8 +15,10 @@ import { QuizService } from '../../../../service/quiz/quiz.service';
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.scss'],
 })
-export class ProgressBarComponent {
+export class ProgressBarComponent implements OnDestroy {
   public static readonly TYPE = 'ProgressBarComponent';
+
+  private readonly _destroy = new Subject();
 
   @Input() public data: Array<string>;
   @Input() public questionIndex: number;
@@ -29,35 +33,45 @@ export class ProgressBarComponent {
   ) {
   }
 
-  public attendeeDataForAnswer(answerIndex: number = 0): object {
-    if (!this.attendeeService.attendees.length || !this.quizService.quiz) {
-      return {};
-    }
+  public ngOnDestroy(): void {
+    this._destroy.next();
+    this._destroy.complete();
+  }
 
-    const question = this.quizService.quiz.questionList[this.questionIndex];
+  public attendeeDataForAnswer(answerIndex: number = 0): Observable<object> {
+    return this.attendeeService.attendeeAmount.pipe(
+      filter(() => Boolean(this.quizService.quiz)),
+      map(attendeeAmount => {
+        if (!attendeeAmount) {
+          return {};
+        }
 
-    if (this.hideProgressbarCssStyle) {
-      return this.getAnonymousCorrectWrongResults(question);
-    }
+        const question = this.quizService.quiz.questionList[this.questionIndex];
+        if (this.hideProgressbarCssStyle) {
+          return this.getAnonymousCorrectWrongResults(question);
+        }
 
-    const result = {
-      answerIndex: answerIndex,
-      label: [QuestionType.ABCDSingleChoiceQuestion].includes(question.TYPE) ? null : this.data[answerIndex],
-      absolute: 0,
-      base: this.attendeeService.attendees.length,
-      percent: '0',
-      isCorrect: 0,
-    };
+        const result = {
+          answerIndex: answerIndex,
+          label: [QuestionType.ABCDSingleChoiceQuestion].includes(question.TYPE) ? null : this.data[answerIndex],
+          absolute: 0,
+          base: this.attendeeService.attendees.length,
+          percent: '0',
+          isCorrect: 0,
+        };
 
-    if (question.TYPE === QuestionType.RangedQuestion) {
-      this.updateResultSetForRangedQuestions(result, question);
-    } else if (question.TYPE === QuestionType.FreeTextQuestion) {
-      this.updateResultSetForFreetextQuestions(result, question);
-    } else {
-      this.updateResultSetForQuestions(result, question, answerIndex);
-    }
+        if (question.TYPE === QuestionType.RangedQuestion) {
+          this.updateResultSetForRangedQuestions(result, question);
+        } else if (question.TYPE === QuestionType.FreeTextQuestion) {
+          this.updateResultSetForFreetextQuestions(result, question);
+        } else {
+          this.updateResultSetForQuestions(result, question, answerIndex);
+        }
 
-    return result;
+        return result;
+      }),
+      takeUntil(this._destroy),
+    );
   }
 
   private getAnonymousCorrectWrongResults(question): object {

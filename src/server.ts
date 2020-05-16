@@ -1,6 +1,8 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
+import * as compression from 'compression';
+import * as cookieparser from 'cookie-parser';
 import * as express from 'express';
 import { Express } from 'express';
 import { existsSync } from 'fs';
@@ -8,11 +10,18 @@ import { join } from 'path';
 import 'zone.js/dist/zone-node';
 import { AppServerModule } from './main.server';
 
+require('source-map-support').install();
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/frontend/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+
+  // gzip
+  server.use(compression());
+  // cookies
+  server.use(cookieparser());
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine('html', ngExpressEngine({
@@ -21,6 +30,7 @@ export function app(): Express {
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
+  server.disable('x-powered-by');
 
   // Example Express Rest API endpoints
   // app.get('/api/**', (req, res) => { });

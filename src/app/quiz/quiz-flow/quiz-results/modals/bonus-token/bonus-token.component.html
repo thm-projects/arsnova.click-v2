@@ -9,9 +9,12 @@
   </button>
 </div>
 <div class="modal-body">
-  <p>{{'component.liveResults.bonus-token.your-bonus-token' | translate}}</p>
-  <p class="break-word">{{bonusToken}}</p>
-  <p>{{'component.liveResults.bonus-token.send-to-teacher' | translate}}</p>
+  <p *ngIf="!bonusToken">{{'component.liveResults.bonus-token.please-wait' | translate}}</p>
+  <ng-container *ngIf="bonusToken">
+    <p>{{'component.liveResults.bonus-token.your-bonus-token' | translate}}</p>
+    <p class="break-word">{{bonusToken}}</p>
+    <p>{{'component.liveResults.bonus-token.send-to-teacher' | translate}}</p>
+  </ng-container>
 </div>
 <div class="modal-footer">
   <button (click)="copy()"
@@ -24,7 +27,7 @@
     <span *ngIf="clipboardText">{{'global.copy-to-clipboard' | translate}}</span>
     <span *ngIf="!clipboardText">{{'global.copied' | translate}}</span>
   </button>
-  <a href="{{'component.liveResults.bonus-token.mail' | translate:{token: bonusToken, quizname: quizname, date: date} }}"
+  <a href="{{'component.liveResults.bonus-token.mail' | translate:{token: bonusToken, quizname: quizname, date: date, nickname: nickname} }}"
      target="_blank">
     <button [attr.aria-label]="'global.mail-to' | translate"
             class="btn btn-primary">

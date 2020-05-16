@@ -1,3 +1,24 @@
+<div class="my-3 d-flex justify-content-between align-items-center">
+  <h3 class="mb-0">
+    <fa-icon [icon]="'users'"></fa-icon>
+    <span class="ml-2">{{attendeeService.getActiveMembers().length}}</span>
+  </h3>
+
+  <div *ngIf="attendeeService.ownAttendee"
+       class="my-1 d-flex flex-wrap flex-sm-nowrap col-auto">
+    <p class="text-center mr-sm-2 d-flex justify-content-center flex-grow-1 align-self-center text-nowrap">{{'component.lobby.own_nickname' | translate}}</p>
+    <div [style.background-color]="'#' + sanitizeHTML(attendeeService.ownAttendee.colorCode)"
+         [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(attendeeService.ownAttendee.colorCode)))"
+         class="rounded d-flex align-items-center justify-content-center own-nick w-100">
+      <p class="mb-0 p-2 break-word">
+          <span *ngIf="isHtmlNickname(attendeeService.ownAttendee.name)"
+                [innerHTML]="parseNickname(attendeeService.ownAttendee.name)"></span>
+        <span *ngIf="!isHtmlNickname(attendeeService.ownAttendee.name)">{{attendeeService.ownAttendee.name}}</span>
+      </p>
+    </div>
+  </div>
+</div>
+
 <div class="row">
   <ng-container *ngIf="attendeeService.getMemberGroups()?.length === 1; else attendeesByGroup">
     <ng-container *ngIf="!attendeeService.attendees.length">
@@ -9,11 +30,10 @@
          class="my-1 col-sm-4 col-md-3">
       <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
            [class.cursor-pointer]="quizService.isOwner"
-           [class.own-nick]="attendeeService.isOwnNick(elem.name)"
            [id]="elem.id"
            [style.background-color]="'#' + sanitizeHTML(elem.colorCode)"
            [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-           class="member-wrapper rounded h-100 d-flex align-items-center justify-content-center">
+           class="rounded d-flex align-items-center justify-content-center">
         <p class="mb-0 p-2 break-word">
           <span *ngIf="isHtmlNickname(elem.name)"
                 [innerHTML]="parseNickname(elem.name)"></span>
@@ -48,7 +68,7 @@
                  [id]="elem.id"
                  [style.background-color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
                  [style.color]="'#' + sanitizeHTML(elem.colorCode)"
-                 class="member-wrapper rounded px-1 py-1 fa-2x">>
+                 class="rounded px-1 py-1 fa-2x">>
         </fa-icon>
         <p class="ml-2 attendee-text text-truncate mb-0 align-self-center">
           <span *ngIf="isHtmlNickname(elem.name)"
