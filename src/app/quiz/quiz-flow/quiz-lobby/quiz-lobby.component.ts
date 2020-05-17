@@ -14,6 +14,7 @@ import { UserRole } from '../../../lib/enums/UserRole';
 import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IAudioPlayerConfig } from '../../../lib/interfaces/IAudioConfig';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -47,6 +48,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   private readonly _messageSubscriptions: Array<string> = [];
 
   public hasTriggeredNavigation: boolean;
+  public musicConfig: IAudioPlayerConfig;
 
   get nickToRemove(): string {
     return this._nickToRemove;
@@ -91,6 +93,16 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
         this.router.navigate(['/']);
         return;
       }
+
+      this.musicConfig = {
+        autostart: true,
+        hideControls: true,
+        original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
+                                this.quizService.quiz.sessionConfig.music.volumeConfig.global :
+                                this.quizService.quiz.sessionConfig.music.volumeConfig.lobby),
+        src: this.quizService.quiz.sessionConfig.music.titleConfig.lobby,
+        target: 'lobby'
+      };
 
       this.handleMessages();
 

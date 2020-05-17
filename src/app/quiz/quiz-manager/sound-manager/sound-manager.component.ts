@@ -6,7 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { MusicSessionConfigurationEntity } from '../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
 import { StorageKey } from '../../../lib/enums/enums';
-import { ISong } from '../../../lib/interfaces/ISong';
+import { IAudioPlayerConfig, ISong } from '../../../lib/interfaces/IAudioConfig';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 
@@ -45,6 +45,10 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   private _selected = 'lobby';
   private readonly _destroy = new Subject();
 
+  public lobbyMusicConfig: IAudioPlayerConfig;
+  public countdownRunningMusicConfig: IAudioPlayerConfig;
+  public countdownEndMusicConfig: IAudioPlayerConfig;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private translateService: TranslateService,
@@ -78,6 +82,27 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
       this.setRandomKey();
       this.setCountdownRunningSongs();
       this.setCountdownEndSongs();
+
+      this.lobbyMusicConfig = {
+        autostart: false,
+        src: this.config?.titleConfig?.lobby,
+        target: 'lobby',
+        original_volume: String(this.config?.volumeConfig.useGlobalVolume ? this.config?.volumeConfig.global : this.config?.volumeConfig.lobby)
+      };
+
+      this.countdownRunningMusicConfig = {
+        autostart: false,
+        src: this.config?.titleConfig?.countdownRunning,
+        target: 'countdownRunning',
+        original_volume: String(this.config?.volumeConfig.useGlobalVolume ? this.config?.volumeConfig.global : this.config?.volumeConfig.countdownRunning)
+      };
+
+      this.countdownEndMusicConfig = {
+        autostart: false,
+        src: this.config?.titleConfig?.countdownEnd,
+        target: 'countdownEnd',
+        original_volume: String(this.config?.volumeConfig.useGlobalVolume ? this.config?.volumeConfig.global : this.config?.volumeConfig.countdownEnd)
+      };
     });
   }
 

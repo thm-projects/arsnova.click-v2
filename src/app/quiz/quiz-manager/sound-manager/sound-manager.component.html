@@ -105,10 +105,8 @@
 
         <div class="col-sm-7">
           <!--suppress JSValidateTypes -->
-          <app-audio-player [src]="config?.titleConfig?.lobby"
+          <app-audio-player [config]="lobbyMusicConfig"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
-                            [target]="'lobby'"
-                            [original_volume]="config?.volumeConfig.useGlobalVolume ? toString(config?.volumeConfig.global) : toString(config?.volumeConfig.lobby)"
                             (volumeChange)="config?.volumeConfig.lobby = $event"></app-audio-player>
         </div>
       </div>
@@ -153,10 +151,8 @@
 
         <div class="col-sm-7">
           <!--suppress JSValidateTypes -->
-          <app-audio-player [src]="config?.titleConfig?.countdownRunning"
+          <app-audio-player [config]="countdownRunningMusicConfig"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
-                            [target]="'countdownRunning'"
-                            [original_volume]="config?.volumeConfig.useGlobalVolume ? toString(config?.volumeConfig.global) : toString(config?.volumeConfig.countdownRunning)"
                             (volumeChange)="config?.volumeConfig.countdownRunning = $event"></app-audio-player>
         </div>
 
@@ -202,10 +198,8 @@
 
         <div class="col-sm-7">
           <!--suppress JSValidateTypes -->
-          <app-audio-player [src]="config?.titleConfig.countdownEnd"
+          <app-audio-player [config]="countdownEndMusicConfig"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
-                            [target]="'countdownEnd'"
-                            [original_volume]="config?.volumeConfig.useGlobalVolume ? toString(config?.volumeConfig.global) : toString(config?.volumeConfig.countdownEnd)"
                             (volumeChange)="config?.volumeConfig.countdownEnd = $event"></app-audio-player>
         </div>
       </div>
