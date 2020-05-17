@@ -54,9 +54,9 @@
             },
             "fileReplacements": [],
             "styles": [
-              "src/styles/styles.scss",
               "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
               "node_modules/prism-themes/themes/prism-ghcolors.css",
+              "src/styles/styles.scss",
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
@@ -153,8 +153,9 @@
                 }
               ],
               "styles": [
-                "src/styles/styles.scss",
+                "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
+                "src/styles/styles.scss",
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
@@ -245,8 +246,9 @@
                 }
               ],
               "styles": [
-                "src/styles/styles.scss",
+                "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
+                "src/styles/styles.scss",
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
@@ -337,8 +339,9 @@
                 }
               ],
               "styles": [
-                "src/styles/styles.scss",
+                "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
+                "src/styles/styles.scss",
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
@@ -389,8 +392,9 @@
                 }
               ],
               "styles": [
-                "src/styles/styles.scss",
+                "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
                 "node_modules/prism-themes/themes/prism-ghcolors.css",
+                "src/styles/styles.scss",
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",

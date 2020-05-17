@@ -81,16 +81,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this._hasSuccess;
   }
 
-  set hasSuccess(value: string) {
-    this._hasSuccess = value;
-  }
-
   get hasErrors(): string {
     return this._hasErrors;
-  }
-
-  set hasErrors(value: string) {
-    this._hasErrors = value;
   }
 
   get isShowingQuiznameDatalist(): boolean {
