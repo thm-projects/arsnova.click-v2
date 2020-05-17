@@ -56,8 +56,8 @@
                    class="d-none"
                    autocomplete="off"
                    role="switch"
-                   [checked]="config?.volumeConfig.useGlobalVolume"
-                   (change)="config?.volumeConfig.useGlobalVolume = !config?.volumeConfig.useGlobalVolume">
+                   [ngModel]="config?.volumeConfig.useGlobalVolume"
+                   (ngModelChange)="toggleGlobalVolume()">
             <span *ngIf="config?.volumeConfig.useGlobalVolume">{{'plugins.sound.activated' | translate}}</span>
             <span *ngIf="!config?.volumeConfig.useGlobalVolume">{{'plugins.sound.deactivated' | translate}}</span>
           </label>
@@ -68,7 +68,8 @@
             <input type="range"
                    list="tickmarks"
                    class="flex-grow-1 align-self-center"
-                   [(ngModel)]="config?.volumeConfig.global">
+                   (ngModelChange)="updateAudioVolume($event)"
+                   [ngModel]="config?.volumeConfig.global">
             <span class="ml-2">{{config?.volumeConfig.global}}&nbsp;&#37;</span>
           </label>
         </div>
@@ -106,6 +107,7 @@
         <div class="col-sm-7">
           <!--suppress JSValidateTypes -->
           <app-audio-player [config]="lobbyMusicConfig"
+                            [revalidate]="revalidate"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
                             (volumeChange)="config?.volumeConfig.lobby = $event"></app-audio-player>
         </div>
@@ -152,6 +154,7 @@
         <div class="col-sm-7">
           <!--suppress JSValidateTypes -->
           <app-audio-player [config]="countdownRunningMusicConfig"
+                            [revalidate]="revalidate"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
                             (volumeChange)="config?.volumeConfig.countdownRunning = $event"></app-audio-player>
         </div>
@@ -199,6 +202,7 @@
         <div class="col-sm-7">
           <!--suppress JSValidateTypes -->
           <app-audio-player [config]="countdownEndMusicConfig"
+                            [revalidate]="revalidate"
                             class="mb-0 ml-md-3 mt-3 mt-sm-0 d-flex"
                             (volumeChange)="config?.volumeConfig.countdownEnd = $event"></app-audio-player>
         </div>

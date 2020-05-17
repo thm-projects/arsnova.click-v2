@@ -1,4 +1,4 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -19,35 +19,31 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'SoundManagerComponent';
 
   private _lobbySongs: Array<ISong> = [];
+  private _countdownRunningSounds: Array<ISong> = [];
+  private _countdownEndSounds: Array<ISong> = [];
+  private _config: MusicSessionConfigurationEntity;
+  private _selected = 'lobby';
+  private readonly _destroy = new Subject();
+  public lobbyMusicConfig: IAudioPlayerConfig;
+  public countdownRunningMusicConfig: IAudioPlayerConfig;
+  public countdownEndMusicConfig: IAudioPlayerConfig;
+  public readonly revalidate = new Subject();
 
   get lobbySongs(): Array<ISong> {
     return this._lobbySongs;
   }
 
-  private _countdownRunningSounds: Array<ISong> = [];
-
   get countdownRunningSounds(): Array<ISong> {
     return this._countdownRunningSounds;
   }
-
-  private _countdownEndSounds: Array<ISong> = [];
 
   get countdownEndSounds(): Array<ISong> {
     return this._countdownEndSounds;
   }
 
-  private _config: MusicSessionConfigurationEntity;
-
   get config(): MusicSessionConfigurationEntity {
     return this._config;
   }
-
-  private _selected = 'lobby';
-  private readonly _destroy = new Subject();
-
-  public lobbyMusicConfig: IAudioPlayerConfig;
-  public countdownRunningMusicConfig: IAudioPlayerConfig;
-  public countdownEndMusicConfig: IAudioPlayerConfig;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -82,37 +78,18 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
       this.setRandomKey();
       this.setCountdownRunningSongs();
       this.setCountdownEndSongs();
-
-      this.lobbyMusicConfig = {
-        autostart: false,
-        src: this.config?.titleConfig?.lobby,
-        target: 'lobby',
-        original_volume: String(this.config?.volumeConfig.useGlobalVolume ? this.config?.volumeConfig.global : this.config?.volumeConfig.lobby)
-      };
-
-      this.countdownRunningMusicConfig = {
-        autostart: false,
-        src: this.config?.titleConfig?.countdownRunning,
-        target: 'countdownRunning',
-        original_volume: String(this.config?.volumeConfig.useGlobalVolume ? this.config?.volumeConfig.global : this.config?.volumeConfig.countdownRunning)
-      };
-
-      this.countdownEndMusicConfig = {
-        autostart: false,
-        src: this.config?.titleConfig?.countdownEnd,
-        target: 'countdownEnd',
-        original_volume: String(this.config?.volumeConfig.useGlobalVolume ? this.config?.volumeConfig.global : this.config?.volumeConfig.countdownEnd)
-      };
+      this.updateAudioSource();
     });
   }
 
   public selectSound(target: 'lobby' | 'countdownRunning' | 'countdownEnd', event: Event): void {
     this.config.titleConfig[target] = (<HTMLSelectElement>event.target).value;
-    this.toggleMusicPreview(target);
+    this.updateAudioSource();
   }
 
   public openTab(id: string): void {
     this._selected = id;
+    this.updateAudioSource();
   }
 
   public isSelected(elem: string): boolean {
@@ -126,10 +103,25 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     }
     this._destroy.next();
     this._destroy.complete();
+    this.revalidate.complete();
   }
 
-  public toString(value: number): string {
-    return String(value);
+  public toggleGlobalVolume(): void {
+    this.config.volumeConfig.useGlobalVolume = !this.config?.volumeConfig.useGlobalVolume;
+    this.updateAudioVolume();
+  }
+
+  public updateAudioVolume(value?: string): void {
+    const volumeConfig = this.config?.volumeConfig;
+    if (value) {
+      volumeConfig.global = parseInt(value, 10);
+    }
+
+    this.lobbyMusicConfig.original_volume = String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.lobby);
+    this.countdownRunningMusicConfig.original_volume = String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.countdownRunning);
+    this.countdownEndMusicConfig.original_volume = String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.countdownEnd);
+
+    this.revalidate.next();
   }
 
   private initConfig(): void {
@@ -201,18 +193,36 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     });
   }
 
-  private toggleMusicPreview(target: 'lobby' | 'countdownRunning' | 'countdownEnd'): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const audioElements = document.getElementsByTagName('audio');
-      for (let i = 0; i < audioElements.length; i++) {
-        (<HTMLAudioElement>audioElements.item(i)).volume = (parseInt(String(this.config.volumeConfig[target]), 10) || 60) / 100;
-      }
-    }
-  }
-
   private resetSongList(): void {
     this._lobbySongs.splice(0, this._lobbySongs.length);
     this._countdownRunningSounds.splice(0, this._countdownRunningSounds.length);
     this._countdownEndSounds.splice(0, this._countdownEndSounds.length);
+  }
+
+  private updateAudioSource(): void {
+    const volumeConfig = this.config?.volumeConfig;
+
+    this.lobbyMusicConfig = {
+      autostart: false,
+      src: this.config?.titleConfig?.lobby,
+      target: 'lobby',
+      loop: true,
+      original_volume: String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.lobby)
+    };
+
+    this.countdownRunningMusicConfig = {
+      autostart: false,
+      src: this.config?.titleConfig?.countdownRunning,
+      target: 'countdownRunning',
+      loop: true,
+      original_volume: String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.countdownRunning)
+    };
+
+    this.countdownEndMusicConfig = {
+      autostart: false,
+      src: this.config?.titleConfig?.countdownEnd,
+      target: 'countdownEnd',
+      original_volume: String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.countdownEnd)
+    };
   }
 }

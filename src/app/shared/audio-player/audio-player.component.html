@@ -1,4 +1,4 @@
-<div *ngIf="!hideControls"
+<div *ngIf="!config?.hideControls"
      class="btn-toolbar flex-grow-1 flex-nowrap">
 
   <div class="btn-group d-flex align-items-center">
@@ -31,7 +31,7 @@
 
 </div>
 
-<button *ngIf="autostart && autostartRejected"
+<button *ngIf="config?.autostart && autostartRejected"
         class="btn btn-invers btn-sm"
         (click)="playMusic()">
   <fa-icon class="mr-2" [icon]="'play'"></fa-icon>
