@@ -474,7 +474,7 @@
       "neutral_answer": "Reponses",
       "bonus-token": {
         "title": "Bonustoken",
-        "mail": "mailto:?subject=arsnova.click:%20My%20Token%20%C2%BB{quizname}%C2%AB&body=Hi%2C%0D%0A%0D%0AI%20took%20part%20in%20the%20quiz%20%C2%BB{quizname}%C2%AB%20on%20{date}%20and%20received%20following%20token%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMy%20nickname%20in%20the%20quiz%20is%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0APlease%20exchange%20the%20token%20for%20bonus%20points.%0D%0A%0D%0AI%20am%20looking%20forward%20to%20our%20next%20quiz%20with%20arsnova.click%21",
+        "mail": "mailto:?subject=arsnova.click%3A%20My%20Token%20%C2%BB{quizname}%C2%AB&body=Hi%2C%0D%0A%0D%0AI%20took%20part%20in%20the%20quiz%20%C2%BB{quizname}%C2%AB%20on%20{date}%20and%20received%20the%20following%20token%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMy%20nickname%20in%20the%20quiz%20was%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0AI%20am%20looking%20forward%20to%20our%20next%20quiz%20with%20arsnova.click%21",
         "your-bonus-token": "Your Token:",
         "please-wait": "Please wait - your token is loading",
         "send-to-teacher": "Send this token to your teacher to gain some bonus points!"
