@@ -1,5 +1,5 @@
 import { isPlatformServer } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -13,6 +13,7 @@ import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IAudioPlayerConfig } from '../../../lib/interfaces/IAudioConfig';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
@@ -24,6 +25,7 @@ import { I18nService } from '../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../service/question-text/question-text.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { TwitterService } from '../../../service/twitter/twitter.service';
+import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
 import { BonusTokenComponent } from './modals/bonus-token/bonus-token.component';
 import { ToLobbyConfirmComponent } from './modals/to-lobby-confirm/to-lobby-confirm.component';
 
@@ -44,6 +46,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy = new Subject();
 
+  @ViewChild('countdownEndAudioComp') private readonly countdownEndAudioComp!: AudioPlayerComponent;
+
   public hasTriggeredNavigation: boolean;
   public countdown: number;
   public answers: Array<string> = [];
@@ -53,7 +57,8 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public isStarting: boolean;
   public isStopping: boolean;
   public isLoadingQuestionData: boolean;
-  public playCountdownEndSound: boolean;
+  public countdownRunningMusicConfig: IAudioPlayerConfig;
+  public countdownEndMusicConfig: IAudioPlayerConfig;
 
   get showResponseProgress(): boolean {
     return this._showResponseProgress;
@@ -152,10 +157,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
     this.cd.markForCheck();
     return ![QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
-  }
-
-  public toString(value: number): string {
-    return String(value);
   }
 
   public showConfidenceRate(questionIndex: number): boolean {
@@ -285,6 +286,30 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
     this.isLoadingQuestionData = true;
     this.quizService.loadDataToPlay(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
+
+      if (this.quizService.isOwner) {
+        this.countdownRunningMusicConfig = {
+          autostart: true,
+          hideControls: true,
+          original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.global :
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning),
+          src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownRunning,
+          target: 'countdownRunning'
+        };
+
+        this.countdownEndMusicConfig = {
+          autostart: false,
+          hideControls: true,
+          loop: false,
+          original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.global :
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd),
+          src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownEnd,
+          target: 'countdownEnd'
+        };
+      }
+
       this.handleMessages();
       this.questionTextService.change(this.quizService.currentQuestion().questionText).subscribe(() => this.cd.markForCheck());
     }).catch(() => this.hasTriggeredNavigation = true);
@@ -333,10 +358,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         console.log('QuizResultsComponent: StopQuiz failed', data);
       }
     });
-    if (this.countdown) {
-      this.countdown = 0;
-      this.playEndSound();
-    }
     this.cd.markForCheck();
     this.isStopping = false;
   }
@@ -503,9 +524,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.countdown = payload.value;
         this.hideProgressbarStyle = this.countdown > 0;
-        if (!this.countdown) {
-          this.playEndSound();
-        }
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
         this.attendeeService.removeMember(payload.name);
@@ -523,7 +541,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
         this.countdown = 0;
-        this.playEndSound();
         this.hideProgressbarStyle = false;
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
@@ -553,11 +570,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         if (!this.showStartQuizButton) {
           this.addFooterElements();
         }
+        this.playEndSound();
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.showStopCountdownButton = payload.value > 0;
         this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
         if (!this.showStartQuizButton) {
           this.addFooterElements();
+        }
+        if (!this.countdown) {
+          this.playEndSound();
         }
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         this.showStartQuizButton = true;
@@ -608,6 +629,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   private playEndSound(): void {
-    this.playCountdownEndSound = true;
+    this.countdownEndAudioComp.playMusic();
   }
 }

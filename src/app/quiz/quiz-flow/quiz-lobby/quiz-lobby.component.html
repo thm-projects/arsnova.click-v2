@@ -4,6 +4,10 @@
     <span class="ml-2">{{attendeeService.getActiveMembers().length}}</span>
   </h3>
 
+  <div class="ml-auto" *ngIf="quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby">
+    <app-audio-player [config]="musicConfig"></app-audio-player>
+  </div>
+
   <div *ngIf="attendeeService.ownAttendee"
        class="my-1 d-flex flex-wrap flex-sm-nowrap col-auto">
     <p class="text-center mr-sm-2 d-flex justify-content-center flex-grow-1 align-self-center text-nowrap">{{'component.lobby.own_nickname' | translate}}</p>
@@ -43,13 +47,6 @@
     </div>
   </ng-container>
 </div>
-
-<ng-container *ngIf="quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby">
-  <app-audio-player [autostart]="true"
-                    [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? toString(quizService.quiz.sessionConfig.music.volumeConfig.global) : toString(quizService.quiz.sessionConfig.music.volumeConfig.lobby)"
-                    [src]="quizService.quiz.sessionConfig.music.titleConfig.lobby"
-                    [target]="'lobby'"></app-audio-player>
-</ng-container>
 
 <ng-template #attendeesByGroup>
   <div *ngFor="let group of attendeeService.getMemberGroups()"

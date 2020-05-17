@@ -3,6 +3,22 @@
     <fa-icon [icon]="'users'"></fa-icon>
     <span class="ml-2">{{attendeeService.getActiveMembers().length}}</span>
   </h3>
+
+
+  <div *ngIf="quizService.isOwner">
+    <ng-container *ngIf="countdown && quizService.quiz?.sessionConfig?.music.enabled.countdownRunning">
+      <app-audio-player [config]="countdownRunningMusicConfig"></app-audio-player>
+    </ng-container>
+
+    <ng-container *ngIf="quizService.quiz?.sessionConfig?.music.enabled.countdownEnd">
+      <app-audio-player #countdownEndAudioComp [config]="countdownEndMusicConfig"></app-audio-player>
+    </ng-container>
+
+    <ng-container *ngIf="countdown">
+      <app-gamification-animation [countdownValue]="countdown"></app-gamification-animation>
+    </ng-container>
+  </div>
+
   <h3 *ngIf="countdown > 0"
       class="mb-0">
     <span class="mr-2">{{countdown}}</span>
@@ -122,26 +138,4 @@
                       [questionIndex]="selectedQuestionIndex"
                       [question]="quizService.quiz.questionList[selectedQuestionIndex]"></app-progress-bar>
   </div>
-</ng-container>
-
-<ng-container *ngIf="quizService.isOwner">
-  <ng-container *ngIf="countdown && quizService.quiz && quizService.quiz.sessionConfig?.music.enabled.countdownRunning">
-    <app-audio-player [autostart]="true"
-                      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? toString(quizService.quiz.sessionConfig.music.volumeConfig.global) : toString(quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning)"
-                      [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownRunning"
-                      [target]="'countdownRunning'"></app-audio-player>
-  </ng-container>
-
-  <ng-container *ngIf="playCountdownEndSound">
-    <app-audio-player
-      [autostart]="true"
-      [loop]="false"
-      [original_volume]="quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ? toString(quizService.quiz.sessionConfig.music.volumeConfig.global) : toString(quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd)"
-      [src]="quizService.quiz.sessionConfig.music.titleConfig.countdownEnd"
-      [target]="'countdownEnd'"></app-audio-player>
-  </ng-container>
-
-  <ng-container *ngIf="countdown">
-    <app-gamification-animation [countdownValue]="countdown"></app-gamification-animation>
-  </ng-container>
 </ng-container>
