@@ -397,7 +397,7 @@
       "neutral_answer": "Antworten",
       "bonus-token": {
         "title": "Bonustoken",
-        "mail": "mailto:?subject=Mein%20Token%20({quizname})&body=Hallo,%0D%0A%0D%0Afür%20das%20Quiz%20{quizname}%20am%20{date}%20lautet%20mein%20Token%20''{token}''.%20Mein%20Nickname%20ist%20''{nickname}''.%0D%0A%0D%0AViele%20Grüße%0D%0A",
+        "mail": "mailto:?subject=arsnova.click:%20Mein%20Token%20%C2%BB{quizname}%C2%AB&body=Hallo%2C%0D%0A%0D%0AIch%20habe%20am%20Quiz%20%C2%BB{quizname}%C2%AB%20am%20{date}%20teilgenommen%20und%20habe%20folgendes%20Token%20erhalten%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMein%20Nickname%20im%20Quiz%20lautet%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0ABitte%20tauschen%20Sie%20das%20Token%20gegen%20Bonuspunkte%20ein.%0D%0A%0D%0AIch%20freue%20mich%20schon%20auf%20unser%20nächstes%20Quiz%20mit%20arsnova.click%21",
         "your-bonus-token": "Dein Token:",
         "please-wait": "Bitte warte - dein Token wird geladen",
         "send-to-teacher": "Sende diesen Token an deinen Lehrer / deine Lehrerin und tausche ihn gegen Bonuspunkte ein"
