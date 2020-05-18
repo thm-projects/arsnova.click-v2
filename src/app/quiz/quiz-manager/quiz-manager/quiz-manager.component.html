@@ -5,20 +5,21 @@
   </fa-icon>
 </button>
 
-<h2 class="d-flex align-items-center">
-  <span *ngIf="quizService.quiz?.questionList.length">{{'component.quiz_manager.added_questions_title' | translate:{amount: quizService.quiz?.questionList.length} }}</span>
+<h2 *ngIf="quizService.quiz?.questionList.length as questionListLength"
+    (click)="toggleQuestionBody()"
+    [class.cursor-pointer]="questionListLength > 1"
+    class="d-flex align-items-center">
+  <span>{{'component.quiz_manager.added_questions_title' | translate:{amount: questionListLength} }}</span>
 
-  <span *ngIf="quizService.quiz?.questionList.length > 1"
+  <span *ngIf="questionListLength > 1"
         class="ml-auto">
-    <fa-icon (click)="hideQuestionBody()"
-             *ngIf="!hasAllQuestionBodiesHidden()"
+    <fa-icon *ngIf="!hasAllQuestionBodiesHidden()"
              [icon]="'angle-double-up'"
-             class="mx-2 cursor-pointer"
+             class="mx-2"
              role="button"></fa-icon>
-    <fa-icon (click)="showQuestionBody()"
-             *ngIf="hasAllQuestionBodiesHidden()"
+    <fa-icon *ngIf="hasAllQuestionBodiesHidden()"
              [icon]="'angle-double-down'"
-             class="mx-2 cursor-pointer"
+             class="mx-2"
              role="button"></fa-icon>
   </span>
 </h2>

@@ -196,7 +196,16 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     return this._hiddenQuestionBodies.includes(elem);
   }
 
-  public toggleQuestionBody(elem: AbstractQuestionEntity): void {
+  public toggleQuestionBody(elem?: AbstractQuestionEntity): void {
+    if (!elem) {
+      if (this.hasAllQuestionBodiesHidden()) {
+        this.showQuestionBody();
+      } else {
+        this.hideQuestionBody();
+      }
+      return;
+    }
+
     if (this.hasQuestionBodyHidden(elem)) {
       this.showQuestionBody(elem);
     } else {
