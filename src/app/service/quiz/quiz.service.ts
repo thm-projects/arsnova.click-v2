@@ -76,7 +76,6 @@ export class QuizService {
   private _readingConfirmationRequested = false;
   private _isInEditMode = false;
 
-  public canUseBonusToken: boolean;
   public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
   constructor(
