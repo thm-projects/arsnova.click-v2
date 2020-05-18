@@ -57,7 +57,7 @@
 
   <div role="listitem"
        [attr.data-intro]="'component.quiz_summary.description.question_item' | translate">
-    <div class="mb-2 question">
+    <div class="mb-2">
       <h4 *ngIf="!quizService.isAddingPoolQuestion">
         <span>{{'component.quiz_summary.question' | translate}}&nbsp;{{questionIndex + 1}}</span>:
       </h4>
@@ -79,7 +79,8 @@
         <span *ngFor="let tag of question?.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">, </span></span>
       </p>
     </div>
-    <div class="mb-2 answers">
+
+    <div class="mb-2">
       <div>
         <h4><span [innerHTML]="'component.quiz_summary.answer' | translate"></span>:&nbsp;</h4>
       </div>
@@ -133,8 +134,9 @@
         </div>
       </div>
     </div>
+
     <div *ngIf="question?.TYPE === 'FreeTextQuestion'"
-         class="mb-2 answers">
+         class="mb-2">
       <h4>{{'component.quiz_summary.answer_configuration' | translate}}:&nbsp;</h4>
       <p *ngFor="let config of getAnswerAsFreetext(question?.answerOptionList[0])?.getConfig()"
          class="mb-0">
@@ -142,11 +144,33 @@
         <span>{{config.configEnabledString | translate}}</span>
       </p>
     </div>
-    <div class="mb-2 timer">
+
+    <div class="mb-2">
       <h4>{{'component.quiz_summary.timer' | translate}}:</h4>
       <p *ngIf="question?.timer">{{question?.timer}}&nbsp;{{ 'component.timer.second' | translate:{COUNT: question?.timer} }}</p>
       <p *ngIf="!question?.timer">{{ 'component.quiz_summary.no-timer' | translate }}</p>
     </div>
+
+    <div *ngIf="canSelectRequiredState(question)"
+         class="mb-2">
+      <h4>
+        <span>{{'component.quiz_summary.required-for-token.title' | translate}}:</span>
+        <small>
+          <fa-icon [icon]="'info-circle'"
+                   class="ml-2"
+                   [ngbTooltip]="'component.quiz_summary.required-for-token.label' | translate"></fa-icon>
+        </small>
+      </h4>
+      <button *ngIf="question"
+             class="btn btn-sm cursor-pointer mb-0 align-self-center"
+             [class.btn-success]="question.requiredForToken"
+             (click)="setRequiredForToken(question)"
+             [class.btn-danger]="!question.requiredForToken">
+        <span *ngIf="question.requiredForToken">{{'global.yes' | translate}}</span>
+        <span *ngIf="!question.requiredForToken">{{'global.no' | translate}}</span>
+      </button>
+    </div>
+
     <div class="mb-2 validation">
       <h4 class="bg-light p-2 rounded text-center">
         <span class="text-success"

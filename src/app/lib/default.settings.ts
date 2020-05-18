@@ -26,6 +26,7 @@ export const DefaultSettings = {
       correctValue: 30,
       answerOptionList: [],
       tags: [],
+      requiredForToken: true
     },
     sessionConfig: {
       music: {

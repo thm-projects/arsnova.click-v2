@@ -5,6 +5,7 @@ import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAn
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
+import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -61,5 +62,14 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
 
   public getQuizManagerDetailsRoutingTarget(): string | number {
     return this.quizService.isAddingPoolQuestion ? 'quiz-pool' : this.questionIndex;
+  }
+
+  public setRequiredForToken(question: AbstractQuestionEntity): void {
+    question.requiredForToken = !question.requiredForToken;
+    this.quizService.persist();
+  }
+
+  public canSelectRequiredState(question: AbstractQuestionEntity): boolean {
+    return question && ![QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question.TYPE);
   }
 }

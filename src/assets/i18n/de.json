@@ -545,7 +545,11 @@
         "validation_errors": "Dein Quiz kann erst gestartet werden, wenn alle Fehler behoben wurden."
       },
       "quiz_url": "Quiz URL",
-      "no-timer": "Kein Countdown gesetzt. Die Runde muss manuell beendet werden."
+      "no-timer": "Kein Countdown gesetzt. Die Runde muss manuell beendet werden.",
+      "required-for-token": {
+        "title": "Erforderliche Quizfrage",
+        "label": "Damit der Teilnehmende einen Bonustoken bekommen kann, muss diese Quizfrage richtig beantwortet werden"
+      }
     },
     "theme_switcher": {
       "set_theme": "Dein Stil",

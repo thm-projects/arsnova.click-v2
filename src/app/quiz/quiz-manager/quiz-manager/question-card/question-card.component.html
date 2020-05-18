@@ -7,7 +7,11 @@
     <fa-icon *ngIf="!elem?.isValid()"
              [icon]="'exclamation-triangle'"
              [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
-             class="text-warning ml-2"></fa-icon>
+             class="text-danger ml-2"></fa-icon>
+    <fa-icon *ngIf="elem?.requiredForToken"
+             [icon]="'key'"
+             class="text-warning ml-2"
+             [ngbTooltip]="'component.quiz_summary.required-for-token.label' | translate"></fa-icon>
 
     <div class="ml-auto">
       <span *ngIf="isChoiceQuestion()">

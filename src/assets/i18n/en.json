@@ -670,7 +670,11 @@
       "hide_selected_nicks": "Hide nicknames",
       "show_selected_nicks": "Show nicknames",
       "quiz_url": "Quiz URL",
-      "no-timer": "No countdown set. The quiz round must be stopped manually."
+      "no-timer": "No countdown set. The quiz round must be stopped manually.",
+      "required-for-token": {
+        "title": "Mandatory Question",
+        "label": "Question is required to be answered correctly by the attendee to achieve a bonus token"
+      }
     },
     "theme_switcher": {
       "set_theme": "Choose a theme",
