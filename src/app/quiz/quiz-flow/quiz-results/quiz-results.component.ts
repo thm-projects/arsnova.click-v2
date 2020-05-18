@@ -43,6 +43,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   private _questionText: string;
   private _serverUnavailableModal: NgbModalRef;
   private _showResponseProgress: boolean;
+  private _footerElems: Array<any>;
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy = new Subject();
 
@@ -59,6 +60,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public isLoadingQuestionData: boolean;
   public countdownRunningMusicConfig: IAudioPlayerConfig;
   public countdownEndMusicConfig: IAudioPlayerConfig;
+
+  set footerElems(value: Array<any>) {
+    this._footerElems = value;
+    this.footerBarService.replaceFooterElements(value);
+  }
 
   get showResponseProgress(): boolean {
     return this._showResponseProgress;
@@ -415,6 +421,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
       this.loadProgressbars(currentStateData);
 
+      if (!this.quizService.isOwner && this.quizService.quiz.questionList.length - 1 === this.quizService.quiz.currentQuestionIndex) {
+        this.quizApiService.getCanUseBonusToken().pipe(filter(canUseBonusToken => Boolean(canUseBonusToken))).subscribe(() => {
+          this.footerElems = [this.footerBarService.footerElemShowToken].concat(this._footerElems);
+          this.cd.markForCheck();
+        });
+      }
+
       this.isLoadingQuestionData = false;
       this.cd.markForCheck();
     });
@@ -496,7 +509,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         });
       };
     } else {
-      footerElems = [this.footerBarService.footerElemShowToken];
+      footerElems = [];
       if (environment.enableTwitter && this.twitterService.getOptIn()) {
         /*
          FIXME Disabled due to performance impacts
@@ -507,7 +520,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.ngbModal.open(BonusTokenComponent);
       };
     }
-    this.footerBarService.replaceFooterElements(footerElems);
+    this.footerElems = footerElems;
     this.cd.markForCheck();
   }
 

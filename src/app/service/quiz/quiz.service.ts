@@ -20,13 +20,6 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class QuizService {
-  private _isAddingPoolQuestion = false;
-  private _isOwner = false;
-  private _quiz: QuizEntity;
-  private _readingConfirmationRequested = false;
-  private _isInEditMode = false;
-
-  public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
   get isAddingPoolQuestion(): boolean {
     return this._isAddingPoolQuestion;
@@ -77,6 +70,14 @@ export class QuizService {
   get isInEditMode(): boolean {
     return this._isInEditMode;
   }
+  private _isAddingPoolQuestion = false;
+  private _isOwner = false;
+  private _quiz: QuizEntity;
+  private _readingConfirmationRequested = false;
+  private _isInEditMode = false;
+
+  public canUseBonusToken: boolean;
+  public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
