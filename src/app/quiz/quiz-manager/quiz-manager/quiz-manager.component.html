@@ -26,7 +26,7 @@
 
 <h4 *ngIf="!quizService.quiz?.questionList.length">{{'component.quiz_manager.no_added_questions' | translate}}</h4>
 
-<ul class="list-unstyled">
+<ul class="list-unstyled full-xs">
   <ng-container *ngIf="isLoaded">
     <app-question-card (bodyVisibility)="toggleQuestionBody(elem)"
                        (delete)="deleteQuestion(i)"

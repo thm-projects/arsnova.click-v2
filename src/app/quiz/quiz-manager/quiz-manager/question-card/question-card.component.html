@@ -1,37 +1,37 @@
 <div (click)="triggerBodyVisibility()"
      [class.cursor-pointer]="elem?.questionText.length"
-     class="card-header p-2 border-bottom-0">
-  <div class="d-flex">
-    <span>{{elem?.translationReferrer() | translate}}</span>
+     class="card-header p-2 border-bottom-0 row no-gutters">
 
+  <p class="col-10 col-sm-auto">{{elem?.translationReferrer() | translate}}</p>
+
+  <div class="ml-auto ml-sm-0 d-flex justify-content-end">
     <fa-icon *ngIf="!elem?.isValid()"
              [icon]="'exclamation-triangle'"
+             [class.mr-1]="elem?.requiredForToken"
              [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
-             class="text-danger ml-2"></fa-icon>
+             class="text-danger ml-sm-2"></fa-icon>
+
     <fa-icon *ngIf="elem?.requiredForToken"
              [icon]="'key'"
-             class="text-warning ml-2"
+             [class.ml-1]="!elem?.isValid()"
+             class="text-warning ml-sm-2"
              [ngbTooltip]="'component.quiz_summary.required-for-token.label' | translate"></fa-icon>
+  </div>
 
-    <div class="ml-auto">
-      <span *ngIf="isChoiceQuestion()">
-        {{'component.quiz_summary.answer_amount' | translate:{amount: elem?.answerOptionList?.length} }}
-      </span>
-      <ng-container *ngIf="elem?.questionText.length">
-        <fa-icon *ngIf="!isBodyHidden"
-                 [icon]="'angle-up'"
-                 class="ml-2"
-                 role="button"></fa-icon>
-        <fa-icon *ngIf="isBodyHidden"
-                 [icon]="'angle-down'"
-                 class="ml-2"
-                 role="button"></fa-icon>
-      </ng-container>
-    </div>
+  <div class="col-12 col-sm-auto ml-sm-auto d-flex">
+    <p *ngIf="isChoiceQuestion()"
+          class="mr-sm-1">
+      {{'component.quiz_summary.answer_amount' | translate:{amount: elem?.answerOptionList?.length} }}
+    </p>
+
+    <fa-icon *ngIf="elem?.questionText.length"
+             [icon]="isBodyHidden ? 'angle-down' : 'angle-up'"
+             class="d-flex ml-auto justify-content-end align-items-center"
+             role="button"></fa-icon>
   </div>
 
   <small *ngIf="elem?.tags?.length"
-         class="font-italic">
+         class="col-12 font-italic">
     <span *ngFor="let tag of elem?.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">,</span></span>
   </small>
 </div>
