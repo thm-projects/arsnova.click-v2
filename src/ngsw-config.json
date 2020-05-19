@@ -39,6 +39,7 @@
     {
       "name": "api-freshness",
       "urls": [
+        "/*.css",
         "/api/**",
         "/lib/**",
         "/backend/**",
@@ -52,17 +53,6 @@
         "maxSize": 1,
         "maxAge": "1u",
         "timeout": "1s"
-      }
-    },
-    {
-      "name": "api-performance",
-      "urls": [
-        "/*.css"
-      ],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 100,
-        "maxAge": "3d"
       }
     }
   ]
