@@ -6,7 +6,7 @@
 </button>
 
 <h2 *ngIf="quizService.quiz?.questionList.length as questionListLength"
-    (click)="toggleQuestionBody()"
+    (click)="questionListLength > 1 ? toggleQuestionBody() : null"
     [class.cursor-pointer]="questionListLength > 1"
     class="d-flex align-items-center">
   <span>{{'component.quiz_manager.added_questions_title' | translate:{amount: questionListLength} }}</span>
