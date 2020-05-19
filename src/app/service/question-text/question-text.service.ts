@@ -53,9 +53,9 @@ export class QuestionTextService {
     if (matchForDollar) {
       mathjaxValues = mathjaxValues.concat(matchForDollar);
     }
+    result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
 
     if (!mathjaxValues.length) {
-      result = this.customMarkdownService.parseGithubFlavoredMarkdown(result);
       this._inputCache[value] = result;
       return of(result);
     }
@@ -63,20 +63,17 @@ export class QuestionTextService {
     return this.parseMathjax(mathjaxValues).pipe(map(mathjaxRendered => {
 
       mathjaxValues.forEach((mathjaxValue: string, index: number) => {
-        if (!mathjaxRendered[index]?.svg) {
+        if (!mathjaxRendered[index]?.svg || !mathjaxValue.match(/(\${1,2}\n?([^\$]*)\n?\${1,2})/)) {
           return;
         }
 
-        if (mathjaxValue.match(/(\${1,2}\n?([^\$]*)\n?\${1,2})/)) {
-          const htmlNode = mathjaxValue.startsWith('$$') ? 'div' : 'span';
-          const htmlString = `<${htmlNode}>${mathjaxRendered[index].svg}</${htmlNode}>`;
-          result = this.customMarkdownService.parseGithubFlavoredMarkdown(result).replace(mathjaxValue, htmlString);
-        } else {
-          const searchStr = this.customMarkdownService.compile(mathjaxValue).trim();
-          const searchStrWithoutParagraph = searchStr.replace('<p>', '').replace('</p>', '');
-          result = result.replace(searchStr, `<div class="d-inline-block">${mathjaxRendered[index].svg}</div>`);
-          result = result.replace(searchStrWithoutParagraph, `<div class="d-inline-block">${mathjaxRendered[index].svg}</div>`);
-        }
+        const htmlNode = mathjaxValue.startsWith('$$') ? 'div' : 'span';
+        const htmlString = `<${htmlNode}>${mathjaxRendered[index].svg}</${htmlNode}>`;
+        const searchStr = this.customMarkdownService.parseGithubFlavoredMarkdown(mathjaxValue).trim();
+        const searchStrWithoutParagraph = searchStr.replace('<p>', '').replace('</p>', '').trim();
+
+        result = result.replace(searchStrWithoutParagraph, htmlString);
+        result = result.replace(this.customMarkdownService.parseGithubFlavoredMarkdown(mathjaxValue), htmlString);
       });
 
       this._inputCache[value] = result;

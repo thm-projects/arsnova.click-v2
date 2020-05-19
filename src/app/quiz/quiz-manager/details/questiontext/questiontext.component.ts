@@ -110,6 +110,9 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
           this.insertInQuestionText('$', '$');
         }
         break;
+      case 'lineBreakMarkdownButton':
+        this.insertInQuestionText('<br/>', '');
+        break;
     }
 
     this.questionTextService.change(this.textarea.nativeElement.value).subscribe(() => this.cd.markForCheck());

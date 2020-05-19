@@ -9,8 +9,9 @@ import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-transl
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
 import { Angulartics2Module } from 'angulartics2';
+import { MarkedOptions } from 'marked';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownModule, MarkedOptions } from 'ngx-markdown';
+import { MarkdownModule, MarkedOptions as NgxMarkedOptions } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -40,6 +41,7 @@ function markedOptionsFactory(): MarkedOptions {
     pedantic: false,
     smartLists: true,
     smartypants: false,
+    xhtml: true
   };
 }
 
@@ -85,7 +87,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     HttpClientModule,
     MarkdownModule.forRoot({
       markedOptions: {
-        provide: MarkedOptions,
+        provide: NgxMarkedOptions,
         useFactory: (
           markedOptionsFactory
         ),
