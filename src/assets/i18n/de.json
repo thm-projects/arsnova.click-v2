@@ -211,6 +211,22 @@
     }
   },
   "component": {
+    "answer-result": {
+      "correct": {
+        "title": "Klasse, das war richtig!"
+      },
+      "partial-correct": {
+        "title": "Teilweise richtig",
+        "amount-correct": "{correct} von {available} Antworten richtig"
+      },
+      "wrong": {
+        "title": "Leider falsch",
+        "motivate": "Gib nicht auf!"
+      },
+      "points-gained": "+ {points} Punkte",
+      "rank": "Du bist aktuell auf Platz {rank}",
+      "to-quiz-results": "Zur Quizfrage"
+    },
     "twitter-card": {
       "more-tweets": "Mehr Tweets",
       "follower": "Follower: {count}"

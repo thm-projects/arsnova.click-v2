@@ -17,6 +17,7 @@ import { INamedType } from '../../lib/interfaces/interfaces';
 import { IWindow } from '../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { ConnectionService } from '../../service/connection/connection.service';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { I18nService } from '../../service/i18n/i18n.service';
 import { NotificationService } from '../../service/notification/notification.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -47,6 +48,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     @Inject(PLATFORM_ID) private platformId: Object,
     public i18nService: I18nService, // Must be instantiated here to be available in all child components
     public sharedService: SharedService,
+    public footerBarService: FooterBarService,
     public twitterService: TwitterService,
     private translateService: TranslateService,
     private router: Router,
@@ -197,6 +199,14 @@ export class RootComponent implements OnInit, AfterViewInit {
     });
 
     this.twitterService.showTwitter.next(!this.twitterService.isShowingTwitter);
+  }
+
+  public getClasses(): string {
+    if (this.footerBarService.footerElements.length) {
+      return 'col-sm-11 offset-sm-1 col-md-10 offset-md-0 col-xl-9';
+    }
+
+    return 'col-12 col-sm-10 offset-sm-1 col-xl-8 offset-xl-2';
   }
 
   private fetchChildComponent(route: ActivatedRoute): INamedType {

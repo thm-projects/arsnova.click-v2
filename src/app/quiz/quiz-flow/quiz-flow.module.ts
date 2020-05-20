@@ -5,6 +5,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { ShowUnloadWarningGuard } from '../../service/show-unload-warning-guard/show-unload-warning.guard';
 import { SharedModule } from '../../shared/shared.module';
+import { AnswerResultComponent } from './answer-result/answer-result.component';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { QuizFlowSharedModule } from './quiz-flow-shared.module';
@@ -63,6 +64,11 @@ export const quizFlowRoutes: Routes = [
     component: ConfidenceRateComponent,
     data: {},
     canDeactivate: [ShowUnloadWarningGuard],
+  }, {
+    path: 'answer-result',
+    component: AnswerResultComponent,
+    data: {},
+    canDeactivate: [ShowUnloadWarningGuard],
   },
 ];
 
@@ -72,6 +78,7 @@ export const quizFlowRoutes: Routes = [
   ],
   bootstrap: [EditModeConfirmComponent, QrCodeContentComponent],
   declarations: [
+    AnswerResultComponent,
     QuizLobbyComponent,
     VotingComponent,
     LeaderboardComponent,

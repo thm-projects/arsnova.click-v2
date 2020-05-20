@@ -5,7 +5,7 @@
   </div>
 
   <div class="container-fluid px-0 d-flex flex-wrap">
-    <div class="px-0 col-md-2 col-xl-2">
+    <div class="px-0 col-md-2 col-xl-2" *ngIf="footerBarService.footerElements?.length">
       <div class="row mr-0">
         <app-footer-bar class="col-12 pr-0"></app-footer-bar>
         <app-additional-data *ngIf="isInQuizManager"
@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <main class="pb-4 col-sm-11 offset-sm-1 col-md-10 offset-md-0 col-xl-9">
+    <main [class]="'pb-4 ' + getClasses()">
       <router-outlet>
       </router-outlet>
     </main>

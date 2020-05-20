@@ -1,7 +1,7 @@
 import { MessageProtocol, StatusProtocol } from '../../enums/Message';
 
-export interface IMessage {
+export interface IMessage<T = any> {
   status?: StatusProtocol;
   step: MessageProtocol;
-  payload?: any;
+  payload?: T;
 }

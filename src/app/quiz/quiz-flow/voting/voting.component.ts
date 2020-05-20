@@ -251,7 +251,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         this.countdown = payload.value;
         if (!this.countdown) {
           this.hasTriggeredNavigation = true;
-          this.router.navigate(this.getNextRoute());
+          this.sendResponses('results');
         }
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
@@ -290,9 +290,12 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   private getNextRoute(route?: string): Array<string> {
+    const isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this._currentQuestion.TYPE);
+
     return [
       '/quiz', 'flow', route ? route : environment.confidenceSliderEnabled && //
-                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
+                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' :
+                                       isRankableQuestion ? 'answer-result' : 'results',
     ];
   }
 }

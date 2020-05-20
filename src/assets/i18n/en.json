@@ -255,6 +255,22 @@
     }
   },
   "component": {
+    "answer-result": {
+      "correct": {
+        "title": "Marvelous - that was correct!"
+      },
+      "partial-correct": {
+        "title": "Partially correct",
+        "amount-correct": "{correct} of {available} Answers correct"
+      },
+      "wrong": {
+        "title": "Sorry, that's wrong",
+        "motivate": "Don't give up!"
+      },
+      "points-gained": "+ {points} points",
+      "rank": "You are currently at position {rank}",
+      "to-quiz-results": "To the quiz results"
+    },
     "twitter-card": {
       "more-tweets": "More Tweets",
       "follower": "Follower: {count}"
