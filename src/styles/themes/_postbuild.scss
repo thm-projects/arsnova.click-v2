@@ -94,6 +94,18 @@ fa-icon {
   }
 }
 
+.answer-result-correct {
+  background-color: $bg-answer-result-correct;
+}
+
+.answer-result-partially-correct {
+  background-color: $bg-answer-result-partially-correct;
+}
+
+.answer-result-wrong {
+  background-color: $bg-answer-result-wrong;
+}
+
 #connection-indicator {
   &.fill-success {
     fill: $success;

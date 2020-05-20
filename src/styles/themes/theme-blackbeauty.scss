@@ -6,7 +6,7 @@ $dark: black;
 $info: yellow;
 $success: #00A000;
 $warning: #FF8C00;
-$error: #f44336;
+$danger: #f44336;
 
 $primary_text_color: white;
 $secondary_text_color: #757575;
@@ -26,6 +26,10 @@ $pre-color: $secondary;
 $border-loader_wrapper-outer_spin: #3498db;
 $border-loader_wrapper-middle_spin: #e74c3c;
 $border-loader_wrapper-inner_spin: #f9c922;
+
+$bg-answer-result-correct: $success;
+$bg-answer-result-partially-correct: $invers;
+$bg-answer-result-wrong: $danger;
 
 $progress-bg: transparent;
 

@@ -145,8 +145,10 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       this.data = data;
 
       if (this.isLoading) {
-        this._statusCssClass = data.state === AnswerState.Correct ? 'bg-success' : data.state === AnswerState.PartiallyCorrect ? 'bg-invers' : 'bg-danger';
-        this.document.body.classList.remove('bg-success', 'bg-invers', 'bg-danger');
+        this._statusCssClass = data.state === AnswerState.Correct ? 'answer-result-correct' :
+                               data.state === AnswerState.PartiallyCorrect ? 'answer-result-partially-correct' :
+                               'answer-result-wrong';
+        this.document.body.classList.remove('answer-result-correct', 'answer-result-partially-correct', 'answer-result-wrong');
         this.document.body.classList.add(this._statusCssClass);
         if (data.state === AnswerState.Correct) {
           this._loadedConfetti.pipe(take(1)).subscribe(() => (window as any).confetti.start());
