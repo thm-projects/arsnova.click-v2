@@ -225,7 +225,8 @@
       },
       "points-gained": "+ {points} Punkte",
       "rank": "Du bist aktuell auf Platz {rank}",
-      "to-quiz-results": "Zur Quizfrage"
+      "to-quiz-results": "Zur Quizfrage",
+      "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!"
     },
     "twitter-card": {
       "more-tweets": "Mehr Tweets",

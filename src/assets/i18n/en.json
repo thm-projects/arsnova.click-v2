@@ -269,7 +269,8 @@
       },
       "points-gained": "+ {points} points",
       "rank": "You are currently at position {rank}",
-      "to-quiz-results": "To the quiz results"
+      "to-quiz-results": "To the quiz results",
+      "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!"
     },
     "twitter-card": {
       "more-tweets": "More Tweets",
