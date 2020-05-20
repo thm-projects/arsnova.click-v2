@@ -26,26 +26,28 @@
 </ng-container>
 
 <ng-template #attendeeView>
-  <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
-       [class.col-12]="!i"
-       [class.col-sm-6]="!!i">
-    <div [class.own-nick]="attendeeService.isOwnNick(attendee.name)"
-         class="bg-secondary text-secondary-inverted rounded p-2 my-2">
-      <fa-icon *ngIf="!i"
-               [icon]="'trophy'"
-               class="mr-2"></fa-icon>
-      <span *ngIf="i">{{i + 1}}.&nbsp;</span>
-      <span><span [innerHTML]="parseNickname(attendee.name)"
-                  class="d-inline-flex"></span>&nbsp;-&nbsp;</span>
-      <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
+  <div class="form-row">
+    <div *ngFor="let attendee of leaderBoardCorrect; let i = index"
+         [class.col-12]="!i"
+         [class.col-sm-6]="!!i">
+      <div [class.own-nick]="attendeeService.isOwnNick(attendee.name)"
+           class="bg-secondary text-secondary-inverted rounded p-2 my-2">
+        <fa-icon *ngIf="!i"
+                 [icon]="'trophy'"
+                 class="mr-2"></fa-icon>
+        <span *ngIf="i">{{i + 1}}.&nbsp;</span>
+        <span><span [innerHTML]="parseNickname(attendee.name)"
+                    class="d-inline-flex"></span>&nbsp;-&nbsp;</span>
+        <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
+      </div>
     </div>
-  </div>
 
-  <div class="col-12">
-    <h5 *ngIf="!quizService.isOwner && hasOwnResponse()"
-        class="mb-0 mt-5 text-center">
-      <span>{{'component.leaderboard.own-rank.own-data' | translate:{INDEX: ownResponse.index + 1, SCORE: ownResponse.element?.score} }}</span>
-      <span *ngIf="ownResponse.closestOpponent">{{'component.leaderboard.own-rank.closest-opponent' | translate:{NAME: ownResponse.closestOpponent?.name, SCORE: ownResponse.closestOpponent?.score} }}</span>
-    </h5>
+    <div class="col-12">
+      <h5 *ngIf="!quizService.isOwner && hasOwnResponse()"
+          class="mb-0 mt-5 text-center">
+        <span>{{'component.leaderboard.own-rank.own-data' | translate:{INDEX: ownResponse.index + 1, SCORE: ownResponse.element?.score} }}</span>
+        <span *ngIf="ownResponse.closestOpponent">{{'component.leaderboard.own-rank.closest-opponent' | translate:{NAME: ownResponse.closestOpponent?.name, SCORE: ownResponse.closestOpponent?.score} }}</span>
+      </h5>
+    </div>
   </div>
 </ng-template>
