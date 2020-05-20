@@ -22,7 +22,9 @@
 
 <ng-template #wrongAnswer>
   <h1 class="mb-5">{{'component.answer-result.wrong.title' | translate}}</h1>
-  <fa-icon class="mb-5" [icon]="'times'" [size]="'6x'"></fa-icon>
+  <div class="mb-5">
+    <fa-icon [icon]="'times'" [size]="'6x'"></fa-icon>
+  </div>
   <h2 class="h1" *ngIf="data?.rank">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</h2>
   <h2 class="mt-5">{{'component.answer-result.wrong.motivate' | translate}}</h2>
 </ng-template>
