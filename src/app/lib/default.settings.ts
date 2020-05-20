@@ -43,9 +43,9 @@ export const DefaultSettings = {
           useGlobalVolume: true,
         },
         titleConfig: {
-          lobby: 'Song0',
-          countdownRunning: 'Song0',
-          countdownEnd: 'Song0',
+          lobby: 'Song3',
+          countdownRunning: 'Song1',
+          countdownEnd: 'Song1',
         },
       },
       nicks: {
