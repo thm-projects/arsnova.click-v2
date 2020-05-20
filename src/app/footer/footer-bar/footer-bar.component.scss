@@ -10,7 +10,8 @@
 }
 
 @mixin navbarFooterSMView() {
-  position: absolute;
+  position: fixed;
+  top: 70px;
   max-width: 20vw;
 
   .footerElement {
