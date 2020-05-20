@@ -95,6 +95,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       }
 
       this.musicConfig = {
+        loop: true,
         autostart: true,
         hideControls: true,
         original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?

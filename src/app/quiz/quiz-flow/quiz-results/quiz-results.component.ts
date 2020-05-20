@@ -296,6 +296,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       if (this.quizService.isOwner) {
         this.countdownRunningMusicConfig = {
           autostart: true,
+          loop: true,
           hideControls: true,
           original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.global :
