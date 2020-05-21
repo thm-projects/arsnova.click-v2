@@ -47,11 +47,11 @@ export class ThemesService {
     private i18nService: I18nService,
     private transferState: TransferState,
   ) {
-    const key: StateKey<number> = makeStateKey<number>('transfer-theme-map');
+    const key: StateKey<Array<IThemeHashMap>> = makeStateKey<Array<IThemeHashMap>>('transfer-theme-map');
     if (this.themeMap) {
       this.transferState.set(key, this.themeMap);
     } else {
-      this.themeHashes = this.transferState.get(key, []);
+      this.themeHashes = this.transferState.get<Array<IThemeHashMap>>(key, null);
       console.log('ThemesService: Transferred state and loaded themeHashes', this.themeHashes);
     }
 
