@@ -1,3 +1,7 @@
+<div class="ml-auto" *ngIf="quizService.playAudio && quizService.quiz?.sessionConfig?.music.shared.countdownRunning">
+  <app-audio-player [config]="musicConfig"></app-audio-player>
+</div>
+
 <div *ngIf="quizService?.currentQuestion()?.timer > 0"
      class="overflow-hidden mb-3 d-flex"
      id="countdown-header">

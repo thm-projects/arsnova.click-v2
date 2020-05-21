@@ -26,7 +26,7 @@ export class QuizService {
   private _readingConfirmationRequested = false;
   private _isInEditMode = false;
 
-  public playAudio: boolean;
+  public playAudio = true;
 
   get isAddingPoolQuestion(): boolean {
     return this._isAddingPoolQuestion;

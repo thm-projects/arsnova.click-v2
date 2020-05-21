@@ -9,11 +9,13 @@ import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { IAudioPlayerConfig } from '../../../lib/interfaces/IAudioConfig';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -44,6 +46,8 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   public isSendingResponse: boolean;
   public hasTriggeredNavigation: boolean;
   public countdown: number;
+
+  public musicConfig: IAudioPlayerConfig;
 
   get answers(): Array<string> {
     return this._answers;
@@ -171,6 +175,19 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
         return;
+      }
+
+      if (!this.quizService.isOwner && quiz.sessionConfig.music.shared.countdownRunning) {
+        this.musicConfig = {
+          autostart: true,
+          loop: true,
+          hideControls: true,
+          original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.global :
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning),
+          src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownRunning,
+          target: AudioPlayerConfigTarget.countdownRunning
+        };
       }
 
       this._currentQuestion = this.quizService.currentQuestion();

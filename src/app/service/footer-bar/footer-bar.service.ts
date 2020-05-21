@@ -459,7 +459,7 @@ export class FooterBarService {
   });
   public footerElemAudio: IFooterBarElement = new FooterbarElement({
     id: 'audio',
-    iconClass: ['fas', 'volume-mute'],
+    iconClass: ['fas', 'volume-up'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.audio',
     selectable: false,
