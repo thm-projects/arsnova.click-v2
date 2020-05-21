@@ -24,6 +24,7 @@ import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { ThemesMockService } from '../../service/themes/themes.mock.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { UserService } from '../../service/user/user.service';
+import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuizJoinComponent } from './quiz-join.component';
 
 describe('QuizJoinComponent', () => {
@@ -40,6 +41,7 @@ describe('QuizJoinComponent', () => {
             deps: [PLATFORM_ID, StorageService],
           },
         }), RouterTestingModule, HttpClientTestingModule,
+        I18nTestingModule
       ],
       providers: [
         RxStompService, SimpleMQ,
