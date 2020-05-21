@@ -16,13 +16,15 @@ import {
   USE_EXTEND,
   USE_STORE,
 } from '@ngx-translate/core';
+import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 
 @NgModule({
-  declarations: [],
+  declarations: [TranslatePipeMock],
   imports: [
     CommonModule,
   ],
+  exports: [TranslatePipeMock],
   providers: [
     TranslateStore, {
       provide: TranslateLoader,
