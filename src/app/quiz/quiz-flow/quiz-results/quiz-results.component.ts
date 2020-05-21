@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { NumberType, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
@@ -302,7 +303,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.global :
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning),
           src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownRunning,
-          target: 'countdownRunning'
+          target: AudioPlayerConfigTarget.countdownRunning
         };
 
         this.countdownEndMusicConfig = {
@@ -313,7 +314,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.global :
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd),
           src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownEnd,
-          target: 'countdownEnd'
+          target: AudioPlayerConfigTarget.countdownEnd
         };
       }
 

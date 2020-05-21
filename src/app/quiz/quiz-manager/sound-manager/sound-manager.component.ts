@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { MusicSessionConfigurationEntity } from '../../../lib/entities/session-configuration/MusicSessionConfigurationEntity';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { StorageKey } from '../../../lib/enums/enums';
 import { IAudioPlayerConfig, ISong } from '../../../lib/interfaces/IAudioConfig';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
@@ -28,6 +29,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
   public countdownRunningMusicConfig: IAudioPlayerConfig;
   public countdownEndMusicConfig: IAudioPlayerConfig;
   public readonly revalidate = new Subject();
+  public readonly AudioPlayerConfigTarget = AudioPlayerConfigTarget;
 
   get lobbySongs(): Array<ISong> {
     return this._lobbySongs;
@@ -82,7 +84,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     });
   }
 
-  public selectSound(target: 'lobby' | 'countdownRunning' | 'countdownEnd', event: Event): void {
+  public selectSound(target: AudioPlayerConfigTarget, event: Event): void {
     this.config.titleConfig[target] = (<HTMLSelectElement>event.target).value;
     this.updateAudioSource();
   }
@@ -205,7 +207,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     this.lobbyMusicConfig = {
       autostart: false,
       src: this.config?.titleConfig?.lobby,
-      target: 'lobby',
+      target: AudioPlayerConfigTarget.lobby,
       loop: true,
       original_volume: String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.lobby)
     };
@@ -213,7 +215,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     this.countdownRunningMusicConfig = {
       autostart: false,
       src: this.config?.titleConfig?.countdownRunning,
-      target: 'countdownRunning',
+      target: AudioPlayerConfigTarget.countdownRunning,
       loop: true,
       original_volume: String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.countdownRunning)
     };
@@ -221,7 +223,7 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     this.countdownEndMusicConfig = {
       autostart: false,
       src: this.config?.titleConfig?.countdownEnd,
-      target: 'countdownEnd',
+      target: AudioPlayerConfigTarget.countdownEnd,
       original_volume: String(volumeConfig.useGlobalVolume ? volumeConfig.global : volumeConfig.countdownEnd)
     };
   }

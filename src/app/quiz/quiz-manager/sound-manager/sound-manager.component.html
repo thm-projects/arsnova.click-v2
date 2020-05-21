@@ -114,7 +114,7 @@
       </div>
 
       <select class="custom-select mt-4"
-              (change)="selectSound('lobby', $event)"
+              (change)="selectSound(AudioPlayerConfigTarget.lobby, $event)"
               title="soundSelect">
         <option *ngFor="let elem of lobbySongs"
                 [selected]="config?.titleConfig?.lobby === elem.id"
@@ -162,7 +162,7 @@
       </div>
 
       <select class="custom-select mt-4"
-              (change)="selectSound('countdownRunning', $event)"
+              (change)="selectSound(AudioPlayerConfigTarget.countdownRunning, $event)"
               title="soundSelect">
         <option *ngFor="let elem of countdownRunningSounds"
                 [selected]="config?.titleConfig?.countdownRunning === elem.id"
@@ -209,7 +209,7 @@
       </div>
 
       <select class="custom-select mt-4"
-              (change)="selectSound('countdownEnd', $event)"
+              (change)="selectSound(AudioPlayerConfigTarget.countdownEnd, $event)"
               title="soundSelect">
         <option *ngFor="let elem of countdownEndSounds"
                 [selected]="config?.titleConfig?.countdownEnd === elem.id"

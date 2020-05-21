@@ -21,6 +21,8 @@ export class SharedService {
     return this._isLoadingEmitter;
   }
 
+  public readonly activeQuizzesChanged = new ReplaySubject(1);
+
   constructor() {
     this._isLoadingEmitter.next(true);
   }

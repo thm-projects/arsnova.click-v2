@@ -7,6 +7,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
@@ -102,7 +103,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
                                 this.quizService.quiz.sessionConfig.music.volumeConfig.global :
                                 this.quizService.quiz.sessionConfig.music.volumeConfig.lobby),
         src: this.quizService.quiz.sessionConfig.music.titleConfig.lobby,
-        target: 'lobby'
+        target: AudioPlayerConfigTarget.lobby
       };
 
       this.handleMessages();

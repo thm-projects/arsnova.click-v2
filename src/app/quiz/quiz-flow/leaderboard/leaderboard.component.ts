@@ -55,10 +55,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return this._memberGroupResults;
   }
 
-  get isGlobalRanking(): boolean {
-    return this._isGlobalRanking;
-  }
-
   get ownResponse(): { index: number; element: ILeaderBoardItem; closestOpponent: ILeaderBoardItem } {
     return this._ownResponse;
   }

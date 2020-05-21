@@ -255,6 +255,10 @@
     }
   },
   "component": {
+    "quiz-join": {
+      "top-header": "The quiz has not yet started",
+      "sub-header": "Don't worry - we have you covered. You'll be connected as soon as the quiz master starts it."
+    },
     "answer-result": {
       "correct": {
         "title": "Marvelous - that was correct!"

@@ -147,12 +147,14 @@ export class ConnectionService {
             if (!this.sharedService.activeQuizzes.includes(parsedMessage.payload.quizName)) {
               this.sharedService.activeQuizzes.push(parsedMessage.payload.quizName);
             }
+            this.sharedService.activeQuizzesChanged.next();
             break;
           case MessageProtocol.SetInactive:
             const index = this.sharedService.activeQuizzes.indexOf(parsedMessage.payload.quizName);
             if (index > -1) {
               this.sharedService.activeQuizzes.splice(index, 1);
             }
+            this.sharedService.activeQuizzesChanged.next();
             break;
           default:
             console.log('Publishing message to queue', parsedMessage.step, parsedMessage.payload || {});
