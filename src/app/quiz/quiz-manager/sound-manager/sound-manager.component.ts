@@ -126,6 +126,10 @@ export class SoundManagerComponent implements OnInit, OnDestroy {
     this.revalidate.next();
   }
 
+  public toggleConfig(target: AudioPlayerConfigTarget): void {
+    this.quizService.quiz.sessionConfig.music.shared[target] = !this.quizService.quiz.sessionConfig.music.shared[target];
+  }
+
   private initConfig(): void {
     const defaultConfig = DefaultSettings.defaultQuizSettings.sessionConfig.music.titleConfig;
 
