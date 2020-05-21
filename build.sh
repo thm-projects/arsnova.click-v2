@@ -45,4 +45,4 @@ cd /usr/src/app
 # npm run purify
 
 echo "Gzipping app files"
-find . -name "*.*" -type f -print0 | xargs -0 gzip -9 -k
+find dist/frontend/browser -name "*.*" -type f -print0 | xargs -0 gzip -9 -k
