@@ -60,52 +60,52 @@
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                "bundleName": "theme-arsnova-dot-click-contrast"
+                "bundleName": "theme-arsnova-dot-click-contrast-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-blackbeauty.scss",
-                "bundleName": "theme-blackbeauty"
+                "bundleName": "theme-blackbeauty-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-elegant.scss",
-                "bundleName": "theme-elegant"
+                "bundleName": "theme-elegant-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-Material.scss",
-                "bundleName": "theme-Material"
+                "bundleName": "theme-Material-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-Material-hope.scss",
-                "bundleName": "theme-Material-hope"
+                "bundleName": "theme-Material-hope-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-decent-blue.scss",
-                "bundleName": "theme-decent-blue"
+                "bundleName": "theme-decent-blue-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-Material-blue.scss",
-                "bundleName": "theme-Material-blue"
+                "bundleName": "theme-Material-blue-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-spiritual-purple.scss",
-                "bundleName": "theme-spiritual-purple"
+                "bundleName": "theme-spiritual-purple-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                "bundleName": "theme-GreyBlue-Lime"
+                "bundleName": "theme-GreyBlue-Lime-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-westermann-blue.scss",
-                "bundleName": "theme-westermann-blue"
+                "bundleName": "theme-westermann-blue-%%_CSS_FILE_HASH_%%"
               },
               {
                 "inject": false,
@@ -159,52 +159,52 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast"
+                  "bundleName": "theme-arsnova-dot-click-contrast-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant"
+                  "bundleName": "theme-elegant-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material"
+                  "bundleName": "theme-Material-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope"
+                  "bundleName": "theme-Material-hope-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue"
+                  "bundleName": "theme-decent-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue"
+                  "bundleName": "theme-Material-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple"
+                  "bundleName": "theme-spiritual-purple-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime"
+                  "bundleName": "theme-GreyBlue-Lime-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
@@ -252,52 +252,52 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast"
+                  "bundleName": "theme-arsnova-dot-click-contrast-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant"
+                  "bundleName": "theme-elegant-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material"
+                  "bundleName": "theme-Material-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope"
+                  "bundleName": "theme-Material-hope-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue"
+                  "bundleName": "theme-decent-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue"
+                  "bundleName": "theme-Material-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple"
+                  "bundleName": "theme-spiritual-purple-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime"
+                  "bundleName": "theme-GreyBlue-Lime-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
@@ -345,12 +345,12 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
@@ -398,12 +398,12 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-%%_CSS_FILE_HASH_%%"
                 },
                 {
                   "inject": false,

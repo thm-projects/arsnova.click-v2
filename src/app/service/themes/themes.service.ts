@@ -5,7 +5,7 @@ import { themes } from '../../lib/available-themes';
 import { StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
-import { ITheme } from '../../lib/interfaces/ITheme';
+import { ITheme, IThemeHashMap } from '../../lib/interfaces/ITheme';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { I18nService } from '../i18n/i18n.service';
@@ -21,6 +21,7 @@ export class ThemesService {
   private readonly _defaultTheme: QuizTheme;
 
   public readonly themeChanged: EventEmitter<QuizTheme> = new EventEmitter<QuizTheme>();
+  public themeHashes: Array<IThemeHashMap>;
 
   get currentTheme(): QuizTheme {
     return this._currentTheme;

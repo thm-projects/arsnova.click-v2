@@ -9,6 +9,7 @@ RUN set -e \
     && apk update \
     && apk upgrade \
     && apk add --no-cache \
+    jq \
     udev \
     chromium \
     ttf-freefont

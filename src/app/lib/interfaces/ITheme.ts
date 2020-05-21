@@ -6,3 +6,8 @@ export interface ITheme {
   description: string;
   id: QuizTheme;
 }
+
+export interface IThemeHashMap {
+  hash: string;
+  theme: string;
+}

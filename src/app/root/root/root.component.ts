@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { forkJoin, Subject, Subscription } from 'rxjs';
+import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
@@ -14,8 +14,10 @@ import { DbState, DeprecatedDb, DeprecatedKeys } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
 import { INamedType } from '../../lib/interfaces/interfaces';
+import { IThemeHashMap } from '../../lib/interfaces/ITheme';
 import { IWindow } from '../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
+import { ThemesApiService } from '../../service/api/themes/themes-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { I18nService } from '../../service/i18n/i18n.service';
@@ -65,6 +67,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private rendererFactory: RendererFactory2,
     @Inject(DOCUMENT) private document: Document,
     private notificationService: NotificationService,
+    private themesApiService: ThemesApiService,
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
@@ -74,10 +77,11 @@ export class RootComponent implements OnInit, AfterViewInit {
         if (String(themeName) === 'default') {
           themeName = environment.defaultTheme;
         }
-        this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
+        this.loadStyleHashMap().subscribe(data => {
+          this.themeService.themeHashes = data;
+          const hash = data.find(value => value.theme === themeName).hash;
+          this.loadExternalStyles(`/theme-${themeName}${hash ? '-' : ''}${hash}.css`);
           this.initializeCookieConsent(themeName);
-        }).catch(reason => {
-          console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
         });
       });
 
@@ -215,16 +219,19 @@ export class RootComponent implements OnInit, AfterViewInit {
     );
   }
 
-  private loadExternalStyles(styleUrl: string): Promise<void> {
-    return new Promise(resolve => {
-      const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
-      if (existingNode.href.includes(styleUrl)) {
-        resolve();
-        return;
-      }
-      existingNode.href = styleUrl;
-      resolve();
-    });
+  private loadStyleHashMap(): Observable<Array<IThemeHashMap>> {
+    if (this.themeService.themeHashes) {
+      return of(this.themeService.themeHashes);
+    }
+    return this.themesApiService.getThemeConfig();
+  }
+
+  private loadExternalStyles(styleUrl: string): void {
+    const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
+    if (existingNode.href.includes(styleUrl)) {
+      return;
+    }
+    existingNode.href = styleUrl;
   }
 
   private initializeCookieConsent(theme: QuizTheme): void {
