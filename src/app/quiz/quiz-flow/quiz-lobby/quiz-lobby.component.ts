@@ -225,9 +225,12 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   private addFooterElementsAsAttendee(): void {
-    this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-    ]);
+    const footerBarElements = [this.footerBarService.footerElemBack];
+    if (this.quizService.quiz.sessionConfig.music.shared.lobby) {
+      footerBarElements.push(this.footerBarService.footerElemAudio);
+    }
+
+    this.footerBarService.replaceFooterElements(footerBarElements);
     this.footerBarService.footerElemBack.onClickCallback = async () => {
       this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
       this.attendeeService.cleanUp();

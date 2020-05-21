@@ -457,6 +457,23 @@ export class FooterBarService {
   }, () => {
     this.twitterService.tweet();
   });
+  public footerElemAudio: IFooterBarElement = new FooterbarElement({
+    id: 'audio',
+    iconClass: ['fas', 'volume-mute'],
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.audio',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.audio',
+    linkTarget: null,
+  }, self => {
+    this.quizService.toggleAudioPlay();
+    if (this.quizService.playAudio) {
+      self.iconClass = ['fas', 'volume-up'];
+    } else {
+      self.iconClass = ['fas', 'volume-mute'];
+    }
+  });
 
   get footerElements(): Array<IFooterBarElement> {
     return this._footerElements;

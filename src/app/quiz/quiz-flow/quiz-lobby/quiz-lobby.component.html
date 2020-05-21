@@ -4,7 +4,7 @@
     <span class="ml-2">{{attendeeService.getActiveMembers().length}}</span>
   </h3>
 
-  <div class="ml-auto" *ngIf="quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby">
+  <div class="ml-auto" *ngIf="(quizService.isOwner && quizService.quiz?.sessionConfig?.music.enabled.lobby) || (quizService.playAudio && !quizService.isOwner && quizService.quiz?.sessionConfig?.music.shared.lobby)">
     <app-audio-player [config]="musicConfig"></app-audio-player>
   </div>
 

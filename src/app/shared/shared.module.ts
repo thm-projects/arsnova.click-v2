@@ -71,6 +71,8 @@ import {
   faUpload,
   faUserFriends,
   faUsers,
+  faVolumeMute,
+  faVolumeUp,
   faWrench,
 } from '@fortawesome/free-solid-svg-icons';
 import { NgbAlertModule, NgbModalModule, NgbPopoverModule, NgbTooltipModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
@@ -190,5 +192,7 @@ export class SharedModule {
     library.addIcons(faAngleDoubleUp);
     library.addIcons(faAngleDown);
     library.addIcons(faAngleDoubleDown);
+    library.addIcons(faVolumeUp);
+    library.addIcons(faVolumeMute);
   }
 }

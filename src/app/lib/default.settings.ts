@@ -35,6 +35,11 @@ export const DefaultSettings = {
           countdownRunning: true,
           countdownEnd: true,
         },
+        shared: {
+          lobby: false,
+          countdownRunning: false,
+          countdownEnd: false,
+        },
         volumeConfig: {
           global: 60,
           lobby: 60,

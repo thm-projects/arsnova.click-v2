@@ -20,6 +20,13 @@ import { StorageService } from '../storage/storage.service';
   providedIn: 'root',
 })
 export class QuizService {
+  private _isAddingPoolQuestion = false;
+  private _isOwner = false;
+  private _quiz: QuizEntity;
+  private _readingConfirmationRequested = false;
+  private _isInEditMode = false;
+
+  public playAudio: boolean;
 
   get isAddingPoolQuestion(): boolean {
     return this._isAddingPoolQuestion;
@@ -70,11 +77,6 @@ export class QuizService {
   get isInEditMode(): boolean {
     return this._isInEditMode;
   }
-  private _isAddingPoolQuestion = false;
-  private _isOwner = false;
-  private _quiz: QuizEntity;
-  private _readingConfirmationRequested = false;
-  private _isInEditMode = false;
 
   public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
@@ -277,6 +279,10 @@ export class QuizService {
       questionList: questionList ?? [new SingleChoiceQuestionEntity({ answerOptionList: [] })],
       ...defaultSettings,
     });
+  }
+
+  public toggleAudioPlay(): void {
+    this.playAudio = !this.playAudio;
   }
 
   private restoreSettings(quizName: string): Promise<boolean> {

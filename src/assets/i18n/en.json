@@ -90,7 +90,8 @@
           "tweet": "Tweet"
         },
         "questionpool": "Quiz-Pool",
-        "my-quizzes": "My Quizzes"
+        "my-quizzes": "My Quizzes",
+        "audio": "Music"
       },
       "about": {
         "title": "About arsnova.click",
@@ -1000,7 +1001,8 @@
       "random": "Random selection",
       "silence": "No sound",
       "play": "Play",
-      "stop": "Stop"
+      "stop": "Stop",
+      "allow-stream-to-clients": "Allow audio for attendees"
     },
     "splashscreen": {
       "error": {

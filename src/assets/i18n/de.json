@@ -82,7 +82,8 @@
           "tweet": "Tweet"
         },
         "questionpool": "Quiz-Pool",
-        "my-quizzes": "Meine Quizze"
+        "my-quizzes": "Meine Quizze",
+        "audio": "Musik"
       },
       "about": {
         "title": "arsnova.click",
@@ -843,7 +844,8 @@
       "active": "Sound ist aktiviert",
       "activated": "Aktiviert",
       "deactivated": "Deaktiviert",
-      "random": "Zufällige Auswahl"
+      "random": "Zufällige Auswahl",
+      "allow-stream-to-clients": "Audio für Teilnehmer aktivieren"
     },
     "splashscreen": {
       "error": {
