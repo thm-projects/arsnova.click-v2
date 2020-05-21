@@ -20,10 +20,10 @@ echo "Renaming the css files with their hash"
 while read p; do
   hash=$(echo "$p" | cut -d ' ' -f1)
   file=$(echo "$p" | cut -d ' ' -f3)
-  mv $file "$(echo "$file" | sed s/%%_CSS_FILE_HASH_%%/$hash/)"
+  mv $file "$(echo "$file" | sed s/__CSS_FILE_HASH__/$hash/)"
 done < theme-hashes.txt
 echo "Building json file which contains a map with the theme name and the current hash"
-jq -R -c 'split("\n") | .[] | split(" ") | {hash: .[0], theme: .[2] | rtrimstr("\n") | sub("\\-%%_CSS_FILE_HASH_%%.css";"") | sub("theme-";"")}' < theme-hashes.txt | jq -c -s '.' > assets/theme-hashes.json
+jq -R -c 'split("\n") | .[] | split(" ") | {hash: .[0], theme: .[2] | rtrimstr("\n") | sub("\\-__CSS_FILE_HASH__.css";"") | sub("theme-";"")}' < theme-hashes.txt | jq -c -s '.' > assets/theme-hashes.json
 
 cd /usr/src/app/dist/frontend/
 echo "Starting the http server"

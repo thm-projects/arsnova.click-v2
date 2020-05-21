@@ -33,6 +33,11 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     src: 'Song0',
     target: AudioPlayerConfigTarget.connecting
   };
+  public hasApproved: boolean;
+
+  get quizName(): string {
+    return this._quizName;
+  }
 
   get isPending(): boolean {
     return this._isPending;

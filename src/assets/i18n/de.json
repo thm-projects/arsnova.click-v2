@@ -214,7 +214,11 @@
   "component": {
     "quiz-join": {
       "top-header": "Das Quiz wurde noch nicht gestartet",
-      "sub-header": "Keine Sorge, wir verbinden dich sobald das Quiz gestartet wird"
+      "sub-header": "Keine Sorge, wir verbinden dich sobald das Quiz gestartet wird",
+      "approval": {
+        "top-header": "Du möchtest dem Quiz",
+        "sub-header": "beitreten - ist das richtig?"
+      }
     },
     "answer-result": {
       "correct": {
