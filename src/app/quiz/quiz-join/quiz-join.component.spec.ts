@@ -1,17 +1,18 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { RxStompService } from '@stomp/ng2-stompjs';
+import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
-import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
@@ -41,6 +42,7 @@ describe('QuizJoinComponent', () => {
         }), RouterTestingModule, HttpClientTestingModule,
       ],
       providers: [
+        RxStompService, SimpleMQ,
         {
           provide: StorageService,
           useClass: StorageServiceMock,
@@ -59,6 +61,9 @@ describe('QuizJoinComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
+        }, {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock,
         },
       ],
       declarations: [QuizJoinComponent],
@@ -78,21 +83,4 @@ describe('QuizJoinComponent', () => {
   it('should contain a TYPE reference', async(() => {
     expect(QuizJoinComponent.TYPE).toEqual('QuizJoinComponent');
   }));
-
-  it('should redirect the user to / on failure', async(inject([Router, QuizApiService], (router: Router, quizApiService: QuizApiService) => {
-    const quizStatusData = {
-      status: StatusProtocol.Failed,
-      step: MessageProtocol.Unavailable,
-      payload: {
-        authorizeViaCas: true,
-        provideNickSelection: false,
-      },
-    };
-
-    spyOn(quizApiService, 'getQuizStatus').and.returnValue(of(quizStatusData));
-    spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
-
-    component.ngOnInit();
-    expect(router.navigate).toHaveBeenCalledWith(['/']);
-  })));
 });

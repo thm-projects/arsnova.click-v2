@@ -8,6 +8,7 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -88,7 +89,7 @@ describe('SoundManagerComponent', () => {
       const value = 'Song1';
       const event = <any>{ target: { value } };
       quizService.quizUpdateEmitter.next(quizService.quiz);
-      component.selectSound('lobby', event);
+      component.selectSound(AudioPlayerConfigTarget.lobby, event);
       expect(quizService.quiz.sessionConfig.music.titleConfig.lobby).toEqual(value);
     }));
   });
