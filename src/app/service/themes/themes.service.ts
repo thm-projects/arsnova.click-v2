@@ -47,7 +47,6 @@ export class ThemesService {
     private i18nService: I18nService,
     private transferState: TransferState,
   ) {
-    console.log('themeservice initial', this.themeMap);
     const key: StateKey<number> = makeStateKey<number>('transfer-theme-map');
     if (this.themeMap) {
       this.transferState.set(key, this.themeMap);
