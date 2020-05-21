@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '../../../../../environments/environment';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
@@ -18,7 +18,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   templateUrl: './quiz-manager-details-overview.component.html',
   styleUrls: ['./quiz-manager-details-overview.component.scss'],
 })
-export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent {
+export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent implements OnDestroy {
   public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
   public readonly environment = environment;
 
@@ -40,6 +40,15 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     ]);
 
     this.showSaveQuizButton = true;
+  }
+
+  @HostListener('window:beforeunload', [])
+  public ngOnDestroy(): void {
+    super.ngOnDestroy();
+
+    if (this.quizService.quiz) {
+      this.quizService.persist();
+    }
   }
 
   public trackDetailsTarget(link: string): void {
@@ -71,5 +80,26 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
 
   public canSelectRequiredState(question: AbstractQuestionEntity): boolean {
     return question && ![QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question.TYPE);
+  }
+
+  public getDifficultyTranslation(): string {
+    if (this.question.difficulty < 3) {
+      return 'component.quiz_summary.difficulty.very-easy';
+    }
+    if (this.question.difficulty < 5) {
+      return 'component.quiz_summary.difficulty.easy';
+    }
+    if (this.question.difficulty === 5) {
+      return 'component.quiz_summary.difficulty.medium';
+    }
+    if (this.question.difficulty < 8) {
+      return 'component.quiz_summary.difficulty.challenging';
+    }
+    if (this.question.difficulty < 10) {
+      return 'component.quiz_summary.difficulty.very-hard';
+    }
+    if (this.question.difficulty === 10) {
+      return 'component.quiz_summary.difficulty.pro-only';
+    }
   }
 }

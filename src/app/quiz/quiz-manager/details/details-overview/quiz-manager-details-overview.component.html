@@ -152,14 +152,14 @@
     </div>
 
     <div *ngIf="canSelectRequiredState(question)"
-         class="mb-2">
-      <h4>
-        <span>{{'component.quiz_summary.required-for-token.title' | translate}}:</span>
+         class="mb-2 d-flex">
+      <h4 class="mb-0 mr-3">
         <small>
           <fa-icon [icon]="'info-circle'"
-                   class="ml-2"
+                   class="mr-2"
                    [ngbTooltip]="'component.quiz_summary.required-for-token.label' | translate"></fa-icon>
         </small>
+        <span>{{'component.quiz_summary.required-for-token.title' | translate}}:</span>
       </h4>
       <button *ngIf="question"
              class="btn btn-sm cursor-pointer mb-0 align-self-center"
@@ -169,6 +169,27 @@
         <span *ngIf="question.requiredForToken">{{'global.yes' | translate}}</span>
         <span *ngIf="!question.requiredForToken">{{'global.no' | translate}}</span>
       </button>
+    </div>
+
+    <div *ngIf="canSelectRequiredState(question)"
+         class="mb-2 d-flex">
+      <h4 class="mb-0 mr-5">
+        <small>
+          <fa-icon [icon]="'info-circle'"
+                   class="mr-2"
+                   [ngbTooltip]="'component.quiz_summary.difficulty.label' | translate"></fa-icon>
+        </small>
+        <span>{{'component.quiz_summary.difficulty.title' | translate}}:</span>
+      </h4>
+
+      <div class="d-flex align-items-center">
+        <input type="range"
+               [min]="1"
+               [max]="10"
+               [(ngModel)]="question.difficulty">
+        <p class="text-center ml-3">{{getDifficultyTranslation() | translate:{multiplicator: question.difficulty} }}</p>
+      </div>
+
     </div>
 
     <div class="mb-2 validation">

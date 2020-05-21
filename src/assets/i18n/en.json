@@ -697,6 +697,16 @@
       "required-for-token": {
         "title": "Mandatory Question",
         "label": "Question is required to be answered correctly by the attendee to achieve a bonus token"
+      },
+      "difficulty": {
+        "title": "Difficulty",
+        "label": "The difficulty of a question influences the score for correct answers",
+        "very-easy": "Very easy (+ {multiplicator, plural, one{Normale} other{#-fache} } x score)",
+        "easy": "Easy (+ {multiplicator}x score)",
+        "medium": "Medium (+ {multiplicator}x score)",
+        "challenging": "Challenging (+ {multiplicator}x score)",
+        "very-hard": "Very hard (+ {multiplicator}x score)",
+        "pro-only": "Only for pros (+ {multiplicator}x score)"
       }
     },
     "theme_switcher": {

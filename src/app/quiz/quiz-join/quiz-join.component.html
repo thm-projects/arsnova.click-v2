@@ -3,8 +3,8 @@
   <div class="position-relative arsnova-click-label mx-auto mw-500px text-center">
     <ng-container *ngIf="hasApproved && isPending">
       <app-audio-player [config]="audioConfig"></app-audio-player>
-      <h2 class="text-bold my-0">{{'component.quiz-join.top-header' | translate}}</h2>
-      <h4 class="my-0">{{'component.quiz-join.sub-header' | translate}}</h4>
+      <h2 class="text-bold my-0">{{'component.quiz-join.top-header' | translate }}</h2>
+      <h4 class="mt-5">{{'component.quiz-join.sub-header' | translate}}</h4>
     </ng-container>
 
     <ng-container *ngIf="!hasApproved">
@@ -12,8 +12,8 @@
       <h1>{{quizName}}</h1>
       <h3>{{'component.quiz-join.approval.sub-header' | translate}}</h3>
       <div class="d-flex justify-content-between mt-5">
-        <button class="btn btn-success w-25" (click)="hasApproved  = true">{{'global.yes' | translate}}</button>
-        <button class="btn btn-danger w-25" [routerLink]="['/']">{{'global.no' | translate}}</button>
+        <button class="btn btn-success w-25 flex-grow-1 flex-sm-grow-0 mr-2" (click)="hasApproved  = true">{{'global.yes' | translate}}</button>
+        <button class="btn btn-danger w-25 flex-grow-1 flex-sm-grow-0 ml-2" [routerLink]="['/']">{{'global.no' | translate}}</button>
       </div>
     </ng-container>
   </div>

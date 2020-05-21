@@ -213,8 +213,8 @@
   },
   "component": {
     "quiz-join": {
-      "top-header": "Das Quiz wurde noch nicht gestartet",
-      "sub-header": "Keine Sorge, wir verbinden dich sobald das Quiz gestartet wird",
+      "top-header": "Dein Quiz wurde noch nicht gestartet",
+      "sub-header": "Keine Sorge - wir verbinden dich, sobald das Quiz gestartet wird",
       "approval": {
         "top-header": "Du möchtest dem Quiz",
         "sub-header": "beitreten - ist das richtig?"
@@ -576,6 +576,16 @@
       "required-for-token": {
         "title": "Erforderliche Quizfrage",
         "label": "Damit der Teilnehmende einen Bonustoken bekommen kann, muss diese Quizfrage richtig beantwortet werden"
+      },
+      "difficulty": {
+        "title": "Schwierigkeitsgrad",
+        "label": "Der Schwierigkeitsgrad der Frage beeinflusst die vergebene Punktzahl für richtige Antworten",
+        "very-easy": "Sehr einfach ({multiplicator, plural, one{Normale} other{#-fache} } Punktzahl)",
+        "easy": "Einfach ({multiplicator}-fache Punktzahl)",
+        "medium": "Mittelmäßig ({multiplicator}-fache Punktzahl)",
+        "challenging": "Herausfordernd ({multiplicator}-fache Punktzahl)",
+        "very-hard": "Sehr schwer ({multiplicator}-fache Punktzahl)",
+        "pro-only": "Nur für Profis ({multiplicator}-fache Punktzahl)"
       }
     },
     "theme_switcher": {

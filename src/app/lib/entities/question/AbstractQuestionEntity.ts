@@ -11,6 +11,7 @@ export abstract class AbstractQuestionEntity {
   public answerOptionList: Array<AbstractAnswerEntity>;
   public tags: Array<string> = DefaultSettings.defaultQuizSettings.question.tags;
   public requiredForToken: boolean = DefaultSettings.defaultQuizSettings.question.requiredForToken;
+  public difficulty = DefaultSettings.defaultQuizSettings.question.difficulty;
   public abstract TYPE: QuestionType;
 
   protected constructor(data) {
@@ -19,6 +20,7 @@ export abstract class AbstractQuestionEntity {
     this.displayAnswerText = data.displayAnswerText ?? this.displayAnswerText;
     this.answerOptionList = data.answerOptionList ?? [];
     this.tags = data.tags ?? [];
+    this.difficulty = data.difficulty ?? this.difficulty;
 
     this.requiredForToken = data.requiredForToken ?? this.requiredForToken;
   }
