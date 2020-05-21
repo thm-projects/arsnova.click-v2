@@ -34,6 +34,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     target: AudioPlayerConfigTarget.connecting
   };
   public hasApproved: boolean;
+  public isLoading = true;
 
   get quizName(): string {
     return this._quizName;
@@ -103,6 +104,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   private resolveQuizStatusData(quizStatusData: IMessage): void {
     if (quizStatusData.status !== StatusProtocol.Success || quizStatusData.step !== MessageProtocol.Available) {
       this._isPending = true;
+      this.isLoading = false;
       return;
     }
 

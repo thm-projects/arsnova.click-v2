@@ -1,6 +1,6 @@
 <div id="loader-wrapper">
 
-  <div class="position-relative arsnova-click-label mx-auto mw-500px text-center">
+  <div *ngIf="!isLoading" class="position-relative arsnova-click-label mx-auto mw-500px text-center">
     <ng-container *ngIf="hasApproved && isPending">
       <app-audio-player [config]="audioConfig"></app-audio-player>
       <h2 class="text-bold my-0">{{'component.quiz-join.top-header' | translate }}</h2>
