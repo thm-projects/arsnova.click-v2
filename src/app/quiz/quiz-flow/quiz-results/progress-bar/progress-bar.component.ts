@@ -198,7 +198,7 @@ export class ProgressBarComponent implements OnDestroy {
         if (value.responses[this.questionIndex].value === null || //
             typeof value.responses[this.questionIndex].value === 'undefined' || //
             !valueString) {
-          return true;
+          return false;
         }
         return responseValue < question.rangeMin || responseValue > question.rangeMax;
       }
