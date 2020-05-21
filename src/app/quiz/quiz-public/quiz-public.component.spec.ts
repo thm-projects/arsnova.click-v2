@@ -14,6 +14,8 @@ import { FileUploadService } from '../../service/file-upload/file-upload.service
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
+import { ThemesMockService } from '../../service/themes/themes.mock.service';
+import { ThemesService } from '../../service/themes/themes.service';
 import { TwitterService } from '../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
@@ -48,6 +50,9 @@ describe('QuizPublicComponent', () => {
               get: () => 0,
             }),
           },
+        }, {
+          provide: ThemesService,
+          useClass: ThemesMockService
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,

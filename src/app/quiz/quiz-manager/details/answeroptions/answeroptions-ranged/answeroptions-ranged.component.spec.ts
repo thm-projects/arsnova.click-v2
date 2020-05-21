@@ -6,8 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
-import { SimpleMQ } from 'ng2-simple-mq';
-import { MarkdownService } from 'ngx-markdown';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../../../lib/jwt.factory';
@@ -21,6 +19,8 @@ import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../../service/settings/settings.service';
 import { SharedService } from '../../../../../service/shared/shared.service';
+import { ThemesMockService } from '../../../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../../../service/themes/themes.service';
 import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { AnsweroptionsRangedComponent } from './answeroptions-ranged.component';
 
@@ -49,7 +49,10 @@ describe('AnsweroptionsRangedComponent', () => {
           {
             provide: QuizService,
             useClass: QuizMockService,
-          }, HeaderLabelService, FooterBarService, SettingsService, {
+          }, HeaderLabelService, {
+            provide: ThemesService,
+            useClass: ThemesMockService
+          }, FooterBarService, SettingsService, {
             provide: ConnectionService,
             useClass: ConnectionMockService,
           }, {

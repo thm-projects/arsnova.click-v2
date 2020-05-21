@@ -25,6 +25,8 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
@@ -61,7 +63,10 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, QuestionTextService, HeaderLabelService, FooterBarService, SettingsService, {
+        }, QuestionTextService, HeaderLabelService, {
+          provide: ThemesService,
+          useClass: ThemesMockService
+        }, FooterBarService, SettingsService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, SimpleMQ,

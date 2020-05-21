@@ -1,5 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, inject, TestBed } from '@angular/core/testing';
+import { TransferState } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -46,7 +47,7 @@ describe('ThemesService', () => {
         }, FooterBarService, SettingsService, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, SharedService, ThemesService,
+        }, SharedService, ThemesService, TransferState
       ],
     });
   }));

@@ -23,6 +23,8 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { TwitterService } from '../../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
@@ -57,7 +59,10 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
-        }, HeaderLabelService, FooterBarService, SharedService, SettingsService, MemberApiService, {
+        }, HeaderLabelService, {
+          provide: ThemesService,
+          useClass: ThemesMockService
+        }, FooterBarService, SharedService, SettingsService, MemberApiService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
         }, {

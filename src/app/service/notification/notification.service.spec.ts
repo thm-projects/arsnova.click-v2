@@ -9,6 +9,8 @@ import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../custom-markdown/CustomMarkdownServiceMock';
+import { ThemesMockService } from '../themes/themes.mock.service';
+import { ThemesService } from '../themes/themes.service';
 
 import { NotificationService } from './notification.service';
 
@@ -26,7 +28,10 @@ describe('NotificationService', () => {
     providers: [
       { provide: SwPush, useValue: {} },
       { provide: CustomMarkdownService, useClass: CustomMarkdownServiceMock },
-      RxStompService, SimpleMQ,
+      RxStompService, {
+        provide: ThemesService,
+        useClass: ThemesMockService
+      }, SimpleMQ,
     ],
   }));
 

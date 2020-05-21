@@ -30,6 +30,8 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { TrackingMockService } from '../../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { TwitterService } from '../../../service/twitter/twitter.service';
@@ -69,7 +71,10 @@ describe('QuizResultsComponent', () => {
         }, RxStompService, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, TranslateService, FooterBarService, SettingsService, {
+        }, TranslateService, {
+          provide: ThemesService,
+          useClass: ThemesMockService
+        }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, {
