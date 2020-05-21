@@ -6,8 +6,8 @@
 
   <div class="container-fluid px-0 d-flex flex-wrap">
     <div class="px-0 col-md-2 col-xl-2" *ngIf="footerBarService.footerElements?.length">
-      <div class="row mr-0 h-100">
-        <app-footer-bar class="col-12 pr-0 position-relative"></app-footer-bar>
+      <div class="row mr-0 sticky-top">
+        <app-footer-bar class="col-12 pr-0"></app-footer-bar>
         <app-additional-data *ngIf="isInQuizManager"
                              class="col-sm-11 offset-sm-1 offset-md-0 pr-0"></app-additional-data>
       </div>

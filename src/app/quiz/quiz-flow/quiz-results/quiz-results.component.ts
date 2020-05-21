@@ -12,6 +12,7 @@ import { NumberType, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
+import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { IAudioPlayerConfig } from '../../../lib/interfaces/IAudioConfig';
@@ -486,7 +487,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
   private addFooterElements(): void {
 
-    let footerElems;
+    let footerElems: Array<IFooterBarElement>;
 
     if (this.quizService.isOwner) {
       footerElems = [

@@ -87,7 +87,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   private handleMessages(): void {
     this.connectionService.connectToGlobalChannel().pipe(
       switchMapTo(this.sharedService.activeQuizzesChanged),
-      filter(() => this.sharedService.activeQuizzes.map(q => q.toLowerCase()).includes(this._quizName)),
+      filter(() => this.sharedService.activeQuizzes.map(q => q.toLowerCase()).includes(this._quizName.toLowerCase())),
       switchMapTo(this.quizApiService.getFullQuizStatusData(this._quizName)),
       takeUntil(this._destroy)
     ).subscribe(data => {
