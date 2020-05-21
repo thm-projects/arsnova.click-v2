@@ -599,6 +599,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         this.showStartQuizButton = true;
         this.showStopQuizButton = false;
+        this.hideProgressbarStyle = true;
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.cd.markForCheck();
       }),

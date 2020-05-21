@@ -37,7 +37,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
 
   private _answers: Array<string> = [];
   private _questionText: string;
-  private _selectedAnswers: Array<number> | string | number;
+  private _selectedAnswers: Array<number> | string | number = [];
   private _currentQuestion: AbstractQuestionEntity;
   private _serverUnavailableModal: NgbModalRef;
   private readonly _destroy = new Subject();
@@ -177,6 +177,9 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         return;
       }
 
+      this._currentQuestion = this.quizService.currentQuestion();
+      this.initData();
+
       if (!this.quizService.isOwner && quiz.sessionConfig.music.shared.countdownRunning) {
         this.musicConfig = {
           autostart: true,
@@ -190,7 +193,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         };
       }
 
-      this._currentQuestion = this.quizService.currentQuestion();
       if ( //
         (this.quizService.quiz.currentQuestionIndex > -1 && this.quizService.quiz.currentStartTimestamp === -1) || //
         this.attendeeService.hasReponse() //
@@ -199,8 +201,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         this.router.navigate(this.getNextRoute());
         return;
       }
-
-      this.initData();
 
       this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string | Array<string>) => {
         if (Array.isArray(value)) {

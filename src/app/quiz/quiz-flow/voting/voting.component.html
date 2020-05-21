@@ -73,7 +73,7 @@
      class="position-fixed fixed-bottom py-2 d-flex bg-primary">
   <button (click)="sendResponses()"
           [disabled]="isSendingResponse"
-          class="btn btn-info btn-lg mx-3 px-sm-5 mx-sm-auto flex-grow-1 flex-sm-grow-0">
+          class="btn btn-info btn-lg my-3 my-sm-0 mx-3 px-sm-5 mx-sm-auto flex-grow-1 flex-sm-grow-0">
     <span class="mr-2">{{'component.voting.send' | translate}}</span>
     <fa-icon *ngIf="isSendingResponse"
              [icon]="'spinner'"
