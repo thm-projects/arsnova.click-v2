@@ -52,6 +52,7 @@ export class ThemesService {
       this.transferState.set(key, this.themeMap);
     } else {
       this.themeHashes = this.transferState.get(key, []);
+      console.log('ThemesService: Transferred state and loaded themeHashes', this.themeHashes);
     }
 
     this._defaultTheme = isPlatformServer(this.platformId) ? environment.defaultTheme : //
