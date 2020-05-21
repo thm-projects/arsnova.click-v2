@@ -1,10 +1,12 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { EventEmitter, Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { themes } from '../../lib/available-themes';
 import { StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
+import { THEME_MAP } from '../../lib/injection-token/theme-map';
 import { ITheme, IThemeHashMap } from '../../lib/interfaces/ITheme';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
@@ -36,13 +38,23 @@ export class ThemesService {
   }
 
   constructor(
+    @Optional() @Inject(THEME_MAP) private themeMap: Array<IThemeHashMap>, //
     @Inject(PLATFORM_ID) private platformId: Object,
     private quizService: QuizService,
     private connectionService: ConnectionService,
     private themesApiService: ThemesApiService,
     private storageService: StorageService,
     private i18nService: I18nService,
+    private transferState: TransferState,
   ) {
+    console.log('themeservice initial', this.themeMap);
+    const key: StateKey<number> = makeStateKey<number>('transfer-theme-map');
+    if (this.themeMap) {
+      this.transferState.set(key, this.themeMap);
+    } else {
+      this.themeHashes = this.transferState.get(key, []);
+    }
+
     this._defaultTheme = isPlatformServer(this.platformId) ? environment.defaultTheme : //
                          environment.darkModeCheckEnabled && //
                          window.matchMedia('(prefers-color-scheme: dark)').matches ? //
