@@ -25,24 +25,65 @@ done < theme-hashes.txt
 echo "Building json file which contains a map with the theme name and the current hash"
 jq -R -c 'split("\n") | .[] | split(" ") | {hash: .[0], theme: .[2] | rtrimstr("\n") | sub("\\-__CSS_FILE_HASH__.css";"") | sub("theme-";"")}' < theme-hashes.txt | jq -c -s '.' > assets/theme-hashes.json
 
-cd /usr/src/app/dist/frontend/
-echo "Starting the http server"
-angular-http-server --path browser/ --silent -p 4711 &
+echo "Checking if images need to be regenerated"
+stylefile=$(ls | grep "styles.*.css" | head -n 1)
+csstype="text/css"
+curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype
+styletype=$?
 
-cd /usr/src/app/dist/frontend/browser/assets/jobs
-echo "Generating link images"
-node GenerateMetaNodes.js --command=generateLinkImages --baseUrl="$2"
+curl "$val/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
+hashdiff=$?
 
-echo "Generating manifest"
-node GenerateMetaNodes.js --command=generateManifest --baseUrl="$2"
+if [ "$styletype" -eq "0" ] && [ "$hashdiff" -eq "0" ]
+then
+   echo "Styles are equal - no need to regenerate the images but we need to download them"
 
-echo "Generating preview screenshots"
-node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4711 --root=true
+   for theme in $(echo $themes | jq '.[]')
+   do
+      theme=$(echo "$theme" | tr -d '"')
+      echo "Downloading assets for theme '$theme'"
+      mkdir -p assets/images/theme/$theme
+      for langKey in en de fr it es ;
+      do
+         langKey=$(echo "$langKey" | tr -d '"')
+         for previewSize in $(cat assets/imageDerivates.json | jq '.frontendPreview | .[]')
+         do
+            previewSize=$(echo "$previewSize" | tr -d '"')
+            curl -s $val/assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png > assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png
+            echo "Download of preview image '$theme/preview_${langKey}_s${previewSize}.png' complete"
+         done
+      done
+      for logoSize in $(cat assets/imageDerivates.json | jq '.logo | .[]')
+      do
+         logoSize=$(echo "$logoSize" | tr -d '"')
+         curl -s $val/assets/images/theme/$theme/logo_s${logoSize}.png > assets/images/theme/$theme/logo_s${logoSize}.png
+         echo "Download of logo image '$theme/logo_s${logoSize}.png' complete"
+      done
+      echo "Download of assets for theme '$theme' completed"
+      echo "-------------------------------------------"
+   done
+else
+   echo "Styles are not equal - regenerating images"
 
-cd /usr/src/app
-# Disabled for now since purifyCSS removes nearly all css with Angular 9
-# echo "Purifying css"
-# npm run purify
+   cd /usr/src/app/dist/frontend/
+   echo "Starting the http server"
+   angular-http-server --path browser/ --silent -p 4711 &
+
+   cd /usr/src/app/dist/frontend/browser/assets/jobs
+   echo "Generating link images"
+   node GenerateMetaNodes.js --command=generateLinkImages --baseUrl="$2"
+
+   echo "Generating manifest"
+   node GenerateMetaNodes.js --command=generateManifest --baseUrl="$2"
+
+   echo "Generating preview screenshots"
+   node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4711 --root=true
+
+   cd /usr/src/app
+   # Disabled for now since purifyCSS removes nearly all css with Angular 9
+   # echo "Purifying css"
+   # npm run purify
+fi
 
 echo "Gzipping app files"
 find dist/frontend/browser -name "*.*" -type f -print0 | xargs -0 gzip -9 -k
