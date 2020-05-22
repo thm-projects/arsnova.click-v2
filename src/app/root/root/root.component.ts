@@ -7,7 +7,7 @@ import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { EventReplayer } from 'preboot';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
@@ -75,23 +75,22 @@ export class RootComponent implements OnInit, AfterViewInit {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
 
-    this.themeService.themeChanged.pipe(filter(t => !!t && isPlatformBrowser(this.platformId)), distinctUntilChanged(), takeUntil(this._destroy))
-      .subscribe((themeName: QuizTheme) => {
-        if (String(themeName) === 'default') {
-          themeName = environment.defaultTheme;
-        }
-        this.loadStyleHashMap().pipe(
-          tap(data => this.themeService.themeHashes = data),
-          map(data =>  data.find(value => value.theme === themeName).hash),
-          switchMap(hash => this.loadExternalStyles(`/theme-${themeName}${hash ? '-' : ''}${hash}.css`)),
-          take(1),
-        ).subscribe(() => {
-          this.initializeCookieConsent(themeName);
-        });
-      });
-
     if (isPlatformBrowser(this.platformId)) {
       this.updateCheckService.checkForUpdates();
+
+      let theme: QuizTheme;
+      this.themeService.themeChanged.pipe(
+        filter(t => !!t),
+        map(themeName => String(themeName) === 'default' ? environment.defaultTheme : themeName),
+        tap(themeName => theme = themeName),
+        switchMap(this.loadStyleHashMap.bind(this)),
+        tap(data => this.themeService.themeHashes = data),
+        map(data =>  data.find(value => value.theme === theme).hash),
+        switchMap(hash => this.loadExternalStyles(`/theme-${theme}${hash ? '-' : ''}${hash}.css`)),
+        takeUntil(this._destroy)
+      ).subscribe(() => {
+        this.initializeCookieConsent(theme);
+      });
     }
 
     this.sharedService.isLoadingEmitter.pipe(filter(() => isPlatformBrowser(this.platformId)), takeUntil(this._destroy))
@@ -236,25 +235,28 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   private loadExternalStyles(styleUrl: string): Observable<boolean> {
     const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
-    const clone = existingNode.cloneNode();
 
     return new Observable<boolean>(subscriber => {
-      this.document.head.appendChild(clone);
       if (existingNode.href.includes(styleUrl)) {
         subscriber.next(true);
         subscriber.complete();
         return;
       }
-      existingNode.href = styleUrl;
-      existingNode.onload = () => {
+      const clone = existingNode.cloneNode();
+      this.document.head.appendChild(clone);
+
+      const css = new Image();
+      css.onerror = () => {
+        existingNode.href = styleUrl;
         subscriber.next(true);
         subscriber.complete();
+
+        setTimeout(() => {
+          this._rendererInstance.removeChild(this.document.head, clone);
+        }, 100);
       };
-      existingNode.onerror = () => {
-        subscriber.next(false);
-        subscriber.complete();
-      };
-    }).pipe(tap(() => this.document.head.removeChild(clone)));
+      css.src = styleUrl;
+    });
   }
 
   private initializeCookieConsent(theme: QuizTheme): void {
