@@ -59,6 +59,8 @@ then
       echo "Download of assets for theme '$theme' completed"
       echo "-------------------------------------------"
    done
+
+   cd /usr/src/app
 else
    echo "Styles are not equal - regenerating theme assets"
 
