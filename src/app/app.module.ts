@@ -4,7 +4,6 @@ import { APP_INITIALIZER, ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityC
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TransferHttpCacheModule } from '@nguniversal/common';
 import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
@@ -13,6 +12,7 @@ import { MarkedOptions } from 'marked';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownModule, MarkedOptions as NgxMarkedOptions } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
+import { PrebootModule } from 'preboot';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { FooterModule } from './footer/footer.module';
@@ -55,10 +55,10 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'arsnova-click' }),
+    PrebootModule.withConfig({ appRoot: 'app-root', replay: false, }),
     AppRoutingModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,
-    TransferHttpCacheModule,
     ServiceWorkerModule.register('/click-service-worker.js', { enabled: environment.production }),
     ModalsModule,
     TranslateModule.forRoot({

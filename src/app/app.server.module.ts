@@ -38,7 +38,7 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
         provide: TranslateCompiler,
         useFactory: createTranslateCompiler,
       },
-    }), AppModule, ServerModule, ServerTransferStateModule,
+    }), AppModule, ServerModule, ServerTransferStateModule
   ],
   providers: [
     {

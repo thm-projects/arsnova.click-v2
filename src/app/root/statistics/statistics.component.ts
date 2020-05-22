@@ -86,7 +86,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         this.notificationService.footerBadges['admin'] = this.statistics.quiz.pool.pendingQuestionAmount;
       }
       this.isLoading = false;
-    });
+    }, () => this.isLoading = false);
 
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.RequestStatistics, () => {

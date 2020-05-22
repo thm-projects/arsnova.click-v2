@@ -1,10 +1,11 @@
 import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
+import { AfterViewInit, ApplicationRef, Component, HostListener, Inject, OnInit, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { EventReplayer } from 'preboot';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
@@ -68,6 +69,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     @Inject(DOCUMENT) private document: Document,
     private notificationService: NotificationService,
     private themesApiService: ThemesApiService,
+    private appRef: ApplicationRef,
+    private replayer: EventReplayer,
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
@@ -96,6 +99,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+
     this.i18nService.initLanguage();
     this.themeService.initTheme();
 
@@ -175,6 +179,8 @@ export class RootComponent implements OnInit, AfterViewInit {
     if (isPlatformServer(this.platformId)) {
       return;
     }
+
+    this.replayer.replayAll();
 
     window.addEventListener('appinstalled', () => {
       this.trackingService.trackConversionEvent({
