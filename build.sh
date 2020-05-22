@@ -3,9 +3,6 @@
 echo "Installing npm modules"
 npm install
 
-echo "Installing angular-http-server"
-npm install -g angular-http-server
-
 echo "Building the app"
 npm run build:"$1"
 
@@ -25,7 +22,7 @@ done < theme-hashes.txt
 echo "Building json file which contains a map with the theme name and the current hash"
 jq -R -c 'split("\n") | .[] | split(" ") | {hash: .[0], theme: .[2] | rtrimstr("\n") | sub("\\-__CSS_FILE_HASH__.css";"") | sub("theme-";"")}' < theme-hashes.txt | jq -c -s '.' > assets/theme-hashes.json
 
-echo "Checking if images need to be regenerated"
+echo "Checking if the theme assets need to be regenerated"
 stylefile=$(ls | grep "styles.*.css" | head -n 1)
 csstype="text/css"
 curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype
@@ -36,7 +33,7 @@ hashdiff=$?
 
 if [ "$styletype" -eq "0" ] && [ "$hashdiff" -eq "0" ]
 then
-   echo "Styles are equal - no need to regenerate the images but we need to download them"
+   echo "Styles are equal - no need to regenerate the theme assets but we need to download them"
 
    for theme in $(echo $themes | jq '.[]')
    do
@@ -63,7 +60,11 @@ then
       echo "-------------------------------------------"
    done
 else
-   echo "Styles are not equal - regenerating images"
+   echo "Styles are not equal - regenerating theme assets"
+
+   cd /usr/src/app/
+   echo "Installing angular-http-server"
+   npm install -g angular-http-server
 
    cd /usr/src/app/dist/frontend/
    echo "Starting the http server"
