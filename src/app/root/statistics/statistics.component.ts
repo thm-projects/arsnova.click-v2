@@ -5,7 +5,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
-import { filter, switchMapTo, takeUntil, tap } from 'rxjs/operators';
+import { filter, switchMapTo, takeUntil } from 'rxjs/operators';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { UserRole } from '../../lib/enums/UserRole';
 import { IServerStatistics } from '../../lib/interfaces/IServerStatistics';
@@ -36,7 +36,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   private readonly _messageSubscriptions: Array<string> = [];
 
   public statistics: Partial<IServerStatistics>;
-  public isLoading = false;
+  public isLoading = true;
   public readonly data: Array<IStatisticDataTile> = [];
 
   constructor(
@@ -77,7 +77,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       switchMapTo(this.rxStompService.connectionState$), //
       filter(value => value === RxStompState.OPEN), //
       switchMapTo(this.i18nService.initialized), //
-      tap(() => this.isLoading = true), //
       switchMapTo(this.statisticsApiService.getBaseAppStatistics()), //
       takeUntil(this._destroy$), //
     ).subscribe(data => {
@@ -95,7 +94,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
           return;
         }
 
-        this.isLoading = true;
         this.statisticsApiService.getBaseAppStatistics().subscribe(data => {
           this.statistics = data;
           this.buildDataTiles();

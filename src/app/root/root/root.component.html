@@ -20,7 +20,7 @@
   </div>
 </div>
 
-<div *ngIf="twitterService.twitterEnabled && twitterService.getOptIn()"
+<div *ngIf="twitterService.twitterEnabled && twitterService.getOptIn() && connectionService.serverAvailable"
      [class.flex-column]="twitterService.showTwitter | async"
      [class.position-absolute]="!(twitterService.showTwitter | async)"
      [class.position-fixed]="twitterService.showTwitter | async"

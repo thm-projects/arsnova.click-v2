@@ -240,7 +240,7 @@
           </p>
         </div>
 
-        <ng-container *ngIf="twitterService.twitterEnabled">
+        <ng-container *ngIf="twitterService.twitterEnabled && connectionService.serverAvailable">
 
           <div *ngIf="twitterService.getOptIn()"
                class="col-12 d-flex mb-4 mb-md-3">
@@ -274,7 +274,7 @@
     </div>
   </div>
 
-  <app-statistics *ngIf="!disableStatistics && !isShowingQuiznameDatalist"
+  <app-statistics *ngIf="!disableStatistics && !isShowingQuiznameDatalist && connectionService.serverAvailable"
                   class="col-12 px-0 px-sm-3 mt-2 d-block"></app-statistics>
 
 </div>
