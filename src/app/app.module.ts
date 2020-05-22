@@ -1,6 +1,6 @@
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer, ɵgetDOM } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, Inject, NgModule, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -114,6 +114,28 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
     }, SimpleMQ, RoutePreloader,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (platformId: object) => () => {
+        if (isPlatformBrowser(platformId)) {
+          const dom = ɵgetDOM();
+          const styles = Array.prototype.slice.apply(
+            dom.getDefaultDocument().querySelectorAll('style[ng-transition]')
+          );
+          styles.forEach(el => {
+            // Remove ng-transition attribute to prevent Angular appInitializerFactory
+            // to remove server styles before preboot complete
+            el.removeAttribute('ng-transition');
+          });
+          dom.getDefaultDocument().addEventListener('PrebootComplete', () => {
+            // After preboot complete, remove the server scripts
+            styles.forEach(el => dom.remove(el));
+          });
+        }
+      },
+      deps: [PLATFORM_ID],
+      multi: true,
+    },
   ],
   bootstrap: [RootComponent],
 })
