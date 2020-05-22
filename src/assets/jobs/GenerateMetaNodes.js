@@ -2,7 +2,6 @@ const path = require('path');
 const fs = require('fs');
 const process = require('process');
 const minimist = require('minimist');
-const mkdirp = require('mkdirp');
 const mf = require('messageformat');
 
 const argv = minimist(process.argv.slice(2));

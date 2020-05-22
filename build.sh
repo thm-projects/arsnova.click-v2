@@ -49,6 +49,9 @@ then
             curl -s $2/assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png > assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png
             echo "Download of preview image '$theme/preview_${langKey}_s${previewSize}.png' complete"
          done
+
+         curl -s $2/manifest_${theme}_${langKey}.json > manifest_${theme}_${langKey}.json
+         echo "Download of manifest file for $theme ($langKey version) completed"
       done
       for logoSize in $(cat assets/imageDerivates.json | jq '.logo | .[]')
       do
