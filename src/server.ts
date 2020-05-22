@@ -15,7 +15,8 @@ require('source-map-support').install();
 export function app(): Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/frontend/browser');
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index.html';
+  const themeHashMap = JSON.parse(readFileSync(join(distFolder, 'assets/theme-hashes.json'), {encoding: 'UTF-8'}));
 
   // gzip
   server.use(compression());
@@ -41,10 +42,9 @@ export function app(): Express {
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
     const theme = req.cookies.theme ?? environment.defaultTheme;
-    const hashMap = JSON.parse(readFileSync(join(__dirname, '/../browser/assets/theme-hashes.json'), {encoding: 'UTF-8'}));
-    const hash = hashMap.find(value => value.theme === theme).hash;
+    const hash = themeHashMap.find(value => value.theme === theme).hash;
     const href = `/theme-${theme}${hash ? '-' : ''}${hash}.css`;
-    const indexHtmlContent = readFileSync(join(__dirname, '..', 'browser', 'index.html'), {encoding: 'UTF-8'});
+    const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
     const updatedIndexHtml = indexHtmlContent.replace(/__PRELOAD_THEME_HREF__/g, href);
 
     res.send(updatedIndexHtml);
