@@ -93,6 +93,7 @@
     "marked": "^1.1.0",
     "messageformat": "^2.3.0",
     "ng2-simple-mq": "^9.1.0",
+    "ngx-cookie-service": "^3.0.4",
     "ngx-infinite-scroll": "^9.0.0",
     "ngx-markdown": "^9.1.1",
     "ngx-toastr": "^12.0.1",

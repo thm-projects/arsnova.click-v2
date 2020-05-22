@@ -10,6 +10,7 @@ import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
 import { Angulartics2Module } from 'angulartics2';
 import { MarkedOptions } from 'marked';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { CookieService } from 'ngx-cookie-service';
 import { MarkdownModule, MarkedOptions as NgxMarkedOptions } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
 import { PrebootModule } from 'preboot';
@@ -157,6 +158,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
       deps: [PLATFORM_ID, TranslateService, Injector],
       multi: true,
     },
+    CookieService,
   ],
   bootstrap: [RootComponent],
 })

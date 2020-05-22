@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { CookieService } from 'ngx-cookie-service';
 import { EventReplayer } from 'preboot';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
 import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
@@ -71,6 +72,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private themesApiService: ThemesApiService,
     private appRef: ApplicationRef,
     private replayer: EventReplayer,
+    private cookieService: CookieService,
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
@@ -82,7 +84,10 @@ export class RootComponent implements OnInit, AfterViewInit {
       this.themeService.themeChanged.pipe(
         filter(t => !!t),
         map(themeName => String(themeName) === 'default' ? environment.defaultTheme : themeName),
-        tap(themeName => theme = themeName),
+        tap(themeName => {
+          theme = themeName;
+          cookieService.set('theme', themeName);
+        }),
         switchMap(this.loadStyleHashMap.bind(this)),
         tap(data => this.themeService.themeHashes = data),
         map(data =>  data.find(value => value.theme === theme).hash),
@@ -234,7 +239,9 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private loadExternalStyles(styleUrl: string): Observable<boolean> {
-    const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
+    const existingNodes = this.document.getElementsByClassName('theme-styles') as HTMLCollectionOf<HTMLLinkElement>;
+    let existingNode: HTMLLinkElement;
+    existingNode = existingNodes.item(0);
 
     return new Observable<boolean>(subscriber => {
       if (existingNode.href.includes(styleUrl)) {

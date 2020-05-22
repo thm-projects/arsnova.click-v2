@@ -51,7 +51,7 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
     }, {
       provide: THEME_MAP,
       useValue: JSON.parse(fs.readFileSync(path.join(__dirname, '/../browser/assets/theme-hashes.json'), {encoding: 'UTF-8'}))
-    }
+    },
   ],
   bootstrap: [RootComponent],
 })

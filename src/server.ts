@@ -1,13 +1,12 @@
-import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
 import * as compression from 'compression';
 import * as cookieparser from 'cookie-parser';
 import * as express from 'express';
 import { Express } from 'express';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import 'zone.js/dist/zone-node';
+import { environment } from './environments/environment';
 import { AppServerModule } from './main.server';
 
 require('source-map-support').install();
@@ -41,18 +40,14 @@ export function app(): Express {
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
-    res.render(indexHtml, {
-      req,
-      providers: [
-        {
-          provide: APP_BASE_HREF,
-          useValue: req.baseUrl,
-        }, {
-          provide: REQUEST,
-          useValue: req,
-        },
-      ],
-    });
+    const theme = req.cookies.theme ?? environment.defaultTheme;
+    const hashMap = JSON.parse(readFileSync(join(__dirname, '/../browser/assets/theme-hashes.json'), {encoding: 'UTF-8'}));
+    const hash = hashMap.find(value => value.theme === theme).hash;
+    const href = `/theme-${theme}${hash ? '-' : ''}${hash}.css`;
+    const indexHtmlContent = readFileSync(join(__dirname, '..', 'browser', 'index.html'), {encoding: 'UTF-8'});
+    const updatedIndexHtml = indexHtmlContent.replace(/__PRELOAD_THEME_HREF__/g, href);
+
+    res.send(updatedIndexHtml);
   });
 
   return server;
