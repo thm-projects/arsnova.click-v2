@@ -31,7 +31,7 @@ csstype="text/css"
 curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype
 styletype=$?
 
-curl "$val/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
+curl "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
 hashdiff=$?
 
 if [ "$styletype" -eq "0" ] && [ "$hashdiff" -eq "0" ]
@@ -49,14 +49,14 @@ then
          for previewSize in $(cat assets/imageDerivates.json | jq '.frontendPreview | .[]')
          do
             previewSize=$(echo "$previewSize" | tr -d '"')
-            curl -s $val/assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png > assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png
+            curl -s $2/assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png > assets/images/theme/$theme/preview_${langKey}_s${previewSize}.png
             echo "Download of preview image '$theme/preview_${langKey}_s${previewSize}.png' complete"
          done
       done
       for logoSize in $(cat assets/imageDerivates.json | jq '.logo | .[]')
       do
          logoSize=$(echo "$logoSize" | tr -d '"')
-         curl -s $val/assets/images/theme/$theme/logo_s${logoSize}.png > assets/images/theme/$theme/logo_s${logoSize}.png
+         curl -s $2/assets/images/theme/$theme/logo_s${logoSize}.png > assets/images/theme/$theme/logo_s${logoSize}.png
          echo "Download of logo image '$theme/logo_s${logoSize}.png' complete"
       done
       echo "Download of assets for theme '$theme' completed"
