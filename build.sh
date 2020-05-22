@@ -23,9 +23,9 @@ echo "Building json file which contains a map with the theme name and the curren
 jq -R -c 'split("\n") | .[] | split(" ") | {hash: .[0], theme: .[2] | rtrimstr("\n") | sub("\\-__CSS_FILE_HASH__.css";"") | sub("theme-";"")}' < theme-hashes.txt | jq -c -s '.' > assets/theme-hashes.json
 
 echo "Checking if the theme assets need to be regenerated"
-stylefile=$(ls | grep "styles.*.css" | head -n 1)
+stylefile=$(ls | grep "styles.*.css" | head -n 1) > /dev/null
 csstype="text/css"
-curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype
+curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype > /dev/null
 styletype=$?
 
 curl "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
