@@ -239,11 +239,11 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   private loadExternalStyles(styleUrl: string): Observable<boolean> {
-    const existingNodes = this.document.getElementsByClassName('theme-styles') as HTMLCollectionOf<HTMLLinkElement>;
-    let existingNode: HTMLLinkElement;
-    existingNode = existingNodes.item(0);
-
     return new Observable<boolean>(subscriber => {
+      const existingNodes = this.document.getElementsByClassName('theme-styles') as HTMLCollectionOf<HTMLLinkElement>;
+      let existingNode: HTMLLinkElement;
+      existingNode = existingNodes.item(0);
+
       if (existingNode.href.includes(styleUrl)) {
         subscriber.next(true);
         subscriber.complete();

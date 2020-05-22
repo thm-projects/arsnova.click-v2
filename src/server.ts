@@ -1,4 +1,6 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 import * as compression from 'compression';
 import * as cookieparser from 'cookie-parser';
 import * as express from 'express';
@@ -47,7 +49,20 @@ export function app(): Express {
     const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
     const updatedIndexHtml = indexHtmlContent.replace(/__PRELOAD_THEME_HREF__/g, href);
 
-    res.send(updatedIndexHtml);
+    res.render(indexHtml, {
+      req,
+      res,
+      document: updatedIndexHtml,
+      providers: [
+        {
+          provide: APP_BASE_HREF,
+          useValue: req.baseUrl,
+        }, {
+          provide: REQUEST,
+          useValue: req,
+        },
+      ],
+    });
   });
 
   return server;
