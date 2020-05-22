@@ -101,6 +101,8 @@ export class ThemesService {
       return;
     }
 
+    console.log('ThemesService: Reloading link nodes');
+
     if (!theme) {
       theme = this._currentTheme;
     }
