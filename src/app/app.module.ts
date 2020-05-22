@@ -55,7 +55,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'arsnova-click' }),
-    PrebootModule.withConfig({ appRoot: 'app-root', replay: false, }),
+    PrebootModule.withConfig({ appRoot: 'app-root', replay: false }),
     AppRoutingModule,
     ToastrModule.forRoot(),
     BrowserTransferStateModule,

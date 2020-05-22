@@ -7,7 +7,7 @@ import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { EventReplayer } from 'preboot';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
@@ -80,10 +80,12 @@ export class RootComponent implements OnInit, AfterViewInit {
         if (String(themeName) === 'default') {
           themeName = environment.defaultTheme;
         }
-        this.loadStyleHashMap().subscribe(data => {
-          this.themeService.themeHashes = data;
-          const hash = data.find(value => value.theme === themeName).hash;
-          this.loadExternalStyles(`/theme-${themeName}${hash ? '-' : ''}${hash}.css`);
+        this.loadStyleHashMap().pipe(
+          tap(data => this.themeService.themeHashes = data),
+          map(data =>  data.find(value => value.theme === themeName).hash),
+          switchMap(hash => this.loadExternalStyles(`/theme-${themeName}${hash ? '-' : ''}${hash}.css`)),
+          take(1),
+        ).subscribe(() => {
           this.initializeCookieConsent(themeName);
         });
       });
@@ -232,12 +234,27 @@ export class RootComponent implements OnInit, AfterViewInit {
     return this.themesApiService.getThemeConfig();
   }
 
-  private loadExternalStyles(styleUrl: string): void {
+  private loadExternalStyles(styleUrl: string): Observable<boolean> {
     const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
-    if (existingNode.href.includes(styleUrl)) {
-      return;
-    }
-    existingNode.href = styleUrl;
+    const clone = existingNode.cloneNode();
+
+    return new Observable<boolean>(subscriber => {
+      this.document.head.appendChild(clone);
+      if (existingNode.href.includes(styleUrl)) {
+        subscriber.next(true);
+        subscriber.complete();
+        return;
+      }
+      existingNode.href = styleUrl;
+      existingNode.onload = () => {
+        subscriber.next(true);
+        subscriber.complete();
+      };
+      existingNode.onerror = () => {
+        subscriber.next(false);
+        subscriber.complete();
+      };
+    }).pipe(tap(() => this.document.head.removeChild(clone)));
   }
 
   private initializeCookieConsent(theme: QuizTheme): void {
