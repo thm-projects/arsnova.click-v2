@@ -137,7 +137,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
 
             const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
             locationInitialized.then(() => {
-              const lang = navigator.language.match(/([A-Z]{2})/);
+              const lang = navigator.language.match(/([A-Z]{2})/i);
               let langToSet: string;
               if (!Array.isArray(lang) || !lang[0]) {
                 langToSet = Language.EN;
