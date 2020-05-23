@@ -8,6 +8,7 @@
         "files": [
           "/assets/i18n/**",
           "/*.js",
+          "/index.html",
           "/manifest*.json"
         ]
       }
@@ -18,9 +19,8 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "*.css",
-          "/assets/js/**",
-          "/index.html"
+          "/*.css",
+          "/assets/js/**"
         ]
       }
     },

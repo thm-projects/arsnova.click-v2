@@ -45,9 +45,9 @@ export function app(): Express {
   server.get('*', (req, res) => {
     const theme = req.cookies.theme ?? environment.defaultTheme;
     const hash = themeHashMap.find(value => value.theme === theme).hash;
-    const href = `/theme-${theme}${hash ? '-' : ''}${hash}.css`;
+    const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
     const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
-    const updatedIndexHtml = indexHtmlContent.replace(/__PRELOAD_THEME_HREF__/g, href);
+    const updatedIndexHtml = indexHtmlContent.replace(/theme-default.css/g, href);
 
     res.render(indexHtml, {
       req,
