@@ -99,8 +99,18 @@ export class I18nService {
   public initLanguage(): void {
     let lang;
     if (isPlatformServer(this.platformId)) {
+      if (this.request.url.match(/.*[.][a-zA-Z]*$/)) {
+        return;
+      }
       try {
-        lang = this.request.header('accept-language').match(/([A-Z]{2})/i);
+        const reqUrlMatch = this.request.url.match(/\/preview\/.*\/(.{2})/);
+        if (reqUrlMatch) {
+          this.setLanguage(Language[reqUrlMatch[1].toUpperCase()]);
+          return;
+        }
+        if (!lang) {
+          lang = this.request.header('accept-language').match(/([A-Z]{2})/i);
+        }
       } catch {
         lang = null;
       }
@@ -109,6 +119,12 @@ export class I18nService {
       } else {
         this.setLanguage(lang[0]);
       }
+      return;
+    }
+
+    const urlMatch = location.href.match(/\/preview\/.*\/(.{2})/);
+    if (urlMatch) {
+      this.setLanguage(Language[urlMatch[1].toUpperCase()]);
       return;
     }
 

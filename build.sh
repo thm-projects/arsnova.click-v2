@@ -79,7 +79,7 @@ else
    cd /usr/src/app/dist/frontend/
    echo "Starting the http server"
    angular-http-server --path browser/ --silent -p 4711 &
-   sleep 2s
+   sleep 5s
 
    cd /usr/src/app/dist/frontend/browser/assets/jobs
    echo "Generating link images"
