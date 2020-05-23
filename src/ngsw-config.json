@@ -6,11 +6,9 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "**.css",
           "/assets/i18n/**",
-          "/index.html",
           "/*.js",
-          "/manifest.json"
+          "/manifest*.json"
         ]
       }
     },
@@ -20,7 +18,9 @@
       "updateMode": "prefetch",
       "resources": {
         "files": [
-          "/assets/js/**"
+          "*.css",
+          "/assets/js/**",
+          "/index.html"
         ]
       }
     },

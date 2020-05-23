@@ -72,6 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public Title = Title;
   public disableStatistics: boolean;
   public readonly selectedTitle = environment.title;
+  public readonly isServer = isPlatformServer(this.platformId);
 
   get serverPassword(): string {
     return this._serverPassword;

@@ -130,12 +130,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -223,12 +223,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -316,12 +316,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -369,12 +369,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -509,7 +509,7 @@
             "production": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [
@@ -523,7 +523,7 @@
             "thmStaging": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [
@@ -537,7 +537,7 @@
             "thmBeta": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [
@@ -551,7 +551,7 @@
             "westermann": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [
