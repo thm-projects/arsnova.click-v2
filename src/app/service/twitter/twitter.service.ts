@@ -1,6 +1,9 @@
 import { isPlatformServer } from '@angular/common';
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { TranslateService } from '@ngx-translate/core';
+import { Request } from 'express';
+import { CookieService } from 'ngx-cookie-service';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -36,11 +39,13 @@ export class TwitterService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
+    @Optional() @Inject(REQUEST) private request: Request,
     private twitterApiService: TwitterApiService,
     private quizService: QuizService,
     private themesService: ThemesService,
     private customMarkdown: CustomMarkdownService,
     private translate: TranslateService,
+    private cookieService: CookieService,
   ) {
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz))).subscribe(quiz => {
       this._quizName = quiz.name;
@@ -50,7 +55,7 @@ export class TwitterService {
   }
 
   public setOptIn(): void {
-    localStorage.setItem(StorageKey.TwitterOptIn, 'true');
+    this.cookieService.set(StorageKey.TwitterOptIn, 'true');
     this.refreshTweets().subscribe();
   }
 
@@ -66,10 +71,10 @@ export class TwitterService {
 
   public getOptIn(): boolean {
     if (isPlatformServer(this.platformId)) {
-      return false;
+      return Boolean(this.request.cookies[StorageKey.TwitterOptIn]);
     }
 
-    return Boolean(JSON.parse(localStorage.getItem(StorageKey.TwitterOptIn)));
+    return Boolean(this.cookieService.get(StorageKey.TwitterOptIn));
   }
 
   public tweet(): void {
