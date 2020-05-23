@@ -24,6 +24,7 @@ async function asyncForEach(array, callback) {
   const browser = await puppeteer.launch(params);
   const page = await browser.newPage();
   await page.setViewport({width: viewportWidth, height: viewportHeight});
+  await page.setJavaScriptEnabled(false);
 
   const host = /localhost/.test(urls[0]) ?
     'localhost' : /staging.arsnova.click/.test(urls[0]) ?

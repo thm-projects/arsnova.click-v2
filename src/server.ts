@@ -43,7 +43,8 @@ export function app(): Express {
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
-    const theme = req.cookies.theme ?? environment.defaultTheme;
+    const reqUrlMatch = req.url.match(/\/preview\/([a-z\-A-Z]*)\/.*/);
+    const theme = (reqUrlMatch ? reqUrlMatch[1] : req.cookies.theme) ?? environment.defaultTheme;
     const hash = themeHashMap.find(value => value.theme === theme).hash;
     const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
     const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});

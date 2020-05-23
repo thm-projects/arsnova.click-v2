@@ -68,7 +68,7 @@ export class I18nService {
 
   public setLanguage(language: Language | string): void {
     if (!Language[language.toString().toUpperCase()]) {
-      return;
+      language = Language.EN;
     }
 
     this.currentLanguage = Language[language.toString().toUpperCase()];
@@ -134,7 +134,7 @@ export class I18nService {
       } else if (Language[this.translateService.getBrowserLang().toUpperCase()]) {
         this.setLanguage(Language[this.translateService.getBrowserLang().toUpperCase()]);
       } else {
-        lang = navigator.language.match(/([A-Z]{2})/);
+        lang = navigator.language.match(/([A-Z]{2})/i);
         if (!Array.isArray(lang) || !lang[0]) {
           this.setLanguage(Language.EN);
         } else {
