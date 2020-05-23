@@ -72,14 +72,10 @@ then
 else
    echo "Styles are not equal - regenerating theme assets"
 
-   cd /usr/src/app/
-   echo "Installing angular-http-server"
-   npm install -g angular-http-server
-
-   cd /usr/src/app/dist/frontend/
-   echo "Starting the http server"
-   angular-http-server --path browser/ --silent -p 4711 &
-   sleep 5s
+   cd /usr/src/app
+   echo "Starting the ssr server"
+   node dist/frontend/server/main.js &
+   sleep 3s
 
    cd /usr/src/app/dist/frontend/browser/assets/jobs
    echo "Generating link images"
@@ -89,7 +85,7 @@ else
    node GenerateMetaNodes.js --command=generateManifest --baseUrl="$2"
 
    echo "Generating preview screenshots"
-   node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4711 --root=true
+   node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000 --root=true
 
    # Disabled for now since purifyCSS removes nearly all css with Angular 9
    # cd /usr/src/app
