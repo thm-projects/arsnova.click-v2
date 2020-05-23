@@ -10,7 +10,7 @@ const urls = argv.urls ? JSON.parse(argv.urls) : [argv.url || 'https://www.googl
 const format = argv.format === 'png' ? 'png' : 'jpeg';
 const viewportWidth = argv.viewportWidth || 1024;
 const viewportHeight = argv.viewportHeight || 576;
-const delay = argv.delay || 1000;
+const delay = argv.delay || 850;
 const params = argv.root ? {args: ['--no-sandbox', '--disable-setuid-sandbox'], executablePath: process.env.CHROMIUM_PATH} : {};
 const derivates = require('../imageDerivates').frontendPreview;
 
