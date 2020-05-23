@@ -72,6 +72,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public Title = Title;
   public disableStatistics: boolean;
   public readonly selectedTitle = environment.title;
+  public readonly isServer = isPlatformServer(this.platformId);
 
   get serverPassword(): string {
     return this._serverPassword;
@@ -147,6 +148,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this.activatedRoute.data.pipe(takeUntil(this._destroy)).subscribe(data => {
+      this.twitterService.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
+      this.disableStatistics = data.disableStatistics;
+    });
+
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -213,11 +219,6 @@ export class HomeComponent implements OnInit, OnDestroy {
         await this.themesService.updateCurrentlyUsedTheme();
         this.i18nService.setLanguage(<Language>params.get('languageId').toUpperCase());
       }
-    });
-
-    this.activatedRoute.data.pipe(takeUntil(this._destroy)).subscribe(data => {
-      this.twitterService.twitterEnabled = environment.enableTwitter && !data.disableTwitter;
-      this.disableStatistics = data.disableStatistics;
     });
 
     this.connectionService.serverStatusEmitter.pipe(

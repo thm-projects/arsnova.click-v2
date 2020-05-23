@@ -20,6 +20,8 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { TwitterService } from '../../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
@@ -83,6 +85,9 @@ describe('NicknameManagerComponent', () => {
         }, {
           provide: QuizService,
           useClass: QuizMockService,
+        }, {
+          provide: ThemesService,
+          useClass: ThemesMockService
         }, FooterBarService, SettingsService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,

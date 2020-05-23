@@ -82,7 +82,8 @@
           "tweet": "Tweet"
         },
         "questionpool": "Quiz-Pool",
-        "my-quizzes": "Meine Quizze"
+        "my-quizzes": "Meine Quizze",
+        "audio": "Musik"
       },
       "about": {
         "title": "arsnova.click",
@@ -211,6 +212,31 @@
     }
   },
   "component": {
+    "quiz-join": {
+      "top-header": "Dein Quiz wurde noch nicht gestartet",
+      "sub-header": "Keine Sorge - wir verbinden dich, sobald das Quiz gestartet wird",
+      "approval": {
+        "top-header": "Du möchtest dem Quiz",
+        "sub-header": "beitreten - ist das richtig?"
+      }
+    },
+    "answer-result": {
+      "correct": {
+        "title": "Klasse, das war richtig!"
+      },
+      "partial-correct": {
+        "title": "Teilweise richtig",
+        "amount-correct": "{correct} von {available} Antworten richtig"
+      },
+      "wrong": {
+        "title": "Leider falsch",
+        "motivate": "Gib nicht auf!"
+      },
+      "points-gained": "+ {points} Punkte",
+      "rank": "Du bist aktuell auf Platz {rank}",
+      "to-quiz-results": "Zur Quizfrage",
+      "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!"
+    },
     "twitter-card": {
       "more-tweets": "Mehr Tweets",
       "follower": "Follower: {count}"
@@ -366,7 +392,8 @@
       "ranking": "Rangliste",
       "reading_confirmation": "Lesebestätigung",
       "show_question": "Nächste Frage",
-      "start_round": "Nächste Frage",
+      "start_round": "Starte countdown",
+      "start_question": "Nächste Frage",
       "confirm_read": "Ich habe die Frage verstanden",
       "title_reading_confirmation": "Fragen gelesen...",
       "title_running_countdown": "Abstimmung...",
@@ -545,7 +572,21 @@
         "validation_errors": "Dein Quiz kann erst gestartet werden, wenn alle Fehler behoben wurden."
       },
       "quiz_url": "Quiz URL",
-      "no-timer": "Kein Countdown gesetzt. Die Runde muss manuell beendet werden."
+      "no-timer": "Kein Countdown gesetzt. Die Runde muss manuell beendet werden.",
+      "required-for-token": {
+        "title": "Erforderliche Quizfrage",
+        "label": "Damit der Teilnehmende einen Bonustoken bekommen kann, muss diese Quizfrage richtig beantwortet werden"
+      },
+      "difficulty": {
+        "title": "Schwierigkeitsgrad",
+        "label": "Der Schwierigkeitsgrad der Frage beeinflusst die vergebene Punktzahl für richtige Antworten",
+        "very-easy": "Sehr einfach ({multiplicator, plural, one{Normale} other{#-fache} } Punktzahl)",
+        "easy": "Einfach ({multiplicator}-fache Punktzahl)",
+        "medium": "Mittelmäßig ({multiplicator}-fache Punktzahl)",
+        "challenging": "Herausfordernd ({multiplicator}-fache Punktzahl)",
+        "very-hard": "Sehr schwer ({multiplicator}-fache Punktzahl)",
+        "pro-only": "Nur für Profis ({multiplicator}-fache Punktzahl)"
+      }
     },
     "theme_switcher": {
       "set_theme": "Dein Stil",
@@ -817,7 +858,11 @@
       "active": "Sound ist aktiviert",
       "activated": "Aktiviert",
       "deactivated": "Deaktiviert",
-      "random": "Zufällige Auswahl"
+      "random": "Zufällige Auswahl",
+      "allow-stream-to-clients": {
+        "title": "Audio für Teilnehmer aktivieren",
+        "label": "Dies deaktiviert die Audiowiedergabe für den Quizmaster und aktiviert ihn für die Teilnehmer. Da die Startzeit der Musik nicht synchron läuft ist die Aktivierung nur empfohlen, wenn die Teilnehmer nicht im gleichen Raum sitzen."
+      }
     },
     "splashscreen": {
       "error": {

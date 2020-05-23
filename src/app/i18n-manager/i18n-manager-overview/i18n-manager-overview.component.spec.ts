@@ -17,6 +17,8 @@ import { CasLoginService } from '../../service/login/cas-login.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../service/themes/themes.mock.service';
+import { ThemesService } from '../../service/themes/themes.service';
 import { TwitterService } from '../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { UserService } from '../../service/user/user.service';
@@ -51,7 +53,10 @@ describe('I18nManagerOverviewComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
-        }, CasLoginService, FooterBarService, HeaderLabelService, ModalOrganizerService, {
+        }, CasLoginService, {
+          provide: ThemesService,
+          useClass: ThemesMockService
+        }, FooterBarService, HeaderLabelService, ModalOrganizerService, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
         },

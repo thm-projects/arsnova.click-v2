@@ -1,17 +1,7 @@
-@font-face {
-  font-family: 'arsnova';
-  src: url('/assets/fonts/arsnova.eot?u4wa2e');
-  src: url('/assets/fonts/arsnova.eot?u4wa2e#iefix') format('embedded-opentype'),
-  url('/assets/fonts/arsnova.ttf?u4wa2e') format('truetype'),
-  url('/assets/fonts/arsnova.woff?u4wa2e') format('woff'),
-  url('/assets/fonts/arsnova.svg?u4wa2e#arsnova') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 ul {
   li {
     flex: 1 0 calc(100% / 7);
+    line-height: 20px;
     &:hover {
       opacity: 0.8;
     }
@@ -21,7 +11,13 @@ ul {
   }
 }
 
-.latexIcon::before {
+.line-break-icon::before {
+  font-weight: bold;
+  content: "\21A9";
+  font-size: x-large;
+}
+
+.latex-icon::before {
+  font-weight: bold;
   content: "\TeX";
-  font-family: "arsnova", serif;
 }

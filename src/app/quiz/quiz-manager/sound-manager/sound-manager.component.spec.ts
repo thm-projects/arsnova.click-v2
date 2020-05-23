@@ -5,9 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
@@ -18,6 +19,8 @@ import { SettingsService } from '../../../service/settings/settings.service';
 import { SharedService } from '../../../service/shared/shared.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { TwitterService } from '../../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { AudioPlayerComponent } from '../../../shared/audio-player/audio-player.component';
@@ -47,6 +50,9 @@ describe('SoundManagerComponent', () => {
           }, {
             provide: QuizService,
             useClass: QuizMockService,
+          }, {
+            provide: ThemesService,
+            useClass: ThemesMockService
           }, FooterBarService, SettingsService, {
             provide: ConnectionService,
             useClass: ConnectionMockService,
@@ -65,7 +71,7 @@ describe('SoundManagerComponent', () => {
   beforeEach((
     () => {
       const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
-      library.addIcons(...[faStop, faPlay]);
+      library.addIcons(...[faStop, faPlay, faInfoCircle]);
       fixture = TestBed.createComponent(SoundManagerComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -77,6 +83,7 @@ describe('SoundManagerComponent', () => {
       expect(component).toBeTruthy();
     }
   ));
+
   it('should contain a TYPE reference', (
     () => {
       expect(SoundManagerComponent.TYPE).toEqual('SoundManagerComponent');
@@ -88,7 +95,7 @@ describe('SoundManagerComponent', () => {
       const value = 'Song1';
       const event = <any>{ target: { value } };
       quizService.quizUpdateEmitter.next(quizService.quiz);
-      component.selectSound('lobby', event);
+      component.selectSound(AudioPlayerConfigTarget.lobby, event);
       expect(quizService.quiz.sessionConfig.music.titleConfig.lobby).toEqual(value);
     }));
   });

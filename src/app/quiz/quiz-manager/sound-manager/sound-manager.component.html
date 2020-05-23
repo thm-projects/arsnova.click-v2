@@ -86,6 +86,22 @@
   <div class="card text-dark">
     <div class="card-body">
       <div class="row no-gutters align-items-center">
+        <div class="col-12 mb-2 d-flex">
+          <p class="mb-0 mr-2 align-self-center"
+             style="line-height: 1.2">
+            <fa-icon [icon]="'info-circle'"
+                     class="mr-2"
+                     [ngbTooltip]="'plugins.sound.allow-stream-to-clients.label' | translate"></fa-icon>
+            <span>{{'plugins.sound.allow-stream-to-clients.title' | translate}}</span>&#58;&nbsp;
+          </p>
+          <label class="btn cursor-pointer mb-0 align-self-center ml-auto"
+                 [class.btn-success]="config?.shared.lobby"
+                 (click)="toggleConfig(AudioPlayerConfigTarget.lobby)"
+                 [class.btn-danger]="!config?.shared.lobby">
+            <span *ngIf="config?.shared.lobby">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+            <span *ngIf="!config?.shared.lobby">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+          </label>
+        </div>
 
         <div class="col-sm-5">
           <label class="d-flex btn cursor-pointer mb-0 justify-content-center"
@@ -114,7 +130,7 @@
       </div>
 
       <select class="custom-select mt-4"
-              (change)="selectSound('lobby', $event)"
+              (change)="selectSound(AudioPlayerConfigTarget.lobby, $event)"
               title="soundSelect">
         <option *ngFor="let elem of lobbySongs"
                 [selected]="config?.titleConfig?.lobby === elem.id"
@@ -133,6 +149,22 @@
   <div class="card text-dark">
     <div class="card-body">
       <div class="row no-gutters align-items-center">
+        <div class="col-12 mb-2 d-flex">
+          <p class="mb-0 mr-2 align-self-center"
+             style="line-height: 1.2">
+            <fa-icon [icon]="'info-circle'"
+                     class="mr-2"
+                     [ngbTooltip]="'plugins.sound.allow-stream-to-clients.label' | translate"></fa-icon>
+            <span>{{'plugins.sound.allow-stream-to-clients.title' | translate}}</span>&#58;&nbsp;
+          </p>
+          <label class="btn cursor-pointer mb-0 align-self-center ml-auto"
+                 [class.btn-success]="config?.shared.countdownRunning"
+                 (click)="toggleConfig(AudioPlayerConfigTarget.countdownRunning)"
+                 [class.btn-danger]="!config?.shared.countdownRunning">
+            <span *ngIf="config?.shared.countdownRunning">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
+            <span *ngIf="!config?.shared.countdownRunning">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
+          </label>
+        </div>
 
         <div class="col-sm-5">
           <label class="d-flex btn cursor-pointer mb-0 justify-content-center"
@@ -162,7 +194,7 @@
       </div>
 
       <select class="custom-select mt-4"
-              (change)="selectSound('countdownRunning', $event)"
+              (change)="selectSound(AudioPlayerConfigTarget.countdownRunning, $event)"
               title="soundSelect">
         <option *ngFor="let elem of countdownRunningSounds"
                 [selected]="config?.titleConfig?.countdownRunning === elem.id"
@@ -209,7 +241,7 @@
       </div>
 
       <select class="custom-select mt-4"
-              (change)="selectSound('countdownEnd', $event)"
+              (change)="selectSound(AudioPlayerConfigTarget.countdownEnd, $event)"
               title="soundSelect">
         <option *ngFor="let elem of countdownEndSounds"
                 [selected]="config?.titleConfig?.countdownEnd === elem.id"

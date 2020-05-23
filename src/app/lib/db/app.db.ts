@@ -25,8 +25,8 @@ export class AppDb extends Dexie {
       const quizData = await trans.db.table(DbTable.Quiz).toArray();
       localStorage.setItem('hashtags', JSON.stringify(quizData.map(quiz => quiz.name)));
       quizData.forEach(quiz => localStorage.setItem(quiz.name, quiz));
-      trans.idbtrans.db.deleteObjectStore(DbTable.Quiz);
-      trans.idbtrans.db.deleteObjectStore(DbTable.Config);
+      this.backendDB().deleteObjectStore(DbTable.Quiz);
+      this.backendDB().deleteObjectStore(DbTable.Config);
     });
 
     this.version(1).stores({

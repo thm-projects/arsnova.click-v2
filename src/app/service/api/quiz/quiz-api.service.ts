@@ -6,6 +6,7 @@ import { DefaultSettings } from '../../../lib/default.settings';
 import { QuizEntity } from '../../../lib/entities/QuizEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { IAnswerResult } from '../../../lib/interfaces/IAnswerResult';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 export class QuizApiService {
   private _getFreeMemberGroupUrl: string;
   private _getActiveQuizzesUrl: string;
+  private _getCanUseBonusTokenUrl: string;
 
   get getFreeMemberGroupUrl(): string {
     return this._getFreeMemberGroupUrl;
@@ -74,6 +76,7 @@ export class QuizApiService {
   private _postResetQuizUrl: string;
   private _postStopQuizUrl: string;
   private _getQuizStartTimeUrl: string;
+  private _getAnswerResultUrl: string;
 
   constructor(private http: HttpClient) {
     this.loadUrls();
@@ -208,6 +211,16 @@ export class QuizApiService {
     return this.http.get<Array<string>>(this._getActiveQuizzesUrl);
   }
 
+  public getCanUseBonusToken(): Observable<boolean> {
+    return this.http.get<boolean>(this._getCanUseBonusTokenUrl, { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } });
+  }
+
+  public getAnswerResult(): Observable<IAnswerResult> {
+    return this.http.get<IAnswerResult>(this._getAnswerResultUrl,
+      { headers: { authorization: sessionStorage.getItem(StorageKey.QuizToken) } }
+      );
+  }
+
   private loadUrls(): void {
     this._putQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz`;
     this._putSaveQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/save`;
@@ -233,5 +246,7 @@ export class QuizApiService {
     this._deleteActiveQuizUrl = `${DefaultSettings.httpApiEndpoint}/quiz/active`;
     this._initQuizInstanceUrl = `${DefaultSettings.httpApiEndpoint}/quiz/public/init`;
     this._getActiveQuizzesUrl = `${DefaultSettings.httpApiEndpoint}/quiz/active`;
+    this._getCanUseBonusTokenUrl = `${DefaultSettings.httpApiEndpoint}/quiz/bonus-token`;
+    this._getAnswerResultUrl = `${DefaultSettings.httpApiEndpoint}/quiz/answer-result`;
   }
 }

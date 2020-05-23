@@ -1,0 +1,42 @@
+<ng-template #loading>
+  <fa-icon class="mb-5" [icon]="'spinner'" [spin]="true" [size]="'8x'"></fa-icon>
+  <h1 class="mt-5">{{'global.please-wait' | translate}}</h1>
+</ng-template>
+
+<ng-template #correctAnswer>
+  <h1 class="mb-5">{{'component.answer-result.correct.title' | translate}}</h1>
+  <fa-icon [icon]="'check'" [size]="'6x'"></fa-icon>
+  <h2 class="my-5 h1 bg-invers rounded-pill mx-auto">{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</h2>
+  <h2 class="my-5 h1">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</h2>
+  <h4 class="my-5" *ngIf="data?.rank === 1">{{'component.answer-result.pole-position' | translate}}</h4>
+</ng-template>
+
+<ng-template #partiallyCorrectAnswer>
+  <h1 class="mb-5">{{'component.answer-result.partial-correct.title' | translate}}</h1>
+  <fa-icon [icon]="'check'" [size]="'6x'"></fa-icon>
+  <div class="my-5 px-3 h1 bg-invers rounded-pill mx-auto bg-light-invers text-invers">
+    <h2>{{'component.answer-result.partial-correct.amount-correct' | translate:{correct: data?.amountCorrect, available: data?.amountAvailable} }}</h2>
+    <h2>{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</h2>
+  </div>
+  <h2 class="my-5 h1">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</h2>
+</ng-template>
+
+<ng-template #wrongAnswer>
+  <h1 class="mb-5">{{'component.answer-result.wrong.title' | translate}}</h1>
+  <div class="mb-5">
+    <fa-icon [icon]="'times'" [size]="'6x'"></fa-icon>
+  </div>
+  <h2 class="h1" *ngIf="data?.rank">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</h2>
+  <h2 class="mt-5">{{'component.answer-result.wrong.motivate' | translate}}</h2>
+</ng-template>
+
+<div class="d-flex flex-column align-items-center frame-container">
+  <div class="my-auto text-center">
+
+    <ng-container *ngIf="!isLoading else loading">
+      <ng-container [ngTemplateOutlet]="data?.state === AnswerState.Correct ? correctAnswer : data?.state === AnswerState.PartiallyCorrect ? partiallyCorrectAnswer : wrongAnswer"></ng-container>
+
+      <button class="btn btn-secondary mt-sm-5 mt-3 mb-5 mx-auto" (click)="this.hasTriggeredNavigation = true" [routerLink]="['/quiz', 'flow', 'results']">{{'component.answer-result.to-quiz-results' | translate}}</button>
+    </ng-container>
+  </div>
+</div>

@@ -12,6 +12,8 @@ import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { WordCloudComponent } from '../../../shared/word-cloud/word-cloud.component';
 
@@ -36,7 +38,10 @@ describe('QuizPoolOverviewComponent', () => {
         }),
       ],
       providers: [
-        RxStompService, SimpleMQ, FormBuilder, {
+        RxStompService, SimpleMQ, {
+          provide: ThemesService,
+          useClass: ThemesMockService
+        }, FormBuilder, {
           provide: CustomMarkdownService,
           useClass: CustomMarkdownServiceMock,
         },

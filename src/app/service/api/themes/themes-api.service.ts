@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { frontendPreview } from '../../../../assets/imageDerivates.json';
+import { IThemeHashMap } from '../../../lib/interfaces/ITheme';
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +27,9 @@ export class ThemesApiService {
 
   public getLinkImages(theme: string): Observable<Array<any>> {
     return this.http.get<Array<any>>(this.THEMES_LINK_IMAGES_GET_URL(theme));
+  }
+
+  public getThemeConfig(): Observable<Array<IThemeHashMap>> {
+    return this.http.get<Array<IThemeHashMap>>('/assets/theme-hashes.json');
   }
 }

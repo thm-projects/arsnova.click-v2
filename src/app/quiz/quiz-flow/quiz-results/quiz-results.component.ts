@@ -7,10 +7,12 @@ import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { NumberType, StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
+import { IFooterBarElement } from '../../../lib/footerbar-element/interfaces';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IMemberSerialized } from '../../../lib/interfaces/entities/Member/IMemberSerialized';
 import { IAudioPlayerConfig } from '../../../lib/interfaces/IAudioConfig';
@@ -43,6 +45,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   private _questionText: string;
   private _serverUnavailableModal: NgbModalRef;
   private _showResponseProgress: boolean;
+  private _footerElems: Array<any>;
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy = new Subject();
 
@@ -59,6 +62,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public isLoadingQuestionData: boolean;
   public countdownRunningMusicConfig: IAudioPlayerConfig;
   public countdownEndMusicConfig: IAudioPlayerConfig;
+
+  set footerElems(value: Array<any>) {
+    this._footerElems = value;
+    this.footerBarService.replaceFooterElements(value);
+  }
 
   get showResponseProgress(): boolean {
     return this._showResponseProgress;
@@ -290,12 +298,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       if (this.quizService.isOwner) {
         this.countdownRunningMusicConfig = {
           autostart: true,
+          loop: true,
           hideControls: true,
           original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.global :
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning),
           src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownRunning,
-          target: 'countdownRunning'
+          target: AudioPlayerConfigTarget.countdownRunning
         };
 
         this.countdownEndMusicConfig = {
@@ -306,7 +315,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.global :
                                   this.quizService.quiz.sessionConfig.music.volumeConfig.countdownEnd),
           src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownEnd,
-          target: 'countdownEnd'
+          target: AudioPlayerConfigTarget.countdownEnd
         };
       }
 
@@ -415,6 +424,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
       this.loadProgressbars(currentStateData);
 
+      if (!this.quizService.isOwner && this.quizService.quiz.questionList.length - 1 === this.quizService.quiz.currentQuestionIndex) {
+        this.quizApiService.getCanUseBonusToken().pipe(filter(canUseBonusToken => Boolean(canUseBonusToken))).subscribe(() => {
+          this.footerElems = [this.footerBarService.footerElemShowToken].concat(this._footerElems);
+          this.cd.markForCheck();
+        });
+      }
+
       this.isLoadingQuestionData = false;
       this.cd.markForCheck();
     });
@@ -471,7 +487,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
   private addFooterElements(): void {
 
-    let footerElems;
+    let footerElems: Array<IFooterBarElement>;
 
     if (this.quizService.isOwner) {
       footerElems = [
@@ -496,7 +512,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         });
       };
     } else {
-      footerElems = [this.footerBarService.footerElemShowToken];
+      footerElems = [];
       if (environment.enableTwitter && this.twitterService.getOptIn()) {
         /*
          FIXME Disabled due to performance impacts
@@ -507,7 +523,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.ngbModal.open(BonusTokenComponent);
       };
     }
-    this.footerBarService.replaceFooterElements(footerElems);
+    this.footerElems = footerElems;
     this.cd.markForCheck();
   }
 
@@ -583,6 +599,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
         this.showStartQuizButton = true;
         this.showStopQuizButton = false;
+        this.hideProgressbarStyle = true;
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.cd.markForCheck();
       }),

@@ -7,6 +7,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
@@ -95,13 +96,14 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       }
 
       this.musicConfig = {
+        loop: true,
         autostart: true,
         hideControls: true,
         original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
                                 this.quizService.quiz.sessionConfig.music.volumeConfig.global :
                                 this.quizService.quiz.sessionConfig.music.volumeConfig.lobby),
         src: this.quizService.quiz.sessionConfig.music.titleConfig.lobby,
-        target: 'lobby'
+        target: AudioPlayerConfigTarget.lobby
       };
 
       this.handleMessages();
@@ -223,9 +225,12 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   private addFooterElementsAsAttendee(): void {
-    this.footerBarService.replaceFooterElements([
-      this.footerBarService.footerElemBack,
-    ]);
+    const footerBarElements = [this.footerBarService.footerElemBack];
+    if (this.quizService.quiz.sessionConfig.music.shared.lobby) {
+      footerBarElements.push(this.footerBarService.footerElemAudio);
+    }
+
+    this.footerBarService.replaceFooterElements(footerBarElements);
     this.footerBarService.footerElemBack.onClickCallback = async () => {
       this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
       this.attendeeService.cleanUp();

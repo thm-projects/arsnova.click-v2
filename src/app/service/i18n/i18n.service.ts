@@ -68,7 +68,7 @@ export class I18nService {
 
   public setLanguage(language: Language | string): void {
     if (!Language[language.toString().toUpperCase()]) {
-      return;
+      language = Language.EN;
     }
 
     this.currentLanguage = Language[language.toString().toUpperCase()];
@@ -99,8 +99,18 @@ export class I18nService {
   public initLanguage(): void {
     let lang;
     if (isPlatformServer(this.platformId)) {
+      if (this.request.url.match(/.*[.][a-zA-Z]*$/)) {
+        return;
+      }
       try {
-        lang = this.request.header('accept-language').match(/([A-Z]{2})/i);
+        const reqUrlMatch = this.request.url.match(/\/preview\/.*\/(.{2})/);
+        if (reqUrlMatch) {
+          this.setLanguage(Language[reqUrlMatch[1].toUpperCase()]);
+          return;
+        }
+        if (!lang) {
+          lang = this.request.header('accept-language').match(/([A-Z]{2})/i);
+        }
       } catch {
         lang = null;
       }
@@ -112,13 +122,19 @@ export class I18nService {
       return;
     }
 
+    const urlMatch = location.href.match(/\/preview\/.*\/(.{2})/);
+    if (urlMatch) {
+      this.setLanguage(Language[urlMatch[1].toUpperCase()]);
+      return;
+    }
+
     this.storageService.db.Config.get(StorageKey.Language).then(storedLanguage => {
       if (storedLanguage && Language[storedLanguage.value.toUpperCase()]) {
         this.setLanguage(Language[storedLanguage.value.toUpperCase()]);
       } else if (Language[this.translateService.getBrowserLang().toUpperCase()]) {
         this.setLanguage(Language[this.translateService.getBrowserLang().toUpperCase()]);
       } else {
-        lang = navigator.language.match(/([A-Z]{2})/);
+        lang = navigator.language.match(/([A-Z]{2})/i);
         if (!Array.isArray(lang) || !lang[0]) {
           this.setLanguage(Language.EN);
         } else {

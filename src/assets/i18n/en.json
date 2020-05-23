@@ -90,7 +90,8 @@
           "tweet": "Tweet"
         },
         "questionpool": "Quiz-Pool",
-        "my-quizzes": "My Quizzes"
+        "my-quizzes": "My Quizzes",
+        "audio": "Music"
       },
       "about": {
         "title": "About arsnova.click",
@@ -255,6 +256,31 @@
     }
   },
   "component": {
+    "quiz-join": {
+      "top-header": "The quiz has not yet started",
+      "sub-header": "Don't worry - we have you covered. You'll be connected as soon as the quiz master starts it.",
+      "approval": {
+        "top-header": "You want to join the quiz",
+        "sub-header": "Is that correct?"
+      }
+    },
+    "answer-result": {
+      "correct": {
+        "title": "Marvelous - that was correct!"
+      },
+      "partial-correct": {
+        "title": "Partially correct",
+        "amount-correct": "{correct} of {available} Answers correct"
+      },
+      "wrong": {
+        "title": "Sorry, that's wrong",
+        "motivate": "Don't give up!"
+      },
+      "points-gained": "+ {points} points",
+      "rank": "You are currently at position {rank}",
+      "to-quiz-results": "To the quiz results",
+      "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!"
+    },
     "twitter-card": {
       "more-tweets": "More Tweets",
       "follower": "Follower: {count}"
@@ -443,7 +469,8 @@
       "ranking": "Ranking",
       "reading_confirmation": "Reading confirmation",
       "show_question": "Show next question",
-      "start_round": "Next question",
+      "start_round": "Start countdown",
+      "start_question": "Start question",
       "confirm_read": "Got that!",
       "title_reading_confirmation": "Question read...",
       "title_running_countdown": "Voting...",
@@ -670,7 +697,21 @@
       "hide_selected_nicks": "Hide nicknames",
       "show_selected_nicks": "Show nicknames",
       "quiz_url": "Quiz URL",
-      "no-timer": "No countdown set. The quiz round must be stopped manually."
+      "no-timer": "No countdown set. The quiz round must be stopped manually.",
+      "required-for-token": {
+        "title": "Mandatory Question",
+        "label": "Question is required to be answered correctly by the attendee to achieve a bonus token"
+      },
+      "difficulty": {
+        "title": "Difficulty",
+        "label": "The difficulty of a question influences the score for correct answers",
+        "very-easy": "Very easy (+ {multiplicator, plural, one{Normale} other{#-fache} } x score)",
+        "easy": "Easy (+ {multiplicator}x score)",
+        "medium": "Medium (+ {multiplicator}x score)",
+        "challenging": "Challenging (+ {multiplicator}x score)",
+        "very-hard": "Very hard (+ {multiplicator}x score)",
+        "pro-only": "Only for pros (+ {multiplicator}x score)"
+      }
     },
     "theme_switcher": {
       "set_theme": "Choose a theme",
@@ -974,7 +1015,11 @@
       "random": "Random selection",
       "silence": "No sound",
       "play": "Play",
-      "stop": "Stop"
+      "stop": "Stop",
+      "allow-stream-to-clients": {
+        "title": "Allow audio for attendees",
+        "label": "This deactivates the audio for the quiz master and activates it for the attendees. Since the starttime of the music is not synchronized it is only advised to activate this feature if the attendees are participating remotely at the quiz."
+      }
     },
     "splashscreen": {
       "error": {

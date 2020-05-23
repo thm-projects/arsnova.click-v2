@@ -19,6 +19,8 @@ import { QuizMockService } from '../../../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../../../service/settings/settings.service';
 import { SharedService } from '../../../../../service/shared/shared.service';
+import { ThemesMockService } from '../../../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../../../service/themes/themes.service';
 import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { AnsweroptionsFreetextComponent } from './answeroptions-freetext.component';
 
@@ -47,7 +49,10 @@ describe('AnsweroptionsFreetextComponent', () => {
           {
             provide: QuizService,
             useClass: QuizMockService,
-          }, HeaderLabelService, FooterBarService, SettingsService, {
+          }, HeaderLabelService, {
+            provide: ThemesService,
+            useClass: ThemesMockService
+          }, FooterBarService, SettingsService, {
             provide: ConnectionService,
             useClass: ConnectionMockService,
           }, SharedService, {

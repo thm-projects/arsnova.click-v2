@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
+import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
@@ -29,6 +30,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
 
   private _confidenceValue = '100';
   private _serverUnavailableModal: NgbModalRef;
+  private _isRankableQuestion: boolean;
 
   private readonly _destroy = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
@@ -68,6 +70,9 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
         this.router.navigate(['/']);
         return;
       }
+
+      this._isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion]
+        .includes(this.quizService.currentQuestion().TYPE);
     });
 
     if (this.attendeeService.hasConfidenceValue()) {
@@ -127,7 +132,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
   public async sendConfidence(): Promise<Subscription> {
     return this.memberApiService.putConfidenceValue(parseInt(this._confidenceValue, 10)).subscribe((data: IMessage) => {
       this.hasTriggeredNavigation = true;
-      this.router.navigate(['/quiz', 'flow', 'results']);
+      this.router.navigate(['/quiz', 'flow', (this._isRankableQuestion ? 'answer-result' : 'results')]);
     });
   }
 

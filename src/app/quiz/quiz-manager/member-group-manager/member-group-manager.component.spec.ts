@@ -5,8 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faTwitter } from '@fortawesome/free-brands-svg-icons';
-import { faEdit, faThumbsUp, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
@@ -20,6 +19,8 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 import { SettingsService } from '../../../service/settings/settings.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { TwitterService } from '../../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
@@ -45,6 +46,9 @@ describe('MemberGroupManagerComponent', () => {
           RxStompService, SimpleMQ, {
             provide: StorageService,
             useClass: StorageServiceMock,
+          }, {
+            provide: ThemesService,
+            useClass: ThemesMockService
           }, FooterBarService, HeaderLabelService, {
             provide: QuizService,
             useClass: QuizMockService,

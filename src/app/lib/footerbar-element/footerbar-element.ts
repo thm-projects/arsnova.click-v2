@@ -26,6 +26,10 @@ export class FooterbarElement implements IFooterBarElement {
     return this._iconClass;
   }
 
+  set iconClass(value: IconProp) {
+    this._iconClass = value;
+  }
+
   get iconColorClass(): string {
     return this._iconColorClass;
   }
@@ -85,11 +89,11 @@ export class FooterbarElement implements IFooterBarElement {
     this._isLoading = value;
   }
 
-  private readonly _introTranslate: string;
   private _restoreOnClickCallback: Function;
+  private _iconClass: IconProp;
+  private readonly _introTranslate: string;
   private readonly _id: string;
   private readonly _iconLayer: Array<IconParams>;
-  private readonly _iconClass: IconProp;
   private readonly _iconColorClass: string;
   private readonly _textClass: string;
   private readonly _textName: string;

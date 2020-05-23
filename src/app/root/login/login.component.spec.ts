@@ -15,6 +15,8 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../service/themes/themes.mock.service';
+import { ThemesService } from '../../service/themes/themes.service';
 import { TwitterService } from '../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
 import { UserService } from '../../service/user/user.service';
@@ -40,7 +42,10 @@ describe('LoginComponent', () => {
         RxStompService, SimpleMQ, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, HeaderLabelService, FooterBarService, {
+        }, HeaderLabelService, {
+          provide: ThemesService,
+          useClass: ThemesMockService
+        }, FooterBarService, {
           provide: UserService,
           useValue: {
             logout: () => {},

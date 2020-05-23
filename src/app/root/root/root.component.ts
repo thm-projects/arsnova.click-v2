@@ -1,12 +1,14 @@
 import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
+import { AfterViewInit, ApplicationRef, Component, HostListener, Inject, OnInit, PLATFORM_ID, Renderer2, RendererFactory2 } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { IMessage } from '@stomp/stompjs/esm6';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { forkJoin, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
+import { EventReplayer } from 'preboot';
+import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
+import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
@@ -14,9 +16,12 @@ import { DbState, DeprecatedDb, DeprecatedKeys } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
 import { INamedType } from '../../lib/interfaces/interfaces';
+import { IThemeHashMap } from '../../lib/interfaces/ITheme';
 import { IWindow } from '../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
+import { ThemesApiService } from '../../service/api/themes/themes-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
+import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { I18nService } from '../../service/i18n/i18n.service';
 import { NotificationService } from '../../service/notification/notification.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -42,12 +47,15 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   public isInQuizManager = false;
   public isLoading = false;
+  public readonly isServer = isPlatformServer(this.platformId);
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public i18nService: I18nService, // Must be instantiated here to be available in all child components
     public sharedService: SharedService,
+    public footerBarService: FooterBarService,
     public twitterService: TwitterService,
+    public connectionService: ConnectionService,
     private translateService: TranslateService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -57,30 +65,38 @@ export class RootComponent implements OnInit, AfterViewInit {
     private rxStompService: RxStompService,
     private storageService: StorageService,
     private quizService: QuizService,
-    private connectionService: ConnectionService,
     private messageQueue: SimpleMQ,
     private trackingService: TrackingService,
     private rendererFactory: RendererFactory2,
     @Inject(DOCUMENT) private document: Document,
     private notificationService: NotificationService,
+    private themesApiService: ThemesApiService,
+    private appRef: ApplicationRef,
+    private replayer: EventReplayer,
+    private cookieService: CookieService,
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
 
-    this.themeService.themeChanged.pipe(filter(t => !!t && isPlatformBrowser(this.platformId)), distinctUntilChanged(), takeUntil(this._destroy))
-      .subscribe((themeName: QuizTheme) => {
-        if (String(themeName) === 'default') {
-          themeName = environment.defaultTheme;
-        }
-        this.loadExternalStyles(`/theme-${themeName}.css`).then(() => {
-          this.initializeCookieConsent(themeName);
-        }).catch(reason => {
-          console.log('RootComponent: theme loading failed', reason, themeName, document.getElementById('theme-styles'));
-        });
-      });
-
     if (isPlatformBrowser(this.platformId)) {
       this.updateCheckService.checkForUpdates();
+
+      let theme: QuizTheme;
+      this.themeService.themeChanged.pipe(
+        filter(t => !!t),
+        map(themeName => String(themeName) === 'default' ? environment.defaultTheme : themeName),
+        tap(themeName => {
+          theme = themeName;
+          cookieService.set('theme', themeName);
+        }),
+        switchMap(this.loadStyleHashMap.bind(this)),
+        tap(data => this.themeService.themeHashes = data),
+        map(data =>  data.find(value => value.theme === theme).hash),
+        switchMap(hash => this.loadExternalStyles(`/theme-${theme}${hash ? '-' : ''}${hash}.css`)),
+        takeUntil(this._destroy)
+      ).subscribe(() => {
+        this.initializeCookieConsent(theme);
+      });
     }
 
     this.sharedService.isLoadingEmitter.pipe(filter(() => isPlatformBrowser(this.platformId)), takeUntil(this._destroy))
@@ -90,6 +106,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit(): void {
+
     this.i18nService.initLanguage();
     this.themeService.initTheme();
 
@@ -170,6 +187,8 @@ export class RootComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    this.replayer.replayAll();
+
     window.addEventListener('appinstalled', () => {
       this.trackingService.trackConversionEvent({
         action: this.fetchChildComponent(this.activatedRoute).TYPE,
@@ -199,21 +218,52 @@ export class RootComponent implements OnInit, AfterViewInit {
     this.twitterService.showTwitter.next(!this.twitterService.isShowingTwitter);
   }
 
+  public getClasses(): string {
+    if (this.footerBarService.footerElements.length) {
+      return 'col-sm-11 offset-sm-1 col-md-10 offset-md-0 col-xl-9';
+    }
+
+    return 'col-12 col-sm-10 offset-sm-1 col-xl-8 offset-xl-2';
+  }
+
   private fetchChildComponent(route: ActivatedRoute): INamedType {
     return <INamedType>(
       route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component
     );
   }
 
-  private loadExternalStyles(styleUrl: string): Promise<void> {
-    return new Promise(resolve => {
-      const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
+  private loadStyleHashMap(): Observable<Array<IThemeHashMap>> {
+    if (this.themeService.themeHashes) {
+      return of(this.themeService.themeHashes);
+    }
+    return this.themesApiService.getThemeConfig();
+  }
+
+  private loadExternalStyles(styleUrl: string): Observable<boolean> {
+    return new Observable<boolean>(subscriber => {
+      const existingNodes = this.document.getElementsByClassName('theme-styles') as HTMLCollectionOf<HTMLLinkElement>;
+      let existingNode: HTMLLinkElement;
+      existingNode = existingNodes.item(0);
+
       if (existingNode.href.includes(styleUrl)) {
-        resolve();
+        subscriber.next(true);
+        subscriber.complete();
         return;
       }
-      existingNode.href = styleUrl;
-      resolve();
+      const clone = existingNode.cloneNode();
+      this.document.head.appendChild(clone);
+
+      const css = new Image();
+      css.onerror = () => {
+        existingNode.href = styleUrl;
+        subscriber.next(true);
+        subscriber.complete();
+
+        setTimeout(() => {
+          this._rendererInstance.removeChild(this.document.head, clone);
+        }, 100);
+      };
+      css.src = styleUrl;
     });
   }
 

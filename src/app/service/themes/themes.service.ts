@@ -1,11 +1,13 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { EventEmitter, Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { EventEmitter, Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
+import { makeStateKey, StateKey, TransferState } from '@angular/platform-browser';
 import { environment } from '../../../environments/environment';
 import { themes } from '../../lib/available-themes';
 import { StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
-import { ITheme } from '../../lib/interfaces/ITheme';
+import { THEME_MAP } from '../../lib/injection-token/theme-map';
+import { ITheme, IThemeHashMap } from '../../lib/interfaces/ITheme';
 import { ThemesApiService } from '../api/themes/themes-api.service';
 import { ConnectionService } from '../connection/connection.service';
 import { I18nService } from '../i18n/i18n.service';
@@ -21,6 +23,7 @@ export class ThemesService {
   private readonly _defaultTheme: QuizTheme;
 
   public readonly themeChanged: EventEmitter<QuizTheme> = new EventEmitter<QuizTheme>();
+  public themeHashes: Array<IThemeHashMap>;
 
   get currentTheme(): QuizTheme {
     return this._currentTheme;
@@ -35,13 +38,23 @@ export class ThemesService {
   }
 
   constructor(
+    @Optional() @Inject(THEME_MAP) private themeMap: Array<IThemeHashMap>, //
     @Inject(PLATFORM_ID) private platformId: Object,
     private quizService: QuizService,
     private connectionService: ConnectionService,
     private themesApiService: ThemesApiService,
     private storageService: StorageService,
     private i18nService: I18nService,
+    private transferState: TransferState,
   ) {
+    const key: StateKey<Array<IThemeHashMap>> = makeStateKey<Array<IThemeHashMap>>('transfer-theme-map');
+    if (this.themeMap) {
+      this.transferState.set(key, this.themeMap);
+    } else {
+      this.themeHashes = this.transferState.get<Array<IThemeHashMap>>(key, null);
+      console.log('ThemesService: Transferred state and loaded themeHashes', this.themeHashes);
+    }
+
     this._defaultTheme = isPlatformServer(this.platformId) ? environment.defaultTheme : //
                          environment.darkModeCheckEnabled && //
                          window.matchMedia('(prefers-color-scheme: dark)').matches ? //
@@ -87,6 +100,8 @@ export class ThemesService {
     if (isPlatformServer(this.platformId) || (!document.getElementById('link-manifest') && !theme)) {
       return;
     }
+
+    console.log('ThemesService: Reloading link nodes');
 
     if (!theme) {
       theme = this._currentTheme;

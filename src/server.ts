@@ -5,9 +5,10 @@ import * as compression from 'compression';
 import * as cookieparser from 'cookie-parser';
 import * as express from 'express';
 import { Express } from 'express';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import 'zone.js/dist/zone-node';
+import { environment } from './environments/environment';
 import { AppServerModule } from './main.server';
 
 require('source-map-support').install();
@@ -16,7 +17,8 @@ require('source-map-support').install();
 export function app(): Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/frontend/browser');
-  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index.html';
+  const themeHashMap = JSON.parse(readFileSync(join(distFolder, 'assets/theme-hashes.json'), {encoding: 'UTF-8'}));
 
   // gzip
   server.use(compression());
@@ -41,8 +43,17 @@ export function app(): Express {
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
+    const reqUrlMatch = req.url.match(/\/preview\/([a-z\-A-Z]*)\/.*/);
+    const theme = (reqUrlMatch ? reqUrlMatch[1] : req.cookies.theme) ?? environment.defaultTheme;
+    const hash = themeHashMap.find(value => value.theme === theme).hash;
+    const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
+    const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
+    const updatedIndexHtml = indexHtmlContent.replace(/theme-default.css/g, href);
+
     res.render(indexHtml, {
       req,
+      res,
+      document: updatedIndexHtml,
       providers: [
         {
           provide: APP_BASE_HREF,

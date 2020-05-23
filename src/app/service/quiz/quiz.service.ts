@@ -26,7 +26,7 @@ export class QuizService {
   private _readingConfirmationRequested = false;
   private _isInEditMode = false;
 
-  public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
+  public playAudio = true;
 
   get isAddingPoolQuestion(): boolean {
     return this._isAddingPoolQuestion;
@@ -77,6 +77,8 @@ export class QuizService {
   get isInEditMode(): boolean {
     return this._isInEditMode;
   }
+
+  public readonly quizUpdateEmitter: ReplaySubject<QuizEntity> = new ReplaySubject(1);
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -277,6 +279,10 @@ export class QuizService {
       questionList: questionList ?? [new SingleChoiceQuestionEntity({ answerOptionList: [] })],
       ...defaultSettings,
     });
+  }
+
+  public toggleAudioPlay(): void {
+    this.playAudio = !this.playAudio;
   }
 
   private restoreSettings(quizName: string): Promise<boolean> {

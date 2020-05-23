@@ -7,6 +7,8 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { SharedModule } from '../../shared/shared.module';
 import { StorageService } from '../storage/storage.service';
 import { StorageServiceMock } from '../storage/storage.service.mock';
+import { ThemesMockService } from '../themes/themes.mock.service';
+import { ThemesService } from '../themes/themes.service';
 import { TrackingMockService } from '../tracking/tracking.mock.service';
 import { TwitterService } from '../twitter/twitter.service';
 import { TwitterServiceMock } from '../twitter/twitter.service.mock';
@@ -22,6 +24,9 @@ describe('FooterBarService', () => {
       ],
       providers: [
         RxStompService, SimpleMQ, {
+          provide: ThemesService,
+          useClass: ThemesMockService
+        }, {
           provide: TranslateService,
           useClass: TrackingMockService,
         }, {

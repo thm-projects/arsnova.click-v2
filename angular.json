@@ -31,6 +31,7 @@
               "src/assets/imageDerivates.json",
               "src/assets/themeData.json",
               "src/assets/piwik/piwik.js",
+              "src/assets/theme-hashes.json",
               {
                 "glob": "click-service-worker.js",
                 "input": "src",
@@ -60,52 +61,52 @@
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                "bundleName": "theme-arsnova-dot-click-contrast"
+                "bundleName": "theme-arsnova-dot-click-contrast-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-blackbeauty.scss",
-                "bundleName": "theme-blackbeauty"
+                "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-elegant.scss",
-                "bundleName": "theme-elegant"
+                "bundleName": "theme-elegant-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-Material.scss",
-                "bundleName": "theme-Material"
+                "bundleName": "theme-Material-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-Material-hope.scss",
-                "bundleName": "theme-Material-hope"
+                "bundleName": "theme-Material-hope-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-decent-blue.scss",
-                "bundleName": "theme-decent-blue"
+                "bundleName": "theme-decent-blue-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-Material-blue.scss",
-                "bundleName": "theme-Material-blue"
+                "bundleName": "theme-Material-blue-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-spiritual-purple.scss",
-                "bundleName": "theme-spiritual-purple"
+                "bundleName": "theme-spiritual-purple-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                "bundleName": "theme-GreyBlue-Lime"
+                "bundleName": "theme-GreyBlue-Lime-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
                 "input": "src/styles/themes/theme-westermann-blue.scss",
-                "bundleName": "theme-westermann-blue"
+                "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
@@ -129,12 +130,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -159,52 +160,52 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast"
+                  "bundleName": "theme-arsnova-dot-click-contrast-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant"
+                  "bundleName": "theme-elegant-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material"
+                  "bundleName": "theme-Material-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope"
+                  "bundleName": "theme-Material-hope-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue"
+                  "bundleName": "theme-decent-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue"
+                  "bundleName": "theme-Material-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple"
+                  "bundleName": "theme-spiritual-purple-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime"
+                  "bundleName": "theme-GreyBlue-Lime-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
@@ -222,12 +223,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -252,52 +253,52 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast"
+                  "bundleName": "theme-arsnova-dot-click-contrast-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant"
+                  "bundleName": "theme-elegant-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
-                  "bundleName": "theme-Material"
+                  "bundleName": "theme-Material-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope"
+                  "bundleName": "theme-Material-hope-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue"
+                  "bundleName": "theme-decent-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue"
+                  "bundleName": "theme-Material-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple"
+                  "bundleName": "theme-spiritual-purple-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime"
+                  "bundleName": "theme-GreyBlue-Lime-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
@@ -315,12 +316,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -345,12 +346,12 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
@@ -368,12 +369,12 @@
               ],
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "all",
               "sourceMap": {
                 "hidden": false,
-                "styles": true,
+                "styles": false,
                 "scripts": true
               },
               "extractCss": true,
@@ -398,12 +399,12 @@
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
-                  "bundleName": "theme-blackbeauty"
+                  "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
                   "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue"
+                  "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
@@ -508,7 +509,7 @@
             "production": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [
@@ -522,7 +523,7 @@
             "thmStaging": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [
@@ -536,7 +537,7 @@
             "thmBeta": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [
@@ -550,7 +551,7 @@
             "westermann": {
               "optimization": {
                 "scripts": true,
-                "styles": false
+                "styles": true
               },
               "outputHashing": "media",
               "fileReplacements": [

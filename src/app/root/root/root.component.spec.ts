@@ -10,6 +10,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TOAST_CONFIG } from 'ngx-toastr';
+import { EventReplayer } from 'preboot';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
@@ -29,6 +30,7 @@ import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../service/themes/themes.mock.service';
 import { ThemesService } from '../../service/themes/themes.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
@@ -66,6 +68,9 @@ describe('RootComponent', () => {
           }, HeaderLabelService, ThemesService, {
             provide: TrackingService,
             useClass: TrackingMockService,
+          }, {
+            provide: ThemesService,
+            useClass: ThemesMockService
           }, FooterBarService, SettingsService, {
             provide: ConnectionService,
             useClass: ConnectionMockService,
@@ -89,7 +94,10 @@ describe('RootComponent', () => {
           }, RxStompService, SimpleMQ, {
             provide: TwitterService,
             useClass: TwitterServiceMock,
-          },
+          }, {
+            provide: EventReplayer,
+            useValue: {replayAll: () => {}}
+          }
         ],
         declarations: [
           HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent, TranslatePipeMock,

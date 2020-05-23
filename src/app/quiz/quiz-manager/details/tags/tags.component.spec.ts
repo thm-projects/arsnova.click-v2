@@ -11,6 +11,8 @@ import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMoc
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
+import { ThemesMockService } from '../../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../../service/themes/themes.service';
 import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { TagsComponent } from './tags.component';
@@ -31,6 +33,9 @@ describe('TagsComponent', () => {
         }),
       ],
       providers: [RxStompService, SimpleMQ, {
+        provide: ThemesService,
+        useClass: ThemesMockService
+      }, {
         provide: CustomMarkdownService,
         useClass: CustomMarkdownServiceMock,
       }],

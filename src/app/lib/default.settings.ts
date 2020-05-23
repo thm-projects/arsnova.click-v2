@@ -26,6 +26,8 @@ export const DefaultSettings = {
       correctValue: 30,
       answerOptionList: [],
       tags: [],
+      requiredForToken: true,
+      difficulty: 5
     },
     sessionConfig: {
       music: {
@@ -33,6 +35,11 @@ export const DefaultSettings = {
           lobby: true,
           countdownRunning: true,
           countdownEnd: true,
+        },
+        shared: {
+          lobby: false,
+          countdownRunning: false,
+          countdownEnd: false,
         },
         volumeConfig: {
           global: 60,
@@ -42,9 +49,9 @@ export const DefaultSettings = {
           useGlobalVolume: true,
         },
         titleConfig: {
-          lobby: 'Song0',
-          countdownRunning: 'Song0',
-          countdownEnd: 'Song0',
+          lobby: 'Song3',
+          countdownRunning: 'Song1',
+          countdownEnd: 'Song1',
         },
       },
       nicks: {

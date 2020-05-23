@@ -26,6 +26,8 @@ import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { StorageService } from '../../../service/storage/storage.service';
 import { StorageServiceMock } from '../../../service/storage/storage.service.mock';
+import { ThemesMockService } from '../../../service/themes/themes.mock.service';
+import { ThemesService } from '../../../service/themes/themes.service';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 import { VotingQuestionComponent } from './voting-question/voting-question.component';
 
@@ -59,6 +61,9 @@ describe('VotingComponent', () => {
         }, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
+        }, {
+          provide: ThemesService,
+          useClass: ThemesMockService
         }, FooterBarService, {
           provide: ConnectionService,
           useClass: ConnectionMockService,

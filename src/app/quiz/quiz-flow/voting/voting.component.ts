@@ -9,11 +9,13 @@ import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../../lib/enums/Message';
 import { QuestionType } from '../../../lib/enums/QuestionType';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IMessage } from '../../../lib/interfaces/communication/IMessage';
+import { IAudioPlayerConfig } from '../../../lib/interfaces/IAudioConfig';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -35,7 +37,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
 
   private _answers: Array<string> = [];
   private _questionText: string;
-  private _selectedAnswers: Array<number> | string | number;
+  private _selectedAnswers: Array<number> | string | number = [];
   private _currentQuestion: AbstractQuestionEntity;
   private _serverUnavailableModal: NgbModalRef;
   private readonly _destroy = new Subject();
@@ -44,6 +46,8 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   public isSendingResponse: boolean;
   public hasTriggeredNavigation: boolean;
   public countdown: number;
+
+  public musicConfig: IAudioPlayerConfig;
 
   get answers(): Array<string> {
     return this._answers;
@@ -174,6 +178,21 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       }
 
       this._currentQuestion = this.quizService.currentQuestion();
+      this.initData();
+
+      if (!this.quizService.isOwner && quiz.sessionConfig.music.shared.countdownRunning) {
+        this.musicConfig = {
+          autostart: true,
+          loop: true,
+          hideControls: true,
+          original_volume: String(this.quizService.quiz.sessionConfig.music.volumeConfig.useGlobalVolume ?
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.global :
+                                  this.quizService.quiz.sessionConfig.music.volumeConfig.countdownRunning),
+          src: this.quizService.quiz.sessionConfig.music.titleConfig.countdownRunning,
+          target: AudioPlayerConfigTarget.countdownRunning
+        };
+      }
+
       if ( //
         (this.quizService.quiz.currentQuestionIndex > -1 && this.quizService.quiz.currentStartTimestamp === -1) || //
         this.attendeeService.hasReponse() //
@@ -182,8 +201,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         this.router.navigate(this.getNextRoute());
         return;
       }
-
-      this.initData();
 
       this.questionTextService.eventEmitter.pipe(takeUntil(this._destroy)).subscribe((value: string | Array<string>) => {
         if (Array.isArray(value)) {
@@ -251,7 +268,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         this.countdown = payload.value;
         if (!this.countdown) {
           this.hasTriggeredNavigation = true;
-          this.router.navigate(this.getNextRoute());
+          this.sendResponses('results');
         }
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
@@ -290,9 +307,12 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   private getNextRoute(route?: string): Array<string> {
+    const isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this._currentQuestion.TYPE);
+
     return [
       '/quiz', 'flow', route ? route : environment.confidenceSliderEnabled && //
-                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' : 'results',
+                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' :
+                                       isRankableQuestion ? 'answer-result' : 'results',
     ];
   }
 }

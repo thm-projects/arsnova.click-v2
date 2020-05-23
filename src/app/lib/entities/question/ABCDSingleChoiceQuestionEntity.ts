@@ -7,6 +7,8 @@ export class ABCDSingleChoiceQuestionEntity extends SingleChoiceQuestionEntity {
 
   constructor(props) {
     super(props);
+    this.requiredForToken = false;
+    this.answerOptionList.forEach(answer => answer.isCorrect = false);
   }
 
   public isValid(): boolean {

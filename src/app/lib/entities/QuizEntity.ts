@@ -21,7 +21,7 @@ export class QuizEntity {
     this.name = props.name;
     this.currentQuestionIndex = props.currentQuestionIndex;
     this.questionList = (props.questionList || []).map(question => getQuestionForType(question.TYPE, question));
-    this.sessionConfig = props.sessionConfig;
+    this.sessionConfig = new SessionConfigurationEntity(props.sessionConfig);
     this.state = props.state;
     this.expiry = props.expiry;
     this.currentStartTimestamp = props.currentStartTimestamp;

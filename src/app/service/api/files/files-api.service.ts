@@ -1,15 +1,15 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { DefaultSettings } from '../../../lib/default.settings';
+import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FilesApiService {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
-  public SOUND_FILE_GET_URL(target: 'lobby' | 'countdownRunning' | 'countdownEnd', fileName: string): string {
+  public SOUND_FILE_GET_URL(target: AudioPlayerConfigTarget, fileName: string): string {
     return `${DefaultSettings.httpApiEndpoint}/files/sound/${encodeURIComponent(target)}/${encodeURIComponent(fileName)}.mp3`;
   }
 }

@@ -19,10 +19,6 @@ class MarkdownBarElement {
     return this._customIcon;
   }
 
-  get hiddenByDefault(): boolean {
-    return this._hiddenByDefault;
-  }
-
   get id(): string {
     return this._id;
   }
@@ -45,19 +41,16 @@ class MarkdownBarElement {
 
   private readonly _id: string;
   private readonly _titleRef: string;
-  private readonly _hiddenByDefault: boolean;
 
-  constructor({ id, titleRef, iconClass, iconClassToggled = iconClass, hiddenByDefault = false, customIcon = false }) {
+  constructor({ id, titleRef, iconClass, iconClassToggled = iconClass, customIcon = false }) {
     this._id = id;
     this._titleRef = titleRef;
     this._iconClass = iconClass;
     this._customIcon = customIcon;
     this._iconClassToggled = iconClassToggled;
-    this._hiddenByDefault = hiddenByDefault;
   }
 }
 
-/* Visible Markdown buttons by default */
 const BoldMarkdownButton = new MarkdownBarElement({
   id: 'boldMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.bold',
@@ -88,32 +81,27 @@ const ImageMarkdownButton = new MarkdownBarElement({
   titleRef: 'plugins.markdown_bar.tooltip.image',
   iconClass: 'image',
 });
-const ShowMoreMarkdownButton = new MarkdownBarElement({
-  id: 'showMoreMarkdownButton',
-  titleRef: 'plugins.markdown_bar.tooltip.show_more',
-  iconClass: 'caret-square-down',
-  iconClassToggled: 'caret-square-up',
-});
-
-/* Hidden Markdown buttons - visible only by clicking on ShowMoreMarkdownButton */
 const LatexMarkdownButton = new MarkdownBarElement({
   id: 'latexMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.latex',
-  iconClass: 'latexIcon',
+  iconClass: 'latex-icon',
   customIcon: true,
-  hiddenByDefault: true,
 });
 const StrikeThroughMarkdownButton = new MarkdownBarElement({
   id: 'strikeThroughMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.strike_through',
   iconClass: 'strikethrough',
-  hiddenByDefault: true,
 });
 const ItalicMarkdownButton = new MarkdownBarElement({
   id: 'italicMarkdownButton',
   titleRef: 'plugins.markdown_bar.tooltip.italic',
   iconClass: 'italic',
-  hiddenByDefault: true,
+});
+const LineBreakMarkdownButton = new MarkdownBarElement({
+  id: 'lineBreakMarkdownButton',
+  titleRef: 'plugins.markdown_bar.tooltip.line-break',
+  iconClass: 'line-break-icon',
+  customIcon: true,
 });
 
 
@@ -129,7 +117,7 @@ export class MarkdownBarComponent {
 
   constructor(private translateService: TranslateService, private trackingService: TrackingService) {
     this.markdownBarElements.push(BoldMarkdownButton, HeaderMarkdownButton, HyperlinkMarkdownButton, UlMarkdownButton, CodeMarkdownButton,
-      ImageMarkdownButton, LatexMarkdownButton, StrikeThroughMarkdownButton, ItalicMarkdownButton);
+      ImageMarkdownButton, LatexMarkdownButton, StrikeThroughMarkdownButton, ItalicMarkdownButton, LineBreakMarkdownButton);
   }
 
   public connector(elem: MarkdownBarElement): void {
