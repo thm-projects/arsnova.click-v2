@@ -859,7 +859,10 @@
       "activated": "Aktiviert",
       "deactivated": "Deaktiviert",
       "random": "Zufällige Auswahl",
-      "allow-stream-to-clients": "Audio für Teilnehmer aktivieren"
+      "allow-stream-to-clients": {
+        "title": "Audio für Teilnehmer aktivieren",
+        "label": "Dies deaktiviert die Audiowiedergabe für den Quizmaster und aktiviert ihn für die Teilnehmer. Da die Startzeit der Musik nicht synchron läuft ist die Aktivierung nur empfohlen, wenn die Teilnehmer nicht im gleichen Raum sitzen."
+      }
     },
     "splashscreen": {
       "error": {

@@ -1012,7 +1012,10 @@
       "silence": "No sound",
       "play": "Play",
       "stop": "Stop",
-      "allow-stream-to-clients": "Allow audio for attendees"
+      "allow-stream-to-clients": {
+        "title": "Allow audio for attendees",
+        "label": "This deactivates the audio for the quiz master and activates it for the attendees. Since the starttime of the music is not synchronized it is only advised to activate this feature if the attendees are participating remotely at the quiz."
+      }
     },
     "splashscreen": {
       "error": {

@@ -89,7 +89,10 @@
         <div class="col-12 mb-2 d-flex">
           <p class="mb-0 mr-2 align-self-center"
              style="line-height: 1.2">
-            <span [innerHTML]="'plugins.sound.allow-stream-to-clients' | translate"></span>&#58;&nbsp;
+            <fa-icon [icon]="'info-circle'"
+                     class="mr-2"
+                     [ngbTooltip]="'plugins.sound.allow-stream-to-clients.label' | translate"></fa-icon>
+            <span>{{'plugins.sound.allow-stream-to-clients.title' | translate}}</span>&#58;&nbsp;
           </p>
           <label class="btn cursor-pointer mb-0 align-self-center ml-auto"
                  [class.btn-success]="config?.shared.lobby"
@@ -149,7 +152,10 @@
         <div class="col-12 mb-2 d-flex">
           <p class="mb-0 mr-2 align-self-center"
              style="line-height: 1.2">
-            <span [innerHTML]="'plugins.sound.allow-stream-to-clients' | translate"></span>&#58;&nbsp;
+            <fa-icon [icon]="'info-circle'"
+                     class="mr-2"
+                     [ngbTooltip]="'plugins.sound.allow-stream-to-clients.label' | translate"></fa-icon>
+            <span>{{'plugins.sound.allow-stream-to-clients.title' | translate}}</span>&#58;&nbsp;
           </p>
           <label class="btn cursor-pointer mb-0 align-self-center ml-auto"
                  [class.btn-success]="config?.shared.countdownRunning"
@@ -207,19 +213,6 @@
   <div class="card text-dark">
     <div class="card-body">
       <div class="row no-gutters align-items-center">
-        <div class="col-12 mb-2 d-flex">
-          <p class="mb-0 mr-2 align-self-center"
-             style="line-height: 1.2">
-            <span [innerHTML]="'plugins.sound.allow-stream-to-clients' | translate"></span>&#58;&nbsp;
-          </p>
-          <label class="btn cursor-pointer mb-0 align-self-center ml-auto"
-                 [class.btn-success]="config?.shared.countdownEnd"
-                 (click)="toggleConfig(AudioPlayerConfigTarget.countdownEnd)"
-                 [class.btn-danger]="!config?.shared.countdownEnd">
-            <span *ngIf="config?.shared.countdownEnd">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
-            <span *ngIf="!config?.shared.countdownEnd">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
-          </label>
-        </div>
 
         <div class="col-sm-5">
           <label class="d-flex btn cursor-pointer mb-0 justify-content-center"
