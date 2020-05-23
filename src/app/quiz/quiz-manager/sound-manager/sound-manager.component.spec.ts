@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
@@ -71,7 +71,7 @@ describe('SoundManagerComponent', () => {
   beforeEach((
     () => {
       const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
-      library.addIcons(...[faStop, faPlay]);
+      library.addIcons(...[faStop, faPlay, faInfoCircle]);
       fixture = TestBed.createComponent(SoundManagerComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -83,6 +83,7 @@ describe('SoundManagerComponent', () => {
       expect(component).toBeTruthy();
     }
   ));
+
   it('should contain a TYPE reference', (
     () => {
       expect(SoundManagerComponent.TYPE).toEqual('SoundManagerComponent');

@@ -6,7 +6,7 @@
     <ng-template #amountTemplate>
       <div class="col-md-6 d-flex justify-content-center align-items-center flex-column my-auto my-md-0 flex-grow-1">
         <fa-icon *ngIf="isLoading" [spin]="true" [icon]="'spinner'" size="4x"></fa-icon>
-        <h3 *ngIf="!isLoading" class="w-100 text-truncate text-center fs-xxl">{{elem.amount}}</h3>
+        <h3 *ngIf="!isLoading" class="w-100 text-truncate text-center fs-xxl mb-0">{{elem.amount}}</h3>
       </div>
     </ng-template>
 
