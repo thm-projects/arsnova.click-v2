@@ -105,11 +105,6 @@
               },
               {
                 "inject": false,
-                "input": "src/styles/themes/theme-westermann-blue.scss",
-                "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
                 "input": "src/styles/themes/theme-Material.scss",
                 "bundleName": "theme-default"
               }
@@ -204,11 +199,6 @@
                 },
                 {
                   "inject": false,
-                  "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
                   "bundleName": "theme-default"
                 }
@@ -294,11 +284,6 @@
                   "inject": false,
                   "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
                   "bundleName": "theme-GreyBlue-Lime-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-westermann-blue.scss",
-                  "bundleName": "theme-westermann-blue-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
