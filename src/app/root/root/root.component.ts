@@ -117,7 +117,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       take(1), //
       takeUntil(this._destroy), //
     ).subscribe(() => {
-      if (localStorage.getItem('hashtags')) {
+      if (localStorage.getItem(DeprecatedKeys.hashtags)) {
         console.log('[RootComponent] Migrating legacy quiz data');
         this.migrateLegacyQuizData();
       }

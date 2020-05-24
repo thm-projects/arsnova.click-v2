@@ -72,12 +72,7 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
         return;
       }
 
-      if (typeof this.quizService.quiz?.sessionConfig.nicks.memberGroups[0] === 'string') {
-        this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups.map((value: any) => ({name: value, color: ''}));
-      } else {
-        this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups;
-      }
-
+      this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups;
       this._maxMembersPerGroup = this.quizService.quiz?.sessionConfig.nicks.maxMembersPerGroup;
       this._autoJoinToGroup = this.quizService.quiz?.sessionConfig.nicks.autoJoinToGroup;
     });
@@ -125,6 +120,6 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   }
 
   public memberGroupExists(): boolean {
-    return this.memberGroups.findIndex(value => value.name.toLowerCase().trim() === this.memberGroupName.toLowerCase().trim()) > -1;
+    return this.memberGroups.findIndex(value => value.name?.toLowerCase().trim() === this.memberGroupName.toLowerCase().trim()) > -1;
   }
 }
