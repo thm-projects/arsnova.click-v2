@@ -113,7 +113,7 @@ describe('ProgressBarComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      group: {name: 'Default', color: ''},
+      groupName: 'Default',
       currentQuizName: '',
       colorCode: '#00000',
       responses: [],
@@ -140,7 +140,7 @@ describe('ProgressBarComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      group: {name: 'Default', color: ''},
+      groupName: 'Default',
       currentQuizName: '',
       colorCode: '#00000',
       responses: [],
@@ -168,7 +168,7 @@ describe('ProgressBarComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      group: {name: 'Default', color: ''},
+      groupName: 'Default',
       currentQuizName: '',
       colorCode: '#00000',
       responses: [],
@@ -195,7 +195,7 @@ describe('ProgressBarComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      group: {name: 'Default', color: ''},
+      groupName: 'Default',
       currentQuizName: '',
       colorCode: '#00000',
       responses: [],
@@ -223,7 +223,7 @@ describe('ProgressBarComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      group: {name: 'Default', color: ''},
+      groupName: 'Default',
       currentQuizName: '',
       colorCode: '#00000',
       responses: [],
@@ -250,7 +250,7 @@ describe('ProgressBarComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      group: {name: 'Default', color: ''},
+      groupName: 'Default',
       currentQuizName: '',
       colorCode: '#00000',
       responses: [],

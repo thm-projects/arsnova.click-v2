@@ -87,7 +87,7 @@ describe('MemberGroupSelectComponent', () => {
       spyOn(component, 'addToGroup').and.callThrough();
       spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 
-      component.addToGroup('testGroup');
+      component.addToGroup({name: 'testGroup', color: ''});
       expect(component.addToGroup).not.toThrowError();
     })));
   });
