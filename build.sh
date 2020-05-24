@@ -87,10 +87,9 @@ else
    echo "Generating preview screenshots"
    node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000 --root=true
 
-   # Disabled for now since purifyCSS removes nearly all css with Angular 9
-   # cd /usr/src/app
-   # echo "Purifying css"
-   # npm run purify
+   cd /usr/src/app
+   echo "Purifying css"
+   npm run purify
 fi
 
 echo "Gzipping app files"
