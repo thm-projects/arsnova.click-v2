@@ -458,7 +458,7 @@
       "team-result": {
         "name": "Team \"{TEAM_NAME}\"",
         "overall-response-time": "Overall Response Time: {RESPONSE_TIME}",
-        "score": "Score: {SCORE}"
+        "score": "{SCORE} points"
       },
       "own-rank": {
         "own-data": "You are on rank {INDEX} with a score of {SCORE}",
@@ -822,7 +822,7 @@
       "username": "Username"
     },
     "member-group-select": {
-      "title": "Select a Team"
+      "title": "Select your Team"
     },
     "quiz_manager_details": {
       "back": "Back to the quiz overview",

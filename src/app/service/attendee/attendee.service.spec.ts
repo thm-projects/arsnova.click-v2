@@ -69,8 +69,7 @@ describe('AttendeeService', () => {
 
   it('should get all member groups', () => {
     const service: AttendeeService = TestBed.inject(AttendeeService);
-
-    expect(service.getMemberGroups()).toContain('Default');
+    expect(service.getMemberGroups().length).toEqual(0);
   });
 
   it('should get all members of a group', () => {

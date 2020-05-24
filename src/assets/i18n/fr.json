@@ -321,9 +321,9 @@
       "second": "Seconde",
       "export": "Export (.csv)",
       "team-result": {
-        "name": "Team \"{TEAM_NAME}\"",
+        "name": "{TEAM_NAME}",
         "overall-response-time": "Temps de réponse global: {RESPONSE_TIME}",
-        "score": "But: {SCORE}"
+        "score": "{SCORE} But"
       },
       "no_attendee_correct_global": "Aucun parcours sans faute",
       "question": "Question",

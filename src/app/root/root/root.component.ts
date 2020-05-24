@@ -8,7 +8,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { CookieService } from 'ngx-cookie-service';
 import { EventReplayer } from 'preboot';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
-import { filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import themeData from '../../../assets/themeData.json';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
@@ -85,6 +85,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       this.themeService.themeChanged.pipe(
         filter(t => !!t),
         map(themeName => String(themeName) === 'default' ? environment.defaultTheme : themeName),
+        distinctUntilChanged(),
         tap(themeName => {
           theme = themeName;
           cookieService.delete('theme');
@@ -242,25 +243,26 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   private loadExternalStyles(styleUrl: string): Observable<boolean> {
     return new Observable<boolean>(subscriber => {
-      const existingNodes = this.document.getElementsByClassName('theme-styles') as HTMLCollectionOf<HTMLLinkElement>;
-      let existingNode: HTMLLinkElement;
-      existingNode = existingNodes.item(0);
+      const existingNode = this._rendererInstance.selectRootElement('.theme-styles');
 
+      console.log('existingnode', existingNode.href, styleUrl);
       if (existingNode.href.includes(styleUrl)) {
         subscriber.next(true);
         subscriber.complete();
         return;
       }
-      const clone = existingNode.cloneNode();
-      this.document.head.appendChild(clone);
+      const clone: HTMLLinkElement = existingNode.cloneNode() as HTMLLinkElement;
+      this._rendererInstance.appendChild(this.document.head, clone);
 
       const css = new Image();
       css.onerror = () => {
         existingNode.href = styleUrl;
+        console.log('moving href', existingNode.href, styleUrl);
         subscriber.next(true);
         subscriber.complete();
 
         setTimeout(() => {
+          console.log('removing clone', clone.href, styleUrl);
           this._rendererInstance.removeChild(this.document.head, clone);
         }, 100);
       };

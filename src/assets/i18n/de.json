@@ -379,9 +379,9 @@
       "second": "{COUNT, plural, =0{Sekunden} one{Sekunde} other{Sekunden}}",
       "export": "Export",
       "team-result": {
-        "name": "Team \"{TEAM_NAME}\"",
+        "name": "{TEAM_NAME}",
         "overall-response-time": "Kummulierte Antwortzeit: {RESPONSE_TIME}",
-        "score": "Punkte: {SCORE}"
+        "score": "{SCORE} Punkte"
       },
       "own-rank": {
         "own-data": "Du bist auf Platz {INDEX} mit einem Punktestand von {SCORE}",
@@ -437,7 +437,7 @@
       "start_quiz": "Los geht's!",
       "kick_member_confirmation": "Soll die Person \"{NAME}\" aus dem Quiz entfernt werden?",
       "own_nickname": "Dein Nickname:",
-      "waiting_for_players": "Warten auf die Anderen…",
+      "waiting_for_players": "Warten auf die anderen…",
       "description": {}
     },
     "nickname_categories": {
@@ -687,7 +687,7 @@
       "username": "Benutzername"
     },
     "member-group-select": {
-      "title": "Wähle ein Team"
+      "title": "Wähle dein Team"
     },
     "quiz_manager_details": {
       "tags": {

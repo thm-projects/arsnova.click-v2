@@ -9,6 +9,8 @@ import { AttendeeMockService } from '../../../service/attendee/attendee.mock.ser
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
@@ -56,7 +58,10 @@ describe('MemberGroupSelectComponent', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
-        },
+        }, {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock
+        }
       ],
       declarations: [MemberGroupSelectComponent, TranslatePipeMock],
     }).compileComponents();

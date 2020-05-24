@@ -40,10 +40,12 @@ $link-hover-decoration: none;
 $corner-radius: 10px;
 $splash-screen-corner-radius: 10px;
 
-$font-size-base: 1.13rem;
+$font-size-base: 1rem;
 $small-font-size: 80%;
 
 $statistics-icon-opacity: 0.2;
+
+$paragraph-margin-bottom: 0;
 
 @import "prebuild";
 

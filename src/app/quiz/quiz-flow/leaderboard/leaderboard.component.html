@@ -11,16 +11,31 @@
 </h4>
 
 <ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length > 1;else attendeeView">
-  <ng-container *ngFor="let group of memberGroupResults">
-    <div class="row">
-      <div class="col-12 col-sm-6">
-        <div class="bg-secondary text-secondary-inverted rounded p-2 my-2">
-          <h6 class="text-center mb-0">{{'component.leaderboard.team-result.name' | translate:{TEAM_NAME: group.name} }}</h6>
-          <hr/>
-          <p>{{'component.leaderboard.team-result.overall-response-time' | translate:{RESPONSE_TIME: formatResponseTime(group.responseTime)} }}</p>
-          <p>{{'component.leaderboard.team-result.score' | translate:{SCORE: group.score} }}</p>
+  <ng-container *ngFor="let group of memberGroupResults; let isLast = last">
+
+    <div [class.mb-5]="!isLast" class="d-flex align-items-center flex-wrap" *ngIf="getPercentForGroup(group) as percent;">
+      <p class="mx-2 text-right w-100">{{'component.leaderboard.team-result.score' | translate:{SCORE: group.score} }}</p>
+
+      <div [innerHTML]="parseNickname(group.name)" [title]="group.name"></div>
+
+      <div class="progress rounded ml-2 flex-grow-1">
+
+        <div *ngIf="group.score && percent"
+             [attr.aria-valuenow]="percent"
+             [class]="('progress-bar overflow-visible text-left rounded ') + getTeamProgressClasses(group)"
+             [style.width.%]="sanitizeStyle(percent)"
+             aria-valuemax="100"
+             aria-valuemin="0"
+             role="progressbar">
+        </div>
+
+        <div *ngIf="!group.score"
+             class="w-100 d-flex align-items-center justify-content-center">
+          <fa-icon [icon]="'spinner'"
+                   [spin]="true"></fa-icon>
         </div>
       </div>
+
     </div>
   </ng-container>
 </ng-container>

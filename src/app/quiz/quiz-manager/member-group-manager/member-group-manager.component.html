@@ -49,8 +49,8 @@
         <button class="btn btn-success"
                 id="add-member-group"
                 (click)="addMemberGroup()"
-                [class.disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length"
-                [disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length">
+                [class.disabled]="memberGroupExists() || !memberGroupName.length"
+                [disabled]="memberGroupExists() || !memberGroupName.length">
           <span>{{'component.membergroup-manager.create-team' | translate}}</span>
         </button>
       </div>
@@ -63,8 +63,8 @@
     <ul *ngFor="let group of memberGroups"
         class="list-unstyled">
       <li class="border-bottom p-2 d-flex">
-        <span>{{group}}</span>
-        <fa-icon (click)="removeMemberGroup(group)"
+        <div [innerHTML]="parseNickname(group.name)"></div>
+        <fa-icon (click)="removeMemberGroup(group.name)"
                  [icon]="'trash'"
                  class="cursor-pointer ml-auto"></fa-icon>
       </li>

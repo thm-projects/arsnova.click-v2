@@ -132,7 +132,7 @@ describe('QuizResultsComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      groupName: 'Default',
+      group: {name: 'Default', color: ''},
       colorCode: '#00000',
       responses: [],
       currentQuizName: '',
@@ -146,7 +146,7 @@ describe('QuizResultsComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      groupName: 'Default',
+      group: {name: 'Default', color: ''},
       colorCode: '#00000',
       responses: [],
       currentQuizName: '',
@@ -170,7 +170,7 @@ describe('QuizResultsComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      groupName: 'Default',
+      group: {name: 'Default', color: ''},
       colorCode: '#00000',
       currentQuizName: '',
       responses: [
@@ -195,7 +195,7 @@ describe('QuizResultsComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      groupName: 'Default',
+      group: {name: 'Default', color: ''},
       colorCode: '#00000',
       currentQuizName: '',
       responses: [
@@ -220,7 +220,7 @@ describe('QuizResultsComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      groupName: 'Default',
+      group: {name: 'Default', color: ''},
       colorCode: '#00000',
       currentQuizName: '',
       responses: [
@@ -240,7 +240,7 @@ describe('QuizResultsComponent', () => {
     attendeeService.addMember(new Attendee({
       id: '',
       name: 'testNickname',
-      groupName: 'Default',
+      group: {name: 'Default', color: ''},
       colorCode: '#00000',
       currentQuizName: '',
       responses: [

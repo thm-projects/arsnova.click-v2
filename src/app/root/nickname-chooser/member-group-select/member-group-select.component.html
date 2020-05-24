@@ -1,7 +1,10 @@
-<h4 class="text-light mb-4">{{'component.member-group-select.title' | translate}}</h4>
+<h4 class="mb-4 text-center">{{'component.member-group-select.title' | translate}}</h4>
 
-<div *ngFor="let group of memberGroups"
-     class="btn btn-light btn-block"
-     (click)="addToGroup(group)">
-  {{group}}
+<div class="row form-row justify-content-center">
+  <div *ngFor="let group of memberGroups" class="col-auto mb-3">
+    <div class="btn btn-secondary"
+         [innerHTML]="parseNickname(group.name)"
+         (click)="addToGroup(group)">
+    </div>
+  </div>
 </div>

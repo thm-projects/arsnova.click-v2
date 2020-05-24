@@ -63,7 +63,7 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       this.headerLabelService.headerLabelParams = {
         QUESTION_INDEX: (this.quizService.quiz.currentQuestionIndex + 1),
       };
-      this.isTeam = this.quizService.quiz.sessionConfig.nicks.memberGroups.length > 1;
+      this.isTeam = this.quizService.quiz.sessionConfig.nicks.memberGroups.length > 0;
       this.cd.markForCheck();
       this.handleMessages();
     }).catch(() => this.hasTriggeredNavigation = true);

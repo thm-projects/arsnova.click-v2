@@ -646,6 +646,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   private playEndSound(): void {
-    this.countdownEndAudioComp.playMusic();
+    this.countdownEndAudioComp?.playMusic();
   }
 }

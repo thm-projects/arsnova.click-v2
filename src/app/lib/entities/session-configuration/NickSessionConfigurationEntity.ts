@@ -1,7 +1,8 @@
 import { DefaultSettings } from '../../default.settings';
+import { IMemberGroupBase } from '../../interfaces/users/IMemberGroupBase';
 
 export class NickSessionConfigurationEntity {
-  public memberGroups: Array<string> = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.memberGroups;
+  public memberGroups: Array<IMemberGroupBase> = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.memberGroups;
   public maxMembersPerGroup: number = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.maxMembersPerGroup;
   public autoJoinToGroup: boolean = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.autoJoinToGroup;
   public selectedNicks: Array<string> = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.selectedNicks;

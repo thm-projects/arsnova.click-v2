@@ -3,6 +3,10 @@
   box-shadow: none !important;
 }
 
+html {
+  font-size: 18px;
+}
+
 body {
   height: 100%;
 }
@@ -46,8 +50,6 @@ body {
 }
 
 p {
-  margin: 0;
-
   img {
     max-width: 100%;
     max-height: 50vh;
@@ -87,21 +89,6 @@ iframe {
   .cc-window {
     border-radius: 0 !important;
   }
-}
-
-.box-shadow-success {
-  box-shadow: 0 0 .25rem $success;
-  pointer-events: none;
-}
-
-.box-shadow-danger {
-  box-shadow: 0 0 .25rem $danger;
-  pointer-events: none;
-}
-
-.box-shadow-warning {
-  box-shadow: 0 0 .25rem $warning;
-  pointer-events: none;
 }
 
 .color-twitter {

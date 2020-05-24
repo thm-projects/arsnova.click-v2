@@ -1,9 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../lib/enums/enums';
+import { IMemberGroupBase } from '../../../lib/interfaces/users/IMemberGroupBase';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
@@ -16,14 +19,14 @@ import { QuizService } from '../../../service/quiz/quiz.service';
 export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'MemberGroupManagerComponent';
 
-  private _memberGroups: Array<string> = [];
+  private _memberGroups: Array<IMemberGroupBase> = [];
   private _maxMembersPerGroup: number;
   private _autoJoinToGroup: boolean;
   private readonly _destroy = new Subject();
 
   public memberGroupName = '';
 
-  get memberGroups(): Array<string> {
+  get memberGroups(): Array<IMemberGroupBase> {
     return this._memberGroups;
   }
 
@@ -49,6 +52,8 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
     private headerLabelService: HeaderLabelService,
     private translateService: TranslateService,
     private quizService: QuizService,
+    private sanitizer: DomSanitizer,
+    private customMarkdownService: CustomMarkdownService
   ) {
 
     this.footerBarService.TYPE_REFERENCE = MemberGroupManagerComponent.TYPE;
@@ -67,7 +72,12 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups;
+      if (typeof this.quizService.quiz?.sessionConfig.nicks.memberGroups[0] === 'string') {
+        this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups.map((value: any) => ({name: value, color: ''}));
+      } else {
+        this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups;
+      }
+
       this._maxMembersPerGroup = this.quizService.quiz?.sessionConfig.nicks.maxMembersPerGroup;
       this._autoJoinToGroup = this.quizService.quiz?.sessionConfig.nicks.autoJoinToGroup;
     });
@@ -87,20 +97,34 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   }
 
   public addMemberGroup(): void {
-    if (!this.memberGroupName.length || this.memberGroups.find(group => group === this.memberGroupName)) {
+    if (!this.memberGroupName.length || this.memberGroupExists()) {
       return;
     }
 
-    this.memberGroups.push(this.memberGroupName);
+    this.memberGroups.push({name: this.memberGroupName.trim(), color: ''});
     this.memberGroupName = '';
   }
 
   public removeMemberGroup(groupName: string): void {
-    if (!this.memberGroups.find(group => group === groupName)) {
+    if (!this.memberGroups.find(group => group.name === groupName)) {
       return;
     }
 
-    this.memberGroups.splice(this.memberGroups.findIndex(group => group === groupName), 1);
+    this.memberGroups.splice(this.memberGroups.findIndex(group => group.name === groupName), 1);
   }
 
+  public sanitizeHTML(value: string): string {
+    return this.sanitizer.sanitize(SecurityContext.HTML, `${value}`);
+  }
+
+  public parseNickname(value: string): string {
+    if (value.match(/:[\w\+\-]+:/g)) {
+      return this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(value));
+    }
+    return value;
+  }
+
+  public memberGroupExists(): boolean {
+    return this.memberGroups.findIndex(value => value.name.toLowerCase().trim() === this.memberGroupName.toLowerCase().trim()) > -1;
+  }
 }

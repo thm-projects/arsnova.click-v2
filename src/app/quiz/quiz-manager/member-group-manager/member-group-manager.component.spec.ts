@@ -12,6 +12,8 @@ import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
@@ -58,7 +60,10 @@ describe('MemberGroupManagerComponent', () => {
           }, {
             provide: TwitterService,
             useClass: TwitterServiceMock,
-          },
+          }, {
+            provide: CustomMarkdownService,
+            useClass: CustomMarkdownServiceMock
+          }
         ],
         declarations: [MemberGroupManagerComponent, TranslatePipeMock],
       }).compileComponents();
@@ -77,7 +82,7 @@ describe('MemberGroupManagerComponent', () => {
 
   beforeEach(() => {
     component.memberGroups.splice(0, component.memberGroups.length);
-    component.memberGroups.push('Default');
+    component.memberGroups.push({name: 'Default', color: ''});
   });
 
   it('should create', (

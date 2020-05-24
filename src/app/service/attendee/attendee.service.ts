@@ -7,6 +7,7 @@ import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../lib/enums/enums';
 import { QuizState } from '../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IMemberGroupBase } from '../../lib/interfaces/users/IMemberGroupBase';
 import { MemberApiService } from '../api/member/member-api.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
@@ -50,7 +51,7 @@ export class AttendeeService {
     }
   }
 
-  public getMemberGroups(): Array<string> {
+  public getMemberGroups(): Array<IMemberGroupBase> {
 
     if (!this.quizService.quiz) {
       return [];

@@ -332,9 +332,9 @@
       "second": "Secondo",
       "export": "Export (.csv)",
       "team-result": {
-        "name": "Team \"{TEAM_NAME}\"",
+        "name": "{TEAM_NAME}",
         "overall-response-time": "Tempo di risposta complessivo: {RESPONSE_TIME}",
-        "score": "Punto: {SCORE}"
+        "score": "{SCORE} Punto"
       },
       "no_attendee_correct_global": "Nessuno ha risposto correttamente a tutte le domande.",
       "question": "Domanda",

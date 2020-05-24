@@ -37,15 +37,17 @@ $link-decoration: none;
 $link-hover-color: $primary;
 $link-hover-decoration: none;
 
-$font: Roboto, Roboto-Regular, Helvetica, Arial, sans-serif !important;
 $corner-radius: 10px;
 $splash-screen-corner-radius: 10px;
 
+$font-size-base: 1rem;
 $small-font-size: 80%;
 
 $btn-disabled-opacity: 0.58;
 
 $statistics-icon-opacity: 0.2;
+
+$paragraph-margin-bottom: 0;
 
 @import "prebuild";
 
