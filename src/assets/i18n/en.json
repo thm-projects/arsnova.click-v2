@@ -277,9 +277,12 @@
         "motivate": "Don't give up!"
       },
       "points-gained": "+ {points} points",
+      "points-gained-team": "{points} points",
       "rank": "You are currently at position {rank}",
+      "rank-team": "Your team is currently at position {rank}",
       "to-quiz-results": "To the quiz results",
-      "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!"
+      "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!",
+      "pole-position-team": "Your team is the greatest! First rank in the entire quiz! Bravo!"
     },
     "twitter-card": {
       "more-tweets": "More Tweets",

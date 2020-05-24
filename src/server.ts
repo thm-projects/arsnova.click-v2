@@ -53,7 +53,7 @@ export function app(): Express {
   server.get('*', (req, res) => {
     const reqUrlMatch = req.url.match(/\/preview\/([a-z\-A-Z]*)\/.*/);
     const theme = (reqUrlMatch ? reqUrlMatch[1] : req.cookies.theme) ?? environment.defaultTheme;
-    const hash = themeHashMap.find(value => value.theme === theme).hash;
+    const hash = themeHashMap.find(value => value.theme === theme)?.hash ?? themeHashMap.find(value => value.theme === environment.defaultTheme);
     const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
     const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
     const updatedIndexHtml = indexHtmlContent.replace(/theme-default.css/g, href);

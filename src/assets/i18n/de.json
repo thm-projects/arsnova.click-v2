@@ -233,9 +233,12 @@
         "motivate": "Gib nicht auf!"
       },
       "points-gained": "+ {points} Punkte",
+      "points-gained-team": "{points} Punkte",
       "rank": "Du bist aktuell auf Platz {rank}",
+      "rank-team": "Dein Team ist aktuell auf Platz {rank}",
       "to-quiz-results": "Zur Quizfrage",
-      "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!"
+      "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!",
+      "pole-position-team": "Ihr seid die Besten! Erster Platz im gesamten Quiz! Bravo!"
     },
     "twitter-card": {
       "more-tweets": "Mehr Tweets",

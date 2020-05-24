@@ -6,9 +6,18 @@
 <ng-template #correctAnswer>
   <h1 class="mb-5">{{'component.answer-result.correct.title' | translate}}</h1>
   <fa-icon [icon]="'check'" [size]="'6x'"></fa-icon>
-  <h2 class="my-5 h1 bg-invers rounded-pill mx-auto">{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</h2>
-  <h2 class="my-5 h1">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</h2>
-  <h4 class="my-5" *ngIf="data?.rank === 1">{{'component.answer-result.pole-position' | translate}}</h4>
+  <h2 class="my-5 h1 bg-invers rounded-pill mx-auto">
+    <ng-container *ngIf="!isTeam">{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</ng-container>
+    <ng-container *ngIf="isTeam">{{'component.answer-result.points-gained-team' | translate:{points: data?.pointsGained} }}</ng-container>
+  </h2>
+  <h2 class="my-5 h1">
+    <ng-container *ngIf="!isTeam">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</ng-container>
+    <ng-container *ngIf="isTeam">{{'component.answer-result.rank-team' | translate:{rank: data?.rank} }}</ng-container>
+  </h2>
+  <h4 class="my-5" *ngIf="data?.rank === 1">
+    <ng-container *ngIf="!isTeam">{{'component.answer-result.pole-position' | translate}}</ng-container>
+    <ng-container *ngIf="isTeam">{{'component.answer-result.pole-position-team' | translate}}</ng-container>
+  </h4>
 </ng-template>
 
 <ng-template #partiallyCorrectAnswer>
@@ -16,9 +25,15 @@
   <fa-icon [icon]="'check'" [size]="'6x'"></fa-icon>
   <div class="my-5 px-3 h1 bg-invers rounded-pill mx-auto bg-light-invers text-invers">
     <h2>{{'component.answer-result.partial-correct.amount-correct' | translate:{correct: data?.amountCorrect, available: data?.amountAvailable} }}</h2>
-    <h2>{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</h2>
+    <h2>
+      <ng-container *ngIf="!isTeam">{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</ng-container>
+      <ng-container *ngIf="isTeam">{{'component.answer-result.points-gained-team' | translate:{points: data?.pointsGained} }}</ng-container>
+    </h2>
   </div>
-  <h2 class="my-5 h1">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</h2>
+  <h2 class="my-5 h1">
+    <ng-container *ngIf="!isTeam">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</ng-container>
+    <ng-container *ngIf="isTeam">{{'component.answer-result.rank-team' | translate:{rank: data?.rank} }}</ng-container>
+  </h2>
 </ng-template>
 
 <ng-template #wrongAnswer>
@@ -26,7 +41,10 @@
   <div class="mb-5">
     <fa-icon [icon]="'times'" [size]="'6x'"></fa-icon>
   </div>
-  <h2 class="h1" *ngIf="data?.rank">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</h2>
+  <h2 class="h1" *ngIf="data?.rank">
+    <ng-container *ngIf="!isTeam">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</ng-container>
+    <ng-container *ngIf="isTeam">{{'component.answer-result.rank-team' | translate:{rank: data?.rank} }}</ng-container>
+  </h2>
   <h2 class="mt-5">{{'component.answer-result.wrong.motivate' | translate}}</h2>
 </ng-template>
 

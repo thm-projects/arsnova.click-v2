@@ -55,6 +55,7 @@ export class TwitterService {
   }
 
   public setOptIn(): void {
+    this.cookieService.delete(StorageKey.TwitterOptIn);
     this.cookieService.set(StorageKey.TwitterOptIn, 'true', 31536000);
     this.refreshTweets().subscribe();
   }
