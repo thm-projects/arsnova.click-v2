@@ -89,7 +89,7 @@ export class RootComponent implements OnInit, AfterViewInit {
         tap(themeName => {
           theme = themeName;
           cookieService.delete('theme');
-          cookieService.set('theme', themeName, 31536000);
+          cookieService.set('theme', themeName, 365000);
         }),
         switchMap(this.loadStyleHashMap.bind(this)),
         tap(data => this.themeService.themeHashes = data),
