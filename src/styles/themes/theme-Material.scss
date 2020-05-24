@@ -6,7 +6,7 @@ $dark: black;
 $info: #00CCB9;
 $success: #006000;
 $warning: #FF9800;
-$danger: #f44336;
+$danger: #b3190e;
 
 $primary_text_color: white;
 $secondary_text_color: #757575;
@@ -28,19 +28,19 @@ $border-loader_wrapper-inner_spin: #f9c922;
 
 $bg-answer-result-correct: #00a200;
 $bg-answer-result-partially-correct: $invers;
-$bg-answer-result-wrong: $danger;
+$bg-answer-result-wrong: #f44336;
 
 $progress-bg: transparent;
 
-$link-color: #c4fffa;
+$link-color: #fff94c;
 $link-decoration: none;
-$link-hover-color: #cbf9f5;
+$link-hover-color: #fffc9a;
 $link-hover-decoration: none;
 
-$font: Roboto, Roboto-Regular, Helvetica, Arial, sans-serif !important;
 $corner-radius: 10px;
 $splash-screen-corner-radius: 10px;
 
+$font-size-base: 1.13rem;
 $small-font-size: 80%;
 
 $statistics-icon-opacity: 0.2;
@@ -78,34 +78,34 @@ $colorChangingOwnNick: (
 
 $colorChangingArs: (
   0: (fg: white, bg: transparent),
-  25: (fg: #b22222, bg: transparent),
+  25: (fg: #7d0101, bg: transparent),
   50: (fg: white, bg: transparent),
-  75: (fg: #ffd700, bg: transparent),
+  75: (fg: #ffec85, bg: transparent),
   100: (fg: white, bg: transparent)
 );
 
 $colorChangingNova: (
-  0: (fg: #ffd700, bg: transparent),
+  0: (fg: #ffec85, bg: transparent),
   25: (fg: white, bg: transparent),
-  50: (fg: #b22222, bg: transparent),
+  50: (fg: #7d0101, bg: transparent),
   75: (fg: white, bg: transparent),
-  100: (fg: #ffd700, bg: transparent)
+  100: (fg: #ffec85, bg: transparent)
 );
 
 $colorChangingDot: (
   0: (fg: white, bg: transparent),
-  25: (fg: #ffd700, bg: transparent),
+  25: (fg: #ffec85, bg: transparent),
   50: (fg: white, bg: transparent),
-  75: (fg: #b22222, bg: transparent),
+  75: (fg: #7d0101, bg: transparent),
   100: (fg: white, bg: transparent)
 );
 
 $colorChangingClick: (
-  0: (fg: #b22222, bg: transparent),
+  0: (fg: #7d0101, bg: transparent),
   25: (fg: white, bg: transparent),
-  50: (fg: #ffd700, bg: transparent),
+  50: (fg: #ffec85, bg: transparent),
   75: (fg: white, bg: transparent),
-  100: (fg: #b22222, bg: transparent)
+  100: (fg: #7d0101, bg: transparent)
 );
 
 $logo-bg: transparent;

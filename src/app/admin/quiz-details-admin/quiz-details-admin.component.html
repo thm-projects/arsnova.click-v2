@@ -27,10 +27,10 @@
 
   <div class="card text-dark">
     <div class="card-body">
-      <p class="card-text mb-0">Reading-Confirmation enabled: {{quiz?.sessionConfig.readingConfirmationEnabled}}</p>
-      <p class="card-text mb-0">Confidence-Slider enabled: {{quiz?.sessionConfig.confidenceSliderEnabled}}</p>
-      <p class="card-text mb-0">Show response progress: {{quiz?.sessionConfig.showResponseProgress}}</p>
-      <p class="card-text mb-0">Theme: {{quiz?.sessionConfig.theme}}</p>
+      <p class="card-text">Reading-Confirmation enabled: {{quiz?.sessionConfig.readingConfirmationEnabled}}</p>
+      <p class="card-text">Confidence-Slider enabled: {{quiz?.sessionConfig.confidenceSliderEnabled}}</p>
+      <p class="card-text">Show response progress: {{quiz?.sessionConfig.showResponseProgress}}</p>
+      <p class="card-text">Theme: {{quiz?.sessionConfig.theme}}</p>
     </div>
   </div>
 </div>
@@ -45,30 +45,30 @@
     <div class="card-header"><h6 class="mb-0">Type: {{question.TYPE}}</h6></div>
     <div class="card-body">
 
-      <p class="card-text mb-0">Question Text: {{question.questionText}}</p>
-      <p class="card-text mb-0">Timer: {{question.timer}}</p>
+      <p class="card-text">Question Text: {{question.questionText}}</p>
+      <p class="card-text">Timer: {{question.timer}}</p>
 
       <hr/>
 
       <p *ngIf="isSet(question.displayAnswerText)"
-         class="card-text mb-0">Display Answer Text: {{question.displayAnswerText}}</p>
+         class="card-text">Display Answer Text: {{question.displayAnswerText}}</p>
       <p *ngIf="isSet(getQuestionAsSurvey(question).multipleSelectionEnabled)"
-         class="card-text mb-0">Multiple Selection Enabled: {{getQuestionAsSurvey(question).multipleSelectionEnabled}}</p>
+         class="card-text">Multiple Selection Enabled: {{getQuestionAsSurvey(question).multipleSelectionEnabled}}</p>
       <p *ngIf="isSet(getQuestionAsSurvey(question).showOneAnswerPerRow)"
-         class="card-text mb-0">Show One Answer Per Row: {{getQuestionAsSurvey(question).showOneAnswerPerRow}}</p>
+         class="card-text">Show One Answer Per Row: {{getQuestionAsSurvey(question).showOneAnswerPerRow}}</p>
 
       <hr/>
 
-      <p class="card-text mb-0">Answers:</p>
+      <p class="card-text">Answers:</p>
       <p *ngIf="!question.answerOptionList.length">No answers added</p>
       <div class="form-row">
 
         <div *ngFor="let answers of question.answerOptionList"
              class="my-1 col-12 col-sm-6">
           <div class="p-2 border border-primary rounded">
-            <p class="card-text mb-0">Type: {{answers.TYPE}}</p>
-            <p class="card-text mb-0">Answer Text: {{answers.answerText}}</p>
-            <p class="card-text mb-0">Is Correct: {{answers.isCorrect}}</p>
+            <p class="card-text">Type: {{answers.TYPE}}</p>
+            <p class="card-text">Answer Text: {{answers.answerText}}</p>
+            <p class="card-text">Is Correct: {{answers.isCorrect}}</p>
           </div>
         </div>
 
@@ -86,27 +86,27 @@
   <div class="card text-dark mb-3">
     <div class="card-header"><h6 class="mb-0">Lobby</h6></div>
     <div class="card-body">
-      <p class="card-text mb-0">Enabled: {{quiz?.sessionConfig.music.enabled.lobby}}</p>
-      <p class="card-text mb-0">Title: {{quiz?.sessionConfig.music.titleConfig.lobby}}</p>
-      <p class="card-text mb-0">Volume: {{quiz?.sessionConfig.music.volumeConfig.lobby}}</p>
+      <p class="card-text">Enabled: {{quiz?.sessionConfig.music.enabled.lobby}}</p>
+      <p class="card-text">Title: {{quiz?.sessionConfig.music.titleConfig.lobby}}</p>
+      <p class="card-text">Volume: {{quiz?.sessionConfig.music.volumeConfig.lobby}}</p>
     </div>
   </div>
 
   <div class="card text-dark mb-3">
     <div class="card-header"><h6 class="mb-0">Countdown Running</h6></div>
     <div class="card-body">
-      <p class="card-text mb-0">Enabled: {{quiz?.sessionConfig.music.enabled.countdownRunning}}</p>
-      <p class="card-text mb-0">Title: {{quiz?.sessionConfig.music.titleConfig.countdownRunning}}</p>
-      <p class="card-text mb-0">Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownRunning}}</p>
+      <p class="card-text">Enabled: {{quiz?.sessionConfig.music.enabled.countdownRunning}}</p>
+      <p class="card-text">Title: {{quiz?.sessionConfig.music.titleConfig.countdownRunning}}</p>
+      <p class="card-text">Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownRunning}}</p>
     </div>
   </div>
 
   <div class="card text-dark mb-3">
     <div class="card-header"><h6 class="mb-0">Countdown End</h6></div>
     <div class="card-body">
-      <p class="card-text mb-0">Enabled: {{quiz?.sessionConfig.music.enabled.countdownEnd}}</p>
-      <p class="card-text mb-0">Title: {{quiz?.sessionConfig.music.titleConfig.countdownEnd}}</p>
-      <p class="card-text mb-0">Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownEnd}}</p>
+      <p class="card-text">Enabled: {{quiz?.sessionConfig.music.enabled.countdownEnd}}</p>
+      <p class="card-text">Title: {{quiz?.sessionConfig.music.titleConfig.countdownEnd}}</p>
+      <p class="card-text">Volume: {{quiz?.sessionConfig.music.volumeConfig.countdownEnd}}</p>
     </div>
   </div>
 </div>
@@ -117,23 +117,23 @@
 
   <div class="card text-dark">
     <div class="card-body">
-      <p class="card-text mb-0">Max Members Per Group: {{quiz?.sessionConfig.nicks.maxMembersPerGroup}}</p>
-      <p class="card-text mb-0">Automatically join to Group: {{quiz?.sessionConfig.nicks.autoJoinToGroup}}</p>
-      <p class="card-text mb-0">Block Illegal Nicks: {{quiz?.sessionConfig.nicks.blockIllegalNicks}}</p>
-      <p class="card-text mb-0">Restrict to CAS Login: {{quiz?.sessionConfig.nicks.restrictToCasLogin}}</p>
+      <p class="card-text">Max Members Per Group: {{quiz?.sessionConfig.nicks.maxMembersPerGroup}}</p>
+      <p class="card-text">Automatically join to Group: {{quiz?.sessionConfig.nicks.autoJoinToGroup}}</p>
+      <p class="card-text">Block Illegal Nicks: {{quiz?.sessionConfig.nicks.blockIllegalNicks}}</p>
+      <p class="card-text">Restrict to CAS Login: {{quiz?.sessionConfig.nicks.restrictToCasLogin}}</p>
 
       <hr/>
 
-      <p class="card-text mb-0">Selected Nicks:</p>
-      <p class="mb-0">
+      <p class="card-text">Selected Nicks:</p>
+      <p>
         <span *ngIf="!quiz?.sessionConfig.nicks.selectedNicks.length">None selected</span>
         <span>{{quiz?.sessionConfig.nicks.selectedNicks.join(', ')}}</span>
       </p>
 
       <hr/>
 
-      <p class="mb-0">Member Groups:</p>
-      <p class="mb-0">{{quiz?.sessionConfig.nicks.memberGroups.join(', ')}}</p>
+      <p>Member Groups:</p>
+      <p>{{quiz?.sessionConfig.nicks.memberGroups.join(', ')}}</p>
 
     </div>
   </div>

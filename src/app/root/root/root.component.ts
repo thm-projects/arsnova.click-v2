@@ -87,7 +87,7 @@ export class RootComponent implements OnInit, AfterViewInit {
         map(themeName => String(themeName) === 'default' ? environment.defaultTheme : themeName),
         tap(themeName => {
           theme = themeName;
-          cookieService.set('theme', themeName);
+          cookieService.set('theme', themeName, 31536000);
         }),
         switchMap(this.loadStyleHashMap.bind(this)),
         tap(data => this.themeService.themeHashes = data),
@@ -270,7 +270,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   private initializeCookieConsent(theme: QuizTheme): void {
     if (!(
       <IWindow>window
-    ).cookieconsent || !theme || document.cookie.includes('cookieconsent_status=dismiss')) {
+    ).cookieconsent || !theme || this.cookieService.check('cookieconsent_status=dismiss')) {
       return;
     }
 

@@ -17,7 +17,7 @@
          placeholder="Enter the Key here, eg. component.name.group.title"/>
 
   <div *ngFor="let langKey of getKeys(languageLoaderService.languageTranslation)">
-    <p class="mb-0">{{languageLoaderService.languageTranslation[langKey]}}</p>
+    <p>{{languageLoaderService.languageTranslation[langKey]}}</p>
     <textarea class="key-textarea form-control mb-2"
               (keyup)="updateKey($event, langKey)"></textarea>
   </div>

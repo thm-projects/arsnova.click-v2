@@ -18,7 +18,7 @@
       <div *ngFor="let elem of getTypesafeAnswer()?.getConfig()"
            class="col-12 col-sm-6 mb-2 d-flex"
            [attr.data-intro]="elem.configTitle | translate">
-        <p class="mb-0 mr-2 align-self-center w-100"
+        <p class="mr-2 align-self-center w-100"
            style="line-height: 1.2">
           <span [innerHTML]="elem.configTitle | translate"></span>&#58;&nbsp;
         </p>

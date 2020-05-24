@@ -39,7 +39,15 @@ export function app(): Express {
   // Serve static files from /browser
   server.get('**/*.*', express.static(distFolder, {
     maxAge: '1y',
-  }));
+  }), (req, res, next) => {
+    if (process.env.NODE_ENV !== 'development') {
+      next();
+      return;
+    }
+
+    console.log('Rewriting static request', 'https://arsnova.click' + req.url);
+    res.redirect('https://arsnova.click' + req.url);
+  });
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {

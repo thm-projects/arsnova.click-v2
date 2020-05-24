@@ -61,19 +61,19 @@
       <h5 *ngIf="!quizService.isAddingPoolQuestion">
         <span>{{'component.quiz_summary.question' | translate}}&nbsp;{{questionIndex + 1}}</span>:
       </h5>
-      <p class="mb-0">
+      <p>
         <span>{{'component.quiz_summary.text' | translate}}:&nbsp;</span>
         <span *ngIf="question?.questionText"
               class="break-word"
               [innerHTML]="question?.questionText"></span>
         <span *ngIf="!question?.questionText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
       </p>
-      <p class="mb-0">
+      <p>
         <span>{{'component.quiz_summary.type' | translate}}:&nbsp;</span>
         <span *ngIf="!question?.TYPE">{{'component.quiz_summary.validation_errors.reasons.empty_question_type' | translate}}</span>
         <span *ngIf="question?.TYPE">{{question?.translationReferrer() | translate}}</span>
       </p>
-      <p class="mb-0">
+      <p>
         <span>{{'component.quiz_summary.tags' | translate}}:&nbsp;</span>
         <span *ngIf="!question?.tags?.length">{{'component.quiz_manager.no-added-tags' | translate}}</span>
         <span *ngFor="let tag of question?.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">, </span></span>
@@ -86,36 +86,30 @@
       </div>
       <div role="list">
         <div *ngIf="question?.TYPE === 'RangedQuestion'">
-          <p role="listitem"
-             class="mb-0">
+          <p role="listitem">
             <span [innerHTML]="'component.answeroptions.ranged_question.correct_value' | translate"></span>:&nbsp;
             <span [innerHTML]="toString(getQuestionAsRanged(question)?.correctValue)"></span>
           </p>
-          <p role="listitem"
-             class="mb-0">
+          <p role="listitem">
             <span [innerHTML]="'component.answeroptions.ranged_question.min_range' | translate"></span>:&nbsp;
             <span [innerHTML]="toString(getQuestionAsRanged(question)?.rangeMin)"></span>
           </p>
-          <p role="listitem"
-             class="mb-0">
+          <p role="listitem">
             <span [innerHTML]="'component.answeroptions.ranged_question.max_range' | translate"></span>:&nbsp;
             <span [innerHTML]="toString(getQuestionAsRanged(question)?.rangeMax)"></span>
           </p>
         </div>
         <div *ngIf="question?.TYPE === 'FreeTextQuestion'">
           <p *ngIf="question?.answerOptionList[0]?.answerText"
-             class="mb-0"
              role="listitem"
              [innerHTML]="question?.answerOptionList[0]?.answerText"></p>
           <p *ngIf="!question?.answerOptionList[0]?.answerText"
-             class="mb-0"
              role="listitem">
             {{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}
           </p>
         </div>
         <div *ngIf="!['RangedQuestion', 'FreeTextQuestion'].includes(question?.TYPE)">
           <p *ngFor="let answer of question?.answerOptionList; let i = index;"
-             class="mb-0"
              role="listitem">
             <span>{{'component.quiz_summary.answer' | translate}}&nbsp;{{i+1}}</span>
             <span *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question?.TYPE)">
@@ -127,8 +121,7 @@
                   [innerHTML]="answer.answerText"></span>
             <span *ngIf="!answer.answerText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
           </p>
-          <p *ngIf="!question?.answerOptionList.length"
-             class="mb-0">
+          <p *ngIf="!question?.answerOptionList.length">
             {{'component.quiz_summary.validation_errors.reasons.no_answers_defined' | translate}}
           </p>
         </div>
@@ -138,8 +131,7 @@
     <div *ngIf="question?.TYPE === 'FreeTextQuestion'"
          class="mb-2">
       <h5>{{'component.quiz_summary.answer_configuration' | translate}}:&nbsp;</h5>
-      <p *ngFor="let config of getAnswerAsFreetext(question?.answerOptionList[0])?.getConfig()"
-         class="mb-0">
+      <p *ngFor="let config of getAnswerAsFreetext(question?.answerOptionList[0])?.getConfig()">
         <span>{{config.configTitle | translate}}</span>:&nbsp;
         <span>{{config.configEnabledString | translate}}</span>
       </p>
@@ -182,12 +174,13 @@
         <span>{{'component.quiz_summary.difficulty.title' | translate}}:</span>
       </h5>
 
-      <div class="d-flex align-items-center">
+      <div class="d-flex flex-wrap align-items-center">
         <input type="range"
+               class="mr-3"
                [min]="1"
                [max]="10"
                [(ngModel)]="question.difficulty">
-        <p class="text-center ml-3">{{getDifficultyTranslation() | translate:{multiplicator: question.difficulty} }}</p>
+        <p class="text-center text-nowrap">{{getDifficultyTranslation() | translate:{multiplicator: question.difficulty} }}</p>
       </div>
 
     </div>

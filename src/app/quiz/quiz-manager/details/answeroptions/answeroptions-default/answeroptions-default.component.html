@@ -59,7 +59,7 @@
                [attr.data-intro]="'component.answeroptions.description.show_answer_content_on_buttons' | translate"
                class="col-12 mb-2 d-flex">
             <p [innerHTML]="'component.answeroptions.show_answer_content_on_buttons' | translate"
-               class="mb-0 mr-2 align-self-center w-100"
+               class="mr-2 align-self-center w-100"
                style="line-height: 1.2;"></p>
             <label [class.btn-danger]="!question.displayAnswerText"
                    [class.btn-success]="question.displayAnswerText"
@@ -79,7 +79,7 @@
           <div [attr.data-intro]="'component.answeroptions.description.show_one_answer_per_row' | translate"
                class="col-12 mb-2 d-flex">
             <p [innerHTML]="'component.answeroptions.show_one_answer_per_row' | translate"
-               class="mb-0 mr-2 align-self-center w-100"
+               class="mr-2 align-self-center w-100"
                style="line-height: 1.2;"></p>
             <label [class.btn-danger]="!question?.showOneAnswerPerRow"
                    [class.btn-success]="question?.showOneAnswerPerRow"
@@ -99,7 +99,7 @@
           <div *ngIf="question?.TYPE === 'SurveyQuestion'"
                [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate"
                class="col-12 mb-2 d-flex">
-            <p class="mb-0 mr-2 align-self-center w-100"
+            <p class="mr-2 align-self-center w-100"
                style="line-height: 1.2;">
               {{'component.answeroptions.multiple_selection_survey' | translate}}
             </p>

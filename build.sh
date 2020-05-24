@@ -30,7 +30,7 @@ csstype="text/css"
 curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype > /dev/null
 styletype=$?
 
-curl "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
+curl -sI "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
 hashdiff=$?
 
 if [[ "$styletype" -eq "0" ]] && [[ "$hashdiff" -eq "0" ]]

@@ -14,7 +14,7 @@
     <div [style.background-color]="'#' + sanitizeHTML(attendeeService.ownAttendee.colorCode)"
          [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(attendeeService.ownAttendee.colorCode)))"
          class="rounded d-flex align-items-center justify-content-center own-nick w-100">
-      <p class="mb-0 p-2 break-word">
+      <p class="p-2 break-word">
           <span *ngIf="isHtmlNickname(attendeeService.ownAttendee.name)"
                 [innerHTML]="parseNickname(attendeeService.ownAttendee.name)"></span>
         <span *ngIf="!isHtmlNickname(attendeeService.ownAttendee.name)">{{attendeeService.ownAttendee.name}}</span>
@@ -38,7 +38,7 @@
            [style.background-color]="'#' + sanitizeHTML(elem.colorCode)"
            [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
            class="rounded d-flex align-items-center justify-content-center">
-        <p class="mb-0 p-2 break-word">
+        <p class="p-2 break-word">
           <span *ngIf="isHtmlNickname(elem.name)"
                 [innerHTML]="parseNickname(elem.name)"></span>
           <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>
@@ -67,7 +67,7 @@
                  [style.color]="'#' + sanitizeHTML(elem.colorCode)"
                  class="rounded px-1 py-1 fa-2x">>
         </fa-icon>
-        <p class="ml-2 attendee-text text-truncate mb-0 align-self-center">
+        <p class="ml-2 attendee-text text-truncate align-self-center">
           <span *ngIf="isHtmlNickname(elem.name)"
                 [innerHTML]="parseNickname(elem.name)"></span>
           <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>

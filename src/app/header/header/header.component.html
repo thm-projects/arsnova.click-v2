@@ -78,7 +78,7 @@
         <fa-icon [class.text-danger]="!connectionService.serverAvailable"
                  [class.text-success]="connectionService.serverAvailable"
                  [icon]="connectionService.serverAvailable ? 'check' : 'times'"></fa-icon>
-        <p class="ml-2 mb-0 d-inline">
+        <p class="ml-2 d-inline">
           <span>Server: </span>
           <span *ngIf="connectionService.serverAvailable">{{'region.header.connection_status.server_status.available' | translate}}</span>
           <span *ngIf="!connectionService.serverAvailable">{{'region.header.connection_status.server_status.not_available' | translate}}</span>
@@ -88,7 +88,7 @@
         <fa-icon [class.text-danger]="!connectionService.websocketAvailable"
                  [class.text-success]="connectionService.websocketAvailable"
                  [icon]="connectionService.websocketAvailable ? 'check' : 'times'"></fa-icon>
-        <p class="ml-2 mb-0 d-inline">
+        <p class="ml-2 d-inline">
           <span>Websocket: </span>
           <span *ngIf="connectionService.websocketAvailable">{{'region.header.connection_status.websocket_status.connected' | translate}}</span>
           <span *ngIf="!connectionService.websocketAvailable">{{'region.header.connection_status.websocket_status.not_connected' | translate}}</span>
@@ -98,7 +98,7 @@
         <fa-icon [class.text-danger]="connectionService.rtt > 300 || !connectionService.serverAvailable"
                  [class.text-success]="connectionService.rtt <= 300 && connectionService.serverAvailable"
                  [icon]="connectionService.rtt <= 300 && connectionService.serverAvailable ? 'check' : 'times'"></fa-icon>
-        <p class="ml-2 mb-0 d-inline">
+        <p class="ml-2 d-inline">
           <span>Round-Trip-Time: </span>
           <span *ngIf="connectionService.serverAvailable">{{connectionService.rtt}} ms</span>
           <span *ngIf="!connectionService.serverAvailable">{{'region.header.connection_status.server_status.not_available' | translate}}</span>
@@ -106,7 +106,7 @@
       </li>
     </ul>
 
-    <p class="text-muted mb-0">{{'region.header.connection_status.estimated-storage-quota.label' | translate}}:</p>
+    <p class="text-muted">{{'region.header.connection_status.estimated-storage-quota.label' | translate}}:</p>
     <p class="mb-3">
       <span *ngIf="!storage.quota">{{'region.header.connection_status.estimated-storage-quota.not_available' | translate}}</span>
       <span *ngIf="storage.quota">{{'region.header.connection_status.estimated-storage-quota.currently-used' | translate:{QUOTA: i18nService.formatNumber(round(storage.quota / 1024 / 1024)), USAGE: i18nService.formatNumber(round(storage.usage / 1024 / 1024))} }}</span>
