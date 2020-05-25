@@ -811,7 +811,9 @@
       "create-team-placeholder": "Enter a Team name here...",
       "create-team": "Add Team",
       "current-teams": "Currently added Teams:",
-      "no-current-teams": "No Teams added yet"
+      "no-current-teams": "No Teams added yet",
+      "team-name": "Name of the team:",
+      "team-color": "Choose a color:"
     },
     "login": {
       "title": "Please enter your login credentials",

@@ -676,7 +676,9 @@
       "create-team-placeholder": "Gib hier den Namen des Teams ein...",
       "create-team": "Team hinzufügen",
       "current-teams": "Aktuell hinzugefügte Teams:",
-      "no-current-teams": "Kein Team bisher hinzugefügt"
+      "no-current-teams": "Kein Team bisher hinzugefügt",
+      "team-name": "Name des Teams:",
+      "team-color": "Wähle eine Farbe:"
     },
     "login": {
       "title": "Bitte gib deine Zugangsdaten ein",

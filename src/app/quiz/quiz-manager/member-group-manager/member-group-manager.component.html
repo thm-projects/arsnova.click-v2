@@ -67,7 +67,7 @@
         <div class="card flex-grow-1">
           <div class="card-body d-flex flex-column">
             <h6 class="d-flex align-items-center">
-              <span>Name des Teams:</span>
+              <span>{{'component.membergroup-manager.team-name' | translate}}</span>
               <button class="btn btn-sm btn-secondary ml-auto" (click)="removeMemberGroup(group.name)">
                 <fa-icon [icon]="'trash'"></fa-icon>
               </button>
@@ -75,7 +75,7 @@
             <div class="mb-auto" [innerHTML]="parseNickname(group.name)"></div>
             <hr class="w-100"/>
 
-            <h6>Wähle eine Farbe:</h6>
+            <h6>{{'component.membergroup-manager.team-color' | translate}}</h6>
             <div class="justify-content-between rounded bg-body p-2">
               <div class="form-row">
                 <div *ngFor="let color of groupColors"
