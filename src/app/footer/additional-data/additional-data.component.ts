@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, HostListener, Inject } from '@angular/core';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -23,7 +24,12 @@ export class AdditionalDataComponent {
     this._isShowingMore = value;
   }
 
-  constructor(@Inject(DOCUMENT) readonly document, public quizService: QuizService, private trackingService: TrackingService) {
+  constructor(
+    @Inject(DOCUMENT) readonly document: Document,
+    public quizService: QuizService,
+    private trackingService: TrackingService,
+    private fileUploadService: FileUploadService
+  ) {
   }
 
   public getQuizUrl(quizName: string): string {
@@ -64,5 +70,12 @@ export class AdditionalDataComponent {
     document.body.removeChild(selBox);
     this.clipboardText = false;
     setTimeout(() => { this.clipboardText = true; }, 1000);
+  }
+
+  public renameQuiz(): void {
+    const blob = new Blob([JSON.stringify(this.quizService.quiz)], { type: 'application/json' });
+    this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, this.quizService.quiz.name);
+    this.fileUploadService.overrideLocalQuiz = this.quizService.quiz.name;
+    this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
   }
 }

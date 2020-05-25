@@ -643,6 +643,7 @@
         "invalid-question": "Only valid questions can be uploaded to the Quiz-Pool",
         "no-tags": "You need to add some Tags to your question to upload it to the Quiz-Pool."
       },
+      "quiz_rename": "Edit",
       "correct": "Correct",
       "wrong": "Wrong",
       "question": "Question",

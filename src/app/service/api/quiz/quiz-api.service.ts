@@ -102,8 +102,8 @@ export class QuizApiService {
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 
-  public deleteQuiz(quiz: QuizEntity): Observable<IMessage> {
-    return this.http.delete<IMessage>(`${this._deleteQuizUrl}/${encodeURIComponent(quiz.name)}`,
+  public deleteQuiz(quiz: QuizEntity | string): Observable<IMessage> {
+    return this.http.delete<IMessage>(`${this._deleteQuizUrl}/${encodeURIComponent(typeof quiz === 'string' ? quiz : quiz.name)}`,
       { headers: { authorization: sessionStorage.getItem(StorageKey.PrivateKey) } });
   }
 

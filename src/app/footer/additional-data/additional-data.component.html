@@ -8,10 +8,19 @@
            [attr.data-intro]="'component.quiz_summary.description.header' | translate"
            class="element-wrapper d-flex flex-column bg-white text-dark px-2 py-2 flex-grow-1 mw-100">
         <h5 class="text-center">{{'component.quiz_summary.quiz_name' | translate}}</h5>
-        <p class="d-flex align-self-center align-items-end text-bold text-center"
-           role="listitem">
-          <span>{{quizService.quiz?.name}}</span>
-        </p>
+        <div class="d-flex flex-wrap">
+          <p class="d-flex align-self-center align-items-end text-bold text-center ml-sm-auto mr-md-auto"
+             role="listitem">
+            <span>{{quizService.quiz?.name}}</span>
+          </p>
+
+          <button (click)="renameQuiz()"
+                  [attr.aria-label]="'component.quiz_summary.quiz_rename' | translate"
+                  [title]="'component.quiz_summary.quiz_rename' | translate"
+                  class="btn btn-sm btn-outline-primary text-truncate mx-auto mr-sm-0 mr-md-auto">
+            <fa-icon [icon]="'edit'"></fa-icon>
+          </button>
+        </div>
       </div>
     </div>
 

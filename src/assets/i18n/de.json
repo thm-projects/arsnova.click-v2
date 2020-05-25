@@ -531,6 +531,7 @@
         "invalid-question": "Nur gültige Fragen können in den Quiz-Pool hochgeladen werden",
         "no-tags": "Damit deine Frage hochgeladen werden kann, musst du ihr noch ein paar Tags geben"
       },
+      "quiz_rename": "Bearbeiten",
       "correct": "Korrekt",
       "wrong": "Falsch",
       "question": "Frage",
