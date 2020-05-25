@@ -79,7 +79,12 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
   }
 
   public canSelectRequiredState(question: AbstractQuestionEntity): boolean {
-    return question && ![QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question.TYPE);
+    return !this.quizService.isAddingPoolQuestion &&
+           ![QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question?.TYPE);
+  }
+
+  public canSelectDifficulty(question: AbstractQuestionEntity): boolean {
+    return ![QuestionType.ABCDSingleChoiceQuestion, QuestionType.SurveyQuestion].includes(question?.TYPE);
   }
 
   public getDifficultyTranslation(): string {
