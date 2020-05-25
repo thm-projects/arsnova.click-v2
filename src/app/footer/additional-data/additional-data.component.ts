@@ -32,10 +32,6 @@ export class AdditionalDataComponent {
   ) {
   }
 
-  public getQuizUrl(quizName: string): string {
-    return encodeURI(`${document.location.origin}/quiz/${quizName}`);
-  }
-
   public switchShowMoreOrLess(): void {
     if (this.isShowingMore) {
       this.trackingService.trackClickEvent({
@@ -54,22 +50,6 @@ export class AdditionalDataComponent {
   @HostListener('window:resize', [])
   public onResize(): void {
     this.isShowingMore = window.innerWidth >= 768;
-  }
-
-  public copyQuizLink(value: string): void {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = value;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.clipboardText = false;
-    setTimeout(() => { this.clipboardText = true; }, 1000);
   }
 
   public renameQuiz(): void {

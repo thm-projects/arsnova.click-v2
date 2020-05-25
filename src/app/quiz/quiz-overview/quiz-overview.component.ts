@@ -226,6 +226,16 @@ export class QuizOverviewComponent implements OnInit {
     return this.arrayUnique(this.getTags(elem));
   }
 
+  public getQuizLink(quizName: string): string {
+    return encodeURI(`${document.location.origin}/quiz/${quizName}`);
+  }
+
+  public copyQuizLink(inputElement: HTMLInputElement): void {
+    inputElement.select();
+    document.execCommand('copy');
+    inputElement.setSelectionRange(0, 0);
+  }
+
   private loadData(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.storageService.db.Quiz.toCollection().each(session => this._sessions.push(new QuizEntity(session)));

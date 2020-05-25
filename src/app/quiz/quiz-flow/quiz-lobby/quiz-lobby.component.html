@@ -19,7 +19,7 @@
              [innerHTML]="parseNickname(myself.groupName)"></div>
         <div *ngIf="!isHtmlNickname(myself.groupName)">[{{myself.groupName}}]</div>
       </div>
-      <p class="break-word">
+      <p class="flex-grow-1 break-word">
           <span *ngIf="isHtmlNickname(myself.name)"
                 [innerHTML]="parseNickname(myself.name)"></span>
         <span *ngIf="!isHtmlNickname(myself.name)">{{myself.name}}</span>
@@ -47,7 +47,7 @@
              [innerHTML]="parseNickname(elem.groupName)"></div>
         <div *ngIf="!isHtmlNickname(elem.groupName)">[{{elem.groupName}}]</div>
       </div>
-      <p class="break-word">
+      <p class="flex-grow-1 break-word">
           <span *ngIf="isHtmlNickname(elem.name)"
                 [innerHTML]="parseNickname(elem.name)"></span>
         <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>
