@@ -8,6 +8,7 @@
           <div class="form-group">
             <label for="max-users-per-group">{{'component.membergroup-manager.max-users' | translate}}</label>
             <input type="number"
+                   min="1"
                    class="form-control form-control-sm"
                    id="max-users-per-group"
                    [placeholder]="'component.membergroup-manager.max-users' | translate"
@@ -32,25 +33,33 @@
       </div>
     </div>
 
-    <div class="input-group input-group-sm">
-      <input type="text"
-             class="form-control mb-2 mb-sm-0"
-             [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
-             (keyup.enter)="addMemberGroup()"
-             [(ngModel)]="memberGroupName"
-             [attr.aria-label]="'component.membergroup-manager.create-team-placeholder' | translate"
-             aria-describedby="add-member-group">
+    <form [formGroup]="formGroup">
+      <div class="input-group input-group-sm">
+        <input type="text"
+               class="form-control mb-2 mb-sm-0"
+               [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
+               (keyup.enter)="addMemberGroup()"
+               (keypress)="formGroup.updateValueAndValidity()"
+               formControlName="memberGroupName"
+               [attr.aria-label]="'component.membergroup-manager.create-team-placeholder' | translate"
+               aria-describedby="add-member-group">
 
-      <div class="input-group-append">
-        <button class="btn btn-success"
-                id="add-member-group"
-                (click)="addMemberGroup()"
-                [class.disabled]="memberGroupExists() || !memberGroupName.length"
-                [disabled]="memberGroupExists() || !memberGroupName.length">
-          <span>{{'component.membergroup-manager.create-team' | translate}}</span>
-        </button>
+        <div class="input-group-append">
+          <button class="btn btn-success"
+                  id="add-member-group"
+                  (click)="addMemberGroup()"
+                  [class.disabled]="!formGroup.get('memberGroupName').valid"
+                  [disabled]="!formGroup.get('memberGroupName').valid">
+            <span>{{'component.membergroup-manager.create-team' | translate}}</span>
+          </button>
+        </div>
       </div>
-    </div>
+
+      <div *ngIf="!formGroup.get('memberGroupName').valid" class="position-relative">
+        <div *ngIf="formGroup.get('memberGroupName').errors.invalid" class="invalid-tooltip d-block">{{'component.membergroup-manager.validation-error.invalid-member-group' | translate}}</div>
+        <div *ngIf="formGroup.get('memberGroupName').errors.duplicate" class="invalid-tooltip d-block">{{'component.membergroup-manager.validation-error.duplicate-member-group' | translate}}</div>
+      </div>
+    </form>
 
     <div class="mt-3">
       <p [innerHTML]="'component.answeroptions.emoji_info' | translate"

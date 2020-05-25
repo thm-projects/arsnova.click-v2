@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, ValidationErrors, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
@@ -24,10 +25,12 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   private _autoJoinToGroup: boolean;
   private readonly _destroy = new Subject();
 
-  public memberGroupName = '';
   public readonly groupColors: Array<string> = [
-    '#ff0000', '#008000', '#800080', '#add8e6', '#ffa500', '#ffc0cb', '#5f9ea0', '#fff8dc', '#7fffd4', '#bf0202', '#025abf', '#e6dd26'
+    '#ff0000', '#008000', '#800080', '#add8e6', '#ffa500', '#ffc0cb', '#5f9ea0', '#fff8dc', '#7fffd4', '#bf0202', '#025abf', '#e6dd26',
   ];
+  public readonly formGroup = this.formBuilder.group({
+    memberGroupName: new FormControl(null, { validators: [Validators.required, this.hasValidGroupSelected.bind(this)], updateOn: 'change' }),
+  });
 
   get memberGroups(): Array<IMemberGroupBase> {
     return this._memberGroups;
@@ -56,7 +59,8 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
     private translateService: TranslateService,
     private quizService: QuizService,
     private sanitizer: DomSanitizer,
-    private customMarkdownService: CustomMarkdownService
+    private customMarkdownService: CustomMarkdownService,
+    private formBuilder: FormBuilder,
   ) {
 
     this.footerBarService.TYPE_REFERENCE = MemberGroupManagerComponent.TYPE;
@@ -91,7 +95,7 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   }
 
   public addMemberGroup(): void {
-    if (!this.memberGroupName.length || this.memberGroupExists()) {
+    if (!this.formGroup.get('memberGroupName').valid) {
       return;
     }
 
@@ -99,8 +103,8 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
     do {
       random = Math.floor(Math.random() * this.groupColors.length);
     } while (this.hasGroupColorSelected(this.groupColors[random]));
-    this.memberGroups.push({name: this.memberGroupName.trim(), color: this.groupColors[random]});
-    this.memberGroupName = '';
+    this.memberGroups.push({ name: this.formGroup.get('memberGroupName').value.trim(), color: this.groupColors[random] });
+    this.formGroup.get('memberGroupName').reset();
   }
 
   public removeMemberGroup(groupName: string): void {
@@ -122,11 +126,30 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
     return value;
   }
 
-  public memberGroupExists(): boolean {
-    return this.memberGroups.findIndex(value => value.name?.toLowerCase().trim() === this.memberGroupName.toLowerCase().trim()) > -1;
-  }
-
   public hasGroupColorSelected(color: string): boolean {
     return Boolean(this.memberGroups.find(value => value.color === color));
+  }
+
+  private memberGroupExists(): boolean {
+    return this.memberGroups.findIndex(value => {
+      return value.name?.toLowerCase().trim() === this.formGroup.get('memberGroupName').value?.toLowerCase().trim();
+    }) > -1;
+  }
+
+  private hasValidGroupSelected(control: AbstractControl): ValidationErrors {
+    if (control.pristine) {
+      return {};
+    }
+
+    if (this.memberGroupExists()) {
+      return { duplicate: true };
+    }
+
+    const emojiMatch = control.value.match(/:[\w\+\-]+:/);
+    if (emojiMatch && emojiMatch[0] !== emojiMatch.input) {
+      return { invalid: true };
+    }
+
+    return {};
   }
 }

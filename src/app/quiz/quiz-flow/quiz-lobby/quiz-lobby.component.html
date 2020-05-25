@@ -14,7 +14,11 @@
     <div [style.background-color]="'#' + sanitizeHTML(myself.colorCode)"
          [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(myself.colorCode)))"
          class="p-2 rounded d-flex align-items-center justify-content-center own-nick w-100">
-      <div *ngIf="myself.groupName && myself.groupName !== 'Default'" class="mr-1" [innerHTML]="parseNickname(myself.groupName)"></div>
+      <div *ngIf="myself.groupName && myself.groupName !== 'Default'" class="mr-2 flex-grow-1 flex-shrink-0">
+        <div *ngIf="isHtmlNickname(myself.groupName)"
+             [innerHTML]="parseNickname(myself.groupName)"></div>
+        <div *ngIf="!isHtmlNickname(myself.groupName)">[{{myself.groupName}}]</div>
+      </div>
       <p class="break-word">
           <span *ngIf="isHtmlNickname(myself.name)"
                 [innerHTML]="parseNickname(myself.name)"></span>
@@ -36,9 +40,9 @@
     <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
          [class.cursor-pointer]="quizService.isOwner"
          [style.background-color]="sanitizeHTML(getColorForNick(elem))"
-         [style.color]="sanitizeHTML(transformForegroundColor(hexToRgb(getColorForNick(elem))))"
-         class="p-2 rounded d-flex flex-grow-1 align-items-center justify-content-center">
-      <div *ngIf="elem.groupName && elem.groupName !== 'Default'" class="mr-1">
+         [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(getColorForNick(elem))))"
+         class="p-2 rounded d-flex justify-content-center align-items-center w-100">
+      <div *ngIf="elem.groupName && elem.groupName !== 'Default'" class="mr-2 flex-grow-1 flex-shrink-0">
         <div *ngIf="isHtmlNickname(elem.groupName)"
              [innerHTML]="parseNickname(elem.groupName)"></div>
         <div *ngIf="!isHtmlNickname(elem.groupName)">[{{elem.groupName}}]</div>

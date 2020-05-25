@@ -813,7 +813,11 @@
       "current-teams": "Currently added Teams:",
       "no-current-teams": "No Teams added yet",
       "team-name": "Name of the team:",
-      "team-color": "Choose a color:"
+      "team-color": "Choose a color:",
+      "validation-error": {
+        "invalid-member-group": "Invalid name. Please do not mix emojis and regular text",
+        "duplicate-member-group": "This name is already used"
+      }
     },
     "login": {
       "title": "Please enter your login credentials",

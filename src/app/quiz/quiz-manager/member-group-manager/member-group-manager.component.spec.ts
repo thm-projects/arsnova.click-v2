@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -36,7 +36,9 @@ describe('MemberGroupManagerComponent', () => {
     () => {
       TestBed.configureTestingModule({
         imports: [
-          I18nTestingModule, HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
+          I18nTestingModule,
+          FormsModule, ReactiveFormsModule,
+          HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
             jwtOptionsProvider: {
               provide: JWT_OPTIONS,
               useFactory: jwtOptionsFactory,
@@ -45,7 +47,7 @@ describe('MemberGroupManagerComponent', () => {
           }),
         ],
         providers: [
-          RxStompService, SimpleMQ, {
+          RxStompService, SimpleMQ, FormBuilder, {
             provide: StorageService,
             useClass: StorageServiceMock,
           }, {
@@ -101,24 +103,24 @@ describe('MemberGroupManagerComponent', () => {
 
     it('should add a member group on valid input', (
       () => {
-        component.memberGroupName = 'testgroup';
+        component.formGroup.get('memberGroupName').setValue('testgroup');
         component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(2);
+        expect(component.memberGroups.length).toEqual(1);
       }
     ));
     it('should not add a member group on invalid input', (
       () => {
-        component.memberGroupName = '';
+        component.formGroup.get('memberGroupName').setValue('');
         component.addMemberGroup();
         expect(component.memberGroups.length).toEqual(1);
       }
     ));
     it('should not add an existing member group', (
       () => {
-        component.memberGroupName = 'testgroup';
+        component.formGroup.get('memberGroupName').setValue('testgroup');
         component.addMemberGroup();
         component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(2);
+        expect(component.memberGroups.length).toEqual(1);
       }
     ));
   });
