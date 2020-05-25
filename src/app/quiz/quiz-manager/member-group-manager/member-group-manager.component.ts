@@ -95,7 +95,7 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   }
 
   public addMemberGroup(): void {
-    if (!this.formGroup.get('memberGroupName').valid) {
+    if (!this.formGroup.get('memberGroupName').value) {
       return;
     }
 

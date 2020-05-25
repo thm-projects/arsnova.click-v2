@@ -84,7 +84,6 @@ describe('MemberGroupManagerComponent', () => {
 
   beforeEach(() => {
     component.memberGroups.splice(0, component.memberGroups.length);
-    component.memberGroups.push({name: 'Default', color: ''});
   });
 
   it('should create', (
@@ -99,45 +98,44 @@ describe('MemberGroupManagerComponent', () => {
     }
   ));
 
-  describe('#addMemberGroup', () => {
+  it('should add a member group on valid input', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('testgroup');
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(1);
+    }
+  ));
 
-    it('should add a member group on valid input', (
-      () => {
-        component.formGroup.get('memberGroupName').setValue('testgroup');
-        component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(1);
-      }
-    ));
-    it('should not add a member group on invalid input', (
-      () => {
-        component.formGroup.get('memberGroupName').setValue('');
-        component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(1);
-      }
-    ));
-    it('should not add an existing member group', (
-      () => {
-        component.formGroup.get('memberGroupName').setValue('testgroup');
-        component.addMemberGroup();
-        component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(1);
-      }
-    ));
-  });
+  it('should not add a member group on invalid input', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('');
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(0);
+    }
+  ));
 
-  describe('#removeMemberGroup', () => {
+  it('should not add an existing member group', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('testgroup');
+      component.addMemberGroup();
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(1);
+    }
+  ));
 
-    it('should remove an existing member group', (
-      () => {
-        component.removeMemberGroup('Default');
-        expect(component.memberGroups.length).toEqual(0);
-      }
-    ));
-    it('should not remove a not existing member group', (
-      () => {
-        component.removeMemberGroup('notexisting');
-        expect(component.memberGroups.length).toEqual(1);
-      }
-    ));
-  });
+  it('should remove an existing member group', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('testgroup');
+      component.addMemberGroup();
+      component.removeMemberGroup('testgroup');
+      expect(component.memberGroups.length).toEqual(0);
+    }
+  ));
+
+  it('should not remove a not existing member group', (
+    () => {
+      component.removeMemberGroup('notexisting');
+      expect(component.memberGroups.length).toEqual(0);
+    }
+  ));
 });
