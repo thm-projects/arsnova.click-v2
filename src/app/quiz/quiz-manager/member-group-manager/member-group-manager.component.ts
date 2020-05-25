@@ -95,7 +95,7 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   }
 
   public addMemberGroup(): void {
-    if (!this.formGroup.get('memberGroupName').value) {
+    if (!this.formGroup.get('memberGroupName').value || this.memberGroups.length === this.groupColors.length) {
       return;
     }
 
@@ -139,6 +139,10 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   private hasValidGroupSelected(control: AbstractControl): ValidationErrors {
     if (control.pristine) {
       return {};
+    }
+
+    if (this.memberGroups.length === this.groupColors.length) {
+      return { full: true };
     }
 
     if (this.memberGroupExists()) {

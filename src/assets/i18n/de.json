@@ -680,6 +680,7 @@
       "team-name": "Name des Teams:",
       "team-color": "Wähle eine Farbe:",
       "validation-error": {
+        "full-member-group": "Alle verfügbaren Teams wurden bereits erstellt. Bitte lösche zunächst ein Team.",
         "invalid-member-group": "Ungültiger Name. Bitte verwende entwder normalen Text oder Emojis",
         "duplicate-member-group": "Dieser Name ist bereits vergeben"
       }

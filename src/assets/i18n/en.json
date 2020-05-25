@@ -815,6 +815,7 @@
       "team-name": "Name of the team:",
       "team-color": "Choose a color:",
       "validation-error": {
+        "full-member-group": "All available teams were already created. Please remove a team first.",
         "invalid-member-group": "Invalid name. Please do not mix emojis and regular text",
         "duplicate-member-group": "This name is already used"
       }
