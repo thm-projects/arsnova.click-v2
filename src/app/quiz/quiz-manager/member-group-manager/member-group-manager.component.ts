@@ -3,7 +3,7 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } fr
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { StorageKey } from '../../../lib/enums/enums';
 import { IMemberGroupBase } from '../../../lib/interfaces/users/IMemberGroupBase';
 import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
@@ -25,6 +25,9 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   private readonly _destroy = new Subject();
 
   public memberGroupName = '';
+  public readonly groupColors: Array<string> = [
+    '#ff0000', '#008000', '#800080', '#add8e6', '#ffa500', '#ffc0cb', '#5f9ea0', '#fff8dc', '#7fffd4', '#bf0202', '#025abf', '#e6dd26'
+  ];
 
   get memberGroups(): Array<IMemberGroupBase> {
     return this._memberGroups;
@@ -67,11 +70,7 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
-      if (!quiz) {
-        return;
-      }
-
+    this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz), takeUntil(this._destroy)).subscribe(quiz => {
       this._memberGroups = this.quizService.quiz?.sessionConfig.nicks.memberGroups;
       this._maxMembersPerGroup = this.quizService.quiz?.sessionConfig.nicks.maxMembersPerGroup;
       this._autoJoinToGroup = this.quizService.quiz?.sessionConfig.nicks.autoJoinToGroup;
@@ -96,7 +95,11 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.memberGroups.push({name: this.memberGroupName.trim(), color: ''});
+    let random: number;
+    do {
+      random = Math.floor(Math.random() * this.groupColors.length);
+    } while (this.hasGroupColorSelected(this.groupColors[random]));
+    this.memberGroups.push({name: this.memberGroupName.trim(), color: this.groupColors[random]});
     this.memberGroupName = '';
   }
 
@@ -121,5 +124,9 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
 
   public memberGroupExists(): boolean {
     return this.memberGroups.findIndex(value => value.name?.toLowerCase().trim() === this.memberGroupName.toLowerCase().trim()) > -1;
+  }
+
+  public hasGroupColorSelected(color: string): boolean {
+    return Boolean(this.memberGroups.find(value => value.color === color));
   }
 }

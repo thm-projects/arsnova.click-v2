@@ -291,7 +291,7 @@
       "show_answer_content_on_buttons": "Antworttext auf Abstimmbuttons?",
       "show_one_answer_per_row": "Zeige nur eine Antwortoption pro Zeile?",
       "multiple_selection_survey": "Mehrere Optionen auswählbar?",
-      "emoji_info": "Du kannst auch Emojis einfügen! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-50px' src='/assets/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
+      "emoji_info": "Du kannst auch Emojis einfügen! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-40px' src='/assets/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
       "description": {
         "default_answer_row": "Ziehe diesen Block in die Liste der Antwortoptionen oder klick auf ihn, um eine neue Antwort einzufügen.",
         "added_answers": "Hier siehst du die Antwortoptionen der Frage. Du kannst die Reihenfolge per Drag & Drop ändern.",

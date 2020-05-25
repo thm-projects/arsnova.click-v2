@@ -7,6 +7,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
+import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
@@ -39,6 +40,10 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
   styleUrls: ['./quiz-lobby.component.scss'],
 })
 export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
+
+  get nickToRemove(): string {
+    return this._nickToRemove;
+  }
   public static readonly TYPE = 'QuizLobbyComponent';
 
   private _nickToRemove: string;
@@ -50,10 +55,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
 
   public hasTriggeredNavigation: boolean;
   public musicConfig: IAudioPlayerConfig;
-
-  get nickToRemove(): string {
-    return this._nickToRemove;
-  }
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -206,6 +207,14 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
 
   public toString(value: number): string {
     return String(value);
+  }
+
+  public getColorForNick(elem: MemberEntity): string {
+   if (elem.groupName) {
+     return this.quizService.quiz.sessionConfig.nicks.memberGroups.find(value => value.name === elem.groupName).color;
+   }
+
+   return '#' + elem.colorCode;
   }
 
   private handleNewQuiz(): void {

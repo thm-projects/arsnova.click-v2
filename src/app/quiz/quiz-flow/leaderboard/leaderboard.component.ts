@@ -12,6 +12,7 @@ import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { ILeaderBoardItem } from '../../../lib/interfaces/ILeaderboard';
+import { IMemberGroupBase } from '../../../lib/interfaces/users/IMemberGroupBase';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -177,9 +178,8 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return Math.round(group.score / this.absolute * 100);
   }
 
-  public getTeamProgressClasses(group: ILeaderBoardItem): string {
-    const teamVar = this.quizService.quiz?.sessionConfig.nicks.memberGroups.find(value => value.name === group.name).color;
-    return `bg-${teamVar} box-shadow-${teamVar}`;
+  public getTeam(group: ILeaderBoardItem): IMemberGroupBase {
+    return this.quizService.quiz?.sessionConfig.nicks.memberGroups.find(value => value.name === group.name);
   }
 
   private initData(): void {

@@ -111,6 +111,10 @@ fa-icon {
   background-color: $bg-answer-result-wrong;
 }
 
+.bg-body {
+  background: $body-bg;
+}
+
 #connection-indicator {
   &.fill-success {
     fill: $success;

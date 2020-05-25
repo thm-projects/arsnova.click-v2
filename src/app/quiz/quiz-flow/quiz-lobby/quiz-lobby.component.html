@@ -32,13 +32,17 @@
   </ng-container>
 
   <div *ngFor="let elem of attendeeService.attendees"
-       class="my-1 col-sm-6 col-md-4 col-lg-3">
+       class="my-1 col-sm-6 col-md-4 col-lg-3 d-flex">
     <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
          [class.cursor-pointer]="quizService.isOwner"
-         [style.background-color]="'#' + sanitizeHTML(elem.colorCode)"
-         [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-         class="p-2 rounded d-flex align-items-center justify-content-center">
-      <div *ngIf="elem.groupName && elem.groupName !== 'Default'" class="mr-1" [innerHTML]="parseNickname(elem.groupName)"></div>
+         [style.background-color]="sanitizeHTML(getColorForNick(elem))"
+         [style.color]="sanitizeHTML(transformForegroundColor(hexToRgb(getColorForNick(elem))))"
+         class="p-2 rounded d-flex flex-grow-1 align-items-center justify-content-center">
+      <div *ngIf="elem.groupName && elem.groupName !== 'Default'" class="mr-1">
+        <div *ngIf="isHtmlNickname(elem.groupName)"
+             [innerHTML]="parseNickname(elem.groupName)"></div>
+        <div *ngIf="!isHtmlNickname(elem.groupName)">[{{elem.groupName}}]</div>
+      </div>
       <p class="break-word">
           <span *ngIf="isHtmlNickname(elem.name)"
                 [innerHTML]="parseNickname(elem.name)"></span>

@@ -22,7 +22,9 @@
 
         <div *ngIf="group.score && percent"
              [attr.aria-valuenow]="percent"
-             [class]="('progress-bar overflow-visible text-left rounded ') + getTeamProgressClasses(group)"
+             [style.background-color]="getTeam(group).color"
+             [style.box-shadow]="'0 0 .25rem ' + getTeam(group).color"
+             class="progress-bar overflow-visible text-left rounded"
              [style.width.%]="sanitizeStyle(percent)"
              aria-valuemax="100"
              aria-valuemin="0"

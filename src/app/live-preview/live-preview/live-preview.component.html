@@ -12,10 +12,10 @@
                 [showHeader]="false"></app-header>
 
     <ng-container *ngIf="connectionService.serverAvailable;else notAvailableTmpl">
-      <div class="d-flex justify-content-around align-items-center flex-wrap"
+      <div class="d-flex flex-wrap"
            id="answer-option-element-wrapper">
         <div *ngFor="let elem of dataSource; let i = index"
-             [style.flex-basis]="question?.showOneAnswerPerRow ? '100%' : getComputedWidth()"
+             [style.width]="question?.showOneAnswerPerRow ? '100%' : getComputedWidth()"
              class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer">
           <p *ngIf="question?.displayAnswerText"
              [innerHTML]="sanitizeHTML(elem)"

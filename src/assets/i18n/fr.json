@@ -207,7 +207,7 @@
       "show_answer_content_on_buttons": "Réponses sur les boutons?",
       "show_one_answer_per_row": "Show only one answer per row?",
       "multiple_selection_survey": "Sélection multiple possible?",
-      "emoji_info": "Ajouter des émoticons? <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img style='width:40px;' src='/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
+      "emoji_info": "Ajouter des émoticons? <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-40px' src='/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
       "description": {
         "default_answer_row": "Glissez ce bloc dans la liste des réponses ou cliquez dessus pour ajouter une réponse.",
         "added_answers": "Voici les réponses à la question. En les glissant, vous pouvez les ranger dans l’ordre voulu.",
