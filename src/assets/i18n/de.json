@@ -682,7 +682,8 @@
       "validation-error": {
         "full-member-group": "Alle verfügbaren Teams wurden bereits erstellt. Bitte lösche zunächst ein Team.",
         "invalid-member-group": "Ungültiger Name. Bitte verwende entwder normalen Text oder Emojis",
-        "duplicate-member-group": "Dieser Name ist bereits vergeben"
+        "duplicate-member-group": "Dieser Name ist bereits vergeben",
+        "add-second-group": "Füge bitte mindestens 2 Teams hinzu oder lösche das bestehende Team"
       }
     },
     "login": {
