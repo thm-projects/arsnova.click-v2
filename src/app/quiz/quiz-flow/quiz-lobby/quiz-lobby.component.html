@@ -42,7 +42,7 @@
          [style.background-color]="sanitizeHTML(getColorForNick(elem))"
          [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(getColorForNick(elem))))"
          class="p-2 rounded d-flex justify-content-center align-items-center w-100">
-      <div *ngIf="elem.groupName && elem.groupName !== 'Default'" class="mr-2 flex-grow-1 flex-shrink-0">
+      <div *ngIf="elem.groupName" class="mr-2 flex-grow-1 flex-shrink-0">
         <div *ngIf="isHtmlNickname(elem.groupName)"
              [innerHTML]="parseNickname(elem.groupName)"></div>
         <div *ngIf="!isHtmlNickname(elem.groupName)">[{{elem.groupName}}]</div>

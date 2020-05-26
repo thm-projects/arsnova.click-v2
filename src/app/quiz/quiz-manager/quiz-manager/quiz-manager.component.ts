@@ -82,6 +82,8 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.quizService.close().subscribe();
+
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.isLoaded = true;
       this.cdRef.markForCheck();

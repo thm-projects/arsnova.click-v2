@@ -96,7 +96,7 @@ export class MemberGroupSelectComponent implements OnInit, OnDestroy {
   }
 
   public parseNickname(value: string): string {
-    if (value.match(/:[\w\+\-]+:/g)) {
+    if (value?.match(/:[\w\+\-]+:/g)) {
       return this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(value));
     }
     return value;
