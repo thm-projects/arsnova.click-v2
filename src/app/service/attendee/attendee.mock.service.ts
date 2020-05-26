@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
 
@@ -19,8 +20,9 @@ export class AttendeeMockService {
 
   public reloadData(): void {}
 
-  public cleanUp(): void {
+  public cleanUp(): Observable<any> {
     this.attendees = [];
+    return new Observable(subscriber => subscriber.next());
   }
 
   public hasConfidenceValue(): boolean {

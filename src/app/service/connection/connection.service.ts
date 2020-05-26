@@ -71,8 +71,10 @@ export class ConnectionService {
     this.initWebsocket();
   }
 
-  public cleanUp(): void {
+  public cleanUp(): Observable<boolean> {
     this._isWebSocketAuthorized = false;
+
+    return new Observable(subscriber => subscriber.next(true));
   }
 
   public initConnection(overrideCurrentState?: boolean): Promise<any> {

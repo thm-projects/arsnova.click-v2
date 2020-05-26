@@ -79,9 +79,9 @@ describe('QuizService', () => {
   it('should clean up the state', () => {
     const service: QuizService = TestBed.inject(QuizService);
     service.isOwner = true;
-    service.cleanUp();
-
-    expect(service.isOwner).toBe(false);
+    service.cleanUp().subscribe(() => {
+      expect(service.isOwner).toBe(false);
+    });
   });
 
   it('should persist a quiz in edit mode', () => {

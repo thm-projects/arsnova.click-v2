@@ -79,7 +79,6 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
       }
 
       this._quizName = quizname;
-      this.handleMessages();
 
       this.storageService.db.Quiz.get(quizname).then(quiz => {
         if (quiz) {
@@ -97,6 +96,8 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
           });
           return;
         }
+
+        this.handleMessages();
 
         this.quizApiService.getFullQuizStatusData(quizname).subscribe(data => {
           this.resolveQuizStatusData(data);

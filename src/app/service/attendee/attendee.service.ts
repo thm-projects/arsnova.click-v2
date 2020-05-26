@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Attendee } from '../../lib/attendee/attendee';
 import { MemberEntity } from '../../lib/entities/member/MemberEntity';
@@ -64,10 +64,12 @@ export class AttendeeService {
     return this._attendees.filter(attendee => attendee.groupName === groupName);
   }
 
-  public cleanUp(): void {
+  public cleanUp(): Observable<boolean> {
     this.attendees = [];
     this.attendeeAmount.next(0);
     this.ownNick = null;
+
+    return new Observable(subscriber => subscriber.next(true));
   }
 
   public addMember(attendee: IMemberSerialized): void {

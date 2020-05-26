@@ -86,8 +86,9 @@ describe('AttendeeService', () => {
 
     service.addMember(memberMock);
 
-    service.cleanUp();
-    expect(service.attendees.length).toEqual(0);
+    service.cleanUp().subscribe(() => {
+      expect(service.attendees.length).toEqual(0);
+    });
   });
 
   it('should add a member', () => {

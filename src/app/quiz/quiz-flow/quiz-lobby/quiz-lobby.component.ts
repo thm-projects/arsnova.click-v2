@@ -242,8 +242,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     this.footerBarService.replaceFooterElements(footerBarElements);
     this.footerBarService.footerElemBack.onClickCallback = async () => {
       this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
-      this.attendeeService.cleanUp();
-      this.connectionService.cleanUp();
+      this.attendeeService.cleanUp().subscribe();
+      this.connectionService.cleanUp().subscribe();
       this.hasTriggeredNavigation = true;
       this.router.navigate(['/']);
     };
@@ -305,7 +305,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
           .then(() => this.router.navigate(['/quiz', 'manager', 'overview']))
           .then(() => this.quizApiService.deleteActiveQuiz(this.quizService.quiz).subscribe())
           .then(() => {
-          this.attendeeService.cleanUp();
+          this.attendeeService.cleanUp().subscribe();
         });
       }).catch(() => {});
     };

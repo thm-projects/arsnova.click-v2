@@ -58,7 +58,7 @@
                 <span>Type:&nbsp;</span>
                 <span>{{question.question.TYPE}}</span>
                 <span class="ml-auto">
-                <a (click)="quizService.cleanUp()"
+                <a (click)="quizService.cleanUp().subscribe()"
                    [queryParams]="{id: question.id}"
                    [routerLink]="['/quiz', 'manager', 'quiz-pool', 'overview']"
                    class="nav-link text-dark p-0 ml-3">

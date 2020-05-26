@@ -90,14 +90,15 @@ export class QuizService {
   ) {
   }
 
-  public cleanUp(): void {
+  public cleanUp(): Observable<void> {
     this._readingConfirmationRequested = false;
     this._isAddingPoolQuestion = false;
     this._isInEditMode = false;
 
-    this.close();
-    this.quiz = null;
-    this.isOwner = false;
+    return this.close().pipe(tap(() => {
+      this.quiz = null;
+      this.isOwner = false;
+    }));
   }
 
   public persist(): void {
@@ -137,9 +138,9 @@ export class QuizService {
     return this.quiz.questionList[this.quiz.currentQuestionIndex];
   }
 
-  public close(): void {
+  public close(): Observable<void> {
     if (isPlatformServer(this.platformId)) {
-      return null;
+      return new Observable(subscriber => subscriber.next());
     }
 
     if (this.isOwner && this._quiz) {
@@ -150,8 +151,10 @@ export class QuizService {
         }
         return this.storageService.db.Quiz.put(quiz);
       });
-      this.quizApiService.deleteActiveQuiz(this._quiz).subscribe();
+      return this.quizApiService.deleteActiveQuiz(this._quiz);
     }
+
+    return new Observable(subscriber => subscriber.next());
   }
 
   public isValid(): boolean {
