@@ -68,7 +68,9 @@ export class QuizMockService {
 
   public persist(): void {}
 
-  public close(): void {}
+  public close(): Observable<any> {
+    return new Observable(subscriber => subscriber.next());
+  }
 
   public loadData(): Observable<QuizEntity> {
     return of(this.quiz);
