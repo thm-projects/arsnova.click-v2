@@ -68,6 +68,8 @@ export class QuizMockService {
 
   public persist(): void {}
 
+  public close(): void {}
+
   public loadData(): Observable<QuizEntity> {
     return of(this.quiz);
   }
