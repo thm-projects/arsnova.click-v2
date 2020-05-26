@@ -51,7 +51,7 @@ export class QuizEntity {
         questionListValid = false;
       }
     });
-    return questionListValid;
+    return questionListValid && this.sessionConfig.nicks.memberGroups.length !== 1;
   }
 
   public equals(questionGroup: QuizEntity): boolean {

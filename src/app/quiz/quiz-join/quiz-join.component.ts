@@ -3,7 +3,9 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMapTo, takeUntil } from 'rxjs/operators';
+import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { AudioPlayerConfigTarget } from '../../lib/enums/AudioPlayerConfigTarget';
+import { StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { IAudioPlayerConfig } from '../../lib/interfaces/IAudioConfig';
@@ -13,6 +15,7 @@ import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
+import { StorageService } from '../../service/storage/storage.service';
 import { ThemesService } from '../../service/themes/themes.service';
 
 @Component({
@@ -55,6 +58,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     private sharedService: SharedService,
     private connectionService: ConnectionService,
     private footerBarService: FooterBarService,
+    private storageService: StorageService,
   ) {
     this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
   }
@@ -77,10 +81,28 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
       this._quizName = quizname;
       this.handleMessages();
 
-      this.quizApiService.getFullQuizStatusData(quizname).subscribe(data => {
-        this.resolveQuizStatusData(data);
-      }, () => {
-        this.router.navigate(['/']);
+      this.storageService.db.Quiz.get(quizname).then(quiz => {
+        if (quiz) {
+          const quizEntity = new QuizEntity(quiz);
+          if (!quizEntity.isValid()) {
+            sessionStorage.setItem(StorageKey.CurrentQuizName, quizname);
+            this.router.navigate(['/quiz', 'manager', 'overview']);
+            return;
+          }
+
+          this.quizApiService.setQuiz(quiz).subscribe(modifiedQuestionGroup => {
+            this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
+            this.quizService.isOwner = true;
+            this.router.navigate(['/quiz', 'flow']);
+          });
+          return;
+        }
+
+        this.quizApiService.getFullQuizStatusData(quizname).subscribe(data => {
+          this.resolveQuizStatusData(data);
+        }, () => {
+          this.router.navigate(['/']);
+        });
       });
     });
   }
