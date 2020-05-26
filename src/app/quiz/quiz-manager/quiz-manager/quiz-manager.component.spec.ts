@@ -2,6 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { SwPush } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
@@ -50,7 +51,9 @@ describe('QuizManagerComponent', () => {
         }), HttpClientTestingModule, RouterTestingModule, FooterModule, FontAwesomeModule, NgbPopoverModule, NgbTooltipModule,
       ],
       providers: [
-        RxStompService, SimpleMQ, UserService, {
+        RxStompService, SimpleMQ, UserService,
+        { provide: SwPush, useValue: {} },
+        {
           provide: StorageService,
           useClass: StorageServiceMock,
         }, HeaderLabelService, {
