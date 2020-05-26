@@ -9,6 +9,10 @@ npm run build:"$1"
 echo "Copying assets"
 npm run copy:"$1"
 
+cd /usr/src/app
+echo "Purifying css"
+npm run purify
+
 echo "Renaming css files to a hashed version and add a json file containing the theme and the corresponding hash"
 cd /usr/src/app/dist/frontend/browser
 echo "Building css file hashes"
@@ -86,10 +90,6 @@ else
 
    echo "Generating preview screenshots"
    node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000 --root=true
-
-   cd /usr/src/app
-   echo "Purifying css"
-   npm run purify
 fi
 
 echo "Gzipping app files"
