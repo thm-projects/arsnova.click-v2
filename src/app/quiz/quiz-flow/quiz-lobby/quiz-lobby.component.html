@@ -47,7 +47,7 @@
              [innerHTML]="parseNickname(elem.groupName)"></div>
         <div *ngIf="!isHtmlNickname(elem.groupName)">[{{elem.groupName}}]</div>
       </div>
-      <p class="flex-grow-1 break-word">
+      <p class="flex-grow-1 break-word" [class.text-center]="!elem.groupName">
           <span *ngIf="isHtmlNickname(elem.name)"
                 [innerHTML]="parseNickname(elem.name)"></span>
         <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>

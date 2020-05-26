@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -31,6 +31,7 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-voting',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static readonly TYPE = 'VotingComponent';
@@ -75,6 +76,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     private memberApiService: MemberApiService,
     private ngbModal: NgbModal,
     private messageQueue: SimpleMQ,
+    private cd: ChangeDetectorRef,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
@@ -216,6 +218,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         } else {
           this._questionText = value;
         }
+        this.cd.markForCheck();
       });
 
       this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText)).subscribe();
@@ -278,6 +281,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
           this.hasTriggeredNavigation = true;
           this.sendResponses('results');
         }
+        this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
