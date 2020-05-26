@@ -31,10 +31,10 @@
 <div *ngIf="displayAnswerButtons()"
      [class.mb-5]="showSendResponseButton()"
      class="d-flex justify-content-around align-items-center flex-wrap mt-3">
-  <button (click)="toggleSelectAnswer(i)"
+  <button (click)="toggleSelectAnswer(elem)"
           *ngFor="let elem of answers; let i = index"
-          [class.btn-invers]="isSelected(i)"
-          [class.btn-secondary]="!isSelected(i)"
+          [class.btn-invers]="isSelected(elem)"
+          [class.btn-secondary]="!isSelected(elem)"
           [class.m-2]="!getQuestionAsSurvey().showOneAnswerPerRow"
           [class.my-2]="getQuestionAsSurvey().showOneAnswerPerRow"
           [style.flex-basis]="getQuestionAsSurvey().showOneAnswerPerRow ? '100%' : 'auto'"
