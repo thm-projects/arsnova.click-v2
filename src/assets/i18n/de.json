@@ -433,6 +433,9 @@
         "send-to-teacher": "Sende diesen Token an deinen Lehrer / deine Lehrerin und tausche ihn gegen Bonuspunkte ein"
       }
     },
+    "question-details": {
+      "selected-answer-elements": "Du hast \"{elements}\" gewählt"
+    },
     "lobby": {
       "start_quiz": "Los geht's!",
       "kick_member_confirmation": "Soll die Person \"{NAME}\" aus dem Quiz entfernt werden?",

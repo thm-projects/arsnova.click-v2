@@ -510,6 +510,9 @@
         "send-to-teacher": "Send this token to your teacher to gain some bonus points!"
       }
     },
+    "question-details": {
+      "selected-answer-elements": "You selected: {elements}"
+    },
     "lobby": {
       "start_quiz": "Let's go!",
       "kick_member_confirmation": "Shall the attendee \"{NAME}\" be removed from the session?",

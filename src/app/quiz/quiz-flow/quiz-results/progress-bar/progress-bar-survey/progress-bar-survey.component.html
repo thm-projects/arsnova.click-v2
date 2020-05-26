@@ -6,7 +6,7 @@
       <span>{{normalizedAnswerIndex}}</span>
       <span *ngIf="label">:&nbsp;<span [innerHTML]="sanitizeHTML(label)"></span></span>
     </span>
-    <span class="mr-2">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}</span>
+    <span class="mr-2 d-flex align-items-end">{{percent}}&nbsp;|&nbsp;{{absolute}}&nbsp;/&nbsp;{{base}}</span>
   </div>
 
   <div class="progress">

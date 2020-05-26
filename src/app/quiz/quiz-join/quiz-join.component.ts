@@ -60,7 +60,10 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     private footerBarService: FooterBarService,
     private storageService: StorageService,
   ) {
-    this.footerBarService.replaceFooterElements([this.footerBarService.footerElemBack]);
+    this.footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack,
+      this.footerBarService.footerElemAudio,
+    ]);
   }
 
   public ngOnInit(): void {

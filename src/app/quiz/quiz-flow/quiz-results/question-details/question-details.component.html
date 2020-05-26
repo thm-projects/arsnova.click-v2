@@ -22,3 +22,7 @@
     <span [innerHTML]="sanitizeHTML(elem)"></span>
   </p>
 </ng-template>
+
+<h2 class="mt-5 text-center" *ngIf="selectedAnswerElements?.length">
+  {{'component.question-details.selected-answer-elements' | translate:{elements: selectedAnswerElements} }}
+</h2>
