@@ -210,8 +210,9 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   public getColorForNick(elem: MemberEntity): string {
-   if (elem.groupName) {
-     return this.quizService.quiz.sessionConfig.nicks.memberGroups.find(value => value.name === elem.groupName).color;
+    const groups = this.quizService.quiz?.sessionConfig.nicks.memberGroups;
+   if (elem.groupName && groups.length) {
+     return groups.find(value => value.name === elem.groupName)?.color ?? '#' + elem.colorCode;
    }
 
    return '#' + elem.colorCode;
