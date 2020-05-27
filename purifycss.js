@@ -22,7 +22,7 @@ function fromDir(startPath, filter, callback) {
   }
 }
 
-fromDir('./dist/frontend/browser', /theme-.*\.css$/, function (filename) {
+fromDir('./dist/frontend/browser', /^.*theme-(?!.*(default)).*css$/, function (filename) {
   const content = ['./dist/frontend/browser/*.js', './dist/frontend/browser/*.html'];
   const css = [filename];
 
@@ -33,5 +33,6 @@ fromDir('./dist/frontend/browser', /theme-.*\.css$/, function (filename) {
     rejected: true,
   };
   console.log('-- found: ', filename);
+  return;
   purifycss(content, css, options);
 });
