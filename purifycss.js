@@ -33,6 +33,5 @@ fromDir('./dist/frontend/browser', /^.*theme-(?!.*(default)).*css$/, function (f
     rejected: true,
   };
   console.log('-- found: ', filename);
-  return;
   purifycss(content, css, options);
 });
