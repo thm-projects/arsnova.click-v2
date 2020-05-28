@@ -12,7 +12,7 @@
       <h1>{{quizName}}</h1>
       <h3>{{'component.quiz-join.approval.sub-header' | translate}}</h3>
       <div class="d-flex justify-content-between mt-5">
-        <button class="btn btn-success w-25 flex-grow-1 flex-sm-grow-0 mr-2" (click)="hasApproved  = true">{{'global.yes' | translate}}</button>
+        <button class="btn btn-success w-25 flex-grow-1 flex-sm-grow-0 mr-2" (click)="approve()">{{'global.yes' | translate}}</button>
         <button class="btn btn-danger w-25 flex-grow-1 flex-sm-grow-0 ml-2" [routerLink]="['/']">{{'global.no' | translate}}</button>
       </div>
     </ng-container>

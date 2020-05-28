@@ -62,7 +62,6 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   ) {
     this.footerBarService.replaceFooterElements([
       this.footerBarService.footerElemBack,
-      this.footerBarService.footerElemAudio,
     ]);
   }
 
@@ -114,6 +113,14 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this._destroy.next();
     this._destroy.complete();
+  }
+
+  public approve(): void {
+    this.hasApproved = true;
+    this.footerBarService.replaceFooterElements([
+      this.footerBarService.footerElemBack,
+      this.footerBarService.footerElemAudio,
+    ]);
   }
 
   private handleMessages(): void {
