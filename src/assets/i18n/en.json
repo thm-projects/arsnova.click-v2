@@ -803,8 +803,7 @@
       "question": "Show question",
       "seconds_left": "# {COUNT, plural, =0{Seconds} one{Second} other{Seconds}} left!",
       "tags": {
-        "categories": "Topics",
-        "category": "Topic"
+        "category": "{amount, plural, =0{Topics} one{Topic} other{Topics}}"
       }
     },
     "membergroup-manager": {

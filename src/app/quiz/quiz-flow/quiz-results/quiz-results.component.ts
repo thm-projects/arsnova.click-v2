@@ -568,6 +568,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.quizService.readingConfirmationRequested = true;
           this._mustRequestReadingConfirmation = false;
           this.isStarting = false;
+          this.cd.markForCheck();
           return;
         }
 
@@ -580,6 +581,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         }
 
         this.isStarting = false;
+        this.cd.markForCheck();
       }),
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.showStartQuizButton = false;

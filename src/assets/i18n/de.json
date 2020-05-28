@@ -668,8 +668,7 @@
         "title": "Wie sicher bist du dir bei deiner Antwort?"
       },
       "tags": {
-        "categories": "Themen",
-        "category": "Thema"
+        "category": "{amount, plural, =0{Themen} one{Thema} other{Themen}}"
       }
     },
     "membergroup-manager": {
