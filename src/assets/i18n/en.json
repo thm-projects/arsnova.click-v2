@@ -270,7 +270,9 @@
       },
       "partial-correct": {
         "title": "Partially correct",
-        "amount-correct": "{correct} of {available} Answers correct"
+        "amount-correct": "{correct} of {available} answers correct",
+        "amount-wrong": "{wrong} wrong {wrong, plural, =0{answers} one{answer} other{answers}} selected",
+        "ranged-question-correct": "Not correctly estimated, but acceptable"
       },
       "wrong": {
         "title": "Sorry, that's wrong",
@@ -466,7 +468,7 @@
       }
     },
     "liveResults": {
-      "title": "Results {QUESTION_INDEX}",
+      "title": "Question {QUESTION_INDEX}",
       "question": "Show question",
       "question_number": "Question",
       "ranking": "Ranking",

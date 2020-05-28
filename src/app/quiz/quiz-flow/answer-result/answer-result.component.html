@@ -23,9 +23,11 @@
 <ng-template #partiallyCorrectAnswer>
   <h1 class="mb-5">{{'component.answer-result.partial-correct.title' | translate}}</h1>
   <fa-icon [icon]="'check'" [size]="'6x'"></fa-icon>
-  <div class="my-5 px-3 h1 bg-invers rounded-pill mx-auto bg-light-invers text-invers">
-    <h2>{{'component.answer-result.partial-correct.amount-correct' | translate:{correct: data?.amountCorrect, available: data?.amountAvailable} }}</h2>
-    <h2>
+  <div class="my-5 px-3 py-2 h1 bg-invers rounded-pill mx-auto bg-light-invers text-invers">
+    <h2 *ngIf="onlyOneAvailableCorrectAnswer">{{'component.answer-result.partial-correct.ranged-question-correct' | translate }}</h2>
+    <h2 *ngIf="!onlyOneAvailableCorrectAnswer">{{'component.answer-result.partial-correct.amount-correct' | translate:{correct: data?.amountCorrect, available: data?.amountAvailable} }}</h2>
+    <h2 *ngIf="data.amountWrong">{{'component.answer-result.partial-correct.amount-wrong' | translate:{wrong: data?.amountWrong} }}</h2>
+    <h2 class="mb-0">
       <ng-container *ngIf="!isTeam">{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</ng-container>
       <ng-container *ngIf="isTeam">{{'component.answer-result.points-gained-team' | translate:{points: data?.pointsGained} }}</ng-container>
     </h2>

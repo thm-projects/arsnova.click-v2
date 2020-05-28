@@ -226,7 +226,9 @@
       },
       "partial-correct": {
         "title": "Teilweise richtig",
-        "amount-correct": "{correct} von {available} Antworten richtig"
+        "amount-correct": "{correct} von {available} Antworten richtig",
+        "amount-wrong": "{wrong} falsche {wrong, plural, =0{Antworten} one{Antwort} other{Antworten}} gewählt",
+        "ranged-question-correct": "Nicht korrekt geraten, aber akzeptabel"
       },
       "wrong": {
         "title": "Leider falsch",
