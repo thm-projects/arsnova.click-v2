@@ -585,7 +585,9 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       }),
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.showStartQuizButton = false;
+        this.isStarting = false;
         this.showStopQuizButton = this.quizService.currentQuestion().timer === 0;
+        this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
         this.showStopCountdownButton = false;
         this.showStopQuizButton = false;
@@ -596,7 +598,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.playEndSound();
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.showStopCountdownButton = payload.value > 0;
-        this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+        if (!payload.value) {
+          this._mustRequestReadingConfirmation = this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
+          this.quizService.readingConfirmationRequested = !this._mustRequestReadingConfirmation;
+          this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+        }
         if (!this.showStartQuizButton) {
           this.addFooterElements();
         }
