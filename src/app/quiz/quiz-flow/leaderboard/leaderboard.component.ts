@@ -205,10 +205,12 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this._ownResponse = lederboardData.payload.ownResponse;
           this._memberGroupResults = lederboardData.payload.memberGroupResults;
 
-          this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-            return memberGroupResult.correctQuestions.length > 0;
-          });
-          this.absolute = Math.max(...this._memberGroupResults.map(value => value.score));
+          if (this._memberGroupResults) {
+            this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
+              return memberGroupResult.correctQuestions.length > 0;
+            });
+            this.absolute = Math.max(...this._memberGroupResults.map(value => value.score));
+          }
 
           this.isLoadingData = false;
         });
