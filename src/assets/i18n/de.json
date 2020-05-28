@@ -218,6 +218,10 @@
       "approval": {
         "top-header": "Du möchtest dem Quiz",
         "sub-header": "beitreten - ist das richtig?"
+      },
+      "joining": {
+        "top-header": "Gleich geht's los",
+        "sub-header": "Warte noch kurz..."
       }
     },
     "answer-result": {

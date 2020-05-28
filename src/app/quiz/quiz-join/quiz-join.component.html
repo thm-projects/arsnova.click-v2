@@ -2,9 +2,13 @@
 
   <div *ngIf="!isLoading" class="position-relative arsnova-click-label mx-auto mw-500px text-center">
     <ng-container *ngIf="hasApproved && isPending">
-      <app-audio-player *ngIf="quizService.playAudio" [config]="audioConfig"></app-audio-player>
-      <h2 class="text-bold my-0">{{'component.quiz-join.top-header' | translate }}</h2>
-      <h4 class="mt-5">{{'component.quiz-join.sub-header' | translate}}</h4>
+      <app-audio-player #joinAudio *ngIf="quizService.playAudio" [config]="audioConfig"></app-audio-player>
+      <app-audio-player #countdownEndAudio [config]="countdownEndMusicConfig" (playbackFinished)="playbackFinished.next()"></app-audio-player>
+
+      <ng-container *ngIf="!isJoining">
+        <h2 class="text-bold my-0">{{'component.quiz-join.top-header' | translate }}</h2>
+        <h4 class="mt-5">{{'component.quiz-join.sub-header' | translate}}</h4>
+      </ng-container>
     </ng-container>
 
     <ng-container *ngIf="!hasApproved">
@@ -15,6 +19,11 @@
         <button class="btn btn-success w-25 flex-grow-1 flex-sm-grow-0 mr-2" (click)="approve()">{{'global.yes' | translate}}</button>
         <button class="btn btn-danger w-25 flex-grow-1 flex-sm-grow-0 ml-2" [routerLink]="['/']">{{'global.no' | translate}}</button>
       </div>
+    </ng-container>
+
+    <ng-container *ngIf="isJoining">
+      <h3>{{'component.quiz-join.joining.top-header' | translate}}</h3>
+      <h3>{{'component.quiz-join.joining.sub-header' | translate}}</h3>
     </ng-container>
   </div>
 

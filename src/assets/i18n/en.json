@@ -262,6 +262,10 @@
       "approval": {
         "top-header": "You want to join the quiz",
         "sub-header": "Is that correct?"
+      },
+      "joining": {
+        "top-header": "Nearly there",
+        "sub-header": "Hang on a second..."
       }
     },
     "answer-result": {
