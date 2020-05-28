@@ -1,9 +1,10 @@
-import { Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
 
 export class AttendeeMockService {
   public attendees = [];
+  public attendeeAmount = new ReplaySubject(1);
 
   public getMemberGroups(): Array<string> {
     return ['Default'];
