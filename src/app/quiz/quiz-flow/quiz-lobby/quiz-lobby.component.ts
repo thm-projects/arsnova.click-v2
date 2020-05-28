@@ -41,20 +41,19 @@ import { QrCodeContentComponent } from './modals/qr-code-content/qr-code-content
 })
 export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
 
-  get nickToRemove(): string {
-    return this._nickToRemove;
-  }
   public static readonly TYPE = 'QuizLobbyComponent';
-
   private _nickToRemove: string;
   private _serverUnavailableModal: NgbModalRef;
   private _reconnectTimeout: any;
   private _kickMemberModalRef: NgbActiveModal;
   private readonly _destroy = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
-
   public hasTriggeredNavigation: boolean;
   public musicConfig: IAudioPlayerConfig;
+
+  get nickToRemove(): string {
+    return this._nickToRemove;
+  }
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -232,6 +231,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     });
 
     this.addFooterElementsAsOwner();
+
+    this.attendeeService.attendeeAmount.pipe(takeUntil(this._destroy)).subscribe(() => {
+      this.footerBarService.footerElemStartQuiz.isActive = this.canStartQuiz();
+    });
   }
 
   private addFooterElementsAsAttendee(): void {
@@ -251,8 +254,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   private addFooterElementsAsOwner(): void {
-    this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
-
     const footerElements = [
       this.footerBarService.footerElemStartQuiz, this.footerBarService.footerElemQRCode,
     ];
@@ -276,7 +277,7 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
 
   private addFooterElemClickCallbacksAsOwner(): void {
     this.footerBarService.footerElemStartQuiz.onClickCallback = (self: FooterbarElement) => {
-      if (!this.attendeeService.attendees.length) {
+      if (!this.canStartQuiz()) {
         return;
       }
       self.isLoading = true;
@@ -337,15 +338,26 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   }
 
   private handleMessagesForOwner(): void {
-    this._messageSubscriptions.push(...[
-      this.messageQueue.subscribe(MessageProtocol.AllPlayers, payload => {
-        this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
-      }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {
-        this.footerBarService.footerElemStartQuiz.isActive = true;
-      }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
-        this.footerBarService.footerElemStartQuiz.isActive = this.attendeeService.attendees.length > 0;
-      }),
-    ]);
+
+  }
+
+  private canStartQuiz(): boolean {
+    if (!this.quizService.quiz.sessionConfig.nicks.memberGroups.length) {
+      return this.attendeeService.attendees.length > 0;
+    }
+
+    let filledTeams = 0;
+    for (const team of this.quizService.quiz.sessionConfig.nicks.memberGroups) {
+      if (this.attendeeService.attendees.some(attendee => attendee.groupName === team.name)) {
+        filledTeams++;
+      }
+
+      if (filledTeams === 2) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private handleMessagesForAttendee(): void {
