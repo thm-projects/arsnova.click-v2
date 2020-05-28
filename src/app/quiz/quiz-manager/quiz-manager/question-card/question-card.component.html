@@ -32,7 +32,7 @@
 
   <small *ngIf="elem?.tags?.length"
          class="col-12 font-italic">
-    <span *ngFor="let tag of elem?.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">,</span></span>
+    {{elem.tags.join(', ')}}
   </small>
 </div>
 
