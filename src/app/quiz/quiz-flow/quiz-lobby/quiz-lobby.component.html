@@ -14,12 +14,12 @@
     <div [style.background-color]="'#' + sanitizeHTML(myself.colorCode)"
          [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(myself.colorCode)))"
          class="p-2 rounded d-flex align-items-center justify-content-center own-nick w-100">
-      <div *ngIf="myself.groupName && myself.groupName !== 'Default'" class="mr-2 flex-grow-1 flex-shrink-0">
+      <div *ngIf="myself.groupName" class="mr-2 flex-grow-1 flex-shrink-0">
         <div *ngIf="isHtmlNickname(myself.groupName)"
              [innerHTML]="parseNickname(myself.groupName)"></div>
         <div *ngIf="!isHtmlNickname(myself.groupName)">[{{myself.groupName}}]</div>
       </div>
-      <p class="flex-grow-1 break-word">
+      <p class="flex-grow-1 break-word" [class.text-center]="!myself.groupName">
           <span *ngIf="isHtmlNickname(myself.name)"
                 [innerHTML]="parseNickname(myself.name)"></span>
         <span *ngIf="!isHtmlNickname(myself.name)">{{myself.name}}</span>
