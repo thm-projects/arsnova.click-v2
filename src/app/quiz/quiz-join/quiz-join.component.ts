@@ -185,6 +185,11 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
       }
     });
 
+    if (!this._isPending) {
+      this.playbackFinished.next();
+      return;
+    }
+
     this._isJoining = true;
     this.joinAudio.stopMusic();
     this.countdownEndAudio.playMusic();
