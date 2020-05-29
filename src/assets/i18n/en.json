@@ -1144,7 +1144,11 @@
     "close": "Close",
     "pending-pool-question": {
       "title": "New Quiz-Pool {amount, plural, =0{questions} one{question} other{questions} }",
-      "body": "{amount, plural, =0{0 questions} one{One question} other{{amount} questions} } is waiting for approval in the Quiz-Pool"
+      "body": "{amount, plural, =0{0 questions are} one{One question is} other{{amount} questions are} } waiting for approval in the Quiz-Pool"
+    },
+    "pool-question-approved": {
+      "title": "Quiz-Pool question approved",
+      "body": "One of your Quiz-Pool questions was approved!"
     }
   }
 }

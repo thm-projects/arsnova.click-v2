@@ -174,7 +174,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
 
     this._isUploading = true;
     this.cdRef.detectChanges();
-    this.quizPoolApiService.postNewQuestion(this.elem, `${this.quizService.quiz.name}`).subscribe({
+    this.quizPoolApiService.postNewQuestion(this.elem, `${this.quizService.quiz.name}`, sub).subscribe({
       complete: removeQuestionFromUploadingQueue,
       error: removeQuestionFromUploadingQueue,
     });

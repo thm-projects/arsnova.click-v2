@@ -1,6 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { SwPush } from '@angular/service-worker';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMap, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
@@ -8,7 +9,9 @@ import { StorageKey } from '../../../lib/enums/enums';
 import { QuizPoolApiService } from '../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { NotificationService } from '../../../service/notification/notification.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
+import { StorageService } from '../../../service/storage/storage.service';
 
 export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   private _queryParams: Params = {};
@@ -44,6 +47,9 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     protected quizPoolApiService: QuizPoolApiService,
     private router: Router,
     protected route: ActivatedRoute,
+    protected storageService?: StorageService,
+    protected swPush?: SwPush,
+    protected notificationService?: NotificationService
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
@@ -97,7 +103,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
       if (this.showSaveQuizButton) {
         footerElems.push(this.footerBarService.footerElemSaveQuiz);
 
-        this.footerBarService.footerElemSaveQuiz.onClickCallback = self => {
+        this.footerBarService.footerElemSaveQuiz.onClickCallback = async self => {
           if (!self.isActive) {
             return;
           }
@@ -107,7 +113,28 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
               this.router.navigate(['/admin', 'quiz', 'pool']);
             });
           } else {
-            this.quizPoolApiService.postNewQuestion(this.quizService.currentQuestion()).subscribe(() => {
+
+            let sub: PushSubscriptionJSON;
+
+            try {
+              sub = (await this.storageService.db.Config.get(StorageKey.PushSubscription))?.value;
+
+              if (!sub) {
+
+                const confirmed = confirm('Möchtest du eine Benachrichtigung erhalten, wenn deine Frage für den Quiz-Pool genehmigt wurde?');
+
+                if (confirmed) {
+                  sub = (await this.swPush.requestSubscription({
+                    serverPublicKey: this.notificationService.vapidPublicKey,
+                  })).toJSON();
+                  await this.storageService.db.Config.put({ type: StorageKey.PushSubscription, value: sub });
+                }
+              }
+            } catch (e) {
+              console.error('Error while trying to load a swpush subscription', e);
+            }
+
+            this.quizPoolApiService.postNewQuestion(this.quizService.currentQuestion(), null, sub).subscribe(() => {
               this.router.navigate(['/quiz', 'pool']);
             });
           }

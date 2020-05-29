@@ -1,5 +1,6 @@
 import { Component, HostListener, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SwPush } from '@angular/service-worker';
 import { environment } from '../../../../../environments/environment';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -9,7 +10,9 @@ import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { NotificationService } from '../../../../service/notification/notification.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
+import { StorageService } from '../../../../service/storage/storage.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
 
@@ -31,8 +34,12 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     quizPoolApiService: QuizPoolApiService,
     router: Router,
     private trackingService: TrackingService,
+    storageService?: StorageService,
+    swPush?: SwPush,
+    notificationService?: NotificationService
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(
+      platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, storageService, swPush, notificationService);
 
     footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
     footerBarService.replaceFooterElements([

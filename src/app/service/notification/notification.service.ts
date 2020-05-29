@@ -23,6 +23,10 @@ export class NotificationService {
   private _badgeAmount = 0;
   private readonly _vapidPublicKey = environment.vapidPublicKey;
 
+  public get vapidPublicKey(): string {
+    return this._vapidPublicKey;
+  }
+
   public readonly badge$: ReplaySubject<number> = new ReplaySubject<number>(1);
   public readonly footerBadges = {};
 
@@ -80,12 +84,12 @@ export class NotificationService {
 
   private buildOptions(payload: any): NotificationOptions {
     return {
-      icon: `/assets/images/theme/theme-${this.themesService.currentTheme}/logo_s64x64.png`,
+      icon: `/assets/images/theme/${this.themesService.currentTheme}/logo_s64x64.png`,
       vibrate: [100, 50, 100],
       requireInteraction: true,
-      body: this.translate.instant('notification.pending-pool-question.body', { amount: payload.amount }),
-      tag: payload.tag,
-      renotify: false,
+      body: payload.body,
+      tag: payload.tag ?? String(Math.random()),
+      renotify: true,
       actions: [
         {
           action: 'close',
@@ -97,34 +101,61 @@ export class NotificationService {
 
   private registerHandlers(): void {
     if ('setAppBadge' in navigator) {
+      console.log('Registering handler for app badge update');
       // @ts-ignore
       this.badge$.subscribe(value => navigator.setAppBadge(value));
     }
 
     if ('serviceWorker' in navigator) {
+      console.log('Registering message handler in service worker');
       const serviceworker = navigator.serviceWorker;
       serviceworker.addEventListener('message', async (event) => {
+        console.log('Message in sw received', event);
         if (!event.data || typeof event.data !== 'string') {
           return;
         }
 
+        let options: object;
         const parsed: IMessage = JSON.parse(event.data);
+        const reg = await serviceworker.getRegistration();
+
         switch (parsed.step) {
           case MessageProtocol.PendingPoolQuestion:
-            const reg = await serviceworker.getRegistration();
             const parsedAmount = parseInt(parsed.payload.amount, 10);
 
             if (parsedAmount > 0) {
-              await reg.showNotification(this.translate.instant('notification.pending-pool-question.title', { amount: parsedAmount }),
-                this.buildOptions({ ...parsed.payload, tag: `${parsed.step}_${parsedAmount}` }));
+              console.log('Showing push message for PendingPoolQuestion with parsedAmount', parsedAmount);
 
+              options = this.buildOptions({
+                ...parsed.payload,
+                body: this.translate.instant('notification.pending-pool-question.body', { amount: parsedAmount })
+              });
+              await reg.showNotification(this.translate.instant('notification.pending-pool-question.title', { amount: parsedAmount }),
+                options);
+
+              console.log('Notification showed', options);
             } else {
-              const notifications = await reg.getNotifications();
-              notifications.filter(notification => notification.tag === parsed.step).forEach(notification => setTimeout(() => notification.close()));
+              console.log('Showing generic push message for PendingPoolQuestion without parsedAmount');
             }
             break;
+          case MessageProtocol.PoolQuestionApproved:
+            console.log('Showing push message for PoolQuestionApproved');
+
+            options = this.buildOptions({
+              ...parsed.payload,
+              body: this.translate.instant('notification.pool-question-approved.body')
+            });
+            await reg.showNotification(this.translate.instant('notification.pool-question-approved.title'),
+              options);
+
+            console.log('Notification showed', options);
+            break;
           case MessageProtocol.UpdateBadgeAmount:
+            console.log('Showing push message for UpdateBadgeAmount with parsedAmount', parsed.payload);
+
             this.modifyBadge(parseInt(parsed.payload, 10));
+
+            console.log('Notification showed', options);
             break;
           default:
             console.error('Unknown message from service worker received');
