@@ -2,6 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMap, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
@@ -49,7 +50,8 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     protected route: ActivatedRoute,
     protected storageService?: StorageService,
     protected swPush?: SwPush,
-    protected notificationService?: NotificationService
+    protected notificationService?: NotificationService,
+    protected translate?: TranslateService
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
@@ -121,7 +123,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
 
               if (!sub) {
 
-                const confirmed = confirm('Möchtest du eine Benachrichtigung erhalten, wenn deine Frage für den Quiz-Pool genehmigt wurde?');
+                const confirmed = confirm(this.translate.instant('notification.request-permission'));
 
                 if (confirmed) {
                   sub = (await this.swPush.requestSubscription({

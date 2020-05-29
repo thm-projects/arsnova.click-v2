@@ -941,6 +941,7 @@
   },
   "notification": {
     "close": "Schließen",
+    "request-permission": "Möchtest du eine Benachrichtigung erhalten, wenn deine Frage für den Quiz-Pool genehmigt wurde?",
     "pending-pool-question": {
       "title": "Neue Quiz-Pool {amount, plural, =0{Fragen} one{Frage} other{Fragen} }",
       "body": "Es {amount, plural, =0{warten 0 Fragen} one{wartet eine Frage} other{warten {amount} Fragen} } im Quiz-Pool auf eine Überprüfung"

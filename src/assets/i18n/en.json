@@ -1142,6 +1142,7 @@
   },
   "notification": {
     "close": "Close",
+    "request-permission": "Do you want to receive a notification when your question for the Quiz-Pool has been approved?",
     "pending-pool-question": {
       "title": "New Quiz-Pool {amount, plural, =0{questions} one{question} other{questions} }",
       "body": "{amount, plural, =0{0 questions are} one{One question is} other{{amount} questions are} } waiting for approval in the Quiz-Pool"

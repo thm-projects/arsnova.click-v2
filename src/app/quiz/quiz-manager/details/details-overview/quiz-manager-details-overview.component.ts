@@ -1,6 +1,7 @@
 import { Component, HostListener, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
+import { TranslateService } from '@ngx-translate/core';
 import { environment } from '../../../../../environments/environment';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -36,10 +37,12 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     private trackingService: TrackingService,
     storageService?: StorageService,
     swPush?: SwPush,
-    notificationService?: NotificationService
+    notificationService?: NotificationService,
+    translate?: TranslateService,
   ) {
     super(
-      platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, storageService, swPush, notificationService);
+      platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, storageService, swPush, notificationService,
+      translate);
 
     footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
     footerBarService.replaceFooterElements([
