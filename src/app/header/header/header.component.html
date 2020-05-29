@@ -114,7 +114,7 @@
 
     <div>
       <button (click)="checkForUpdates()"
-              [disabled]="!connectionService.serverAvailable"
+              [disabled]="isCheckingForUpdates || !connectionService.serverAvailable"
               class="btn btn-primary">
         <span *ngIf="!isCheckingForUpdates">{{'region.header.connection_status.check-for-updates' | translate}}</span>
         <span *ngIf="isCheckingForUpdates">
