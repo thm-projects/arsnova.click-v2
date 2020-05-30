@@ -32,7 +32,7 @@
       <ng-container *ngIf="isTeam">{{'component.answer-result.points-gained-team' | translate:{points: data?.pointsGained} }}</ng-container>
     </h2>
   </div>
-  <h2 class="my-3 my-sm-5 h1">
+  <h2 class="my-3 my-sm-5 h1" *ngIf="data?.rank > 0">
     <ng-container *ngIf="!isTeam">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</ng-container>
     <ng-container *ngIf="isTeam">{{'component.answer-result.rank-team' | translate:{rank: data?.rank} }}</ng-container>
   </h2>
