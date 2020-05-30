@@ -11,7 +11,7 @@ import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
-import { ILeaderBoardItem } from '../../../lib/interfaces/ILeaderboard';
+import { ILeaderBoardItem, ILeaderboardMemberGroupItem } from '../../../lib/interfaces/ILeaderboard';
 import { IMemberGroupBase } from '../../../lib/interfaces/users/IMemberGroupBase';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
@@ -38,7 +38,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return this._leaderBoardCorrect;
   }
 
-  get memberGroupResults(): Array<ILeaderBoardItem> {
+  get memberGroupResults(): Array<ILeaderboardMemberGroupItem> {
     return this._memberGroupResults;
   }
 
@@ -49,7 +49,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
   private _questionIndex: number;
   private _leaderBoardCorrect: Array<ILeaderBoardItem> = [];
-  private _memberGroupResults: Array<ILeaderBoardItem>;
+  private _memberGroupResults: Array<ILeaderboardMemberGroupItem>;
   private _isGlobalRanking: boolean;
   private _ownResponse: { index: number, element: ILeaderBoardItem, closestOpponent: ILeaderBoardItem };
   private _serverUnavailableModal: NgbModalRef;
@@ -174,12 +174,12 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
   }
 
-  public getPercentForGroup(group: ILeaderBoardItem): number {
+  public getPercentForGroup(group: ILeaderboardMemberGroupItem): number {
     return Math.round(group.score / this.absolute * 100);
   }
 
-  public getTeam(group: ILeaderBoardItem): IMemberGroupBase {
-    return this.quizService.quiz?.sessionConfig.nicks.memberGroups.find(value => value.name === group.name);
+  public getTeam(group: ILeaderboardMemberGroupItem): IMemberGroupBase {
+    return this.quizService.quiz?.sessionConfig.nicks.memberGroups.find(value => value.name === group._id);
   }
 
   private initData(): void {
@@ -206,9 +206,6 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this._memberGroupResults = lederboardData.payload.memberGroupResults;
 
           if (this._memberGroupResults) {
-            this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-              return memberGroupResult.correctQuestions.length > 0;
-            });
             this.absolute = Math.max(...this._memberGroupResults.map(value => value.score));
           }
 

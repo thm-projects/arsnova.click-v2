@@ -10,13 +10,13 @@
   </ng-container>
 </h4>
 
-<ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length > 1;else attendeeView">
+<ng-container *ngIf="quizService.quiz?.sessionConfig?.nicks.memberGroups.length;else attendeeView">
   <ng-container *ngFor="let group of memberGroupResults; let isLast = last">
 
     <div [class.mb-5]="!isLast" class="d-flex align-items-center flex-wrap" *ngIf="getPercentForGroup(group) as percent;">
       <p class="mx-2 text-right w-100">{{'component.leaderboard.team-result.score' | translate:{SCORE: group.score} }}</p>
 
-      <div [innerHTML]="parseNickname(group.name)" [title]="group.name"></div>
+      <div [innerHTML]="parseNickname(group._id)" [title]="group._id"></div>
 
       <div class="progress rounded ml-2 flex-grow-1">
 

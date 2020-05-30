@@ -6,7 +6,7 @@
 <ng-template #correctAnswer>
   <h1 class="mb-3 mb-sm-5">{{'component.answer-result.correct.title' | translate}}</h1>
   <fa-icon [icon]="'check'" [size]="'4x'"></fa-icon>
-  <h2 class="my-3 my-sm-5 h1 bg-invers mx-auto">
+  <h2 class="my-3 my-sm-5 py-2 h1 bg-invers mx-auto">
     <ng-container *ngIf="!isTeam">{{'component.answer-result.points-gained' | translate:{points: data?.pointsGained} }}</ng-container>
     <ng-container *ngIf="isTeam">{{'component.answer-result.points-gained-team' | translate:{points: data?.pointsGained} }}</ng-container>
   </h2>
@@ -41,7 +41,7 @@
 <ng-template #wrongAnswer>
   <h1 class="mb-3 mb-sm-5">{{'component.answer-result.wrong.title' | translate}}</h1>
   <fa-icon [icon]="'times'" [size]="'4x'"></fa-icon>
-  <h2 class="my-3 my-sm-5 h1" *ngIf="data?.rank">
+  <h2 class="my-3 my-sm-5 h1" *ngIf="data?.rank > 0">
     <ng-container *ngIf="!isTeam">{{'component.answer-result.rank' | translate:{rank: data?.rank} }}</ng-container>
     <ng-container *ngIf="isTeam">{{'component.answer-result.rank-team' | translate:{rank: data?.rank} }}</ng-container>
   </h2>
