@@ -176,6 +176,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.sharedService.activeQuizzes = value;
     });
 
+    this.storageService.stateNotifier.pipe(filter(val => val === DbState.Revalidate), takeUntil(this._destroy)).subscribe(() => {
+      this.storageService.db.getAllQuiznames().then(quizNames => {
+        this._ownQuizzes = quizNames;
+      });
+    });
+
     dbInitialized$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(async params => {
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
@@ -479,7 +485,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       }
 
-      this.router.navigate(routingTarget);
+      console.log('navigating');
+      this.router.navigate(routingTarget).then(() => console.log('navigated'));
     }, () => {
       this._isPerformingClick.splice(0);
     });

@@ -87,8 +87,9 @@ export class UserService {
     private jwtHelper: JwtHelperService,
     private quizService: QuizService,
   ) {
-    this.storageService.stateNotifier.pipe(filter(type => this.username !== DbName.Default && type !== null && type !== DbState.Destroy))
-    .subscribe(() => {
+    this.storageService.stateNotifier.pipe(
+      filter(type => this.username !== DbName.Default && type !== null && type !== DbState.Destroy),
+    ).subscribe(() => {
       this.reloadState();
     });
 
@@ -225,8 +226,12 @@ export class UserService {
         }).then(() => {
           return Promise.all(this._tmpRemoteQuizData.map(quiz => {
             console.log('UserService: persisting remote quiz to local db', quiz.name);
-            return this.quizService.saveParsedQuiz(new QuizEntity(quiz)).toPromise();
-          })).then(() => this.storageService.db.initialized.next());
+            return this.storageService.db.Quiz.put(new QuizEntity(quiz));
+          })).then(() => {
+            this._tmpRemoteQuizData = [];
+            this.storageService.db.initialized.next();
+            this.storageService.stateNotifier.next(DbState.Revalidate);
+          });
         });
       } else {
         console.log('UserService: not received remote quiz data');
