@@ -1,3 +1,9 @@
+<ng-template #resultTemplate
+             let-r="result"
+             let-t="term">
+  <div class="d-flex justify-content-center" [innerHtml]="r.html" [title]="r.raw"></div>
+</ng-template>
+
 <div class="row">
   <div class="col-12">
     <h4>{{'component.membergroup-manager.title' | translate}}</h4>
@@ -35,14 +41,22 @@
 
     <form [formGroup]="formGroup">
       <div class="input-group input-group-sm">
-        <input type="text"
-               class="form-control mb-2 mb-sm-0"
-               [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
+
+        <input #inputElement
+               #instance="ngbTypeahead"
+               (click)="click$.next(inputElement.value)"
+               (focus)="focus$.next(inputElement.value)"
                (keyup.enter)="addMemberGroup()"
                (keypress)="formGroup.updateValueAndValidity()"
-               formControlName="memberGroupName"
+               [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
+               [ngbTypeahead]="search.bind(self)"
                [attr.aria-label]="'component.membergroup-manager.create-team-placeholder' | translate"
-               aria-describedby="add-member-group">
+               [inputFormatter]="inputFormatter.bind(self)"
+               [resultTemplate]="resultTemplate"
+               class="form-control mb-2 mb-sm-0"
+               formControlName="memberGroupName"
+               aria-describedby="add-member-group"
+               type="text"/>
 
         <div class="input-group-append">
           <button class="btn btn-success"

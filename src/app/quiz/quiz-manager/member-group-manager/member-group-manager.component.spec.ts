@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
@@ -38,7 +39,7 @@ describe('MemberGroupManagerComponent', () => {
         imports: [
           I18nTestingModule,
           FormsModule, ReactiveFormsModule,
-          HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
+          HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, NgbTypeaheadModule, JwtModule.forRoot({
             jwtOptionsProvider: {
               provide: JWT_OPTIONS,
               useFactory: jwtOptionsFactory,

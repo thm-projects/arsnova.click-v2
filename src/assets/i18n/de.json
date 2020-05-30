@@ -681,7 +681,7 @@
       "title": "Organisiere deine Teilnehmer in Teams",
       "max-users": "Maximale Anzahl an Teilnehmern pro Team",
       "autojoin-to-team": "Füge Teilnehmer automatisch zu Teams hinzu",
-      "create-team-placeholder": "Gib hier den Namen des Teams ein...",
+      "create-team-placeholder": "Gib hier den Namen des Teams ein. Starte mit einem Doppelpunkt um nach Emojis zu suchen...",
       "create-team": "Team hinzufügen",
       "current-teams": "Aktuell hinzugefügte Teams:",
       "no-current-teams": "Kein Team bisher hinzugefügt",

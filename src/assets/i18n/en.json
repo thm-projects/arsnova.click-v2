@@ -816,7 +816,7 @@
       "title": "Organize members in Teams",
       "max-users": "Max users per Team",
       "autojoin-to-team": "Add users automatically to Teams",
-      "create-team-placeholder": "Enter a Team name here...",
+      "create-team-placeholder": "Enter a Team name here. Start with a colon to search for emojis...",
       "create-team": "Add Team",
       "current-teams": "Currently added Teams:",
       "no-current-teams": "No Teams added yet",
