@@ -423,8 +423,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     if (!this.countdown) {
       this.countdown = 0;
       const question = this.quizService.currentQuestion();
-      if (question && question.timer === 0 && !currentStateData?.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
-        nick => nick.responses[this.quizService.quiz.currentQuestionIndex].responseTime === -1)) {
+      const currentQuestionIndex = this.quizService.quiz.currentQuestionIndex;
+      if (question?.timer === 0 &&
+          !currentStateData?.payload.readingConfirmationRequested &&
+          this.attendeeService.attendees.some(nick => nick.responses[currentQuestionIndex].responseTime === -1)
+      ) {
         this.showStartQuizButton = false;
         this.hideProgressbarStyle = false;
         this.showStopQuizButton = this.quizService.isOwner;
@@ -433,10 +436,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
                                      >= this.quizService.quiz.currentQuestionIndex;
           this.hideProgressbarStyle = this.selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex;
-        } else {
+        } else if (this.attendeeService.attendees.some(nick => nick.responses[currentQuestionIndex].responseTime > 0)) {
           this.showStartQuizButton = this.quizService.isOwner && //
                                      this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
           this.hideProgressbarStyle = false;
+        } else {
+          this.showStartQuizButton = false;
+          this.hideProgressbarStyle = true;
         }
       }
 
@@ -599,8 +605,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.showStopCountdownButton = payload.value > 0;
         if (!payload.value) {
-          this._mustRequestReadingConfirmation = this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
-          this.quizService.readingConfirmationRequested = !this._mustRequestReadingConfirmation;
+          this._mustRequestReadingConfirmation = environment.readingConfirmationEnabled &&
+                                                 this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
+          if (this._mustRequestReadingConfirmation) {
+            this.quizService.readingConfirmationRequested = false;
+          }
           this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
         }
         if (!this.showStartQuizButton) {

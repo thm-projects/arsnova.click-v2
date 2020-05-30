@@ -87,7 +87,7 @@
   </div>
 
   <div class="question">
-    <h5 *ngIf="quizService.quiz && visibleQuestions.length > 1 && quizService.quiz.questionList.length">
+    <h5 *ngIf="quizService.quiz?.questionList.length">
       <span class="mr-1">{{'component.liveResults.question_number' | translate}}&nbsp;{{selectedQuestionIndex + 1}} / {{quizService.quiz.questionList.length}}</span>
       <fa-icon *ngIf="isLoadingQuestionData"
                [icon]="'spinner'"
