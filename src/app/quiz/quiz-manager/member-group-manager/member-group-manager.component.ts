@@ -96,7 +96,7 @@ export class MemberGroupManagerComponent implements OnInit, OnDestroy {
     this.nickApiService.getPredefinedNicks().pipe(takeUntil(this._destroy)).subscribe(data => {
       this.availableEmojis = data.emojis;
     }, error => {
-      console.log('NicknameManagerComponent: GetPredefinedNicks failed', error);
+      console.log(MemberGroupManagerComponent.TYPE, ': GetPredefinedNicks failed', error);
     });
   }
 
