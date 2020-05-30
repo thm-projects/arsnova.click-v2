@@ -24,27 +24,27 @@
                      class="cursor-pointer ml-3"></fa-icon>
           </div>
         </div>
-        <p class="card-text mb-0">Username: {{user.name}}</p>
-        <p class="card-text mb-0">
+        <p class="card-text">Username: {{user.name}}</p>
+        <p class="card-text">
           <span>Gitlab Token:&nbsp;</span>
           <span *ngIf="!user.gitlabToken">No Gitlab access token set</span>
           <span>{{user.gitlabToken}}</span>
         </p>
-        <p class="card-text mb-0">
+        <p class="card-text">
           <span>Password-Hash:</span><br/>
           <span>{{user.passwordHash}}</span>
         </p>
-        <p class="card-text mb-0">
+        <p class="card-text">
           <span>Token-Hash:</span><br/>
           <span *ngIf="!user.tokenHash">No login token set</span>
           <span>{{user.tokenHash}}</span>
         </p>
         <p *ngIf="user.privateKey"
-           class="card-text mb-0">
+           class="card-text">
           <span>Private Key:</span><br/>
           <span>{{user.privateKey}}</span>
         </p>
-        <p class="card-text mb-0">User Authorizations:</p>
+        <p class="card-text">User Authorizations:</p>
         <ul>
           <li *ngFor="let auth of user.userAuthorizations">{{auth}}</li>
         </ul>

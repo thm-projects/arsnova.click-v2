@@ -46,6 +46,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   private _serverUnavailableModal: NgbModalRef;
   private _showResponseProgress: boolean;
   private _footerElems: Array<any>;
+  private _mustRequestReadingConfirmation: boolean;
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _destroy = new Subject();
 
@@ -374,33 +375,15 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public async startQuiz(): Promise<void> {
     this.isStarting = true;
     this.hideProgressbarStyle = true;
-    const startQuizData = await this.quizApiService.nextStep(this.quizService.quiz.name).toPromise();
-    if (startQuizData.status !== StatusProtocol.Success) {
-      console.log('QuizResultsComponent: NextStep failed', startQuizData);
-      this.isStarting = false;
-      return;
-    }
+    this.quizApiService.nextStep(this.quizService.quiz.name).subscribe(startQuizData => {
+      if (startQuizData.status !== StatusProtocol.Success) {
+        console.log('QuizResultsComponent: NextStep failed', startQuizData);
+        this.isStarting = false;
+        return;
+      }
 
-    const question = this.quizService.currentQuestion();
-    this.generateAnswers(question);
-    this.questionTextService.change(this.quizService.currentQuestion().questionText).subscribe(() => this.cd.markForCheck());
-
-    if (environment.readingConfirmationEnabled && startQuizData.step === MessageProtocol.ReadingConfirmationRequested) {
-      this.quizService.readingConfirmationRequested = true;
-      this.isStarting = false;
-      return;
-    }
-
-    this.quizService.readingConfirmationRequested = false;
-
-    if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
-      this.footerBarService.replaceFooterElements([
-        this.footerBarService.footerElemBack,
-      ]);
-    }
-
-    this.cd.markForCheck();
-    this.isStarting = false;
+      this._mustRequestReadingConfirmation = startQuizData.step === MessageProtocol.ReadingConfirmationRequested;
+    });
   }
 
   private initData(): Promise<void> {
@@ -440,8 +423,11 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     if (!this.countdown) {
       this.countdown = 0;
       const question = this.quizService.currentQuestion();
-      if (question && question.timer === 0 && !currentStateData?.payload.readingConfirmationRequested && this.attendeeService.attendees.some(
-        nick => nick.responses[this.quizService.quiz.currentQuestionIndex].responseTime === -1)) {
+      const currentQuestionIndex = this.quizService.quiz.currentQuestionIndex;
+      if (question?.timer === 0 &&
+          !currentStateData?.payload.readingConfirmationRequested &&
+          this.attendeeService.attendees.some(nick => nick.responses[currentQuestionIndex].responseTime === -1)
+      ) {
         this.showStartQuizButton = false;
         this.hideProgressbarStyle = false;
         this.showStopQuizButton = this.quizService.isOwner;
@@ -450,10 +436,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.showStartQuizButton = this.quizService.isOwner && this.quizService.quiz.questionList.length
                                      >= this.quizService.quiz.currentQuestionIndex;
           this.hideProgressbarStyle = this.selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex;
-        } else {
+        } else if (this.attendeeService.attendees.some(nick => nick.responses[currentQuestionIndex].responseTime > 0)) {
           this.showStartQuizButton = this.quizService.isOwner && //
                                      this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
           this.hideProgressbarStyle = false;
+        } else {
+          this.showStartQuizButton = false;
+          this.hideProgressbarStyle = true;
         }
       }
 
@@ -576,9 +565,35 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
   private handleMessagesForOwner(): void {
     this._messageSubscriptions.push(...[
+      this.messageQueue.subscribe(MessageProtocol.NextQuestion, () => {
+        const question = this.quizService.currentQuestion();
+        this.generateAnswers(question);
+        this.questionTextService.change(this.quizService.currentQuestion().questionText).subscribe(() => this.cd.markForCheck());
+
+        if (environment.readingConfirmationEnabled && this._mustRequestReadingConfirmation) {
+          this.quizService.readingConfirmationRequested = true;
+          this._mustRequestReadingConfirmation = false;
+          this.isStarting = false;
+          this.cd.markForCheck();
+          return;
+        }
+
+        this.quizService.readingConfirmationRequested = false;
+
+        if (this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1) {
+          this.footerBarService.replaceFooterElements([
+            this.footerBarService.footerElemBack,
+          ]);
+        }
+
+        this.isStarting = false;
+        this.cd.markForCheck();
+      }),
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.showStartQuizButton = false;
+        this.isStarting = false;
         this.showStopQuizButton = this.quizService.currentQuestion().timer === 0;
+        this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
         this.showStopCountdownButton = false;
         this.showStopQuizButton = false;
@@ -589,7 +604,14 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.playEndSound();
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
         this.showStopCountdownButton = payload.value > 0;
-        this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+        if (!payload.value) {
+          this._mustRequestReadingConfirmation = environment.readingConfirmationEnabled &&
+                                                 this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
+          if (this._mustRequestReadingConfirmation) {
+            this.quizService.readingConfirmationRequested = false;
+          }
+          this.showStartQuizButton = !payload.value && this.quizService.quiz.questionList.length > this.quizService.quiz.currentQuestionIndex + 1;
+        }
         if (!this.showStartQuizButton) {
           this.addFooterElements();
         }
@@ -646,6 +668,6 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   private playEndSound(): void {
-    this.countdownEndAudioComp.playMusic();
+    this.countdownEndAudioComp?.playMusic();
   }
 }

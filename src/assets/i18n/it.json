@@ -219,7 +219,7 @@
       "show_answer_content_on_buttons": "Antworttext auf Abstimmbuttons?",
       "show_one_answer_per_row": "Show only one answer per row?",
       "multiple_selection_survey": "Selezionare diverse opzioni?",
-      "emoji_info": "Puoi aggiungere anche Emojis! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img style='width:40px;' src='/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
+      "emoji_info": "Puoi aggiungere anche Emojis! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-40px' src='/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
       "description": {
         "default_answer_row": "Trascina questo blocco nella lista delle risposte oppure puoi cliccarci sopra per aggiungere una nuova risposta.",
         "added_answers": "Qui puoi vedere i tipi di risposta alla domanda. Puoi cambiare l´ordine per Drag & Drop.",
@@ -332,9 +332,9 @@
       "second": "Secondo",
       "export": "Export (.csv)",
       "team-result": {
-        "name": "Team \"{TEAM_NAME}\"",
+        "name": "{TEAM_NAME}",
         "overall-response-time": "Tempo di risposta complessivo: {RESPONSE_TIME}",
-        "score": "Punto: {SCORE}"
+        "score": "{SCORE} Punto"
       },
       "no_attendee_correct_global": "Nessuno ha risposto correttamente a tutte le domande.",
       "question": "Domanda",

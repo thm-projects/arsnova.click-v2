@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
 import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
@@ -11,7 +12,12 @@ export class UpdateCheckService {
   private swUpdateToast: ActiveToast<any>;
   private readonly INTERVAL_PERIOD = 21600;
 
-  constructor(private updates: SwUpdate, private translateService: TranslateService, private toastService: ToastrService) {
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private updates: SwUpdate,
+    private translateService: TranslateService,
+    private toastService: ToastrService
+  ) {
     if (updates.isEnabled) {
       interval(this.INTERVAL_PERIOD).subscribe(() => this.doCheck().then(() => console.log('checking for updates')));
     }

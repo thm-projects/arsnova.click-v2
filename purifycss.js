@@ -22,8 +22,8 @@ function fromDir(startPath, filter, callback) {
   }
 }
 
-fromDir('./dist/browser', /theme-.*\.css$/, function (filename) {
-  const content = ['./dist/browser/*.js', './dist/browser/*.html'];
+fromDir('./dist/frontend/browser', /^.*theme-(?!.*(default)).*css$/, function (filename) {
+  const content = ['./dist/frontend/browser/*.js', './dist/frontend/browser/*.html'];
   const css = [filename];
 
   const options = {

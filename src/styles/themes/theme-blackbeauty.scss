@@ -38,10 +38,10 @@ $link-decoration: none;
 $link-hover-color: #cbf9f5;
 $link-hover-decoration: none;
 
-$font: Roboto, Roboto-Regular, Helvetica, Arial, sans-serif !important;
 $corner-radius: 10px;
 $splash-screen-corner-radius: 10px;
 
+$font-size-base: 1rem;
 $small-font-size: 80%;
 
 $card-bg: #000;
@@ -49,6 +49,10 @@ $card-color: #fff;
 $card-border-color: rgba(white, .125) !default;
 
 $statistics-icon-opacity: 0.7;
+
+$paragraph-margin-bottom: 0;
+
+$input-focus-border-color: none;
 
 @import "prebuild";
 

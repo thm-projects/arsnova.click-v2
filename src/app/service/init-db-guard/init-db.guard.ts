@@ -24,7 +24,7 @@ export class InitDbGuard implements CanActivate {
     }
 
     return this.storageService.stateNotifier.pipe(filter(val => {
-      return val === DbState.Initialized;
+      return [DbState.Initialized, DbState.Revalidate].includes(val);
     }), map(() => true));
   }
 }

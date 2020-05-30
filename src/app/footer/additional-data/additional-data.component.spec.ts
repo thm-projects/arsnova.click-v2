@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
+import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
@@ -30,7 +32,10 @@ describe('AdditionalDataComponent', () => {
         }, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        },
+        }, {
+          provide: FileUploadService,
+          useClass: FileUploadMockService
+        }
       ],
       declarations: [AdditionalDataComponent, TranslatePipeMock],
     }).compileComponents();

@@ -14,8 +14,8 @@ export class ConnectionMockService {
     this.initWebsocket();
   }
 
-  public cleanUp(): void {
-
+  public cleanUp(): Observable<any> {
+    return new Observable(subscriber => subscriber.next());
   }
 
   public sendMessage(message: IMessage): void {

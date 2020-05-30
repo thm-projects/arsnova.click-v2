@@ -50,10 +50,11 @@ export class QuizPoolApiService {
     return this.http.get<IMessage>(this._getQuizpoolQuestionsUrl, { headers: { authorization: this.userService.staticLoginToken } });
   }
 
-  public postNewQuestion(question: AbstractQuestionEntity, quizName?: string): Observable<IMessage> {
+  public postNewQuestion(question: AbstractQuestionEntity, quizName?: string, subscription?: PushSubscriptionJSON): Observable<IMessage> {
     return this.http.post<IMessage>(this._postNewQuestionUrl, {
       question,
       origin: quizName,
+      subscription,
     });
   }
 

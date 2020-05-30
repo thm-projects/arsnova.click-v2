@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMapTo, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
@@ -32,6 +32,7 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
   private _question: AbstractQuestionEntity;
   private _questionIndex: number;
   private _questionText: string;
+  private _selectedAnswerElements: string;
   private _answers: Array<string>;
   private _serverUnavailableModal: NgbModalRef;
   private readonly _messageSubscriptions: Array<string> = [];
@@ -57,6 +58,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
 
   get answers(): Array<string> {
     return this._answers;
+  }
+
+  get selectedAnswerElements(): string {
+    return this._selectedAnswerElements;
   }
 
   constructor(
@@ -138,6 +143,21 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
       this._question = this.quizService.quiz.questionList[this._questionIndex];
       this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText)).subscribe();
       this.questionTextService.change(this._question.questionText).subscribe();
+
+      this.attendeeService.attendeeAmount.pipe(
+        map(() => this.attendeeService.ownAttendee),
+        distinctUntilChanged(),
+        filter(v => Boolean(v))
+      ).subscribe(mySelf => {
+        const res = mySelf.responses[this._questionIndex].value;
+        if (Array.isArray(res)) {
+          this._selectedAnswerElements = res.map(v => this.normalizeAnswerIndex(v)).join(', ');
+        } else {
+          this._selectedAnswerElements = res;
+        }
+        this.cd.markForCheck();
+      });
+      this.attendeeService.reloadData();
     });
 
     if (isPlatformServer(this.platformId)) {

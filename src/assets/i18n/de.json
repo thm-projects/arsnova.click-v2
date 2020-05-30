@@ -218,6 +218,10 @@
       "approval": {
         "top-header": "Du möchtest dem Quiz",
         "sub-header": "beitreten - ist das richtig?"
+      },
+      "joining": {
+        "top-header": "Gleich geht's los",
+        "sub-header": "Warte noch kurz..."
       }
     },
     "answer-result": {
@@ -226,16 +230,21 @@
       },
       "partial-correct": {
         "title": "Teilweise richtig",
-        "amount-correct": "{correct} von {available} Antworten richtig"
+        "amount-correct": "{correct} von {available} Antworten richtig",
+        "amount-wrong": "{wrong} falsche {wrong, plural, =0{Antworten} one{Antwort} other{Antworten}} gewählt",
+        "ranged-question-correct": "Nicht korrekt geraten, aber akzeptabel"
       },
       "wrong": {
         "title": "Leider falsch",
         "motivate": "Gib nicht auf!"
       },
       "points-gained": "+ {points} Punkte",
+      "points-gained-team": "{points} Punkte",
       "rank": "Du bist aktuell auf Platz {rank}",
+      "rank-team": "Dein Team ist aktuell auf Platz {rank}",
       "to-quiz-results": "Zur Quizfrage",
-      "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!"
+      "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!",
+      "pole-position-team": "Ihr seid die Besten! Erster Platz im gesamten Quiz! Bravo!"
     },
     "twitter-card": {
       "more-tweets": "Mehr Tweets",
@@ -288,7 +297,7 @@
       "show_answer_content_on_buttons": "Antworttext auf Abstimmbuttons?",
       "show_one_answer_per_row": "Zeige nur eine Antwortoption pro Zeile?",
       "multiple_selection_survey": "Mehrere Optionen auswählbar?",
-      "emoji_info": "Du kannst auch Emojis einfügen! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-50px' src='/assets/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
+      "emoji_info": "Du kannst auch Emojis einfügen! <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-40px' src='/assets/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
       "description": {
         "default_answer_row": "Ziehe diesen Block in die Liste der Antwortoptionen oder klick auf ihn, um eine neue Antwort einzufügen.",
         "added_answers": "Hier siehst du die Antwortoptionen der Frage. Du kannst die Reihenfolge per Drag & Drop ändern.",
@@ -376,9 +385,9 @@
       "second": "{COUNT, plural, =0{Sekunden} one{Sekunde} other{Sekunden}}",
       "export": "Export",
       "team-result": {
-        "name": "Team \"{TEAM_NAME}\"",
+        "name": "{TEAM_NAME}",
         "overall-response-time": "Kummulierte Antwortzeit: {RESPONSE_TIME}",
-        "score": "Punkte: {SCORE}"
+        "score": "{SCORE} Punkte"
       },
       "own-rank": {
         "own-data": "Du bist auf Platz {INDEX} mit einem Punktestand von {SCORE}",
@@ -430,11 +439,14 @@
         "send-to-teacher": "Sende diesen Token an deinen Lehrer / deine Lehrerin und tausche ihn gegen Bonuspunkte ein"
       }
     },
+    "question-details": {
+      "selected-answer-elements": "Du hast \"{elements}\" gewählt"
+    },
     "lobby": {
       "start_quiz": "Los geht's!",
       "kick_member_confirmation": "Soll die Person \"{NAME}\" aus dem Quiz entfernt werden?",
       "own_nickname": "Dein Nickname:",
-      "waiting_for_players": "Warten auf die Anderen…",
+      "waiting_for_players": "Warten auf die anderen…",
       "description": {}
     },
     "nickname_categories": {
@@ -528,6 +540,7 @@
         "invalid-question": "Nur gültige Fragen können in den Quiz-Pool hochgeladen werden",
         "no-tags": "Damit deine Frage hochgeladen werden kann, musst du ihr noch ein paar Tags geben"
       },
+      "quiz_rename": "Bearbeiten",
       "correct": "Korrekt",
       "wrong": "Falsch",
       "question": "Frage",
@@ -661,18 +674,25 @@
         "title": "Wie sicher bist du dir bei deiner Antwort?"
       },
       "tags": {
-        "categories": "Themen",
-        "category": "Thema"
+        "category": "{amount, plural, =0{Themen} one{Thema} other{Themen}}"
       }
     },
     "membergroup-manager": {
       "title": "Organisiere deine Teilnehmer in Teams",
       "max-users": "Maximale Anzahl an Teilnehmern pro Team",
       "autojoin-to-team": "Füge Teilnehmer automatisch zu Teams hinzu",
-      "create-team-placeholder": "Gib hier den Namen des Teams ein...",
+      "create-team-placeholder": "Gib hier den Namen des Teams ein. Starte mit einem Doppelpunkt um nach Emojis zu suchen...",
       "create-team": "Team hinzufügen",
       "current-teams": "Aktuell hinzugefügte Teams:",
-      "no-current-teams": "Kein Team bisher hinzugefügt"
+      "no-current-teams": "Kein Team bisher hinzugefügt",
+      "team-name": "Name des Teams:",
+      "team-color": "Wähle eine Farbe:",
+      "validation-error": {
+        "full-member-group": "Alle verfügbaren Teams wurden bereits erstellt. Bitte lösche zunächst ein Team.",
+        "invalid-member-group": "Ungültiger Name. Bitte verwende entwder normalen Text oder Emojis",
+        "duplicate-member-group": "Dieser Name ist bereits vergeben",
+        "add-second-group": "Füge bitte mindestens 2 Teams hinzu oder lösche das bestehende Team"
+      }
     },
     "login": {
       "title": "Bitte gib deine Zugangsdaten ein",
@@ -684,7 +704,7 @@
       "username": "Benutzername"
     },
     "member-group-select": {
-      "title": "Wähle ein Team"
+      "title": "Wähle dein Team"
     },
     "quiz_manager_details": {
       "tags": {
@@ -921,9 +941,14 @@
   },
   "notification": {
     "close": "Schließen",
+    "request-permission": "Möchtest du eine Benachrichtigung erhalten, wenn deine Frage für den Quiz-Pool genehmigt wurde?",
     "pending-pool-question": {
       "title": "Neue Quiz-Pool {amount, plural, =0{Fragen} one{Frage} other{Fragen} }",
       "body": "Es {amount, plural, =0{warten 0 Fragen} one{wartet eine Frage} other{warten {amount} Fragen} } im Quiz-Pool auf eine Überprüfung"
+    },
+    "pool-question-approved": {
+      "title": "Quiz-Pool Frage genehmigt",
+      "body": "Eine deiner Quiz-Pool Fragen wurde genehmigt!"
     }
   }
 }

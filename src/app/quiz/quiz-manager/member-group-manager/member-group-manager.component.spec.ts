@@ -1,17 +1,20 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizMockService } from '../../../service/quiz/quiz-mock.service';
@@ -34,7 +37,9 @@ describe('MemberGroupManagerComponent', () => {
     () => {
       TestBed.configureTestingModule({
         imports: [
-          I18nTestingModule, HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
+          I18nTestingModule,
+          FormsModule, ReactiveFormsModule,
+          HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, NgbTypeaheadModule, JwtModule.forRoot({
             jwtOptionsProvider: {
               provide: JWT_OPTIONS,
               useFactory: jwtOptionsFactory,
@@ -43,7 +48,7 @@ describe('MemberGroupManagerComponent', () => {
           }),
         ],
         providers: [
-          RxStompService, SimpleMQ, {
+          RxStompService, SimpleMQ, FormBuilder, {
             provide: StorageService,
             useClass: StorageServiceMock,
           }, {
@@ -58,7 +63,10 @@ describe('MemberGroupManagerComponent', () => {
           }, {
             provide: TwitterService,
             useClass: TwitterServiceMock,
-          },
+          }, {
+            provide: CustomMarkdownService,
+            useClass: CustomMarkdownServiceMock
+          }
         ],
         declarations: [MemberGroupManagerComponent, TranslatePipeMock],
       }).compileComponents();
@@ -77,7 +85,6 @@ describe('MemberGroupManagerComponent', () => {
 
   beforeEach(() => {
     component.memberGroups.splice(0, component.memberGroups.length);
-    component.memberGroups.push('Default');
   });
 
   it('should create', (
@@ -92,45 +99,44 @@ describe('MemberGroupManagerComponent', () => {
     }
   ));
 
-  describe('#addMemberGroup', () => {
+  it('should add a member group on valid input', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('testgroup');
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(1);
+    }
+  ));
 
-    it('should add a member group on valid input', (
-      () => {
-        component.memberGroupName = 'testgroup';
-        component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(2);
-      }
-    ));
-    it('should not add a member group on invalid input', (
-      () => {
-        component.memberGroupName = '';
-        component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(1);
-      }
-    ));
-    it('should not add an existing member group', (
-      () => {
-        component.memberGroupName = 'testgroup';
-        component.addMemberGroup();
-        component.addMemberGroup();
-        expect(component.memberGroups.length).toEqual(2);
-      }
-    ));
-  });
+  it('should not add a member group on invalid input', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('');
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(0);
+    }
+  ));
 
-  describe('#removeMemberGroup', () => {
+  it('should not add an existing member group', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('testgroup');
+      component.addMemberGroup();
+      component.addMemberGroup();
+      expect(component.memberGroups.length).toEqual(1);
+    }
+  ));
 
-    it('should remove an existing member group', (
-      () => {
-        component.removeMemberGroup('Default');
-        expect(component.memberGroups.length).toEqual(0);
-      }
-    ));
-    it('should not remove a not existing member group', (
-      () => {
-        component.removeMemberGroup('notexisting');
-        expect(component.memberGroups.length).toEqual(1);
-      }
-    ));
-  });
+  it('should remove an existing member group', (
+    () => {
+      component.formGroup.get('memberGroupName').setValue('testgroup');
+      component.addMemberGroup();
+      component.removeMemberGroup('testgroup');
+      expect(component.memberGroups.length).toEqual(0);
+    }
+  ));
+
+  it('should not remove a not existing member group', (
+    () => {
+      component.removeMemberGroup('notexisting');
+      expect(component.memberGroups.length).toEqual(0);
+    }
+  ));
 });

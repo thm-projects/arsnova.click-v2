@@ -69,8 +69,7 @@ describe('AttendeeService', () => {
 
   it('should get all member groups', () => {
     const service: AttendeeService = TestBed.inject(AttendeeService);
-
-    expect(service.getMemberGroups()).toContain('Default');
+    expect(service.getMemberGroups().length).toEqual(0);
   });
 
   it('should get all members of a group', () => {
@@ -87,8 +86,9 @@ describe('AttendeeService', () => {
 
     service.addMember(memberMock);
 
-    service.cleanUp();
-    expect(service.attendees.length).toEqual(0);
+    service.cleanUp().subscribe(() => {
+      expect(service.attendees.length).toEqual(0);
+    });
   });
 
   it('should add a member', () => {

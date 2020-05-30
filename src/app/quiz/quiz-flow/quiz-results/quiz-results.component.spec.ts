@@ -159,12 +159,12 @@ describe('QuizResultsComponent', () => {
   it(`#showStartQuizButton`, inject([QuizService], (quizService: QuizService) => {
     quizService['_isOwner'] = true;
     quizService.readingConfirmationRequested = true;
-    expect(component.showStartQuizButton).toBeTrue();
+    expect(component.showStartQuizButton).toBeFalse();
   }));
   it(`#hideProgressbarCssStyle`, inject([QuizService], (quizService: QuizService) => {
     quizService.readingConfirmationRequested = false;
     quizService.quiz.currentQuestionIndex = 0;
-    expect(component.hideProgressbarStyle).toBeFalse();
+    expect(component.hideProgressbarStyle).toBeTrue();
   }));
   it(`#showConfidenceRate`, inject([QuizService, AttendeeService], (quizService: QuizService, attendeeService: AttendeeService) => {
     attendeeService.addMember(new Attendee({

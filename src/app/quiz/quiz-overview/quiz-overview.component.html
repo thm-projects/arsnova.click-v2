@@ -34,14 +34,30 @@
           </span>
         </p>
 
+        <div class="input-group input-group-sm">
+          <input [attr.aria-label]="'component.quiz_summary.description.session_url' | translate"
+                 [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
+                 type="text"
+                 class="form-control"
+                 readonly
+                 #quizLinkInput
+                 [value]="getQuizLink(elem.name)"/>
+          <div class="input-group-append">
+            <button (click)="copyQuizLink(quizLinkInput)"
+                    [title]="'global.copy-to-clipboard' | translate"
+                    class="btn btn-primary">
+              <fa-icon [icon]="'copy'"
+                       class="cursor-pointer text-reset"></fa-icon>
+            </button>
+          </div>
+        </div>
+
         <ng-container *ngIf="getUniqueTags(elem).length">
           <p class="card-text">
             <small>{{'component.name_management.used-pool-tags' | translate}}:</small>
           </p>
           <small class="font-italic d-block">
-            <ng-container *ngFor="let tag of getUniqueTags(elem); let lastElem = last">{{tag}}
-              <ng-container *ngIf="!lastElem">,&nbsp;</ng-container>
-            </ng-container>
+            {{getUniqueTags(elem).join(', ')}}
           </small>
         </ng-container>
       </div>

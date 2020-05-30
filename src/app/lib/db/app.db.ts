@@ -34,6 +34,22 @@ export class AppDb extends Dexie {
       [DbTable.Quiz]: 'name',
     });
 
+    this.version(1.1).stores({
+      [DbTable.Config]: 'type',
+      [DbTable.Quiz]: 'name',
+    }).upgrade(async trans => {
+      const quizData = await trans.db.table(DbTable.Quiz).toArray();
+      return Promise.all(quizData.map(value => {
+        if (typeof value.sessionConfig.nicks.memberGroups[0] === 'string') {
+          value.sessionConfig.nicks.memberGroups = value.sessionConfig.nicks.memberGroups
+            .filter((groupName: any) => groupName !== 'Default')
+            .map((groupName: any) => ({name: groupName, color: 'success'}))
+          ;
+          return this[DbTable.Quiz].put(value);
+        }
+      }));
+    });
+
     this.Config.get(StorageKey.PrivateKey).then(privateKey => {
       if (privateKey) {
         sessionStorage.setItem(StorageKey.PrivateKey, privateKey.value);

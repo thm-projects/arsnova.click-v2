@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -11,7 +11,8 @@ import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
 import { QuizState } from '../../../lib/enums/QuizState';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
-import { ILeaderBoardItem } from '../../../lib/interfaces/ILeaderboard';
+import { ILeaderBoardItem, ILeaderboardMemberGroupItem } from '../../../lib/interfaces/ILeaderboard';
+import { IMemberGroupBase } from '../../../lib/interfaces/users/IMemberGroupBase';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { LeaderboardApiService } from '../../../service/api/leaderboard/leaderboard-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -28,20 +29,6 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   styleUrls: ['./leaderboard.component.scss'],
 })
 export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
-  public static readonly TYPE = 'LeaderboardComponent';
-
-  private _questionIndex: number;
-  private _leaderBoardCorrect: Array<ILeaderBoardItem> = [];
-  private _memberGroupResults: Array<ILeaderBoardItem>;
-  private _isGlobalRanking: boolean;
-  private _ownResponse: { index: number, element: ILeaderBoardItem, closestOpponent: ILeaderBoardItem };
-  private _serverUnavailableModal: NgbModalRef;
-  private _name: string;
-  private readonly _destroy = new Subject();
-  private readonly _messageSubscriptions: Array<string> = [];
-
-  public isLoadingData = true;
-  public hasTriggeredNavigation: boolean;
 
   get questionIndex(): number {
     return this._questionIndex;
@@ -51,13 +38,28 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return this._leaderBoardCorrect;
   }
 
-  get memberGroupResults(): Array<ILeaderBoardItem> {
+  get memberGroupResults(): Array<ILeaderboardMemberGroupItem> {
     return this._memberGroupResults;
   }
 
   get ownResponse(): { index: number; element: ILeaderBoardItem; closestOpponent: ILeaderBoardItem } {
     return this._ownResponse;
   }
+  public static readonly TYPE = 'LeaderboardComponent';
+
+  private _questionIndex: number;
+  private _leaderBoardCorrect: Array<ILeaderBoardItem> = [];
+  private _memberGroupResults: Array<ILeaderboardMemberGroupItem>;
+  private _isGlobalRanking: boolean;
+  private _ownResponse: { index: number, element: ILeaderBoardItem, closestOpponent: ILeaderBoardItem };
+  private _serverUnavailableModal: NgbModalRef;
+  private _name: string;
+  private readonly _destroy = new Subject();
+  private readonly _messageSubscriptions: Array<string> = [];
+
+  public isLoadingData = true;
+  public hasTriggeredNavigation: boolean;
+  public absolute: number;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -133,7 +135,7 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
   }
 
   public parseNickname(value: string): string {
-    if (value.match(/:[\w\+\-]+:/g)) {
+    if (value?.match(/:[\w\+\-]+:/g)) {
       return this.sanitizeHTML(this.customMarkdownService.parseGithubFlavoredMarkdown(value));
     }
     return value;
@@ -167,6 +169,19 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     return Object.keys(this._ownResponse || {}).length > 1;
   }
 
+  public sanitizeStyle(value: string | number): SafeStyle {
+    value = value.toString().replace(/\s/g, '');
+    return this.sanitizer.sanitize(SecurityContext.STYLE, `${value}`);
+  }
+
+  public getPercentForGroup(group: ILeaderboardMemberGroupItem): number {
+    return Math.round(group.score / this.absolute * 100);
+  }
+
+  public getTeam(group: ILeaderboardMemberGroupItem): IMemberGroupBase {
+    return this.quizService.quiz?.sessionConfig.nicks.memberGroups.find(value => value.name === group._id);
+  }
+
   private initData(): void {
 
     this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
@@ -190,9 +205,9 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this._ownResponse = lederboardData.payload.ownResponse;
           this._memberGroupResults = lederboardData.payload.memberGroupResults;
 
-          this._memberGroupResults = this._memberGroupResults.filter(memberGroupResult => {
-            return memberGroupResult.correctQuestions.length > 0;
-          });
+          if (this._memberGroupResults) {
+            this.absolute = Math.max(...this._memberGroupResults.map(value => value.score));
+          }
 
           this.isLoadingData = false;
         });

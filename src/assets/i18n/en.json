@@ -262,6 +262,10 @@
       "approval": {
         "top-header": "You want to join the quiz",
         "sub-header": "Is that correct?"
+      },
+      "joining": {
+        "top-header": "Nearly there",
+        "sub-header": "Hang on a second..."
       }
     },
     "answer-result": {
@@ -270,16 +274,21 @@
       },
       "partial-correct": {
         "title": "Partially correct",
-        "amount-correct": "{correct} of {available} Answers correct"
+        "amount-correct": "{correct} of {available} answers correct",
+        "amount-wrong": "{wrong} wrong {wrong, plural, =0{answers} one{answer} other{answers}} selected",
+        "ranged-question-correct": "Not correctly estimated, but acceptable"
       },
       "wrong": {
         "title": "Sorry, that's wrong",
         "motivate": "Don't give up!"
       },
       "points-gained": "+ {points} points",
+      "points-gained-team": "{points} points",
       "rank": "You are currently at position {rank}",
+      "rank-team": "Your team is currently at position {rank}",
       "to-quiz-results": "To the quiz results",
-      "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!"
+      "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!",
+      "pole-position-team": "Your team is the greatest! First rank in the entire quiz! Bravo!"
     },
     "twitter-card": {
       "more-tweets": "More Tweets",
@@ -332,7 +341,7 @@
       "show_answer_content_on_buttons": "Display the answer's content on the buttons?",
       "show_one_answer_per_row": "Show only one answer per row?",
       "multiple_selection_survey": "Allow selection of multiple answers?",
-      "emoji_info": "You can embed also one of these <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis (external website!)</a> in your answeroptions <img class='w-50px' src='/assets/images/emojis/smile.png' alt='emoji'/> <br/>Simply click on the website on the Emoji and paste it into the answeroption.",
+      "emoji_info": "You can embed also one of these <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis (external website!)</a> <img class='w-40px' src='/assets/images/emojis/smile.png' alt='emoji'/> <br/>Simply click on the website on the Emoji and paste it into the answeroption.",
       "description": {
         "default_answer_row": "Drag this block into the list of answeroptions to create a new one.",
         "added_answers": "Here are all already created answeroptions. You can change the order of the answers via drag & drop.",
@@ -455,7 +464,7 @@
       "team-result": {
         "name": "Team \"{TEAM_NAME}\"",
         "overall-response-time": "Overall Response Time: {RESPONSE_TIME}",
-        "score": "Score: {SCORE}"
+        "score": "{SCORE} points"
       },
       "own-rank": {
         "own-data": "You are on rank {INDEX} with a score of {SCORE}",
@@ -463,7 +472,7 @@
       }
     },
     "liveResults": {
-      "title": "Results {QUESTION_INDEX}",
+      "title": "Question {QUESTION_INDEX}",
       "question": "Show question",
       "question_number": "Question",
       "ranking": "Ranking",
@@ -506,6 +515,9 @@
         "please-wait": "Please wait - your token is loading",
         "send-to-teacher": "Send this token to your teacher to gain some bonus points!"
       }
+    },
+    "question-details": {
+      "selected-answer-elements": "You selected: {elements}"
     },
     "lobby": {
       "start_quiz": "Let's go!",
@@ -640,6 +652,7 @@
         "invalid-question": "Only valid questions can be uploaded to the Quiz-Pool",
         "no-tags": "You need to add some Tags to your question to upload it to the Quiz-Pool."
       },
+      "quiz_rename": "Edit",
       "correct": "Correct",
       "wrong": "Wrong",
       "question": "Question",
@@ -796,18 +809,25 @@
       "question": "Show question",
       "seconds_left": "# {COUNT, plural, =0{Seconds} one{Second} other{Seconds}} left!",
       "tags": {
-        "categories": "Topics",
-        "category": "Topic"
+        "category": "{amount, plural, =0{Topics} one{Topic} other{Topics}}"
       }
     },
     "membergroup-manager": {
       "title": "Organize members in Teams",
       "max-users": "Max users per Team",
       "autojoin-to-team": "Add users automatically to Teams",
-      "create-team-placeholder": "Enter a Team name here...",
+      "create-team-placeholder": "Enter a Team name here. Start with a colon to search for emojis...",
       "create-team": "Add Team",
       "current-teams": "Currently added Teams:",
-      "no-current-teams": "No Teams added yet"
+      "no-current-teams": "No Teams added yet",
+      "team-name": "Name of the team:",
+      "team-color": "Choose a color:",
+      "validation-error": {
+        "full-member-group": "All available teams were already created. Please remove a team first.",
+        "invalid-member-group": "Invalid name. Please do not mix emojis and regular text",
+        "duplicate-member-group": "This name is already used",
+        "add-second-group": "Please add at least 2 teams or remove the existing one"
+      }
     },
     "login": {
       "title": "Please enter your login credentials",
@@ -819,7 +839,7 @@
       "username": "Username"
     },
     "member-group-select": {
-      "title": "Select a Team"
+      "title": "Select your Team"
     },
     "quiz_manager_details": {
       "back": "Back to the quiz overview",
@@ -1122,9 +1142,14 @@
   },
   "notification": {
     "close": "Close",
+    "request-permission": "Do you want to receive a notification when your question for the Quiz-Pool has been approved?",
     "pending-pool-question": {
       "title": "New Quiz-Pool {amount, plural, =0{questions} one{question} other{questions} }",
-      "body": "{amount, plural, =0{0 questions} one{One question} other{{amount} questions} } is waiting for approval in the Quiz-Pool"
+      "body": "{amount, plural, =0{0 questions are} one{One question is} other{{amount} questions are} } waiting for approval in the Quiz-Pool"
+    },
+    "pool-question-approved": {
+      "title": "Quiz-Pool question approved",
+      "body": "One of your Quiz-Pool questions was approved!"
     }
   }
 }

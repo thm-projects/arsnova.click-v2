@@ -32,6 +32,7 @@
       <label class="text-muted mb-0 align-self-start"
              for="import-url">Search content</label>
       <input #searchInput
+             (change)="cd.markForCheck()"
              class="form-control"
              id="search"
              placeholder="Search..."
@@ -58,7 +59,7 @@
                 <span>Type:&nbsp;</span>
                 <span>{{question.question.TYPE}}</span>
                 <span class="ml-auto">
-                <a (click)="quizService.cleanUp()"
+                <a (click)="quizService.cleanUp().subscribe()"
                    [queryParams]="{id: question.id}"
                    [routerLink]="['/quiz', 'manager', 'quiz-pool', 'overview']"
                    class="nav-link text-dark p-0 ml-3">

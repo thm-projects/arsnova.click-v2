@@ -1,5 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, HostListener, Inject } from '@angular/core';
+import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 
@@ -23,11 +24,12 @@ export class AdditionalDataComponent {
     this._isShowingMore = value;
   }
 
-  constructor(@Inject(DOCUMENT) readonly document, public quizService: QuizService, private trackingService: TrackingService) {
-  }
-
-  public getQuizUrl(quizName: string): string {
-    return encodeURI(`${document.location.origin}/quiz/${quizName}`);
+  constructor(
+    @Inject(DOCUMENT) readonly document: Document,
+    public quizService: QuizService,
+    private trackingService: TrackingService,
+    private fileUploadService: FileUploadService
+  ) {
   }
 
   public switchShowMoreOrLess(): void {
@@ -50,19 +52,10 @@ export class AdditionalDataComponent {
     this.isShowingMore = window.innerWidth >= 768;
   }
 
-  public copyQuizLink(value: string): void {
-    const selBox = document.createElement('textarea');
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = value;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
-    this.clipboardText = false;
-    setTimeout(() => { this.clipboardText = true; }, 1000);
+  public renameQuiz(): void {
+    const blob = new Blob([JSON.stringify(this.quizService.quiz)], { type: 'application/json' });
+    this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, this.quizService.quiz.name);
+    this.fileUploadService.overrideLocalQuiz = this.quizService.quiz.name;
+    this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
   }
 }

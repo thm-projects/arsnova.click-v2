@@ -1,4 +1,4 @@
-import { isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -45,13 +45,12 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
 
     let footerElements;
 
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
-
     if (environment.forceQuizTheme && sessionStorage.getItem(StorageKey.CurrentQuizName)) {
-      this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
       footerElements = [this.footerBarService.footerElemBack];
+
+      if (isPlatformBrowser(this.platformId)) {
+        this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+      }
 
       this.footerBarService.footerElemBack.onClickCallback = () => {
         this.router.navigate(['/quiz', 'manager']);

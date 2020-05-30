@@ -1,3 +1,9 @@
+<ng-template #resultTemplate
+             let-r="result"
+             let-t="term">
+  <div class="d-flex justify-content-center" [innerHtml]="r.html" [title]="r.raw"></div>
+</ng-template>
+
 <div class="row">
   <div class="col-12">
     <h4>{{'component.membergroup-manager.title' | translate}}</h4>
@@ -8,7 +14,8 @@
           <div class="form-group">
             <label for="max-users-per-group">{{'component.membergroup-manager.max-users' | translate}}</label>
             <input type="number"
-                   class="form-control"
+                   min="1"
+                   class="form-control form-control-sm"
                    id="max-users-per-group"
                    [placeholder]="'component.membergroup-manager.max-users' | translate"
                    [ngModelOptions]="{standalone: true}"
@@ -20,53 +27,105 @@
 
       <div class="col-12 col-sm-7 mb-2">
         <label class="d-block">{{'component.membergroup-manager.autojoin-to-team' | translate}}</label>
-        <label class="btn cursor-pointer mb-0"
-               [class.btn-success]="autoJoinToGroup"
-               [class.btn-danger]="!autoJoinToGroup">
-          <input type="checkbox"
-                 class="d-none"
-                 [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
-                 autocomplete="off"
-                 role="switch"
-                 [(ngModel)]="autoJoinToGroup"
-                 [title]="'component.answeroptions.is_correct' | translate">
+        <button class="btn btn-sm cursor-pointer mb-0"
+                [attr.aria-label]="'component.answeroptions.description.is_correct' | translate"
+                [class.btn-success]="autoJoinToGroup"
+                [class.btn-danger]="!autoJoinToGroup"
+                (click)="autoJoinToGroup = !autoJoinToGroup"
+                [title]="'component.answeroptions.is_correct' | translate">
           <span *ngIf="autoJoinToGroup">{{'global.yes' | translate}}</span>
           <span *ngIf="!autoJoinToGroup">{{'global.no' | translate}}</span>
-        </label>
+        </button>
       </div>
     </div>
 
-    <div class="input-group input-group-sm">
-      <input type="text"
-             class="form-control mb-2 mb-sm-0"
-             [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
-             (keyup.enter)="addMemberGroup()"
-             [(ngModel)]="memberGroupName"
-             [attr.aria-label]="'component.membergroup-manager.create-team-placeholder' | translate"
-             aria-describedby="add-member-group">
+    <form [formGroup]="formGroup">
+      <div class="input-group input-group-sm">
 
-      <div class="input-group-append">
-        <button class="btn btn-success"
-                id="add-member-group"
-                (click)="addMemberGroup()"
-                [class.disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length"
-                [disabled]="memberGroups.indexOf(memberGroupName) > -1 || !memberGroupName.length">
-          <span>{{'component.membergroup-manager.create-team' | translate}}</span>
-        </button>
+        <input #inputElement
+               #instance="ngbTypeahead"
+               (click)="click$.next(inputElement.value)"
+               (focus)="focus$.next(inputElement.value)"
+               (keyup.enter)="addMemberGroup()"
+               (keypress)="formGroup.updateValueAndValidity()"
+               [placeholder]="'component.membergroup-manager.create-team-placeholder' | translate"
+               [ngbTypeahead]="search.bind(self)"
+               [attr.aria-label]="'component.membergroup-manager.create-team-placeholder' | translate"
+               [inputFormatter]="inputFormatter.bind(self)"
+               [resultTemplate]="resultTemplate"
+               class="form-control mb-2 mb-sm-0"
+               formControlName="memberGroupName"
+               aria-describedby="add-member-group"
+               type="text"/>
+
+        <div class="input-group-append">
+          <button class="btn btn-success"
+                  id="add-member-group"
+                  (click)="addMemberGroup()"
+                  [class.disabled]="!formGroup.get('memberGroupName').valid"
+                  [disabled]="!formGroup.get('memberGroupName').valid">
+            <span>{{'component.membergroup-manager.create-team' | translate}}</span>
+          </button>
+        </div>
       </div>
+
+      <div *ngIf="!formGroup.get('memberGroupName').valid" class="position-relative">
+        <div *ngIf="formGroup.get('memberGroupName').errors.full" class="invalid-tooltip d-block">{{'component.membergroup-manager.validation-error.full-member-group' | translate}}</div>
+        <div *ngIf="formGroup.get('memberGroupName').errors.invalid" class="invalid-tooltip d-block">{{'component.membergroup-manager.validation-error.invalid-member-group' | translate}}</div>
+        <div *ngIf="formGroup.get('memberGroupName').errors.duplicate" class="invalid-tooltip d-block">{{'component.membergroup-manager.validation-error.duplicate-member-group' | translate}}</div>
+      </div>
+    </form>
+
+    <div class="mt-3">
+      <p [innerHTML]="'component.answeroptions.emoji_info' | translate"
+         class="d-flex justify-content-center align-items-center"></p>
     </div>
 
     <h6 class="mt-3">{{'component.membergroup-manager.current-teams' | translate}}</h6>
 
     <p *ngIf="!memberGroups.length">{{'component.membergroup-manager.no-current-teams' | translate}}</p>
 
-    <ul *ngFor="let group of memberGroups"
-        class="list-unstyled">
-      <li class="border-bottom p-2 d-flex">
-        <span>{{group}}</span>
-        <fa-icon (click)="removeMemberGroup(group)"
-                 [icon]="'trash'"
-                 class="cursor-pointer ml-auto"></fa-icon>
+    <ul class="list-unstyled row form-row">
+      <li *ngFor="let group of memberGroups"
+          class="col-md-6 mb-2 d-flex">
+        <div class="card flex-grow-1">
+          <div class="card-body d-flex flex-column">
+            <h6 class="d-flex align-items-center">
+              <span>{{'component.membergroup-manager.team-name' | translate}}</span>
+              <button class="btn btn-sm btn-secondary ml-auto" (click)="removeMemberGroup(group.name)">
+                <fa-icon [icon]="'trash'"></fa-icon>
+              </button>
+            </h6>
+            <div class="mb-auto" [innerHTML]="parseNickname(group.name)"></div>
+            <hr class="w-100"/>
+
+            <h6>{{'component.membergroup-manager.team-color' | translate}}</h6>
+            <div class="justify-content-between rounded bg-body p-2">
+              <div class="form-row">
+                <div *ngFor="let color of groupColors"
+                     class="col-6 col-sm-3 col-lg-2 mb-1">
+                  <button [disabled]="group.color === color || hasGroupColorSelected(color)"
+                          class="btn btn-sm color-picker"
+                          [style.border-color]="color"
+                          [style.background-color]="group.color !== color && !hasGroupColorSelected(color) ? color : 'transparent'"
+                          (click)="group.color = color">
+                    <fa-icon *ngIf="group.color === color" [icon]="'check'"></fa-icon>
+                    <fa-icon *ngIf="group.color !== color && hasGroupColorSelected(color)" [icon]="'times'"></fa-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li *ngIf="memberGroups.length === 1"
+          class="col-md-6 mb-2 d-flex">
+        <div class="card flex-grow-1">
+          <div class="card-body d-flex flex-column justify-content-center">
+            <h6 class="mb-0 text-center">{{'component.membergroup-manager.validation-error.add-second-group' | translate}}</h6>
+          </div>
+        </div>
       </li>
     </ul>
   </div>

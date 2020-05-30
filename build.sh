@@ -2,12 +2,24 @@
 
 echo "Installing npm modules"
 npm install
+if [[ $? -ne "0" ]]
+then
+  exit 1
+fi
 
 echo "Building the app"
 npm run build:"$1"
+if [[ $? -ne "0" ]]
+then
+  exit 2
+fi
 
 echo "Copying assets"
 npm run copy:"$1"
+
+cd /usr/src/app
+echo "Purifying css"
+npm run purify
 
 echo "Renaming css files to a hashed version and add a json file containing the theme and the corresponding hash"
 cd /usr/src/app/dist/frontend/browser
@@ -30,7 +42,7 @@ csstype="text/css"
 curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype > /dev/null
 styletype=$?
 
-curl "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
+curl -sI "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
 hashdiff=$?
 
 if [[ "$styletype" -eq "0" ]] && [[ "$hashdiff" -eq "0" ]]
@@ -86,11 +98,6 @@ else
 
    echo "Generating preview screenshots"
    node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000 --root=true
-
-   # Disabled for now since purifyCSS removes nearly all css with Angular 9
-   # cd /usr/src/app
-   # echo "Purifying css"
-   # npm run purify
 fi
 
 echo "Gzipping app files"

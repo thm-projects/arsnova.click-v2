@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Pipe({
   name: 'genericFilter',
+  pure: false,
 })
 export class GenericFilterPipe implements PipeTransform {
 

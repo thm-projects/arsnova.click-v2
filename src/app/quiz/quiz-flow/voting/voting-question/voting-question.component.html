@@ -1,11 +1,6 @@
 <p *ngIf="tags?.length"
    class="mb-4">
-  <span *ngIf="tags.length > 1"><u>{{'component.voting.tags.categories' | translate}}</u>:&nbsp;</span>
-  <span *ngIf="tags.length === 1">{{'component.voting.tags.category' | translate}}:&nbsp;</span>
-  <ng-container *ngFor="let tag of tags; let isLast = last">
-    <span>"{{tag}}"</span>
-    <span *ngIf="!isLast">,&nbsp;</span>
-  </ng-container>
+  <span><u>{{'component.voting.tags.category' | translate:{amount: tags.length} }}</u>:&nbsp;{{tags.join(', ')}}</span>
 </p>
 
 <div [innerHTML]="sanitizeHTML(questionText)"

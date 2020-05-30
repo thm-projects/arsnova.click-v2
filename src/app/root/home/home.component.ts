@@ -3,8 +3,8 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, SecurityContext, Vie
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs';
-import { delay, distinctUntilChanged, filter, switchMapTo, take, takeUntil } from 'rxjs/operators';
+import { Observable, Subject, zip } from 'rxjs';
+import { delay, distinctUntilChanged, filter, switchMapTo, take, takeUntil, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -172,8 +172,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     const routerParamsInitialized$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
     const dbInitialized$ = this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(amount), takeUntil(this._destroy));
 
-    routerParamsInitialized$.subscribe(() => {
-      this.cleanUpSessionStorage();
+    this.cleanUpSessionStorage().pipe(switchMapTo(this.quizApiService.getActiveQuizzes())).subscribe(value => {
+      this.sharedService.activeQuizzes = value;
+    });
+
+    this.storageService.stateNotifier.pipe(filter(val => val === DbState.Revalidate), takeUntil(this._destroy)).subscribe(() => {
+      this.storageService.db.getAllQuiznames().then(quizNames => {
+        this._ownQuizzes = quizNames;
+      });
     });
 
     dbInitialized$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(async params => {
@@ -226,8 +232,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       switchMapTo(this.connectionService.connectToGlobalChannel()),
       takeUntil(this._destroy),
     ).subscribe();
-
-    this.quizApiService.getActiveQuizzes().subscribe(value => this.sharedService.activeQuizzes = value);
   }
 
   public ngOnDestroy(): void {
@@ -481,7 +485,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       }
 
-      this.router.navigate(routingTarget);
+      console.log('navigating');
+      this.router.navigate(routingTarget).then(() => console.log('navigated'));
     }, () => {
       this._isPerformingClick.splice(0);
     });
@@ -592,32 +597,40 @@ export class HomeComponent implements OnInit, OnDestroy {
     }, () => {});
   }
 
-  private cleanUpSessionStorage(): void {
-    if (isPlatformServer(this.platformId)) {
-      return;
-    }
+  private cleanUpSessionStorage(): Observable<any> {
+    const requests$: Array<Observable<any>> = [];
 
     if (this.quizService.quiz && this.attendeeService.ownNick) {
-      this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
+      requests$.push(this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick));
     }
-    this.attendeeService.cleanUp();
-    this.quizService.cleanUp();
-    this.connectionService.cleanUp();
+
+    requests$.push(this.attendeeService.cleanUp());
+    requests$.push(this.quizService.cleanUp());
+    requests$.push(this.connectionService.cleanUp());
+    requests$.push(new Observable(subscriber => {
+      this.storageService.db.Config.delete(StorageKey.QuizTheme).finally(() => subscriber.next());
+    }));
+
     sessionStorage.removeItem(StorageKey.CurrentQuizName);
     sessionStorage.removeItem(StorageKey.CurrentNickName);
+    sessionStorage.removeItem(StorageKey.CurrentMemberGroupName);
     sessionStorage.removeItem(StorageKey.QuizToken);
-    if (isPlatformBrowser(this.platformId)) {
-      this.storageService.db.Config.delete(StorageKey.QuizTheme);
-    }
+
     if (!environment.persistQuizzes && !this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
-      this.storageService.db.Quiz.toCollection().each(quizData => {
-        this.quizApiService.deleteQuiz(quizData).subscribe(() => {
-          this.storageService.db.Quiz.delete(quizData.name);
-        }, () => {
-          this.storageService.db.Quiz.delete(quizData.name);
-        });
-      });
+      requests$.push(new Observable(subscriber => {
+
+        this.storageService.db.Quiz.toCollection().each(quizData => {
+          requests$.push(this.quizApiService.deleteQuiz(quizData).pipe(tap(() => {
+            this.storageService.db.Quiz.delete(quizData.name);
+          }, () => {
+            this.storageService.db.Quiz.delete(quizData.name);
+          })));
+
+        }).finally(() => subscriber.next());
+      }));
     }
+
+    return zip(...requests$);
   }
 
   private async addDemoQuiz(): Promise<QuizEntity> {

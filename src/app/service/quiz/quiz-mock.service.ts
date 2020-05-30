@@ -62,9 +62,15 @@ export class QuizMockService {
     return [this.currentQuestion()];
   }
 
-  public cleanUp(): void {}
+  public cleanUp(): Observable<any> {
+    return new Observable(subscriber => subscriber.next());
+  }
 
   public persist(): void {}
+
+  public close(): Observable<any> {
+    return new Observable(subscriber => subscriber.next());
+  }
 
   public loadData(): Observable<QuizEntity> {
     return of(this.quiz);

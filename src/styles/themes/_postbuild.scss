@@ -39,10 +39,15 @@
 @import "../checkbox";
 @import "loader";
 @import "keyframes";
+@import "standard-style-definitions";
 
 body {
-  font-family: $font;
+  font-family: $font-text;
   @include transitionEffect();
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-header;
 }
 
 .card {
@@ -104,6 +109,10 @@ fa-icon {
 
 .answer-result-wrong {
   background-color: $bg-answer-result-wrong;
+}
+
+.bg-body {
+  background: $body-bg;
 }
 
 #connection-indicator {
@@ -174,4 +183,11 @@ fa-icon {
 
 .twitter-ancor a {
   color: $secondary_text_color;
+}
+
+@each $color, $value in $theme-colors {
+  .box-shadow-#{$color} {
+    box-shadow: 0 0 .25rem $value;
+    pointer-events: none;
+  }
 }

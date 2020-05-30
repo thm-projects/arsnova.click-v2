@@ -14,8 +14,7 @@
 </ng-container>
 
 <ng-template #defaultAnswerView>
-  <p *ngFor="let elem of answers; let i = index"
-     class="mb-0">
+  <p *ngFor="let elem of answers; let i = index">
     <fa-icon *ngIf="question.TYPE !== 'SurveyQuestion'"
              [icon]="(isCorrectAnswerIndex(i) ? 'check-square' : 'square')"
              class="mr-2"></fa-icon>
@@ -23,3 +22,7 @@
     <span [innerHTML]="sanitizeHTML(elem)"></span>
   </p>
 </ng-template>
+
+<h2 class="mt-5 text-center" *ngIf="selectedAnswerElements?.length">
+  {{'component.question-details.selected-answer-elements' | translate:{elements: selectedAnswerElements} }}
+</h2>

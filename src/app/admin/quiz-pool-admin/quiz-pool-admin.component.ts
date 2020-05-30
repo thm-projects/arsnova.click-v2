@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { StatusProtocol } from '../../lib/enums/Message';
 import { IQuizPoolQuestion } from '../../lib/interfaces/quizzes/IQuizPoolQuestion';
 import { QuizPoolApiService } from '../../service/api/quiz-pool/quiz-pool-api.service';
@@ -14,6 +14,7 @@ enum QuizPoolSource {
   selector: 'app-quiz-pool-admin',
   templateUrl: './quiz-pool-admin.component.html',
   styleUrls: ['./quiz-pool-admin.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuizPoolAdminComponent implements OnInit {
   private _isUploading: boolean;
@@ -34,6 +35,7 @@ export class QuizPoolAdminComponent implements OnInit {
 
   constructor(
     public quizService: QuizService,
+    public cd: ChangeDetectorRef,
     private quizPoolApiService: QuizPoolApiService,
     private footerBarService: FooterBarService,
   ) {
@@ -67,6 +69,7 @@ export class QuizPoolAdminComponent implements OnInit {
       }
 
       this._questions.splice(index, 1);
+      this.cd.markForCheck();
     });
   }
 
@@ -78,6 +81,7 @@ export class QuizPoolAdminComponent implements OnInit {
       this._questions = this._allQuestions;
       this._currentSource = QuizPoolSource.ApprovedQuestions;
     }
+    this.cd.markForCheck();
   }
 
   public getCurrentSourceText(): string {
@@ -103,8 +107,12 @@ export class QuizPoolAdminComponent implements OnInit {
           return;
         }
         this._allQuestions = data.payload;
+        this.cd.markForCheck();
       },
-      error: () => this._isUploading = false,
+      error: () => {
+        this._isUploading = false;
+        this.cd.markForCheck();
+      },
     });
   }
 
@@ -114,12 +122,14 @@ export class QuizPoolAdminComponent implements OnInit {
       if (this._currentSource === QuizPoolSource.ApprovedQuestions) {
         this._questions = this._allQuestions;
       }
+      this.cd.markForCheck();
     });
     this.quizPoolApiService.getPendingQuizpool().subscribe(data => {
       this._pendingQuestions = data.payload;
       if (this._currentSource === QuizPoolSource.PendingQuestions) {
         this._questions = this._pendingQuestions;
       }
+      this.cd.markForCheck();
     });
   }
 }

@@ -1,10 +1,4 @@
-div {
-  background-color: #fff;
-  &:hover {
-    background-color: darken(#fff, 20);
-  }
-  &:active {
-    background-color: darken(#fff, 80);
-    color: #fff;
-  }
+:host ::ng-deep img[alt*="emoji_"] {
+  height: 64px;
+  width: 64px;
 }

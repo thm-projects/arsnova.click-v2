@@ -14,6 +14,7 @@ import { getDefaultQuestionForType } from '../../../lib/QuizValidator';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { NotificationService } from '../../../service/notification/notification.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
 import { QuizTypeSelectModalComponent } from './quiz-type-select-modal/quiz-type-select-modal.component';
@@ -44,6 +45,7 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
     private quizApiService: QuizApiService,
     private modalService: NgbModal,
     private cdRef: ChangeDetectorRef,
+    private notificationService: NotificationService,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
@@ -80,9 +82,15 @@ export class QuizManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
+    this.quizService.close().subscribe();
+
     this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => {
       this.isLoaded = true;
       this.cdRef.markForCheck();
+
+      const memberGroupInvalid = this.quizService.quiz.sessionConfig.nicks.memberGroups.length === 1;
+      this.footerBarService.footerElemMemberGroup.iconClass = ['fas', memberGroupInvalid ? 'exclamation-triangle' : 'users'];
+      this.notificationService.footerBadges[this.footerBarService.footerElemMemberGroup.id] = memberGroupInvalid ? '!' : null;
     }).catch(() => {});
 
     this.revalidate.pipe(takeUntil(this._destroy)).subscribe(() => {

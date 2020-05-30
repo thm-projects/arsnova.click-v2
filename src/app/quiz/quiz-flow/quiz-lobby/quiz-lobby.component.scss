@@ -2,3 +2,10 @@
   /* Font size of "fas fa-user" => fa-2x */
   line-height: 2em;
 }
+
+:host .team-wrapper {
+  ::ng-deep img[alt*="emoji_"] {
+    height: 64px;
+    width: 64px;
+  }
+}

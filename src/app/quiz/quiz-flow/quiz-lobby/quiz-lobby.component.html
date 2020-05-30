@@ -8,74 +8,53 @@
     <app-audio-player [config]="musicConfig"></app-audio-player>
   </div>
 
-  <div *ngIf="attendeeService.ownAttendee"
+  <div *ngIf="attendeeService.ownAttendee as myself"
        class="my-1 d-flex flex-wrap flex-sm-nowrap col-auto">
     <p class="text-center mr-sm-2 d-flex justify-content-center flex-grow-1 align-self-center text-nowrap">{{'component.lobby.own_nickname' | translate}}</p>
-    <div [style.background-color]="'#' + sanitizeHTML(attendeeService.ownAttendee.colorCode)"
-         [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(attendeeService.ownAttendee.colorCode)))"
-         class="rounded d-flex align-items-center justify-content-center own-nick w-100">
-      <p class="mb-0 p-2 break-word">
-          <span *ngIf="isHtmlNickname(attendeeService.ownAttendee.name)"
-                [innerHTML]="parseNickname(attendeeService.ownAttendee.name)"></span>
-        <span *ngIf="!isHtmlNickname(attendeeService.ownAttendee.name)">{{attendeeService.ownAttendee.name}}</span>
+    <div [style.background-color]="'#' + sanitizeHTML(myself.colorCode)"
+         [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(myself.colorCode)))"
+         class="p-2 rounded d-flex align-items-center justify-content-center own-nick w-100">
+      <div *ngIf="myself.groupName" class="mr-2 flex-grow-1 flex-shrink-0">
+        <div *ngIf="isHtmlNickname(myself.groupName)"
+             [innerHTML]="parseNickname(myself.groupName)"></div>
+        <div *ngIf="!isHtmlNickname(myself.groupName)">[{{myself.groupName}}]</div>
+      </div>
+      <p class="flex-grow-1 break-word" [class.text-center]="!myself.groupName">
+          <span *ngIf="isHtmlNickname(myself.name)"
+                [innerHTML]="parseNickname(myself.name)"></span>
+        <span *ngIf="!isHtmlNickname(myself.name)">{{myself.name}}</span>
       </p>
     </div>
   </div>
 </div>
 
 <div class="row">
-  <ng-container *ngIf="attendeeService.getMemberGroups()?.length === 1; else attendeesByGroup">
-    <ng-container *ngIf="!attendeeService.attendees.length">
-      <div class="col-12">
-        <h3 class="text-center center-top d-flex align-self-center justify-content-center">{{'component.lobby.waiting_for_players' | translate}}</h3>
-      </div>
-    </ng-container>
-    <div *ngFor="let elem of attendeeService.attendees"
-         class="my-1 col-sm-4 col-md-3">
-      <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
-           [class.cursor-pointer]="quizService.isOwner"
-           [id]="elem.id"
-           [style.background-color]="'#' + sanitizeHTML(elem.colorCode)"
-           [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-           class="rounded d-flex align-items-center justify-content-center">
-        <p class="mb-0 p-2 break-word">
-          <span *ngIf="isHtmlNickname(elem.name)"
-                [innerHTML]="parseNickname(elem.name)"></span>
-          <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>
-        </p>
-      </div>
+  <ng-container *ngIf="!attendeeService.attendees.length">
+    <div class="col-12">
+      <h3 class="text-center center-top d-flex align-self-center justify-content-center">{{'component.lobby.waiting_for_players' | translate}}</h3>
     </div>
   </ng-container>
-</div>
 
-<ng-template #attendeesByGroup>
-  <div *ngFor="let group of attendeeService.getMemberGroups()"
-       class="col-12 col-sm-6">
-    <div class="pb-4">
-      <h4>Team {{group}}</h4>
-      <ng-container *ngIf="!attendeeService.getMembersOfGroup(group).length">
-        <span class="attendee-text">{{'component.lobby.waiting_for_players' | translate}}</span>
-      </ng-container>
-      <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
-           *ngFor="let elem of attendeeService.getMembersOfGroup(group)"
-           [class.cursor-pointer]="quizService.isOwner"
-           class="d-inline-flex mw-100 mr-3">
-        <fa-icon [class.own-nick]="attendeeService.isOwnNick(elem.name)"
-                 [icon]="'users'"
-                 [id]="elem.id"
-                 [style.background-color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(elem.colorCode)))"
-                 [style.color]="'#' + sanitizeHTML(elem.colorCode)"
-                 class="rounded px-1 py-1 fa-2x">>
-        </fa-icon>
-        <p class="ml-2 attendee-text text-truncate mb-0 align-self-center">
+  <div *ngFor="let elem of attendeeService.attendees"
+       class="my-1 col-sm-6 col-md-4 col-lg-3 d-flex">
+    <div (click)="openKickMemberModal(removeMemberModal, elem.name)"
+         [class.cursor-pointer]="quizService.isOwner"
+         [style.background-color]="sanitizeHTML(getColorForNick(elem))"
+         [style.color]="'#' + sanitizeHTML(transformForegroundColor(hexToRgb(getColorForNick(elem))))"
+         class="p-2 rounded d-flex justify-content-center align-items-center w-100">
+      <div *ngIf="elem.groupName" class="mr-2 flex-grow-1 flex-shrink-0">
+        <div *ngIf="isHtmlNickname(elem.groupName)"
+             [innerHTML]="parseNickname(elem.groupName)"></div>
+        <div *ngIf="!isHtmlNickname(elem.groupName)">[{{elem.groupName}}]</div>
+      </div>
+      <p class="flex-grow-1 break-word" [class.text-center]="!elem.groupName">
           <span *ngIf="isHtmlNickname(elem.name)"
                 [innerHTML]="parseNickname(elem.name)"></span>
-          <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>
-        </p>
-      </div>
+        <span *ngIf="!isHtmlNickname(elem.name)">{{elem.name}}</span>
+      </p>
     </div>
   </div>
-</ng-template>
+</div>
 
 <ng-template #removeMemberModal
              let-c="close"

@@ -37,13 +37,23 @@ export class HeaderLabelService {
     });
   }
 
+  public hasHeaderLabelParams(): boolean {
+    return Object.keys(this.headerLabelParams).length > 0;
+  }
+
   private regenerateTitle(): void {
     if (!this._headerLabel || this._headerLabel === 'default') {
       this.titleService.setTitle(HeaderLabelService.getDefaultBrowserTitle());
     } else {
-      this.translateService.get(this._headerLabel, this.headerLabelParams).subscribe(translatedValue => {
-        this.titleService.setTitle(HeaderLabelService.getDefaultBrowserTitle() + ' - ' + translatedValue);
-      });
+      this.translateService
+        .get(this._headerLabel, this.headerLabelParams)
+        .subscribe(translatedValue => {
+          if (this.hasHeaderLabelParams()) {
+            this.titleService.setTitle(HeaderLabelService.getDefaultBrowserTitle() + ' - ' + translatedValue);
+          } else {
+            this.titleService.setTitle(HeaderLabelService.getDefaultBrowserTitle());
+          }
+        });
     }
   }
 

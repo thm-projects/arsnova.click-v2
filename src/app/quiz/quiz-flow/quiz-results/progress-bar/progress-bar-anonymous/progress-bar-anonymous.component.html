@@ -5,7 +5,7 @@
     <div *ngIf="base"
          class="d-flex justify-content-between">
       <span class="text-truncate mx-2">{{'component.liveResults.correct_answer' | translate}}</span>
-      <span class="mr-2">{{correct.percent}}&nbsp;|&nbsp;{{correct.absolute}}&nbsp;/&nbsp;{{base}}</span>
+      <span class="mr-2 d-flex align-items-end">{{correct.percent}}&nbsp;|&nbsp;{{correct.absolute}}&nbsp;/&nbsp;{{base}}</span>
     </div>
 
     <div class="progress">

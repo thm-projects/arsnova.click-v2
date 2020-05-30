@@ -1,8 +1,10 @@
+import { Observable, ReplaySubject } from 'rxjs';
 import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
 
 export class AttendeeMockService {
   public attendees = [];
+  public attendeeAmount = new ReplaySubject(1);
 
   public getMemberGroups(): Array<string> {
     return ['Default'];
@@ -19,8 +21,9 @@ export class AttendeeMockService {
 
   public reloadData(): void {}
 
-  public cleanUp(): void {
+  public cleanUp(): Observable<any> {
     this.attendees = [];
+    return new Observable(subscriber => subscriber.next());
   }
 
   public hasConfidenceValue(): boolean {

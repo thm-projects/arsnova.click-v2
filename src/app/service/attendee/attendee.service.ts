@@ -1,12 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Attendee } from '../../lib/attendee/attendee';
 import { MemberEntity } from '../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../lib/enums/enums';
 import { QuizState } from '../../lib/enums/QuizState';
 import { IMemberSerialized } from '../../lib/interfaces/entities/Member/IMemberSerialized';
+import { IMemberGroupBase } from '../../lib/interfaces/users/IMemberGroupBase';
 import { MemberApiService } from '../api/member/member-api.service';
 import { QuizService } from '../quiz/quiz.service';
 import { StorageService } from '../storage/storage.service';
@@ -50,7 +51,7 @@ export class AttendeeService {
     }
   }
 
-  public getMemberGroups(): Array<string> {
+  public getMemberGroups(): Array<IMemberGroupBase> {
 
     if (!this.quizService.quiz) {
       return [];
@@ -63,10 +64,12 @@ export class AttendeeService {
     return this._attendees.filter(attendee => attendee.groupName === groupName);
   }
 
-  public cleanUp(): void {
+  public cleanUp(): Observable<boolean> {
     this.attendees = [];
     this.attendeeAmount.next(0);
     this.ownNick = null;
+
+    return new Observable(subscriber => subscriber.next(true));
   }
 
   public addMember(attendee: IMemberSerialized): void {

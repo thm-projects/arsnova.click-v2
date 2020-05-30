@@ -24,6 +24,8 @@ export class FileUploadService {
     return this._duplicateQuizzes;
   }
 
+  public overrideLocalQuiz: string;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
@@ -40,7 +42,7 @@ export class FileUploadService {
     this._renameFilesQueue = new FormData();
     this._duplicateQuizzes = [];
 
-    this.quizApiService.postQuizUpload(formData).subscribe((data: IMessage) => {
+    this.quizApiService.postQuizUpload(formData).subscribe(async (data: IMessage) => {
       if (data.payload.duplicateQuizzes.length) {
         this._duplicateQuizzes = data.payload.duplicateQuizzes;
         data.payload.duplicateQuizzes.forEach((duplicateQuiz: IDuplicateQuiz) => {
@@ -60,6 +62,12 @@ export class FileUploadService {
         });
 
         if (!data.payload.duplicateQuizzes.length) {
+          if (this.overrideLocalQuiz) {
+            await this.storageService.db.Quiz.delete(this.overrideLocalQuiz);
+            await this.quizApiService.deleteQuiz(this.overrideLocalQuiz).toPromise();
+            this.overrideLocalQuiz = null;
+          }
+
           if (data.payload.quizData.length === 1) {
             this.quizService.quiz = quiz;
             this.quizService.isOwner = true;

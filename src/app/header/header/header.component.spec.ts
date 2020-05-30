@@ -16,6 +16,7 @@ import { I18nService } from '../../service/i18n/i18n.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
+import { UpdateCheckService } from '../../service/update-check/update-check.service';
 import { SharedModule } from '../../shared/shared.module';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { HeaderComponent } from './header.component';
@@ -59,7 +60,8 @@ describe('HeaderComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
-    spyOn(component, 'reloadPage').and.callFake(() => {});
+    const updateCheckService = TestBed.inject(UpdateCheckService);
+    spyOn(updateCheckService, 'reloadPage').and.callFake(() => {});
     fixture.detectChanges();
   }));
 

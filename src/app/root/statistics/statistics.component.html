@@ -5,7 +5,7 @@
        class="form-row mx-0 position-relative px-3 px-md-5 py-3 py-md-0 my-4 my-lg-0 d-flex flex-md-row">
     <ng-template #amountTemplate>
       <div class="col-md-6 d-flex justify-content-center align-items-center flex-column my-auto my-md-0 flex-grow-1">
-        <fa-icon *ngIf="isLoading" [spin]="true" [icon]="'spinner'" size="4x"></fa-icon>
+        <fa-icon *ngIf="isLoading" [spin]="true" [icon]="'spinner'" size="4x" class="loading-icon d-flex align-items-center"></fa-icon>
         <h3 *ngIf="!isLoading" class="w-100 text-truncate text-center fs-xxl mb-0">{{elem.amount}}</h3>
       </div>
     </ng-template>

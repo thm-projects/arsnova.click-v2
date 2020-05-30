@@ -196,7 +196,7 @@ export class QuizPoolOverviewComponent implements OnInit, OnDestroy, AfterConten
   }
 
   public createQuestion(): void {
-    this.quizService.cleanUp();
+    this.quizService.cleanUp().subscribe();
     this.router.navigate(['/', 'quiz', 'manager', 'quiz-pool', 'overview']);
   }
 

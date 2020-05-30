@@ -39,13 +39,21 @@ export function app(): Express {
   // Serve static files from /browser
   server.get('**/*.*', express.static(distFolder, {
     maxAge: '1y',
-  }));
+  }), (req, res, next) => {
+    if (process.env.NODE_ENV !== 'development') {
+      next();
+      return;
+    }
+
+    console.log('Rewriting static request', 'https://arsnova.click' + req.url);
+    res.redirect('https://arsnova.click' + req.url);
+  });
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
     const reqUrlMatch = req.url.match(/\/preview\/([a-z\-A-Z]*)\/.*/);
     const theme = (reqUrlMatch ? reqUrlMatch[1] : req.cookies.theme) ?? environment.defaultTheme;
-    const hash = themeHashMap.find(value => value.theme === theme).hash;
+    const hash = themeHashMap.find(value => value.theme === theme)?.hash ?? themeHashMap.find(value => value.theme === environment.defaultTheme);
     const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
     const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
     const updatedIndexHtml = indexHtmlContent.replace(/theme-default.css/g, href);

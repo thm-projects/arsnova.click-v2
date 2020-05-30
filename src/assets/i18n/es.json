@@ -208,7 +208,7 @@
       "show_answer_content_on_buttons": "¿Respuesta en el pin?",
       "show_one_answer_per_row": "Show only one answer per row?",
       "multiple_selection_survey": "¿Varios opciones seleccionable?",
-      "emoji_info": "También puedes usar emoticonos. <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img style='width:40px;' src='/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
+      "emoji_info": "También puedes usar emoticonos. <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'><img class='w-40px' src='/images/emojis/smile.png' alt='smiling_emoji.png'/></a>",
       "description": {
         "default_answer_row": "Arrastras ese bloque en la lista de opciones de respuestas o clicas en lo para integrar una respuesta nueva.",
         "added_answers": "Aquí puedes ver las opciones de respuestas para la pregunta. Puedes cambiar el orden por arrastrar y soltar.",
@@ -322,9 +322,9 @@
       "second": "Segundo",
       "export": "Exportar (.csv)",
       "team-result": {
-        "name": "Team \"{TEAM_NAME}\"",
+        "name": "{TEAM_NAME}",
         "overall-response-time": "Tiempo de respuesta general: {RESPONSE_TIME}",
-        "score": "Puntuación: {SCORE}"
+        "score": "{SCORE} Puntuación"
       },
       "no_attendee_correct_global": "Nadie respondía correctamente a todas las preguntas",
       "question": "Pregunta",

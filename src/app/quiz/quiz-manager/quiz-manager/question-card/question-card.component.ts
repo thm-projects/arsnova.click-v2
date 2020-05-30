@@ -13,14 +13,18 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AbstractChoiceQuestionEntity } from '../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
+import { StorageKey } from '../../../../lib/enums/enums';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
+import { NotificationService } from '../../../../service/notification/notification.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
+import { StorageService } from '../../../../service/storage/storage.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
 
 @Component({
@@ -147,7 +151,11 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
     private questionTextService: QuestionTextService,
     private sanitizer: DomSanitizer,
     private cdRef: ChangeDetectorRef,
-  ) {
+    private storageService: StorageService,
+    private swPush: SwPush,
+    private notificationService: NotificationService,
+    private translate?: TranslateService,
+    ) {
     this.cdRef.detach();
   }
 
@@ -162,7 +170,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
     this._destroy.complete();
   }
 
-  public updloadToQuizPool(): void {
+  public async updloadToQuizPool(): Promise<void> {
     if (!this.elem?.isValid() || !this.elem?.tags?.length || this.isUploading) {
       return;
     }
@@ -174,7 +182,31 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
 
     this._isUploading = true;
     this.cdRef.detectChanges();
-    this.quizPoolApiService.postNewQuestion(this.elem, `${this.quizService.quiz.name}`).subscribe({
+
+    let sub: PushSubscriptionJSON;
+
+    try {
+      sub = (await this.storageService.db.Config.get(StorageKey.PushSubscription))?.value;
+
+      if (!sub) {
+
+        const confirmed = confirm(this.translate.instant('notification.request-permission'));
+
+        if (confirmed) {
+          sub = (await this.swPush.requestSubscription({
+            serverPublicKey: this.notificationService.vapidPublicKey,
+          })).toJSON();
+          await this.storageService.db.Config.put({ type: StorageKey.PushSubscription, value: sub });
+        }
+      }
+    } catch (e) {
+      console.error('Error while trying to load a swpush subscription', e);
+    }
+
+    this.quizPoolApiService.postNewQuestion(this.quizService.currentQuestion(), null, sub).subscribe(() => {
+      this.router.navigate(['/quiz', 'pool']);
+    });
+    this.quizPoolApiService.postNewQuestion(this.elem, `${this.quizService.quiz.name}`, sub).subscribe({
       complete: removeQuestionFromUploadingQueue,
       error: removeQuestionFromUploadingQueue,
     });

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -31,13 +31,14 @@ import { QuizService } from '../../../service/quiz/quiz.service';
   selector: 'app-voting',
   templateUrl: './voting.component.html',
   styleUrls: ['./voting.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigation {
   public static readonly TYPE = 'VotingComponent';
 
   private _answers: Array<string> = [];
   private _questionText: string;
-  private _selectedAnswers: Array<number> | string | number = [];
+  private _selectedAnswers: Array<string> | string | number = [];
   private _currentQuestion: AbstractQuestionEntity;
   private _serverUnavailableModal: NgbModalRef;
   private readonly _destroy = new Subject();
@@ -57,7 +58,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     return this._questionText;
   }
 
-  get selectedAnswers(): Array<number> | string | number {
+  get selectedAnswers(): Array<string> | string | number {
     return this._selectedAnswers;
   }
 
@@ -75,6 +76,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     private memberApiService: MemberApiService,
     private ngbModal: NgbModal,
     private messageQueue: SimpleMQ,
+    private cd: ChangeDetectorRef,
   ) {
     if (isPlatformBrowser(this.platformId)) {
       sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
@@ -108,10 +110,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     return String.fromCharCode(65 + index);
   }
 
-  public isSelected(index: number): boolean {
+  public isSelected(elem: string): boolean {
     return (
-             Array.isArray(this._selectedAnswers) && this._selectedAnswers.indexOf(index) > -1
-           ) || this._selectedAnswers === index;
+             Array.isArray(this._selectedAnswers) && this._selectedAnswers.indexOf(elem) > -1
+           ) || this._selectedAnswers === elem;
   }
 
   public parseTextInput(event: Event): void {
@@ -128,16 +130,16 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     return Boolean(this.selectedAnswers) ?? false;
   }
 
-  public toggleSelectAnswer(index: number): void {
+  public toggleSelectAnswer(elem: string): void {
     if (!Array.isArray(this._selectedAnswers)) {
       return;
     }
 
-    this.isSelected(index) ? //
-    this._selectedAnswers.splice(this._selectedAnswers.indexOf(index), 1) : //
+    this.isSelected(elem) ? //
+    this._selectedAnswers.splice(this._selectedAnswers.indexOf(elem), 1) : //
     this.toggleSelectedAnswers() ? //
-    this._selectedAnswers = [index] : //
-    this._selectedAnswers.push(index);
+    this._selectedAnswers = [elem] : //
+    this._selectedAnswers.push(elem);
   }
 
   public sendResponses(route?: string): void {
@@ -145,7 +147,15 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
 
     this.hasTriggeredNavigation = true;
     this.router.navigate(this.getNextRoute(route));
-    this.memberApiService.putResponse(this._selectedAnswers).subscribe((data: IMessage) => {
+
+    let result: Array<number> | number | string;
+    if (Array.isArray(this._selectedAnswers)) {
+      result = this._selectedAnswers.map(v => this._answers.findIndex(answer => answer === v));
+    } else {
+      result = this._selectedAnswers;
+    }
+
+    this.memberApiService.putResponse(result).subscribe((data: IMessage) => {
       if (data.status !== StatusProtocol.Success) {
         console.log('VotingComponent: PutResponse failed', data);
       }
@@ -208,6 +218,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         } else {
           this._questionText = value;
         }
+        this.cd.markForCheck();
       });
 
       this.questionTextService.changeMultiple(this._currentQuestion.answerOptionList.map(answer => answer.answerText)).subscribe();
@@ -270,6 +281,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
           this.hasTriggeredNavigation = true;
           this.sendResponses('results');
         }
+        this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;

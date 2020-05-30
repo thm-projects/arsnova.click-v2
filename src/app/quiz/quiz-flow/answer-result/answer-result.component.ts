@@ -28,12 +28,14 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
   private _confettiScriptRef: HTMLScriptElement;
   private readonly _destroy$ = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
-  private readonly _loadedConfetti = new ReplaySubject(1);
+  private readonly _loadedConfetti = new ReplaySubject<void>(1);
   private readonly _abortRequest = new Subject();
 
   public hasTriggeredNavigation: boolean;
   public isLoading = true;
   public data: IAnswerResult;
+  public isTeam: boolean;
+  public onlyOneAvailableCorrectAnswer: boolean;
   public readonly AnswerState = AnswerState;
 
   constructor(
@@ -62,6 +64,7 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       this.headerLabelService.headerLabelParams = {
         QUESTION_INDEX: (this.quizService.quiz.currentQuestionIndex + 1),
       };
+      this.isTeam = this.quizService.quiz.sessionConfig.nicks.memberGroups.length > 0;
       this.cd.markForCheck();
       this.handleMessages();
     }).catch(() => this.hasTriggeredNavigation = true);
@@ -143,6 +146,7 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
     this._abortRequest.next();
     this.quizApiService.getAnswerResult().pipe(takeUntil(this._abortRequest)).subscribe(data => {
       this.data = data;
+      this.onlyOneAvailableCorrectAnswer = data.amountAvailable === 1 && data.amountCorrect === data.amountAvailable;
       this._statusCssClass = data.state === AnswerState.Correct ? 'answer-result-correct' :
                              data.state === AnswerState.PartiallyCorrect ? 'answer-result-partially-correct' :
                              'answer-result-wrong';

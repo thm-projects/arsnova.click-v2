@@ -1,16 +1,18 @@
+import { IQuizResponse } from './quizzes/IQuizResponse';
+
 export declare interface ILeaderBoardItem {
   name: string;
   responseTime: number;
   score: number;
-}
-
-export declare interface ILeaderBoard {
-  attendees: Array<ILeaderBoardItem>;
-}
-
-export declare interface ILeaderBoardItem {
-  name: string;
-  responseTime: number;
   correctQuestions: Array<number>;
   confidenceValue: number;
+}
+
+export interface ILeaderboardMemberGroupItem {
+  confidence: number;
+  names: Array<string>;
+  responseTimes: number;
+  responses: Array<IQuizResponse>;
+  score: number;
+  _id: string;
 }
