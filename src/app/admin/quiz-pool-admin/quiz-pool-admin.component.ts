@@ -35,9 +35,9 @@ export class QuizPoolAdminComponent implements OnInit {
 
   constructor(
     public quizService: QuizService,
+    public cd: ChangeDetectorRef,
     private quizPoolApiService: QuizPoolApiService,
     private footerBarService: FooterBarService,
-    private cd: ChangeDetectorRef,
   ) {
     const footerElements = [
       this.footerBarService.footerElemBack,

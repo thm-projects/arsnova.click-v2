@@ -2,9 +2,17 @@
 
 echo "Installing npm modules"
 npm install
+if [[ $? -ne "0" ]]
+then
+  exit 1
+fi
 
 echo "Building the app"
 npm run build:"$1"
+if [[ $? -ne "0" ]]
+then
+  exit 2
+fi
 
 echo "Copying assets"
 npm run copy:"$1"
