@@ -767,8 +767,8 @@
       }
     },
     "home": {
-      "join": "Tritt {name} bei",
-      "use": "Verwende {name}",
+      "join": "Tritt »{name}« bei",
+      "use": "Verwende »{name}«",
       "new-demo-quiz": "Erstelle ein neues Demo Quiz",
       "new-abcd-quiz": "Erstelle ein neues ABCD Quiz",
       "view-public": "Klicke hier um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes}} zu wählen!",

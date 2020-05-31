@@ -908,8 +908,8 @@
       "title": "Choose an alternative"
     },
     "home": {
-      "join": "Join {name}",
-      "use": "Use {name}",
+      "join": "Join »{name}«",
+      "use": "Use »{name}«",
       "new-demo-quiz": "Create new Demo Quiz",
       "new-abcd-quiz": "Create a new ABCD Quiz",
       "view-public": "Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
