@@ -4,9 +4,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of, Subject, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, switchMapTo, takeUntil } from 'rxjs/operators';
-import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../lib/entities/question/AbstractChoiceQuestionEntity';
+import { DeviceType } from '../../lib/enums/DeviceType';
 import { StorageKey } from '../../lib/enums/enums';
+import { LivePreviewEnvironment } from '../../lib/enums/LivePreviewEnvironment';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { QuestionTextService } from '../../service/question-text/question-text.service';
 import { QuizService } from '../../service/quiz/quiz.service';
@@ -20,14 +21,14 @@ import { QuizService } from '../../service/quiz/quiz.service';
 export class LivePreviewComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'LivePreviewComponent';
 
-  private _targetEnvironment: LIVE_PREVIEW_ENVIRONMENT;
+  private _targetEnvironment: LivePreviewEnvironment;
   private _revalidate: Subscription;
-  private _targetDevice: DEVICE_TYPES;
+  private _targetDevice: DeviceType;
   private _question: AbstractChoiceQuestionEntity;
   private readonly _destroy = new Subject();
   private _questionIndex: number;
 
-  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+  public readonly ENVIRONMENT_TYPE = LivePreviewEnvironment;
   public dataSource: Array<string>;
 
   @Input() set revalidate(value: Subject<any>) {
@@ -39,19 +40,19 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  get targetEnvironment(): LIVE_PREVIEW_ENVIRONMENT {
+  get targetEnvironment(): LivePreviewEnvironment {
     return this._targetEnvironment;
   }
 
-  @Input() set targetEnvironment(value: LIVE_PREVIEW_ENVIRONMENT) {
+  @Input() set targetEnvironment(value: LivePreviewEnvironment) {
     this._targetEnvironment = value;
   }
 
-  get targetDevice(): DEVICE_TYPES {
+  get targetDevice(): DeviceType {
     return this._targetDevice;
   }
 
-  @Input() set targetDevice(value: DEVICE_TYPES) {
+  @Input() set targetDevice(value: DeviceType) {
     this._targetDevice = value;
   }
 
@@ -72,30 +73,30 @@ export class LivePreviewComponent implements OnInit, OnDestroy {
 
   public deviceClass(): string {
     switch (this.targetDevice) {
-      case DEVICE_TYPES.XS:
+      case DeviceType.XS:
         return 'device_xs';
-      case DEVICE_TYPES.SM:
+      case DeviceType.SM:
         return 'device_sm';
-      case DEVICE_TYPES.MD:
+      case DeviceType.MD:
         return 'device_md';
-      case DEVICE_TYPES.LG:
+      case DeviceType.LG:
         return 'device_lg';
-      case DEVICE_TYPES.XLG:
+      case DeviceType.XLG:
         return 'device_xlg';
     }
   }
 
   public getComputedWidth(): string {
     switch (this.targetDevice) {
-      case DEVICE_TYPES.XS:
+      case DeviceType.XS:
         return 'calc(50% - 1rem)';
-      case DEVICE_TYPES.SM:
+      case DeviceType.SM:
         return 'device_sm';
-      case DEVICE_TYPES.MD:
+      case DeviceType.MD:
         return 'device_md';
-      case DEVICE_TYPES.LG:
+      case DeviceType.LG:
         return 'device_lg';
-      case DEVICE_TYPES.XLG:
+      case DeviceType.XLG:
         return 'device_xlg';
     }
   }

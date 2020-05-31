@@ -10,8 +10,9 @@ import { TOAST_CONFIG } from 'ngx-toastr';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
-import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../environments/environment';
 import { HeaderModule } from '../../header/header.module';
+import { DeviceType } from '../../lib/enums/DeviceType';
+import { LivePreviewEnvironment } from '../../lib/enums/LivePreviewEnvironment';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
@@ -73,8 +74,8 @@ describe('LivePreviewComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(LivePreviewComponent);
     component = fixture.componentInstance;
-    component.targetEnvironment = LIVE_PREVIEW_ENVIRONMENT.QUESTION;
-    component.targetDevice = DEVICE_TYPES.XS;
+    component.targetEnvironment = LivePreviewEnvironment.QUESTION;
+    component.targetDevice = DeviceType.XS;
     fixture.detectChanges();
   }));
 
@@ -87,12 +88,12 @@ describe('LivePreviewComponent', () => {
   }));
 
   it('#deviceClass', async(() => {
-    component.targetDevice = DEVICE_TYPES.XS;
+    component.targetDevice = DeviceType.XS;
     expect(component.deviceClass()).toEqual('device_xs');
   }));
 
   it('#getComputedWidth', async(() => {
-    component.targetDevice = DEVICE_TYPES.XS;
+    component.targetDevice = DeviceType.XS;
     expect(component.getComputedWidth()).toEqual('calc(50% - 1rem)');
   }));
 

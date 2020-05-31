@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, In
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { switchMapTo, takeUntil } from 'rxjs/operators';
-import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../../environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { SurveyQuestionEntity } from '../../../../../lib/entities/question/SurveyQuestionEntity';
+import { DeviceType } from '../../../../../lib/enums/DeviceType';
+import { LivePreviewEnvironment } from '../../../../../lib/enums/LivePreviewEnvironment';
 import { QuestionType } from '../../../../../lib/enums/QuestionType';
 import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
@@ -21,8 +22,8 @@ import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager
 })
 export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'AnsweroptionsDefaultComponent';
-  public readonly DEVICE_TYPE = DEVICE_TYPES;
-  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+  public readonly DEVICE_TYPE = DeviceType;
+  public readonly ENVIRONMENT_TYPE = LivePreviewEnvironment;
   public canAddAnsweroptions = false;
   public canDeleteAnswer: boolean;
   public canEditAnswer: boolean;
