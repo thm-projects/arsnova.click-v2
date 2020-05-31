@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 interface ISearchType {
   key: string;
+  value: object;
 }
 
 @Pipe({
@@ -17,12 +18,11 @@ export class SearchFilterPipe implements PipeTransform {
 
     return value.filter(val => {
       if (typeof val === 'string') {
-        return val.toLowerCase().includes(searchFilter.toLowerCase());
+        return val.toLowerCase().includes(searchFilter.trim().toLowerCase());
       }
 
-      return (
-        val as ISearchType
-      ).key.toLowerCase().includes(searchFilter.toLowerCase());
+      return (val as ISearchType).key.toLowerCase().includes(searchFilter.trim().toLowerCase()) ||
+             Object.values((val as ISearchType).value).some(keyValues => keyValues.toLowerCase().includes(searchFilter.trim().toLowerCase()));
     });
   }
 

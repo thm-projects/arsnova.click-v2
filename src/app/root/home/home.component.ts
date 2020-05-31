@@ -485,8 +485,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
       }
 
-      console.log('navigating');
-      this.router.navigate(routingTarget).then(() => console.log('navigated'));
+      this.router.navigate(routingTarget);
     }, () => {
       this._isPerformingClick.splice(0);
     });
