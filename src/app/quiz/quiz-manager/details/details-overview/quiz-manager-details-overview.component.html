@@ -174,7 +174,8 @@
         <span>{{'component.quiz_summary.difficulty.title' | translate}}:</span>
       </h5>
 
-      <div class="d-flex flex-wrap align-items-center">
+      <div *ngIf="question"
+           class="d-flex flex-wrap align-items-center">
         <input type="range"
                class="mr-3"
                [min]="1"

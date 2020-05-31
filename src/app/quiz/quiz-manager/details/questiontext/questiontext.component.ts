@@ -13,7 +13,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { DEVICE_TYPES, LIVE_PREVIEW_ENVIRONMENT } from '../../../../../environments/environment';
+import { DeviceType } from '../../../../lib/enums/DeviceType';
+import { LivePreviewEnvironment } from '../../../../lib/enums/LivePreviewEnvironment';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -32,8 +33,8 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
 
   @ViewChild('questionText', { static: true }) private textarea: ElementRef;
 
-  public readonly DEVICE_TYPE = DEVICE_TYPES;
-  public readonly ENVIRONMENT_TYPE = LIVE_PREVIEW_ENVIRONMENT;
+  public readonly DEVICE_TYPE = DeviceType;
+  public readonly ENVIRONMENT_TYPE = LivePreviewEnvironment;
 
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,

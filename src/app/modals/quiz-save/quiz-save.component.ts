@@ -12,7 +12,7 @@ export class QuizSaveComponent {
 
   private _isSubmitting: boolean;
 
-  public quizVisibility: string;
+  public quizVisibility = QuizVisibility.Any;
   public expiry: string;
   public description: string;
   public noExpiry: boolean;

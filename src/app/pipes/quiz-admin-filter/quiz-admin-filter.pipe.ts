@@ -1,12 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { QuizState } from '../../lib/enums/QuizState';
+import { QuizVisibility } from '../../lib/enums/QuizVisibility';
 import { IAdminQuiz } from '../../lib/interfaces/quizzes/IAdminQuiz';
 
 interface IFilterArgs {
   filterDemoQuiz?: boolean;
   filterAbcdQuiz?: boolean;
   filterActiveQuiz?: boolean;
+  filterPublicQuiz?: boolean;
   filterQuizName?: string;
 }
 
@@ -39,6 +41,10 @@ export class QuizAdminFilterPipe implements PipeTransform {
 
       if (isFiltered && args.filterActiveQuiz) {
         isFiltered = [QuizState.Active, QuizState.Running].includes(quiz.state);
+      }
+
+      if (isFiltered && args.filterPublicQuiz) {
+        isFiltered = Object.entries(QuizVisibility).find(visibility => visibility[1] === QuizVisibility.Any)[0].includes(quiz.visibility);
       }
 
       return isFiltered;
