@@ -33,6 +33,17 @@
       </label>
     </div>
 
+    <div class="col-12 col-sm-auto">
+      <label class="mb-0 d-flex align-items-center cursor-pointer">
+        <span class="checkbox-wrapper">
+          <input type="checkbox"
+                 [(ngModel)]="filterPublicQuiz"/>
+          <span class="checkmark bg-white border rounded checked-dark border-dark"></span>
+        </span>
+        <span class="text-truncate">Show only public Quizzes</span>
+      </label>
+    </div>
+
     <div class="col-12 mt-2">
       <input class="form-control"
              type="text"
@@ -42,7 +53,7 @@
   </div>
 </div>
 
-<div *ngIf="quizzes | quizAdminFilter:{filterDemoQuiz: filterDemoQuiz, filterAbcdQuiz: filterAbcdQuiz, filterQuizName: filterQuizName, filterActiveQuiz: filterActiveQuiz} as results"
+<div *ngIf="quizzes | quizAdminFilter:{filterDemoQuiz: filterDemoQuiz, filterAbcdQuiz: filterAbcdQuiz, filterQuizName: filterQuizName, filterActiveQuiz: filterActiveQuiz, filterPublicQuiz: filterPublicQuiz} as results"
      class="row">
   <div *ngIf="!results.length"
        class="col-12">

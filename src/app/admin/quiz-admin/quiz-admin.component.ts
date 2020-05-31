@@ -19,6 +19,7 @@ export class QuizAdminComponent implements OnInit {
   public filterDemoQuiz = false;
   public filterAbcdQuiz = false;
   public filterActiveQuiz = false;
+  public filterPublicQuiz = false;
   public filterQuizName = '';
 
   get quizzes(): Array<IAdminQuiz> {
