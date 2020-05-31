@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 interface ISearchType {
   key: string;
-  value: object;
+  value?: object;
 }
 
 @Pipe({
@@ -22,7 +22,7 @@ export class SearchFilterPipe implements PipeTransform {
       }
 
       return (val as ISearchType).key.toLowerCase().includes(searchFilter.trim().toLowerCase()) ||
-             Object.values((val as ISearchType).value).some(keyValues => keyValues.toLowerCase().includes(searchFilter.trim().toLowerCase()));
+             Object.values((val as ISearchType).value || {}).some(keyValues => keyValues.toLowerCase().includes(searchFilter.trim().toLowerCase()));
     });
   }
 
