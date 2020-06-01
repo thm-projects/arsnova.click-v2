@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { Observable, of } from 'rxjs';
 import { QuizMock } from '../../../_mocks/_fixtures/quiz.mock';
 import { QuizAdminFilterPipeMock } from '../../../_mocks/_pipes/QuizAdminFilterPipeMock';
@@ -87,6 +88,9 @@ describe('QuizAdminComponent', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
       declarations: [

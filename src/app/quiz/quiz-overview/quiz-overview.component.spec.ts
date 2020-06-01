@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -113,6 +114,9 @@ describe('QuizOverviewComponent', () => {
         }, SharedService, RxStompService, SimpleMQ, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
       declarations: [QuizOverviewComponent, TranslatePipeMock],

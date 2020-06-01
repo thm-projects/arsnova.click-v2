@@ -3,6 +3,7 @@ import { async, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { SharedModule } from '../../shared/shared.module';
 import { StorageService } from '../storage/storage.service';
@@ -40,7 +41,10 @@ describe('FooterBarService', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
-        },
+        }, {
+          provide: HotkeysService,
+          useValue: {}
+        }
       ],
     });
   }));

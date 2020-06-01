@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
@@ -56,6 +57,9 @@ describe('QuizPublicComponent', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
       declarations: [QuizPublicComponent, TranslatePipeMock],

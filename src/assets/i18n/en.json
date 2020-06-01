@@ -91,7 +91,8 @@
         },
         "questionpool": "Quiz-Pool",
         "my-quizzes": "My Quizzes",
-        "audio": "Music"
+        "audio": "Music",
+        "hotkeys": "Hotkeys"
       },
       "about": {
         "title": "About arsnova.click",
@@ -1151,5 +1152,31 @@
       "title": "Quiz-Pool question approved",
       "body": "One of your Quiz-Pool questions was approved!"
     }
+  },
+  "hotkey": {
+    "modal-title": "Hotkeys",
+    "MultipleChoiceQuestion": {
+      "description": "Add Multiple-Choice question"
+    },
+    "SingleChoiceQuestion": {
+      "description": "Add Single-Choice question"
+    },
+    "RangedQuestion": {
+      "description": "Add ranged question"
+    },
+    "FreeTextQuestion": {
+      "description": "Add freetext question"
+    },
+    "SurveyQuestion": {
+      "description": "Add survey"
+    },
+    "navigate-to-prev-question": "Navigate to previous question",
+    "navigate-to-next-question": "Navigate to next question",
+    "navigate-to-question-text": "Navigate to the question text view",
+    "navigate-to-answeroptions": "Navigate to the answeroption view",
+    "navigate-to-countdown": "Navigate to the countdown view",
+    "navigate-to-question-type": "Navigate to the question type view",
+    "navigate-to-tags": "Navigate to the tag view",
+    "delete-question": "Delete this question"
   }
 }

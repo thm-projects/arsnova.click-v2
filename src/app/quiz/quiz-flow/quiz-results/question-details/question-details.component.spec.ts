@@ -7,6 +7,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
@@ -75,7 +76,10 @@ describe('QuestionDetailsComponent', () => {
         }, QuestionTextService, {
           provide: TranslateService,
           useClass: TranslateServiceMock,
-        }, SimpleMQ,
+        }, SimpleMQ, {
+          provide: HotkeysService,
+          useValue: {}
+        },
       ],
       declarations: [QuestionDetailsComponent, ServerUnavailableModalComponent],
     }).compileComponents();

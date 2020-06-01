@@ -10,6 +10,7 @@ import { faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStri
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { HotkeysService } from 'angular2-hotkeys';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
@@ -105,6 +106,11 @@ describe('QuestiontextComponent', () => {
           }, {
             provide: TwitterService,
             useClass: TwitterServiceMock,
+          }, {
+            provide: HotkeysService,
+            useValue: {
+              add: () => {}
+            }
           },
         ],
         declarations: [

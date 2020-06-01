@@ -1,5 +1,6 @@
 import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { takeUntil } from 'rxjs/operators';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -66,12 +67,20 @@ export class CountdownComponent extends AbstractQuizManagerDetailsComponent impl
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    hotkeysService: HotkeysService
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
 
     footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
     footerBarService.replaceFooterElements([
       footerBarService.footerElemBack,
+    ]);
+
+    this.hotkeysService.add([
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }),
     ]);
   }
 
@@ -94,6 +103,8 @@ export class CountdownComponent extends AbstractQuizManagerDetailsComponent impl
 
   public ngOnInit(): void {
     super.ngOnInit();
+
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager', this._questionIndex, 'overview']);
 
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(() => {
       if (!this.quizService.quiz) {

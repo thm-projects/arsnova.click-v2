@@ -12,6 +12,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DeviceType } from '../../../../lib/enums/DeviceType';
 import { LivePreviewEnvironment } from '../../../../lib/enums/LivePreviewEnvironment';
@@ -44,15 +45,23 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
     route: ActivatedRoute,
     router: Router,
     quizPoolApiService: QuizPoolApiService,
+    hotkeysService: HotkeysService,
     private questionTextService: QuestionTextService,
     private cd: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
 
     footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
     footerBarService.replaceFooterElements([
       footerBarService.footerElemBack,
+    ]);
+
+    this.hotkeysService.add([
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }),
     ]);
   }
 
@@ -127,6 +136,8 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
 
   public ngOnInit(): void {
     super.ngOnInit();
+
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager', this._questionIndex, 'overview']);
 
     this.quizService.quizUpdateEmitter.pipe( //
       distinctUntilChanged(), //

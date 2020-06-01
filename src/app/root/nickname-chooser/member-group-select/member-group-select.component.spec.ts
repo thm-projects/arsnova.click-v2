@@ -3,6 +3,7 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -61,7 +62,10 @@ describe('MemberGroupSelectComponent', () => {
         }, {
           provide: CustomMarkdownService,
           useClass: CustomMarkdownServiceMock
-        }
+        }, {
+          provide: HotkeysService,
+          useValue: {}
+        },
       ],
       declarations: [MemberGroupSelectComponent, TranslatePipeMock],
     }).compileComponents();

@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { QRCodeModule } from 'angular2-qrcode';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
@@ -74,7 +75,10 @@ describe('QuizLobbyComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
-        }, SimpleMQ,
+        }, SimpleMQ, {
+          provide: HotkeysService,
+          useValue: {}
+        },
       ],
       declarations: [QuizLobbyComponent, ServerUnavailableModalComponent],
     }).compileComponents();

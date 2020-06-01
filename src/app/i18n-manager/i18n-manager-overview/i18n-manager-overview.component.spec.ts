@@ -6,6 +6,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
@@ -59,6 +60,9 @@ describe('I18nManagerOverviewComponent', () => {
         }, FooterBarService, HeaderLabelService, ModalOrganizerService, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
       declarations: [KeyOutputComponent, I18nManagerOverviewComponent],

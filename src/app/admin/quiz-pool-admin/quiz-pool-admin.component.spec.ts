@@ -4,6 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { GenericFilterPipeMock } from '../../quiz/quiz-manager/quiz-manager/quiz-type-select-modal/quiz-type-select-modal.component.spec';
@@ -36,6 +37,9 @@ describe('QuizPoolAdminComponent', () => {
         }, {
           provide: CustomMarkdownService,
           useClass: CustomMarkdownServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
         declarations: [QuizPoolAdminComponent, GenericFilterPipeMock],

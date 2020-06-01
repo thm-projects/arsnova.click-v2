@@ -4,6 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { SwPush } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
@@ -31,7 +32,10 @@ describe('NotificationService', () => {
       RxStompService, {
         provide: ThemesService,
         useClass: ThemesMockService
-      }, SimpleMQ,
+      }, SimpleMQ, {
+        provide: HotkeysService,
+        useValue: {}
+      },
     ],
   }));
 

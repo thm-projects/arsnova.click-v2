@@ -19,7 +19,7 @@
              class="answer-option-element d-flex justify-content-center align-items-center rounded m-2 cursor-pointer">
           <p *ngIf="question?.displayAnswerText"
              [innerHTML]="sanitizeHTML(elem)"
-             class="markdown-answer text-dark mathjax-container overflow-hidden"></p>
+             class="markdown-answer text-dark mathjax-container overflow-hidden p-1"></p>
           <p *ngIf="!question?.displayAnswerText"
              class="text-dark">{{normalizeAnswerOptionIndex(i)}}</p>
         </div>

@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -65,6 +66,9 @@ describe('AnsweroptionsFreetextComponent', () => {
                 get: () => null,
               }),
             },
+          }, {
+            provide: HotkeysService,
+            useValue: {}
           },
         ],
         declarations: [AnsweroptionsFreetextComponent, TranslatePipeMock],

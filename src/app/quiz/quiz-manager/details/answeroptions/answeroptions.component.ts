@@ -1,5 +1,6 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
@@ -12,7 +13,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   templateUrl: './answeroptions.component.html',
   styleUrls: ['./answeroptions.component.scss'],
 })
-export class AnsweroptionsComponent extends AbstractQuizManagerDetailsComponent {
+export class AnsweroptionsComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'AnsweroptionsComponent';
 
   public readonly questionType = QuestionType;
@@ -25,12 +26,24 @@ export class AnsweroptionsComponent extends AbstractQuizManagerDetailsComponent 
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    hotkeysService: HotkeysService
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
 
     footerBarService.TYPE_REFERENCE = AnsweroptionsComponent.TYPE;
     footerBarService.replaceFooterElements([
       footerBarService.footerElemBack,
     ]);
+
+    this.hotkeysService.add([
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }),
+    ]);
+  }
+
+  public ngOnInit(): void {
+    super.ngOnInit();
   }
 }

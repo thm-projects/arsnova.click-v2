@@ -1,0 +1,32 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{'hotkey.modal-title' | translate}}</h5>
+    <button type="button"
+            class="close"
+            aria-label="Close"
+            (click)="dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ul class="list-group">
+      <div *ngFor="let hotkey of hotkeys; odd as isOdd; even as isEven"
+           class="d-flex align-items-center p-2 list-group-item"
+           [class.bg-light]="isOdd"
+           [class.bg-secondary]="isEven">
+        <div class="d-inline-block">{{hotkey.description}}</div>
+        <div class="keys ml-auto btn-group">
+          <button *ngFor="let key of formatCombo(hotkey.combo)"
+                  class="btn btn-sm btn-primary"
+                  disabled="disabled">
+            <fa-icon *ngIf="key === 'LEFT'"
+                     [icon]="'long-arrow-alt-left'"></fa-icon>
+            <fa-icon *ngIf="key === 'RIGHT'"
+                     [icon]="'long-arrow-alt-right'"></fa-icon>
+            <ng-container *ngIf="!['LEFT', 'RIGHT'].includes(key)">{{key}}</ng-container>
+          </button>
+        </div>
+      </div>
+    </ul>
+  </div>
+</ng-template>

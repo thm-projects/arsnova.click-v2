@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { takeUntil } from 'rxjs/operators';
 import { availableQuestionTypes, IAvailableQuestionType } from '../../../../lib/available-question-types';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
@@ -16,7 +17,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   templateUrl: './questiontype.component.html',
   styleUrls: ['./questiontype.component.scss'],
 })
-export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent implements OnInit {
+export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   public static readonly TYPE = 'QuestiontypeComponent';
 
   private _selectableQuestionTypes = availableQuestionTypes;
@@ -35,18 +36,28 @@ export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent i
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    hotkeysService: HotkeysService,
     private translateService: TranslateService,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
 
     footerBarService.TYPE_REFERENCE = QuestiontypeComponent.TYPE;
     footerBarService.replaceFooterElements([
       footerBarService.footerElemBack,
     ]);
+
+    this.hotkeysService.add([
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }),
+    ]);
   }
 
   public ngOnInit(): void {
     super.ngOnInit();
+
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager', this._questionIndex, 'overview']);
 
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(() => {
       if (!this.quizService.quiz) {

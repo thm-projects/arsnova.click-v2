@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
@@ -61,6 +62,9 @@ describe('QuizRenameComponent', () => {
           }, SharedService, {
             provide: TwitterService,
             useClass: TwitterServiceMock,
+          }, {
+            provide: HotkeysService,
+            useValue: {}
           },
         ],
         declarations: [QuizRenameComponent, TranslatePipeMock],

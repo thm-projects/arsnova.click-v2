@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HotkeysService } from 'angular2-hotkeys';
 import { switchMapTo, takeUntil } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
 import { FreeTextQuestionEntity } from '../../../../../lib/entities/question/FreeTextQuestionEntity';
@@ -44,9 +45,10 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    hotkeysService: HotkeysService,
     private cd: ChangeDetectorRef,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
   }
 
 
@@ -79,6 +81,8 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
 
   public ngOnInit(): void {
     super.ngOnInit();
+
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager', this._questionIndex, 'overview']);
 
     this.quizService.quizUpdateEmitter.pipe(switchMapTo(this.initialized$), takeUntil(this.destroy)).subscribe(() => {
       if (!this.quizService.quiz) {

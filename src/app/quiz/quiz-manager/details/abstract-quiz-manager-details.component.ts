@@ -3,6 +3,7 @@ import { HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
+import { HotkeysService } from 'angular2-hotkeys';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { distinctUntilChanged, map, switchMap, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
@@ -44,14 +45,15 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     protected platformId: Object,
     public quizService: QuizService,
     private headerLabelService: HeaderLabelService,
-    private footerBarService: FooterBarService,
+    protected footerBarService: FooterBarService,
     protected quizPoolApiService: QuizPoolApiService,
-    private router: Router,
+    protected router: Router,
     protected route: ActivatedRoute,
+    protected hotkeysService: HotkeysService,
     protected storageService?: StorageService,
     protected swPush?: SwPush,
     protected notificationService?: NotificationService,
-    protected translate?: TranslateService
+    protected translate?: TranslateService,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
@@ -66,6 +68,8 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     this._destroy.complete();
 
     this.footerBarService.footerElemSaveQuiz.restoreClickCallback();
+    this.footerBarService.footerElemBack.restoreClickCallback();
+    this.hotkeysService.hotkeys = [];
   }
 
   public ngOnInit(): void {
@@ -96,6 +100,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
 
   protected loadPoolQuizData(questionIndex): Observable<any> {
     if (!isNaN(questionIndex)) {
+      this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager']);
       this.showSaveQuizButton = false;
       this._questionIndex = questionIndex;
       return of(this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)));
@@ -104,6 +109,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
       const footerElems = [this.footerBarService.footerElemBack];
       if (this.showSaveQuizButton) {
         footerElems.push(this.footerBarService.footerElemSaveQuiz);
+        this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'pool']);
 
         this.footerBarService.footerElemSaveQuiz.onClickCallback = async self => {
           if (!self.isActive) {

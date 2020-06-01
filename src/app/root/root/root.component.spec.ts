@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { EventReplayer } from 'preboot';
@@ -97,7 +98,10 @@ describe('RootComponent', () => {
           }, {
             provide: EventReplayer,
             useValue: {replayAll: () => {}}
-          }
+          }, {
+            provide: HotkeysService,
+            useValue: {}
+          },
         ],
         declarations: [
           HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent, TranslatePipeMock,

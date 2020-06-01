@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HotkeysService } from 'angular2-hotkeys';
 import { Subject } from 'rxjs';
 import { switchMapTo, takeUntil } from 'rxjs/operators';
 import { AbstractChoiceQuestionEntity } from '../../../../../lib/entities/question/AbstractChoiceQuestionEntity';
@@ -45,10 +46,11 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    hotkeysService: HotkeysService,
     private cd: ChangeDetectorRef,
     private questionTextService: QuestionTextService,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
   }
 
   public addAnswer(): void {
@@ -89,6 +91,8 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
 
   public ngOnInit(): void {
     super.ngOnInit();
+
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager', this._questionIndex, 'overview']);
 
     this.initialized$.pipe(switchMapTo(this.quizService.quizUpdateEmitter), takeUntil(this.destroy)).subscribe(() => {
       if (!this.quizService.quiz) {

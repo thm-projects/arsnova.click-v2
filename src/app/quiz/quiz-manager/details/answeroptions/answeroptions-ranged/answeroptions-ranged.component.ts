@@ -1,5 +1,6 @@
 import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HotkeysService } from 'angular2-hotkeys';
 import { takeUntil } from 'rxjs/operators';
 import { RangedQuestionEntity } from '../../../../../lib/entities/question/RangedQuestionEntity';
 import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
@@ -60,12 +61,15 @@ export class AnsweroptionsRangedComponent extends AbstractQuizManagerDetailsComp
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
+    hotkeysService: HotkeysService
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
   }
 
   public ngOnInit(): void {
     super.ngOnInit();
+
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager', this._questionIndex, 'overview']);
 
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(() => {
       this._question = this.quizService.quiz.questionList[this._questionIndex] as RangedQuestionEntity;

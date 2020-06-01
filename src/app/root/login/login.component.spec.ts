@@ -8,6 +8,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -55,6 +56,9 @@ describe('LoginComponent', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
       declarations: [LoginComponent, TranslatePipeMock],

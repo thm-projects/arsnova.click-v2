@@ -83,7 +83,8 @@
         },
         "questionpool": "Quiz-Pool",
         "my-quizzes": "Meine Quizze",
-        "audio": "Musik"
+        "audio": "Musik",
+        "hotkeys": "Hotkeys"
       },
       "about": {
         "title": "arsnova.click",
@@ -950,5 +951,31 @@
       "title": "Quiz-Pool Frage genehmigt",
       "body": "Eine deiner Quiz-Pool Fragen wurde genehmigt!"
     }
+  },
+  "hotkey": {
+    "modal-title": "Hotkeys",
+    "MultipleChoiceQuestion": {
+      "description": "Multiple-Choice Frage hinzufügen"
+    },
+    "SingleChoiceQuestion": {
+      "description": "Single-Choice Frage hinzufügen"
+    },
+    "RangedQuestion": {
+      "description": "Schätzfrage hinzufügen"
+    },
+    "FreeTextQuestion": {
+      "description": "Freitextfrage hinzufügen"
+    },
+    "SurveyQuestion": {
+      "description": "Umfrage hinzufügen"
+    },
+    "navigate-to-prev-question": "Zur vorherigen Quizfrage",
+    "navigate-to-next-question": "Zur nächsten Quizfrage",
+    "navigate-to-question-text": "Fragetext bearbeiten",
+    "navigate-to-answeroptions": "Antwortoptionen bearbeiten",
+    "navigate-to-countdown": "Countdown bearbeiten",
+    "navigate-to-question-type": "Typ der Frage bearbeiten",
+    "navigate-to-tags": "Tags der Frage bearbeiten",
+    "delete-question": "Diese Frage löschen"
   }
 }

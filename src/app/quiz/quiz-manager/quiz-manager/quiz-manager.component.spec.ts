@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService, TranslateStore } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
@@ -74,6 +75,11 @@ describe('QuizManagerComponent', () => {
         }, {
           provide: CustomMarkdownService,
           useClass: CustomMarkdownServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {
+            add: () => {}
+          }
         },
       ],
       declarations: [QuizManagerComponent, TranslatePipeMock],

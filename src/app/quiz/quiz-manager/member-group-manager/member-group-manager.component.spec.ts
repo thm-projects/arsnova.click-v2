@@ -8,6 +8,7 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
@@ -66,7 +67,10 @@ describe('MemberGroupManagerComponent', () => {
           }, {
             provide: CustomMarkdownService,
             useClass: CustomMarkdownServiceMock
-          }
+          }, {
+            provide: HotkeysService,
+            useValue: {}
+          },
         ],
         declarations: [MemberGroupManagerComponent, TranslatePipeMock],
       }).compileComponents();
