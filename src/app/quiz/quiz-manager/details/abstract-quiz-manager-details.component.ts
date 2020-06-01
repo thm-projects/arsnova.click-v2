@@ -92,6 +92,10 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
       }
 
       this._question = this.quizService.quiz.questionList[this._questionIndex];
+      if (!this._question) {
+        return;
+      }
+
       this.footerBarService.footerElemSaveQuiz.isActive = this._question.isValid() && this._question.tags.length > 0;
 
       this.initialized$.next(true);
