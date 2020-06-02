@@ -283,7 +283,7 @@
       "optin": {
         "check": "Für Social Media Features anklicken",
         "share": "Auf Social Media teilen",
-        "warning": " Ich bin damit einverstanden, dass Inhalte von Twitter angezeigt werden."
+        "warning": " Ich bin einverstanden, dass Tweets mit #arsnova.click angezeigt werden."
       },
       "tweet": {
         "content": {
@@ -351,7 +351,7 @@
         "title": "Quiz bearbeiten",
         "label": "Bearbeiten"
       },
-      "create_session": "Neues Quiz!",
+      "create_session": "Neues Quiz",
       "can_create_session": "Quiz erstellen",
       "create_demo_session": "Starte Demo Quiz",
       "quiz_management": "Quiz-Speicher",
@@ -446,7 +446,7 @@
     "lobby": {
       "start_quiz": "Los geht's!",
       "kick_member_confirmation": "Soll die Person \"{NAME}\" aus dem Quiz entfernt werden?",
-      "own_nickname": "Dein Nickname:",
+      "own_nickname": "Du bist:",
       "waiting_for_players": "Warten auf die anderen…",
       "description": {}
     },
@@ -822,32 +822,32 @@
     },
     "statistics": {
       "users": {
-        "title": "Anzahl der Nutzer/innen dieser Webseite",
-        "content": "Hier werden alle aktiven Verbindungen zu arsnova.click gewertet. Natürlich sind diese Daten anonymisiert. Es ist nicht möglich, aus diesen Daten Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist es aber ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
+        "title": "User online",
+        "content": "Hier werden alle aktiven Verbindungen zu arsnova.click gezählt. Natürlich sind diese Daten anonymisiert. Es ist nicht möglich, aus diesen Daten Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist es aber ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
       },
       "total-quizzes": {
-        "title": "Quizze insgesamt",
-        "content": "Alle Quizze, die von Nutzern erstellt wurden, werden hier gezählt. Ja, auch deine! Natürlich sind deine Quizze weiterhin privat und nur du kannst sie starten. Keiner kann auf deine Quiz-Daten zugreifen!"
+        "title": "Quizze",
+        "content": "Alle erstellten Quizze werden hier gezählt. Ja, auch deine! Natürlich sind deine Quizze weiterhin privat und nur du kannst sie starten. Keiner kann auf deine Quiz-Daten zugreifen!"
       },
       "active-quizzes": {
         "title": "Aktive Quizze",
-        "content": "Dies ist die Anzahl aller gerade gespielten Quizze. Dazu werden alle Quizze gezählt, die gerade in der Quiz Lobby sind oder aktiv Quizrunden spielen."
+        "content": "Dies ist die Anzahl aller gerade gespielten Quizze. Entweder ist deren Quiz-Lobby geöffnet oder die Quizrunde wurde gestartet."
       },
       "total-pool-questions": {
-        "title": "Pool-Fragen insgesamt",
-        "content": "Im Fragen-Pool kann jeder User für alle anderen Fragen bereitstellen. Damit kann sich jeder eine Inspiration für sein Quiz holen. Auch können Schülerinnen und Schüler die Quizze zur Abfrage und Vertiefung des eigenen Wissens nutzen."
+        "title": "Pool-Fragen",
+        "content": "Im Fragen-Pool kannst du Quizfragen für die Öffentlichkeit bereitstellen. Jeder kann aus den Pool-Fragen eigene Quizze erstellen."
       },
       "total-pool-tags": {
-        "title": "Verschiedene Tags",
-        "content": "Quizfragen können Tags zugewiesen werden. Damit sind sie thematisch sortierbar und können im Fragen-Pool nach Belieben zusammengestellt werden. Dabei bist du in der Auswahl der Tags für deine Pool-Fragen völlig frei. Einige Hinweise zur Vergabe von Tags für Fragen findest du im Quiz-Manager im Reiter 'Tags'."
+        "title": "Tags",
+        "content": "Den Quizfragen können Tags zugewiesen werden. Damit sind sie thematisch sortierbar und können im Fragen-Pool nach Belieben zusammengestellt werden. Dabei bist du in der Auswahl der Tags für deine Pool-Fragen völlig frei. Einige Hinweise zur Vergabe von Tags für Fragen findest du im Quiz-Manager unterm Reiter »Tags«."
       },
       "active-participants": {
-        "title": "Aktuelle Teilnehmerzahl",
-        "content": "Hier findest du die aktuelle Anzahl aller Teilnehmer/innen an den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, auf einzelne Teilnehmer/innen Rückschlüsse zu ziehen, sie zu identifizieren oder ihre Aktionen auf der Seite nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
+        "title": "Players",
+        "content": "Hier siehst du die aktuelle Zahl aller Teilnehmer/innen an den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, auf einzelne Teilnehmer/innen Rückschlüsse zu ziehen, sie zu identifizieren oder ihre Aktionen auf der Seite nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
       },
       "average-participants": {
-        "title": "Durchschnittliche Teilnehmerzahl pro Quiz",
-        "content": "Dieser Wert gibt an, wie viele Teilnehmer durchschnittlich an den Quizzen teilgenommen haben. Auch diese Daten sind anonymisiert. Wir speichern ausschließlich den Nicknamen des Users und das zugehörige Quiz. Damit sind keinerlei Rückschlüsse auf einzelne Personen oder Verbindungen möglich."
+        "title": "Players pro Quiz",
+        "content": "Diese Zahl gibt an, wie viele Personen durchschnittlich an den Quizzen teilgenommen haben."
       }
     }
   },
