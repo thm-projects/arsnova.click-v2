@@ -13,7 +13,7 @@
       "dismiss": "Hinweis nicht mehr anzeigen",
       "learn_more": "Datenschutzerklärung"
     },
-    "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du diese Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
+    "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du die Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
     "abort": "Abbrechen",
     "aria_description": {},
     "true": "Wahr",
@@ -90,26 +90,27 @@
         "title": "arsnova.click",
         "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
         "ars": "arsnova.click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
-        "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelte ein Team aus Bachelor- und Masterstudenten der <a href='http://www.thm.de/site/' target='_blank'>TH Mittelhessen</a> die erste Version dieser <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierten</a> Alternative zum ARSnova-Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
+        "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelte ein Team aus Bachelor- und Masterstudenten der <a href='http://www.thm.de/site/' target='_blank'>THM</a> die erste Version dieser <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierten</a> Alternative zum Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
         "met_requirements": "Bisher wurden die folgenden Features implementiert:",
         "requirements": {
-          "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quiz-Daten liegen im Browser des Quiz-Erstellers (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
+          "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quiz-Daten verbleiben im Browser (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
           "2": "Keine Registrierung, keine Anmeldung, keine Installation (<a href='https://de.wikipedia.org/wiki/Bring_your_own_device' target='_blank'>BYOD</a>), keine Werbung, keine Kosten",
-          "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Kandidat/in bzw. Lehrperson und Schüler/in",
-          "4": "Jeder darf Quizze erstellen, sofort und beliebig viele. Das Erstellen eines Quiz ist sogar auf dem Smartphone ein Kinderspiel!",
-          "5": "Extrem einfache, barrierefreie, beamertaugliche, vollständig in Englisch, Spanisch, Französisch und Italienisch übersetzte Bedienoberfläche",
+          "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Kandidat/in",
+          "4": "Jeder darf Quizze erstellen, sofort und beliebig viele.",
+          "5": "Barrierefreie, für den Beamer optimierte, vollständig in Englisch, Spanisch, Französisch und Italienisch übersetzte Bedienoberfläche",
           "6": "Frageformate: Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
-          "7": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a> und eingebetteten Bildern und Videos im Fragetext und in den Antwortoptionen",
-          "8": "Edutainment: Lernmotivation durch Live-Wettbewerb, einzeln oder in Teams, mit Sound gegen die Uhr und die Mitspielenden",
-          "9": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Webdesign</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
-          "10": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> mit reaktiver Web-Technik",
-          "11": "arsnova.click ist <a href='https://github.com/thm-projects/arsnova.click' target='_blank'>Open Source Software</a>"
+          "7": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a>, Bilder und Videos im Fragetext und in den Antwortoptionen",
+          "8": "Edutainment: Lernmotivation durch Live-Wettbewerb – einzeln oder in Teams – mit Sound gegen die Uhr und die Mitspielenden",
+          "9": "Bonusoption: Die Top Players erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
+          "10": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Design</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
+          "11": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reaktiver Web-Technik",
+          "12": "<a href='https://github.com/thm-projects/arsnova.click' target='_blank'>Open Source Software</a>"
         },
         "manual": {
           "title": "Bedienungshandbuch?",
           "text": {
             "1": "Brauchst du nicht!",
-            "2": "Tipp einfach den Namen des Quiz ein. Die Buttons werden aktiviert, sobald du entweder den Namen eines freigeschalteten Quiz eingibst: \"Mach mit!\" oder ein Quiz mit dem eingegebenen Namen erstellen kannst: \"Neues Quiz!\".",
+            "2": "Tipp einfach den Namen des Quiz ein. Die Buttons werden aktiviert, sobald du entweder den Namen eines freigeschalteten Quiz eingibst: \"Mach mit!\" oder ein Quiz mit dem eingegebenen Namen erstellen kannst: \"Neues Quiz\".",
             "3": "Folge einfach deiner Intuition: schauen, klicken, quizzen."
           }
         }
@@ -146,7 +147,7 @@
         },
         "3rdparty": {
           "title": "Dienste und Inhalte Dritter",
-          "text": "In Quizfragen können Inhalte Dritter, wie zum Beispiel Videos von YouTube und Vimeo oder Grafiken von anderen Webseiten, eingebunden werden. Dies setzt voraus, dass die Anbieter dieser Inhalte die IP-Adresse der Nutzer/innen wahrnehmen. Ohne die IP-Adresse können die Inhalte nicht an den Browser gesendet werden."
+          "text": "In Quizfragen können Inhalte Dritter, wie zum Beispiel Videos von YouTube und Vimeo oder Grafiken von anderen Webseiten, eingebunden werden. Dies setzt voraus, dass die Anbieter der Inhalte die IP-Adresse der Nutzer/innen wahrnehmen. Ohne die IP-Adresse können die Inhalte nicht an den Browser gesendet werden."
         },
         "cookies": {
           "title": "Cookies",
@@ -283,7 +284,7 @@
       "optin": {
         "check": "Für Social Media Features anklicken",
         "share": "Auf Social Media teilen",
-        "warning": " Ich bin einverstanden, dass Tweets mit #arsnova.click angezeigt werden."
+        "warning": " Ich bin einverstanden, dass Tweets mit #arsnovaclick angezeigt werden."
       },
       "tweet": {
         "content": {
@@ -749,7 +750,7 @@
       "demo_quiz": {
         "title": {
           "2": "Gib »ABCD« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiz-Namen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du Quizze im Unterricht einsetzen kannst."
+          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du bonusprämierte Quizze im Unterricht einsetzen kannst."
         }
       },
       "name_input": {}
@@ -823,7 +824,7 @@
     "statistics": {
       "users": {
         "title": "User online",
-        "content": "Hier werden alle aktiven Verbindungen zu arsnova.click gezählt. Natürlich sind diese Daten anonymisiert. Es ist nicht möglich, aus diesen Daten Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist es aber ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
+        "content": "Hier werden alle aktiven Verbindungen zu arsnova.click gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, aus den Daten Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist es aber ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
       },
       "total-quizzes": {
         "title": "Quizze",
@@ -847,7 +848,7 @@
       },
       "average-participants": {
         "title": "Players pro Quiz",
-        "content": "Diese Zahl gibt an, wie viele Personen durchschnittlich an den Quizzen teilgenommen haben."
+        "content": "Die Zahl gibt an, wie viele Personen durchschnittlich an den Quizzen teilgenommen haben."
       }
     }
   },
