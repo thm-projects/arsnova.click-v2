@@ -16,6 +16,7 @@ import { of } from 'rxjs';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../../../_mocks/_services/SwUpdateMock';
 import { HeaderComponent } from '../../../../header/header/header.component';
+import { MarkdownFeature } from '../../../../lib/enums/MarkdownFeature';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { LivePreviewComponent } from '../../../../live-preview/live-preview/live-preview.component';
 import { MarkdownBarComponent } from '../../../../markdown/markdown-bar/markdown-bar.component';
@@ -144,7 +145,7 @@ describe('QuestiontextComponent', () => {
 
   describe('#connector', () => {
     it('should call the markdown interpreter if a markdown button is pressed', () => {
-      expect(() => component.connector('boldMarkdownButton')).not.toThrowError();
+      expect(() => component.connector(MarkdownFeature.Bold)).not.toThrowError();
     });
   });
 

@@ -17,6 +17,12 @@ ul {
   font-size: x-large;
 }
 
+.escape-icon::before {
+  font-weight: bold;
+  content: "\2216";
+  font-size: medium;
+}
+
 .latex-icon::before {
   font-weight: bold;
   content: "\TeX";

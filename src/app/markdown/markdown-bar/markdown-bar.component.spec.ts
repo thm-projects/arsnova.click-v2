@@ -2,9 +2,24 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBold,
+  faCode,
+  faGlobe,
+  faHeading,
+  faImage,
+  faInfoCircle,
+  faItalic,
+  faListOl,
+  faListUl,
+  faMinus,
+  faQuoteRight,
+  faSlash,
+  faStrikethrough,
+} from '@fortawesome/free-solid-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
+import { MarkdownFeature } from '../../lib/enums/MarkdownFeature';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
 import { SharedModule } from '../../shared/shared.module';
@@ -39,10 +54,15 @@ describe('MarkdownBarComponent', () => {
     library.addIcons(faHeading);
     library.addIcons(faGlobe);
     library.addIcons(faListUl);
+    library.addIcons(faListOl);
     library.addIcons(faCode);
     library.addIcons(faImage);
     library.addIcons(faStrikethrough);
     library.addIcons(faItalic);
+    library.addIcons(faSlash);
+    library.addIcons(faMinus);
+    library.addIcons(faInfoCircle);
+    library.addIcons(faQuoteRight);
     fixture = TestBed.createComponent(MarkdownBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -57,7 +77,7 @@ describe('MarkdownBarComponent', () => {
   }));
 
   it('#connector', async(inject([TrackingService], (trackingService: TrackingService) => {
-    const element = component.markdownBarElements.find(el => el.id === 'boldMarkdownButton');
+    const element = component.markdownBarElements.find(el => el.feature === MarkdownFeature.Bold);
 
     spyOn(component.connectorEmitter, 'emit').and.callFake(() => {});
     spyOn(trackingService, 'trackClickEvent').and.callFake(() => {});

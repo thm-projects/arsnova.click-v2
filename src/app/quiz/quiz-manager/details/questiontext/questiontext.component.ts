@@ -16,6 +16,7 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { DeviceType } from '../../../../lib/enums/DeviceType';
 import { LivePreviewEnvironment } from '../../../../lib/enums/LivePreviewEnvironment';
+import { MarkdownFeature } from '../../../../lib/enums/MarkdownFeature';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
@@ -65,24 +66,24 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
     ]);
   }
 
-  public connector(markdownFeature: string): void {
-    switch (markdownFeature) {
-      case 'boldMarkdownButton':
+  public connector(feature: MarkdownFeature): void {
+    switch (feature) {
+      case MarkdownFeature.Bold:
         if (!this.markdownAlreadyExistsAndAutoRemove('**', '**')) {
           this.insertInQuestionText('**', '**');
         }
         break;
-      case 'strikeThroughMarkdownButton':
+      case MarkdownFeature.StrikeThrough:
         if (!this.markdownAlreadyExistsAndAutoRemove('~~', '~~')) {
           this.insertInQuestionText('~~', '~~');
         }
         break;
-      case 'italicMarkdownButton':
+      case MarkdownFeature.Italic:
         if (!this.markdownAlreadyExistsAndAutoRemove('*', '*')) {
-          this.insertInQuestionText('', '*');
+          this.insertInQuestionText('*', '*');
         }
         break;
-      case 'headerMarkdownButton':
+      case MarkdownFeature.Header:
         if (!this.markdownAlreadyExistsAndAutoRemove('### ', '')) {
           if (this.markdownAlreadyExistsAndAutoRemove('## ', '')) {
             this.insertInQuestionText('### ', '');
@@ -95,23 +96,33 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
           }
         }
         break;
-      case 'hyperlinkMarkdownButton':
+      case MarkdownFeature.Hyperlink:
         this.wrapWithLinkSymbol();
         break;
-      case 'imageMarkdownButton':
+      case MarkdownFeature.Image:
         this.wrapWithImageSymbol();
         break;
-      case 'codeMarkdownButton':
+      case MarkdownFeature.Code:
         if (!this.markdownAlreadyExistsAndAutoRemove('```\n', '\n```')) {
           this.insertInQuestionText('```\n', '\n```');
         }
         break;
-      case 'ulMarkdownButton':
+      case MarkdownFeature.UnorderedList:
         if (!this.markdownAlreadyExistsAndAutoRemove('- ')) {
           this.insertInQuestionText('- ');
         }
         break;
-      case 'latexMarkdownButton':
+      case MarkdownFeature.OrderedList:
+        if (!this.markdownAlreadyExistsAndAutoRemove('1. ')) {
+          this.insertInQuestionText('1. ');
+        }
+        break;
+      case MarkdownFeature.Quote:
+        if (!this.markdownAlreadyExistsAndAutoRemove('> ')) {
+          this.insertInQuestionText('> ');
+        }
+        break;
+      case MarkdownFeature.Latex:
         if (!this.markdownAlreadyExistsAndAutoRemove('$$', '$$')) {
           if (!this.markdownAlreadyExistsAndAutoRemove('$', '$')) {
             this.insertInQuestionText('$$', '$$');
@@ -120,8 +131,19 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
           this.insertInQuestionText('$', '$');
         }
         break;
-      case 'lineBreakMarkdownButton':
+      case MarkdownFeature.LineBreak:
         this.insertInQuestionText('<br/>', '');
+        break;
+      case MarkdownFeature.HorizontalRule:
+        this.insertInQuestionText('---\n', '');
+        break;
+      case MarkdownFeature.Escape:
+        if (!this.markdownAlreadyExistsAndAutoRemove('\\')) {
+          this.insertInQuestionText('\\', '');
+        }
+        break;
+      case MarkdownFeature.Info:
+        window.open('https://www.markdownguide.org/cheat-sheet/#basic-syntax', '_blank', 'noopener noreferrer');
         break;
     }
 
