@@ -61,6 +61,7 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
       this.footerBarService.footerElemMemberGroup,
       this.footerBarService.footerElemSound,
       this.footerBarService.footerElemHotkeys,
+      this.footerBarService.footerElemHashtagManagement
     ];
     if (environment.forceQuizTheme) {
       footerElements.push(this.footerBarService.footerElemTheme);

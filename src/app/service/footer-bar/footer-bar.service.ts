@@ -232,7 +232,7 @@ export class FooterBarService {
   });
   public footerElemNicknames: IFooterBarElement = new FooterbarElement({
     id: 'nicknames',
-    iconClass: ['fas', 'users'],
+    iconClass: ['fas', 'portrait'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.nicknames',
     selectable: false,
