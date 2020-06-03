@@ -88,19 +88,19 @@
       },
       "about": {
         "title": "arsnova.click",
-        "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
+        "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
         "ars": "arsnova.click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
         "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelte ein Team aus Bachelor- und Masterstudenten der <a href='http://www.thm.de/site/' target='_blank'>THM</a> die erste Version dieser <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierten</a> Alternative zum Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
-        "met_requirements": "Bisher wurden die folgenden Features implementiert:",
+        "met_requirements": "<b>Features:</b>",
         "requirements": {
           "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quiz-Daten verbleiben im Browser (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
           "2": "Keine Registrierung, keine Anmeldung, keine Installation (<a href='https://de.wikipedia.org/wiki/Bring_your_own_device' target='_blank'>BYOD</a>), keine Werbung, keine Kosten",
           "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Kandidat/in",
           "4": "Jeder darf Quizze erstellen, sofort und beliebig viele.",
-          "5": "Barrierefreie, für den Beamer optimierte, vollständig in Englisch, Spanisch, Französisch und Italienisch übersetzte Bedienoberfläche",
+          "5": "Barrierefreie, für den Beamer optimierte, in Englisch, Spanisch, Französisch und Italienisch übersetzte Bedienoberfläche",
           "6": "Frageformate: Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
           "7": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a>, Bilder und Videos im Fragetext und in den Antwortoptionen",
-          "8": "Edutainment: Lernmotivation durch Live-Wettbewerb – einzeln oder in Teams – mit Sound gegen die Uhr und die Mitspielenden",
+          "8": "Edutainment: Lernmotivation durch Live-Wettbewerb – einzeln oder in Teams – mit Sound im Countdown gegen die Mitspielenden",
           "9": "Bonusoption: Die Top Players erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
           "10": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Design</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
           "11": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reaktiver Web-Technik",
@@ -750,7 +750,7 @@
       "demo_quiz": {
         "title": {
           "2": "Gib »ABCD« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiz-Namen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du bonusprämierte Quizze im Unterricht einsetzen kannst."
+          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du bonusprämierte Quizze zur Lernmotivation im Unterricht einsetzt."
         }
       },
       "name_input": {}
@@ -824,11 +824,11 @@
     "statistics": {
       "users": {
         "title": "User online",
-        "content": "Hier werden alle aktiven Verbindungen zu arsnova.click gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, aus den Daten Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist es aber ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
+        "content": "Hier werden die Verbindungen zu arsnova.click gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist die Zahl ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
       },
       "total-quizzes": {
         "title": "Quizze",
-        "content": "Alle erstellten Quizze werden hier gezählt. Ja, auch deine! Natürlich sind deine Quizze weiterhin privat und nur du kannst sie starten. Keiner kann auf deine Quiz-Daten zugreifen!"
+        "content": "Alle Quizze werden hier gezählt. Ja, auch deine! Natürlich sind deine Quizze privat und nur du kannst sie starten. Keiner kann auf deine Quiz-Daten zugreifen!"
       },
       "active-quizzes": {
         "title": "Aktive Quizze",
@@ -836,19 +836,19 @@
       },
       "total-pool-questions": {
         "title": "Pool-Fragen",
-        "content": "Im Fragen-Pool kannst du Quizfragen für die Öffentlichkeit bereitstellen. Jeder kann aus den Pool-Fragen eigene Quizze erstellen."
+        "content": "Im Fragen-Pool kannst du Quizfragen für die Öffentlichkeit bereitstellen. Jeder kann aus den Pool-Fragen eigene Quizze zusammenstellen."
       },
       "total-pool-tags": {
         "title": "Tags",
-        "content": "Den Quizfragen können Tags zugewiesen werden. Damit sind sie thematisch sortierbar und können im Fragen-Pool nach Belieben zusammengestellt werden. Dabei bist du in der Auswahl der Tags für deine Pool-Fragen völlig frei. Einige Hinweise zur Vergabe von Tags für Fragen findest du im Quiz-Manager unterm Reiter »Tags«."
+        "content": "Einer Frage, die du in den Pool stellst, kannst du beliebige Tags zuweisen. So können Pool-Fragen nach Themen zusammengestellt werden."
       },
       "active-participants": {
-        "title": "Players",
-        "content": "Hier siehst du die aktuelle Zahl aller Teilnehmer/innen an den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, auf einzelne Teilnehmer/innen Rückschlüsse zu ziehen, sie zu identifizieren oder ihre Aktionen auf der Seite nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
+        "title": "Player",
+        "content": "Hier siehst du die aktuelle Zahl aller Player in den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, einzelne Personen zu identifizieren oder ihre Aktionen nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
       },
       "average-participants": {
-        "title": "Players pro Quiz",
-        "content": "Die Zahl gibt an, wie viele Personen durchschnittlich an den Quizzen teilgenommen haben."
+        "title": "Player pro Quiz",
+        "content": "Die Zahl gibt an, wie viele Personen durchschnittlich an Quizzen teilgenommen haben."
       }
     }
   },
@@ -858,8 +858,14 @@
         "bold": "Fett",
         "italic": "Kursiv",
         "heading": "Überschrift",
-        "hyperlink": "Hyperlink",
+        "hyperlink": "Link",
         "unordered_list": "Unsortierte Liste",
+        "ordered_list": "Nummerierte Liste",
+        "strike_through": "Durchgestrichen",
+        "quote": "Eingerücktes Zitat",
+        "escape": "Nachfolgendes Zeichen maskieren",
+        "horizontal-rule": "Trennlinie",
+        "info": "Info zur Textformatierung",
         "latex": "TeX-Formel",
         "code": "Code-Formatierung",
         "image": "Bild"
