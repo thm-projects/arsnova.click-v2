@@ -6,7 +6,20 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBold,
+  faCode,
+  faGlobe,
+  faHeading,
+  faImage,
+  faInfoCircle,
+  faItalic,
+  faListOl,
+  faListUl,
+  faQuoteRight,
+  faStrikethrough,
+} from '@fortawesome/free-solid-svg-icons';
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
@@ -78,7 +91,7 @@ describe('QuestiontextComponent', () => {
             useClass: QuizMockService,
           }, HeaderLabelService, {
             provide: ThemesService,
-            useClass: ThemesMockService
+            useClass: ThemesMockService,
           }, FooterBarService, SettingsService, {
             provide: ConnectionService,
             useClass: ConnectionMockService,
@@ -110,8 +123,8 @@ describe('QuestiontextComponent', () => {
           }, {
             provide: HotkeysService,
             useValue: {
-              add: () => {}
-            }
+              add: () => {},
+            },
           },
         ],
         declarations: [
@@ -124,7 +137,8 @@ describe('QuestiontextComponent', () => {
   beforeEach((
     () => {
       const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
-      library.addIcons(...[faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough]);
+      library.addIcons(faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough, faListOl, faQuoteRight, faMinus,
+        faInfoCircle);
       fixture = TestBed.createComponent(QuestiontextComponent);
       component = fixture.componentInstance;
       component['_questionIndex'] = 0;
