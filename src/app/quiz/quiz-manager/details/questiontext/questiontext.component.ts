@@ -35,7 +35,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   public static readonly TYPE = 'QuestiontextComponent';
 
-  @ViewChild('questionText', { static: true }) private textarea: ElementRef;
+  @ViewChild('questionText', { static: true }) private textarea: ElementRef<HTMLTextAreaElement>;
 
   public readonly DEVICE_TYPE = DeviceType;
   public readonly ENVIRONMENT_TYPE = LivePreviewEnvironment;
@@ -68,8 +68,10 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
       new Hotkey('esc', (): boolean => {
         this.footerBarService.footerElemBack.onClickCallback();
         return false;
-      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
+      }, ['TEXTAREA'], this.translate.instant('region.footer.footer_bar.back')),
     ]);
+
+    this.textarea.nativeElement.focus();
   }
 
   public connector(feature: MarkdownFeature): void {
