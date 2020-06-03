@@ -61,12 +61,12 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
         this.footerBarService.footerElemBack.onClickCallback();
         return false;
       }, undefined, this.translate.instant('region.footer.footer_bar.back')),
-      new Hotkey('ctrl+left', (): boolean => {
+      new Hotkey('alt+left', (): boolean => {
         const prevIndex = this.questionIndex - 1;
         this.router.navigate(['/quiz', 'manager', prevIndex === -1 ? 0 : prevIndex, 'overview']);
         return false;
       }, undefined, this.translate.instant('hotkey.navigate-to-prev-question')),
-      new Hotkey('ctrl+right', (): boolean => {
+      new Hotkey('alt+right', (): boolean => {
         const nextIndex = this.questionIndex + 1;
         const maxIndex = this.quizService.quiz.questionList.length - 1;
         this.router.navigate(['/quiz', 'manager', nextIndex > maxIndex ? maxIndex : nextIndex, 'overview']);
