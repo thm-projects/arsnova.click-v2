@@ -473,3 +473,6 @@ $logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova
 
 $font-header: 'Roboto', Helvetica, Arial, sans-serif !important;
 $font-text: 'Lato', Arial, sans-serif !important;
+
+$color-markdown-blockquote: $primary_text_color !default;
+$border-left-color-markdown-blockquote: $secondary-text_color !default;
