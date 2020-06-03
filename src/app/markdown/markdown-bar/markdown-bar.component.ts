@@ -20,10 +20,6 @@ class MarkdownBarElement {
     return this._customIcon;
   }
 
-  get id(): string {
-    return this._id;
-  }
-
   get titleRef(): string {
     return this._titleRef;
   }
@@ -44,12 +40,10 @@ class MarkdownBarElement {
 
   private readonly _customIcon: boolean;
 
-  private readonly _id: string;
   private readonly _titleRef: string;
   private readonly _feature: MarkdownFeature;
 
-  constructor({ id, titleRef, iconClass, iconClassToggled = iconClass, customIcon = false, feature }) {
-    this._id = id;
+  constructor({ titleRef, iconClass, iconClassToggled = iconClass, customIcon = false, feature }) {
     this._titleRef = titleRef;
     this._iconClass = iconClass;
     this._customIcon = customIcon;
@@ -59,94 +53,79 @@ class MarkdownBarElement {
 }
 
 const BoldMarkdownButton = new MarkdownBarElement({
-  id: 'boldMarkdownButton',
   feature: MarkdownFeature.Bold,
   titleRef: 'plugins.markdown_bar.tooltip.bold',
   iconClass: 'bold',
 });
 const HeaderMarkdownButton = new MarkdownBarElement({
-  id: 'headerMarkdownButton',
   feature: MarkdownFeature.Header,
   titleRef: 'plugins.markdown_bar.tooltip.heading',
   iconClass: 'heading',
 });
 const HyperlinkMarkdownButton = new MarkdownBarElement({
-  id: 'hyperlinkMarkdownButton',
   feature: MarkdownFeature.Hyperlink,
   titleRef: 'plugins.markdown_bar.tooltip.hyperlink',
   iconClass: 'globe',
 });
 const UlMarkdownButton = new MarkdownBarElement({
-  id: 'unorderedListMarkdownButton',
   feature: MarkdownFeature.UnorderedList,
   titleRef: 'plugins.markdown_bar.tooltip.unordered_list',
   iconClass: 'list-ul',
 });
 const OlMarkdownButton = new MarkdownBarElement({
-  id: 'orderedListMarkdownButton',
   feature: MarkdownFeature.OrderedList,
   titleRef: 'plugins.markdown_bar.tooltip.ordered_list',
   iconClass: 'list-ol',
 });
 const CodeMarkdownButton = new MarkdownBarElement({
-  id: 'codeMarkdownButton',
   feature: MarkdownFeature.Code,
   titleRef: 'plugins.markdown_bar.tooltip.code',
   iconClass: 'code',
 });
 const ImageMarkdownButton = new MarkdownBarElement({
-  id: 'imageMarkdownButton',
   feature: MarkdownFeature.Image,
   titleRef: 'plugins.markdown_bar.tooltip.image',
   iconClass: 'image',
 });
 const LatexMarkdownButton = new MarkdownBarElement({
-  id: 'latexMarkdownButton',
   feature: MarkdownFeature.Latex,
   titleRef: 'plugins.markdown_bar.tooltip.latex',
   iconClass: 'latex-icon',
   customIcon: true,
 });
 const StrikeThroughMarkdownButton = new MarkdownBarElement({
-  id: 'strikeThroughMarkdownButton',
   feature: MarkdownFeature.StrikeThrough,
   titleRef: 'plugins.markdown_bar.tooltip.strike_through',
   iconClass: 'strikethrough',
 });
 const ItalicMarkdownButton = new MarkdownBarElement({
-  id: 'italicMarkdownButton',
   feature: MarkdownFeature.Italic,
   titleRef: 'plugins.markdown_bar.tooltip.italic',
   iconClass: 'italic',
 });
 const LineBreakMarkdownButton = new MarkdownBarElement({
-  id: 'lineBreakMarkdownButton',
   feature: MarkdownFeature.LineBreak,
   titleRef: 'plugins.markdown_bar.tooltip.line-break',
   iconClass: 'line-break-icon',
   customIcon: true,
 });
 const EscapeMarkdownButton = new MarkdownBarElement({
-  id: 'escapeMarkdownButton',
   feature: MarkdownFeature.Escape,
   titleRef: 'plugins.markdown_bar.tooltip.escape',
   iconClass: 'escape-icon',
   customIcon: true
 });
 const HrMarkdownButton = new MarkdownBarElement({
-  id: 'horizontalRuleMarkdownButton',
   feature: MarkdownFeature.HorizontalRule,
   titleRef: 'plugins.markdown_bar.tooltip.horizontal-rule',
   iconClass: 'minus',
 });
 const InfoMarkdownButton = new MarkdownBarElement({
-  id: 'infoRuleMarkdownButton',
   feature: MarkdownFeature.Info,
   titleRef: 'plugins.markdown_bar.tooltip.info',
   iconClass: 'info-circle',
 });
 const QuoteMarkdownButton = new MarkdownBarElement({
-  id: 'quoteMarkdownButton',
   feature: MarkdownFeature.Quote,
   titleRef: 'plugins.markdown_bar.tooltip.quote',
   iconClass: 'quote-right',
@@ -174,7 +153,7 @@ export class MarkdownBarComponent {
   public connector(elem: MarkdownBarElement): void {
     this.trackingService.trackClickEvent({
       action: QuestiontextComponent.TYPE,
-      label: elem.id,
+      label: elem.feature,
     });
     this.connectorEmitter.emit(elem.feature);
   }
