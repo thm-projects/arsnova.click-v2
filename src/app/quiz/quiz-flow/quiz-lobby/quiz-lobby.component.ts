@@ -258,16 +258,16 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       this.footerBarService.footerElemStartQuiz, this.footerBarService.footerElemQRCode,
     ];
 
-    if (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
-      footerElements.splice(0, 0, this.footerBarService.footerElemEditQuiz);
-    }
-
     if (environment.readingConfirmationEnabled) {
-      footerElements.splice(2, 0, this.footerBarService.footerElemReadingConfirmation);
+      footerElements.push(this.footerBarService.footerElemReadingConfirmation);
     }
 
     if (environment.confidenceSliderEnabled) {
       footerElements.push(this.footerBarService.footerElemConfidenceSlider);
+    }
+
+    if (!environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
+      footerElements.push(this.footerBarService.footerElemEditQuiz);
     }
 
     this.footerBarService.replaceFooterElements(footerElements);
