@@ -4,12 +4,10 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { QRCodeModule } from 'angular2-qrcode';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
@@ -70,9 +68,6 @@ describe('QuizLobbyComponent', () => {
           provide: ThemesService,
           useClass: ThemesMockService,
         }, MemberApiService, QuizApiService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
           provide: UserService,
           useValue: {},
         }, SimpleMQ, {

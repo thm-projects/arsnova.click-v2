@@ -11,7 +11,6 @@ import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -75,7 +74,7 @@ describe('NicknameSelectComponent', () => {
           useValue: {}
         },
       ],
-      declarations: [NicknameSelectComponent, TranslatePipeMock],
+      declarations: [NicknameSelectComponent],
     }).compileComponents();
   }));
 

@@ -4,11 +4,9 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbModalRef, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -38,9 +36,6 @@ describe('HeaderComponent', () => {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, SharedService, I18nService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
           provide: SwUpdate,
           useClass: SwUpdateMock,
         }, {

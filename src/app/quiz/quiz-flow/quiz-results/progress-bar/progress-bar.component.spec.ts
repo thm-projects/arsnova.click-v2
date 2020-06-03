@@ -2,8 +2,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { Attendee } from '../../../../lib/attendee/attendee';
 import { FreeTextQuestionEntity } from '../../../../lib/entities/question/FreeTextQuestionEntity';
 import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
@@ -65,10 +63,7 @@ describe('ProgressBarComponent', () => {
         }, I18nService, HeaderLabelService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        }, QuestionTextService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
+        }, QuestionTextService,
       ],
       declarations: [
         ProgressBarSingleChoiceComponent,

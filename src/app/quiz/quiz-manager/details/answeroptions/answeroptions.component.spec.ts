@@ -8,15 +8,12 @@ import { SwUpdate } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { HotkeysService } from 'angular2-hotkeys';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../../../_mocks/_services/SwUpdateMock';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { HeaderComponent } from '../../../../header/header/header.component';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { LivePreviewComponent } from '../../../../live-preview/live-preview/live-preview.component';
@@ -116,9 +113,6 @@ describe('AnsweroptionsComponent', () => {
           useValue: {
             add: () => {}
           }
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock
         },
       ],
       declarations: [
@@ -128,7 +122,6 @@ describe('AnsweroptionsComponent', () => {
         AnsweroptionsFreetextComponent,
         AnsweroptionsRangedComponent,
         AnsweroptionsComponent,
-        TranslatePipeMock,
       ],
     }).compileComponents();
   }));

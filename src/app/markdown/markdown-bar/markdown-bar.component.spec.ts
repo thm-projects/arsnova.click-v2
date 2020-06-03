@@ -17,8 +17,6 @@ import {
   faSlash,
   faStrikethrough,
 } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { MarkdownFeature } from '../../lib/enums/MarkdownFeature';
 import { TrackingMockService } from '../../service/tracking/tracking.mock.service';
 import { TrackingService } from '../../service/tracking/tracking.service';
@@ -39,9 +37,6 @@ describe('MarkdownBarComponent', () => {
         {
           provide: TrackingService,
           useClass: TrackingMockService,
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         },
       ],
       declarations: [MarkdownBarComponent],

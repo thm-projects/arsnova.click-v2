@@ -9,7 +9,6 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { MemberApiService } from '../../../service/api/member/member-api.service';
@@ -73,7 +72,7 @@ describe('VotingComponent', () => {
           useValue: {}
         },
       ],
-      declarations: [VotingComponent, VotingQuestionComponent, ServerUnavailableModalComponent, TranslatePipeMock],
+      declarations: [VotingComponent, VotingQuestionComponent, ServerUnavailableModalComponent],
     }).compileComponents();
   }));
 

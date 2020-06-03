@@ -2,9 +2,7 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { DomSanitizer } from '@angular/platform-browser';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../../../_mocks/_services/TranslateServiceMock';
+import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { ProgressBarRangedComponent } from './progress-bar-ranged.component';
 
@@ -15,15 +13,10 @@ describe('ProgressBarRangedComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        FontAwesomeModule,
+        I18nTestingModule, FontAwesomeModule,
       ],
-      providers: [
-        {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
-      ],
-      declarations: [ProgressBarRangedComponent, TranslatePipeMock],
+      providers: [],
+      declarations: [ProgressBarRangedComponent],
     }).compileComponents();
   }));
 

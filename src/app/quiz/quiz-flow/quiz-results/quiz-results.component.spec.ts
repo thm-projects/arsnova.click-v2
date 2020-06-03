@@ -8,7 +8,6 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { environment } from '../../../../environments/environment';
 import { Attendee } from '../../../lib/attendee/attendee';
 import { SurveyQuestionEntity } from '../../../lib/entities/question/SurveyQuestionEntity';
@@ -84,10 +83,7 @@ describe('QuizResultsComponent', () => {
         }, SharedService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        }, HeaderLabelService, I18nService, QuestionTextService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, SimpleMQ, {
+        }, HeaderLabelService, I18nService, QuestionTextService, SimpleMQ, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, {

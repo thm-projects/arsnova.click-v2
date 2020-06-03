@@ -5,7 +5,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -67,7 +66,7 @@ describe('MemberGroupSelectComponent', () => {
           useValue: {}
         },
       ],
-      declarations: [MemberGroupSelectComponent, TranslatePipeMock],
+      declarations: [MemberGroupSelectComponent],
     }).compileComponents();
   }));
 

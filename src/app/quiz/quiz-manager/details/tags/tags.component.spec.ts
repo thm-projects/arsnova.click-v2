@@ -5,11 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbAlertModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
@@ -46,9 +44,6 @@ describe('TagsComponent', () => {
             useValue: {
               add: () => {}
             }
-          }, {
-            provide: TranslateService,
-            useClass: TranslateServiceMock
           },
         ],
         declarations: [TagsComponent],

@@ -6,12 +6,10 @@ import { SwPush } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbPopoverModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService, TranslateStore } from '@ngx-translate/core';
+import { TranslateStore } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { FooterModule } from '../../../footer/footer.module';
 import { availableQuestionTypes } from '../../../lib/available-question-types';
 import { QuestionType } from '../../../lib/enums/QuestionType';
@@ -33,6 +31,7 @@ import { TrackingService } from '../../../service/tracking/tracking.service';
 import { TwitterService } from '../../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { UserService } from '../../../service/user/user.service';
+import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
 
 import { QuizManagerComponent } from './quiz-manager.component';
 
@@ -43,7 +42,7 @@ describe('QuizManagerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        JwtModule.forRoot({
+        I18nTestingModule, JwtModule.forRoot({
           jwtOptionsProvider: {
             provide: JWT_OPTIONS,
             useFactory: jwtOptionsFactory,
@@ -67,9 +66,6 @@ describe('QuizManagerComponent', () => {
           provide: ThemesService,
           useClass: ThemesMockService
         }, FooterBarService, SettingsService, SharedService, TranslateStore, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
         }, {
@@ -82,7 +78,7 @@ describe('QuizManagerComponent', () => {
           }
         },
       ],
-      declarations: [QuizManagerComponent, TranslatePipeMock],
+      declarations: [QuizManagerComponent],
     }).compileComponents();
   }));
 

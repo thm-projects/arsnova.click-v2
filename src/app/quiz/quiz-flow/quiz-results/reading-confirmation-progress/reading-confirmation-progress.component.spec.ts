@@ -1,7 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { I18nService } from '../../../../service/i18n/i18n.service';
@@ -28,10 +26,7 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
         }, {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, I18nService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        },
+        }, I18nService,
       ],
       declarations: [ReadingConfirmationProgressComponent],
     }).compileComponents();

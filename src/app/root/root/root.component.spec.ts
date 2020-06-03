@@ -13,7 +13,6 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { EventReplayer } from 'preboot';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
 import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
@@ -104,7 +103,7 @@ describe('RootComponent', () => {
           },
         ],
         declarations: [
-          HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent, TranslatePipeMock,
+          HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent,
         ],
       }).compileComponents();
     }

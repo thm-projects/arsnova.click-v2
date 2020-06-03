@@ -7,11 +7,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHourglass } from '@fortawesome/free-solid-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { of } from 'rxjs';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
@@ -76,9 +74,6 @@ describe('CountdownComponent', () => {
           useValue: {
             add: () => {}
           }
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock
         },
       ],
       declarations: [CountdownComponent],

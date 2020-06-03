@@ -9,7 +9,6 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
@@ -85,7 +84,7 @@ describe('QuizManagerDetailsOverviewComponent', () => {
             }
           },
         ],
-        declarations: [QuizManagerDetailsOverviewComponent, TranslatePipeMock],
+        declarations: [QuizManagerDetailsOverviewComponent],
       }).compileComponents();
     }
   ));

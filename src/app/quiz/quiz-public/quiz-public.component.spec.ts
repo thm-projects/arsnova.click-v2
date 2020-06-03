@@ -8,7 +8,6 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -62,7 +61,7 @@ describe('QuizPublicComponent', () => {
           useValue: {}
         },
       ],
-      declarations: [QuizPublicComponent, TranslatePipeMock],
+      declarations: [QuizPublicComponent],
     })
     .compileComponents();
   }));
