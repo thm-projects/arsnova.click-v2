@@ -1,5 +1,6 @@
-import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { takeUntil } from 'rxjs/operators';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
@@ -13,7 +14,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   templateUrl: './countdown.component.html',
   styleUrls: ['./countdown.component.scss'],
 })
-export class CountdownComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
+export class CountdownComponent extends AbstractQuizManagerDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   public static readonly TYPE = 'CountdownComponent';
 
   private _parsedHours = '0';
@@ -67,20 +68,24 @@ export class CountdownComponent extends AbstractQuizManagerDetailsComponent impl
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
-    hotkeysService: HotkeysService
+    hotkeysService: HotkeysService,
+    translate: TranslateService
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
 
     footerBarService.TYPE_REFERENCE = CountdownComponent.TYPE;
     footerBarService.replaceFooterElements([
       footerBarService.footerElemBack,
+      footerBarService.footerElemHotkeys
     ]);
+  }
 
+  public ngAfterViewInit(): void {
     this.hotkeysService.add([
       new Hotkey('esc', (): boolean => {
         this.footerBarService.footerElemBack.onClickCallback();
         return false;
-      }),
+      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
     ]);
   }
 

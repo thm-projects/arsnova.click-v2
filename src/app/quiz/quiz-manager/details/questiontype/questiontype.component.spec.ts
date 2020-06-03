@@ -4,10 +4,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
+import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
@@ -74,9 +75,12 @@ describe('QuestiontypeComponent', () => {
           useValue: {
             add: () => {}
           }
+        }, {
+          provide: TranslateService,
+          useClass: TranslateServiceMock
         },
       ],
-      declarations: [QuestiontypeComponent, TranslatePipeMock],
+      declarations: [QuestiontypeComponent],
     }).compileComponents();
   }));
 

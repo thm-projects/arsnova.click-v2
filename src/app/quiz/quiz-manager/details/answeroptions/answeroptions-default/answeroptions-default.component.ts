@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { HotkeysService } from 'angular2-hotkeys';
 import { Subject } from 'rxjs';
 import { switchMapTo, takeUntil } from 'rxjs/operators';
@@ -47,10 +48,11 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
     quizPoolApiService: QuizPoolApiService,
     router: Router,
     hotkeysService: HotkeysService,
+    translate: TranslateService,
     private cd: ChangeDetectorRef,
     private questionTextService: QuestionTextService,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
   }
 
   public addAnswer(): void {

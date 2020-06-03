@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
@@ -17,7 +17,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   templateUrl: './questiontype.component.html',
   styleUrls: ['./questiontype.component.scss'],
 })
-export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
+export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   public static readonly TYPE = 'QuestiontypeComponent';
 
   private _selectableQuestionTypes = availableQuestionTypes;
@@ -37,20 +37,23 @@ export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent i
     quizPoolApiService: QuizPoolApiService,
     router: Router,
     hotkeysService: HotkeysService,
-    private translateService: TranslateService,
+    translate: TranslateService,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
 
     footerBarService.TYPE_REFERENCE = QuestiontypeComponent.TYPE;
     footerBarService.replaceFooterElements([
       footerBarService.footerElemBack,
+      footerBarService.footerElemHotkeys
     ]);
+  }
 
+  public ngAfterViewInit(): void {
     this.hotkeysService.add([
       new Hotkey('esc', (): boolean => {
         this.footerBarService.footerElemBack.onClickCallback();
         return false;
-      }),
+      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
     ]);
   }
 
@@ -74,7 +77,7 @@ export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent i
   }
 
   public morphToQuestionType(type: QuestionType): void {
-    this._question = getDefaultQuestionForType(this.translateService, type, this._question);
+    this._question = getDefaultQuestionForType(this.translate, type, this._question);
     this._questionType = type;
 
     this.quizService.quiz.removeQuestion(this._questionIndex);

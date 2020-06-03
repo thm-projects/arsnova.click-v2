@@ -36,16 +36,15 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     quizPoolApiService: QuizPoolApiService,
     router: Router,
     hotkeysService: HotkeysService,
+    translate: TranslateService,
     private trackingService: TrackingService,
     storageService?: StorageService,
     swPush?: SwPush,
     notificationService?: NotificationService,
-    translate?: TranslateService,
   ) {
     super(
-      platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService,
-      storageService, swPush, notificationService,
-      translate);
+      platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate,
+      storageService, swPush, notificationService);
 
     footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
     footerBarService.replaceFooterElements([

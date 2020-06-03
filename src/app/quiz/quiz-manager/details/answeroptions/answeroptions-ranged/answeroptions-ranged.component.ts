@@ -1,5 +1,6 @@
 import { Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { HotkeysService } from 'angular2-hotkeys';
 import { takeUntil } from 'rxjs/operators';
 import { RangedQuestionEntity } from '../../../../../lib/entities/question/RangedQuestionEntity';
@@ -61,9 +62,10 @@ export class AnsweroptionsRangedComponent extends AbstractQuizManagerDetailsComp
     footerBarService: FooterBarService,
     quizPoolApiService: QuizPoolApiService,
     router: Router,
-    hotkeysService: HotkeysService
+    hotkeysService: HotkeysService,
+    translate: TranslateService,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
   }
 
   public ngOnInit(): void {

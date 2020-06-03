@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { HotkeysService } from 'angular2-hotkeys';
 import { switchMapTo, takeUntil } from 'rxjs/operators';
 import { FreeTextAnswerEntity } from '../../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -46,9 +47,10 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
     quizPoolApiService: QuizPoolApiService,
     router: Router,
     hotkeysService: HotkeysService,
+    translate: TranslateService,
     private cd: ChangeDetectorRef,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
   }
 
 

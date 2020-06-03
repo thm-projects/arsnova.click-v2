@@ -50,10 +50,10 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     protected router: Router,
     protected route: ActivatedRoute,
     protected hotkeysService: HotkeysService,
+    protected translate: TranslateService,
     protected storageService?: StorageService,
     protected swPush?: SwPush,
     protected notificationService?: NotificationService,
-    protected translate?: TranslateService,
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
   }
@@ -64,11 +64,14 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
 
   @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
+    console.log('destroying abstractquizmanagerdetails');
     this._destroy.next();
     this._destroy.complete();
 
     this.footerBarService.footerElemSaveQuiz.restoreClickCallback();
     this.footerBarService.footerElemBack.restoreClickCallback();
+
+    this.hotkeysService.reset();
     this.hotkeysService.hotkeys = [];
   }
 

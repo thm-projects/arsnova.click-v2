@@ -138,14 +138,14 @@
     </div>
 
     <div class="mb-2 d-flex flex-wrap">
-      <h5 class="mb-2 mr-3">{{'component.quiz_summary.timer' | translate}}:</h5>
+      <h5 class="mb-0 mr-3">{{'component.quiz_summary.timer' | translate}}:</h5>
       <p *ngIf="question?.timer">{{question?.timer}}&nbsp;{{ 'component.timer.second' | translate:{COUNT: question?.timer} }}</p>
       <p *ngIf="!question?.timer">{{ 'component.quiz_summary.no-timer' | translate }}</p>
     </div>
 
     <div *ngIf="canSelectRequiredState(question)"
          class="mb-2 d-flex flex-wrap">
-      <h5 class="mb-0 mr-3 text-nowrap">
+      <h5 class="mb-0 mr-md-3">
         <small>
           <fa-icon [icon]="'info-circle'"
                    class="mr-2"
@@ -154,7 +154,7 @@
         <span>{{'component.quiz_summary.required-for-token.title' | translate}}:</span>
       </h5>
       <button *ngIf="question"
-             class="btn btn-sm cursor-pointer mb-0 align-self-center"
+             class="btn btn-sm cursor-pointer mb-0 align-self-center flex-grow-1 flex-sm-grow-0"
              [class.btn-success]="question.requiredForToken"
              (click)="setRequiredForToken(question)"
              [class.btn-danger]="!question.requiredForToken">
@@ -177,7 +177,7 @@
       <div *ngIf="question"
            class="d-flex flex-wrap align-items-center">
         <input type="range"
-               class="mr-3"
+               class="mr-md-3 flex-grow-1"
                [min]="1"
                [max]="10"
                [(ngModel)]="question.difficulty">

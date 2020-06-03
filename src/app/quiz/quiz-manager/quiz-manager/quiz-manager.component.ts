@@ -119,8 +119,11 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.footerBarService.footerElemStartQuiz.restoreClickCallback();
+
     this._destroy.next();
     this._destroy.complete();
+
+    this.hotkeysService.reset();
     this.hotkeysService.hotkeys = [];
 
     if (isPlatformBrowser(this.platformId) && window['hs']) {
