@@ -32,9 +32,9 @@ $bg-answer-result-wrong: #f44336;
 
 $progress-bg: transparent;
 
-$link-color: #fff94c;
+$link-color: yellow;
 $link-decoration: none;
-$link-hover-color: #fffc9a;
+$link-hover-color: darkorange;
 $link-hover-decoration: none;
 
 $corner-radius: 10px;
@@ -82,34 +82,34 @@ $colorChangingOwnNick: (
 
 $colorChangingArs: (
   0: (fg: white, bg: transparent),
-  25: (fg: #7d0101, bg: transparent),
+  25: (fg: #FF9800, bg: transparent),
   50: (fg: white, bg: transparent),
-  75: (fg: #ffec85, bg: transparent),
+  75: (fg: white, bg: transparent),
   100: (fg: white, bg: transparent)
 );
 
 $colorChangingNova: (
-  0: (fg: #ffec85, bg: transparent),
+  0: (fg: white, bg: transparent),
   25: (fg: white, bg: transparent),
-  50: (fg: #7d0101, bg: transparent),
+  50: (fg: #FF9800, bg: transparent),
   75: (fg: white, bg: transparent),
-  100: (fg: #ffec85, bg: transparent)
+  100: (fg: white, bg: transparent)
 );
 
 $colorChangingDot: (
   0: (fg: white, bg: transparent),
-  25: (fg: #ffec85, bg: transparent),
+  25: (fg: white, bg: transparent),
   50: (fg: white, bg: transparent),
-  75: (fg: #7d0101, bg: transparent),
+  75: (fg: #FF9800, bg: transparent),
   100: (fg: white, bg: transparent)
 );
 
 $colorChangingClick: (
-  0: (fg: #7d0101, bg: transparent),
+  0: (fg: #FF9800, bg: transparent),
   25: (fg: white, bg: transparent),
-  50: (fg: #ffec85, bg: transparent),
+  50: (fg: white, bg: transparent),
   75: (fg: white, bg: transparent),
-  100: (fg: #7d0101, bg: transparent)
+  100: (fg: #FF9800, bg: transparent)
 );
 
 $logo-bg: transparent;
