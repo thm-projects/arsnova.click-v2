@@ -19,11 +19,12 @@
           <button *ngFor="let key of formatCombo(hotkey.combo)"
                   class="btn btn-sm btn-primary"
                   disabled="disabled">
+            <span *ngIf="IS_MAC && key === 'ALT'">⌥</span>
             <fa-icon *ngIf="key === 'LEFT'"
                      [icon]="'long-arrow-alt-left'"></fa-icon>
             <fa-icon *ngIf="key === 'RIGHT'"
                      [icon]="'long-arrow-alt-right'"></fa-icon>
-            <ng-container *ngIf="!['LEFT', 'RIGHT'].includes(key)">{{key}}</ng-container>
+            <ng-container *ngIf="(!IS_MAC || !['ALT'].includes(key)) && !['LEFT', 'RIGHT'].includes(key)">{{key}}</ng-container>
           </button>
         </div>
       </div>

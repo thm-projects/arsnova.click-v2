@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from '@angular/common';
 import { flatten } from '@angular/compiler';
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { Subject } from 'rxjs';
@@ -20,8 +21,10 @@ export class HotkeyCheatsheetComponent implements OnInit, OnDestroy {
   @ViewChild('modal') private readonly modal: TemplateRef<any>;
 
   public hotkeys: Array<Hotkey> = [];
+  public readonly IS_MAC = isPlatformBrowser(this.platformId) && (navigator?.userAgent.indexOf('Mac OS') !== -1);
 
   constructor(
+    @Inject(PLATFORM_ID) public platformId: Object,
     public hotkeysService: HotkeysService,
     private activeModal: NgbActiveModal,
     private ngbModal: NgbModal,
