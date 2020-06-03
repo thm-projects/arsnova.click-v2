@@ -39,7 +39,7 @@
     "footer": {
       "footer_bar": {
         "about": "arsnova.click",
-        "home": "Start",
+        "home": "Startseite",
         "tos": "Nutzungsbedingungen",
         "imprint": "Impressum",
         "blog": "Projektblog",
@@ -47,12 +47,12 @@
         "style": "Stil",
         "import": "Quiz-Import",
         "info": "Info",
-        "reading-confirmation": "Lesebestätigung",
+        "reading-confirmation": "Lesebestätigung abfragen",
         "fullscreen": "Vollbild",
         "sound": "Sound",
         "qr_code": "QR-Code",
         "nicknames": "Nicknamen",
-        "edit_quiz": "Bearbeiten",
+        "edit_quiz": "Quiz bearbeiten",
         "show_product_tour": "Tutorial",
         "show_response_progress": "Fortschritt",
         "description": {
@@ -64,10 +64,10 @@
           "confidence-slider": "Aktiviere diese Option, wenn die Teilnehmer/innen auswählen sollen, wie sicher sie sich in ihrer Antwort sind von 0 &#37; \"Geraten\" - 100 &#37; \"Fest überzeugt\". "
         },
         "api-docs": "API Docs",
-        "show_confidence_slider": "Antwortsicherheit",
+        "show_confidence_slider": "Antwortsicherheit abfragen",
         "back": "Zurück",
         "cache_assets": "Assets Cachen",
-        "block_rude_nicknames": "Nicknamen ausschließen",
+        "block_rude_nicknames": "Nicknamen filtern",
         "enable_cas_login": "CAS-Login",
         "global_leaderboard": "Globale Rangliste",
         "dataprivacy": "Datenschutz",
@@ -135,7 +135,7 @@
         "declaration": "Diese Datenschutzerklärung klärt Nutzer/innen von arsnova.click über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
         "app_data": {
           "title": "Anwendungsdaten",
-          "text": "Alle Quizfragen und deren Antwortoptionen werden ausschließlich im Browser-Speicher (localStorage) des Quizerstellers gehalten."
+          "text": "Alle Quizfragen und deren Antwortoptionen werden ausschließlich im Browser-Speicher (Web Storage) des Quiz-Erstellers gehalten."
         },
         "access_data": {
           "title": "Zugriffsdaten",
@@ -524,7 +524,7 @@
         "down": "Nach unten",
         "to-top": "An den Anfang",
         "up": "Nach oben",
-        "quiz-pool-upload": "Fragen-Pool Upload",
+        "quiz-pool-upload": "Frage veröffentlichen",
         "edit": "Bearbeiten",
         "delete": "Löschen"
       }
@@ -538,9 +538,9 @@
       "question_group_successful": "Dein Quiz ist bereit",
       "question_group_failed": "Dein Quiz ist unvollständig",
       "upload-to-pool": {
-        "valid-upload": "Stelle deine Frage für den Fragen-Pool zur Verfügung",
+        "valid-upload": "Stelle deine Frage im Fragen-Pool zur freien Verfügung",
         "invalid-question": "Nur gültige Fragen können in den Fragen-Pool hochgeladen werden",
-        "no-tags": "Damit deine Frage hochgeladen werden kann, musst du ihr noch ein paar Tags geben"
+        "no-tags": "Damit andere deine Frage im Pool finden, musst du sie mit einem »Tag« versehen."
       },
       "quiz_rename": "Bearbeiten",
       "correct": "Korrekt",
@@ -680,20 +680,20 @@
       }
     },
     "membergroup-manager": {
-      "title": "Organisiere deine Teilnehmer/innen in Teams",
-      "max-users": "Maximale Anzahl an Teilnehmenden pro Team",
-      "autojoin-to-team": "Füge Teilnehmer/innen automatisch zu Teams hinzu",
-      "create-team-placeholder": "Gib hier den Namen des Teams ein. Starte mit einem Doppelpunkt um nach Emojis zu suchen...",
+      "title": "Organisiere deine Teams",
+      "max-users": "Maximale Teamgröße",
+      "autojoin-to-team": "Automatisch auf die Teams verteilen?",
+      "create-team-placeholder": "Gib hier den Namen des Team ein. Starte mit einem Doppelpunkt, um nach Emojis zu suchen.",
       "create-team": "Team hinzufügen",
       "current-teams": "Aktuell hinzugefügte Teams:",
       "no-current-teams": "Kein Team bisher hinzugefügt",
-      "team-name": "Name des Teams:",
-      "team-color": "Wähle eine Farbe:",
+      "team-name": "Name oder Emoji des Teams:",
+      "team-color": "Wähle die Teamfarbe:",
       "validation-error": {
         "full-member-group": "Alle verfügbaren Teams wurden bereits erstellt. Bitte lösche zunächst ein Team.",
         "invalid-member-group": "Ungültiger Name. Bitte verwende entweder normalen Text oder Emojis",
-        "duplicate-member-group": "Dieser Name ist bereits vergeben",
-        "add-second-group": "Füge bitte mindestens zwei Teams hinzu oder lösche das bestehende Team"
+        "duplicate-member-group": "Der Name oder das Emoji ist bereits vergeben",
+        "add-second-group": "Füge mindestens zwei Teams hinzu oder lösche das vorhandene Team"
       }
     },
     "login": {
