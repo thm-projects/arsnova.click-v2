@@ -44,7 +44,7 @@ export class AnsweroptionsComponent extends AbstractQuizManagerDetailsComponent 
       new Hotkey('esc', (): boolean => {
         this.footerBarService.footerElemBack.onClickCallback();
         return false;
-      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
+      }, ['INPUT'], this.translate.instant('region.footer.footer_bar.back')),
     ]);
   }
 
