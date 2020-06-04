@@ -56,12 +56,12 @@
         "show_product_tour": "Tutorial",
         "show_response_progress": "Fortschritt",
         "description": {
-          "qr-code": "Teilnehmer können den QR Code mit ihren mobilen Geräten scannen, um dem Quiz teilzunehmen",
+          "qr-code": "Player können den QR-Code mit ihren mobilen Geräten scannen, um am Quiz teilzunehmen",
           "sound": "Setze hier den Sound für die Hintergrundmusik oder den Countdown",
           "reading-confirmation": "Aktiviere diese Option, damit Antworten der Quizfragen vorab dargestellt werden.",
           "response-progress": "Aktiviere diese Option um die Antworten auf eine Frage während des Quizzes live darzustellen. Beachte den psychologischen Effekt: Menschen neigen dazu, der Antwort der Masse zu folgen (Herdeninstinkt).",
           "nicknames": "Du kannst Namen aus mehreren Kategorien vorab selektieren.  ",
-          "confidence-slider": "Aktiviere diese Option, wenn die Teilnehmer/innen auswählen sollen, wie sicher sie sich in ihrer Antwort sind von 0 &#37; \"Geraten\" - 100 &#37; \"Fest überzeugt\". "
+          "confidence-slider": "Aktiviere diese Option, wenn die Player auswählen sollen, wie sicher sie sich in ihrer Antwort sind von 0 &#37; \"Geraten\" - 100 &#37; \"Fest überzeugt\". "
         },
         "api-docs": "API Docs",
         "show_confidence_slider": "Antwortsicherheit abfragen",
@@ -91,7 +91,7 @@
         "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
         "ars": "arsnova.click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
         "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelte ein Team aus Bachelor- und Masterstudenten der <a href='http://www.thm.de/site/' target='_blank'>THM</a> die erste Version dieser <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierten</a> Alternative zum Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
-        "met_requirements": "<b>Features:</b>",
+        "met_requirements": "<strong>Features:</strong>",
         "requirements": {
           "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quiz-Daten verbleiben im Browser (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
           "2": "Keine Registrierung, keine Anmeldung, keine Installation (<a href='https://de.wikipedia.org/wiki/Bring_your_own_device' target='_blank'>BYOD</a>), keine Werbung, keine Kosten",
@@ -104,7 +104,7 @@
           "9": "Bonusoption: Die Top Players erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
           "10": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Design</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
           "11": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reaktiver Web-Technik",
-          "12": "<a href='https://github.com/thm-projects/arsnova.click' target='_blank'>Open Source Software</a>"
+          "12": "<a href='https://git.thm.de/arsnova/arsnova-click-v2/tree/master' target='_blank'>Open Source Software</a>"
         },
         "manual": {
           "title": "Bedienungshandbuch?",
@@ -284,7 +284,7 @@
       "optin": {
         "check": "Für Social Media Features anklicken",
         "share": "Auf Social Media teilen",
-        "warning": " Ich bin einverstanden, dass Tweets mit #arsnovaclick angezeigt werden."
+        "warning": "Ich bin einverstanden, dass Tweets zum Thema arsnova.click angezeigt werden."
       },
       "tweet": {
         "content": {
@@ -309,9 +309,9 @@
         "range_area": "Hier kannst du die korrekte Antwort und die Toleranzen nach oben und unten angeben. Bitte beachte, dass die Eingabe in natürlichen Zahlen erfolgen muss.",
         "min_range": "Hier kannst du den unteren Toleranzwert festlegen.",
         "correct_value": "Diese Antwort ist vollständig korrekt.",
-        "max_range": "Hier kannst Du den oberen Toleranzwert festlegen.",
-        "free_text_question_text": "Hier kannst Du die richtige Antwort eingeben. Die eingegebenen Antworten der Teilnehmer/innen werden gemäß den Kriterien gegen diese Antwort geprüft.",
-        "check_answer": "Hier kannst du mögliche Antworten der Teilnehmer/innen gegen deine Referenzantwort und unter Berücksichtigung der aktuellen Kriterien testen."
+        "max_range": "Hier kannst du den oberen Toleranzwert festlegen.",
+        "free_text_question_text": "Hier kannst du die richtige Antwort eingeben. Die Antworten der Player werden gemäß den Kriterien gegen diese Antwort geprüft.",
+        "check_answer": "Hier kannst du mögliche Antworten der Player gegen deine Referenzantwort und unter Berücksichtigung der aktuellen Kriterien testen."
       },
       "ranged_question": {
         "correct_value": "Richtiger Wert",
@@ -590,7 +590,7 @@
       "no-timer": "Kein Countdown gesetzt. Die Runde muss manuell beendet werden.",
       "required-for-token": {
         "title": "Quizfrage ist für die Bonusvergabe erforderlich",
-        "label": "Damit die/der Teilnehmende einen Bonustoken bekommen kann, muss diese Quizfrage richtig beantwortet werden"
+        "label": "Um einen Bonustoken zu erhalten, muss diese Quizfrage richtig beantwortet werden"
       },
       "difficulty": {
         "title": "Schwierigkeitsgrad",
@@ -652,14 +652,14 @@
       "second": "{COUNT, plural, =0{Sekunden} one{Sekunde} other{Sekunden}}",
       "minute": "{COUNT, plural, =0{Minuten} one{Minute} other{Minuten}}",
       "hour": "{COUNT, plural, =0{Stunden} one{Stunde} other{Stunden}}",
-      "description": "Hier kannst du den Countdown für die Quizfrage einstellen. Sobald er abläuft oder alle Teilnehmer/innen eine Antwort abgegeben haben, ertönt ein Gong oder Pfiff und die Quizrunde ist beendet."
+      "description": "Hier kannst du den Countdown für die Quizfrage einstellen. Sobald er abläuft oder alle Player eine Antwort abgegeben haben, ertönt ein Gong oder Pfiff und die Quizrunde ist beendet."
     },
     "translation": {
       "translations": "Deine Sprache"
     },
     "voting": {
       "title": "Abstimmung",
-      "send": " Absenden",
+      "send": "Absenden",
       "abstention": "Enthaltung",
       "ranged_question": {
         "title": "Gib deinen Schätzwert ein!"
@@ -888,8 +888,8 @@
       "deactivated": "Deaktiviert",
       "random": "Zufällige Auswahl",
       "allow-stream-to-clients": {
-        "title": "Audio für Teilnehmer/innen aktivieren",
-        "label": "Dies deaktiviert die Audiowiedergabe für den Quizmaster und aktiviert ihn für die Teilnehmenden. Da die Startzeit der Musik nicht synchron läuft ist die Aktivierung nur empfohlen, wenn die Teilnehmer nicht im gleichen Raum sitzen."
+        "title": "Audio für Player aktivieren",
+        "label": "Dies deaktiviert die Audiowiedergabe für den Quizmaster und aktiviert ihn für die Player. Da die Startzeit der Musik nicht synchron läuft, ist die Aktivierung nur empfohlen, wenn die Player nicht im gleichen Raum sitzen."
       }
     },
     "splashscreen": {
@@ -906,7 +906,7 @@
       "question_and_answer": {},
       "edit_session_confirmation": {
         "title": "Quiz bearbeiten?",
-        "text": "Alle Teilnehmenden werden vom Quiz abgemeldet.",
+        "text": "Alle Player werden vom Quiz abgemeldet.",
         "continue": "Fortfahren?"
       },
       "remove_question_confirmation": {},
@@ -932,7 +932,7 @@
         "TrueFalseSingleChoiceQuestion": "Wahr-Falsch-Fragen enthalten nur zwei Antwortoptionen (Wahr und Falsch, überschreibbar), von denen eine als richtig markiert sein muss.",
         "MultipleChoiceQuestion": "Multiple-Choice-Fragen enthalten beliebig viele Antwortoptionen, von denen beliebig viele (mindestens jedoch eine) als richtig markiert sein können.",
         "RangedQuestion": "Für die Schätzfrage muss eine Ganzzahl als richtig angegeben werden. Zusätzlich können Toleranzen nach oben und unten festgelegt werden.",
-        "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Teilnehmenden einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
+        "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Player einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
         "SurveyQuestion": "Umfragen enthalten beliebig viele Antwortoptionen, die nicht bewertet werden. Sie können vom Typ Single-Choice oder Multiple-Choice sein.",
         "AbcdSingleChoiceQuestion": "ABCD-Fragen enthalten maximal 26 Antworten (von A bis Z).",
         "type_wrapper": "Hier kannst du den Typ der Quizfrage ändern. Jeder Typ hat seine eigenen Einstellungen. Wechsel den Typ, indem du auf die Box klickst."
