@@ -1,10 +1,13 @@
+variables:
+  MIRROR_REPO: git@github.com:thm-projects/arsnova.click-v2-frontend.git
+
 stages:
   - install
   - test
   - build
   - deploy
 
-.build-template: &build-template
+.build_template: &build_template
   stage: build
   services:
     - name: docker:19.03.1-dind
@@ -21,12 +24,12 @@ stages:
       - variables
       - private_key
 
-.docker-push-template: &docker-push |
+.docker_push_template: &docker_push |
   docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   docker-compose build $CI_COMMIT_REF_NAME
   docker push "$CI_IMAGE_NAME:$VERSION"
 
-.staging-server-env-template: &staging-server-env |
+.staging_server_env_template: &staging_server_env |
   echo "export CI_CONTAINER_INSTANCE_NAME=$CI_CONTAINER_INSTANCE_NAME" >> variables
   echo "export SSH_URL=$STAGING_FRONTEND_URL" >> variables
   echo "export SSH_CMD=$STAGING_SSH" >> variables
@@ -34,7 +37,7 @@ stages:
   echo "export SERVICE_NAME=$SERVICE_NAME" >> variables
   echo "$STAGING_SSH_PRIVATE_KEY" >> private_key
 
-.production-server-env-template: &production-server-env |
+.production_server_env_template: &production_server_env |
   echo "export CI_CONTAINER_INSTANCE_NAME=$CI_CONTAINER_INSTANCE_NAME" >> variables
   echo "export SSH_URL=$PRODUCTION_FRONTEND_URL" >> variables
   echo "export SSH_CMD=$PRODUCTION_SSH" >> variables
@@ -42,15 +45,15 @@ stages:
   echo "export SERVICE_NAME=$SERVICE_NAME" >> variables
   echo "$PRODUCTION_SSH_PRIVATE_KEY" >> private_key
 
-.server-deploy-template: &server-deploy |
+.server_deploy_template: &server_deploy |
   source variables
   eval $(ssh-agent -s)
   mkdir ~/.ssh
   ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
   ssh-add <(cat private_key)
 
-build-master:
-  <<: *build-template
+build_master:
+  <<: *build_template
   only:
     - master
   environment:
@@ -60,11 +63,11 @@ build-master:
     SERVICE_NAME: master
     CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-master
   script:
-    - *production-server-env
-    - *docker-push
+    - *production_server_env
+    - *docker_push
 
-build-staging:
-  <<: *build-template
+build_staging:
+  <<: *build_template
   only:
     - staging
   environment:
@@ -74,11 +77,11 @@ build-staging:
     SERVICE_NAME: staging
     CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-staging
   script:
-    - *staging-server-env
-    - *docker-push
+    - *staging_server_env
+    - *docker_push
 
-build-beta:
-  <<: *build-template
+build_beta:
+  <<: *build_template
   only:
     - beta
   environment:
@@ -88,8 +91,8 @@ build-beta:
     SERVICE_NAME: beta
     CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-beta
   script:
-    - *staging-server-env
-    - *docker-push
+    - *staging_server_env
+    - *docker_push
 
 ts_lint:
   stage: test
@@ -120,15 +123,33 @@ deploy:
   tags:
     - ssh
   script:
-    - *server-deploy
+    - *server_deploy
     - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /home/arsnova/arsnova-click-docker/docker-compose-frontend.yml -p arsnova-click-frontend up --no-deps -d $SERVICE_NAME && docker image prune -af"
 
-deploy-master:
+deploy_master:
   stage: deploy
   only:
     - master
   tags:
     - ssh
   script:
-    - *server-deploy
+    - *server_deploy
     - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /root/docker-compose.yml up --no-deps -d frontend && docker image prune -af"
+
+sync_mirror:
+  stage: deploy
+  tags:
+    - git
+  when: always
+  allow_failure: true
+  dependencies: []
+  only:
+    - master
+    - staging
+  script:
+    - eval $(ssh-agent -s)
+    - mkdir ~/.ssh && echo "$SYNC_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - ssh-add <(echo "$SYNC_SSH_PRIVATE_KEY")
+    - git clone --bare "$CI_REPOSITORY_URL" mirror.git
+    - cd mirror.git
+    - git push --mirror "$MIRROR_REPO"
