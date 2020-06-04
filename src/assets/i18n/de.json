@@ -95,7 +95,7 @@
         "requirements": {
           "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quiz-Daten verbleiben im Browser (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
           "2": "Keine Registrierung, keine Anmeldung, keine Installation (<a href='https://de.wikipedia.org/wiki/Bring_your_own_device' target='_blank'>BYOD</a>), keine Werbung, keine Kosten",
-          "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Kandidat/in",
+          "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Player",
           "4": "Jeder darf Quizze erstellen, sofort und beliebig viele.",
           "5": "Barrierefreie, für den Beamer optimierte, in Englisch, Spanisch, Französisch und Italienisch übersetzte Bedienoberfläche",
           "6": "Frageformate: Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
@@ -104,7 +104,7 @@
           "9": "Bonusoption: Die Top Players erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
           "10": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Design</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
           "11": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reaktiver Web-Technik",
-          "12": "<a href='https://git.thm.de/arsnova/arsnova-click-v2/tree/master' target='_blank'>Open Source Software</a>"
+          "12": "<a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source Software</a>"
         },
         "manual": {
           "title": "Bedienungshandbuch?",
@@ -119,7 +119,7 @@
         "declaration": "Alle (nicht nur Lehrende) dürfen die Quiz-App arsnova.click für ihre Zwecke verwenden, solange dabei nicht gegen deutsches oder EU-Recht verstoßen wird.",
         "license": {
           "title": "Lizenz",
-          "text": "arsnova.click ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://git.thm.de/arsnova/arsnova.click/' target='_blank'>Open Source</a> und steht unter der <a href='http://www.gnu.org/licenses/gpl-3.0-standalone.html' target='_blank'>GNU General Public License Version 3</a>."
+          "text": "arsnova.click ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> und steht unter der <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
         },
         "musicLicense": {
           "title": "Musik-Lizenz",
@@ -685,7 +685,7 @@
       "autojoin-to-team": "Automatisch auf die Teams verteilen?",
       "create-team-placeholder": "Gib hier den Namen des Team ein. Starte mit einem Doppelpunkt, um nach Emojis zu suchen.",
       "create-team": "Team hinzufügen",
-      "current-teams": "Aktuell hinzugefügte Teams:",
+      "current-teams": "Die Teams:",
       "no-current-teams": "Kein Team bisher hinzugefügt",
       "team-name": "Name oder Emoji des Teams:",
       "team-color": "Wähle die Teamfarbe:",
@@ -889,7 +889,7 @@
       "random": "Zufällige Auswahl",
       "allow-stream-to-clients": {
         "title": "Audio für Player aktivieren",
-        "label": "Dies deaktiviert die Audiowiedergabe für den Quizmaster und aktiviert ihn für die Player. Da die Startzeit der Musik nicht synchron läuft, ist die Aktivierung nur empfohlen, wenn die Player nicht im gleichen Raum sitzen."
+        "label": "Dies aktiviert die Musikwiedergabe für Quizmaster und Player. Da die Startzeit der Musik nicht synchron läuft, empfehlen wir die Aktivierung nur, wenn die Player nicht im selben Raum sitzen."
       }
     },
     "splashscreen": {
