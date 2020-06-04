@@ -1,4 +1,21 @@
 #### Contribution
 
-###### Contributing to a submodule
-If the project is checked out as is any commits to the updated submodules will not be reflected to the parent project. To achieve this the command `git submodule update --remote --recursive` or `npm run update` in the root project folder is required. After that the new commits of the submodules need to be committed to the parent project.
+There are currently the following modules of arsnova.click
+
+- WebApp (Angular): https://git.thm.de/arsnova/arsnova-click-v2-frontend
+- API Gateway (NodeJS): https://git.thm.de/arsnova/arsnova-click-v2-backend
+
+To contribute make sure to clone the repo to your local device and make a
+feature branch. If you do not have the sufficient rights to create a feature branch
+in our repo you'll need to fork it and continue there with your feature branch.
+
+Add the changes to your branch and make sure the following quality criterias
+are met:
+
+- No tslint errors are reported (use the tslint files in the modules)
+- The code style standards are followed (see arsnova-click.xml for IntelliJ configuration)
+- The code coverage in all modules is at least 60% (for statements)
+- All unit tests pass
+
+Open a Pull Request to the **staging** branch of the relevant module and resolve all
+upcoming discussions.

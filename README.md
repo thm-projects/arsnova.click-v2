@@ -9,21 +9,22 @@ Submit bug reports to the [Gitlab Issue Board](https://git.thm.de/arsnova/arsnov
 Feel free to contribute to the project. Before starting your work, please visit the [Contribution Guide](./CONTRIBUTING.md)
 
 ###### Core Technologies
-- Angular 6
-- Serverside Rendering through Angular Universal
-- Express Backend with TypeScript
-- Bootstrap 4.1
-- WebSocket Communication
+- Angular 9
+- Serverside Rendering thanks to Angular Universal
+- Bootstrap 4.5
 - Progressive WebApp
+- NodeJS Express Backend with TypeScript
+- WebSocket Communication to RabbitMQ
+- Data is stored in a MongoDB
 
 ###### Major Features
 - Customizable Themes
 - 8 unique Types of Questions
-- LaTeX
-- MathJax
+- LaTeX support
+- MathJax rendering
 - Github Flavored Markdown
 - Export reports as Excel File
-- Authentication via CAS
+- Bonus token for students
 - 5 supported languages
 - QR Code for quick quiz joining
 - Lists of predefined Nicknames available
@@ -32,24 +33,24 @@ Feel free to contribute to the project. Before starting your work, please visit 
 - Challenge quizzes as a team with a fair final score
 
 ###### Global Dependency Requirements
-- Node.js v10
+- Node.js v12
 - NPM v6
-- Angular CLI v6
-- ImageMagick v7.0.7
-- GraphicsMagick v1.3.29
+- Angular CLI v9
+- Docker
 
 ###### Cloning from git
 Install NodeJS and NPM and add the binaries to the path variable.
 To install the angular core globally, enter `npm install -g @angular/core`. Test with `ng -v` in the terminal.
 
-Clone the project via `git clone --recursive git@git.thm.de:arsnova/arsnova-click-v2.git`
-Switch into the project directory and enter `npm i`.
+Don't forget to install the dependencies for each module aswell with `npm i` in the module directory.
 
 Considering the IntelliJ IDEA IDE it is advised to create a `File => New => Project from existing sources` for the arsnova-click-v2 repo. 
 Then include the other modules of arsnova-click-v2 as `File => New => Module from existing sources`.
-Use as location the corresponding cloned git submodule. Repeat the step for all required modules.
+Use as location the corresponding cloned git module. Repeat the step for all required modules.
 
 ###### Installation & Building instructions
 Further instructions how to install and build the frontend and backend apps can be found in the README files of the respective repositories.
 - [Backend](https://git.thm.de/arsnova/arsnova-click-v2-backend/blob/master/README.md)
 - [Frontend](https://git.thm.de/arsnova/arsnova-click-v2-frontend/blob/master/README.md)
+
+Or check out our [developer guide](https://git.thm.de/arsnova/arsnova-click-v2/wikis/home) in the wiki
