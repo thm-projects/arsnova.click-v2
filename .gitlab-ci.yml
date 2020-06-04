@@ -19,4 +19,4 @@ sync_mirror:
     - ssh-add <(echo "$SYNC_SSH_PRIVATE_KEY")
     - git clone --bare "$CI_REPOSITORY_URL" mirror.git
     - cd mirror.git
-    - git push --mirror "$MIRROR_REPO
+    - git push --mirror "$MIRROR_REPO"
