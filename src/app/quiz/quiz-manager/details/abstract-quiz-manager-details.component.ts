@@ -5,7 +5,7 @@ import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { HotkeysService } from 'angular2-hotkeys';
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { distinctUntilChanged, map, switchMap, switchMapTo, takeUntil, tap } from 'rxjs/operators';
+import { map, switchMap, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
 import { QuizPoolApiService } from '../../../service/api/quiz-pool/quiz-pool-api.service';
@@ -17,6 +17,7 @@ import { StorageService } from '../../../service/storage/storage.service';
 
 export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   private _queryParams: Params = {};
+  protected _isQuizPool: boolean;
   private readonly _destroy = new Subject();
 
   protected initialized$ = new ReplaySubject(1);
@@ -84,7 +85,6 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     const questionIndex$ = queryParams.pipe( //
       switchMapTo(this.route.paramMap), //
       map(params => parseInt(params.get('questionIndex'), 10)), //
-      distinctUntilChanged(), //
       switchMap(this.loadPoolQuizData.bind(this)), //
       takeUntil(this._destroy), //
     );
@@ -107,12 +107,14 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
 
   protected loadPoolQuizData(questionIndex): Observable<any> {
     if (!isNaN(questionIndex)) {
+      this._isQuizPool = false;
       this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager']);
       this.showSaveQuizButton = false;
       this._questionIndex = questionIndex;
       return of(this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)));
     } else {
       this._questionIndex = 0;
+      this._isQuizPool = true;
       const footerElems = [this.footerBarService.footerElemBack];
       if (this.showSaveQuizButton) {
         footerElems.push(this.footerBarService.footerElemSaveQuiz);

@@ -60,7 +60,8 @@ export class QuestiontypeComponent extends AbstractQuizManagerDetailsComponent i
   public ngOnInit(): void {
     super.ngOnInit();
 
-    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'manager', this._questionIndex, 'overview']);
+    const target = ['/quiz', 'manager', this._isQuizPool ? 'quiz-pool' : this._questionIndex, 'overview'];
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(target);
 
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(() => {
       if (!this.quizService.quiz) {
