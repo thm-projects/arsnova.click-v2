@@ -111,7 +111,8 @@ describe('AnsweroptionsComponent', () => {
         }, {
           provide: HotkeysService,
           useValue: {
-            add: () => {}
+            add: () => {},
+            reset: () => {},
           }
         },
       ],

@@ -74,7 +74,8 @@ describe('QuizManagerComponent', () => {
         }, {
           provide: HotkeysService,
           useValue: {
-            add: () => {}
+            add: () => {},
+            reset: () => {},
           }
         },
       ],

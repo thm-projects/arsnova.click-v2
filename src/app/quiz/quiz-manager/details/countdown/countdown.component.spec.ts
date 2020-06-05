@@ -72,7 +72,8 @@ describe('CountdownComponent', () => {
         }, {
           provide: HotkeysService,
           useValue: {
-            add: () => {}
+            add: () => {},
+            reset: () => {},
           }
         },
       ],

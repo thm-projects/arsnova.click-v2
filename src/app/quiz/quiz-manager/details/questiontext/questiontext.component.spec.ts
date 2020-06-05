@@ -123,6 +123,7 @@ describe('QuestiontextComponent', () => {
             provide: HotkeysService,
             useValue: {
               add: () => {},
+              reset: () => {},
             },
           },
         ],

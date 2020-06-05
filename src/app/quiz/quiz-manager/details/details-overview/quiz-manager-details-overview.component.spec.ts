@@ -80,7 +80,8 @@ describe('QuizManagerDetailsOverviewComponent', () => {
           }, {
             provide: HotkeysService,
             useValue: {
-              add: () => {}
+              add: () => {},
+              reset: () => {},
             }
           },
         ],
