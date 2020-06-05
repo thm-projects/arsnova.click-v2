@@ -615,7 +615,7 @@
         },
         "pool-save-warning": "Please notice that questions for the Quiz-Pool need to be reviewed by a moderator. Your question will not be available in the Quiz-Pool until the review is completed."
       },
-      "no-added-tags": "Keine Tags bisher hinzugefügt",
+      "no-added-tags": "No added tags yet",
       "description": {
         "available_questions": "Here you can see all types of questions from which you can choose. Each question type offers different presets and possibilities for the design of the quizzes",
         "added_questions": "Here you will find all your quiz questions, which are available in the quiz. To add a quiz question to the quiz, either drag it from the left stack or click the quiz query in the left pile. By clicking on the inserted question, you can set the content of the question.",

@@ -8,9 +8,11 @@ import { Observable, of, ReplaySubject, Subject } from 'rxjs';
 import { map, switchMap, switchMapTo, takeUntil, tap } from 'rxjs/operators';
 import { AbstractQuestionEntity } from '../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../lib/enums/enums';
+import { FooterbarElement } from '../../../lib/footerbar-element/footerbar-element';
 import { QuizPoolApiService } from '../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { I18nService } from '../../../service/i18n/i18n.service';
 import { NotificationService } from '../../../service/notification/notification.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { StorageService } from '../../../service/storage/storage.service';
@@ -52,6 +54,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
     protected route: ActivatedRoute,
     protected hotkeysService: HotkeysService,
     protected translate: TranslateService,
+    protected i18nService: I18nService,
     protected storageService?: StorageService,
     protected swPush?: SwPush,
     protected notificationService?: NotificationService,
@@ -120,42 +123,7 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
         footerElems.push(this.footerBarService.footerElemSaveQuiz);
         this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(['/quiz', 'pool']);
 
-        this.footerBarService.footerElemSaveQuiz.onClickCallback = async self => {
-          if (!self.isActive) {
-            return;
-          }
-
-          if (this.queryParams.id) {
-            this.quizPoolApiService.putApproveQuestion(this.queryParams.id, false, this.quizService.currentQuestion()).subscribe(() => {
-              this.router.navigate(['/admin', 'quiz', 'pool']);
-            });
-          } else {
-
-            let sub: PushSubscriptionJSON;
-
-            try {
-              sub = (await this.storageService.db.Config.get(StorageKey.PushSubscription))?.value;
-
-              if (!sub) {
-
-                const confirmed = confirm(this.translate.instant('notification.request-permission'));
-
-                if (confirmed) {
-                  sub = (await this.swPush.requestSubscription({
-                    serverPublicKey: this.notificationService.vapidPublicKey,
-                  })).toJSON();
-                  await this.storageService.db.Config.put({ type: StorageKey.PushSubscription, value: sub });
-                }
-              }
-            } catch (e) {
-              console.error('Error while trying to load a swpush subscription', e);
-            }
-
-            this.quizPoolApiService.postNewQuestion(this.quizService.currentQuestion(), null, sub).subscribe(() => {
-              this.router.navigate(['/quiz', 'pool']);
-            });
-          }
-        };
+        this.footerBarService.footerElemSaveQuiz.onClickCallback = this.saveQuiz.bind(this);
       }
 
       if (this.queryParams.id) {
@@ -176,6 +144,43 @@ export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnD
         this.footerBarService.replaceFooterElements(footerElems);
         return of(true);
       }
+    }
+  }
+
+  private async saveQuiz(state: FooterbarElement): Promise<void> {
+    if (!state.isActive) {
+      return;
+    }
+
+    if (this.queryParams.id) {
+      this.quizPoolApiService.putApproveQuestion(this.queryParams.id, false, this.quizService.currentQuestion()).subscribe(() => {
+        this.router.navigate(['/admin', 'quiz', 'pool']);
+      });
+    } else {
+
+      let sub: PushSubscriptionJSON;
+
+      try {
+        sub = (await this.storageService.db.Config.get(StorageKey.PushSubscription))?.value;
+
+        if (!sub) {
+
+          const confirmed = confirm(this.translate.instant('notification.request-permission'));
+
+          if (confirmed) {
+            sub = (await this.swPush.requestSubscription({
+              serverPublicKey: this.notificationService.vapidPublicKey,
+            })).toJSON();
+            await this.storageService.db.Config.put({ type: StorageKey.PushSubscription, value: sub });
+          }
+        }
+      } catch (e) {
+        console.error('Error while trying to load a swpush subscription', e);
+      }
+
+      this.quizPoolApiService.postNewQuestion(this.quizService.currentQuestion(), null, sub).subscribe(() => {
+        this.router.navigate(['/quiz', 'pool']);
+      });
     }
   }
 }

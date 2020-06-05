@@ -16,6 +16,7 @@ import { getDefaultQuestionForType } from '../../../lib/QuizValidator';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
+import { I18nService } from '../../../service/i18n/i18n.service';
 import { NotificationService } from '../../../service/notification/notification.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { TrackingService } from '../../../service/tracking/tracking.service';
@@ -49,6 +50,7 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     private cdRef: ChangeDetectorRef,
     private notificationService: NotificationService,
     private hotkeysService: HotkeysService,
+    private i18nService: I18nService
   ) {
     headerLabelService.headerLabel = 'component.quiz_manager.title';
 
@@ -104,18 +106,8 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit(): void {
-    availableQuestionTypes.filter(type => {
-      return ![
-        QuestionType.ABCDSingleChoiceQuestion,
-        QuestionType.YesNoSingleChoiceQuestion,
-        QuestionType.TrueFalseSingleChoiceQuestion,
-      ].includes(type.id);
-    }).forEach((type, index) => {
-      this.hotkeysService.add(new Hotkey('ctrl+' + (index + 1), (): boolean => {
-        this.addQuestion(type.id);
-        return false;
-      }, undefined, this.translateService.instant(type.descriptionHotkey)));
-    });
+    this.i18nService.initialized.pipe(takeUntil(this._destroy)).subscribe(this.loadHotkeys.bind(this));
+    this.translateService.onLangChange.pipe(takeUntil(this._destroy)).subscribe(this.loadHotkeys.bind(this));
   }
 
   public ngOnDestroy(): void {
@@ -126,6 +118,7 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.hotkeysService.reset();
     this.hotkeysService.hotkeys = [];
+    this.hotkeysService.cheatSheetToggle.next(false);
 
     if (isPlatformBrowser(this.platformId) && window['hs']) {
       window['hs'].close();
@@ -286,5 +279,23 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.quizService.quiz.addQuestion(question);
     this.quizService.persist();
     this.router.navigate(['/quiz', 'manager', this.quizService.quiz.questionList.length - 1, 'overview']);
+  }
+
+  private loadHotkeys(): void {
+    this.hotkeysService.hotkeys = [];
+    this.hotkeysService.reset();
+
+    availableQuestionTypes.filter(type => {
+      return ![
+        QuestionType.ABCDSingleChoiceQuestion,
+        QuestionType.YesNoSingleChoiceQuestion,
+        QuestionType.TrueFalseSingleChoiceQuestion,
+      ].includes(type.id);
+    }).forEach((type, index) => {
+      this.hotkeysService.add(new Hotkey('ctrl+' + (index + 1), (): boolean => {
+        this.addQuestion(type.id);
+        return false;
+      }, undefined, this.translateService.instant(type.descriptionHotkey)));
+    });
   }
 }

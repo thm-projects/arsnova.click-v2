@@ -9,6 +9,7 @@ import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { I18nService } from '../../../../service/i18n/i18n.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
 
@@ -49,8 +50,9 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
     quizPoolApiService: QuizPoolApiService,
     hotkeysService: HotkeysService,
     translate: TranslateService,
+    i18nService: I18nService,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate, i18nService);
 
     footerBarService.TYPE_REFERENCE = TagsComponent.TYPE;
     footerBarService.replaceFooterElements([
@@ -60,12 +62,8 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
   }
 
   public ngAfterViewInit(): void {
-    this.hotkeysService.add([
-      new Hotkey('esc', (): boolean => {
-        this.footerBarService.footerElemBack.onClickCallback();
-        return false;
-      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
-    ]);
+    this.i18nService.initialized.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
+    this.translate.onLangChange.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
   }
 
   public resultFormatter(tag: CloudData): string { return `${tag.text}`; }
@@ -142,9 +140,23 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
   public ngOnDestroy(): void {
     super.ngOnDestroy();
 
+    this.hotkeysService.cheatSheetToggle.next(false);
+
     if (this.quizService.quiz) {
       this.quizService.quiz.questionList[this._questionIndex].tags = this.selectedTags.map(tag => tag.text);
       this.quizService.persist();
     }
+  }
+
+  private loadHotkeys(): void {
+    this.hotkeysService.hotkeys = [];
+    this.hotkeysService.reset();
+
+    this.hotkeysService.add([
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
+    ]);
   }
 }

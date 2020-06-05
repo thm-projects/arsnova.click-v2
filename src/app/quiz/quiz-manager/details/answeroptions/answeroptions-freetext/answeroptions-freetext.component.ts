@@ -8,6 +8,7 @@ import { FreeTextQuestionEntity } from '../../../../../lib/entities/question/Fre
 import { QuizPoolApiService } from '../../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../../service/header-label/header-label.service';
+import { I18nService } from '../../../../../service/i18n/i18n.service';
 import { QuizService } from '../../../../../service/quiz/quiz.service';
 import { AbstractQuizManagerDetailsComponent } from '../../abstract-quiz-manager-details.component';
 
@@ -48,9 +49,10 @@ export class AnsweroptionsFreetextComponent extends AbstractQuizManagerDetailsCo
     router: Router,
     hotkeysService: HotkeysService,
     translate: TranslateService,
+    i18nService: I18nService,
     private cd: ChangeDetectorRef,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate, i18nService);
   }
 
 

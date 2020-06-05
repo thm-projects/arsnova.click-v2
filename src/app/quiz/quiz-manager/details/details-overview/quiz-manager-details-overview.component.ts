@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
+import { takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -12,6 +13,7 @@ import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { I18nService } from '../../../../service/i18n/i18n.service';
 import { NotificationService } from '../../../../service/notification/notification.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { StorageService } from '../../../../service/storage/storage.service';
@@ -37,13 +39,14 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     router: Router,
     hotkeysService: HotkeysService,
     translate: TranslateService,
+    i18nService: I18nService,
     private trackingService: TrackingService,
     storageService?: StorageService,
     swPush?: SwPush,
     notificationService?: NotificationService,
   ) {
     super(
-      platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate,
+      platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate, i18nService,
       storageService, swPush, notificationService);
 
     footerBarService.TYPE_REFERENCE = QuizManagerDetailsOverviewComponent.TYPE;
@@ -56,54 +59,16 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
   }
 
   public ngAfterViewInit(): void {
-    this.hotkeysService.add([
-      new Hotkey('esc', (): boolean => {
-        this.footerBarService.footerElemBack.onClickCallback();
-        return false;
-      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
-      new Hotkey('alt+left', (): boolean => {
-        const prevIndex = this.questionIndex - 1;
-        this.router.navigate(['/quiz', 'manager', prevIndex === -1 ? 0 : prevIndex, 'overview']);
-        return false;
-      }, undefined, this.translate.instant('hotkey.navigate-to-prev-question')),
-      new Hotkey('alt+right', (): boolean => {
-        const nextIndex = this.questionIndex + 1;
-        const maxIndex = this.quizService.quiz.questionList.length - 1;
-        this.router.navigate(['/quiz', 'manager', nextIndex > maxIndex ? maxIndex : nextIndex, 'overview']);
-        return false;
-      }, undefined, this.translate.instant('hotkey.navigate-to-next-question')),
-      new Hotkey('ctrl+1', (): boolean => {
-        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'questionText']);
-        return false;
-      }, undefined, this.translate.instant('hotkey.navigate-to-question-text')),
-      new Hotkey('ctrl+2', (): boolean => {
-        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'answeroptions']);
-        return false;
-      }, undefined, this.translate.instant('hotkey.navigate-to-answeroptions')),
-      new Hotkey('ctrl+3', (): boolean => {
-        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'countdown']);
-        return false;
-      }, undefined, this.translate.instant('hotkey.navigate-to-countdown')),
-      new Hotkey('ctrl+4', (): boolean => {
-        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'questionType']);
-        return false;
-      }, undefined, this.translate.instant('hotkey.navigate-to-question-type')),
-      new Hotkey('ctrl+5', (): boolean => {
-        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'tags']);
-        return false;
-      }, undefined, this.translate.instant('hotkey.navigate-to-tags')),
-      new Hotkey('ctrl+del', (): boolean => {
-        this.quizService.quiz.removeQuestion(this._questionIndex);
-        this.quizService.persist();
-        this.footerBarService.footerElemBack.onClickCallback();
-        return false;
-      }, undefined, this.translate.instant('hotkey.delete-question'))
-    ]);
+    this.i18nService.initialized.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
+    this.translate.onLangChange.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
   }
 
   @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
     super.ngOnDestroy();
+
+    this.hotkeysService.cheatSheetToggle.next(false);
 
     if (this.quizService.quiz) {
       this.quizService.persist();
@@ -165,5 +130,61 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     if (this.question.difficulty === 10) {
       return 'component.quiz_summary.difficulty.pro-only';
     }
+  }
+
+  private loadHotkeys(): void {
+    this.hotkeysService.hotkeys = [];
+    this.hotkeysService.reset();
+
+    const hotkeys = [
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
+      new Hotkey('ctrl+1', (): boolean => {
+        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'questionText']);
+        return false;
+      }, undefined, this.translate.instant('hotkey.navigate-to-question-text')),
+      new Hotkey('ctrl+2', (): boolean => {
+        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'answeroptions']);
+        return false;
+      }, undefined, this.translate.instant('hotkey.navigate-to-answeroptions')),
+      new Hotkey('ctrl+3', (): boolean => {
+        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'countdown']);
+        return false;
+      }, undefined, this.translate.instant('hotkey.navigate-to-countdown')),
+      new Hotkey('ctrl+4', (): boolean => {
+        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'questionType']);
+        return false;
+      }, undefined, this.translate.instant('hotkey.navigate-to-question-type')),
+      new Hotkey('ctrl+5', (): boolean => {
+        this.router.navigate(['/quiz', 'manager', this._questionIndex, 'tags']);
+        return false;
+      }, undefined, this.translate.instant('hotkey.navigate-to-tags')),
+      new Hotkey('ctrl+del', (): boolean => {
+        this.quizService.quiz.removeQuestion(this._questionIndex);
+        this.quizService.persist();
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }, undefined, this.translate.instant('hotkey.delete-question'))
+    ];
+
+    if (this.quizService.quiz?.questionList.length > 1) {
+      hotkeys.splice(1, 0,
+        new Hotkey('alt+left', (): boolean => {
+          const prevIndex = this.questionIndex - 1;
+          this.router.navigate(['/quiz', 'manager', prevIndex === -1 ? 0 : prevIndex, 'overview']);
+          return false;
+        }, undefined, this.translate.instant('hotkey.navigate-to-prev-question')),
+        new Hotkey('alt+right', (): boolean => {
+          const nextIndex = this.questionIndex + 1;
+          const maxIndex = this.quizService.quiz.questionList.length - 1;
+          this.router.navigate(['/quiz', 'manager', nextIndex > maxIndex ? maxIndex : nextIndex, 'overview']);
+          return false;
+        }, undefined, this.translate.instant('hotkey.navigate-to-next-question')),
+      );
+    }
+
+    this.hotkeysService.add(hotkeys);
   }
 }

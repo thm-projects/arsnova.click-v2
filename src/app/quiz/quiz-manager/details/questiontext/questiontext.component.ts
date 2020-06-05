@@ -22,6 +22,7 @@ import { MarkdownFeature } from '../../../../lib/enums/MarkdownFeature';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { I18nService } from '../../../../service/i18n/i18n.service';
 import { QuestionTextService } from '../../../../service/question-text/question-text.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
@@ -50,11 +51,12 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
     quizPoolApiService: QuizPoolApiService,
     hotkeysService: HotkeysService,
     translate: TranslateService,
+    i18nService: I18nService,
     private questionTextService: QuestionTextService,
     private cd: ChangeDetectorRef,
     @Inject(DOCUMENT) private document: Document,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate, i18nService);
 
     footerBarService.TYPE_REFERENCE = QuestiontextComponent.TYPE;
     footerBarService.replaceFooterElements([
@@ -64,14 +66,11 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
   }
 
   public ngAfterViewInit(): void {
-    this.hotkeysService.add([
-      new Hotkey('esc', (): boolean => {
-        this.footerBarService.footerElemBack.onClickCallback();
-        return false;
-      }, ['TEXTAREA'], this.translate.instant('region.footer.footer_bar.back')),
-    ]);
+    this.i18nService.initialized.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
+    this.translate.onLangChange.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
 
     this.textarea.nativeElement.focus();
+    this.textarea.nativeElement.scrollTop;
   }
 
   public connector(feature: MarkdownFeature): void {
@@ -305,6 +304,18 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
       return true;
     }
     return false;
+  }
+
+  private loadHotkeys(): void {
+    this.hotkeysService.hotkeys = [];
+    this.hotkeysService.reset();
+
+    this.hotkeysService.add([
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }, ['TEXTAREA'], this.translate.instant('region.footer.footer_bar.back')),
+    ]);
   }
 
 }
