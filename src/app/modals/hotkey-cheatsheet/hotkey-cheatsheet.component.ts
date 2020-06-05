@@ -31,10 +31,11 @@ export class HotkeyCheatsheetComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.hotkeysService.cheatSheetToggle.pipe(takeUntil(this._destroy$)).subscribe(() => {
-      this._isVisible = !this._isVisible;
+    this.hotkeysService.cheatSheetToggle.pipe(takeUntil(this._destroy$)).subscribe(value => {
+      this._isVisible = value ?? !this._isVisible;
 
       if (!this._isVisible) {
+        this.dismiss();
         return;
       }
 
@@ -54,7 +55,7 @@ export class HotkeyCheatsheetComponent implements OnInit, OnDestroy {
   }
 
   public dismiss(): void {
-    this._modalRef.close();
+    this._modalRef?.close();
   }
 
   public formatCombo(combo: string | string[]): Array<string> {
@@ -67,7 +68,7 @@ export class HotkeyCheatsheetComponent implements OnInit, OnDestroy {
 
   private pauseHotkeys(): void {
     this.hotkeys = this.hotkeysService.hotkeys.concat(this.hotkeysService.pausedHotkeys);
-    const hotkeysToPause = this.hotkeys;
+    const hotkeysToPause = this.hotkeys.filter(value => value.combo.includes('esc'));
 
     this.hotkeysService.pause(hotkeysToPause);
     this._pausedHotkeys = hotkeysToPause;

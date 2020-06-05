@@ -466,18 +466,7 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.hotkeys',
     linkTarget: null,
   }, () => {
-    const data = {
-      bubbles : true,
-      cancelable : true,
-      key : '?',
-      location: 0,
-      charCode: 63,
-      which: 219,
-      keyCode: 63,
-      shiftKey : false
-    };
     this.hotkeysService.cheatSheetToggle.next();
-//     this.document.dispatchEvent(new KeyboardEvent('keypress', data));
   });
   public footerElemAudio: IFooterBarElement = new FooterbarElement({
     id: 'audio',

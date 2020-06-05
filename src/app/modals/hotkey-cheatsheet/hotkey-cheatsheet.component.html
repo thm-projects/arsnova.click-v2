@@ -14,19 +14,22 @@
            class="d-flex align-items-center p-2 list-group-item"
            [class.bg-light]="isOdd"
            [class.bg-secondary]="isEven">
+
         <div class="d-inline-block">{{hotkey.description}}</div>
-        <div class="keys ml-auto btn-group">
-          <button *ngFor="let key of formatCombo(hotkey.combo)"
-                  class="btn btn-sm btn-primary"
-                  disabled="disabled">
+
+        <button class="d-flex ml-auto btn btn-sm btn-primary"
+                [disabled]="hotkey.combo.includes('esc')"
+                (click)="hotkey.callback(null, hotkey.combo)">
+          <div *ngFor="let key of formatCombo(hotkey.combo); let i = index"
+               [class.ml-3]="i">
             <span *ngIf="IS_MAC && key === 'ALT'">⌥</span>
             <fa-icon *ngIf="key === 'LEFT'"
                      [icon]="'long-arrow-alt-left'"></fa-icon>
             <fa-icon *ngIf="key === 'RIGHT'"
                      [icon]="'long-arrow-alt-right'"></fa-icon>
             <ng-container *ngIf="(!IS_MAC || !['ALT'].includes(key)) && !['LEFT', 'RIGHT'].includes(key)">{{key}}</ng-container>
-          </button>
-        </div>
+          </div>
+        </button>
       </div>
     </ul>
   </div>
