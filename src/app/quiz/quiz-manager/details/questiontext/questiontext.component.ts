@@ -70,7 +70,9 @@ export class QuestiontextComponent extends AbstractQuizManagerDetailsComponent i
     this.translate.onLangChange.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
 
     this.textarea.nativeElement.focus();
-    this.textarea.nativeElement.scrollTop;
+    this.textarea.nativeElement.scrollTop = 0;
+    this.textarea.nativeElement.selectionStart = 0;
+    this.textarea.nativeElement.selectionEnd = 0;
   }
 
   public connector(feature: MarkdownFeature): void {
