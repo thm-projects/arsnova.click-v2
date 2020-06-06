@@ -367,7 +367,7 @@
       },
       "no_sessions": "Es sind keine Quizze in diesem Browser gespeichert.",
       "aria_description": {},
-      "create_abcd_session": "Starte einen ABCD-Quiz",
+      "create_abcd_session": "Starte ABCD-Quiz",
       "enter_server_password": "Server Passwort eingeben",
       "public-quizzes": "Suchst du mehr? Klicke hier um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes} } zu wählen!",
       "save_session": {
@@ -771,8 +771,8 @@
     "home": {
       "join": "Tritt »{name}« bei",
       "use": "Verwende »{name}«",
-      "new-demo-quiz": "Erstelle ein neues Demo-Quiz",
-      "new-abcd-quiz": "Erstelle ein neues ABCD-Quiz",
+      "new-demo-quiz": "Demo-Quiz zum Kennenlernen",
+      "new-abcd-quiz": "ABCD-Quiz mit einem Klick",
       "view-public": "Klicke hier, um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes}} zu wählen!",
       "view-all-public": "... oder sieh dir deine eigenen veröffentlichten Quizze an!",
       "view-own-public": "Klicke hier, um deine eigenen veröffentlichten Quizze anzusehen!",
