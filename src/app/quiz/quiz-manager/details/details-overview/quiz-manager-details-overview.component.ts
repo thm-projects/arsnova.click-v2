@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Hotkey, HotkeysService } from 'angular2-hotkeys';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { AbstractAnswerEntity } from '../../../../lib/entities/answer/AbstractAnswerEntity';
 import { FreeTextAnswerEntity } from '../../../../lib/entities/answer/FreetextAnwerEntity';
@@ -31,6 +31,7 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
   public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
 
   public renderedQuestionText: SafeHtml;
+  public renderedAnswers: Array<SafeHtml> = [];
 
   public readonly environment = environment;
 
@@ -64,10 +65,18 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
 
     this.showSaveQuizButton = true;
 
+
+    this.questionTextService.eventEmitter.pipe(takeUntil(this.destroy)).subscribe((value: string | Array<string>) => {
+      if (Array.isArray(value)) {
+        this.renderedAnswers = value;
+      } else {
+        this.renderedQuestionText = value;
+      }
+    });
+
     this.initialized$.pipe(takeUntil(this.destroy)).subscribe(() => {
-      this.questionTextService.change(this.question.questionText).subscribe(value => {
-        this.renderedQuestionText = this.sanitizer.bypassSecurityTrustHtml(value);
-      });
+      this.questionTextService.changeMultiple(this.question.answerOptionList.map(answer => answer.answerText)).pipe(take(1)).subscribe();
+      this.questionTextService.change(this.question.questionText).pipe(take(1)).subscribe();
     });
   }
 

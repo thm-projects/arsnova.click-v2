@@ -111,7 +111,7 @@
         </div>
         <div *ngIf="!['RangedQuestion', 'FreeTextQuestion'].includes(question?.TYPE)">
           <p *ngFor="let answer of question?.answerOptionList; let i = index;"
-             role="listitem">
+             role="listitem" class="answer-list-element">
             <span>{{'component.quiz_summary.answer' | translate}}&nbsp;{{i+1}}</span>
             <span *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question?.TYPE)">
               <span *ngIf="answer.isCorrect">&nbsp;({{'component.quiz_summary.correct' | translate}})</span>
@@ -119,7 +119,7 @@
             </span>
             <span>:&nbsp;</span>
             <span *ngIf="answer.answerText"
-                  [innerHTML]="answer.answerText"></span>
+                  [innerHTML]="renderedAnswers[i]"></span>
             <span *ngIf="!answer.answerText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
           </p>
           <p *ngIf="!question?.answerOptionList.length">
