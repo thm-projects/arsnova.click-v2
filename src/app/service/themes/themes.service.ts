@@ -80,7 +80,7 @@ export class ThemesService {
 
     const themeConfig = await Promise.all(themePromises);
     let usedTheme = themeConfig[0] ? themeConfig[0].value : themeConfig[1] ? themeConfig[1].value : themeConfig[2];
-    if (usedTheme === 'default') {
+    if (usedTheme === 'default' || !Object.values(QuizTheme).includes(usedTheme)) {
       usedTheme = environment.defaultTheme;
     }
     const themeDataset = document.getElementsByTagName('html').item(0).dataset['theme'];
