@@ -1,7 +1,7 @@
 {
   "manifest": {
     "name": "Spielbasierte Quiz-App der THM",
-    "description": "Ein bisschen wie Kahoot!, ein bisschen wie Socrative, aber ganz viel ARSnova."
+    "description": "Ein bisschen wie Kahoot!, ein bisschen wie Socrative, aber ganz viel ARSnova!"
   },
   "global": {
     "arsnova_slogan": "Quiz-App für den MINT-Unterricht",
@@ -750,7 +750,7 @@
       "demo_quiz": {
         "title": {
           "2": "Gib »ABC…« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiz-Namen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du bonusprämierte Quizze zur Lernmotivation im Unterricht einsetzt."
+          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du Bonus-Quizze zur Lernmotivation im Unterricht einsetzt."
         }
       },
       "name_input": {}
@@ -840,7 +840,7 @@
       },
       "total-pool-tags": {
         "title": "Tags",
-        "content": "Einer Frage, die du in den Pool stellst, kannst du beliebige Tags zuweisen. So können Pool-Fragen nach Themen zusammengestellt werden."
+        "content": "Du kannst einer Frage, die du in den Pool stellst, beliebige Tags zuweisen. So können Pool-Fragen nach Themen zusammengestellt werden."
       },
       "active-participants": {
         "title": "Player",
