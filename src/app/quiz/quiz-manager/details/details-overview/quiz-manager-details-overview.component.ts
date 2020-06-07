@@ -30,7 +30,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent implements AfterViewInit, OnDestroy {
   public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
 
-  private renderedQuestionText: SafeHtml;
+  public renderedQuestionText: SafeHtml;
 
   public readonly environment = environment;
 
