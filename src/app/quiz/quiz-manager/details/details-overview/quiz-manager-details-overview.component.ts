@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, HostListener, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
@@ -15,6 +16,7 @@ import { FooterBarService } from '../../../../service/footer-bar/footer-bar.serv
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
 import { NotificationService } from '../../../../service/notification/notification.service';
+import { QuestionTextService } from '../../../../service/question-text/question-text.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { StorageService } from '../../../../service/storage/storage.service';
 import { TrackingService } from '../../../../service/tracking/tracking.service';
@@ -27,6 +29,9 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 })
 export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent implements AfterViewInit, OnDestroy {
   public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
+
+  private renderedQuestionText: SafeHtml;
+
   public readonly environment = environment;
 
   constructor(
@@ -41,6 +46,8 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     translate: TranslateService,
     i18nService: I18nService,
     private trackingService: TrackingService,
+    private sanitizer: DomSanitizer,
+    private questionTextService: QuestionTextService,
     storageService?: StorageService,
     swPush?: SwPush,
     notificationService?: NotificationService,
@@ -56,12 +63,20 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     ]);
 
     this.showSaveQuizButton = true;
+
+    this.initialized$.pipe(takeUntil(this.destroy)).subscribe(() => {
+      this.questionTextService.change(this.question.questionText).subscribe(value => {
+        this.renderedQuestionText = this.sanitizer.bypassSecurityTrustHtml(value);
+      });
+    });
   }
 
   public ngAfterViewInit(): void {
     this.i18nService.initialized.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
     this.translate.onLangChange.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
-    this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
+    this.quizService.quizUpdateEmitter.pipe(takeUntil(this.destroy)).subscribe(() => {
+      this.loadHotkeys();
+    });
   }
 
   @HostListener('window:beforeunload', [])

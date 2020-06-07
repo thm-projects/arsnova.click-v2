@@ -61,13 +61,14 @@
       <h5 *ngIf="!quizService.isAddingPoolQuestion">
         <span>{{'component.quiz_summary.question' | translate}}&nbsp;{{questionIndex + 1}}</span>:
       </h5>
-      <p>
-        <span>{{'component.quiz_summary.text' | translate}}:&nbsp;</span>
-        <span *ngIf="question?.questionText"
-              class="break-word"
-              [innerHTML]="question?.questionText"></span>
-        <span *ngIf="!question?.questionText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
+
+      <p *ngIf="!question?.questionText?.length">{{'component.quiz_summary.text' | translate}}:&nbsp;{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</p>
+
+      <p *ngIf="question?.questionText?.length"
+         [innerHtml]="renderedQuestionText"
+         class="mh-20vh text-wrap  overflow-hidden">
       </p>
+
       <p>
         <span>{{'component.quiz_summary.type' | translate}}:&nbsp;</span>
         <span *ngIf="!question?.TYPE">{{'component.quiz_summary.validation_errors.reasons.empty_question_type' | translate}}</span>
