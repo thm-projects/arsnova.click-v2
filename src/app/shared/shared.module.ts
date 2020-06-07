@@ -47,6 +47,7 @@ import {
   faLock,
   faLongArrowAltLeft,
   faLongArrowAltRight,
+  faMask,
   faMinus,
   faMobileAlt,
   faMusic,
@@ -54,7 +55,6 @@ import {
   faPause,
   faPlay,
   faPlus,
-  faPortrait,
   faQrcode,
   faQuestion,
   faQuoteRight,
@@ -207,6 +207,6 @@ export class SharedModule {
     library.addIcons(faListOl);
     library.addIcons(faSlash);
     library.addIcons(faQuoteRight);
-    library.addIcons(faPortrait);
+    library.addIcons(faMask);
   }
 }
