@@ -419,7 +419,7 @@
         "title": "Edit the quiz",
         "label": "Edit"
       },
-      "create_session": "Create Quiz",
+      "create_session": "New quiz",
       "can_create_session": "Create Quiz",
       "create_demo_session": "Start demo quiz",
       "quiz_management": "Stored Quizzes",
@@ -442,7 +442,7 @@
       "aria_description": {
         "name-input-field": "Enter the quiz name here",
         "joinSession": "Join in!",
-        "addNewHashtag": "Create a new quiz",
+        "addNewHashtag": "New quiz",
         "splashscreen_description": "List of all valid and invalid quizzes in your browser"
       },
       "create_abcd_session": "Start ABCD quiz",
@@ -471,7 +471,7 @@
       },
       "own-rank": {
         "own-data": "You are on rank {INDEX} with a score of {SCORE}",
-        "closest-opponent": " right after {NAME} with a score of {SCORE}"
+        "closest-opponent": " right after {NAME} with a score of {SCORE}."
       }
     },
     "liveResults": {
@@ -742,11 +742,11 @@
         },
         "black_beauty": {
           "name": "Black Beauty (beamer-suitable)",
-          "description": "Dark, darker and even darker."
+          "description": "Dark mode"
         },
         "material": {
           "name": "Material Design",
-          "description": "Approach to Google's Material Design."
+          "description": "Light mode"
         },
         "decent_blue": {
           "name": "Decent Blue",
@@ -906,21 +906,21 @@
         "please-wait": "Please wait…",
         "malformed": "Your quiz name contains illegal characters. Please try again with a different name.",
         "already-taken": "Your quiz name is already taken",
-        "min-keys": "The quiz name must contain at least 4 characters"
+        "min-keys": "The quiz name must contain at least four characters."
       },
       "title": "Choose an alternative"
     },
     "home": {
       "join": "Join »{name}«",
       "use": "Use »{name}«",
-      "new-demo-quiz": "Create new Demo Quiz",
-      "new-abcd-quiz": "Create a new ABCD Quiz",
+      "new-demo-quiz": "Create a new demo quiz",
+      "new-abcd-quiz": "Create a new ABCD quiz",
       "view-public": "Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
       "view-all-public": "… or view your own public quizzes!",
       "view-own-public": "Click here to view your own public quizzes!",
       "errors": {
         "already-taken": "This name is already used. Please use another quiz name",
-        "min-length": "Please use at least 4 characters for your quiz name"
+        "min-length": "Please use at least four characters for your quiz name."
       },
       "success": {
         "can-join": "You can join this quiz!",
@@ -965,32 +965,32 @@
     },
     "statistics": {
       "users": {
-        "title": "Amount of Users on this page",
-        "content": "All active connections to arsnova.click are counted here. Of course all data is anonymized. It is not possible to link the data to unique persons. It's just a good hint for you how high the current load of arsnova.click is."
+        "title": "User online",
+        "content": "All connections to arsnova.click are counted here. Of course the data is anonymized. It is not possible to draw conclusions about individual persons. For you the number is a good indication of how much arsnova.click is currently used."
       },
       "total-quizzes": {
-        "title": "All Quizzes",
-        "content": "All quizzes from all users are counted here. Yes, even yours! Your quizzes are of course still private and only you can start them. No one can access your quiz data!"
+        "title": "Quizzes",
+        "content": "All quizzes are counted here. Including yours! Of course your quizzes are private and only you can start them. No one can access your quizzes!"
       },
       "active-quizzes": {
-        "title": "Active Quizzes",
-        "content": "This is the amount of currently played quizzes. All quizzes are counted which are currently in the Quiz Lobby or playing quiz rounds."
+        "title": "Active quizzes",
+        "content": "This is the number of all the quizzes currently being played. Either their quiz lobby is opened or the quiz round has started."
       },
       "total-pool-questions": {
-        "title": "Pool Questions",
-        "content": "With the Question Pool every user can provide some questions for other users. You can get an inspiration for your own quiz here. Students can use the quizzes to strengthen their knowledge."
+        "title": "Pool questions",
+        "content": "In the question pool you can provide quiz questions for the public. Everyone can compile their own quizzes from the pool questions."
       },
       "total-pool-tags": {
-        "title": "Different Tags",
-        "content": "Questions can be tagged. With Tags they are sortable by their topic and can be used in the Quiz-Pool to custom quizzes. You are fully free in the selection of the Tags for your Quiz-Pool Questions. Some hints regarding the tagging of questions can be found in the Quiz Manager in the tab 'Tags'."
+        "title": "Tags",
+        "content": "You can assign any tag you like to a question you put in the pool. This way, pool questions can be compiled by topic."
       },
       "active-participants": {
-        "title": "Current Attendees",
-        "content": "This is the amount of the current attendees of active quizzes. Data privacy is provided here aswell - it is not possible to track single attendees, identify them or their actions. It's just a hint how heavily arsnova.click is used currently."
+        "title": "Active players",
+        "content": "Here you can see the current number of all players in active quizzes. Of course, we attach great importance to data protection: it is not possible to identify individual persons or to track their actions. Don't worry, this is only a rough indication of how much arsnova.click is currently used."
       },
       "average-participants": {
-        "title": "Average Attendees per Quiz",
-        "content": "Here you can find the amount of average attendees per played quiz. This data is anonymized aswell. We only store the name of the attendee and the corresponding quiz. It is not possible to identify single persons or connections with this data."
+        "title": "Players per quiz",
+        "content": "The number indicates the average number of people who took part in quizzes."
       }
     }
   },
@@ -1002,7 +1002,7 @@
         "heading": "Headline",
         "hyperlink": "Hyperlink",
         "unordered_list": "Unordered list",
-        "latex": "LaTex Markup",
+        "latex": "TeX Markup",
         "code": "Code Markup",
         "image": "Image",
         "line_through": "Crossed out",
