@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwPush } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
@@ -56,6 +57,9 @@ describe('QuestionCardComponent', () => {
             useClass: CustomMarkdownServiceMock,
           }, {
             provide: SwPush,
+            useValue: {}
+          }, {
+            provide: HotkeysService,
             useValue: {}
           },
         ],

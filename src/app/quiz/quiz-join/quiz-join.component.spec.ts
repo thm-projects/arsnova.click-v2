@@ -3,10 +3,9 @@ import { PLATFORM_ID } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
@@ -58,14 +57,14 @@ describe('QuizJoinComponent', () => {
           provide: ConnectionService,
           useClass: ConnectionMockService,
         }, SharedService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, {
           provide: UserService,
           useValue: {},
         }, {
           provide: CustomMarkdownService,
           useClass: CustomMarkdownServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
       declarations: [QuizJoinComponent],

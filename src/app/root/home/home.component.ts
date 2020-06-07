@@ -450,11 +450,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       footerElements.push(this.footerBarService.footerElemLogout);
-
-    } else {
-      if (environment.loginMechanism && environment.loginMechanism.length) {
-        footerElements.push(this.footerBarService.footerElemLogin);
-      }
     }
 
     this.footerBarService.replaceFooterElements(footerElements);

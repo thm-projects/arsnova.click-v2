@@ -82,6 +82,7 @@
     "@stomp/ng2-stompjs": "^7.2.0",
     "angular-svg-icon": "^9.2.0",
     "angular-tag-cloud-module": "^4.2.0",
+    "angular2-hotkeys": "^2.2.0",
     "angular2-qrcode": "^2.0.3",
     "angulartics2": "^9.0.1",
     "bootstrap": "^4.5.0",

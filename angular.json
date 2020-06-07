@@ -60,48 +60,13 @@
               "src/styles/styles.scss",
               {
                 "inject": false,
-                "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                "bundleName": "theme-arsnova-dot-click-contrast-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
                 "input": "src/styles/themes/theme-blackbeauty.scss",
                 "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
-                "input": "src/styles/themes/theme-elegant.scss",
-                "bundleName": "theme-elegant-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
                 "input": "src/styles/themes/theme-Material.scss",
                 "bundleName": "theme-Material-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
-                "input": "src/styles/themes/theme-Material-hope.scss",
-                "bundleName": "theme-Material-hope-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
-                "input": "src/styles/themes/theme-decent-blue.scss",
-                "bundleName": "theme-decent-blue-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
-                "input": "src/styles/themes/theme-Material-blue.scss",
-                "bundleName": "theme-Material-blue-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
-                "input": "src/styles/themes/theme-spiritual-purple.scss",
-                "bundleName": "theme-spiritual-purple-__CSS_FILE_HASH__"
-              },
-              {
-                "inject": false,
-                "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                "bundleName": "theme-GreyBlue-Lime-__CSS_FILE_HASH__"
               },
               {
                 "inject": false,
@@ -154,48 +119,13 @@
                 "src/styles/styles.scss",
                 {
                   "inject": false,
-                  "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
                   "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
-                  "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
                   "bundleName": "theme-Material-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
@@ -242,48 +172,13 @@
                 "src/styles/styles.scss",
                 {
                   "inject": false,
-                  "input": "src/styles/themes/theme-arsnova-dot-click-contrast.scss",
-                  "bundleName": "theme-arsnova-dot-click-contrast-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
                   "input": "src/styles/themes/theme-blackbeauty.scss",
                   "bundleName": "theme-blackbeauty-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,
-                  "input": "src/styles/themes/theme-elegant.scss",
-                  "bundleName": "theme-elegant-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
                   "input": "src/styles/themes/theme-Material.scss",
                   "bundleName": "theme-Material-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-Material-hope.scss",
-                  "bundleName": "theme-Material-hope-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-decent-blue.scss",
-                  "bundleName": "theme-decent-blue-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-Material-blue.scss",
-                  "bundleName": "theme-Material-blue-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-spiritual-purple.scss",
-                  "bundleName": "theme-spiritual-purple-__CSS_FILE_HASH__"
-                },
-                {
-                  "inject": false,
-                  "input": "src/styles/themes/theme-GreyBlue-Lime.scss",
-                  "bundleName": "theme-GreyBlue-Lime-__CSS_FILE_HASH__"
                 },
                 {
                   "inject": false,

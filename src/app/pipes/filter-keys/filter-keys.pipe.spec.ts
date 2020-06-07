@@ -20,7 +20,6 @@ describe('FilterKeysPipe', () => {
       value: {
         [Language.DE]: 'test1value',
         [Language.EN]: 'test1value',
-        [Language.FR]: 'test1value',
       },
     }, {
       key: 'test2key',
@@ -86,15 +85,4 @@ describe('FilterKeysPipe', () => {
     expect(pipe.transform(mockValues, Filter.InvalidEN).length).toEqual(0);
   });
 
-  it('should return false if the language files have FR keys', () => {
-    expect(pipe.transform(mockValues, Filter.InvalidFr).length).toEqual(1);
-  });
-
-  it('should return false if the language files do not have ES keys', () => {
-    expect(pipe.transform(mockValues, Filter.InvalidES).length).toBeGreaterThan(0);
-  });
-
-  it('should return false if the language files do not have IT keys', () => {
-    expect(pipe.transform(mockValues, Filter.InvalidIt).length).toBeGreaterThan(0);
-  });
 });

@@ -40,9 +40,14 @@ import {
   faInfoCircle,
   faItalic,
   faKey,
+  faKeyboard,
   faLanguage,
+  faListOl,
   faListUl,
   faLock,
+  faLongArrowAltLeft,
+  faLongArrowAltRight,
+  faMask,
   faMinus,
   faMobileAlt,
   faMusic,
@@ -52,9 +57,11 @@ import {
   faPlus,
   faQrcode,
   faQuestion,
+  faQuoteRight,
   faSave,
   faSignInAlt,
   faSignOutAlt,
+  faSlash,
   faSlidersH,
   faSpinner,
   faSquare,
@@ -194,5 +201,12 @@ export class SharedModule {
     library.addIcons(faAngleDoubleDown);
     library.addIcons(faVolumeUp);
     library.addIcons(faVolumeMute);
+    library.addIcons(faKeyboard);
+    library.addIcons(faLongArrowAltLeft);
+    library.addIcons(faLongArrowAltRight);
+    library.addIcons(faListOl);
+    library.addIcons(faSlash);
+    library.addIcons(faQuoteRight);
+    library.addIcons(faMask);
   }
 }

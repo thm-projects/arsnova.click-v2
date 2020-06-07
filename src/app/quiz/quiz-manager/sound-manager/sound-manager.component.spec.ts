@@ -7,7 +7,7 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faInfoCircle, faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
-import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
+import { HotkeysService } from 'angular2-hotkeys';
 import { AudioPlayerConfigTarget } from '../../../lib/enums/AudioPlayerConfigTarget';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../service/connection/connection.mock.service';
@@ -59,10 +59,13 @@ describe('SoundManagerComponent', () => {
           }, SharedService, {
             provide: TwitterService,
             useClass: TwitterServiceMock,
+          }, {
+            provide: HotkeysService,
+            useValue: {}
           },
         ],
         declarations: [
-          SoundManagerComponent, TranslatePipeMock, AudioPlayerComponent,
+          SoundManagerComponent, AudioPlayerComponent,
         ],
       }).compileComponents();
     }

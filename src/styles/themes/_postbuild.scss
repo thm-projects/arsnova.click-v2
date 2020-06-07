@@ -191,3 +191,9 @@ fa-icon {
     pointer-events: none;
   }
 }
+
+blockquote {
+  padding: 0 1rem;
+  color: $color-markdown-blockquote;
+  border-left: .25rem solid $border-left-color-markdown-blockquote;
+}

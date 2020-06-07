@@ -4,12 +4,10 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
-import { TranslateServiceMock } from '../../../_mocks/_services/TranslateServiceMock';
 import { HeaderModule } from '../../header/header.module';
 import { DeviceType } from '../../lib/enums/DeviceType';
 import { LivePreviewEnvironment } from '../../lib/enums/LivePreviewEnvironment';
@@ -53,9 +51,6 @@ describe('LivePreviewComponent', () => {
         }, FooterBarService, SharedService, SettingsService, HeaderLabelService, {
           provide: TrackingService,
           useClass: TrackingMockService,
-        }, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
         }, I18nService, {
           provide: SwUpdate,
           useClass: SwUpdateMock,

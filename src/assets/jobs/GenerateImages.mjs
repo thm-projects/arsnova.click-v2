@@ -12,7 +12,8 @@ import {default as imageminPngquant} from 'imagemin-pngquant';
 
 const argv = minimist(process.argv.slice(2));
 
-const languages = ['en', 'de', 'fr', 'it', 'es'];
+// const languages = ['en', 'de', 'fr', 'it', 'es'];
+const languages = ['en', 'de'];
 
 const __dirname = path.resolve();
 

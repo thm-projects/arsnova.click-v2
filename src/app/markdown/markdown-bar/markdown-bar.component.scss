@@ -1,6 +1,7 @@
 ul {
   li {
     flex: 1 0 calc(100% / 7);
+    max-width: calc(100% / 7);
     line-height: 20px;
     &:hover {
       opacity: 0.8;
@@ -15,6 +16,12 @@ ul {
   font-weight: bold;
   content: "\21A9";
   font-size: x-large;
+}
+
+.escape-icon::before {
+  font-weight: bold;
+  content: "\2216";
+  font-size: large;
 }
 
 .latex-icon::before {

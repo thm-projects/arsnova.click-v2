@@ -10,14 +10,11 @@ import {
   TranslateFakeLoader,
   TranslateLoader,
   TranslateParser,
-  TranslatePipe,
   TranslateService,
   TranslateStore,
 } from '@ngx-translate/core';
 import { RxStompRPCService, RxStompService } from '@stomp/ng2-stompjs';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
-import { TranslatePipeMock } from '../../../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../../../lib/jwt.factory';
 import { AttendeeMockService } from '../../../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../../../service/attendee/attendee.service';
@@ -53,19 +50,13 @@ describe('When BonusToken Icon is going to be clicked', () => {
         declarations: [ BonusTokenComponent ],
         providers: [
           NgbActiveModal, JwtHelperService,
-          {
-            provide: TranslateService,
-            useClass: TranslateServiceMock
-          }, TranslateStore, {
+          TranslateStore, {
             provide: TranslateLoader,
             useClass: TranslateFakeLoader
           }, {
             provide: TranslateCompiler,
             useClass: TranslateFakeCompiler
-          }, TranslateParser, {
-            provide: TranslatePipe,
-            useClass: TranslatePipeMock
-          }, RxStompRPCService, MarkdownService, {
+          }, TranslateParser, RxStompRPCService, MarkdownService, {
             provide: MarkedOptions,
             useValue: {},
           }, RxStompService, {

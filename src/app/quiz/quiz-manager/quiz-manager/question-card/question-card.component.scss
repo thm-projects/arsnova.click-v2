@@ -1,13 +1,9 @@
-.mh-20vh {
-  max-height: 20vh;
-}
-
 .card-header {
   user-select: none;
 }
 
 :host .card-body {
-  ::ng-deep code, ::ng-deep a {
+  ::ng-deep code, ::ng-deep a, ::ng-deep blockquote {
     color: inherit;
     text-decoration: none;
   }

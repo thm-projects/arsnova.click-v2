@@ -6,12 +6,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwPush } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { ConnectionMockService } from '../../../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../../../service/connection/connection.service';
+import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { QuizMockService } from '../../../../service/quiz/quiz-mock.service';
@@ -77,9 +79,18 @@ describe('QuizManagerDetailsOverviewComponent', () => {
           }, {
             provide: SwPush,
             useValue: {}
+          }, {
+            provide: HotkeysService,
+            useValue: {
+              add: () => {},
+              reset: () => {},
+            }
+          }, {
+            provide: CustomMarkdownService,
+            useClass: CustomMarkdownServiceMock,
           },
         ],
-        declarations: [QuizManagerDetailsOverviewComponent, TranslatePipeMock],
+        declarations: [QuizManagerDetailsOverviewComponent],
       }).compileComponents();
     }
   ));

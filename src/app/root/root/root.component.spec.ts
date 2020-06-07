@@ -8,11 +8,11 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { EventReplayer } from 'preboot';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
 import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
@@ -97,10 +97,13 @@ describe('RootComponent', () => {
           }, {
             provide: EventReplayer,
             useValue: {replayAll: () => {}}
-          }
+          }, {
+            provide: HotkeysService,
+            useValue: {}
+          },
         ],
         declarations: [
-          HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent, TranslatePipeMock,
+          HeaderComponent, FooterBarComponent, RootComponent, AdditionalDataComponent,
         ],
       }).compileComponents();
     }

@@ -16,9 +16,9 @@ export enum Filter {
 export enum LanguageTranslation {
   DE = 'Deutsch', //
   EN = 'English', //
-  FR = 'Français', //
-  IT = 'Italiano', //
-  ES = 'Español', //
+  //  FR = 'Français', //
+  //  IT = 'Italiano', //
+  //  ES = 'Español', //
 }
 
 export enum NumberType {
@@ -38,9 +38,9 @@ export enum CurrencyType {
 export enum Language {
   EN = 'en', //
   DE = 'de', //
-  FR = 'fr', //
-  ES = 'es', //
-  IT = 'it', //
+  //  FR = 'fr', //
+  //  ES = 'es', //
+  //  IT = 'it', //
 }
 
 export enum Project {

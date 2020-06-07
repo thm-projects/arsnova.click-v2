@@ -303,7 +303,7 @@ export class RootComponent implements OnInit, AfterViewInit {
         message: this.translateService.instant('global.cookie_consent.message'),
         dismiss: this.translateService.instant('global.cookie_consent.dismiss'),
         link: this.translateService.instant('global.cookie_consent.learn_more'),
-        href: 'dataprivacy',
+        href: 'info/dataprivacy',
       },
     });
   }

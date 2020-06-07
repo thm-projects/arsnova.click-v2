@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { JustafewPipeMock } from '../../../../_mocks/_pipes/JustafewPipeMock';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
@@ -94,6 +95,9 @@ describe('NicknameManagerComponent', () => {
         }, SharedService, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
       declarations: [NicknameManagerComponent, TranslatePipeMock, JustafewPipeMock],

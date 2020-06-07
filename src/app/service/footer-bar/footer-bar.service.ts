@@ -1,8 +1,9 @@
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
+import { HotkeysService } from 'angular2-hotkeys';
 import { filter, switchMapTo } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DefaultSettings } from '../../lib/default.settings';
@@ -165,10 +166,8 @@ export class FooterBarService {
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.import',
     linkTarget: null,
-  }, function (): void {
-    if (document) {
-      document.getElementById('upload-session').click();
-    }
+  }, () =>  {
+    this.document.getElementById('upload-session').click();
   });
   public footerElemHashtagManagement: IFooterBarElement = new FooterbarElement({
     id: 'sessionManagement',
@@ -233,7 +232,7 @@ export class FooterBarService {
   });
   public footerElemNicknames: IFooterBarElement = new FooterbarElement({
     id: 'nicknames',
-    iconClass: ['fas', 'users'],
+    iconClass: ['fas', 'mask'],
     textClass: 'footerElementText',
     textName: 'region.footer.footer_bar.nicknames',
     selectable: false,
@@ -457,6 +456,18 @@ export class FooterBarService {
   }, () => {
     this.twitterService.tweet();
   });
+  public footerElemHotkeys: IFooterBarElement = new FooterbarElement({
+    id: 'hotkey',
+    iconClass: ['fas', 'keyboard'],
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.hotkeys',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.hotkeys',
+    linkTarget: null,
+  }, () => {
+    this.hotkeysService.cheatSheetToggle.next();
+  });
   public footerElemAudio: IFooterBarElement = new FooterbarElement({
     id: 'audio',
     iconClass: ['fas', 'volume-up'],
@@ -481,6 +492,7 @@ export class FooterBarService {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(DOCUMENT) private document: Document,
     private userService: UserService,
     private rxStompService: RxStompService,
     private quizService: QuizService,
@@ -489,6 +501,7 @@ export class FooterBarService {
     private translateService: TranslateService,
     private themesService: ThemesService,
     private twitterService: TwitterService,
+    private hotkeysService: HotkeysService,
   ) {
 
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => !!quiz && [QuizState.Active, QuizState.Running].includes(quiz.state)),

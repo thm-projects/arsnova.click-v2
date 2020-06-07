@@ -61,13 +61,14 @@
       <h5 *ngIf="!quizService.isAddingPoolQuestion">
         <span>{{'component.quiz_summary.question' | translate}}&nbsp;{{questionIndex + 1}}</span>:
       </h5>
-      <p>
-        <span>{{'component.quiz_summary.text' | translate}}:&nbsp;</span>
-        <span *ngIf="question?.questionText"
-              class="break-word"
-              [innerHTML]="question?.questionText"></span>
-        <span *ngIf="!question?.questionText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
+
+      <p *ngIf="!question?.questionText?.length">{{'component.quiz_summary.text' | translate}}:&nbsp;{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</p>
+
+      <p *ngIf="question?.questionText?.length"
+         [innerHtml]="sanitizeHTML(renderedQuestionText)"
+         class="mh-20vh text-wrap  overflow-hidden">
       </p>
+
       <p>
         <span>{{'component.quiz_summary.type' | translate}}:&nbsp;</span>
         <span *ngIf="!question?.TYPE">{{'component.quiz_summary.validation_errors.reasons.empty_question_type' | translate}}</span>
@@ -110,7 +111,7 @@
         </div>
         <div *ngIf="!['RangedQuestion', 'FreeTextQuestion'].includes(question?.TYPE)">
           <p *ngFor="let answer of question?.answerOptionList; let i = index;"
-             role="listitem">
+             role="listitem" class="answer-list-element">
             <span>{{'component.quiz_summary.answer' | translate}}&nbsp;{{i+1}}</span>
             <span *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question?.TYPE)">
               <span *ngIf="answer.isCorrect">&nbsp;({{'component.quiz_summary.correct' | translate}})</span>
@@ -118,7 +119,7 @@
             </span>
             <span>:&nbsp;</span>
             <span *ngIf="answer.answerText"
-                  [innerHTML]="answer.answerText"></span>
+                  [innerHTML]="sanitizeHTML(renderedAnswers[i])"></span>
             <span *ngIf="!answer.answerText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
           </p>
           <p *ngIf="!question?.answerOptionList.length">
@@ -138,14 +139,14 @@
     </div>
 
     <div class="mb-2 d-flex flex-wrap">
-      <h5 class="mb-2 mr-3">{{'component.quiz_summary.timer' | translate}}:</h5>
+      <h5 class="mb-0 mr-3">{{'component.quiz_summary.timer' | translate}}:</h5>
       <p *ngIf="question?.timer">{{question?.timer}}&nbsp;{{ 'component.timer.second' | translate:{COUNT: question?.timer} }}</p>
       <p *ngIf="!question?.timer">{{ 'component.quiz_summary.no-timer' | translate }}</p>
     </div>
 
     <div *ngIf="canSelectRequiredState(question)"
          class="mb-2 d-flex flex-wrap">
-      <h5 class="mb-0 mr-3 text-nowrap">
+      <h5 class="mb-0 mr-md-3">
         <small>
           <fa-icon [icon]="'info-circle'"
                    class="mr-2"
@@ -154,7 +155,7 @@
         <span>{{'component.quiz_summary.required-for-token.title' | translate}}:</span>
       </h5>
       <button *ngIf="question"
-             class="btn btn-sm cursor-pointer mb-0 align-self-center"
+             class="btn btn-sm cursor-pointer mb-0 align-self-center flex-grow-1 flex-sm-grow-0"
              [class.btn-success]="question.requiredForToken"
              (click)="setRequiredForToken(question)"
              [class.btn-danger]="!question.requiredForToken">
@@ -177,7 +178,7 @@
       <div *ngIf="question"
            class="d-flex flex-wrap align-items-center">
         <input type="range"
-               class="mr-3"
+               class="mr-md-3 flex-grow-1"
                [min]="1"
                [max]="10"
                [(ngModel)]="question.difficulty">

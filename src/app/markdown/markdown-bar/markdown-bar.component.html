@@ -1,18 +1,15 @@
-<div class="">
-  <ul class="list-unstyled m-0 p-0 d-flex flex-wrap overflow-hidden">
-    <li (click)="connector(elem)"
-        *ngFor="let elem of markdownBarElements"
-        [id]="elem.id"
-        [title]="elem.titleRef | translate"
-        class="btn btn-warning rounded-0 cursor-pointer"
-        data-animation="false"
-        data-placement="bottom"
-        data-toggle="tooltip">
-      <i *ngIf="elem.customIcon"
-         [class]="elem.iconClass"
-         aria-hidden="true"></i>
-      <fa-icon *ngIf="!elem.customIcon"
-               [icon]="elem.iconClass"></fa-icon>
-    </li>
-  </ul>
-</div>
+<ul class="list-unstyled m-0 p-0 d-flex flex-wrap overflow-hidden">
+  <li (click)="connector(elem)"
+      *ngFor="let elem of markdownBarElements"
+      [title]="elem.titleRef | translate"
+      class="btn btn-warning rounded-0 cursor-pointer d-flex justify-content-center"
+      data-animation="false"
+      data-placement="bottom"
+      data-toggle="tooltip">
+    <i *ngIf="elem.customIcon"
+       [class]="elem.iconClass"
+       aria-hidden="true"></i>
+    <fa-icon *ngIf="!elem.customIcon"
+             [icon]="elem.iconClass"></fa-icon>
+  </li>
+</ul>

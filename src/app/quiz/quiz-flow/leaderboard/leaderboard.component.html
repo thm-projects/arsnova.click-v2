@@ -54,7 +54,7 @@
                  class="mr-2"></fa-icon>
         <span *ngIf="i">{{i + 1}}.&nbsp;</span>
         <span><span [innerHTML]="parseNickname(attendee.name)"
-                    class="d-inline-flex"></span>&nbsp;-&nbsp;</span>
+                    class="d-inline-flex"></span>&nbsp;|&nbsp;</span>
         <span>{{'component.leaderboard.team-result.score' | translate:{SCORE: attendee.score} }}</span>
       </div>
     </div>

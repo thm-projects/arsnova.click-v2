@@ -6,8 +6,8 @@ import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { faCogs, faMobileAlt, faQuestion, faTags, faUserFriends, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../../service/custom-markdown/CustomMarkdownServiceMock';
@@ -34,14 +34,17 @@ describe('StatisticsComponent', () => {
           },
         }),
       ],
-      declarations: [StatisticsComponent, TranslatePipeMock],
+      declarations: [StatisticsComponent],
       providers: [
         { provide: SwPush, useValue: {} },
         { provide: CustomMarkdownService, useClass: CustomMarkdownServiceMock },
         RxStompService, {
           provide: ThemesService,
           useClass: ThemesMockService
-        }, SimpleMQ,
+        }, SimpleMQ, {
+          provide: HotkeysService,
+          useValue: {}
+        },
       ],
     })
     .compileComponents();

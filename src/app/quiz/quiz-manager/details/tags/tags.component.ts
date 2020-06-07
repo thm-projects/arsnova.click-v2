@@ -1,12 +1,15 @@
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
 import { CloudData } from 'angular-tag-cloud-module';
+import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 import { merge, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
+import { I18nService } from '../../../../service/i18n/i18n.service';
 import { QuizService } from '../../../../service/quiz/quiz.service';
 import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-details.component';
 
@@ -15,7 +18,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss'],
 })
-export class TagsComponent extends AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
+export class TagsComponent extends AbstractQuizManagerDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   public static readonly TYPE = 'TagsComponent';
 
   private _tags: Array<CloudData> = [];
@@ -45,13 +48,22 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
     footerBarService: FooterBarService,
     router: Router,
     quizPoolApiService: QuizPoolApiService,
+    hotkeysService: HotkeysService,
+    translate: TranslateService,
+    i18nService: I18nService,
   ) {
-    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route);
+    super(platformId, quizService, headerLabelService, footerBarService, quizPoolApiService, router, route, hotkeysService, translate, i18nService);
 
     footerBarService.TYPE_REFERENCE = TagsComponent.TYPE;
     footerBarService.replaceFooterElements([
       footerBarService.footerElemBack,
+      footerBarService.footerElemHotkeys
     ]);
+  }
+
+  public ngAfterViewInit(): void {
+    this.i18nService.initialized.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
+    this.translate.onLangChange.pipe(takeUntil(this.destroy)).subscribe(this.loadHotkeys.bind(this));
   }
 
   public resultFormatter(tag: CloudData): string { return `${tag.text}`; }
@@ -104,6 +116,9 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
   public ngOnInit(): void {
     super.ngOnInit();
 
+    const target = ['/quiz', 'manager', this._isQuizPool ? 'quiz-pool' : this._questionIndex, 'overview'];
+    this.footerBarService.footerElemBack.onClickCallback = () => this.router.navigate(target);
+
     this.quizService.quizUpdateEmitter.pipe( //
       distinctUntilChanged(), //
       takeUntil(this.destroy), //
@@ -125,9 +140,23 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
   public ngOnDestroy(): void {
     super.ngOnDestroy();
 
+    this.hotkeysService.cheatSheetToggle.next(false);
+
     if (this.quizService.quiz) {
       this.quizService.quiz.questionList[this._questionIndex].tags = this.selectedTags.map(tag => tag.text);
       this.quizService.persist();
     }
+  }
+
+  private loadHotkeys(): void {
+    this.hotkeysService.hotkeys = [];
+    this.hotkeysService.reset();
+
+    this.hotkeysService.add([
+      new Hotkey('esc', (): boolean => {
+        this.footerBarService.footerElemBack.onClickCallback();
+        return false;
+      }, undefined, this.translate.instant('region.footer.footer_bar.back')),
+    ]);
   }
 }

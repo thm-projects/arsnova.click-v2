@@ -44,9 +44,9 @@
       <div (click)="selectNick(nick)"
            *ngFor="let nick of availableNicks[selectedCategory] | justafew:visibleData"
            [class.selectedNickName]="hasSelectedNick(nick)"
-           class="nickStyle p-2 m-2 cursor-pointer border-bottom">
+           class="nickStyle p-2 mx-2 cursor-pointer border-bottom">
       <span [innerHTML]="parseAvailableNick(nick)"
-            class="nickName d-inline-block pb-1"></span>
+            class="nickName d-flex align-items-center"></span>
       </div>
     </div>
   </div>

@@ -5,10 +5,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
-import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslateServiceMock } from '../../../../_mocks/_services/TranslateServiceMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { ServerUnavailableModalComponent } from '../../../modals/server-unavailable-modal/server-unavailable-modal.component';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -66,10 +65,10 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
         }, QuestionTextService, HeaderLabelService, {
           provide: ThemesService,
           useClass: ThemesMockService
-        }, FooterBarService, SettingsService, {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, SimpleMQ,
+        }, FooterBarService, SettingsService, SimpleMQ, {
+          provide: HotkeysService,
+          useValue: {}
+        },
       ],
       declarations: [ReadingConfirmationComponent, ServerUnavailableModalComponent],
     }).compileComponents();

@@ -11,9 +11,9 @@ import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { faEdit, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { LanguageFilterPipeMock } from '../../../_mocks/_pipes/LanguageFilterPipeMock';
-import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { AttendeeMockService } from '../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../service/attendee/attendee.service';
@@ -99,9 +99,12 @@ describe('HomeComponent', () => {
         }, {
           provide: TwitterService,
           useClass: TwitterServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {}
         },
       ],
-      declarations: [HomeComponent, TranslatePipeMock, SearchFilterPipeMock, TwitterCardsComponent, LanguageFilterPipeMock],
+      declarations: [HomeComponent, SearchFilterPipeMock, TwitterCardsComponent, LanguageFilterPipeMock],
     }).compileComponents();
   });
 

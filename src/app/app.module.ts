@@ -4,9 +4,11 @@ import { APP_INITIALIZER, ErrorHandler, Inject, Injector, NgModule, PLATFORM_ID,
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateCompiler, TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule, SvgLoader } from 'angular-svg-icon';
+import { HotkeyModule } from 'angular2-hotkeys';
 import { Angulartics2Module } from 'angulartics2';
 import { MarkedOptions } from 'marked';
 import { SimpleMQ } from 'ng2-simple-mq';
@@ -43,7 +45,7 @@ function markedOptionsFactory(): MarkedOptions {
     pedantic: false,
     smartLists: true,
     smartypants: false,
-    xhtml: true
+    xhtml: true,
   };
 }
 
@@ -103,6 +105,9 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
         deps: [HttpClient, TransferState],
       },
     }),
+    HotkeyModule.forRoot({
+      disableCheatSheet: true,
+    }),
   ],
   providers: [
     {
@@ -115,7 +120,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
       provide: RxStompService,
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig],
-    }, SimpleMQ, RoutePreloader,
+    }, SimpleMQ, RoutePreloader, NgbActiveModal,
     {
       provide: APP_INITIALIZER,
       useFactory: (platformId: object, translate: TranslateService, injector: Injector) => () => {
@@ -123,7 +128,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
           return new Promise(resolve => {
             const dom = ɵgetDOM();
             const styles = Array.prototype.slice.apply(
-              dom.getDefaultDocument().querySelectorAll('style[ng-transition]')
+              dom.getDefaultDocument().querySelectorAll('style[ng-transition]'),
             );
             styles.forEach(el => {
               // Remove ng-transition attribute to prevent Angular appInitializerFactory

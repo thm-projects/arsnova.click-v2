@@ -10,9 +10,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { HotkeysService } from 'angular2-hotkeys';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../../../_mocks/_services/SwUpdateMock';
 import { HeaderComponent } from '../../../../header/header/header.component';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
@@ -108,6 +108,12 @@ describe('AnsweroptionsComponent', () => {
         }, {
           provide: CustomMarkdownService,
           useClass: CustomMarkdownServiceMock,
+        }, {
+          provide: HotkeysService,
+          useValue: {
+            add: () => {},
+            reset: () => {},
+          }
         },
       ],
       declarations: [
@@ -117,7 +123,6 @@ describe('AnsweroptionsComponent', () => {
         AnsweroptionsFreetextComponent,
         AnsweroptionsRangedComponent,
         AnsweroptionsComponent,
-        TranslatePipeMock,
       ],
     }).compileComponents();
   }));

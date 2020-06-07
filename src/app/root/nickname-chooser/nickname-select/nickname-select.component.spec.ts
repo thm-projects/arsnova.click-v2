@@ -9,8 +9,8 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { NgbAlertModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
+import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
@@ -69,9 +69,12 @@ describe('NicknameSelectComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
-        }, SimpleMQ,
+        }, SimpleMQ, {
+          provide: HotkeysService,
+          useValue: {}
+        },
       ],
-      declarations: [NicknameSelectComponent, TranslatePipeMock],
+      declarations: [NicknameSelectComponent],
     }).compileComponents();
   }));
 

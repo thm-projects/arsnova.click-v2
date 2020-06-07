@@ -9,7 +9,6 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { MarkdownService, MarkedOptions } from 'ngx-markdown';
 import { LanguageFilterPipeMock } from '../../../_mocks/_pipes/LanguageFilterPipeMock';
-import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { TwitterApiService } from '../../service/api/twitter/twitter-api.service';
 import { TwitterService } from '../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../service/twitter/twitter.service.mock';
@@ -32,8 +31,8 @@ describe('TwitterCardsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TwitterCardsComponent, TranslatePipeMock, SearchFilterPipeMock, LanguageFilterPipeMock],
       imports: [I18nTestingModule, FormsModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule, NgbModule],
+      declarations: [TwitterCardsComponent, SearchFilterPipeMock, LanguageFilterPipeMock],
       providers: [
         TwitterApiService, RxStompService, SimpleMQ, MarkdownService, {
           provide: MarkedOptions,

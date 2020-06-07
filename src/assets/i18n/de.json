@@ -1,10 +1,10 @@
 {
   "manifest": {
-    "name": "Quiz-App der THM",
-    "description": "Die Quiz-App der Zukunft!"
+    "name": "Spielbasierte Quiz-App der THM",
+    "description": "Ein bisschen wie Kahoot!, ein bisschen wie Socrative, aber ganz viel ARSnova!"
   },
   "global": {
-    "arsnova_slogan": "Quiz-App für MINT",
+    "arsnova_slogan": "Quiz-App für den MINT-Unterricht",
     "yes": "Ja",
     "no": "Nein",
     "close_window": "Fenster schließen",
@@ -13,21 +13,21 @@
       "dismiss": "Hinweis nicht mehr anzeigen",
       "learn_more": "Datenschutzerklärung"
     },
-    "console-log-warning": "WARNUNG! Dies wird dir nicht beim schummeln helfen! Jeder, der dir gesagt hat, dass du diese Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren",
+    "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du die Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
     "abort": "Abbrechen",
     "aria_description": {},
     "true": "Wahr",
     "false": "Falsch",
     "in-cooperation-with": "in Kooperation mit",
-    "please-wait": "Bitte warten...",
-    "please-select": "Bitte auswählen...",
-    "loose-data-warning": "Bei dieser Navigation können Datenverluste auftreten - möchtest du fortfahren?",
+    "please-wait": "Bitte warten…",
+    "please-select": "Bitte auswählen…",
+    "loose-data-warning": "Bei dieser Navigation können Datenverluste auftreten.\n\nFortfahren?",
     "no-data-error": {
       "title": "Fehler beim Laden der Daten",
-      "load-to-edit": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier ggf. Daten verloren gehen können. Du kannst zur Quiz Übersicht oder zur Startseite zurückkehren.",
-      "load-to-play": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier ggf. Daten verloren gehen können. Die Quiz Runde muss für dich beendet werden. Du kannst nur zur Startseite zurückkehren.",
+      "load-to-edit": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier Daten verloren gehen können. Du kannst zur Quiz-Übersicht oder zur Startseite zurückkehren.",
+      "load-to-play": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier Daten verloren gehen können. Die Quiz-Runde muss für dich beendet werden. Du kannst nur zur Startseite zurückkehren.",
       "homepage": "Zur Startseite",
-      "to-quiz-overview": "Zur Quiz Übersicht"
+      "to-quiz-overview": "Zur Quiz-Übersicht"
     },
     "copy-to-clipboard": "Zwischenablage",
     "copy": "Kopieren",
@@ -39,40 +39,40 @@
     "footer": {
       "footer_bar": {
         "about": "arsnova.click",
-        "home": "Start",
+        "home": "Startseite",
         "tos": "Nutzungsbedingungen",
         "imprint": "Impressum",
         "blog": "Projektblog",
         "languages": "Sprache",
         "style": "Stil",
-        "import": "Quizimport",
+        "import": "Quiz-Import",
         "info": "Info",
-        "reading-confirmation": "Lesebestätigung",
+        "reading-confirmation": "Lesebestätigung abfragen",
         "fullscreen": "Vollbild",
         "sound": "Sound",
         "qr_code": "QR-Code",
         "nicknames": "Nicknamen",
-        "edit_quiz": "Bearbeiten",
+        "edit_quiz": "Quiz bearbeiten",
         "show_product_tour": "Tutorial",
         "show_response_progress": "Fortschritt",
         "description": {
-          "qr-code": "Teilnehmer können den QR Code mit ihren mobilen Geräten scannen um dem Quiz teilzunehmen",
-          "sound": "Setze hier den Sound für die Hintergrundmusik oder den Countdown",
-          "reading-confirmation": "Aktiviere diese Option, damit Antworten der Quizfragen vorab dargestellt werden.",
-          "response-progress": "Aktiviere diese Option um die Antworten auf eine Frage während des Quizzes live darzustellen. Beachte den psychologischen Effekt: Menschen neigen dazu, der Antwort der Masse zu folgen (Herdeninstinkt).",
-          "nicknames": "Du kannst Namen aus mehreren Kategorien vorab selektieren.  ",
-          "confidence-slider": "Aktiviere diese Option wenn die Teilnehmer auswählen sollen, wie sicher sie sich in ihrer Antwort sind von 0 &#37; \"Geraten\" - 100 &#37; \"Fest überzeugt\". "
+          "qr-code": "Player können den QR-Code mit ihren mobilen Geräten scannen, um am Quiz teilzunehmen.",
+          "sound": "Wähle hier die Hintergrundmusik für die Quiz-Lobby und den Countdown.",
+          "reading-confirmation": "Aktiviere diese Option, um vor dem Countdown abzufragen, ob die Quizfrage verstanden wurde. Die Antwortoptionen werden nicht angezeigt.",
+          "response-progress": "Aktiviere diese Option, um die Antworten auf eine Frage während des Countdowns live anzuzeigen. Beachte den psychologischen Effekt: Der Mensch neigt dazu, der Antwort der Masse zu folgen (Herdeninstinkt).",
+          "nicknames": "Du kannst bekannte Namen aus verschiedenen Kategorien oder auch Emojis vorgeben.",
+          "confidence-slider": "Aktiviere diese Option, wenn die Player zurückmelden sollen, wie sicher sie sich in ihrer Antwort sind von 0 &#37; »Geraten« bis 100 &#37; »Fest überzeugt«."
         },
-        "api-docs": "API Docs",
-        "show_confidence_slider": "Antwortsicherheit",
+        "api-docs": "API-Dokumentation",
+        "show_confidence_slider": "Antwortsicherheit abfragen",
         "back": "Zurück",
-        "cache_assets": "Assets Cachen",
-        "block_rude_nicknames": "Nicknamen ausschließen",
-        "enable_cas_login": "CAS Login",
+        "cache_assets": "Assets cachen",
+        "block_rude_nicknames": "Nicknamen filtern",
+        "enable_cas_login": "CAS-Login",
         "global_leaderboard": "Globale Rangliste",
         "dataprivacy": "Datenschutz",
         "member_group": "Teams",
-        "edit-i18n": "I18n editieren",
+        "edit-i18n": "i18n editieren",
         "login": "Einloggen",
         "logout": "Ausloggen",
         "save_quiz": "Quiz speichern",
@@ -81,35 +81,38 @@
         "twitter": {
           "tweet": "Tweet"
         },
-        "questionpool": "Quiz-Pool",
+        "questionpool": "Fragen-Pool",
         "my-quizzes": "Meine Quizze",
-        "audio": "Musik"
+        "audio": "Musik",
+        "hotkeys": "Hotkeys"
       },
       "about": {
         "title": "arsnova.click",
-        "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />ein bisschen <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
-        "ars": "arsnova.click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience Response System (ARS)</a> für öffentliche Bildungseinrichtungen.",
-        "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> entwickelte ein Team aus Bachelor- und Masterstudenten der <a href='http://www.thm.de/site/' target='_blank'>TH Mittelhessen</a> die erste Version dieser <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierten</a> Alternative zum ARSnova-Flaggschiff <a href='https://arsnova.eu/' target='_blank'>arsnova.voting</a>.",
-        "met_requirements": "Bisher wurden die folgenden Features implementiert:",
+        "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
+        "ars": "arsnova.click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
+        "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelten Informatik-Studenten der <a href='http://www.thm.de/site/' target='_blank'>THM</a> die <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierte</a> Alternative zum Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
+        "met_requirements": "<strong>Features:</strong>",
         "requirements": {
-          "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quizdaten liegen im Browser des Quizerstellers (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
+          "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quiz-Daten verbleiben im Browser (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
           "2": "Keine Registrierung, keine Anmeldung, keine Installation (<a href='https://de.wikipedia.org/wiki/Bring_your_own_device' target='_blank'>BYOD</a>), keine Werbung, keine Kosten",
-          "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Kandidat/in bzw. Lehrperson und Schüler/in",
-          "4": "Jeder darf Quizze erstellen, sofort und beliebig viele. Das Erstellen eines Quiz ist sogar auf dem Smartphone ein Kinderspiel!",
-          "5": "Extrem einfache, barrierefreie, beamertaugliche, vollständig in Englisch, Spanisch, Französisch und Italienisch übersetzte Bedienoberfläche",
-          "6": "Frageformate: Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
-          "7": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a> und eingebetteten Videos im Fragetext und in den Antwortoptionen",
-          "8": "Edutainment: Lernmotivation durch Live-Wettbewerb mit Sound gegen die Uhr und die Mitspielenden",
-          "9": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Webdesign</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert dank <a href='https://de.wikipedia.org/wiki/Bootstrap_(Framework)' target='_blank'>Bootstrap</a>. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
-          "10": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> mit reaktiver Web-Technik von <a href='https://www.meteor.com' target='_blank'>Meteor</a>",
-          "11": "arsnova.click ist <a href='https://github.com/thm-projects/arsnova.click' target='_blank'>Open Source Software</a>"
+          "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Player",
+          "4": "Jeder darf Quizze erstellen, sofort und beliebig viele.",
+          "5": "Barrierefreie und für den Beamer optimierte Bedienoberfläche",
+          "6": "Fragetypen: ABC…, Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
+          "7": "ABC…-Quizze können durch Eingabe von ABC… als Quiz-Name mit einem Klick erstellt werden. Die Anzahl der fortlaufende Buchstaben bestimmt die Antwortoptionen.",
+          "8": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a>, Bilder und Videos im Fragetext und in den Antwortoptionen",
+          "9": "Edutainment: Lernmotivation durch Live-Wettbewerb – einzeln oder in Teams – mit Sound im Countdown gegen die Mitspielenden",
+          "10": "Bonusoption: Die Top Player erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
+          "11": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Design</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
+          "12": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reaktiver Web-Technik",
+          "13": "<a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source Software</a>"
         },
         "manual": {
           "title": "Bedienungshandbuch?",
           "text": {
             "1": "Brauchst du nicht!",
-            "2": "Tipp einfach den Namen des Quiz ein. Die Buttons werden aktiviert, sobald du entweder den Namen eines freigeschalteten Quiz eingibst: \"Mach mit!\" oder ein Quiz mit dem eingegebenen Namen erstellen kannst: \"Neues Quiz!\".",
-            "3": "Folge dem Tutorial (Flagge in der Fußleiste) oder einfach deiner Intuition: schauen, klicken, quizzen."
+            "2": "Tipp einfach den Namen des Quiz ein. Die Buttons werden aktiviert, sobald du entweder den Namen eines freigeschalteten Quiz eingibst: »Mach mit!« oder ein Quiz mit dem eingegebenen Namen erstellen kannst: »Neues Quiz«.",
+            "3": "Folge einfach deiner Intuition: schauen, klicken, quizzen."
           }
         }
       },
@@ -117,7 +120,7 @@
         "declaration": "Alle (nicht nur Lehrende) dürfen die Quiz-App arsnova.click für ihre Zwecke verwenden, solange dabei nicht gegen deutsches oder EU-Recht verstoßen wird.",
         "license": {
           "title": "Lizenz",
-          "text": "arsnova.click ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://git.thm.de/arsnova/arsnova.click/' target='_blank'>Open Source</a> und steht unter der <a href='http://www.gnu.org/licenses/gpl-3.0-standalone.html' target='_blank'>GNU General Public License Version 3</a>."
+          "text": "arsnova.click ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> und steht unter der <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
         },
         "musicLicense": {
           "title": "Musik-Lizenz",
@@ -125,7 +128,7 @@
         },
         "warranty": {
           "title": "Gewährleistung",
-          "text": "Wir sind bemüht, den Online-Dienst arsnova.click zuverlässig und störungsfrei zu betreiben, können dies aber nicht garantieren. Alle Quizdaten liegen ausschließlich im Browser-Speicher des Quizerstellers. Wir übernehmen keine Haftung für den Verlust der Daten, zum Beispiel durch Löschen des Browser-Speichers, ohne zuvor die Quizze exportiert zu haben, oder bei rechtswidriger Nutzung des Dienstes."
+          "text": "Wir sind bemüht, den Online-Dienst arsnova.click zuverlässig und störungsfrei zu betreiben, können dies aber nicht garantieren. Alle Quiz-Daten liegen ausschließlich im Browser-Speicher des Quizmasters. Wir übernehmen keine Haftung für den Verlust der Daten, zum Beispiel durch Löschen des Browser-Speichers, ohne zuvor die Quizze exportiert zu haben, oder bei rechtswidriger Nutzung des Dienstes."
         }
       },
       "data_privacy": {
@@ -133,7 +136,7 @@
         "declaration": "Diese Datenschutzerklärung klärt Nutzer/innen von arsnova.click über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
         "app_data": {
           "title": "Anwendungsdaten",
-          "text": "Alle Quizfragen und deren Antwortoptionen werden ausschließlich im Browser-Speicher (localStorage) des Quizerstellers gehalten."
+          "text": "Alle Quizfragen und deren Antwortoptionen werden ausschließlich im Browser-Speicher (Web Storage) des Quizmasters gehalten."
         },
         "access_data": {
           "title": "Zugriffsdaten",
@@ -145,15 +148,15 @@
         },
         "3rdparty": {
           "title": "Dienste und Inhalte Dritter",
-          "text": "In Quizfragen können Inhalte Dritter, wie zum Beispiel Videos von YouTube und Vimeo oder Grafiken von anderen Webseiten, eingebunden werden. Dies setzt voraus, dass die Anbieter dieser Inhalte die IP-Adresse der Nutzer/innen wahrnehmen. Ohne die IP-Adresse können die Inhalte nicht an den Browser gesendet werden."
+          "text": "In Quizfragen können Inhalte Dritter, wie zum Beispiel Videos von YouTube oder Grafiken von anderen Webseiten, eingebunden werden. Dies setzt voraus, dass die Anbieter der Inhalte die IP-Adresse der Nutzer/innen wahrnehmen. Ohne die IP-Adresse können die Inhalte nicht an den Browser gesendet werden."
         },
         "cookies": {
           "title": "Cookies",
-          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova.click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Piwik (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
+          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova.click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
         },
         "piwik": {
-          "title": "Piwik",
-          "text": "Dieses Angebot benutzt Piwik, eine Open-Source-Software zur statistischen Auswertung der Zugriffe, siehe <a href='http://piwik.org/' target='_blank'>piwik.org</a>. Piwik verwendet Cookies, die auf dem Computer der Nutzer/innen gespeichert werden und die eine Analyse der Benutzung der Webseite ermöglichen. Die durch den Cookie erzeugten Informationen über die Benutzung dieses Angebotes werden auf dem Server des Anbieters in Deutschland gespeichert. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Nutzer/innen können die Installation der Cookies durch eine entsprechende Einstellung ihrer Browser-Software verhindern."
+          "title": "Matomo",
+          "text": "Dieses Angebot benutzt Matomo, eine Open-Source-Software zur statistischen Auswertung der Zugriffe, siehe <a href='http://matomo.org/' target='_blank'>matomo.org</a>. Matomo verwendet Cookies, die auf dem Computer der Nutzer/innen gespeichert werden und die eine Analyse der Benutzung der Webseite ermöglichen. Die durch den Cookie erzeugten Informationen über die Benutzung dieses Angebotes werden auf dem Server des Anbieters in Deutschland gespeichert. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Nutzer/innen können die Installation der Cookies durch eine entsprechende Einstellung ihrer Browser-Software verhindern."
         }
       },
       "imprint": {
@@ -168,9 +171,9 @@
             "6": "Wiesenstraße 14",
             "7": "D-35390 Gießen",
             "8": "Telefon: +49 641 309 – 24 50",
-            "9": "E-Mail: <a href='mailto:klaus.quibeldey-cirkel@transmit.de' class='text-light'>klaus.quibeldey-cirkel@transmit.de</a>",
+            "9": "E-Mail: <a href='mailto:klaus.quibeldey-cirkel@transmit.de'>klaus.quibeldey-cirkel@transmit.de</a>",
             "10": "Sitz der Gesellschaft: Gießen",
-            "11": "Website: <a href='https://www.transmit.de' class='text-light'>https://www.transmit.de</a>",
+            "11": "Website: <a href='https://www.transmit.de'>https://www.transmit.de</a>",
             "12": "Rechtsform: GmbH",
             "13": "Amtsgericht: Gießen HRB 3036",
             "14": "USt-IdNr.: DE 188 685 037"
@@ -213,15 +216,15 @@
   },
   "component": {
     "quiz-join": {
-      "top-header": "Dein Quiz wurde noch nicht gestartet",
-      "sub-header": "Keine Sorge - wir verbinden dich, sobald das Quiz gestartet wird",
+      "top-header": "Dein Quiz wurde noch nicht gestartet.",
+      "sub-header": "Keine Sorge – wir verbinden dich, sobald das Quiz gestartet wird.",
       "approval": {
         "top-header": "Du möchtest dem Quiz",
-        "sub-header": "beitreten - ist das richtig?"
+        "sub-header": "beitreten – ist das richtig?"
       },
       "joining": {
-        "top-header": "Gleich geht's los",
-        "sub-header": "Warte noch kurz..."
+        "top-header": "Gleich geht's los…",
+        "sub-header": "Warte noch kurz…"
       }
     },
     "answer-result": {
@@ -232,7 +235,7 @@
         "title": "Teilweise richtig",
         "amount-correct": "{correct} von {available} Antworten richtig",
         "amount-wrong": "{wrong} falsche {wrong, plural, =0{Antworten} one{Antwort} other{Antworten}} gewählt",
-        "ranged-question-correct": "Nicht korrekt geraten, aber akzeptabel"
+        "ranged-question-correct": "Nicht richtig geraten, aber akzeptabel"
       },
       "wrong": {
         "title": "Leider falsch",
@@ -240,8 +243,8 @@
       },
       "points-gained": "+ {points} Punkte",
       "points-gained-team": "{points} Punkte",
-      "rank": "Du bist aktuell auf Platz {rank}",
-      "rank-team": "Dein Team ist aktuell auf Platz {rank}",
+      "rank": "Du bist aktuell auf Platz {rank}.",
+      "rank-team": "Dein Team ist aktuell auf Platz {rank}.",
       "to-quiz-results": "Zur Quizfrage",
       "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!",
       "pole-position-team": "Ihr seid die Besten! Erster Platz im gesamten Quiz! Bravo!"
@@ -253,7 +256,7 @@
     "quiz-pool": {
       "select-tag": {
         "label": "Tag auswählen",
-        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll",
+        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll.",
         "validation-error": {
           "invalid-tag": "Der eingegebene Tag ist leider nicht verfügbar. Bitte klicke auf einen Tag in der Auswahlliste."
         }
@@ -262,9 +265,9 @@
         "label": "Anzahl der Quizfragen",
         "placeholder": "Anzahl der Quizfragen",
         "validation-error": {
-          "required": "Bitte gib die Anzahl der gewünschten Quizfragen ein",
-          "min": "Bitte verwende mindestens eine Quizfrage für diesen Tag",
-          "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen"
+          "required": "Bitte gib die Anzahl der gewünschten Quizfragen ein.",
+          "min": "Bitte verwende mindestens eine Quizfrage für diesen Tag.",
+          "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen."
         }
       },
       "tag-available": "{weight, plural, =0{0 Fragen} one{Eine Frage} other{{weight} Fragen}} verfügbar",
@@ -274,25 +277,25 @@
       "save-tag": "Tag verwenden",
       "delete-tag": "Tag löschen",
       "create-own-question": {
-        "label": "Möchtest du eine neue Quizpool Frage einreichen?",
-        "button-label": "Neue Quizpool Frage"
+        "label": "Möchtest du eine Quizfrage für den Fragen-Pool einreichen?",
+        "button-label": "Neue Frage für den Fragen-Pool"
       }
     },
     "twitter": {
       "optin": {
         "check": "Für Social Media Features anklicken",
         "share": "Auf Social Media teilen",
-        "warning": " Ich bin damit einverstanden, dass Inhalte von Twitter angezeigt werden."
+        "warning": "Ich bin einverstanden, dass Tweets über arsnova.click angezeigt werden."
       },
       "tweet": {
         "content": {
-          "0": "Grade das Quiz \"{NAME}\" auf arsnova.click gespielt ❤️\n"
+          "0": "Gerade das Quiz »{NAME}« auf arsnova.click gespielt ❤️\n"
         }
       }
     },
     "answeroptions": {
       "new_answer": "Neue Antwortoption",
-      "correct": "Korrekt",
+      "correct": "Richtig",
       "wrong": "Falsch",
       "show_answer_content_on_buttons": "Antworttext auf Abstimmbuttons?",
       "show_one_answer_per_row": "Zeige nur eine Antwortoption pro Zeile?",
@@ -306,10 +309,10 @@
         "multiple_selection_survey": "Hier kannst du einstellen, ob eine Mehrfachauswahl möglich sein soll.",
         "range_area": "Hier kannst du die korrekte Antwort und die Toleranzen nach oben und unten angeben. Bitte beachte, dass die Eingabe in natürlichen Zahlen erfolgen muss.",
         "min_range": "Hier kannst du den unteren Toleranzwert festlegen.",
-        "correct_value": "Diese Antwort ist vollständig korrekt.",
-        "max_range": "Hier kannst Du den oberen Toleranzwert festlegen.",
-        "free_text_question_text": "Hier kannst Du die richtige Antwort eingeben. Die eingegebenen Antworten der Teilnehmer/innen werden gemäß den Kriterien gegen diese Antwort geprüft.",
-        "check_answer": "Hier kannst du mögliche Antworten der Teilnehmer/innen gegen deine Referenzantwort und unter Berücksichtigung der aktuellen Kriterien testen."
+        "correct_value": "Diese Antwort ist vollständig richtig.",
+        "max_range": "Hier kannst du den oberen Toleranzwert festlegen.",
+        "free_text_question_text": "Hier kannst du die richtige Antwort eingeben. Die Antworten der Player werden gemäß den Kriterien gegen diese Antwort geprüft.",
+        "check_answer": "Hier kannst du mögliche Antworten der Player gegen deine Referenzantwort und unter Berücksichtigung der aktuellen Kriterien testen."
       },
       "ranged_question": {
         "correct_value": "Richtiger Wert",
@@ -325,9 +328,9 @@
         "config_use_punctuation": "Prüfe die Interpunktion",
         "onText": "Ja",
         "offText": "Nein",
-        "text_placeholder": "Gib hier deine Antwort ein",
-        "check_correct": "Die eingegebene Antwort passt zur gegebenen Referenz ",
-        "check_incorrect": "Die eingegebene Antwort passt nicht zur gegebenen Referenz "
+        "text_placeholder": "Gib hier deine Antwort ein…",
+        "check_correct": "Die eingegebene Antwort passt zur gegebenen Referenz.",
+        "check_incorrect": "Die eingegebene Antwort passt nicht zur gegebenen Referenz."
       }
     },
     "choose_nickname": {
@@ -340,7 +343,7 @@
       "no_selectable_nick_available": {}
     },
     "name_management": {
-      "enter_quiz_name": "Gib hier den Quiznamen ein …",
+      "enter_quiz_name": "Gib hier den Quiz-Namen ein…",
       "join_session": "Mach mit!",
       "start_session": {
         "title": "Quiz starten",
@@ -350,7 +353,7 @@
         "title": "Quiz bearbeiten",
         "label": "Bearbeiten"
       },
-      "create_session": "Neues Quiz!",
+      "create_session": "Neues Quiz",
       "can_create_session": "Quiz erstellen",
       "create_demo_session": "Starte Demo Quiz",
       "quiz_management": "Quiz-Speicher",
@@ -365,9 +368,9 @@
       },
       "no_sessions": "Es sind keine Quizze in diesem Browser gespeichert.",
       "aria_description": {},
-      "create_abcd_session": "Starte ABCD Quiz",
-      "enter_server_password": "Server Passwort eingeben",
-      "public-quizzes": "Suchst du mehr? Klicke hier um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes} } zu wählen!",
+      "create_abcd_session": "Starte ABC…-Quiz",
+      "enter_server_password": "Server-Passwort eingeben",
+      "public-quizzes": "Suchst du mehr? Klicke hier, um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes} } zu wählen!",
       "save_session": {
         "title": "Quiz speichern",
         "label": "Speichern"
@@ -386,12 +389,12 @@
       "export": "Export",
       "team-result": {
         "name": "{TEAM_NAME}",
-        "overall-response-time": "Kummulierte Antwortzeit: {RESPONSE_TIME}",
+        "overall-response-time": "Kumulierte Antwortzeit: {RESPONSE_TIME}",
         "score": "{SCORE} Punkte"
       },
       "own-rank": {
         "own-data": "Du bist auf Platz {INDEX} mit einem Punktestand von {SCORE}",
-        "closest-opponent": " direkt nach {NAME} mit einem Punktestand von {SCORE}"
+        "closest-opponent": " direkt nach {NAME} mit einem Punktestand von {SCORE}."
       }
     },
     "liveResults": {
@@ -401,17 +404,17 @@
       "ranking": "Rangliste",
       "reading_confirmation": "Lesebestätigung",
       "show_question": "Nächste Frage",
-      "start_round": "Starte countdown",
+      "start_round": "Starte Countdown",
       "start_question": "Nächste Frage",
-      "confirm_read": "Ich habe die Frage verstanden",
-      "title_reading_confirmation": "Fragen gelesen...",
-      "title_running_countdown": "Abstimmung...",
+      "confirm_read": "Ich habe die Frage verstanden.",
+      "title_reading_confirmation": "Frage gelesen…",
+      "title_running_countdown": "Abstimmung…",
       "show_more": "Zeige 1 weiteren",
       "show_more_plural": "Zeige %s weitere",
       "correct": "Richtig",
       "wrong": "Falsch",
       "complete_correct": "Vollständig richtig",
-      "partially_correct": "Teilweise korrekt",
+      "partially_correct": "Teilweise richtig",
       "complete_wrong": "Komplett falsch",
       "back_to_lobby": "Zurück zur Lobby",
       "global_ranking": "Globale Rangliste",
@@ -427,7 +430,7 @@
       "abort_question": "Quizrunde abbrechen",
       "confidence_grade": "Antwortsicherheit",
       "own_confidence_grade": "Deine Antwortsicherheit&#10;({value} %)",
-      "guessed_in_range": "Nicht korrekt geraten, aber akzeptabel",
+      "guessed_in_range": "Nicht richtig geraten, aber akzeptabel",
       "wrong_answer": "Falsche Antwort",
       "no_data": "Keine Daten verfügbar",
       "neutral_answer": "Antworten",
@@ -435,17 +438,17 @@
         "title": "Bonustoken",
         "mail": "mailto:?subject=arsnova.click%3A%20Mein%20Token%20%C2%BB{quizname}%C2%AB&body=Hallo%2C%0D%0A%0D%0AIch%20habe%20am%20Quiz%20%C2%BB{quizname}%C2%AB%20am%20{date}%20teilgenommen%20und%20habe%20folgenden%20Token%20erhalten%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMein%20Nickname%20im%20Quiz%20lautete%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0AIch%20freue%20mich%20schon%20auf%20unser%20nächstes%20Quiz%20mit%20arsnova.click%21",
         "your-bonus-token": "Dein Token:",
-        "please-wait": "Bitte warte - dein Token wird geladen",
-        "send-to-teacher": "Sende diesen Token an deinen Lehrer / deine Lehrerin und tausche ihn gegen Bonuspunkte ein"
+        "please-wait": "Bitte warte – dein Token wird geladen",
+        "send-to-teacher": "Sende diesen Token an die Lehrperson und tausche ihn gegen Bonuspunkte ein."
       }
     },
     "question-details": {
-      "selected-answer-elements": "Du hast \"{elements}\" gewählt"
+      "selected-answer-elements": "Du hast »{elements}« gewählt"
     },
     "lobby": {
       "start_quiz": "Los geht's!",
-      "kick_member_confirmation": "Soll die Person \"{NAME}\" aus dem Quiz entfernt werden?",
-      "own_nickname": "Dein Nickname:",
+      "kick_member_confirmation": "Soll die Person »{NAME}« aus dem Quiz entfernt werden?",
+      "own_nickname": "Du bist:",
       "waiting_for_players": "Warten auf die anderen…",
       "description": {}
     },
@@ -458,12 +461,12 @@
         "fantasy": "Fantasy",
         "literature": "Literatur",
         "mythology": "Mythologie",
-        "actor": "Schauspieler",
-        "politics": "Politiker",
+        "actor": "Schauspiel",
+        "politics": "Politik",
         "turing_award": "Turing-Award",
         "emojis": "Emojis"
       },
-      "filter": "Gib hier einen Suchtext ein..."
+      "filter": "Gib hier einen Suchtext ein…"
     },
     "questions": {
       "enter_question_here": "Gib hier die Frage ein. Alles wird automatisch gespeichert.",
@@ -475,13 +478,13 @@
       "ranged_question": "Schätzfrage",
       "free_text_question": "Kurzantwort-Frage",
       "description": {},
-      "single_choice_question_abcd": "ABCD Single-Choice Frage"
+      "single_choice_question_abcd": "ABC…-Frage"
     },
     "quiz_manager": {
       "title": "Quiz-Manager",
-      "available_questions_title": "Vorlagen",
+      "available_questions_title": "Wähle einen Fragetyp aus:",
       "added_questions_title": "{amount, plural, =0{Keine Quizfragen bisher} one{1 Quizfrage} other{# Quizfragen}}",
-      "no_added_questions": "Füge zunächst eine Frage hinzu …",
+      "no_added_questions": "Füge zunächst eine Frage hinzu…",
       "details": {
         "aria": {
           "btn_group": "Auswahl an Einstellungen für das Quiz"
@@ -506,12 +509,11 @@
           "long": "Tags",
           "short": "Tags"
         },
-        "pool-save-warning": "Bitte beachte, dass Quizfragen für den Quiz-Pool erst von einem Administrator überprüft und freigegeben werden müssen. Daher wird deine Frage nach dem Speichern nicht direkt im Quiz-Pool verfügbar sein."
+        "pool-save-warning": "Bitte beachte, dass Quizfragen für den Fragen-Pool erst von einem Administrator überprüft und freigegeben werden müssen. Daher wird deine Frage nach dem Speichern nicht direkt im Fragen-Pool verfügbar sein."
       },
       "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
-        "available_questions": "Hier siehst du alle Fragetypen, aus denen du wählen kannst. Jeder Fragetyp bietet eigene Voreinstellungen und Optionen zur Gestaltung deines Quiz.",
-        "added_questions": "Um eine Frage hinzuzufügen, ziehe eine Vorlage hierher oder klick auf sie. Wenn du die eingefügte Vorlage berührst, siehst du, was du damit machen kannst: Frage editieren, Reihenfolge der Fragen ändern oder die Frage löschen."
+        "available_questions": "Hier siehst du alle Fragetypen, aus denen du wählen kannst. Jeder Fragetyp bietet eigene Voreinstellungen und Optionen zur Gestaltung deines Quiz."
       },
       "available-questions-filter": "Filtere nach deiner Vorlage",
       "select-available-question": "Neue Frage",
@@ -522,26 +524,26 @@
         "down": "Nach unten",
         "to-top": "An den Anfang",
         "up": "Nach oben",
-        "quiz-pool-upload": "Quiz-Pool Upload",
+        "quiz-pool-upload": "Frage veröffentlichen",
         "edit": "Bearbeiten",
         "delete": "Löschen"
       }
     },
     "quiz_summary": {
-      "quiz_name": "Quizname",
+      "quiz_name": "Quiz-Name",
       "answer_amount": "{amount, plural, =0{Keine Antwortoptionen} one{1 Antwortoption} other{# Antwortoptionen} }",
       "validation_question_group": "Status",
-      "question_successful": "Deine Frage ist gültig",
-      "question_failed": "Die Frage ist noch unvollständig",
-      "question_group_successful": "Dein Quiz ist bereit",
-      "question_group_failed": "Dein Quiz ist unvollständig",
+      "question_successful": "Deine Frage ist gültig.",
+      "question_failed": "Die Frage ist noch unvollständig.",
+      "question_group_successful": "Dein Quiz ist bereit.",
+      "question_group_failed": "Dein Quiz ist unvollständig.",
       "upload-to-pool": {
-        "valid-upload": "Stelle deine Frage für den Quiz-Pool zur Verfügung",
-        "invalid-question": "Nur gültige Fragen können in den Quiz-Pool hochgeladen werden",
-        "no-tags": "Damit deine Frage hochgeladen werden kann, musst du ihr noch ein paar Tags geben"
+        "valid-upload": "Stelle deine Frage im Fragen-Pool zur freien Verfügung.",
+        "invalid-question": "Nur gültige Fragen können in den Fragen-Pool hochgeladen werden.",
+        "no-tags": "Damit andere deine Frage im Pool finden, musst du sie mit einem »Tag« versehen."
       },
       "quiz_rename": "Bearbeiten",
-      "correct": "Korrekt",
+      "correct": "Richtig",
       "wrong": "Falsch",
       "question": "Frage",
       "text": "Text",
@@ -558,18 +560,18 @@
           "answerOption": "Antwort"
         },
         "reasons": {
-          "question_text_too_small": "Der Text der Quizfrage ist zu kurz",
-          "question_text_too_long": "Der Text der Quizfrage ist zu lang",
-          "timer_too_small": "Der Countdown ist zu kurz",
-          "no_valid_answers": "Es muss mindestens eine richtige Antwort geben",
-          "one_valid_answer_required": "Es muss exakt eine richtige Antwort geben",
-          "invalid_range": "Der minimale Wert muss kleiner als der maximale Wert sein  ",
-          "invalid_correct_value": "Der korrekte Wert muss innerhalb des minimalen und maximalen Wertes liegen",
-          "answer_text_empty": "Der Antworttext darf nicht leer sein",
-          "no_answers_defined": "Es wurden noch keine Antworten angelegt",
-          "empty_question_text": "Der Text der Frage ist leer",
-          "empty_question_type": "Der Typ der Frage wurde noch nicht gesetzt",
-          "empty-question-tags": "Der Frage wurden noch keine Tags zugewiesen"
+          "question_text_too_small": "Der Text der Quizfrage ist zu kurz.",
+          "question_text_too_long": "Der Text der Quizfrage ist zu lang.",
+          "timer_too_small": "Der Countdown ist zu kurz.",
+          "no_valid_answers": "Es muss mindestens eine richtige Antwort geben.",
+          "one_valid_answer_required": "Es muss exakt eine richtige Antwort geben.",
+          "invalid_range": "Der minimale Wert muss kleiner als der maximale Wert sein.",
+          "invalid_correct_value": "Der richtige Wert muss innerhalb des minimalen und maximalen Wertes liegen.",
+          "answer_text_empty": "Der Antworttext darf nicht leer sein.",
+          "no_answers_defined": "Es wurden noch keine Antworten angelegt.",
+          "empty_question_text": "Der Text der Frage ist leer.",
+          "empty_question_type": "Der Typ der Frage wurde noch nicht gesetzt.",
+          "empty-question-tags": "Der Frage wurden noch keine Tags zugewiesen."
         }
       },
       "selected_nicks": "Nicknamen",
@@ -578,21 +580,21 @@
       "isRestrictingToCAS": "Anmeldung erforderlich?",
       "description": {
         "header": "Hier siehst du die wichtigsten Daten deiner Quizrunde.",
-        "session_url": "Mit diesem Link kann dein Publikum ohne Eintippen des Quiznamens direkt am Quiz teilnehmen. Schreib den Link an die Tafel oder auf Deine Folie. Sobald du die Quizrunde startest, können sich deine Leute einloggen.",
-        "question_group_validation": "Die Validierung deiner Quizrunde schlägt fehl, solange das Quiz noch nicht fertiggestellt ist, zum Beispiel: Es ist noch keine Quizfrage mit einer der Vorlagen erstellt worden, der Fragetext fehlt oder die Antwortoptionen sind unvollständig.",
+        "session_url": "Mit diesem Link kann dein Publikum ohne Eintippen des Quiz-Namens direkt am Quiz teilnehmen. Schreib den Link an die Tafel oder auf Deine Folie. Sobald du die Quizrunde startest, können sich deine Leute einloggen.",
+        "question_group_validation": "Die Validierung deiner Quizrunde schlägt fehl, solange das Quiz noch nicht fertiggestellt ist, zum Beispiel: Es ist noch keine Quizfrage erstellt worden, der Fragetext fehlt oder die Antwortoptionen sind unvollständig.",
         "restrict_to_cas": "Ist diese Einstellung unter &raquo;Freie Auswahl&laquo; bzw. &raquo;Nicknamen&laquo; in der Fußzeile aktiviert, müssen sich die Teilnehmer/innen am zentralen Authentifizierungsdienst anmelden. Hinweis: Diese Option steht nur an der THM zur Verfügung.",
         "question_item": "Hier siehst du alle Daten deiner Quizfrage. Mit den Buttons oben kannst du die Frage überarbeiten.",
         "validation_errors": "Dein Quiz kann erst gestartet werden, wenn alle Fehler behoben wurden."
       },
-      "quiz_url": "Quiz URL",
+      "quiz_url": "Quiz-URL",
       "no-timer": "Kein Countdown gesetzt. Die Runde muss manuell beendet werden.",
       "required-for-token": {
-        "title": "Erforderliche Quizfrage",
-        "label": "Damit der Teilnehmende einen Bonustoken bekommen kann, muss diese Quizfrage richtig beantwortet werden"
+        "title": "Quizfrage ist für die Bonusvergabe erforderlich.",
+        "label": "Um einen Bonustoken zu erhalten, muss diese Quizfrage richtig beantwortet werden."
       },
       "difficulty": {
         "title": "Schwierigkeitsgrad",
-        "label": "Der Schwierigkeitsgrad der Frage beeinflusst die vergebene Punktzahl für richtige Antworten",
+        "label": "Der Schwierigkeitsgrad der Frage beeinflusst die vergebene Punktzahl für richtige Antworten.",
         "very-easy": "Sehr einfach ({multiplicator, plural, one{Normale} other{#-fache} } Punktzahl)",
         "easy": "Einfach ({multiplicator}-fache Punktzahl)",
         "medium": "Mittelmäßig ({multiplicator}-fache Punktzahl)",
@@ -614,11 +616,11 @@
         },
         "black_beauty": {
           "name": "Black Beauty (beamertauglich)",
-          "description": "#3: Akkufreundlich"
+          "description": "Dunkles Design"
         },
         "material": {
           "name": "Material Design Colors",
-          "description": "#1: Der Standard"
+          "description": "Helles Design"
         },
         "decent_blue": {
           "name": "Decent Blue",
@@ -650,14 +652,14 @@
       "second": "{COUNT, plural, =0{Sekunden} one{Sekunde} other{Sekunden}}",
       "minute": "{COUNT, plural, =0{Minuten} one{Minute} other{Minuten}}",
       "hour": "{COUNT, plural, =0{Stunden} one{Stunde} other{Stunden}}",
-      "description": "Hier kannst du den Countdown für die Quizfrage einstellen. Sobald er abläuft oder alle Teilnehmer/innen eine Antwort abgegeben haben, ertönt ein Gong oder Pfiff und die Quizrunde ist beendet."
+      "description": "Hier kannst du den Countdown für die Quizfrage einstellen. Sobald er abläuft oder alle Player eine Antwort abgegeben haben, ertönt ein Gong oder Pfiff und die Quizrunde ist beendet."
     },
     "translation": {
       "translations": "Deine Sprache"
     },
     "voting": {
       "title": "Abstimmung",
-      "send": " Absenden",
+      "send": "Absenden",
       "abstention": "Enthaltung",
       "ranged_question": {
         "title": "Gib deinen Schätzwert ein!"
@@ -678,20 +680,20 @@
       }
     },
     "membergroup-manager": {
-      "title": "Organisiere deine Teilnehmer in Teams",
-      "max-users": "Maximale Anzahl an Teilnehmern pro Team",
-      "autojoin-to-team": "Füge Teilnehmer automatisch zu Teams hinzu",
-      "create-team-placeholder": "Gib hier den Namen des Teams ein. Starte mit einem Doppelpunkt um nach Emojis zu suchen...",
+      "title": "Organisiere deine Teams",
+      "max-users": "Maximale Teamgröße",
+      "autojoin-to-team": "Automatisch auf die Teams verteilen?",
+      "create-team-placeholder": "Gib hier den Namen des Teams ein. Starte mit einem Doppelpunkt, um nach Emojis zu suchen.",
       "create-team": "Team hinzufügen",
-      "current-teams": "Aktuell hinzugefügte Teams:",
+      "current-teams": "Die Teams:",
       "no-current-teams": "Kein Team bisher hinzugefügt",
-      "team-name": "Name des Teams:",
-      "team-color": "Wähle eine Farbe:",
+      "team-name": "Name oder Emoji des Teams:",
+      "team-color": "Wähle die Teamfarbe:",
       "validation-error": {
         "full-member-group": "Alle verfügbaren Teams wurden bereits erstellt. Bitte lösche zunächst ein Team.",
-        "invalid-member-group": "Ungültiger Name. Bitte verwende entwder normalen Text oder Emojis",
-        "duplicate-member-group": "Dieser Name ist bereits vergeben",
-        "add-second-group": "Füge bitte mindestens 2 Teams hinzu oder lösche das bestehende Team"
+        "invalid-member-group": "Ungültiger Name. Bitte verwende entweder normalen Text oder Emojis.",
+        "duplicate-member-group": "Der Name oder das Emoji ist bereits vergeben.",
+        "add-second-group": "Füge mindestens zwei Teams hinzu oder lösche das vorhandene Team."
       }
     },
     "login": {
@@ -709,23 +711,23 @@
     "quiz_manager_details": {
       "tags": {
         "description": {
-          "title": "Hier kannst du deiner Frage Tags hinzufügen. Welche du verwendest, ist dir überlassen.<br/>Einige Empfehlungen für Quiz-Tags an dieser Stelle:",
+          "title": "Hier kannst du deiner Frage Tags hinzufügen. Welche du verwendest, ist dir überlassen.\n\nEmpfehlungen für Quiz-Tags:",
           "dl": {
             "0": {
-              "dt": "Verwende mehrere Tags mit grober, als auch feiner granularen Themengebieten",
-              "dd": "Ein gutes Beispiel wäre sowohl der Tag \"Mathematik\" als auch \"Differentialrechnung\"."
+              "dt": "Verwende mehrere Tags mit großen, als auch feingranularen Themengebieten.",
+              "dd": "Ein gutes Beispiel wäre sowohl der Tag »Mathematik« als auch »Differentialrechnung«."
             },
             "1": {
               "dt": "Für wen ist die Frage geeignet?",
-              "dd": "Bei Fragen für Schüler kannst du z.B. noch die Klassenstufe angeben. Generell sind Tags mit Themenbezug immer vorzuziehen."
+              "dd": "Bei Fragen für Schüler/innen kannst du z. B. noch die Klassenstufe angeben. Generell sind Tags mit Themenbezug immer vorzuziehen."
             },
             "2": {
               "dt": "Keine Modulnamen für Hochschulfragen",
-              "dd": "Hochschulmodulnamen sind inhaltlich manchmal nicht auf alle anderen Hochschulen übertragbar. Fragen, die thematisch nicht genau zugeordnet werden können, erzeugen Verwirrung. Verwende in diesem Falle Tags mit Themenbezug."
+              "dd": "Modulnamen sind inhaltlich nicht auf alle anderen Hochschulen übertragbar. Fragen, die thematisch nicht genau zugeordnet werden können, erzeugen Verwirrung. Verwende in diesem Falle Tags mit Themenbezug."
             },
             "3": {
               "dt": "Sprache und Rechtschreibung",
-              "dd": "Wenn du eine Frage z.B. auf Englisch stellst, verwende keine deutschen Tags. Bitte achte auf eine korrekte Rechtschreibung. Nur so können Fragen mit gleichen Tags ohne großen Aufwand für ein Quiz bereitgestellt werden."
+              "dd": "Wenn du eine Frage z. B. auf Englisch stellst, verwende keine deutschen Tags. Bitte achte auf eine korrekte Rechtschreibung. Nur so können Fragen mit gleichen Tags ohne großen Aufwand für ein Quiz bereitgestellt werden."
             },
             "4": {
               "dt": "Welche Tags kann ich verwenden?",
@@ -734,7 +736,7 @@
           }
         },
         "tag-input": {
-          "placeholder": "Gib hier einen passenden Tag ein"
+          "placeholder": "Gib hier einen passenden Tag ein…"
         }
       }
     },
@@ -747,40 +749,40 @@
     "name_home": {
       "demo_quiz": {
         "title": {
-          "2": "Gib »ABCD« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiznamen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuche den <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und lerne, wie du Quizze im Unterricht einsetzen kannst."
+          "2": "Gib »ABC…« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiz-Namen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
+          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du Bonus-Quizze zur Lernmotivation im Unterricht einsetzt."
         }
       },
       "name_input": {}
     },
     "quiz_rename": {
-      "rename": "Bitte wähle einen Namen für dein Quiz",
+      "rename": "Bitte wähle einen Namen für dein Quiz.",
       "custom": {
-        "title": "Du kannst auch einen eigenen Quiznamen eingeben",
-        "input": "Eigener Quizname",
-        "available": "Der Quizname ist verfügbar",
-        "select-quiz": "Verwende den Quiznamen",
-        "please-wait": "Bitte warten...",
-        "malformed": "Der Quizname enhält ungültige Zeichenfolgen. Bitte versuche einen anderen Namen",
-        "already-taken": "Der Quizname ist bereits vergeben ",
-        "min-keys": "Der Quizname muss mindestens 4 Zeichen lang sein"
+        "title": "Du kannst auch einen eigenen Quiz-Namen eingeben.",
+        "input": "Eigener Quiz-Name",
+        "available": "Der Quiz-Name ist verfügbar.",
+        "select-quiz": "Verwende den Quiz-Namen.",
+        "please-wait": "Bitte warten…",
+        "malformed": "Der Quiz-Name enthält ungültige Zeichenfolgen. Bitte versuche einen anderen Namen.",
+        "already-taken": "Der Quiz-Name ist bereits vergeben.",
+        "min-keys": "Der Quiz-Name muss mindestens vier Zeichen lang sein."
       }
     },
     "home": {
       "join": "Tritt »{name}« bei",
       "use": "Verwende »{name}«",
-      "new-demo-quiz": "Erstelle ein neues Demo Quiz",
-      "new-abcd-quiz": "Erstelle ein neues ABCD Quiz",
-      "view-public": "Klicke hier um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes}} zu wählen!",
-      "view-all-public": "... oder sieh dir deine eigenen veröffentlichten Quizze an!",
-      "view-own-public": "Klicke hier um deine eigenen veröffentlichten Quizze anzusehen!",
+      "new-demo-quiz": "Demo-Quiz zum Kennenlernen",
+      "new-abcd-quiz": "ABCD-Quiz mit einem Klick",
+      "view-public": "Klicke hier, um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes}} zu wählen!",
+      "view-all-public": "… oder sieh dir deine eigenen veröffentlichten Quizze an!",
+      "view-own-public": "Klicke hier, um deine eigenen veröffentlichten Quizze anzusehen!",
       "errors": {
-        "already-taken": "Dieser Name wird bereits verwendet. Bitte nutze einen anderen Quiznamen",
-        "min-length": "Bitte gib für deinen Quiznamen mindestens 4 Zeichen ein"
+        "already-taken": "Dieser Name wird bereits verwendet. Bitte nutze einen anderen Quiz-Namen.",
+        "min-length": "Bitte gib für deinen Quiz-Namen mindestens vier Zeichen ein."
       },
       "success": {
         "can-join": "Diesem Quiz kannst du beitreten!",
-        "can-create": "Dieser Quizname ist verfügbar. Du kannst ein Quiz damit erstellen!"
+        "can-create": "Dieser Quiz-Name ist verfügbar. Du kannst ein Quiz damit erstellen!"
       }
     },
     "public-quizzes": {
@@ -788,10 +790,10 @@
         "title": "Deine veröffentlichten Quizze",
         "remove": "Löschen"
       },
-      "title": "Veröffentlichte Quizze deiner Mitspieler",
+      "title": "Veröffentlichte Quizze deiner Mitspieler/innen",
       "none-available": "Keines verfügbar",
       "number-of-questions": "Anzahl Quizfragen:",
-      "cas-required": "CAS Login erforderlich:",
+      "cas-required": "CAS-Login erforderlich:",
       "features": "Features:",
       "name": "Name:",
       "play": "Starten",
@@ -803,7 +805,7 @@
       "description": "Beschreibung",
       "expiry": "Ablaufdatum",
       "save": "Speichern",
-      "is-submitting": "Speichere..."
+      "is-submitting": "Speichere…"
     },
     "nickname-select": {
       "no-nicks-available": "Keine Nicknamen verfügbar!"
@@ -811,42 +813,42 @@
     "server-unavailable-modal": {
       "title": "Die Verbindung zum Server wurde unterbrochen!",
       "connection-dropped": "Aktuell kann das Quiz nicht weiter gespielt werden, bis die Verbindung zum Server wiederhergestellt wurde. Es wird gerade versucht, eine Verbindung erneut aufzubauen. Alternativ kann die Seite auch manuell neu geladen werden.",
-      "reload-page": "Versuche, die Seite neu zu laden"
+      "reload-page": "Versuche, die Seite neu zu laden."
     },
     "toasts": {
       "swupdate": {
-        "message": "Es ist eine neue Version von arsnova.click verfügbar. Bitte klicke hier um die Seite neuzuladen. Dies wird das Update automatisch installieren.",
+        "message": "Es ist eine neue Version von arsnova.click verfügbar. Bitte klicke hier, um die Seite neu zu laden. Dies wird das Update automatisch installieren.",
         "title": "Neue Version verfügbar"
       }
     },
     "statistics": {
       "users": {
-        "title": "Anzahl der Nutzer dieser Webseite",
-        "content": "Hier werden alle aktiven Verbindungen zu arsnova.click gewertet. Natürlich sind diese Daten anonymisiert. Es ist nicht möglich, aus diesen Daten Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist es aber ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
+        "title": "User online",
+        "content": "Hier werden die Verbindungen zu arsnova.click gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist die Zahl ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
       },
       "total-quizzes": {
-        "title": "Quizze insgesamt",
-        "content": "Alle Quizze, die von Nutzern erstellt wurden, werden hier gezählt. Ja, auch deine! Natürlich sind deine Quizze weiterhin privat und nur du kannst sie starten. Keiner kann auf deine Quizdaten zugreifen!"
+        "title": "Quizze",
+        "content": "Alle Quizze werden hier gezählt. Ja, auch deine! Natürlich sind deine Quizze privat und nur du kannst sie starten. Keiner kann auf deine Quiz-Daten zugreifen!"
       },
       "active-quizzes": {
         "title": "Aktive Quizze",
-        "content": "Dies ist die Anzahl aller gerade gespielten Quizze. Dazu werden alle Quizze gezählt, die gerade in der Quiz Lobby sind oder aktiv Quizrunden spielen."
+        "content": "Dies ist die Anzahl aller gerade gespielten Quizze. Entweder ist deren Quiz-Lobby geöffnet oder die Quizrunde wurde gestartet."
       },
       "total-pool-questions": {
-        "title": "Quiz-Pool Fragen insgesamt",
-        "content": "Mit dem Quiz-Pool kann jeder Nutzer für alle anderen Fragen bereitstellen. Damit kann sich jeder eine Inspiration für sein Quiz holen. Auch können Schülerinnen und Schüler die Quizze zur Abfrage und Vertiefung des eigenen Wissens nutzen."
+        "title": "Pool-Fragen",
+        "content": "Im Fragen-Pool kannst du Quizfragen für die Öffentlichkeit bereitstellen. Jeder kann aus den Pool-Fragen eigene Quizze zusammenstellen."
       },
       "total-pool-tags": {
-        "title": "Verschiedene Tags",
-        "content": "Quizfragen können Tags zugewiesen werden. Damit sind sie thematisch sortierbar und können im Quiz-Pool nach belieben zusammengestellt werden. Dabei bist du in der Auswahl der Tags für deine Quiz-Pool Fragen völlig frei. Einige Hinweise zur Vergabe von Tags für Fragen findest du im Quiz Manager im Reiter 'Tags'."
+        "title": "Tags",
+        "content": "Du kannst einer Frage, die du in den Pool stellst, beliebige Tags zuweisen. So können Pool-Fragen nach Themen zusammengestellt werden."
       },
       "active-participants": {
-        "title": "Aktuelle Teilnehmerzahl",
-        "content": "Hier findest du die aktuelle Anzahl aller Teilnehmer an den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß - es ist nicht möglich, auf einzelne Teilnehmer Rückschlüsse zu ziehen, sie zu identifizieren oder ihre Aktionen auf der Seite nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
+        "title": "Player",
+        "content": "Hier siehst du die aktuelle Zahl aller Player in den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, einzelne Personen zu identifizieren oder ihre Aktionen nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
       },
       "average-participants": {
-        "title": "Durchschnittliche Teilnehmer pro Quiz",
-        "content": "Dieser Wert gibt an, wieviele Teilnehmer durchschnittlich an den Quizzen teilgenommen haben. Auch diese Daten sind anonymisiert. Wir speichern auschließlich den Namen des Teilnehmers und das zugehörige Quiz. Damit sind keinerlei Rückschlüsse auf einzelne Personen oder Verbindungen möglich."
+        "title": "Player pro Quiz",
+        "content": "Die Zahl gibt an, wie viele Personen durchschnittlich an Quizzen teilgenommen haben."
       }
     }
   },
@@ -856,8 +858,14 @@
         "bold": "Fett",
         "italic": "Kursiv",
         "heading": "Überschrift",
-        "hyperlink": "Hyperlink",
+        "hyperlink": "Link",
         "unordered_list": "Unsortierte Liste",
+        "ordered_list": "Nummerierte Liste",
+        "strike_through": "Durchgestrichen",
+        "quote": "Eingerücktes Zitat",
+        "escape": "Nachfolgendes Zeichen maskieren",
+        "horizontal-rule": "Trennlinie",
+        "info": "Info zur Textformatierung",
         "latex": "TeX-Formel",
         "code": "Code-Formatierung",
         "image": "Bild"
@@ -880,8 +888,8 @@
       "deactivated": "Deaktiviert",
       "random": "Zufällige Auswahl",
       "allow-stream-to-clients": {
-        "title": "Audio für Teilnehmer aktivieren",
-        "label": "Dies deaktiviert die Audiowiedergabe für den Quizmaster und aktiviert ihn für die Teilnehmer. Da die Startzeit der Musik nicht synchron läuft ist die Aktivierung nur empfohlen, wenn die Teilnehmer nicht im gleichen Raum sitzen."
+        "title": "Audio für Player aktivieren",
+        "label": "Dies aktiviert die Musikwiedergabe für Quizmaster und Player. Da die Startzeit der Musik nicht synchron läuft, empfehlen wir die Aktivierung nur, wenn die Player nicht im selben Raum sitzen."
       }
     },
     "splashscreen": {
@@ -889,16 +897,16 @@
         "error_messages": {
           "invalid_input_data": "Die eingegebenen Daten sind ungültig oder fehlerhaft!",
           "duplicate_user": "Du versuchst gerade, mit einem zweiten Nicknamen einem Quiz beizutreten. Dies ist nicht möglich!",
-          "too_much_active_quizzes": "Aktuell sind zu viele aktive Quizze auf dem Server vorhanden",
-          "server_password_required": "Ein Passwort ist erforderlich",
-          "server_password_invalid": "Das Passwort ist ungültig",
-          "no_preview_available": "Die Vorschau ist zurzeit nicht verfügbar!"
+          "too_much_active_quizzes": "Aktuell sind zu viele aktive Quizze auf dem Server vorhanden.",
+          "server_password_required": "Ein Passwort ist erforderlich.",
+          "server_password_invalid": "Das Passwort ist ungültig.",
+          "no_preview_available": "Die Vorschau ist zur Zeit nicht verfügbar!"
         }
       },
       "question_and_answer": {},
       "edit_session_confirmation": {
         "title": "Quiz bearbeiten?",
-        "text": "Alle Teilnehmenden werden vom Quiz abgemeldet.",
+        "text": "Alle Player werden vom Quiz abgemeldet.",
         "continue": "Fortfahren?"
       },
       "remove_question_confirmation": {},
@@ -920,14 +928,14 @@
     "question_type": {
       "description": {
         "SingleChoiceQuestion": "Single-Choice-Fragen enthalten beliebig viele Antwortoptionen, von denen genau eine als richtig markiert sein muss.",
-        "YesNoSingleChoiceQuestion": "Ja-Nein-Fragen enthalten nur zwei Antwortopionen (Ja und Nein, überschreibbar), von denen eine als richtig markiert sein muss.",
-        "TrueFalseSingleChoiceQuestion": "Wahr-Falsch-Fragen enthalten nur zwei Antwortopionen (Wahr und Falsch, überschreibbar), von denen eine als richtig markiert sein muss.",
+        "YesNoSingleChoiceQuestion": "Ja-Nein-Fragen enthalten nur zwei Antwortoptionen (Ja und Nein, überschreibbar), von denen eine als richtig markiert sein muss.",
+        "TrueFalseSingleChoiceQuestion": "Wahr-Falsch-Fragen enthalten nur zwei Antwortoptionen (Wahr und Falsch, überschreibbar), von denen eine als richtig markiert sein muss.",
         "MultipleChoiceQuestion": "Multiple-Choice-Fragen enthalten beliebig viele Antwortoptionen, von denen beliebig viele (mindestens jedoch eine) als richtig markiert sein können.",
         "RangedQuestion": "Für die Schätzfrage muss eine Ganzzahl als richtig angegeben werden. Zusätzlich können Toleranzen nach oben und unten festgelegt werden.",
-        "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Teilnehmenden einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
+        "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Player einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
         "SurveyQuestion": "Umfragen enthalten beliebig viele Antwortoptionen, die nicht bewertet werden. Sie können vom Typ Single-Choice oder Multiple-Choice sein.",
-        "AbcdSingleChoiceQuestion": "ABCD Fragen enthalten maximal 26 Antworten (von A - Z).",
-        "type_wrapper": "Hier kannst du den typ der Quizfrage ändern. Jeder Typ hat seine eigenen Einstellungen. Wechsel den Typ indem du auf die Box klickst."
+        "AbcdSingleChoiceQuestion": "ABC…-Fragen enthalten maximal 26 Antworten (von A bis Z).",
+        "type_wrapper": "Hier kannst du den Typ der Quizfrage ändern. Jeder Typ hat seine eigenen Einstellungen. Wechsel den Typ, indem du auf die Box klickst."
       },
       "select-type": "Typ auswählen",
       "current-type": "Aktueller Typ"
@@ -941,14 +949,40 @@
   },
   "notification": {
     "close": "Schließen",
-    "request-permission": "Möchtest du eine Benachrichtigung erhalten, wenn deine Frage für den Quiz-Pool genehmigt wurde?",
+    "request-permission": "Möchtest du eine Benachrichtigung erhalten, wenn deine Frage für den Fragen-Pool genehmigt wurde?",
     "pending-pool-question": {
-      "title": "Neue Quiz-Pool {amount, plural, =0{Fragen} one{Frage} other{Fragen} }",
-      "body": "Es {amount, plural, =0{warten 0 Fragen} one{wartet eine Frage} other{warten {amount} Fragen} } im Quiz-Pool auf eine Überprüfung"
+      "title": "Neue Pool-Frage {amount, plural, =0{Fragen} one{Frage} other{Fragen} }",
+      "body": "Es {amount, plural, =0{warten 0 Fragen} one{wartet eine Frage} other{warten {amount} Fragen} } im Fragen-Pool auf eine Überprüfung."
     },
     "pool-question-approved": {
-      "title": "Quiz-Pool Frage genehmigt",
-      "body": "Eine deiner Quiz-Pool Fragen wurde genehmigt!"
+      "title": "Pool-Frage genehmigt",
+      "body": "Eine deiner Pool-Fragen wurde genehmigt!"
     }
+  },
+  "hotkey": {
+    "modal-title": "Hotkeys",
+    "MultipleChoiceQuestion": {
+      "description": "Multiple-Choice Frage hinzufügen"
+    },
+    "SingleChoiceQuestion": {
+      "description": "Single-Choice Frage hinzufügen"
+    },
+    "RangedQuestion": {
+      "description": "Schätzfrage hinzufügen"
+    },
+    "FreeTextQuestion": {
+      "description": "Freitextfrage hinzufügen"
+    },
+    "SurveyQuestion": {
+      "description": "Umfrage hinzufügen"
+    },
+    "navigate-to-prev-question": "Zur vorherigen Quizfrage",
+    "navigate-to-next-question": "Zur nächsten Quizfrage",
+    "navigate-to-question-text": "Fragetext bearbeiten",
+    "navigate-to-answeroptions": "Antwortoptionen bearbeiten",
+    "navigate-to-countdown": "Countdown bearbeiten",
+    "navigate-to-question-type": "Typ der Frage bearbeiten",
+    "navigate-to-tags": "Tags der Frage bearbeiten",
+    "delete-question": "Diese Frage löschen"
   }
 }

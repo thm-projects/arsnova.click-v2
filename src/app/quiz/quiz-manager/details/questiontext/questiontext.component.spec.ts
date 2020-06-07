@@ -6,15 +6,29 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBold,
+  faCode,
+  faGlobe,
+  faHeading,
+  faImage,
+  faInfoCircle,
+  faItalic,
+  faListOl,
+  faListUl,
+  faQuoteRight,
+  faStrikethrough,
+} from '@fortawesome/free-solid-svg-icons';
+import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
 import { NgbModalModule, NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { HotkeysService } from 'angular2-hotkeys';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { of } from 'rxjs';
-import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
 import { SwUpdateMock } from '../../../../../_mocks/_services/SwUpdateMock';
 import { HeaderComponent } from '../../../../header/header/header.component';
+import { MarkdownFeature } from '../../../../lib/enums/MarkdownFeature';
 import { jwtOptionsFactory } from '../../../../lib/jwt.factory';
 import { LivePreviewComponent } from '../../../../live-preview/live-preview/live-preview.component';
 import { MarkdownBarComponent } from '../../../../markdown/markdown-bar/markdown-bar.component';
@@ -76,7 +90,7 @@ describe('QuestiontextComponent', () => {
             useClass: QuizMockService,
           }, HeaderLabelService, {
             provide: ThemesService,
-            useClass: ThemesMockService
+            useClass: ThemesMockService,
           }, FooterBarService, SettingsService, {
             provide: ConnectionService,
             useClass: ConnectionMockService,
@@ -105,10 +119,16 @@ describe('QuestiontextComponent', () => {
           }, {
             provide: TwitterService,
             useClass: TwitterServiceMock,
+          }, {
+            provide: HotkeysService,
+            useValue: {
+              add: () => {},
+              reset: () => {},
+            },
           },
         ],
         declarations: [
-          HeaderComponent, LivePreviewComponent, MarkdownBarComponent, QuestiontextComponent, TranslatePipeMock,
+          HeaderComponent, LivePreviewComponent, MarkdownBarComponent, QuestiontextComponent,
         ],
       }).compileComponents();
     }
@@ -117,7 +137,8 @@ describe('QuestiontextComponent', () => {
   beforeEach((
     () => {
       const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
-      library.addIcons(...[faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough]);
+      library.addIcons(faBold, faCode, faGlobe, faHeading, faImage, faItalic, faListUl, faStrikethrough, faListOl, faQuoteRight, faMinus,
+        faInfoCircle);
       fixture = TestBed.createComponent(QuestiontextComponent);
       component = fixture.componentInstance;
       component['_questionIndex'] = 0;
@@ -138,7 +159,7 @@ describe('QuestiontextComponent', () => {
 
   describe('#connector', () => {
     it('should call the markdown interpreter if a markdown button is pressed', () => {
-      expect(() => component.connector('boldMarkdownButton')).not.toThrowError();
+      expect(() => component.connector(MarkdownFeature.Bold)).not.toThrowError();
     });
   });
 

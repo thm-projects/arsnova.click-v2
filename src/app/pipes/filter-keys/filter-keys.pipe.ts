@@ -20,12 +20,6 @@ export class FilterKeysPipe implements PipeTransform {
         return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.DE));
       case Filter.InvalidEN:
         return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.EN));
-      case Filter.InvalidES:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.ES));
-      case Filter.InvalidFr:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.FR));
-      case Filter.InvalidIt:
-        return value.filter(elem => this.hasEmptyKeysForLang(elem, Language.IT));
     }
   }
 

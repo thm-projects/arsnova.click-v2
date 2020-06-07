@@ -37,9 +37,13 @@
         max-width: 100%;
         overflow: hidden;
 
-        * {
+        ::ng-deep * {
           text-overflow: ellipsis;
           overflow: hidden;
+          max-width: 100%;
+          margin-bottom: 0;
+          word-break: break-all;
+          hyphens: auto;
         }
       }
     }

@@ -2,9 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
-import { TranslatePipeMock } from '../../../../../_mocks/_pipes/TranslatePipeMock';
-import { TranslateServiceMock } from '../../../../../_mocks/_services/TranslateServiceMock';
+import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
 import { QuizTypeSelectModalComponent } from './quiz-type-select-modal.component';
 
 @Pipe({
@@ -22,14 +20,11 @@ describe('QuizTypeSelectModalComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [FormsModule],
+      imports: [I18nTestingModule, FormsModule],
       providers: [
-        {
-          provide: TranslateService,
-          useClass: TranslateServiceMock,
-        }, NgbActiveModal,
+        NgbActiveModal,
       ],
-      declarations: [QuizTypeSelectModalComponent, TranslatePipeMock, GenericFilterPipeMock],
+      declarations: [QuizTypeSelectModalComponent, GenericFilterPipeMock],
     })
     .compileComponents();
   }));
