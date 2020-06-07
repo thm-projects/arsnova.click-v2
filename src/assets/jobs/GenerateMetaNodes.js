@@ -6,7 +6,9 @@ const mf = require('messageformat');
 
 const argv = minimist(process.argv.slice(2));
 
-const languages = ['en', 'de', 'fr', 'it', 'es'];
+// const languages = ['en', 'de', 'fr', 'it', 'es'];
+const languages = ['en', 'de'];
+
 const rawThemes = require('./../themeData');
 const imageDerivates = require('./../imageDerivates');
 
