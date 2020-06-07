@@ -21,7 +21,7 @@
     "in-cooperation-with": "in Kooperation mit",
     "please-wait": "Bitte warten…",
     "please-select": "Bitte auswählen…",
-    "loose-data-warning": "Bei dieser Navigation können Datenverluste auftreten.<br><br>Fortfahren?",
+    "loose-data-warning": "Bei dieser Navigation können Datenverluste auftreten.\n\nFortfahren?",
     "no-data-error": {
       "title": "Fehler beim Laden der Daten",
       "load-to-edit": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier Daten verloren gehen können. Du kannst zur Quiz-Übersicht oder zur Startseite zurückkehren.",
@@ -42,7 +42,7 @@
         "home": "Startseite",
         "tos": "Nutzungsbedingungen",
         "imprint": "Impressum",
-        "blog": "ARSnova-Blog",
+        "blog": "Projektblog",
         "languages": "Sprache",
         "style": "Stil",
         "import": "Quiz-Import",
@@ -98,13 +98,14 @@
           "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Player",
           "4": "Jeder darf Quizze erstellen, sofort und beliebig viele.",
           "5": "Barrierefreie und für den Beamer optimierte Bedienoberfläche",
-          "6": "Frageformate: ABCD…, Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
-          "7": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a>, Bilder und Videos im Fragetext und in den Antwortoptionen",
-          "8": "Edutainment: Lernmotivation durch Live-Wettbewerb – einzeln oder in Teams – mit Sound im Countdown gegen die Mitspielenden",
-          "9": "Bonusoption: Die Top Player erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
-          "10": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Design</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
-          "11": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reaktiver Web-Technik",
-          "12": "<a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source Software</a>"
+          "6": "Fragetypen: ABC…, Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
+          "7": "ABC…-Quizze können durch Eingabe von ABC… als Quiz-Name mit einem Klick erstellt werden. Die Anzahl der fortlaufende Buchstaben bestimmt die Antwortoptionen.",
+          "8": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a>, Bilder und Videos im Fragetext und in den Antwortoptionen",
+          "9": "Edutainment: Lernmotivation durch Live-Wettbewerb – einzeln oder in Teams – mit Sound im Countdown gegen die Mitspielenden",
+          "10": "Bonusoption: Die Top Player erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
+          "11": "<a href='https://de.wikipedia.org/wiki/Responsive_Webdesign' target='_blank'>Responsives Design</a>: egal ob Smartphone, Beamer oder Wide Screen, das Design skaliert. Selbst komplexe Quizze können auf dem Smartphone erstellt werden.",
+          "12": "Gebaut als <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reaktiver Web-Technik",
+          "13": "<a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source Software</a>"
         },
         "manual": {
           "title": "Bedienungshandbuch?",
@@ -367,7 +368,7 @@
       },
       "no_sessions": "Es sind keine Quizze in diesem Browser gespeichert.",
       "aria_description": {},
-      "create_abcd_session": "Starte ABCD-Quiz",
+      "create_abcd_session": "Starte ABC…-Quiz",
       "enter_server_password": "Server-Passwort eingeben",
       "public-quizzes": "Suchst du mehr? Klicke hier, um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes} } zu wählen!",
       "save_session": {
@@ -477,11 +478,11 @@
       "ranged_question": "Schätzfrage",
       "free_text_question": "Kurzantwort-Frage",
       "description": {},
-      "single_choice_question_abcd": "ABCD-Frage"
+      "single_choice_question_abcd": "ABC…-Frage"
     },
     "quiz_manager": {
       "title": "Quiz-Manager",
-      "available_questions_title": "Vorlagen",
+      "available_questions_title": "Wähle einen Fragetyp aus:",
       "added_questions_title": "{amount, plural, =0{Keine Quizfragen bisher} one{1 Quizfrage} other{# Quizfragen}}",
       "no_added_questions": "Füge zunächst eine Frage hinzu…",
       "details": {
@@ -512,8 +513,7 @@
       },
       "no-added-tags": "Keine Tags bisher hinzugefügt",
       "description": {
-        "available_questions": "Hier siehst du alle Fragetypen, aus denen du wählen kannst. Jeder Fragetyp bietet eigene Voreinstellungen und Optionen zur Gestaltung deines Quiz.",
-        "added_questions": "Um eine Frage hinzuzufügen, ziehe eine Vorlage hierher oder klick auf sie. Wenn du die eingefügte Vorlage berührst, siehst du, was du damit machen kannst: Frage editieren, Reihenfolge der Fragen ändern oder die Frage löschen."
+        "available_questions": "Hier siehst du alle Fragetypen, aus denen du wählen kannst. Jeder Fragetyp bietet eigene Voreinstellungen und Optionen zur Gestaltung deines Quiz."
       },
       "available-questions-filter": "Filtere nach deiner Vorlage",
       "select-available-question": "Neue Frage",
@@ -581,7 +581,7 @@
       "description": {
         "header": "Hier siehst du die wichtigsten Daten deiner Quizrunde.",
         "session_url": "Mit diesem Link kann dein Publikum ohne Eintippen des Quiz-Namens direkt am Quiz teilnehmen. Schreib den Link an die Tafel oder auf Deine Folie. Sobald du die Quizrunde startest, können sich deine Leute einloggen.",
-        "question_group_validation": "Die Validierung deiner Quizrunde schlägt fehl, solange das Quiz noch nicht fertiggestellt ist, zum Beispiel: Es ist noch keine Quizfrage mit einer der Vorlagen erstellt worden, der Fragetext fehlt oder die Antwortoptionen sind unvollständig.",
+        "question_group_validation": "Die Validierung deiner Quizrunde schlägt fehl, solange das Quiz noch nicht fertiggestellt ist, zum Beispiel: Es ist noch keine Quizfrage erstellt worden, der Fragetext fehlt oder die Antwortoptionen sind unvollständig.",
         "restrict_to_cas": "Ist diese Einstellung unter &raquo;Freie Auswahl&laquo; bzw. &raquo;Nicknamen&laquo; in der Fußzeile aktiviert, müssen sich die Teilnehmer/innen am zentralen Authentifizierungsdienst anmelden. Hinweis: Diese Option steht nur an der THM zur Verfügung.",
         "question_item": "Hier siehst du alle Daten deiner Quizfrage. Mit den Buttons oben kannst du die Frage überarbeiten.",
         "validation_errors": "Dein Quiz kann erst gestartet werden, wenn alle Fehler behoben wurden."
@@ -616,11 +616,11 @@
         },
         "black_beauty": {
           "name": "Black Beauty (beamertauglich)",
-          "description": "#3: Akkufreundlich"
+          "description": "Dunkles Design"
         },
         "material": {
           "name": "Material Design Colors",
-          "description": "#1: Der Standard"
+          "description": "Helles Design"
         },
         "decent_blue": {
           "name": "Decent Blue",
@@ -711,7 +711,7 @@
     "quiz_manager_details": {
       "tags": {
         "description": {
-          "title": "Hier kannst du deiner Frage Tags hinzufügen. Welche du verwendest, ist dir überlassen.<br/>Empfehlungen für Quiz-Tags:",
+          "title": "Hier kannst du deiner Frage Tags hinzufügen. Welche du verwendest, ist dir überlassen.\n\nEmpfehlungen für Quiz-Tags:",
           "dl": {
             "0": {
               "dt": "Verwende mehrere Tags mit großen, als auch feingranularen Themengebieten.",
@@ -749,8 +749,8 @@
     "name_home": {
       "demo_quiz": {
         "title": {
-          "2": "Gib »ABCD« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiz-Namen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>ARSnova-Blog</a> und erfahre, wie du bonusprämierte Quizze zur Lernmotivation im Unterricht einsetzt."
+          "2": "Gib »ABC…« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiz-Namen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
+          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du bonusprämierte Quizze zur Lernmotivation im Unterricht einsetzt."
         }
       },
       "name_input": {}
@@ -934,7 +934,7 @@
         "RangedQuestion": "Für die Schätzfrage muss eine Ganzzahl als richtig angegeben werden. Zusätzlich können Toleranzen nach oben und unten festgelegt werden.",
         "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Player einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
         "SurveyQuestion": "Umfragen enthalten beliebig viele Antwortoptionen, die nicht bewertet werden. Sie können vom Typ Single-Choice oder Multiple-Choice sein.",
-        "AbcdSingleChoiceQuestion": "ABCD-Fragen enthalten maximal 26 Antworten (von A bis Z).",
+        "AbcdSingleChoiceQuestion": "ABC…-Fragen enthalten maximal 26 Antworten (von A bis Z).",
         "type_wrapper": "Hier kannst du den Typ der Quizfrage ändern. Jeder Typ hat seine eigenen Einstellungen. Wechsel den Typ, indem du auf die Box klickst."
       },
       "select-type": "Typ auswählen",
