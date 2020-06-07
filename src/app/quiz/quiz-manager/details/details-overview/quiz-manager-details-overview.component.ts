@@ -30,8 +30,8 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent implements AfterViewInit, OnDestroy {
   public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
 
-  public renderedQuestionText: SafeHtml;
-  public renderedAnswers: Array<SafeHtml> = [];
+  public renderedQuestionText: string;
+  public renderedAnswers: Array<string> = [];
 
   public readonly environment = environment;
 
@@ -104,6 +104,11 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
       action: QuizManagerDetailsOverviewComponent.TYPE,
       label: link,
     });
+  }
+
+  public sanitizeHTML(value: string): SafeHtml {
+    // sanitizer.bypassSecurityTrustHtml is required for highslide and mathjax
+    return this.sanitizer.bypassSecurityTrustHtml(value);
   }
 
   public getQuestionAsRanged(question: AbstractQuestionEntity): RangedQuestionEntity {

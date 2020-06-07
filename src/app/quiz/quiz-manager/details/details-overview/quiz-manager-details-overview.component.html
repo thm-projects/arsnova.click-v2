@@ -65,7 +65,7 @@
       <p *ngIf="!question?.questionText?.length">{{'component.quiz_summary.text' | translate}}:&nbsp;{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</p>
 
       <p *ngIf="question?.questionText?.length"
-         [innerHtml]="renderedQuestionText"
+         [innerHtml]="sanitizeHTML(renderedQuestionText)"
          class="mh-20vh text-wrap  overflow-hidden">
       </p>
 
@@ -119,7 +119,7 @@
             </span>
             <span>:&nbsp;</span>
             <span *ngIf="answer.answerText"
-                  [innerHTML]="renderedAnswers[i]"></span>
+                  [innerHTML]="sanitizeHTML(renderedAnswers[i])"></span>
             <span *ngIf="!answer.answerText">{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</span>
           </p>
           <p *ngIf="!question?.answerOptionList.length">
