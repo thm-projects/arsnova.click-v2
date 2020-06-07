@@ -816,11 +816,11 @@
       }
     },
     "membergroup-manager": {
-      "title": "Organize members in Teams",
-      "max-users": "Max users per Team",
+      "title": "Organize players in teams",
+      "max-users": "Max users per team",
       "autojoin-to-team": "Add users automatically to Teams",
-      "create-team-placeholder": "Enter a Team name here. Start with a colon to search for emojis…",
-      "create-team": "Add Team",
+      "create-team-placeholder": "Enter a team name here. Start with a colon to search for emojis…",
+      "create-team": "Add team",
       "current-teams": "Currently added Teams:",
       "no-current-teams": "No Teams added yet",
       "team-name": "Name of the team:",
@@ -839,19 +839,19 @@
       "token": "Token",
       "login-via-token": "You can also log in with a token:",
       "password": "Password",
-      "username": "Username"
+      "username": "User name"
     },
     "member-group-select": {
-      "title": "Select your Team"
+      "title": "Select your team"
     },
     "quiz_manager_details": {
       "back": "Back to the quiz overview",
       "tags": {
         "description": {
-          "title": "You can add Tags to your question here. Which one you use is up to you.<br/>Some recommendations regarding Quiz-Tags:",
+          "title": "You can add tags to your question here. Which one you use is up to you.<br/>Some recommendations regarding quiz tags:",
           "dl": {
             "0": {
-              "dt": "Use multiple Tags with coarse and fine granular subject areas",
+              "dt": "Use multiple tags with coarse and fine granular subject areas",
               "dd": "A good example would be both the Tags »Mathematics« and »Differential Calculus«."
             },
             "1": {
@@ -859,16 +859,16 @@
               "dd": "For questions for pupils you can e.g. specify the grade level. In general, tags with a subject should always be preferred."
             },
             "2": {
-              "dt": "No module names for University questions",
-              "dd": "Subjects of Modules of Universities are usually not applicable to all other Universities. Questions which cannot be exactly associated by their subject are confusing. Use Tags related to a subject in this case."
+              "dt": "No course names for university questions",
+              "dd": "Subjects of university courses are usually not applicable to other universities. Questions which cannot be exactly associated by their subject are confusing. Use tags related to a subject in this case."
             },
             "3": {
               "dt": "Language and spelling",
-              "dd": "If you are writing a Question eg. in German, do not use Englisch Tags, then. Please make sure you are using correct spelling and grammar. Only then questions with the same Tags can be grouped to a quiz without unnecessary effort."
+              "dd": "If you are writing a Question eg. in German, do not use Englisch Tags, then. Please make sure you are using correct spelling and grammar. Only then questions with the same tags can be grouped to a quiz without effort."
             },
             "4": {
               "dt": "Which Tags can I use?",
-              "dd": "You can find and Inspiration in the word cloud below. If you have no match in the search field just keep on typing and create a new Tag."
+              "dd": "You can find and inspiration in the word cloud below. If you have no match in the search field just keep on typing and create a new tag."
             }
           }
         },
@@ -888,7 +888,7 @@
         "title": {
           "1": "Discover arsnova.click!",
           "2": "Enter »Demo Quiz« and run it. Use the app in another browser and play the quiz in different roles.",
-          "3": "Visit our <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>project blog</a> and learn how to use bonus-awarded quizzes to motivate learning in class."
+          "3": "Visit our <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>project blog</a> and learn how to use bonus quizzes to motivate learning in class."
         }
       },
       "name_input": {
@@ -897,7 +897,7 @@
       }
     },
     "quiz_rename": {
-      "rename": "Please select a name for your quiz",
+      "rename": "Please select a name for your quiz.",
       "custom": {
         "title": "Alternatively you can enter a custom quiz name",
         "input": "Custom quiz name",
@@ -934,7 +934,7 @@
       },
       "title": "All public quizzes",
       "none-available": "None available",
-      "number-of-questions": "Number of Questions:",
+      "number-of-questions": "Number of questions:",
       "cas-required": "CAS Login required:",
       "features": "Features:",
       "name": "Name:",
@@ -942,8 +942,8 @@
       "copy": "Copy"
     },
     "quiz-save": {
-      "access-allowed-for": "Access to this Quiz is allowed for:",
-      "title": "Settings for saved Quizzes",
+      "access-allowed-for": "Access to this quiz is allowed for:",
+      "title": "Settings for saved quizzes",
       "description": "Description",
       "expiry": "Expiry",
       "save": "Save",
@@ -959,13 +959,13 @@
     },
     "toasts": {
       "swupdate": {
-        "message": "There is a new Version of arsnova.click available. Please click here to reload the page. This will install the update automatically.",
-        "title": "New Version available"
+        "message": "There is a new version of arsnova.click available. Please click here to reload the page. This will install the update automatically.",
+        "title": "New version available"
       }
     },
     "statistics": {
       "users": {
-        "title": "User online",
+        "title": "Users online",
         "content": "All connections to arsnova.click are counted here. Of course the data is anonymized. It is not possible to draw conclusions about individual persons. For you the number is a good indication of how much arsnova.click is currently used."
       },
       "total-quizzes": {
