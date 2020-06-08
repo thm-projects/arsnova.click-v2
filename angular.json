@@ -454,6 +454,18 @@
             "production": {
               "browserTarget": "frontend:build:production",
               "serverTarget": "frontend:server:production"
+            },
+            "thmStaging": {
+              "browserTarget": "frontend:build:thmStaging",
+              "serverTarget": "frontend:server:thmStaging"
+            },
+            "thmBeta": {
+              "browserTarget": "frontend:build:thmBeta",
+              "serverTarget": "frontend:server:thmBeta"
+            },
+            "westermann": {
+              "browserTarget": "frontend:build:westermann",
+              "serverTarget": "frontend:server:westermann"
             }
           }
         },

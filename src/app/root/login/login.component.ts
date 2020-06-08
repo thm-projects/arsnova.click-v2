@@ -46,7 +46,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private storageServie: StorageService,
   ) {
     this.userService.logout();
-    this.headerLabelService.headerLabel = 'component.login.login';
     this.footerBarService.replaceFooterElements([]);
   }
 
@@ -61,6 +60,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       this.hasTokenLogin = environment.loginMechanism.includes(LoginMechanism.Token) && this.return.includes('/quiz/create');
       this.hasUsernamePasswordLogin = environment.loginMechanism.includes(LoginMechanism.UsernamePassword) && !this.hasTokenLogin;
+
+      if (this.hasTokenLogin) {
+        this.headerLabelService.headerLabel = 'component.login.login-to-quiz';
+      } else {
+        this.headerLabelService.headerLabel = 'component.login.login';
+      }
 
       if (!this.hasTokenLogin && !this.hasUsernamePasswordLogin) {
         this.router.navigate(['/']);

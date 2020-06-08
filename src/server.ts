@@ -40,7 +40,7 @@ export function app(): Express {
   server.get('**/*.*', express.static(distFolder, {
     maxAge: '1y',
   }), (req, res, next) => {
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV !== 'development' || req.url.endsWith('.css')) {
       next();
       return;
     }

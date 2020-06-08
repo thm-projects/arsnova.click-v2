@@ -60,7 +60,7 @@ export class QuizPublicComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.router.paramMap.pipe(takeUntil(this._destroy), distinctUntilChanged()).subscribe(params => {
+    this.router.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(params => {
       if (params.get('own')) {
         this.quizApiService.getOwnPublicQuizzes().subscribe(val => this.availablePublicQuizzes = val);
         this.isViewingOwnQuizzes = true;

@@ -10,6 +10,7 @@ import { Title } from '../../lib/enums/enums';
 export class HeaderLabelService {
   private _headerLabelParams = {};
   private _headerLabel = 'default';
+  private _subHeader: string;
 
   public isUnavailableModalOpen: boolean;
 
@@ -28,6 +29,15 @@ export class HeaderLabelService {
 
   set headerLabel(value: string) {
     this._headerLabel = value;
+    this.regenerateTitle();
+  }
+
+  get subHeader(): string {
+    return this._subHeader;
+  }
+
+  set subHeader(value: string) {
+    this._subHeader = value;
     this.regenerateTitle();
   }
 

@@ -101,14 +101,17 @@ fa-icon {
 
 .answer-result-correct {
   background-color: $bg-answer-result-correct;
+  color: $fg-answer-result-correct;
 }
 
 .answer-result-partially-correct {
   background-color: $bg-answer-result-partially-correct;
+  color: $fg-answer-result-partially-correct;
 }
 
 .answer-result-wrong {
   background-color: $bg-answer-result-wrong;
+  color: $fg-answer-result-wrong;
 }
 
 .bg-body {

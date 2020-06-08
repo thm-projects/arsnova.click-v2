@@ -7,6 +7,7 @@ import { SessionConfigurationEntity } from './session-configuration/SessionConfi
 
 export class QuizEntity {
   public name: string;
+  public origin?: string;
   public currentQuestionIndex: number;
   public questionList: Array<AbstractQuestionEntity>;
   public sessionConfig: SessionConfigurationEntity;
@@ -19,6 +20,7 @@ export class QuizEntity {
 
   constructor(props) {
     this.name = props.name;
+    this.origin = props.origin;
     this.currentQuestionIndex = props.currentQuestionIndex;
     this.questionList = (props.questionList || []).map(question => getQuestionForType(question.TYPE, question));
     this.sessionConfig = new SessionConfigurationEntity(props.sessionConfig);

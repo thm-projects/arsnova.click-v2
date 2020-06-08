@@ -13,7 +13,7 @@
     "clean": "rimraf dist",
     "start:DEV": "ng serve --host 192.168.2.101 --port 4210 --aot",
     "start:DEV:LOCAL": "ng serve --port 80 --aot --disable-host-check --host=0.0.0.0",
-    "start:WESTERMANN": "ng serve --port 4210 --aot --configuration=westermann",
+    "start:WESTERMANN": "ng run frontend:serve-ssr --configuration=westermann",
     "build:PROD": "ng build --prod && ng run frontend:server:production",
     "build:STAGING_THM": "ng build --configuration=thmStaging && ng run frontend:server:thmStaging",
     "build:BETA_THM": "ng build --configuration=thmBeta && ng run frontend:server:thmBeta",

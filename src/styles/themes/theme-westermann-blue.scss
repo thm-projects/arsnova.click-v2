@@ -9,7 +9,7 @@ $warning: #FF9800;
 $danger: #b22222;
 
 $primary_text_color: #000000;
-$secondary_text_color: #9c9c9c;
+$secondary_text_color: #717171;
 
 $modal-content-bg: white;
 $modal-content-color: #000c19;
@@ -27,8 +27,11 @@ $border-loader_wrapper-middle_spin: #e74c3c;
 $border-loader_wrapper-inner_spin: #f9c922;
 
 $bg-answer-result-correct: $success;
+$fg-answer-result-correct: $light;
 $bg-answer-result-partially-correct: $invers;
+$fg-answer-result-partially-correct: $light;
 $bg-answer-result-wrong: $danger;
+$fg-answer-result-wrong: $light;
 
 $progress-bg: transparent;
 

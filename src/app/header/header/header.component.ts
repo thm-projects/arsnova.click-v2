@@ -36,8 +36,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public isCheckingForUpdates: boolean;
   public readonly logoStyle = {
-    height: '60px',
-    width: '60px',
+    height: '40px',
+    width: '40px',
   };
   public readonly logoXlStyle = environment.title === Title.Default ? {
     height: '60px',

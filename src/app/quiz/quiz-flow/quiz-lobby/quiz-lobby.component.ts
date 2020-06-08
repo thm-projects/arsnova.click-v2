@@ -115,6 +115,13 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       } else {
         this.handleNewAttendee();
       }
+
+      if (this.quizService.quiz.origin) {
+        this.headerLabelService.headerLabel = this.quizService.quiz.origin;
+        this.headerLabelService.subHeader = `Quiz-ID: ${this.quizService.quiz.name}`;
+      } else {
+        this.headerLabelService.headerLabel = this.quizService.quiz.name;
+      }
     });
 
     if (isPlatformBrowser(this.platformId)) {
@@ -193,6 +200,8 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     this._destroy.next();
     this._destroy.complete();
 
+    this.headerLabelService.subHeader = null;
+
     this._messageSubscriptions.forEach(id => this.messageQueue.unsubscribe(id));
 
     if (this.quizService.isOwner) {
@@ -222,8 +231,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
     if (!this.quizService.quiz) {
       return;
     }
-
-    this.headerLabelService.headerLabel = this.quizService.quiz.name;
 
     this.trackingService.trackConversionEvent({
       action: QuizLobbyComponent.TYPE,
@@ -386,8 +393,6 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
 
   private handleNewAttendee(): void {
     console.log('QuizLobbyComponent: quiz status for attendee initialized', this.quizService.quiz);
-
-    this.headerLabelService.headerLabel = this.quizService.quiz.name;
 
     this.addFooterElementsAsAttendee();
   }

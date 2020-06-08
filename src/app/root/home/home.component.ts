@@ -157,7 +157,9 @@ export class HomeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.userService.loginNotifier.pipe(takeUntil(this._destroy), distinctUntilChanged()).subscribe(isLoggedIn => {
+    const loginNotified$ = this.userService.loginNotifier.pipe(takeUntil(this._destroy), distinctUntilChanged());
+
+    loginNotified$.subscribe(isLoggedIn => {
       this.updateFooterElements(isLoggedIn);
       this.canModifyQuiz = !environment.requireLoginToCreateQuiz || (
         isLoggedIn && this.userService.isAuthorizedFor(UserRole.QuizAdmin)
@@ -169,37 +171,24 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     let amount = 1;
     this.storageService.stateNotifier.pipe(filter(val => val === DbState.Destroy), takeUntil(this._destroy)).subscribe(() => amount = 1);
-    const routerParamsInitialized$ = this.activatedRoute.paramMap.pipe(distinctUntilChanged(), takeUntil(this._destroy));
+    const routerParamsInitialized$ = this.activatedRoute.paramMap.pipe(takeUntil(this._destroy));
     const dbInitialized$ = this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(amount), takeUntil(this._destroy));
+    const dbLoaded$ = this.storageService.stateNotifier.pipe(
+      filter(val => [DbState.Initialized, DbState.Revalidate].includes(val)),
+      takeUntil(this._destroy)
+    );
 
     this.cleanUpSessionStorage().pipe(switchMapTo(this.quizApiService.getActiveQuizzes())).subscribe(value => {
       this.sharedService.activeQuizzes = value;
     });
 
-    this.storageService.stateNotifier.pipe(filter(val => val === DbState.Revalidate), takeUntil(this._destroy)).subscribe(() => {
+    dbLoaded$.subscribe(() => {
       this.storageService.db.getAllQuiznames().then(quizNames => {
         this._ownQuizzes = quizNames;
       });
     });
 
-    dbInitialized$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(async params => {
-      this.storageService.db.getAllQuiznames().then(quizNames => {
-        this._ownQuizzes = quizNames;
-
-        /*
-         TODO FIXME
-         Disabled since the scroll position cannot be set to the top because of the modal backdrop
-         if (this._ownQuizzes.length && //
-         environment.showJoinableQuizzes && //
-         (
-         !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.CreateQuiz)
-         )) {
-         const ref = this.modalService.open(AvailableQuizzesComponent);
-         this._destroy.subscribe(() => ref.close());
-         }
-         */
-      });
-
+    dbLoaded$.pipe(switchMapTo(loginNotified$)).subscribe(() => {
       if (environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
         this.quizApiService.getPublicQuizAmount().subscribe(val => {
           this.publicQuizAmount = val;
@@ -208,7 +197,9 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.ownPublicQuizAmount = val;
         });
       }
+    });
 
+    dbInitialized$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(async params => {
       if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
         const theme = this.storageService.db.Config.get(StorageKey.DefaultTheme);
         if (!theme) {
@@ -450,6 +441,8 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       footerElements.push(this.footerBarService.footerElemLogout);
+    } else if (environment.showLoginButton) {
+      footerElements.push(this.footerBarService.footerElemLogin);
     }
 
     this.footerBarService.replaceFooterElements(footerElements);

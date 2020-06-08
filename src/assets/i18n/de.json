@@ -73,7 +73,7 @@
         "dataprivacy": "Datenschutz",
         "member_group": "Teams",
         "edit-i18n": "i18n editieren",
-        "login": "Einloggen",
+        "login": "Anmelden",
         "logout": "Ausloggen",
         "save_quiz": "Quiz speichern",
         "admin": "Administration",
@@ -697,8 +697,9 @@
       }
     },
     "login": {
-      "title": "Bitte gib deine Zugangsdaten ein",
+      "title": "Bitte geben Sie Ihr Zugangskennwort ein.",
       "login": "Einloggen",
+      "login-to-quiz": "Herzlich willkommen zum Quiz",
       "authorization_failed": "Authentifikation fehlgeschlagen",
       "token": "Token",
       "login-via-token": "Du kannst dich auch mit einem Token einloggen:",

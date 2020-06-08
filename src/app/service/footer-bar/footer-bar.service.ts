@@ -1,4 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { HttpEventType } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -6,8 +7,6 @@ import { RxStompState } from '@stomp/rx-stomp';
 import { HotkeysService } from 'angular2-hotkeys';
 import { filter, switchMapTo } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { DefaultSettings } from '../../lib/default.settings';
-import { StorageKey } from '../../lib/enums/enums';
 import { StatusProtocol } from '../../lib/enums/Message';
 import { QuizState } from '../../lib/enums/QuizState';
 import { FooterbarElement } from '../../lib/footerbar-element/footerbar-element';
@@ -569,6 +568,45 @@ export class FooterBarService {
   }
 
   private updateFooterElementsState(): void {
+    this.footerElemExport.onClickCallback = () => {
+      this.footerElemExport.isLoading = true;
+      this.quizApiService.getExportFile(
+        this.quizService.quiz.name,
+        this.themesService.currentTheme,
+        this.translateService.currentLang
+      ).subscribe(event => {
+        if (event.type === HttpEventType.Response) {
+          const blob = new Blob([event.body], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          const date: Date = new Date();
+          const dateFormatted = `${date.getDate()}_${date.getMonth() + 1}_${date.getFullYear()}-${date.getHours()}_${date.getMinutes()}`;
+          const name = `Export-${this.quizService.quiz.name}-${dateFormatted}.xlsx`;
+          a.href = objectUrl;
+          a.download = name;
+          a.click();
+          URL.revokeObjectURL(objectUrl);
+          this.footerElemExport.isLoading = false;
+          this.footerElemExport.loadingBarState = 0;
+          return;
+        } else if (event.type === HttpEventType.DownloadProgress) {
+          this.footerElemExport.loadingBarState = Math.round((100 * event.loaded) / event.total);
+        }
+      });
+    };
+    this.footerElemEnableCasLogin.onClickCallback = () => {
+      const newState = !this.footerElemEnableCasLogin.isActive;
+      this.footerElemEnableCasLogin.isActive = newState;
+      this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin = newState;
+      this.quizService.persist();
+    };
+    this.footerElemBlockRudeNicknames.onClickCallback = () => {
+      const newState = !this.footerElemBlockRudeNicknames.isActive;
+      this.footerElemBlockRudeNicknames.isActive = newState;
+      this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks = newState;
+      this.quizService.persist();
+    };
+
     if (!this.quizService.quiz) {
       return;
     }
@@ -578,30 +616,10 @@ export class FooterBarService {
     this.footerElemStartQuiz.isActive = this.quizService.isValid() && this._connectionState === RxStompState.OPEN;
     this.footerElemNicknames.isActive = this._connectionState === RxStompState.OPEN;
 
-    this.footerElemExport.restoreClickCallback();
-    this.footerElemExport.onClickCallback = async () => {
-      const link = `${DefaultSettings.httpApiEndpoint}/quiz/export/${encodeURIComponent(this.quizService.quiz.name)}/${encodeURIComponent(
-        sessionStorage.getItem(StorageKey.PrivateKey))}/${encodeURIComponent(this.themesService.currentTheme)}/${encodeURIComponent(
-        this.translateService.currentLang)}`;
-      window.open(link);
-    };
-
     this.footerElemEnableCasLogin.restoreClickCallback();
     this.footerElemEnableCasLogin.isActive = this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin;
-    this.footerElemEnableCasLogin.onClickCallback = () => {
-      const newState = !this.footerElemEnableCasLogin.isActive;
-      this.footerElemEnableCasLogin.isActive = newState;
-      this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin = newState;
-      this.quizService.persist();
-    };
 
     this.footerElemBlockRudeNicknames.restoreClickCallback();
     this.footerElemBlockRudeNicknames.isActive = this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks;
-    this.footerElemBlockRudeNicknames.onClickCallback = () => {
-      const newState = !this.footerElemBlockRudeNicknames.isActive;
-      this.footerElemBlockRudeNicknames.isActive = newState;
-      this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks = newState;
-      this.quizService.persist();
-    };
   }
 }

@@ -158,7 +158,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
       return false;
     }
     if (index === this.quizService.quiz.currentQuestionIndex && //
-        this.quizService.quiz.sessionConfig.readingConfirmationEnabled && //
+        (environment.readingConfirmationEnabled && this.quizService.quiz.sessionConfig.readingConfirmationEnabled) && //
         (this.quizService.readingConfirmationRequested || this.countdown) //
     ) {
       return false;
@@ -234,7 +234,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     const matchCount = this.attendeeService.attendees.filter(value => {
       return value.responses[questionIndex] ? value.responses[questionIndex].readingConfirmation : false;
     }).length;
-    const readingConfirmationStatus = this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
+    const readingConfirmationStatus = environment.readingConfirmationEnabled && this.quizService.quiz.sessionConfig.readingConfirmationEnabled;
     this.cd.markForCheck();
     return matchCount > 0 || (readingConfirmationStatus && this.selectedQuestionIndex === this.quizService.quiz.currentQuestionIndex);
   }
@@ -407,7 +407,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
       this.loadProgressbars(currentStateData);
 
-      if (!this.quizService.isOwner && this.quizService.quiz.questionList.length - 1 === this.quizService.quiz.currentQuestionIndex) {
+      if (environment.enableBonusToken &&
+          !this.quizService.isOwner &&
+          this.quizService.quiz.questionList.length - 1 === this.quizService.quiz.currentQuestionIndex
+      ) {
         this.quizApiService.getCanUseBonusToken().pipe(filter(canUseBonusToken => Boolean(canUseBonusToken))).subscribe(() => {
           this.footerElems = [this.footerBarService.footerElemShowToken].concat(this._footerElems);
           this.cd.markForCheck();
