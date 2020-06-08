@@ -35,10 +35,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() public interactiveLogo = true;
 
   public isCheckingForUpdates: boolean;
-  public readonly logoStyle = {
-    height: '40px',
-    width: '40px',
-  };
   public readonly logoXlStyle = environment.title === Title.Default ? {
     height: '60px',
     width: '60px',

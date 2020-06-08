@@ -30,7 +30,7 @@
                [icon]="getIconClass(elem)"
                [spin]="elem.isLoading"></fa-icon>
     </p>
-    <p class="footerElemText flex-column text-truncate text-left ml-2 flex-grow-1">
+    <p class="footerElemText flex-column text-truncate text-left ml-2 flex-lg-grow-1">
       <span [class]="elem.textClass"
             [innerHTML]="elem.textName | translate"></span>
       <span *ngIf="elem.isLoading && elem.loadingBarState"
