@@ -53,8 +53,10 @@ export class AdditionalDataComponent {
   }
 
   public renameQuiz(): void {
-    const blob = new Blob([JSON.stringify(this.quizService.quiz)], { type: 'application/json' });
-    this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, this.quizService.quiz.name);
+    const clone = JSON.parse(JSON.stringify(this.quizService.quiz));
+    clone.name = null;
+    const blob = new Blob([JSON.stringify(clone)], { type: 'application/json' });
+    this.fileUploadService.renameFilesQueue.set('uploadFiles[]', blob, null);
     this.fileUploadService.overrideLocalQuiz = this.quizService.quiz.name;
     this.fileUploadService.uploadFile(this.fileUploadService.renameFilesQueue);
   }

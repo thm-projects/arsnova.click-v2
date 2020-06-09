@@ -759,7 +759,7 @@
       "name_input": {}
     },
     "quiz_rename": {
-      "rename": "Bitte wähle einen Namen für dein Quiz.",
+      "rename": "Bitte wähle einen Namen für dein Quiz",
       "custom": {
         "title": "Du kannst auch einen eigenen Quiz-Namen eingeben.",
         "input": "Eigener Quiz-Name",
