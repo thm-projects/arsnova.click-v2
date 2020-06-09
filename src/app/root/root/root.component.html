@@ -57,3 +57,8 @@
   <div class="loader-section section-left"></div>
   <div class="loader-section section-right"></div>
 </div>
+
+<div *ngIf="showInfoButtonsInFooter" class="d-flex justify-content-between flex-wrap position-absolute bottom-0 w-100">
+  <a target="_blank" class="mx-1 mb-1 btn btn-info btn-sm" href="/info/imprint" >{{'region.footer.footer_bar.imprint' | translate}}</a>
+  <a target="_blank" class="mx-1 mb-1 btn btn-info btn-sm" href="/info/dataprivacy">{{'region.footer.footer_bar.dataprivacy' | translate}}</a>
+</div>

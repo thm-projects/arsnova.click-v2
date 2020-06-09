@@ -11,6 +11,10 @@ body {
   height: 100%;
 }
 
+.mh-100vh {
+  min-height: 100vh;
+}
+
 * {
   backface-visibility: hidden;
   outline: none !important;

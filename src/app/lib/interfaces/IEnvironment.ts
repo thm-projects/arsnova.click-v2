@@ -34,4 +34,5 @@ export interface IEnvironment {
   darkModeCheckEnabled: boolean;
   enableTwitter: boolean;
   enableQuizPool: boolean;
+  showInfoButtonsInFooter: boolean;
 }

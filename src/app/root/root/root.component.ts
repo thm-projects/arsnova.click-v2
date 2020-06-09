@@ -48,6 +48,7 @@ export class RootComponent implements OnInit, AfterViewInit {
   public isInQuizManager = false;
   public isLoading = false;
   public readonly isServer = isPlatformServer(this.platformId);
+  public readonly showInfoButtonsInFooter: boolean = environment.showInfoButtonsInFooter;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
