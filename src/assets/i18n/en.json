@@ -948,6 +948,7 @@
       "title": "Settings for saved quizzes",
       "description": "Description",
       "expiry": "Expiry",
+      "no-expiry": "No Expiry",
       "save": "Save",
       "is-submitting": "Submitting…"
     },
