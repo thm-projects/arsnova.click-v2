@@ -2,6 +2,7 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { captureException } from '@sentry/browser';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { RxStompState } from '@stomp/rx-stomp';
 import { HotkeysService } from 'angular2-hotkeys';
@@ -592,6 +593,10 @@ export class FooterBarService {
         } else if (event.type === HttpEventType.DownloadProgress) {
           this.footerElemExport.loadingBarState = Math.round((100 * event.loaded) / event.total);
         }
+      }, () => {
+        this.footerElemExport.isLoading = false;
+        this.footerElemExport.loadingBarState = 0;
+        captureException(new Error('Export failed'));
       });
     };
     this.footerElemEnableCasLogin.onClickCallback = () => {

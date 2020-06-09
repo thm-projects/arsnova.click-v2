@@ -66,7 +66,7 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
         QUESTION_INDEX: (this.quizService.quiz.currentQuestionIndex + 1),
       };
       this.isTeam = this.quizService.quiz.sessionConfig.nicks.memberGroups.length > 0;
-      this.isLastQuestion = this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length;
+      this.isLastQuestion = this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1;
       this.cd.markForCheck();
       this.handleMessages();
     }).catch(() => this.hasTriggeredNavigation = true);
