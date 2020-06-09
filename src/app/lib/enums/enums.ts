@@ -8,17 +8,11 @@ export enum Filter {
   InvalidKeys, //
   InvalidDE, //
   InvalidEN, //
-  InvalidES, //
-  InvalidFr, //
-  InvalidIt, //
 }
 
 export enum LanguageTranslation {
   DE = 'Deutsch', //
   EN = 'English', //
-  //  FR = 'Français', //
-  //  IT = 'Italiano', //
-  //  ES = 'Español', //
 }
 
 export enum NumberType {
@@ -30,17 +24,11 @@ export enum NumberType {
 export enum CurrencyType {
   DE = 'EUR', //
   EN = 'GBP', //
-  FR = 'EUR', //
-  IT = 'EUR', //
-  ES = 'EUR', //
 }
 
 export enum Language {
   EN = 'en', //
   DE = 'de', //
-  //  FR = 'fr', //
-  //  ES = 'es', //
-  //  IT = 'it', //
 }
 
 export enum Project {
