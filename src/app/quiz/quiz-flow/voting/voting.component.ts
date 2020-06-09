@@ -304,16 +304,14 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   private toggleSelectedAnswers(): boolean {
-    if (this._currentQuestion.TYPE === QuestionType.SurveyQuestion && !(
-      this._currentQuestion as SurveyQuestionEntity
-    ).multipleSelectionEnabled) {
+    if ([QuestionType.SurveyQuestion, QuestionType.ABCDSurveyQuestion].includes(this._currentQuestion.TYPE) &&
+        !(this._currentQuestion as SurveyQuestionEntity).multipleSelectionEnabled) {
       return true;
     }
 
     return [
       QuestionType.SingleChoiceQuestion,
       QuestionType.TrueFalseSingleChoiceQuestion,
-      QuestionType.ABCDSurveyQuestion,
       QuestionType.YesNoSingleChoiceQuestion,
     ].includes(this._currentQuestion.TYPE);
   }
