@@ -246,7 +246,7 @@
       "rank": "Du bist aktuell auf Platz {rank}.",
       "rank-team": "Dein Team ist aktuell auf Platz {rank}.",
       "last-question-rank": "Du hast es auf den {rank}. Platz geschafft!",
-      "last-question-rank-team": "Dein Team es auf den {rank}. Platz geschafft!",
+      "last-question-rank-team": "Dein Team hat es auf den {rank}. Platz geschafft!",
       "to-quiz-results": "Zur Quizfrage",
       "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!",
       "pole-position-team": "Ihr seid die Besten! Erster Platz im gesamten Quiz! Bravo!"
