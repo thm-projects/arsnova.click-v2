@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
+import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { StorageService } from '../../service/storage/storage.service';
@@ -23,6 +24,7 @@ export class QuizPublicComponent implements OnInit, OnDestroy {
   public isViewingOwnQuizzes = false;
 
   constructor(
+    public customMarkdownService: CustomMarkdownService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private storageService: StorageService,
     private quizApiService: QuizApiService,

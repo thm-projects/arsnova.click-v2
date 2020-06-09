@@ -9,6 +9,8 @@ import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { of } from 'rxjs';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
+import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
+import { CustomMarkdownServiceMock } from '../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -59,6 +61,9 @@ describe('QuizPublicComponent', () => {
         }, {
           provide: HotkeysService,
           useValue: {}
+        }, {
+          provide: CustomMarkdownService,
+          useClass: CustomMarkdownServiceMock
         },
       ],
       declarations: [QuizPublicComponent],
