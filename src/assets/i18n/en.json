@@ -939,7 +939,7 @@
       "number-of-questions": "Number of questions:",
       "cas-required": "CAS Login required:",
       "features": "Features:",
-      "name": "Name:",
+      "name": "Quiz name:",
       "play": "Play",
       "copy": "Copy"
     },
@@ -947,8 +947,8 @@
       "access-allowed-for": "Access to this quiz is allowed for:",
       "title": "Settings for saved quizzes",
       "description": "Description",
-      "expiry": "Expiry",
-      "no-expiry": "No Expiry",
+      "expiry": "Expiration date",
+      "no-expiry": "No expiration date",
       "save": "Save",
       "is-submitting": "Submitting…"
     },
