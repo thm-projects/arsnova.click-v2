@@ -246,7 +246,7 @@
       "rank": "Du bist aktuell auf Platz {rank}.",
       "rank-team": "Dein Team ist aktuell auf Platz {rank}.",
       "last-question-rank": "Du hast es auf den {rank}. Platz geschafft!",
-      "last-question-rank-team": "Dein Team es auf den {rank}. Platz geschafft!",
+      "last-question-rank-team": "Dein Team hat es auf den {rank}. Platz geschafft!",
       "to-quiz-results": "Zur Quizfrage",
       "pole-position": "Du bist der Beste! Erster Platz im gesamten Quiz! Bravo!",
       "pole-position-team": "Ihr seid die Besten! Erster Platz im gesamten Quiz! Bravo!"
@@ -776,9 +776,9 @@
       "use": "Verwende »{name}«",
       "new-demo-quiz": "Demo-Quiz zum Kennenlernen",
       "new-abcd-quiz": "ABCD-Quiz mit einem Klick",
-      "view-public": "Klicke hier, um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes}} zu wählen!",
+      "view-public": "Klick hier, um aus einer Liste veröffentlichter Quizze zu wählen!",
       "view-all-public": "… oder sieh dir deine eigenen veröffentlichten Quizze an!",
-      "view-own-public": "Klicke hier, um deine eigenen veröffentlichten Quizze anzusehen!",
+      "view-own-public": "Klick hier, um deine veröffentlichten Quizze anzusehen!",
       "errors": {
         "already-taken": "Dieser Name wird bereits verwendet. Bitte nutze einen anderen Quiz-Namen.",
         "min-length": "Bitte gib für deinen Quiz-Namen mindestens vier Zeichen ein."
@@ -793,12 +793,12 @@
         "title": "Deine veröffentlichten Quizze",
         "remove": "Löschen"
       },
-      "title": "Veröffentlichte Quizze deiner Mitspieler/innen",
-      "none-available": "Keines verfügbar",
-      "number-of-questions": "Anzahl Quizfragen:",
+      "title": "Veröffentlichte Quizze",
+      "none-available": "Kein Quiz verfügbar",
+      "number-of-questions": "Anzahl Quiz-Fragen:",
       "cas-required": "CAS-Login erforderlich:",
       "features": "Features:",
-      "name": "Name:",
+      "name": "Quiz-Name:",
       "play": "Starten",
       "copy": "Kopieren"
     },
