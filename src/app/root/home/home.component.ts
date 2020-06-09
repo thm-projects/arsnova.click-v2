@@ -132,7 +132,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.footerBarService.TYPE_REFERENCE = HomeComponent.TYPE;
 
-    headerLabelService.headerLabel = 'default';
+    this.headerLabelService.reset();
 
     this.updateFooterElements(this.userService.isLoggedIn);
     this.canModifyQuiz = !environment.requireLoginToCreateQuiz || this.userService.isAuthorizedFor(UserRole.QuizAdmin);

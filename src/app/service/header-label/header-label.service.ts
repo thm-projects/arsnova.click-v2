@@ -48,7 +48,13 @@ export class HeaderLabelService {
   }
 
   public hasHeaderLabelParams(): boolean {
-    return Object.keys(this.headerLabelParams).length > 0;
+    return Object.keys(this.headerLabelParams || {}).length > 0;
+  }
+
+  public reset(): void {
+    this.headerLabel = 'default';
+    this.headerLabelParams = {};
+    this.subHeader = null;
   }
 
   private regenerateTitle(): void {
