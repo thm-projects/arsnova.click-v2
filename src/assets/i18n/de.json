@@ -480,7 +480,7 @@
       "ranged_question": "Schätzfrage",
       "free_text_question": "Kurzantwort-Frage",
       "description": {},
-      "single_choice_question_abcd": "ABC…-Frage"
+      "survey_question_abcd": "ABC…-Frage"
     },
     "quiz_manager": {
       "title": "Quiz-Manager",
@@ -937,7 +937,7 @@
         "RangedQuestion": "Für die Schätzfrage muss eine Ganzzahl als richtig angegeben werden. Zusätzlich können Toleranzen nach oben und unten festgelegt werden.",
         "FreeTextQuestion": "Bei der Kurzantwort-Frage müssen die Player einen Text eingeben. Dieser wird mit dem Referenzwert verglichen.",
         "SurveyQuestion": "Umfragen enthalten beliebig viele Antwortoptionen, die nicht bewertet werden. Sie können vom Typ Single-Choice oder Multiple-Choice sein.",
-        "AbcdSingleChoiceQuestion": "ABC…-Fragen enthalten maximal 26 Antworten (von A bis Z).",
+        "ABCDSurveyQuestion": "ABC…-Fragen enthalten maximal 26 Antworten (von A bis Z).",
         "type_wrapper": "Hier kannst du den Typ der Quizfrage ändern. Jeder Typ hat seine eigenen Einstellungen. Wechsel den Typ, indem du auf die Box klickst."
       },
       "select-type": "Typ auswählen",

@@ -28,13 +28,13 @@
                                                                                   class="h-100 d-flex align-items-center"></fa-icon>
               </span>
               <input (input)="updateAnswerValue($event, i)"
-                     [class.rounded-right]="['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"
+                     [class.rounded-right]="['SurveyQuestion', 'ABCDSurveyQuestion'].includes(question.TYPE)"
                      [class.rounded-left]="!canDeleteAnswer"
                      [readOnly]="!canEditAnswer"
                      [value]="elem.answerText"
                      class="btn-block text-left p-2 border-0"
                      type="text">
-              <label *ngIf="!['SurveyQuestion', 'ABCDSingleChoiceQuestion'].includes(question.TYPE)"
+              <label *ngIf="!['SurveyQuestion', 'ABCDSurveyQuestion'].includes(question.TYPE)"
                      [class.btn-danger]="!elem.isCorrect"
                      [class.btn-success]="elem.isCorrect"
                      class="btn cursor-pointer mb-0">
@@ -96,7 +96,7 @@
               <span *ngIf="!question?.showOneAnswerPerRow">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
             </label>
           </div>
-          <div *ngIf="question?.TYPE === 'SurveyQuestion'"
+          <div *ngIf="['SurveyQuestion', 'ABCDSurveyQuestion'].includes(question?.TYPE)"
                [attr.data-intro]="'component.answeroptions.description.multiple_selection_survey' | translate"
                class="col-12 mb-2 d-flex">
             <p class="mr-2 align-self-center w-100"

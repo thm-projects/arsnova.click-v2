@@ -1,4 +1,9 @@
 <div class="row">
+
+  <div class="col-12 full-xs">
+    <span [innerHtml]="getParsedSelectedNicks()"></span>
+  </div>
+
   <div class="col-12 nicknameFilter">
     <input (input)="filterForKeyword($event)"
            [placeholder]="'component.nickname_categories.filter' | translate"

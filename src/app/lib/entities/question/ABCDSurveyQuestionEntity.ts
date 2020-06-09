@@ -1,9 +1,9 @@
 import { QuestionType } from '../../enums/QuestionType';
 import { DefaultAnswerEntity } from '../answer/DefaultAnswerEntity';
-import { SingleChoiceQuestionEntity } from './SingleChoiceQuestionEntity';
+import { SurveyQuestionEntity } from './SurveyQuestionEntity';
 
-export class ABCDSingleChoiceQuestionEntity extends SingleChoiceQuestionEntity {
-  public TYPE = QuestionType.ABCDSingleChoiceQuestion;
+export class ABCDSurveyQuestionEntity extends SurveyQuestionEntity {
+  public TYPE = QuestionType.ABCDSurveyQuestion;
 
   constructor(props) {
     super(props);
@@ -16,11 +16,11 @@ export class ABCDSingleChoiceQuestionEntity extends SingleChoiceQuestionEntity {
   }
 
   public translationReferrer(): string {
-    return 'component.questions.single_choice_question_abcd';
+    return 'component.questions.survey_question_abcd';
   }
 
   public translationDescription(): string {
-    return 'component.question_type.description.AbcdSingleChoiceQuestion';
+    return 'component.question_type.description.ABCDSurveyQuestion';
   }
 
   public removeAnswerOption(): void {

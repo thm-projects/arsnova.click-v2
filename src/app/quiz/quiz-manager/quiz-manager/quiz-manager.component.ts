@@ -287,7 +287,7 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     availableQuestionTypes.filter(type => {
       return ![
-        QuestionType.ABCDSingleChoiceQuestion,
+        QuestionType.ABCDSurveyQuestion,
         QuestionType.YesNoSingleChoiceQuestion,
         QuestionType.TrueFalseSingleChoiceQuestion,
       ].includes(type.id);

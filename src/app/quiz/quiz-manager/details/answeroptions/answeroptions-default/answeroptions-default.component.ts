@@ -106,9 +106,9 @@ export class AnsweroptionsDefaultComponent extends AbstractQuizManagerDetailsCom
 
       this.canAddAnsweroptions = ![QuestionType.TrueFalseSingleChoiceQuestion, QuestionType.YesNoSingleChoiceQuestion].includes(this._question.TYPE);
       this.canDeleteAnswer = this.canAddAnsweroptions;
-      this.canEditAnswer = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
-      this.canShowAnswerContentOnButtons = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
-      this.canInjectEmojis = ![QuestionType.ABCDSingleChoiceQuestion].includes(this._question.TYPE);
+      this.canEditAnswer = ![QuestionType.ABCDSurveyQuestion].includes(this._question.TYPE);
+      this.canShowAnswerContentOnButtons = ![QuestionType.ABCDSurveyQuestion].includes(this._question.TYPE);
+      this.canInjectEmojis = ![QuestionType.ABCDSurveyQuestion].includes(this._question.TYPE);
 
       this.questionTextService.changeMultiple(this._question.answerOptionList.map(answer => answer.answerText)).subscribe();
     });

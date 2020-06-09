@@ -1,5 +1,5 @@
 export enum QuestionType {
-  ABCDSingleChoiceQuestion      = 'ABCDSingleChoiceQuestion', //
+  ABCDSurveyQuestion            = 'ABCDSurveyQuestion', //
   FreeTextQuestion              = 'FreeTextQuestion', //
   MultipleChoiceQuestion        = 'MultipleChoiceQuestion', //
   RangedQuestion                = 'RangedQuestion', //

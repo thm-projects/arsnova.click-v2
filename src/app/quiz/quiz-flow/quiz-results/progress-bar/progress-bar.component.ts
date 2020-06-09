@@ -53,7 +53,7 @@ export class ProgressBarComponent implements OnDestroy {
 
         const result = {
           answerIndex: answerIndex,
-          label: [QuestionType.ABCDSingleChoiceQuestion].includes(question.TYPE) ? null : this.data[answerIndex],
+          label: [QuestionType.ABCDSurveyQuestion].includes(question.TYPE) ? null : this.data[answerIndex],
           absolute: 0,
           base: this.attendeeService.attendees.length,
           percent: '0',
@@ -109,7 +109,7 @@ export class ProgressBarComponent implements OnDestroy {
         } else {
           wrong++;
         }
-      } else if ([QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(question.TYPE)) {
+      } else if ([QuestionType.SurveyQuestion, QuestionType.ABCDSurveyQuestion].includes(question.TYPE)) {
         neutral++;
       } else {
         question.answerOptionList.forEach((answer, answerIndex) => {

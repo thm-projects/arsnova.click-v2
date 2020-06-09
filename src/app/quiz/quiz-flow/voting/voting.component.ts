@@ -313,13 +313,13 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     return [
       QuestionType.SingleChoiceQuestion,
       QuestionType.TrueFalseSingleChoiceQuestion,
-      QuestionType.ABCDSingleChoiceQuestion,
+      QuestionType.ABCDSurveyQuestion,
       QuestionType.YesNoSingleChoiceQuestion,
     ].includes(this._currentQuestion.TYPE);
   }
 
   private getNextRoute(route?: string): Array<string> {
-    const isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this._currentQuestion.TYPE);
+    const isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSurveyQuestion].includes(this._currentQuestion.TYPE);
 
     return [
       '/quiz', 'flow', route ? route : environment.confidenceSliderEnabled && //

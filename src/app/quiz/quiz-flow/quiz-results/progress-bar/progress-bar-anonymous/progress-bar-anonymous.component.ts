@@ -43,6 +43,6 @@ export class ProgressBarAnonymousComponent extends AbstractProgressBar {
   }
 
   public isSurveyQuestion(): boolean {
-    return [QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this.type);
+    return [QuestionType.SurveyQuestion, QuestionType.ABCDSurveyQuestion].includes(this.type);
   }
 }

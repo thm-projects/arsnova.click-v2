@@ -586,7 +586,7 @@
       "description": {
         "preview": "Here is a preview of the entered text on the left."
       },
-      "single_choice_question_abcd": "ABCD Single-Choice question"
+      "survey_question_abcd": "ABCD Single-Choice question"
     },
     "quiz_manager": {
       "title": "Quiz Manager",
@@ -1132,7 +1132,7 @@
         "RangedQuestion": "For the ranged question, an integer must be specified as correct. In addition, upper and lower tolerances can be entered.",
         "FreeTextQuestion": "In the free text query, the participant must enter any text. This is matched with the provided reference value.",
         "SurveyQuestion": "Surveys may contain any number of answers, none of them can be marked as right or wrong.",
-        "AbcdSingleChoiceQuestion": "ABCD questions contain at maximum 26 answers (from A - Z).",
+        "ABCDSurveyQuestion": "ABCD questions contain at maximum 26 answers (from A - Z).",
         "type_wrapper": "Here you can change the type of quiz question. Each type has different settings. Change the type by clicking on the respective box."
       },
       "select-type": "Select Type",

@@ -19,10 +19,10 @@ export const availableQuestionTypes: Array<IAvailableQuestionType> = [
     descriptionType: 'view.question_type.description.SingleChoiceQuestion',
     descriptionHotkey: 'hotkey.SingleChoiceQuestion.description',
   }, {
-    id: QuestionType.ABCDSingleChoiceQuestion,
-    translationName: 'component.questions.single_choice_question_abcd',
-    descriptionType: 'view.question_type.description.AbcdSingleChoiceQuestion',
-    descriptionHotkey: 'hotkey.AbcdSingleChoiceQuestion.description',
+    id: QuestionType.ABCDSurveyQuestion,
+    translationName: 'component.questions.survey_question_abcd',
+    descriptionType: 'view.question_type.description.ABCDSurveyQuestion',
+    descriptionHotkey: 'hotkey.ABCDSurveyQuestion.description',
   }, {
     id: QuestionType.YesNoSingleChoiceQuestion,
     translationName: 'component.questions.single_choice_question_yes_no',

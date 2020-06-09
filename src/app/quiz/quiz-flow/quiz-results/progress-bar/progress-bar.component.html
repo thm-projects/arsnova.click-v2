@@ -14,7 +14,7 @@
                                       [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-multiple-choice>
     <app-progress-bar-survey *ngIf="question?.TYPE === 'SurveyQuestion'"
                              [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-survey>
-    <app-progress-bar-survey *ngIf="question?.TYPE === 'ABCDSingleChoiceQuestion'"
+    <app-progress-bar-survey *ngIf="question?.TYPE === 'ABCDSurveyQuestion'"
                              [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-survey>
     <app-progress-bar-ranged *ngIf="question?.TYPE === 'RangedQuestion'"
                              [attendeeData]="attendeeDataForAnswer(i) | async"></app-progress-bar-ranged>

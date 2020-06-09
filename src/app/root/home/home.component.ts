@@ -10,7 +10,7 @@ import { checkABCDOrdering } from '../../lib/checkABCDOrdering';
 import { DefaultSettings } from '../../lib/default.settings';
 import { AbstractAnswerEntity } from '../../lib/entities/answer/AbstractAnswerEntity';
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
-import { ABCDSingleChoiceQuestionEntity } from '../../lib/entities/question/ABCDSingleChoiceQuestionEntity';
+import { ABCDSurveyQuestionEntity } from '../../lib/entities/question/ABCDSurveyQuestionEntity';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { DbState, Language, StorageKey, Title } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
@@ -654,7 +654,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         }));
       });
       this.enteredSessionName = questionGroup ? questionGroup.name : this.enteredSessionName.trim();
-      const abcdQuestion: ABCDSingleChoiceQuestionEntity = new ABCDSingleChoiceQuestionEntity({
+      const abcdQuestion: ABCDSurveyQuestionEntity = new ABCDSurveyQuestionEntity({
         questionText: '',
         timer: 60,
         displayAnswerText: false,
@@ -680,8 +680,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         }));
       });
       this.enteredSessionName = questionGroup.name;
-      const abcdQuestion: ABCDSingleChoiceQuestionEntity = new ABCDSingleChoiceQuestionEntity({
-        TYPE: QuestionType.ABCDSingleChoiceQuestion,
+      const abcdQuestion: ABCDSurveyQuestionEntity = new ABCDSurveyQuestionEntity({
+        TYPE: QuestionType.ABCDSurveyQuestion,
         questionText: '',
         timer: 60,
         displayAnswerText: false,

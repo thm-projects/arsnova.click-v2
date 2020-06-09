@@ -1,7 +1,7 @@
 import { TranslateService } from '@ngx-translate/core';
 import { DefaultAnswerEntity } from './entities/answer/DefaultAnswerEntity';
 import { FreeTextAnswerEntity } from './entities/answer/FreetextAnwerEntity';
-import { ABCDSingleChoiceQuestionEntity } from './entities/question/ABCDSingleChoiceQuestionEntity';
+import { ABCDSurveyQuestionEntity } from './entities/question/ABCDSurveyQuestionEntity';
 import { AbstractQuestionEntity } from './entities/question/AbstractQuestionEntity';
 import { FreeTextQuestionEntity } from './entities/question/FreeTextQuestionEntity';
 import { MultipleChoiceQuestionEntity } from './entities/question/MultipleChoiceQuestionEntity';
@@ -16,8 +16,8 @@ export const getQuestionForType = (type: QuestionType, data = {}): AbstractQuest
   switch (type) {
     case QuestionType.FreeTextQuestion:
       return new FreeTextQuestionEntity(data);
-    case QuestionType.ABCDSingleChoiceQuestion:
-      return new ABCDSingleChoiceQuestionEntity(data);
+    case QuestionType.ABCDSurveyQuestion:
+      return new ABCDSurveyQuestionEntity(data);
     case QuestionType.YesNoSingleChoiceQuestion:
       return new YesNoSingleChoiceQuestionEntity(data);
     case QuestionType.TrueFalseSingleChoiceQuestion:
@@ -63,8 +63,8 @@ export const getDefaultQuestionForType = (translateService: TranslateService, ty
           }),
         ],
       });
-    case QuestionType.ABCDSingleChoiceQuestion:
-      return new ABCDSingleChoiceQuestionEntity({
+    case QuestionType.ABCDSurveyQuestion:
+      return new ABCDSurveyQuestionEntity({
         ...data,
         answerOptionList: [
           new DefaultAnswerEntity({

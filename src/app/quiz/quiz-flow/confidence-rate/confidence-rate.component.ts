@@ -71,7 +71,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
         return;
       }
 
-      this._isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion]
+      this._isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSurveyQuestion]
         .includes(this.quizService.currentQuestion().TYPE);
     });
 

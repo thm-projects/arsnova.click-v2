@@ -145,7 +145,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     }
 
     this.cd.markForCheck();
-    return ![QuestionType.SurveyQuestion, QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
+    return ![QuestionType.SurveyQuestion, QuestionType.ABCDSurveyQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
   }
 
   public showQuestionButton(index: number): boolean {
@@ -165,7 +165,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     }
 
     this.cd.markForCheck();
-    return ![QuestionType.ABCDSingleChoiceQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
+    return ![QuestionType.ABCDSurveyQuestion].includes(this.quizService.quiz.questionList[index].TYPE);
   }
 
   public showConfidenceRate(questionIndex: number): boolean {

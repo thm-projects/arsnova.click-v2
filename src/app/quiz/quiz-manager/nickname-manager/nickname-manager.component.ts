@@ -230,4 +230,8 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
         return 'component.nickname_categories.category.emojis';
     }
   }
+
+  public getParsedSelectedNicks(): SafeHtml {
+    return this.quizService.quiz.sessionConfig.nicks.selectedNicks.map(v => this.sanitizeHTML(v)).join(', ');
+  }
 }
