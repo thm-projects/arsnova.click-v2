@@ -1,8 +1,15 @@
-<div class="row">
-
-  <div class="col-12 full-xs">
-    <span [innerHtml]="getParsedSelectedNicks()"></span>
+<div class="full-xs" *ngIf="quizService.quiz?.sessionConfig.nicks.selectedNicks.length">
+  <div class="card mb-3">
+    <div class="card-body trim-nick-elements">
+      <ng-container *ngFor="let value of getParsedSelectedNicks(); let isLast = last">
+        <div class="d-inline-block" [innerHTML]="value"></div>
+        <p *ngIf="!isLast">,&nbsp;</p>
+      </ng-container>
+    </div>
   </div>
+</div>
+
+<div class="row">
 
   <div class="col-12 nicknameFilter">
     <input (input)="filterForKeyword($event)"

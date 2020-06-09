@@ -37,3 +37,9 @@
 .nickStyle {
   user-select: none;
 }
+
+.trim-nick-elements {
+  ::ng-deep p {
+    display: inline;
+  }
+}

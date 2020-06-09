@@ -160,3 +160,15 @@ iframe {
 .mh-20vh {
   max-height: 20vh;
 }
+
+@include media-breakpoint-only(xs) {
+  .full-xs {
+    margin-left: -#{$grid-gutter-width / 2};
+    margin-right: -#{$grid-gutter-width / 2};
+
+    .card {
+      border-radius: 0;
+    }
+  }
+
+}

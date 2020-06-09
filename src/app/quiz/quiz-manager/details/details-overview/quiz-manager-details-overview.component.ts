@@ -67,7 +67,6 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
 
     this.showSaveQuizButton = true;
 
-
     this.questionTextService.eventEmitter.pipe(takeUntil(this.destroy)).subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
         this.renderedAnswers = value;
@@ -131,7 +130,6 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
 
   public setRequiredForToken(question: AbstractQuestionEntity): void {
     question.requiredForToken = !question.requiredForToken;
-    this.quizService.persist();
   }
 
   public canSelectRequiredState(question: AbstractQuestionEntity): boolean {

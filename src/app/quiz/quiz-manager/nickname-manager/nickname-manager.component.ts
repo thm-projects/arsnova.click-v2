@@ -54,9 +54,9 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
   }
 
   constructor(
+    public quizService: QuizService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private sanitizer: DomSanitizer,
-    private quizService: QuizService,
     private footerBarService: FooterBarService,
     private nickApiService: NickApiService,
     private customMarkdownService: CustomMarkdownService,
@@ -74,7 +74,7 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName));
+    this.quizService.loadDataToEdit(sessionStorage.getItem(StorageKey.CurrentQuizName)).then(() => this.cd.markForCheck());
   }
 
   public onScrollDown(): void {
@@ -231,7 +231,10 @@ export class NicknameManagerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getParsedSelectedNicks(): SafeHtml {
-    return this.quizService.quiz.sessionConfig.nicks.selectedNicks.map(v => this.sanitizeHTML(v)).join(', ');
+  public getParsedSelectedNicks(): Array<SafeHtml> {
+    return this.quizService.quiz?.sessionConfig.nicks.selectedNicks
+      .map(v => this.customMarkdownService.parseGithubFlavoredMarkdown(v))
+      .map(v => this.sanitizeHTML(v))
+      ;
   }
 }
