@@ -90,6 +90,7 @@ import { environment } from '../../environments/environment';
 import { AudioPlayerComponent } from './audio-player/audio-player.component';
 import { GamificationAnimationComponent } from './gamification-animation/gamification-animation.component';
 import { NoDataErrorComponent } from './no-data-error/no-data-error.component';
+import { VotingQuestionComponent } from './voting-question/voting-question.component';
 import { WordCloudComponent } from './word-cloud/word-cloud.component';
 
 @NgModule({
@@ -123,8 +124,9 @@ import { WordCloudComponent } from './word-cloud/word-cloud.component';
     AngularSvgIconModule,
     NoDataErrorComponent,
     WordCloudComponent,
+    VotingQuestionComponent,
   ],
-  declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent, WordCloudComponent],
+  declarations: [AudioPlayerComponent, GamificationAnimationComponent, NoDataErrorComponent, WordCloudComponent, VotingQuestionComponent],
   bootstrap: [],
 })
 export class SharedModule {

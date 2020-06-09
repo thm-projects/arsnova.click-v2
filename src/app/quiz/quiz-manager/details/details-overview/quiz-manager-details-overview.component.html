@@ -64,10 +64,9 @@
 
       <p *ngIf="!question?.questionText?.length">{{'component.quiz_summary.text' | translate}}:&nbsp;{{'component.quiz_summary.validation_errors.reasons.empty_question_text' | translate}}</p>
 
-      <p *ngIf="question?.questionText?.length"
-         [innerHtml]="sanitizeHTML(renderedQuestionText)"
-         class="mh-20vh text-wrap  overflow-hidden">
-      </p>
+      <app-voting-question *ngIf="question?.questionText?.length"
+                           class="d-block mh-20vh overflow-hidden"
+                           [questionText]="customMarkdownService.parseGithubFlavoredMarkdown(question?.questionText)"></app-voting-question>
 
       <p>
         <span>{{'component.quiz_summary.type' | translate}}:&nbsp;</span>

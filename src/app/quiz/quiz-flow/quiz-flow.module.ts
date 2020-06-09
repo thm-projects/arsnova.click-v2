@@ -8,7 +8,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { AnswerResultComponent } from './answer-result/answer-result.component';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { LeaderboardComponent } from './leaderboard/leaderboard.component';
-import { QuizFlowSharedModule } from './quiz-flow-shared.module';
 import { EditModeConfirmComponent } from './quiz-lobby/modals/edit-mode-confirm/edit-mode-confirm.component';
 import { QrCodeContentComponent } from './quiz-lobby/modals/qr-code-content/qr-code-content.component';
 import { QuizLobbyComponent } from './quiz-lobby/quiz-lobby.component';
@@ -74,7 +73,7 @@ export const quizFlowRoutes: Routes = [
 
 @NgModule({
   imports: [
-    SharedModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, QRCodeModule, QuizFlowSharedModule, MarkdownModule.forChild(),
+    SharedModule, RouterModule.forChild(quizFlowRoutes), QuizResultsModule, QRCodeModule, MarkdownModule.forChild(),
   ],
   bootstrap: [EditModeConfirmComponent, QrCodeContentComponent],
   declarations: [

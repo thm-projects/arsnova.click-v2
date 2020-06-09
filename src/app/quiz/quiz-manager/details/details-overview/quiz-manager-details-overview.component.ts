@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +13,7 @@ import { AbstractQuestionEntity } from '../../../../lib/entities/question/Abstra
 import { RangedQuestionEntity } from '../../../../lib/entities/question/RangedQuestionEntity';
 import { QuestionType } from '../../../../lib/enums/QuestionType';
 import { QuizPoolApiService } from '../../../../service/api/quiz-pool/quiz-pool-api.service';
+import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
 import { FooterBarService } from '../../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../../service/header-label/header-label.service';
 import { I18nService } from '../../../../service/i18n/i18n.service';
@@ -31,7 +33,6 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
 export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent implements AfterViewInit, OnDestroy {
   public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
 
-  public renderedQuestionText: string;
   public renderedAnswers: Array<string> = [];
 
   public readonly environment = environment;
@@ -47,6 +48,7 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     hotkeysService: HotkeysService,
     translate: TranslateService,
     i18nService: I18nService,
+    public customMarkdownService: CustomMarkdownService,
     private trackingService: TrackingService,
     private sanitizer: DomSanitizer,
     private questionTextService: QuestionTextService,
@@ -70,8 +72,6 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     this.questionTextService.eventEmitter.pipe(takeUntil(this.destroy)).subscribe((value: string | Array<string>) => {
       if (Array.isArray(value)) {
         this.renderedAnswers = value;
-      } else {
-        this.renderedQuestionText = value;
       }
       this.cdRef.markForCheck();
     });
@@ -93,6 +93,10 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
   @HostListener('window:beforeunload', [])
   public ngOnDestroy(): void {
     super.ngOnDestroy();
+
+    if (isPlatformBrowser(this.platformId) && window['hs']) {
+      window['hs'].close();
+    }
 
     this.hotkeysService.cheatSheetToggle.next(false);
 

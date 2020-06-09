@@ -38,7 +38,7 @@ import { TwitterService } from '../../../service/twitter/twitter.service';
 import { TwitterServiceMock } from '../../../service/twitter/twitter.service.mock';
 import { SharedModule } from '../../../shared/shared.module';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
-import { VotingQuestionComponent } from '../voting/voting-question/voting-question.component';
+import { VotingQuestionComponent } from '../../../shared/voting-question/voting-question.component';
 import { ConfidenceRateComponent } from './confidence-rate/confidence-rate.component';
 import { ProgressBarAnonymousComponent } from './progress-bar/progress-bar-anonymous/progress-bar-anonymous.component';
 import { ProgressBarFreetextComponent } from './progress-bar/progress-bar-freetext/progress-bar-freetext.component';

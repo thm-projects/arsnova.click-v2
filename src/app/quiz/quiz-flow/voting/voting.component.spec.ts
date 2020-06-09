@@ -29,7 +29,7 @@ import { StorageServiceMock } from '../../../service/storage/storage.service.moc
 import { ThemesMockService } from '../../../service/themes/themes.mock.service';
 import { ThemesService } from '../../../service/themes/themes.service';
 import { I18nTestingModule } from '../../../shared/testing/i18n-testing/i18n-testing.module';
-import { VotingQuestionComponent } from './voting-question/voting-question.component';
+import { VotingQuestionComponent } from '../../../shared/voting-question/voting-question.component';
 
 import { VotingComponent } from './voting.component';
 
