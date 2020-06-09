@@ -66,15 +66,6 @@ export class I18nManagerOverviewComponent implements OnInit, OnDestroy {
       case 4:
         this._filter = Filter.InvalidEN;
         return;
-      case 5:
-        this._filter = Filter.InvalidES;
-        return;
-      case 6:
-        this._filter = Filter.InvalidFr;
-        return;
-      case 7:
-        this._filter = Filter.InvalidIt;
-        return;
       default:
         throw Error(`Unknown filter set: ${value}`);
     }
