@@ -289,6 +289,8 @@
       "points-gained-team": "{points} points",
       "rank": "You are currently at position {rank}",
       "rank-team": "Your team is currently at position {rank}",
+      "last-question-rank": "You made it to position {rank}",
+      "last-question-rank-team": "Your team has made it to number {rank} in the ranking!",
       "to-quiz-results": "To the quiz results",
       "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!",
       "pole-position-team": "Your team is the greatest! First rank in the entire quiz! Bravo!"

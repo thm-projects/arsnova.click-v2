@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Inject, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
@@ -26,6 +26,7 @@ import { AbstractQuizManagerDetailsComponent } from '../abstract-quiz-manager-de
   selector: 'app-quiz-manager-details-overview',
   templateUrl: './quiz-manager-details-overview.component.html',
   styleUrls: ['./quiz-manager-details-overview.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDetailsComponent implements AfterViewInit, OnDestroy {
   public static readonly TYPE = 'QuizManagerDetailsOverviewComponent';
@@ -49,6 +50,7 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     private trackingService: TrackingService,
     private sanitizer: DomSanitizer,
     private questionTextService: QuestionTextService,
+    private cdRef: ChangeDetectorRef,
     storageService?: StorageService,
     swPush?: SwPush,
     notificationService?: NotificationService,
@@ -72,6 +74,7 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
       } else {
         this.renderedQuestionText = value;
       }
+      this.cdRef.markForCheck();
     });
 
     this.initialized$.pipe(takeUntil(this.destroy)).subscribe(() => {
@@ -215,5 +218,6 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     }
 
     this.hotkeysService.add(hotkeys);
+    this.cdRef.markForCheck();
   }
 }
