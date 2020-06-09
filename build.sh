@@ -21,6 +21,9 @@ cd /usr/src/app
 echo "Purifying css"
 npm run purify
 
+echo "Regenerating hashes"
+npm run ngsw-config
+
 echo "Renaming css files to a hashed version and add a json file containing the theme and the corresponding hash"
 cd /usr/src/app/dist/frontend/browser
 echo "Building css file hashes"

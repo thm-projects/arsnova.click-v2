@@ -10,7 +10,7 @@ services:
       args:
         buildCmd: "PROD"
         targetUrl: "https://arsnova.click"
-        themes: "[\"Material\",\"Material-blue\",\"Material-hope\",\"arsnova-dot-click-contrast\",\"blackbeauty\",\"decent-blue\",\"elegant\",\"GreyBlue-Lime\",\"spiritual-purple\"]"
+        themes: "[\"Material\",\"blackbeauty\"]"
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
         CHROMIUM_PATH: "/usr/bin/chromium-browser"
         CHROME_BIN: "/usr/bin/chromium-browser"
@@ -26,7 +26,7 @@ services:
       args:
         buildCmd: "STAGING_THM"
         targetUrl: "https://staging.arsnova.click"
-        themes: "[\"Material\",\"Material-blue\",\"Material-hope\",\"arsnova-dot-click-contrast\",\"blackbeauty\",\"decent-blue\",\"elegant\",\"GreyBlue-Lime\",\"spiritual-purple\"]"
+        themes: "[\"Material\",\"blackbeauty\"]"
         PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
         CHROMIUM_PATH: "/usr/bin/chromium-browser"
         CHROME_BIN: "/usr/bin/chromium-browser"

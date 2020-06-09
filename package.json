@@ -52,7 +52,8 @@
     "dev:ssr": "ng run frontend:serve-ssr",
     "serve:ssr": "node dist/frontend/server/main.js",
     "build:ssr": "ng build --prod && ng run frontend:server:production",
-    "prerender": "ng run frontend:prerender"
+    "prerender": "ng run frontend:prerender",
+    "ngsw-config": "node_modules/.bin/ngsw-config dist src/ngsw-config.json"
   },
   "private": true,
   "dependencies": {
