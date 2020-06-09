@@ -899,7 +899,7 @@
       }
     },
     "quiz_rename": {
-      "rename": "Please select a name for your quiz.",
+      "rename": "Please select a name for your quiz",
       "custom": {
         "title": "Alternatively you can enter a custom quiz name",
         "input": "Custom quiz name",
@@ -948,6 +948,7 @@
       "title": "Settings for saved quizzes",
       "description": "Description",
       "expiry": "Expiry",
+      "no-expiry": "No Expiry",
       "save": "Save",
       "is-submitting": "Submitting…"
     },

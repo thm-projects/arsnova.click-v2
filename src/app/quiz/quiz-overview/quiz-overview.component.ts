@@ -200,7 +200,7 @@ export class QuizOverviewComponent implements OnInit {
         return;
       }
 
-      this.sessions[index].expiry = new Date(val.expiry);
+      this.sessions[index].expiry = val.expiry ? new Date(val.expiry) : null;
       this.sessions[index].visibility = val.visibility;
       this.sessions[index].description = val.description;
       this._isSaving.push(index);
