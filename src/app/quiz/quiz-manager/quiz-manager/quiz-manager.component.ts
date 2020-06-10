@@ -80,7 +80,7 @@ export class QuizManagerComponent implements OnInit, AfterViewInit, OnDestroy {
         this.quizService.quiz = updatedQuiz;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
         self.isLoading = false;
-      });
+      }, () => self.isLoading = false);
     };
   }
 
