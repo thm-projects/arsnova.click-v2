@@ -118,7 +118,7 @@ ts_lint:
 i18n_check:
   stage: test
   tags:
-    - nodejs
+    - meteor
   script:
     - node src/i18n-check.js
 
