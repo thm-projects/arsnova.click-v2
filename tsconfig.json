@@ -18,7 +18,7 @@
     "resolveJsonModule": true,
     "incremental": true,
     "lib": [
-      "es2018",
+      "esnext",
       "dom"
     ]
   },

@@ -16,11 +16,12 @@
     "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du die Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
     "abort": "Abbrechen",
     "true": "Wahr",
+    "fail!": "Yes",
     "false": "Falsch",
     "in-cooperation-with": "in Kooperation mit",
     "please-wait": "Bitte warten…",
     "please-select": "Bitte auswählen…",
-    "loose-data-warning": "Bei dieser Navigation können Datenverluste auftreten.\n\nFortfahren?",
+    "loose-data-warning": "Bei dieser Navigation können Datenverluste auftreten. - Fortfahren?",
     "no-data-error": {
       "title": "Fehler beim Laden der Daten",
       "load-to-edit": "Für die gewünschte Seite konnten die Daten nicht geladen werden. Verwende bitte nicht die Navigation deines Browsers, da hier Daten verloren gehen können. Du kannst zur Quiz-Übersicht oder zur Startseite zurückkehren.",

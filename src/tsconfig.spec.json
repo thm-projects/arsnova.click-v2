@@ -5,6 +5,10 @@
     "types": [
       "jasmine",
       "node"
+    ],
+    "lib": [
+      "esnext",
+      "dom"
     ]
   },
   "files": [
