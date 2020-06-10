@@ -1,1 +1,937 @@
-{"manifest":{"name":"Game-based quiz app developed by THMM","description":"A bit like Kahoot!, a bit like Socrative, but lots of ARSnova!"},"global":{"arsnova_slogan":"Quiz app for MINT lessons","yes":"Yes","no":"No","close_window":"Close window","cookie_consent":{"message":"arsnova.click is a web app that uses cookies to ensure you get the best experience.","dismiss":"Got it!","learn_more":"More about data privacy…"},"console-log-warning":"WARNING! This will not help you cheating on any quizzes at all! Anyone who told you to use these tools may try to compromise your computer.","back":"Back","next":"Next","delete":"Delete","save":"Save","abort":"Abort","aria_description":{"arsnova_slogan":"Quizzes for everyone & anything"},"true":"True","false":"False","in-cooperation-with":"in cooperation with","please-wait":"Please wait…","please-select":"Please select…","loose-data-warning":"With this navigation data loss is possible - do you want to proceed?","no-data-error":{"title":"Error while loading data","load-to-edit":"The data for the requested page could not be loaded. Please do not use the browser's navigation as data loss is possible. You can go to the quiz overview or to the home page now.","load-to-play":"The data for the requested page could not be loaded. Please do not use the browser's navigation as data loss is possible. The quiz round must be quit now. You can only return to the home page.","homepage":"To the home page","to-quiz-overview":"To the quiz overview"},"copy":"Copy","copy-to-clipboard":"Copy to clipboard","mail-to":"Send as E-Mail","copied":"Copied","follow-us-at-twitter":"Follow us at twitter!"},"region":{"footer":{"footer_bar":{"about":"arsnova.click","home":"Homepage","tos":"Terms of Use","imprint":"Imprint","blog":"Project Blog","languages":"Language","style":"Styles","import":"Import","info":"Info","reading-confirmation":"Reading confirmation","fullscreen":"Fullscreen","sound":"Sound","qr_code":"QR","nicknames":"Nicknames","edit_quiz":"Edit","show_product_tour":"Product tour","show_response_progress":"Progress","description":{"qr-code":"Attendees can scan the QR code via their mobile devices to join the quiz.","sound":"Set the sound for the background music or the countdown here.","reading-confirmation":"Activate this option if only the question <bold>without</bold> answer options should be displayed first. Only those who confirm the reading (understanding) of the question can participate in the quiz. The number of confirmations is displayed. With the reading confirmation you can create the same conditions for all attendees at the countdown.","response-progress":"Do you want to display the number of responses to the individual answer options during the countdown? Then activate this option. Note, however, the psychological effect: People tend to be directed to the majority (herd instinct).","nicknames":"You can preset selectable nicknames out of multiple categories here. Hint: Block a rude nickname by clicking on the attendee in the quiz lobby.","confidence-slider":"Active that option, which if you want that the participants can see the certainty of answering in hundreds during the vote: 0 &#37; »guessed« - 100 &#37; »absolutely safe«. The average would be indicated in the results diagram."},"api-docs":"API Docs","show_more":"More","remove":"Remove","show_confidence_slider":"Confidence Grade","back":"Back","cache_assets":"Cache Assets","block_rude_nicknames":"Block rude nicknames","enable_cas_login":"Enable CAS Login","global_leaderboard":"Global Leaderboard","dataprivacy":"Data Privacy","member_group":"Teams","edit-i18n":"Edit i18n","login":"Login","logout":"Logout","save_quiz":"Save Quiz","admin":"Administrate","showToken":"Show Token","twitter":{"tweet":"Tweet"},"questionpool":"Question Pool","my-quizzes":"My Quizzes","audio":"Music","hotkeys":"Hotkeys"},"about":{"title":"About arsnova.click","declaration":"A little <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />a little <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />a lot <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!","ars":"arsnova.click is an innovative <a href='https://en.wikipedia.org/wiki/Audience_response#Classroom_use' target='_blank'>Audience-Response-System (ARS)</a> for public educational institutions.","developed_by":"Inspired by <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> and <a href='https://socrative.com/' target='_blank'>Socrative</a> developed by computer science students of <a href='https://www.thm.de/site/' target='_blank'>THM</a> the <a href='https://en.wikipedia.org/wiki/Gamification' target='_blank'>gamified</a> alternative to the flagship <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.","met_requirements":"<strong>Features:</strong>","requirements":{"1":"Absolute data privacy: No personal files on the server. All quiz data is located at the <a href='http://www.w3schools.com/html/html5_webstorage.asp' target='_blank'>HTML5 Local Storage</a> of the quiz owner.","2":"No registration, no installation, no costs at all","3":"Same landing page for both roles: quiz master and player","4":"Anyone can create quizzes: immediately and as much as you like!","5":"Accessible and for projectors optimized user interface","6":"<a href='https://en.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formulas and text formatting with <a href='https://guides.github.com/features/mastering-markdown/' target='_blank'>Markdown</a> in questions and answer options","7":"One dialog fits everything: As many answer options you like with multiple choice, single choice and surveys.","8":"ABC...-Quizzes can be created by entering ABC... as the quiz name with one click. The number of consecutive letters determines the answer options.","9":"Edutainment: Have fun during learning with a live competition against the clock and the other players with sound effects.","10":"Bonus option: The top players receive »tokens«, which they can redeem for bonus points by emailing the teacher.","11":"<a href='https://en.wikipedia.org/wiki/Responsive_web_design' target='_blank'>Responsive Web design</a>: Whether smartphone, beamer or wide screen, the design scales. Even complex quizzes can be created on the smartphone.","12":"Built as <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reactive web technology","13":"<a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source Software</a>"},"manual":{"title":"User Manual?","text":{"1":"There's no need for that!","2":"Just type in the name of the quiz. The buttons will be activated as soon as you either enter the name of an unlocked quiz: »Join in!« or create a quiz with the entered name: »New Quiz«.","3":"Now it is as simple as: Clicking. Looking. Quizzing."}}},"tos":{"declaration":"All ( not only teachers ) are allowed to use the quiz app arsnova.click for their own purposes as long as this does not violate German or EU law.","license":{"title":"License","text":"arsnova.click is a free web service (Software as a Service). The software is <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> and is licensed under the <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."},"musicLicense":{"title":"Music license","text":"The sound <a href='http://soundbible.com/2148-Chinese-Gong.html' target='_blank'>Chinese Gong</a> by Daniel Simon is licensed under <a href='https://creativecommons.org/licenses/by/3.0/' target='_blank'>CC BY 3.0</a>."},"warranty":{"title":"Warranty","text":"We are trying to maintain the online service of ARSnova.click reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service."},"title":"Terms of Service"},"data_privacy":{"scope":"Scope","declaration":"This privacy statement explains to users of ARSnova.click the nature, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).","app_data":{"title":"Application data","text":"All quiz questions and their answer options are held by the local browser storage of the quiz owner."},"access_data":{"title":"Access data","text":"Besides web server log files, no personal access data is stored."},"logfiles":{"title":"Webserver logfiles","text":"The provider collects log files about every access to the ARSnova.click system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications."},"3rdparty":{"title":"3rd party services","text":"In quizzes third party services or content, such as videos from YouTube and Vimeo or graphics can be included from other websites. This requires that the provider of such content percive the user's IP address. Without the IP address the content can not be sent to the browser."},"cookies":{"title":"Cookies","text":"Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer ARSnova.click uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely."},"piwik":{"title":"Matomo","text":"This offer uses Matomo, an open source software for statistical analysis of traffic, see <a href='http://matomo.org/' target='_blank'>matomo.org</a>. Matomo uses cookies, which are stored on the computer of the user and allow the analysis of your use of the website. The information generated by the cookie about your use of this service is stored on the provider's server in Germany. The IP address is anonymized immediately after processing and before the storage. The user can refuse the use of cookies by changing the settings of their browser software."},"title":"Data Privacy"},"imprint":{"provider":{"title":"Service provider","text":{"1":"The operation of the web app arsnova.click is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.","2":"c/o THM – Technische Hochschule Mittelhessen","3":"Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik","4":"Prof. Dr. Klaus Quibeldey-Cirkel","5":"Lehrstuhl für Softwaretechnik","6":"Wiesenstraße 14","7":"D-35390 Gießen","8":"Telefon: +49 641 309 – 24 50","9":"E-Mail: <a href='mailto:klaus.quibeldey-cirkel@transmit.de'>klaus.quibeldey-cirkel@transmit.de</a>","10":"Sitz der Gesellschaft: Gießen","11":"Website: <a href='https://www.transmit.de' class='text-light'>https://www.transmit.de</a>","12":"Rechtsform: GmbH","13":"Amtsgericht: Gießen HRB 3036","14":"USt-IdNr.: DE 188 685 037"}},"title":"Imprint"},"go_to":"Go to: ","show-more":{"show-more-elements":"All available options:","onText":"Activated","offText":"Deactivated"}},"header":{"connection_status":{"title":"Connection status","websocket_status":{"connected":"Connected","not_connected":"Disconnected"},"show_result":"Details","pending":"Pending…","finished_with_errors":"Finished with errors","finished_with_warnings":"Finished with warnings","finished_without_warnings":"Successful","localStorage_status":{"writable":"Writable","non_writable":"Not writable"},"estimated-storage-quota":{"label":"Estimated storage quota","not_available":"Not available - Manual update check required!","currently-used":"Currently {USAGE}MiB of {QUOTA}MiB used"},"disconnected":"You're not connected right now. You can only join a quiz or create a new quiz with an internet connection!","server_status":{"not_available":"Not available","available":"Available"},"indexedDb_status":{"writable":"Writable","non_writable":"Not writable"},"check-for-updates":"Check for Updates","checking-for-updates":"Checking for Updates"},"new_question":"New question","reset":"Reset","yes":"Yes","no":"No","reset_session_confirmation":{"empty_lobby":{"title":"Leave the edit mode?","text":"You will be logged out. The created Question(s), including the assigned answer options and timer configurations, are stored in the local storage of your browser. Except the quiz name, all data of this session will be removed from the server."},"active_quiz":{"title":"Exit the quiz?","text":"On resetting the session, all students will be redirected to the landing page. The current ranking and the quiz-lobby will be deleted. The created Question(s), including the assigned answer options and timer configurations, are stored in the local storage of your browser. Except the quiz name, all data of this session will be removed from the server."},"continue":"Proceed?"},"exit_session_confirmation":{"title":"Leave the quiz?","text":"You will be removed from the quiz and your progress will be lost!","continue":"Proceed?"},"aria_description":{"logo-header-chars":"arsnova.click"},"question":"Question","answers":"Answers"}},"component":{"quiz-join":{"top-header":"The quiz has not yet started","sub-header":"Don't worry - we have you covered. You'll be connected as soon as the quiz master starts it.","approval":{"top-header":"You want to join the quiz","sub-header":"Is that correct?"},"joining":{"top-header":"Nearly there","sub-header":"Hang on a second…"}},"answer-result":{"correct":{"title":"Marvelous - that was correct!"},"partial-correct":{"title":"Partially correct","amount-correct":"{correct} of {available} answers correct","amount-wrong":"{wrong} wrong {wrong, plural, =0{answers} one{answer} other{answers}} selected","ranged-question-correct":"Not correctly estimated, but acceptable"},"wrong":{"title":"Sorry, that's wrong","motivate":"Don't give up!"},"points-gained":"+ {points} points","points-gained-team":"{points} points","rank":"You are currently at position {rank}","rank-team":"Your team is currently at position {rank}","last-question-rank":"You made it to position {rank}","last-question-rank-team":"Your team has made it to number {rank} in the ranking!","to-quiz-results":"To the quiz results","pole-position":"You are the greatest! First rank in the entire quiz! Bravo!","pole-position-team":"Your team is the greatest! First rank in the entire quiz! Bravo!"},"twitter-card":{"more-tweets":"More Tweets","follower":"Follower: {count}"},"quiz-pool":{"select-tag":{"label":"Select Tag","placeholder":"Enter your preferred Tag here. The quiz will be built with questions with the selected Tags.","validation-error":{"invalid-tag":"The entered Tag is not available. Please select one from the dropdown menu."}},"tag-question-amount":{"label":"Amount of questions","placeholder":"Amount of questions","validation-error":{"required":"Please enter the amount of questions here","min":"Please use at least one question for this tag","max":"You can select only {max, plural, =0{0 questions} one{one question} other{{max} questions}} with your selected Tag"}},"tag-available":"{weight, plural, =0{0 Questions} one{One Question} other{{weight} Questions}} available","question-amount-warning":"Please notice that redundant questions with multiple Tags will only be included once in your quiz. The amount of questions in your quiz can be lower than the selected {amount} questions.","create-quiz":"Create Quiz","selected-tags":"Selected Tags","save-tag":"Use Tag","delete-tag":"Delete Tag","create-own-question":{"label":"Do you want to create a new pool question?","button-label":"New pool question"}},"twitter":{"optin":{"check":"Check if you want enable Twitter features","share":"Share on social media","warning":"I agree that content from Twitter will be displayed"},"tweet":{"content":{"0":"Just played the quiz »{NAME}« at arsnova.click ❤️\n"}}},"answeroptions":{"new_answer":"New answer option","correct":"Correct","wrong":"Wrong","show_answer_content_on_buttons":"Display the answer's content on the buttons?","show_one_answer_per_row":"Show only one answer per row?","multiple_selection_survey":"Allow selection of multiple answers?","emoji_info":"You can embed also one of these <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis (external website!)</a> <img class='w-40px' src='/assets/images/emojis/smile.png' alt='emoji'/> <br/>Simply click on the website on the Emoji and paste it into the answeroption.","description":{"default_answer_row":"Drag this block into the list of answeroptions to create a new one.","added_answers":"Here are all already created answeroptions. You can change the order of the answers via drag & drop.","show_answer_content_on_buttons":"The response buttons for the participants can either be labeled with the letter of the response or the complete answer's text. Note, however, that too much text in the answer can be badly readable depending on the size of the viewport.","show_one_answer_per_row":"This will increase the width of the answer option button to use the full width of the row. Use this for large formulas or texts.","multiple_selection_survey":"Here you can set whether the participants are to go directly to the evaluation after clicking on a response of the survey, or whether a multiple selection should be possible.","range_area":"Here you can specify the correct answer as well as the top and lower tolerances. Please note that the input must be in natural numbers.","min_range":"Here you can set the lower tolerance value.","correct_value":"This answer is completely correct.","max_range":"Here you can set the upper tolerance value.","free_text_question_text":"Here you can enter the correct answer. The responses entered by the participants are checked against this response according to the configuration.","check_answer":"Here you can test possible answers of the participants against your reference value and the current configuration.","added_answer_short_text":"Every answeroption contains a unique letter which can be displayed for the quiz attendees.","added_answer_text":"Here you can enter some text for the answeroption. Markup like Markdown and LaTeX is supported.","added_answer_is_correct":"This button determines if the answeroption is marked as correct or wrong.","added_answer_remove":"Clicking on this button deletes the response.","preview":"Here you can see a preview of the answer content entered on the left.","range_slider":"With this slider you can dynamically change the upper and lower tolerances. The correct value will correspond to the mean value.","config_case_sensitive":"If this option is activated, the case of the entered response must match that of the reference response.","config_trim_whitespaces":"Specifies whether the whitespaces of the entered response are to be checked.","config_use_keywords":"This option must be activated, the order of the words of the entered response must correspond to the reference value. If this option is deactivated, it is unfortunately not possible to check the spaces and punctuation marks.","config_use_punctuation":"This option determines whether the punctuation marks of the entered value are to be checked."},"ranged_question":{"correct_value":"Correct value","min_range":"Minimum value","max_range":"Maximum value","title":"Interval of correct answers"},"free_text_question":{"title":"Free text answer","check_answer_title":"Test possible input:","config_case_sensitive":"Observe upper and lower case","config_trim_whitespaces":"Observe white spaces in the answer","config_use_keywords":"Observe sequence of the words","config_use_punctuation":"Observe punctuation marks","onText":"Yes","offText":"No","text_placeholder":"Enter your answer here","check_correct":"The entered answer matches the provided reference.","check_incorrect":"The entered answer does not match the provided reference."},"title":"Define answers","answeroptiontext_placeholder":"Answer option required","forward":"Proceed to the countdown","back":"Back to the quiz manager"},"choose_nickname":{"enter_nickname":"Take a nickname","enter_nickname_here":"Enter your nickname here","nickname_blacklist_popup":"This name is (because of its meaning) not available!","description":{"nickname_input":"Here you can enter a name, which is different from the other players.","choose_selectable_nick":"You can select one of the available nicknames from this list."},"nickname_na_popup":"This name is not available!","nickname_too_long":"The name is too long","nickname_too_short":"The name is too short","no_selectable_nick_available":{"1":"All available nicknames have been chosen.","2":"It is not possible to join the quiz."}},"name_management":{"enter_quiz_name":"Enter the quiz name here","join_session":"Join in!","start_session":{"title":"Start the quiz","label":"Start"},"edit_session":{"title":"Edit the quiz","label":"Edit"},"create_session":"New quiz","can_create_session":"Create Quiz","create_demo_session":"Start demo quiz","quiz_management":"Stored Quizzes","session_management":"Quizzes","delete_session":{"title":"Delete quiz","label":"Delete"},"export":{"title":"Export quiz","label":"Export"},"no_sessions":"There are no quizzes stored in your browser.","reenter_session":"Open","available_sessions":"These quizzes are stored in your browser:","import":"Import quiz","delete_session_confirmation":"Shall the quiz '<span id=\"session_name\"></span>' be removed permanently?","valid_question":"Valid Quiz","invalid_question":"Invalid Quiz","aria_description":{"name-input-field":"Enter the quiz name here","joinSession":"Join in!","addNewHashtag":"New quiz","splashscreen_description":"List of all valid and invalid quizzes in your browser"},"create_abcd_session":"Start ABCD quiz","enter_server_password":"Enter the server password here","public-quizzes":"Looking for more? Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!","save_session":{"title":"Save Quiz","label":"Save"},"used-pool-tags":"Used Tags"},"leaderboard":{"header":"Leaderboard","global_header":"Global leaderboard","title":{"single_question":"Question {QUESTION_ID} - Score","all_questions":"Score"},"no_attendee_correct":"Nobody knew the answer","second":"{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}","export":"Export","team-result":{"name":"Team »{TEAM_NAME}«","overall-response-time":"Overall Response Time: {RESPONSE_TIME}","score":"{SCORE} points"},"own-rank":{"own-data":"You are on rank {INDEX} with a score of {SCORE}","closest-opponent":" right after {NAME} with a score of {SCORE}."}},"liveResults":{"title":"Question {QUESTION_INDEX}","question":"Show question","question_number":"Question","ranking":"Ranking","reading_confirmation":"Reading confirmation","show_question":"Show next question","start_round":"Start countdown","start_question":"Start question","confirm_read":"Got that!","title_reading_confirmation":"Question read…","title_running_countdown":"Voting…","show_more":"Show 1 more","show_more_plural":"Show %s more","correct":"Correct","wrong":"Wrong","complete_correct":"Everything correct","partially_correct":"Partially correct","complete_wrong":"Everything wrong","back_to_lobby":"Back to the lobby","global_ranking":"Global ranking","start_round_plural":"Start round","game_over":"Game over","countdown":"Countdown","answer_option":"Answer","guessed_correct":"Correctly estimated","guessed_wrong":"Wrong estimated","correct_answer":"Correct answer","show_question_plural":"Show Questions","abort_countdown":"Abort Countdown","abort_question":"Abort question","confidence_grade":"Confidence Grade","own_confidence_grade":"Your Confidence Grade&#10;({value}%)","guessed_in_range":"Not correctly estimated, but acceptable","wrong_answer":"Wrong answer","no_data":"No data available","neutral_answer":"Reponses","bonus-token":{"title":"Bonustoken","mail":"mailto:?subject=arsnova.click%3A%20My%20Token%20%C2%BB{quizname}%C2%AB&body=Hi%2C%0D%0A%0D%0AI%20took%20part%20in%20the%20quiz%20%C2%BB{quizname}%C2%AB%20on%20{date}%20and%20received%20the%20following%20token%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMy%20nickname%20in%20the%20quiz%20was%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0AI%20am%20looking%20forward%20to%20our%20next%20quiz%20with%20arsnova.click%21","your-bonus-token":"Your Token:","please-wait":"Please wait - your token is loading","send-to-teacher":"Send this token to your teacher to gain some bonus points!"}},"question-details":{"selected-answer-elements":"You selected: {elements}"},"lobby":{"start_quiz":"Let's go!","kick_member_confirmation":"Shall the player »{NAME}« be removed from the session?","own_nickname":"Your nickname:","waiting_for_players":"Waiting for the players…","title":"Quiz Lobby","yes":"Yes","no":"No","ready":"Waiting for countdown…","show_more":"Show 1 more","show_more_plural":"Show %s more","add_kicked_member_to_ban_list":"Ban nickname permanently","description":{"memberlist_count":"Here's the amount of attendees.","title":"The quiz lobby displays the nicknames of the attendees in antichronological order of their arrival.","waiting_for_players":"As soon as the attendees arrived at the quiz you can start the quiz round. Note that after starting the quiz no one can log into the quiz until you start it again."}},"nickname_categories":{"choose_all":"Select all","remove_all":"Remove all","category":{"disney":"Disney","science":"Science","fantasy":"Fantasy","literature":"Literature","mythology":"Mythology","actor":"Actors","politics":"Politicians","turing_award":"Turing-Award","emojis":"Emojis"},"filter":"Enter a search text here…","title":"Limit available nicknames","back":"Back","available_nicknames":"Available nicknames","free_choice":"Free Choice","chosen_nicknames":"Selected nicknames","no_nicks_selected":"No nicknames selected. All nicknames are allowed.","block_illegal_nicks":"Block inappropriate nicknames","restrict_to_cas":"Restrict to CAS users (THM University only)"},"question_type":{"title":"Edit question type","currentType":"Current question type:","back":"Back to the quiz manager"},"questions":{"enter_question_here":"Enter your question here","single_choice_question":"Single Choice","single_choice_question_yes_no":"Yes-No Single-Choice question","single_choice_question_true_false":"True-False Single-Choice question","multiple_choice_question":"Multiple Choice","survey_question":"Survey","ranged_question":"Question with ranged answeroptions","free_text_question":"Free text question","title":"Enter question text","forward":"Proceed to the answer options","back":"Back to the quiz manager","description":{"preview":"Here is a preview of the entered text on the left."},"survey_question_abcd":"ABCD Single-Choice question"},"quiz_manager":{"title":"Quiz Manager","available_questions_title":"Available questions","added_questions_title":"{amount, plural, =0{No quesitions created} one{1 question} other{# questions}}","no_added_questions":"Add a question first …","details":{"aria":{"btn_group":"List of settings for the quiz"},"question_type":{"long":"Edit question type","short":"Type"},"question_text":{"long":"Edit question text","short":"Text"},"answeroptions":{"long":"Edit answer options","short":"Answers"},"timer":{"long":"Edit timer","short":"Timer"},"tags":{"long":"Tags","short":"Tags"},"pool-save-warning":"Please notice that questions for the Quiz-Pool need to be reviewed by a moderator. Your question will not be available in the Quiz-Pool until the review is completed."},"no-added-tags":"No added tags yet","description":{"available_questions":"Here you can see all types of questions from which you can choose. Each question type offers different presets and possibilities for the design of the quizzes","added_questions":"Here you will find all your quiz questions, which are available in the quiz. To add a quiz question to the quiz, either drag it from the left stack or click the quiz query in the left pile. By clicking on the inserted question, you can set the content of the question.","back_button":"You can go back any time. The quiz is saved immediately.","forward_button":"If the quiz is valid and you are connected to the server, you can continue to the quiz lobby and open the quiz for participants."},"session_invalid":"The quiz contains incomplete questions","session_empty":"The quiz contains no questions","connection_lost":"The connection to the server is lost","back_to_quiz_administration":"Quiz Administration","available-questions-filter":"Filter for your question","select-available-question":"New question","show_more":"Show more","show_less":"Show less","question-card":{"to-bottom":"To the Bottom","down":"Down","to-top":"To the Top","up":"Up","quiz-pool-upload":"Quiz-Pool Upload","edit":"Edit","delete":"Delete"}},"quiz_summary":{"quiz_name":"Name of the quiz","answer_amount":"{amount, plural, =0{No Answer Items} one{1 Answer Item} other{# Answer Items} }","validation_question_group":"Validation for the complete quiz","question_successful":"The question is valid","question_failed":"The question is still incomplete","question_group_successful":"Your quiz is ready","question_group_failed":"Your quiz is incomplete","upload-to-pool":{"valid-upload":"Provide your question to the Quiz-Pool","invalid-question":"Only valid questions can be uploaded to the Quiz-Pool","no-tags":"You need to add some Tags to your question to upload it to the Quiz-Pool."},"quiz_rename":"Edit","correct":"Correct","wrong":"Wrong","question":"Question","text":"Text","type":"Type","answer":"Answer","answer_configuration":"Configuration of the answer","timer":"Countdown","second":"{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}","tags":"Tags","validation":"Validation","validation_errors":{"types":{"question":"Question","answerOption":"Answer"},"reasons":{"question_text_too_small":"The question text is too short","question_text_too_long":"The question text is too long","timer_too_small":"The timer is too short","no_valid_answers":"There must be at least one correct answer","one_valid_answer_required":"There must be exactly one correct answer","invalid_range":"The minimum range must be smaller than the maximum range","invalid_correct_value":"The correct value must be in the scope of the range","answer_text_empty":"The answer's text is not allowed to be empty","timer_too_big":"The timer is too long","no_answers_defined":"No answers have been defined","no_valid_answer_required":"Correct or wrong answers are not allowed for this question type","empty_question_text":"The text of the question is empty","empty_question_type":"No question type set","empty-question-tags":"No tags have been assigned to the question yet"}},"selected_nicks":"Valid nicknames","no_selected_nicks":"No nicknames selected. All nicknames are valid.","isRestrictingRudeNicks":"Block inappropriate nicknames","isRestrictingToCAS":"Attendees must authenticate via CAS","description":{"header":"Here is the summary of the entire quiz round","session_url":"Under this URL, participants can enter the quiz as soon as you release it","question_group_validation":"The validation of the quiz round fails if the quiz has not yet been completed. This includes non - existing quizzes, missing or incomplete response options, non - set timers, etc.","restrict_to_cas":"If this setting is active, the participants must register at the central authentication service of the University of Applied Sciences Mittelhessen in order to participate in the quiz","question_item":"This section contains information about the selected question.","validation_errors":"The validation errors listed here can be useful in troubleshooting."},"title":"Summary","answer_plural":"Answer options","answer_configuration_plural":"Configuration of the answers","minute":"minute","minute_plural":"minutes","hour":"hour","hour_plural":"hours","edit_quiz":"Edit quiz","start_quiz":"Start quiz","hide_selected_nicks":"Hide nicknames","show_selected_nicks":"Show nicknames","quiz_url":"Quiz URL","no-timer":"No countdown set. The quiz round must be stopped manually.","required-for-token":{"title":"Mandatory Question","label":"Question is required to be answered correctly by the attendee to achieve a bonus token"},"difficulty":{"title":"Difficulty","label":"The difficulty of a question influences the score for correct answers","very-easy":"Very easy (+ {multiplicator, plural, one{Normale} other{#-fache} } x score)","easy":"Easy (+ {multiplicator}x score)","medium":"Medium (+ {multiplicator}x score)","challenging":"Challenging (+ {multiplicator}x score)","very-hard":"Very hard (+ {multiplicator}x score)","pro-only":"Only for pros (+ {multiplicator}x score)"}},"theme_switcher":{"set_theme":"Choose a theme","themes":{"theme-arsnova-dot-click-contrast":{"name":"arsnova.click (high contrast)","description":"Beamerfriendly theme of arsnova.click"},"elegant":{"name":"Elegant","description":"Elegant theme for sophisticated Quizzers."},"black_beauty":{"name":"Black Beauty (beamer-suitable)","description":"Dark mode"},"material":{"name":"Material Design","description":"Light mode"},"decent_blue":{"name":"Decent Blue","description":"A decent blue grey to controll the users focus on the main aspects of Quizzing"},"material_hope":{"name":"Material Hope","description":"Google Material and a spark of hope."},"material-blue":{"name":"Material blue","description":"Google Material in blue and green."},"spiritual-purple":{"name":"Spiritual Purple","description":"Spiritual."},"GreyBlue-Lime":{"name":"GreyBlue Lime","description":"GreyBlue with a hint of Lime."},"westermann-blue":{"name":"Westermann Blue","description":"Default of the Westermann group"}},"select_a_theme_title":"Choose the theme"},"timer":{"second":"{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}","minute":"{COUNT, plural, =0{Minutes} one{Minute} other{Minutes}}","hour":"{COUNT, plural, =0{Hours} one{Hour} other{Hours}}","description":"Here you can set the countdown for the quiz question. As soon as it expires, or all participants have answered, the quiz round is ended.","title":"Set countdown","forward":"Proceed to the quiz manager","back":"Back to the quiz manager"},"translation":{"translations":"Select your language","i18n_currently_not_available":"I18n is currently not available!","beta":"Beta"},"voting":{"title":"Voting","send":"Send","abstention":"Abstention","ranged_question":{"title":"Please enter your answer!","input_placeholder":"Answer"},"free_text_question":{"title":"Provide your answer!","input_placeholder":"Answer"},"confidence_level":{"no_idea":"No idea","not_sure":"Not sure!","unsure":"Unsure","quite_sure":"Quite sure","very_sure":"Truly convinced!","title":"How confident are you in your answer?"},"question":"Show question","seconds_left":"# {COUNT, plural, =0{Seconds} one{Second} other{Seconds}} left!","tags":{"category":"{amount, plural, =0{Topics} one{Topic} other{Topics}}"}},"membergroup-manager":{"title":"Organize players in teams","max-users":"Max users per team","autojoin-to-team":"Add users automatically to Teams","create-team-placeholder":"Enter a team name here. Start with a colon to search for emojis…","create-team":"Add team","current-teams":"Currently added Teams:","no-current-teams":"No Teams added yet","team-name":"Name of the team:","team-color":"Choose a color:","validation-error":{"full-member-group":"All available teams were already created. Please remove a team first.","invalid-member-group":"Invalid name. Please do not mix emojis and regular text","duplicate-member-group":"This name is already used","add-second-group":"Please add at least 2 teams or remove the existing one"}},"login":{"title":"Please enter your login credentials","login":"Login","authorization_failed":"Authorization failed","token":"Token","login-via-token":"You can also log in with a token:","password":"Password","username":"User name","login-to-quiz":"Welcome to the quiz"},"member-group-select":{"title":"Select your team"},"quiz_manager_details":{"back":"Back to the quiz overview","tags":{"description":{"title":"You can add tags to your question here. Which one you use is up to you.<br/>Some recommendations regarding quiz tags:","dl":{"0":{"dt":"Use multiple tags with coarse and fine granular subject areas","dd":"A good example would be both the Tags »Mathematics« and »Differential Calculus«."},"1":{"dt":"Who is the question for?","dd":"For questions for pupils you can e.g. specify the grade level. In general, tags with a subject should always be preferred."},"2":{"dt":"No course names for university questions","dd":"Subjects of university courses are usually not applicable to other universities. Questions which cannot be exactly associated by their subject are confusing. Use tags related to a subject in this case."},"3":{"dt":"Language and spelling","dd":"If you are writing a Question eg. in German, do not use Englisch Tags, then. Please make sure you are using correct spelling and grammar. Only then questions with the same tags can be grouped to a quiz without effort."},"4":{"dt":"Which Tags can I use?","dd":"You can find and inspiration in the word cloud below. If you have no match in the search field just keep on typing and create a new tag."}}},"tag-input":{"placeholder":"Enter an appropriate Tag here"}}},"name_home":{"demo_quiz":{"title":{"1":"Discover arsnova.click!","2":"Enter »Demo Quiz« and run it. Use the app in another browser and play the quiz in different roles.","3":"Visit our <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>project blog</a> and learn how to use bonus quizzes to motivate learning in class."}},"name_input":{"already_exists":"This quiz name is already taken.","illegal_chars":"The quiz name contains illegal characters."}},"quiz_rename":{"rename":"Please select a name for your quiz","custom":{"title":"Alternatively you can enter a custom quiz name","input":"Custom quiz name","available":"Your quiz name is available","select-quiz":"Select quiz name","please-wait":"Please wait…","malformed":"Your quiz name contains illegal characters. Please try again with a different name.","already-taken":"Your quiz name is already taken","min-keys":"The quiz name must contain at least four characters."},"title":"Choose an alternative"},"home":{"join":"Join »{name}«","use":"Use »{name}«","new-demo-quiz":"Create a new demo quiz","new-abcd-quiz":"Create a new ABCD quiz","view-public":"Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!","view-all-public":"… or view your own public quizzes!","view-own-public":"Click here to view your own public quizzes!","errors":{"already-taken":"This name is already used. Please use another quiz name","min-length":"Please use at least four characters for your quiz name."},"success":{"can-join":"You can join this quiz!","can-create":"This quiz name is available. You can create a quiz with it!"}},"public-quizzes":{"own":{"title":"Your public quizzes","remove":"Remove"},"title":"All public quizzes","none-available":"None available","number-of-questions":"Number of questions:","cas-required":"CAS Login required:","features":"Features:","name":"Quiz name:","play":"Play","copy":"Copy"},"quiz-save":{"access-allowed-for":"Access to this quiz is allowed for:","title":"Settings for saved quizzes","description":"Description","expiry":"Expiration date","no-expiry":"No expiration date","save":"Save","is-submitting":"Submitting…"},"nickname-select":{"no-nicks-available":"No nicknames available!"},"server-unavailable-modal":{"title":"The connection to the server has been dropped!","connection-dropped":"The quiz can't be played further until the connection to the server is established again. We are currently trying to reconnect. You can also reload the page manually.","reload-page":"Try reloading the page"},"toasts":{"swupdate":{"message":"There is a new version of arsnova.click available. Please click here to reload the page. This will install the update automatically.","title":"New version available"}},"statistics":{"users":{"title":"Users online","content":"All connections to arsnova.click are counted here. Of course the data is anonymized. It is not possible to draw conclusions about individual persons. For you the number is a good indication of how much arsnova.click is currently used."},"total-quizzes":{"title":"Quizzes","content":"All quizzes are counted here. Including yours! Of course your quizzes are private and only you can start them. No one can access your quizzes!"},"active-quizzes":{"title":"Active quizzes","content":"This is the number of all the quizzes currently being played. Either their quiz lobby is opened or the quiz round has started."},"total-pool-questions":{"title":"Pool questions","content":"In the question pool you can provide quiz questions for the public. Everyone can compile their own quizzes from the pool questions."},"total-pool-tags":{"title":"Tags","content":"You can assign any tag you like to a question you put in the pool. This way, pool questions can be compiled by topic."},"active-participants":{"title":"Active players","content":"Here you can see the current number of all players in active quizzes. Of course, we attach great importance to data protection: it is not possible to identify individual persons or to track their actions. Don't worry, this is only a rough indication of how much arsnova.click is currently used."},"average-participants":{"title":"Players per quiz","content":"The number indicates the average number of people who took part in quizzes."}}},"plugins":{"markdown_bar":{"tooltip":{"bold":"Bold","italic":"Italic","heading":"Headline","hyperlink":"Hyperlink","unordered_list":"Unordered list","latex":"TeX Markup","code":"Code Markup","image":"Image","line_through":"Crossed out","ordered_list":"Ordered list","citation":"Citation","strike_through":"Strikethrough","quote":"Quote","escape":"Mask the following character","horizontal-rule":"Horizontal line","info":"Info about Markdown"},"info_content":"You can use <a target='_blank' class='hyperlink' href='https://en.wikipedia.org/wiki/Markdown'>Markdown</a> markup for your text in ARSnova.click. Frequently used markup options are available via the button bar which is visible on all supported input fields. Additionally ARSnova.click supports <a target='_blank' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'>GitHub Flavored Markdown</a>","visible_text":"Visible text","link_text":"Link text","link_destination":"Link target","advanced_options":"Advanced options","option_width":"Max. width (pixel)","option_height":"Max. height (pixel)","option_position":"Position","option_left":"left","option_centered":"centered","option_right":"right"},"sound":{"running_music":"Countdown (Running)","lobby_music":"Quiz Lobby","finish_music":"Countdown (End)","running_music_detailed":"Countdown Sound","lobby_music_detailed":"Sound in the Quiz Lobby","finish_music_detailed":"Sound at the end of the Countdown","whistle":"Whistle","global_volume":"Global volume","volume":"Volume","inactive":"Sound is inactive","active":"Sound is active","activated":"Activated","deactivated":"Deactivated","random":"Random selection","silence":"No sound","play":"Play","stop":"Stop","allow-stream-to-clients":{"title":"Allow audio for attendees","label":"This deactivates the audio for the quiz master and activates it for the attendees. Since the start time of the music is not synchronized it is only advised to activate this feature if the attendees are participating remotely at the quiz."}},"splashscreen":{"error":{"error_messages":{"invalid_input_data":"The entered data is either invalid or the access is denied!","duplicate_user":"You are attempting to participate with a second identity. This is not possible!","Internal Server Error":"Internal Server Error","update_failed":"The update of the question failed.","session_exists":"This session exists already!","session_exists_warning":"This session does already exist on the server!","session_exists_arsnova_import":"Please enter a name for your arsnova quiz:","session_exists_new":"To import it it is required to rename the session:","session_not_exists":"This session does not exist!","name_exists":"This name exists already!","session_not_available":"Session is currently not available for joining","private_browsing":"If you use ARSnova.click in private browsing you can only join a quiz as an attendee. Unfortunately your browser seems to reject any write access to the local storage. Please use ARSnova.click only via a normal browser tab. Your anonymity will be respected even without using the private mode.","kicked_from_quiz":"You've been kicked from the quiz!","nick_already_exists":"This nickname does already exist in the quiz","export_failed":"Could not export! - %s","not_authorized":"Either there is no quiz or you don't have write access","maximum_answer_options_exceeded":"Maximum number of possible answer options exceeded","name_not_found":"No such name with the given key","member_not_found":"Member not found","duplicate_response":"User has already given a response","answeroption_not_found":"There is no answer option with the given answerOptionNumber","response_timeout":"Response was given out of time range","insert_leaderboard_failed":"Error while adding response set to leaderboard","session_closed":"The quiz session has been closed","invalid_data":"The imported files are corrupt or the access is denied!","too_much_active_quizzes":"There are currently too much quizzes active.","server_password_required":"Creating a quiz on this server requires a password.","server_password_invalid":"The server password is invalid.","no_preview_available":"The preview is currently not available!"},"title":"Notification","set_text_error":"The text of the error splash screen can only be set after it has been rendered!"},"question_and_answer":{"answeroption_plural":"Answers","min_range":"Lower tolerance","correct_value":"Correct value","max_range":"Upper tolerance","reference_value":"Reference value"},"edit_session_confirmation":{"title":"Do you want to edit the quiz?","text":"All attendees will be removed from the quiz.","continue":"Continue?"},"remove_question_confirmation":{"title":"Delete question?","text":"This cannot be undone!"},"reminder_leaderboard_data":{"title":"Warning","text":"The data of the leaderboard will be removed as soon as you leave the quiz. You can download the data for later use here.","continue":"Continue?"},"return_to_lobby":{"title":"Warning","text":"If you proceed to the quiz lobby all played quiz rounds will be reset.\n\nIf you need the current quiz-data, you should export it before continuing.","continue":"Continue?"}}},"lib":{"questions":{"question_choice_single_yes_no":{"yes":"Yes","no":"No"},"question_choice_single_true_false":{"true":"True","false":"False"}}},"view":{"question_type":{"description":{"SingleChoiceQuestion":"Single-choice questions contain as many answer options as you like, one of them must be marked as correct.","YesNoSingleChoiceQuestion":"Yes|No questions contain only two answers (yes and no), one of them must be marked as correct.","TrueFalseSingleChoiceQuestion":"True|False questions also contain only two answers (True and False), one of them must be marked as correct.","MultipleChoiceQuestion":"Multiple-choice questions contain as many answer options as you like, of which as many as you like (at least one) can be marked as correct.","RangedQuestion":"For the ranged question, an integer must be specified as correct. In addition, upper and lower tolerances can be entered.","FreeTextQuestion":"In the free text query, the participant must enter any text. This is matched with the provided reference value.","SurveyQuestion":"Surveys may contain any number of answers, none of them can be marked as right or wrong.","ABCDSurveyQuestion":"ABCD questions contain at maximum 26 answers (from A - Z).","type_wrapper":"Here you can change the type of quiz question. Each type has different settings. Change the type by clicking on the respective box."},"select-type":"Select Type","current-type":"Current Type"}},"enum":{"quiz-visibility":{"account":"Account","any":"Any"}},"notification":{"close":"Close","request-permission":"Do you want to receive a notification when your question for the Quiz-Pool has been approved?","pending-pool-question":{"title":"New Quiz-Pool {amount, plural, =0{questions} one{question} other{questions} }","body":"{amount, plural, =0{0 questions are} one{One question is} other{{amount} questions are} } waiting for approval in the Quiz-Pool"},"pool-question-approved":{"title":"Quiz-Pool question approved","body":"One of your Quiz-Pool questions was approved!"}},"hotkey":{"modal-title":"Hotkeys","MultipleChoiceQuestion":{"description":"Add Multiple-Choice question"},"SingleChoiceQuestion":{"description":"Add Single-Choice question"},"RangedQuestion":{"description":"Add ranged question"},"FreeTextQuestion":{"description":"Add freetext question"},"SurveyQuestion":{"description":"Add survey"},"navigate-to-prev-question":"Navigate to previous question","navigate-to-next-question":"Navigate to next question","navigate-to-question-text":"Navigate to the question text view","navigate-to-answeroptions":"Navigate to the answeroption view","navigate-to-countdown":"Navigate to the countdown view","navigate-to-question-type":"Navigate to the question type view","navigate-to-tags":"Navigate to the tag view","delete-question":"Delete this question"}}
+{
+  "manifest": {
+    "name": "Game-based quiz app developed by THMM",
+    "description": "A bit like Kahoot!, a bit like Socrative, but lots of ARSnova!"
+  },
+  "global": {
+    "arsnova_slogan": "Quiz app for MINT lessons",
+    "yes": "Yes",
+    "no": "No",
+    "close_window": "Close window",
+    "cookie_consent": {
+      "message": "arsnova.click is a web app that uses cookies to ensure you get the best experience.",
+      "dismiss": "Got it!",
+      "learn_more": "More about data privacy…"
+    },
+    "console-log-warning": "WARNING! This will not help you cheating on any quizzes at all! Anyone who told you to use these tools may try to compromise your computer.",
+    "abort": "Abort",
+    "true": "True",
+    "false": "False",
+    "in-cooperation-with": "in cooperation with",
+    "please-wait": "Please wait…",
+    "please-select": "Please select…",
+    "loose-data-warning": "With this navigation data loss is possible - do you want to proceed?",
+    "no-data-error": {
+      "title": "Error while loading data",
+      "load-to-edit": "The data for the requested page could not be loaded. Please do not use the browser's navigation as data loss is possible. You can go to the quiz overview or to the home page now.",
+      "load-to-play": "The data for the requested page could not be loaded. Please do not use the browser's navigation as data loss is possible. The quiz round must be quit now. You can only return to the home page.",
+      "homepage": "To the home page",
+      "to-quiz-overview": "To the quiz overview"
+    },
+    "copy": "Copy",
+    "copy-to-clipboard": "Copy to clipboard",
+    "mail-to": "Send as E-Mail",
+    "copied": "Copied",
+    "follow-us-at-twitter": "Follow us at twitter!"
+  },
+  "region": {
+    "footer": {
+      "footer_bar": {
+        "about": "arsnova.click",
+        "home": "Homepage",
+        "tos": "Terms of Use",
+        "imprint": "Imprint",
+        "blog": "Project Blog",
+        "languages": "Language",
+        "style": "Styles",
+        "import": "Import",
+        "info": "Info",
+        "reading-confirmation": "Reading confirmation",
+        "fullscreen": "Fullscreen",
+        "sound": "Sound",
+        "qr_code": "QR",
+        "nicknames": "Nicknames",
+        "edit_quiz": "Edit",
+        "show_product_tour": "Product tour",
+        "show_response_progress": "Progress",
+        "description": {
+          "qr-code": "Attendees can scan the QR code via their mobile devices to join the quiz.",
+          "sound": "Set the sound for the background music or the countdown here.",
+          "reading-confirmation": "Activate this option if only the question <bold>without</bold> answer options should be displayed first. Only those who confirm the reading (understanding) of the question can participate in the quiz. The number of confirmations is displayed. With the reading confirmation you can create the same conditions for all attendees at the countdown.",
+          "response-progress": "Do you want to display the number of responses to the individual answer options during the countdown? Then activate this option. Note, however, the psychological effect: People tend to be directed to the majority (herd instinct).",
+          "nicknames": "You can preset selectable nicknames out of multiple categories here. Hint: Block a rude nickname by clicking on the attendee in the quiz lobby.",
+          "confidence-slider": "Active that option, which if you want that the participants can see the certainty of answering in hundreds during the vote: 0 &#37; »guessed« - 100 &#37; »absolutely safe«. The average would be indicated in the results diagram."
+        },
+        "api-docs": "API Docs",
+        "show_confidence_slider": "Confidence Grade",
+        "back": "Back",
+        "cache_assets": "Cache Assets",
+        "block_rude_nicknames": "Block rude nicknames",
+        "enable_cas_login": "Enable CAS Login",
+        "global_leaderboard": "Global Leaderboard",
+        "dataprivacy": "Data Privacy",
+        "member_group": "Teams",
+        "edit-i18n": "Edit i18n",
+        "login": "Login",
+        "logout": "Logout",
+        "save_quiz": "Save Quiz",
+        "admin": "Administrate",
+        "showToken": "Show Token",
+        "twitter": {
+          "tweet": "Tweet"
+        },
+        "questionpool": "Question Pool",
+        "my-quizzes": "My Quizzes",
+        "audio": "Music",
+        "hotkeys": "Hotkeys"
+      },
+      "about": {
+        "title": "About arsnova.click",
+        "declaration": "A little <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />a little <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />a lot <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
+        "ars": "arsnova.click is an innovative <a href='https://en.wikipedia.org/wiki/Audience_response#Classroom_use' target='_blank'>Audience-Response-System (ARS)</a> for public educational institutions.",
+        "developed_by": "Inspired by <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> and <a href='https://socrative.com/' target='_blank'>Socrative</a> developed by computer science students of <a href='https://www.thm.de/site/' target='_blank'>THM</a> the <a href='https://en.wikipedia.org/wiki/Gamification' target='_blank'>gamified</a> alternative to the flagship <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
+        "met_requirements": "<strong>Features:</strong>",
+        "requirements": {
+          "1": "Absolute data privacy: No personal files on the server. All quiz data is located at the <a href='http://www.w3schools.com/html/html5_webstorage.asp' target='_blank'>HTML5 Local Storage</a> of the quiz owner.",
+          "2": "No registration, no installation, no costs at all",
+          "3": "Same landing page for both roles: quiz master and player",
+          "4": "Anyone can create quizzes: immediately and as much as you like!",
+          "5": "Accessible and for projectors optimized user interface",
+          "6": "<a href='https://en.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formulas and text formatting with <a href='https://guides.github.com/features/mastering-markdown/' target='_blank'>Markdown</a> in questions and answer options",
+          "7": "One dialog fits everything: As many answer options you like with multiple choice, single choice and surveys.",
+          "8": "ABC...-Quizzes can be created by entering ABC... as the quiz name with one click. The number of consecutive letters determines the answer options.",
+          "9": "Edutainment: Have fun during learning with a live competition against the clock and the other players with sound effects.",
+          "10": "Bonus option: The top players receive »tokens«, which they can redeem for bonus points by emailing the teacher.",
+          "11": "<a href='https://en.wikipedia.org/wiki/Responsive_web_design' target='_blank'>Responsive Web design</a>: Whether smartphone, beamer or wide screen, the design scales. Even complex quizzes can be created on the smartphone.",
+          "12": "Built as <a href='https://en.wikipedia.org/wiki/Progressive_web_app' target='_blank'>Progressive Web App</a> in reactive web technology",
+          "13": "<a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source Software</a>"
+        },
+        "manual": {
+          "title": "User Manual?",
+          "text": {
+            "1": "There's no need for that!",
+            "2": "Just type in the name of the quiz. The buttons will be activated as soon as you either enter the name of an unlocked quiz: »Join in!« or create a quiz with the entered name: »New Quiz«.",
+            "3": "Now it is as simple as: Clicking. Looking. Quizzing."
+          }
+        }
+      },
+      "tos": {
+        "declaration": "Everyone ( not only teachers ) is allowed to use the quiz app arsnova.click for their own purposes as long as this does not violate German or EU law.",
+        "license": {
+          "title": "License",
+          "text": "arsnova.click is a free web service (Software as a Service). The software is <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> and is licensed under the <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
+        },
+        "musicLicense": {
+          "title": "Music license",
+          "text": "The sound <a href='http://soundbible.com/2148-Chinese-Gong.html' target='_blank'>Chinese Gong</a> by Daniel Simon is licensed under <a href='https://creativecommons.org/licenses/by/3.0/' target='_blank'>CC BY 3.0</a>."
+        },
+        "warranty": {
+          "title": "Warranty",
+          "text": "We are trying to maintain the online service of ARSnova.click reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service."
+        }
+      },
+      "data_privacy": {
+        "scope": "Scope",
+        "declaration": "This privacy statement explains to users of ARSnova.click the nature, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).",
+        "app_data": {
+          "title": "Application data",
+          "text": "All quiz questions and their answer options are held by the local browser storage of the quiz owner."
+        },
+        "access_data": {
+          "title": "Access data",
+          "text": "Besides web server log files, no personal access data is stored."
+        },
+        "logfiles": {
+          "title": "Webserver logfiles",
+          "text": "The provider collects log files about every access to the ARSnova.click system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications."
+        },
+        "3rdparty": {
+          "title": "3rd party services",
+          "text": "In quizzes third party services or content, such as videos from YouTube and Vimeo or graphics can be included from other websites. This requires that the provider of such content percive the user's IP address. Without the IP address the content can not be sent to the browser."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "text": "Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer ARSnova.click uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely."
+        },
+        "piwik": {
+          "title": "Matomo",
+          "text": "This offer uses Matomo, an open source software for statistical analysis of traffic, see <a href='http://matomo.org/' target='_blank'>matomo.org</a>. Matomo uses cookies, which are stored on the computer of the user and allow the analysis of your use of the website. The information generated by the cookie about your use of this service is stored on the provider's server in Germany. The IP address is anonymized immediately after processing and before the storage. The user can refuse the use of cookies by changing the settings of their browser software."
+        }
+      },
+      "imprint": {
+        "provider": {
+          "title": "Service provider",
+          "text": {
+            "1": "The operation of the web app arsnova.click is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
+            "2": "c/o THM – Technische Hochschule Mittelhessen",
+            "3": "Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik",
+            "4": "Prof. Dr. Klaus Quibeldey-Cirkel",
+            "5": "Lehrstuhl für Softwaretechnik",
+            "6": "Wiesenstraße 14",
+            "7": "D-35390 Gießen",
+            "8": "Telefon: +49 641 309 – 24 50",
+            "9": "E-Mail: <a href='mailto:klaus.quibeldey-cirkel@transmit.de'>klaus.quibeldey-cirkel@transmit.de</a>",
+            "10": "Sitz der Gesellschaft: Gießen",
+            "11": "Website: <a href='https://www.transmit.de' class='text-light'>https://www.transmit.de</a>",
+            "12": "Rechtsform: GmbH",
+            "13": "Amtsgericht: Gießen HRB 3036",
+            "14": "USt-IdNr.: DE 188 685 037"
+          }
+        }
+      }
+    },
+    "header": {
+      "connection_status": {
+        "title": "Connection status",
+        "websocket_status": {
+          "connected": "Connected",
+          "not_connected": "Disconnected"
+        },
+        "estimated-storage-quota": {
+          "label": "Estimated storage quota",
+          "not_available": "Not available - Manual update check required!",
+          "currently-used": "Currently {USAGE}MiB of {QUOTA}MiB used"
+        },
+        "disconnected": "You're not connected right now. You can only join a quiz or create a new quiz with an internet connection!",
+        "server_status": {
+          "not_available": "Not available",
+          "available": "Available"
+        },
+        "indexedDb_status": {
+          "writable": "Writable",
+          "non_writable": "Not writable"
+        },
+        "check-for-updates": "Check for Updates",
+        "checking-for-updates": "Checking for Updates"
+      }
+    }
+  },
+  "component": {
+    "quiz-join": {
+      "top-header": "The quiz has not yet started",
+      "sub-header": "Don't worry - we have you covered. You'll be connected as soon as the quiz master starts it.",
+      "approval": {
+        "top-header": "You want to join the quiz",
+        "sub-header": "Is that correct?"
+      },
+      "joining": {
+        "top-header": "Nearly there",
+        "sub-header": "Hang on a second…"
+      }
+    },
+    "answer-result": {
+      "correct": {
+        "title": "Marvelous - that was correct!"
+      },
+      "partial-correct": {
+        "title": "Partially correct",
+        "amount-correct": "{correct} of {available} answers correct",
+        "amount-wrong": "{wrong} wrong {wrong, plural, =0{answers} one{answer} other{answers}} selected",
+        "ranged-question-correct": "Not correctly estimated, but acceptable"
+      },
+      "wrong": {
+        "title": "Sorry, that's wrong",
+        "motivate": "Don't give up!"
+      },
+      "points-gained": "+ {points} points",
+      "points-gained-team": "{points} points",
+      "rank": "You are currently at position {rank}",
+      "rank-team": "Your team is currently at position {rank}",
+      "last-question-rank": "You made it to position {rank}",
+      "last-question-rank-team": "Your team has made it to number {rank} in the ranking!",
+      "to-quiz-results": "To the quiz results",
+      "pole-position": "You are the greatest! First rank in the entire quiz! Bravo!",
+      "pole-position-team": "Your team is the greatest! First rank in the entire quiz! Bravo!"
+    },
+    "twitter-card": {
+      "more-tweets": "More Tweets",
+      "follower": "Follower: {count}"
+    },
+    "quiz-pool": {
+      "select-tag": {
+        "label": "Select Tag",
+        "placeholder": "Enter your preferred Tag here. The quiz will be built with questions with the selected Tags.",
+        "validation-error": {
+          "invalid-tag": "The entered Tag is not available. Please select one from the dropdown menu."
+        }
+      },
+      "tag-question-amount": {
+        "label": "Amount of questions",
+        "placeholder": "Amount of questions",
+        "validation-error": {
+          "required": "Please enter the amount of questions here",
+          "min": "Please use at least one question for this tag",
+          "max": "You can select only {max, plural, =0{0 questions} one{one question} other{{max} questions}} with your selected Tag"
+        }
+      },
+      "tag-available": "{weight, plural, =0{0 Questions} one{One Question} other{{weight} Questions}} available",
+      "question-amount-warning": "Please notice that redundant questions with multiple Tags will only be included once in your quiz. The amount of questions in your quiz can be lower than the selected {amount} questions.",
+      "create-quiz": "Create Quiz",
+      "selected-tags": "Selected Tags",
+      "save-tag": "Use Tag",
+      "delete-tag": "Delete Tag",
+      "create-own-question": {
+        "label": "Do you want to create a new pool question?",
+        "button-label": "New pool question"
+      }
+    },
+    "twitter": {
+      "optin": {
+        "check": "Check if you want enable Twitter features",
+        "share": "Share on social media",
+        "warning": "I agree that content from Twitter will be displayed"
+      },
+      "tweet": {
+        "content": {
+          "0": "Just played the quiz »{NAME}« at arsnova.click ❤️\n"
+        }
+      }
+    },
+    "answeroptions": {
+      "new_answer": "New answer option",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "show_answer_content_on_buttons": "Display the answer's content on the buttons?",
+      "show_one_answer_per_row": "Show only one answer per row?",
+      "multiple_selection_survey": "Allow selection of multiple answers?",
+      "emoji_info": "You can embed also one of these <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis (external website!)</a> <img class='w-40px' src='/assets/images/emojis/smile.png' alt='emoji'/> <br/>Simply click on the website on the Emoji and paste it into the answeroption.",
+      "description": {
+        "default_answer_row": "Drag this block into the list of answeroptions to create a new one.",
+        "added_answers": "Here are all already created answeroptions. You can change the order of the answers via drag & drop.",
+        "show_answer_content_on_buttons": "The response buttons for the participants can either be labeled with the letter of the response or the complete answer's text. Note, however, that too much text in the answer can be badly readable depending on the size of the viewport.",
+        "show_one_answer_per_row": "This will increase the width of the answer option button to use the full width of the row. Use this for large formulas or texts.",
+        "multiple_selection_survey": "Here you can set whether the participants are to go directly to the evaluation after clicking on a response of the survey, or whether a multiple selection should be possible.",
+        "range_area": "Here you can specify the correct answer as well as the top and lower tolerances. Please note that the input must be in natural numbers.",
+        "min_range": "Here you can set the lower tolerance value.",
+        "correct_value": "This answer is completely correct.",
+        "max_range": "Here you can set the upper tolerance value.",
+        "free_text_question_text": "Here you can enter the correct answer. The responses entered by the participants are checked against this response according to the configuration.",
+        "check_answer": "Here you can test possible answers of the participants against your reference value and the current configuration."
+      },
+      "ranged_question": {
+        "correct_value": "Correct value",
+        "min_range": "Minimum value",
+        "max_range": "Maximum value"
+      },
+      "free_text_question": {
+        "title": "Free text answer",
+        "check_answer_title": "Test possible input:",
+        "config_case_sensitive": "Observe upper and lower case",
+        "config_trim_whitespaces": "Observe white spaces in the answer",
+        "config_use_keywords": "Observe sequence of the words",
+        "config_use_punctuation": "Observe punctuation marks",
+        "onText": "Yes",
+        "offText": "No",
+        "text_placeholder": "Enter your answer here",
+        "check_correct": "The entered answer matches the provided reference.",
+        "check_incorrect": "The entered answer does not match the provided reference."
+      }
+    },
+    "choose_nickname": {
+      "enter_nickname": "Take a nickname",
+      "enter_nickname_here": "Enter your nickname here",
+      "nickname_blacklist_popup": "This name is (because of its meaning) not available!",
+      "description": {
+        "nickname_input": "Here you can enter a name, which is different from the other players."
+      }
+    },
+    "name_management": {
+      "enter_quiz_name": "Enter the quiz name here",
+      "join_session": "Join in!",
+      "start_session": {
+        "title": "Start the quiz",
+        "label": "Start"
+      },
+      "edit_session": {
+        "title": "Edit the quiz",
+        "label": "Edit"
+      },
+      "create_session": "New quiz",
+      "can_create_session": "Create Quiz",
+      "create_demo_session": "Start demo quiz",
+      "quiz_management": "Stored Quizzes",
+      "session_management": "Quizzes",
+      "delete_session": {
+        "title": "Delete quiz",
+        "label": "Delete"
+      },
+      "export": {
+        "title": "Export quiz",
+        "label": "Export"
+      },
+      "no_sessions": "There are no quizzes stored in your browser.",
+      "create_abcd_session": "Start ABCD quiz",
+      "enter_server_password": "Enter the server password here",
+      "public-quizzes": "Looking for more? Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
+      "save_session": {
+        "title": "Save Quiz",
+        "label": "Save"
+      },
+      "used-pool-tags": "Used Tags"
+    },
+    "leaderboard": {
+      "header": "Leaderboard",
+      "global_header": "Global leaderboard",
+      "title": {
+        "single_question": "Question {QUESTION_ID} - Score",
+        "all_questions": "Score"
+      },
+      "no_attendee_correct": "Nobody knew the answer",
+      "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
+      "export": "Export",
+      "team-result": {
+        "name": "Team »{TEAM_NAME}«",
+        "overall-response-time": "Overall Response Time: {RESPONSE_TIME}",
+        "score": "{SCORE} points"
+      },
+      "own-rank": {
+        "own-data": "You are on rank {INDEX} with a score of {SCORE}",
+        "closest-opponent": " right after {NAME} with a score of {SCORE}."
+      }
+    },
+    "liveResults": {
+      "title": "Question {QUESTION_INDEX}",
+      "question": "Show question",
+      "question_number": "Question",
+      "ranking": "Ranking",
+      "reading_confirmation": "Reading confirmation",
+      "show_question": "Show next question",
+      "start_round": "Start countdown",
+      "start_question": "Start question",
+      "confirm_read": "Got that!",
+      "title_reading_confirmation": "Question read…",
+      "title_running_countdown": "Voting…",
+      "show_more": "Show 1 more",
+      "show_more_plural": "Show %s more",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "complete_correct": "Everything correct",
+      "partially_correct": "Partially correct",
+      "complete_wrong": "Everything wrong",
+      "back_to_lobby": "Back to the lobby",
+      "global_ranking": "Global ranking",
+      "start_round_plural": "Start round",
+      "game_over": "Game over",
+      "countdown": "Countdown",
+      "answer_option": "Answer",
+      "guessed_correct": "Correctly estimated",
+      "guessed_wrong": "Wrong estimated",
+      "correct_answer": "Correct answer",
+      "show_question_plural": "Show Questions",
+      "abort_countdown": "Abort Countdown",
+      "abort_question": "Abort question",
+      "confidence_grade": "Confidence Grade",
+      "own_confidence_grade": "Your Confidence Grade&#10;({value}%)",
+      "guessed_in_range": "Not correctly estimated, but acceptable",
+      "wrong_answer": "Wrong answer",
+      "no_data": "No data available",
+      "neutral_answer": "Reponses",
+      "bonus-token": {
+        "title": "Bonustoken",
+        "mail": "mailto:?subject=arsnova.click%3A%20My%20Token%20%C2%BB{quizname}%C2%AB&body=Hi%2C%0D%0A%0D%0AI%20took%20part%20in%20the%20quiz%20%C2%BB{quizname}%C2%AB%20on%20{date}%20and%20received%20the%20following%20token%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMy%20nickname%20in%20the%20quiz%20was%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0AI%20am%20looking%20forward%20to%20our%20next%20quiz%20with%20arsnova.click%21",
+        "your-bonus-token": "Your Token:",
+        "please-wait": "Please wait - your token is loading",
+        "send-to-teacher": "Send this token to your teacher to gain some bonus points!"
+      }
+    },
+    "question-details": {
+      "selected-answer-elements": "You selected: {elements}"
+    },
+    "lobby": {
+      "start_quiz": "Let's go!",
+      "kick_member_confirmation": "Shall the player »{NAME}« be removed from the session?",
+      "own_nickname": "Your nickname:",
+      "waiting_for_players": "Waiting for the players…"
+    },
+    "nickname_categories": {
+      "choose_all": "Select all",
+      "remove_all": "Remove all",
+      "category": {
+        "disney": "Disney",
+        "science": "Science",
+        "fantasy": "Fantasy",
+        "literature": "Literature",
+        "mythology": "Mythology",
+        "actor": "Actors",
+        "politics": "Politicians",
+        "turing_award": "Turing-Award",
+        "emojis": "Emojis"
+      },
+      "filter": "Enter a search text here…"
+    },
+    "questions": {
+      "enter_question_here": "Enter your question here",
+      "single_choice_question": "Single Choice",
+      "single_choice_question_yes_no": "Yes-No Single-Choice question",
+      "single_choice_question_true_false": "True-False Single-Choice question",
+      "multiple_choice_question": "Multiple Choice",
+      "survey_question": "Survey",
+      "ranged_question": "Question with ranged answeroptions",
+      "free_text_question": "Free text question",
+      "survey_question_abcd": "ABC…-Question"
+    },
+    "quiz_manager": {
+      "title": "Quiz Manager",
+      "available_questions_title": "Available questions",
+      "added_questions_title": "{amount, plural, =0{No quesitions created} one{1 question} other{# questions}}",
+      "no_added_questions": "Add a question first …",
+      "details": {
+        "aria": {
+          "btn_group": "List of settings for the quiz"
+        },
+        "question_type": {
+          "long": "Edit question type",
+          "short": "Type"
+        },
+        "question_text": {
+          "long": "Edit question text",
+          "short": "Text"
+        },
+        "answeroptions": {
+          "long": "Edit answer options",
+          "short": "Answers"
+        },
+        "timer": {
+          "long": "Edit timer",
+          "short": "Timer"
+        },
+        "tags": {
+          "long": "Tags",
+          "short": "Tags"
+        },
+        "pool-save-warning": "Please notice that questions for the Quiz-Pool need to be reviewed by a moderator. Your question will not be available in the Quiz-Pool until the review is completed."
+      },
+      "no-added-tags": "No added tags yet",
+      "available-questions-filter": "Filter for your question",
+      "select-available-question": "New question",
+      "show_more": "Show more",
+      "show_less": "Show less",
+      "question-card": {
+        "to-bottom": "To the Bottom",
+        "down": "Down",
+        "to-top": "To the Top",
+        "up": "Up",
+        "quiz-pool-upload": "Quiz-Pool Upload",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "quiz_summary": {
+      "quiz_name": "Name of the quiz",
+      "answer_amount": "{amount, plural, =0{No Answer Items} one{1 Answer Item} other{# Answer Items} }",
+      "validation_question_group": "Validation for the complete quiz",
+      "question_successful": "The question is valid",
+      "question_failed": "The question is still incomplete",
+      "question_group_successful": "Your quiz is ready",
+      "question_group_failed": "Your quiz is incomplete",
+      "upload-to-pool": {
+        "valid-upload": "Provide your question to the Quiz-Pool",
+        "invalid-question": "Only valid questions can be uploaded to the Quiz-Pool",
+        "no-tags": "You need to add some Tags to your question to upload it to the Quiz-Pool."
+      },
+      "quiz_rename": "Edit",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "question": "Question",
+      "text": "Text",
+      "type": "Type",
+      "answer": "Answer",
+      "answer_configuration": "Configuration of the answer",
+      "timer": "Countdown",
+      "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
+      "tags": "Tags",
+      "validation": "Validation",
+      "validation_errors": {
+        "types": {
+          "question": "Question",
+          "answerOption": "Answer"
+        },
+        "reasons": {
+          "question_text_too_small": "The question text is too short",
+          "question_text_too_long": "The question text is too long",
+          "timer_too_small": "The timer is too short",
+          "no_valid_answers": "There must be at least one correct answer",
+          "one_valid_answer_required": "There must be exactly one correct answer",
+          "invalid_range": "The minimum range must be smaller than the maximum range",
+          "invalid_correct_value": "The correct value must be in the scope of the range",
+          "answer_text_empty": "The answer's text is not allowed to be empty",
+          "no_answers_defined": "No answers have been defined",
+          "empty_question_text": "The text of the question is empty",
+          "empty_question_type": "No question type set",
+          "empty-question-tags": "No tags have been assigned to the question yet"
+        }
+      },
+      "selected_nicks": "Valid nicknames",
+      "no_selected_nicks": "No nicknames selected. All nicknames are valid.",
+      "isRestrictingRudeNicks": "Block inappropriate nicknames",
+      "isRestrictingToCAS": "Attendees must authenticate via CAS",
+      "description": {
+        "header": "Here is the summary of the entire quiz round",
+        "session_url": "Under this URL, participants can enter the quiz as soon as you release it",
+        "question_group_validation": "The validation of the quiz round fails if the quiz has not yet been completed. This includes non - existing quizzes, missing or incomplete response options, non - set timers, etc.",
+        "restrict_to_cas": "If this setting is active, the participants must register at the central authentication service of the University of Applied Sciences Mittelhessen in order to participate in the quiz",
+        "question_item": "This section contains information about the selected question.",
+        "validation_errors": "The validation errors listed here can be useful in troubleshooting."
+      },
+      "quiz_url": "Quiz URL",
+      "no-timer": "No countdown set. The quiz round must be stopped manually.",
+      "required-for-token": {
+        "title": "Mandatory Question",
+        "label": "Question is required to be answered correctly by the attendee to achieve a bonus token"
+      },
+      "difficulty": {
+        "title": "Difficulty",
+        "label": "The difficulty of a question influences the score for correct answers",
+        "very-easy": "Very easy (+ {multiplicator, plural, one{Normale} other{#-fache} } x score)",
+        "easy": "Easy (+ {multiplicator}x score)",
+        "medium": "Medium (+ {multiplicator}x score)",
+        "challenging": "Challenging (+ {multiplicator}x score)",
+        "very-hard": "Very hard (+ {multiplicator}x score)",
+        "pro-only": "Only for pros (+ {multiplicator}x score)"
+      }
+    },
+    "theme_switcher": {
+      "set_theme": "Choose a theme",
+      "themes": {
+        "black_beauty": {
+          "name": "Black Beauty (beamer-suitable)",
+          "description": "Dark mode"
+        },
+        "material": {
+          "name": "Material Design",
+          "description": "Light mode"
+        },
+        "westermann-blue": {
+          "name": "Westermann Blue",
+          "description": "Default of the Westermann group"
+        }
+      }
+    },
+    "timer": {
+      "second": "{COUNT, plural, =0{Seconds} one{Second} other{Seconds}}",
+      "minute": "{COUNT, plural, =0{Minutes} one{Minute} other{Minutes}}",
+      "hour": "{COUNT, plural, =0{Hours} one{Hour} other{Hours}}",
+      "description": "Here you can set the countdown for the quiz question. As soon as it expires, or all participants have answered, the quiz round is ended."
+    },
+    "translation": {
+      "translations": "Select your language"
+    },
+    "voting": {
+      "title": "Voting",
+      "send": "Send",
+      "abstention": "Abstention",
+      "ranged_question": {
+        "title": "Please enter your answer!"
+      },
+      "free_text_question": {
+        "title": "Provide your answer!"
+      },
+      "confidence_level": {
+        "no_idea": "No idea",
+        "not_sure": "Not sure!",
+        "unsure": "Unsure",
+        "quite_sure": "Quite sure",
+        "very_sure": "Truly convinced!",
+        "title": "How confident are you in your answer?"
+      },
+      "tags": {
+        "category": "{amount, plural, =0{Topics} one{Topic} other{Topics}}"
+      }
+    },
+    "membergroup-manager": {
+      "title": "Organize players in teams",
+      "max-users": "Max users per team",
+      "autojoin-to-team": "Add users automatically to Teams",
+      "create-team-placeholder": "Enter a team name here. Start with a colon to search for emojis…",
+      "create-team": "Add team",
+      "current-teams": "Currently added Teams:",
+      "no-current-teams": "No Teams added yet",
+      "team-name": "Name of the team:",
+      "team-color": "Choose a color:",
+      "validation-error": {
+        "full-member-group": "All available teams were already created. Please remove a team first.",
+        "invalid-member-group": "Invalid name. Please do not mix emojis and regular text",
+        "duplicate-member-group": "This name is already used",
+        "add-second-group": "Please add at least 2 teams or remove the existing one"
+      }
+    },
+    "login": {
+      "title": "Please enter your login credentials",
+      "login": "Login",
+      "authorization_failed": "Authorization failed",
+      "token": "Token",
+      "login-via-token": "You can also log in with a token:",
+      "password": "Password",
+      "username": "User name",
+      "login-to-quiz": "Welcome to the quiz"
+    },
+    "member-group-select": {
+      "title": "Select your team"
+    },
+    "quiz_manager_details": {
+      "tags": {
+        "description": {
+          "title": "You can add tags to your question here. Which one you use is up to you.<br/>Some recommendations regarding quiz tags:",
+          "dl": {
+            "0": {
+              "dt": "Use multiple tags with coarse and fine granular subject areas",
+              "dd": "A good example would be both the Tags »Mathematics« and »Differential Calculus«."
+            },
+            "1": {
+              "dt": "Who is the question for?",
+              "dd": "For questions for pupils you can e.g. specify the grade level. In general, tags with a subject should always be preferred."
+            },
+            "2": {
+              "dt": "No course names for university questions",
+              "dd": "Subjects of university courses are usually not applicable to other universities. Questions which cannot be exactly associated by their subject are confusing. Use tags related to a subject in this case."
+            },
+            "3": {
+              "dt": "Language and spelling",
+              "dd": "If you are writing a Question eg. in German, do not use Englisch Tags, then. Please make sure you are using correct spelling and grammar. Only then questions with the same tags can be grouped to a quiz without effort."
+            },
+            "4": {
+              "dt": "Which Tags can I use?",
+              "dd": "You can find and inspiration in the word cloud below. If you have no match in the search field just keep on typing and create a new tag."
+            }
+          }
+        },
+        "tag-input": {
+          "placeholder": "Enter an appropriate Tag here"
+        }
+      }
+    },
+    "name_home": {
+      "demo_quiz": {
+        "title": {
+          "2": "Enter »Demo Quiz« and run it. Use the app in another browser and play the quiz in different roles.",
+          "3": "Visit our <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>project blog</a> and learn how to use bonus quizzes to motivate learning in class."
+        }
+      }
+    },
+    "quiz_rename": {
+      "rename": "Please select a name for your quiz",
+      "custom": {
+        "title": "Alternatively you can enter a custom quiz name",
+        "input": "Custom quiz name",
+        "available": "Your quiz name is available",
+        "select-quiz": "Select quiz name",
+        "please-wait": "Please wait…",
+        "malformed": "Your quiz name contains illegal characters. Please try again with a different name.",
+        "already-taken": "Your quiz name is already taken",
+        "min-keys": "The quiz name must contain at least four characters."
+      }
+    },
+    "home": {
+      "join": "Join »{name}«",
+      "use": "Use »{name}«",
+      "new-demo-quiz": "Create a new demo quiz",
+      "new-abcd-quiz": "Create a new ABCD quiz",
+      "view-public": "Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
+      "view-all-public": "… or view your own public quizzes!",
+      "view-own-public": "Click here to view your own public quizzes!",
+      "errors": {
+        "already-taken": "This name is already used. Please use another quiz name",
+        "min-length": "Please use at least four characters for your quiz name."
+      },
+      "success": {
+        "can-join": "You can join this quiz!",
+        "can-create": "This quiz name is available. You can create a quiz with it!"
+      }
+    },
+    "public-quizzes": {
+      "own": {
+        "title": "Your public quizzes",
+        "remove": "Remove"
+      },
+      "title": "All public quizzes",
+      "none-available": "None available",
+      "number-of-questions": "Number of questions:",
+      "cas-required": "CAS Login required:",
+      "features": "Features:",
+      "name": "Quiz name:",
+      "play": "Play",
+      "copy": "Copy"
+    },
+    "quiz-save": {
+      "access-allowed-for": "Access to this quiz is allowed for:",
+      "title": "Settings for saved quizzes",
+      "description": "Description",
+      "expiry": "Expiration date",
+      "no-expiry": "No expiration date",
+      "save": "Save",
+      "is-submitting": "Submitting…"
+    },
+    "nickname-select": {
+      "no-nicks-available": "No nicknames available!"
+    },
+    "server-unavailable-modal": {
+      "title": "The connection to the server has been dropped!",
+      "connection-dropped": "The quiz can't be played further until the connection to the server is established again. We are currently trying to reconnect. You can also reload the page manually.",
+      "reload-page": "Try reloading the page"
+    },
+    "toasts": {
+      "swupdate": {
+        "message": "There is a new version of arsnova.click available. Please click here to reload the page. This will install the update automatically.",
+        "title": "New version available"
+      }
+    },
+    "statistics": {
+      "users": {
+        "title": "Users online",
+        "content": "All connections to arsnova.click are counted here. Of course the data is anonymized. It is not possible to draw conclusions about individual persons. For you the number is a good indication of how much arsnova.click is currently used."
+      },
+      "total-quizzes": {
+        "title": "Quizzes",
+        "content": "All quizzes are counted here. Including yours! Of course your quizzes are private and only you can start them. No one can access your quizzes!"
+      },
+      "active-quizzes": {
+        "title": "Active quizzes",
+        "content": "This is the number of all the quizzes currently being played. Either their quiz lobby is opened or the quiz round has started."
+      },
+      "total-pool-questions": {
+        "title": "Pool questions",
+        "content": "In the question pool you can provide quiz questions for the public. Everyone can compile their own quizzes from the pool questions."
+      },
+      "total-pool-tags": {
+        "title": "Tags",
+        "content": "You can assign any tag you like to a question you put in the pool. This way, pool questions can be compiled by topic."
+      },
+      "active-participants": {
+        "title": "Active players",
+        "content": "Here you can see the current number of all players in active quizzes. Of course, we attach great importance to data protection: it is not possible to identify individual persons or to track their actions. Don't worry, this is only a rough indication of how much arsnova.click is currently used."
+      },
+      "average-participants": {
+        "title": "Players per quiz",
+        "content": "The number indicates the average number of people who took part in quizzes."
+      }
+    }
+  },
+  "plugins": {
+    "markdown_bar": {
+      "tooltip": {
+        "bold": "Bold",
+        "italic": "Italic",
+        "heading": "Headline",
+        "hyperlink": "Hyperlink",
+        "unordered_list": "Unordered list",
+        "latex": "TeX Markup",
+        "code": "Code Markup",
+        "image": "Image",
+        "line_through": "Crossed out",
+        "ordered_list": "Ordered list",
+        "strike_through": "Strikethrough",
+        "quote": "Quote",
+        "escape": "Mask the following character",
+        "horizontal-rule": "Horizontal line",
+        "info": "Info about Markdown"
+      },
+      "info_content": "You can use <a target='_blank' class='hyperlink' href='https://en.wikipedia.org/wiki/Markdown'>Markdown</a> markup for your text in ARSnova.click. Frequently used markup options are available via the button bar which is visible on all supported input fields. Additionally ARSnova.click supports <a target='_blank' href='https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet'>GitHub Flavored Markdown</a>"
+    },
+    "sound": {
+      "running_music": "Countdown (Running)",
+      "lobby_music": "Quiz Lobby",
+      "finish_music": "Countdown (End)",
+      "running_music_detailed": "Countdown Sound",
+      "lobby_music_detailed": "Sound in the Quiz Lobby",
+      "finish_music_detailed": "Sound at the end of the Countdown",
+      "whistle": "Whistle",
+      "global_volume": "Global volume",
+      "volume": "Volume",
+      "inactive": "Sound is inactive",
+      "active": "Sound is active",
+      "activated": "Activated",
+      "deactivated": "Deactivated",
+      "random": "Random selection",
+      "silence": "No sound",
+      "play": "Play",
+      "stop": "Stop",
+      "allow-stream-to-clients": {
+        "title": "Allow audio for attendees",
+        "label": "This deactivates the audio for the quiz master and activates it for the attendees. Since the start time of the music is not synchronized it is only advised to activate this feature if the attendees are participating remotely at the quiz."
+      }
+    },
+    "splashscreen": {
+      "error": {
+        "error_messages": {
+          "invalid_input_data": "The entered data is either invalid or the access is denied!",
+          "duplicate_user": "You are attempting to participate with a second identity. This is not possible!",
+          "too_much_active_quizzes": "There are currently too much quizzes active.",
+          "server_password_required": "Creating a quiz on this server requires a password.",
+          "server_password_invalid": "The server password is invalid.",
+          "no_preview_available": "The preview is currently not available!"
+        }
+      },
+      "edit_session_confirmation": {
+        "title": "Do you want to edit the quiz?",
+        "text": "All attendees will be removed from the quiz.",
+        "continue": "Continue?"
+      },
+      "return_to_lobby": {
+        "title": "Warning",
+        "text": "If you proceed to the quiz lobby all played quiz rounds will be reset.\n\nIf you need the current quiz-data, you should export it before continuing.",
+        "continue": "Continue?"
+      }
+    }
+  },
+  "view": {
+    "question_type": {
+      "description": {
+        "SingleChoiceQuestion": "Single-choice questions contain as many answer options as you like, one of them must be marked as correct.",
+        "YesNoSingleChoiceQuestion": "Yes|No questions contain only two answers (yes and no), one of them must be marked as correct.",
+        "TrueFalseSingleChoiceQuestion": "True|False questions also contain only two answers (True and False), one of them must be marked as correct.",
+        "MultipleChoiceQuestion": "Multiple-choice questions contain as many answer options as you like, of which as many as you like (at least one) can be marked as correct.",
+        "RangedQuestion": "For the ranged question, an integer must be specified as correct. In addition, upper and lower tolerances can be entered.",
+        "FreeTextQuestion": "In the free text query, the participant must enter any text. This is matched with the provided reference value.",
+        "SurveyQuestion": "Surveys may contain any number of answers, none of them can be marked as right or wrong.",
+        "ABCDSurveyQuestion": "ABCD questions contain at maximum 26 answers (from A - Z).",
+        "type_wrapper": "Here you can change the type of quiz question. Each type has different settings. Change the type by clicking on the respective box."
+      },
+      "select-type": "Select Type",
+      "current-type": "Current Type"
+    }
+  },
+  "enum": {
+    "quiz-visibility": {
+      "account": "Account",
+      "any": "Any"
+    }
+  },
+  "notification": {
+    "close": "Close",
+    "request-permission": "Do you want to receive a notification when your question for the Quiz-Pool has been approved?",
+    "pending-pool-question": {
+      "title": "New Quiz-Pool {amount, plural, =0{questions} one{question} other{questions} }",
+      "body": "{amount, plural, =0{0 questions are} one{One question is} other{{amount} questions are} } waiting for approval in the Quiz-Pool"
+    },
+    "pool-question-approved": {
+      "title": "Quiz-Pool question approved",
+      "body": "One of your Quiz-Pool questions was approved!"
+    }
+  },
+  "hotkey": {
+    "modal-title": "Hotkeys",
+    "MultipleChoiceQuestion": {
+      "description": "Add Multiple-Choice question"
+    },
+    "SingleChoiceQuestion": {
+      "description": "Add Single-Choice question"
+    },
+    "RangedQuestion": {
+      "description": "Add ranged question"
+    },
+    "FreeTextQuestion": {
+      "description": "Add freetext question"
+    },
+    "SurveyQuestion": {
+      "description": "Add survey"
+    },
+    "navigate-to-prev-question": "Navigate to previous question",
+    "navigate-to-next-question": "Navigate to next question",
+    "navigate-to-question-text": "Navigate to the question text view",
+    "navigate-to-answeroptions": "Navigate to the answeroption view",
+    "navigate-to-countdown": "Navigate to the countdown view",
+    "navigate-to-question-type": "Navigate to the question type view",
+    "navigate-to-tags": "Navigate to the tag view",
+    "delete-question": "Delete this question"
+  }
+}
