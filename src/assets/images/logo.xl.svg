@@ -1,7 +1,7 @@
-<svg height="60"
-     id="logo-image-xl"
-     viewBox="0 0 60 70"
-     width="70"
+<svg id="logo-image-xl"
+     viewBox="0 0 60 60"
+     height="60px"
+     width="60px"
      font-size="0.9rem"
      xmlns="http://www.w3.org/2000/svg">
    <text class="arsnova-logo-ars"
