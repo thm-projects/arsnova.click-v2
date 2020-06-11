@@ -3,11 +3,10 @@
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
     <a [routerLink]="interactiveLogo ? ['/'] : null">
       <svg-icon [class.d-md-none]="logoSize !== 'xs'"
-                class="text-white"
                 src="/assets/images/logo.svg"></svg-icon>
       <svg-icon *ngIf="logoSize !== 'xs'"
                 [svgStyle]="logoXlStyle"
-                class="text-white d-none d-md-block"
+                class="d-none d-md-block"
                 src="/assets/images/logo.xl.svg"></svg-icon>
     </a>
   </div>
