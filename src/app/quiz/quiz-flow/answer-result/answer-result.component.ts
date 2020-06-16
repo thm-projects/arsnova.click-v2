@@ -12,6 +12,7 @@ import { IAnswerResult } from '../../../lib/interfaces/IAnswerResult';
 import { IHasTriggeredNavigation } from '../../../lib/interfaces/IHasTriggeredNavigation';
 import { QuizApiService } from '../../../service/api/quiz/quiz-api.service';
 import { AttendeeService } from '../../../service/attendee/attendee.service';
+import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
 
@@ -47,10 +48,12 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
     private quizApiService: QuizApiService,
     private messageQueue: SimpleMQ,
     private attendeeService: AttendeeService,
+    private footerBarService: FooterBarService,
     private router: Router,
     private cd: ChangeDetectorRef,
   ) {
     headerLabelService.headerLabel = 'component.liveResults.title';
+    this.footerBarService.replaceFooterElements([]);
     this.cd.markForCheck();
   }
 
@@ -81,7 +84,7 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
     this._loadedConfetti.complete();
     this.document.body.classList.remove(this._statusCssClass);
     if (this._confettiScriptRef) {
-      (window as any).confetti.stop();
+      (window as any).confetti?.stop();
       this.document.body.removeChild(this._confettiScriptRef);
     }
     const confettiElement = this.document.getElementById('confetti-canvas');

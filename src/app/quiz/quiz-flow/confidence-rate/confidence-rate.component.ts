@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { StorageKey } from '../../../lib/enums/enums';
 import { MessageProtocol } from '../../../lib/enums/Message';
@@ -63,7 +63,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
   }
 
   public ngOnInit(): void {
-    this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
+    this.quizService.quizUpdateEmitter.pipe(take(1), takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
         return;
       }

@@ -146,7 +146,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
     this.isSendingResponse = true;
 
     this.hasTriggeredNavigation = true;
-    this.router.navigate(this.getNextRoute(route));
 
     let result: Array<number> | number | string;
     if (Array.isArray(this._selectedAnswers)) {
@@ -159,7 +158,11 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       if (data.status !== StatusProtocol.Success) {
         console.log('VotingComponent: PutResponse failed', data);
       }
-    }, () => {});
+      this.router.navigate(this.getNextRoute(route));
+    }, err => {
+      console.log('VotingComponent: PutResponse failed', err);
+      this.router.navigate(this.getNextRoute(route));
+    });
   }
 
   public initData(): void {
