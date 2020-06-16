@@ -31,6 +31,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
   private _confidenceValue = '100';
   private _serverUnavailableModal: NgbModalRef;
   private _isRankableQuestion: boolean;
+  private _hasCountdownLeft = false;
 
   private readonly _destroy = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
@@ -53,7 +54,9 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
     private router: Router,
     private headerLabelService: HeaderLabelService,
     private footerBarService: FooterBarService,
-    private memberApiService: MemberApiService, private ngbModal: NgbModal, private messageQueue: SimpleMQ,
+    private memberApiService: MemberApiService,
+    private ngbModal: NgbModal,
+    private messageQueue: SimpleMQ,
   ) {
     headerLabelService.headerLabel = 'component.liveResults.confidence_grade';
     this.footerBarService.replaceFooterElements([]);
@@ -132,7 +135,7 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
   public async sendConfidence(): Promise<Subscription> {
     return this.memberApiService.putConfidenceValue(parseInt(this._confidenceValue, 10)).subscribe((data: IMessage) => {
       this.hasTriggeredNavigation = true;
-      this.router.navigate(['/quiz', 'flow', (this._isRankableQuestion ? 'answer-result' : 'results')]);
+      this.router.navigate(['/quiz', 'flow', (!this._hasCountdownLeft && this._isRankableQuestion ? 'answer-result' : 'results')]);
     });
   }
 
@@ -169,7 +172,11 @@ export class ConfidenceRateComponent implements OnInit, OnDestroy, IHasTriggered
       }), this.messageQueue.subscribe(MessageProtocol.Closed, () => {
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
-      }),
+      }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        this._hasCountdownLeft = payload.value > 0;
+      }), this.messageQueue.subscribe(MessageProtocol.Stop, () => {
+        this._hasCountdownLeft = false;
+      })
     ]);
   }
 

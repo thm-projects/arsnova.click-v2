@@ -115,7 +115,7 @@ export class AttendeeService {
     });
   }
 
-  public hasReponse(): boolean {
+  public hasResponse(): boolean {
     if (!this.getMember(this.ownNick)) {
       return;
     }

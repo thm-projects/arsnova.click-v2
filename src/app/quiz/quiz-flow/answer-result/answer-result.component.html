@@ -72,7 +72,11 @@
     <ng-container *ngIf="!isLoading else loading">
       <ng-container [ngTemplateOutlet]="data?.state === AnswerState.Correct ? correctAnswer : data?.state === AnswerState.PartiallyCorrect ? partiallyCorrectAnswer : wrongAnswer"></ng-container>
 
-      <button class="btn btn-secondary my-3 my-sm-5 mx-auto" (click)="this.hasTriggeredNavigation = true" [routerLink]="['/quiz', 'flow', 'results']">{{'component.answer-result.to-quiz-results' | translate}}</button>
+      <div class="my-3 my-sm-5 mx-auto">
+        <button class="btn btn-secondary mr-2" (click)="this.hasTriggeredNavigation = true" [routerLink]="['/quiz', 'flow', 'results']">{{'component.answer-result.to-quiz-results' | translate}}</button>
+
+        <button class="btn btn-secondary ml-2" (click)="this.hasTriggeredNavigation = true" [routerLink]="['/quiz', 'flow', 'leaderboard']">{{'component.answer-result.to-leaderboard' | translate}}</button>
+      </div>
     </ng-container>
   </div>
 </div>

@@ -165,14 +165,14 @@ describe('AttendeeService', () => {
     service.addMember(memberMock);
     service.ownNick = memberMock.name;
 
-    expect(service.hasReponse()).toEqual(false);
+    expect(service.hasResponse()).toEqual(false);
 
     service.modifyResponse({
       nickname: memberMock.name,
       questionIndex: 0,
       update: response,
     });
-    expect(service.hasReponse()).toEqual(true);
+    expect(service.hasResponse()).toEqual(true);
   });
 
   it('should check if a reading confirmation is set', () => {

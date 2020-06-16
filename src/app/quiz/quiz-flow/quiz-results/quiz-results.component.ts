@@ -652,7 +652,26 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.hasTriggeredNavigation = true;
           this.router.navigate(['/']);
         }
-      }),
+      }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
+        if (!this.attendeeService.hasResponse() ||
+            [QuestionType.ABCDSurveyQuestion, QuestionType.SurveyQuestion].includes(this.quizService.currentQuestion().TYPE)
+        ) {
+          return;
+        }
+
+        this.hasTriggeredNavigation = true;
+        this.router.navigate(['/quiz', 'flow', 'answer-result']);
+      }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        if (payload.value ||
+            !this.attendeeService.hasResponse() ||
+            [QuestionType.ABCDSurveyQuestion, QuestionType.SurveyQuestion].includes(this.quizService.currentQuestion().TYPE)
+        ) {
+          return;
+        }
+
+        this.hasTriggeredNavigation = true;
+        this.router.navigate(['/quiz', 'flow', 'answer-result']);
+      })
     ]);
   }
 

@@ -205,7 +205,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
 
       if ( //
         (this.quizService.quiz.currentQuestionIndex > -1 && this.quizService.quiz.currentStartTimestamp === -1) || //
-        this.attendeeService.hasReponse() //
+        this.attendeeService.hasResponse() //
       ) {
         this.hasTriggeredNavigation = true;
         this.router.navigate(this.getNextRoute());
@@ -317,12 +317,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   }
 
   private getNextRoute(route?: string): Array<string> {
-    const isRankableQuestion = ![QuestionType.SurveyQuestion, QuestionType.ABCDSurveyQuestion].includes(this._currentQuestion.TYPE);
+    const hasConfidenceEnabled = environment.confidenceSliderEnabled && this.quizService.quiz.sessionConfig.confidenceSliderEnabled;
 
     return [
-      '/quiz', 'flow', route ? route : environment.confidenceSliderEnabled && //
-                                       this.quizService.quiz.sessionConfig.confidenceSliderEnabled ? 'confidence-rate' :
-                                       isRankableQuestion ? 'answer-result' : 'results',
+      '/quiz', 'flow', route ? route : (hasConfidenceEnabled ? 'confidence-rate' : 'results'),
     ];
   }
 }
