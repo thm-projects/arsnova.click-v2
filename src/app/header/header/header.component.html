@@ -1,12 +1,12 @@
 <nav class="navbar navbar-header flex-nowrap align-items-center p-0"
      id="header">
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
-    <a [routerLink]="interactiveLogo ? ['/'] : null" class="text-decoration-none">
-      <svg-icon [class.d-md-none]="logoSize !== 'xs'"
-                src="/assets/images/logo.svg"></svg-icon>
-      <svg-icon *ngIf="logoSize !== 'xs'"
-                class="d-none d-md-block"
-                src="/assets/images/logo.xl.svg"></svg-icon>
+    <a [routerLink]="interactiveLogo ? ['/'] : null" class="text-decoration-none" [class.d-md-none]="logoSize !== 'xs'">
+      <svg-icon src="/assets/images/logo.svg"></svg-icon>
+    </a>
+    <a *ngIf="logoSize !== 'xs'"
+       [routerLink]="interactiveLogo ? ['/'] : null" class="d-none d-md-block text-decoration-none">
+      <svg-icon src="/assets/images/logo.xl.svg"></svg-icon>
     </a>
   </div>
   <div *ngIf="showHeader"
