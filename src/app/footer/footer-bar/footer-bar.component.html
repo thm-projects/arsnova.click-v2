@@ -1,15 +1,16 @@
 <nav *ngIf="footerBarService.footerElements.length"
      [class.collapsed]="collapsedNavbar"
      class="nav navbar-footer d-md-inline-block flex-nowrap flex-sm-column justify-content-sm-start p-1 mb-2 mb-sm-0"
-     id="navbar-footer-container"
      role="navigation">
   <input (change)="fileChange($event)"
          accept="application/json"
          class="d-none"
          id="upload-session"
+         aria-hidden="true"
          multiple="multiple"
          type="file"/>
-  <div (click)="toggleSetting(elem)"
+  <a href="#"
+     (click)="toggleSetting(elem)"
        *ngFor="let elem of footerBarService.footerElements"
        [attr.data-intro]="elem.showIntro ? (elem.introTranslate | translate) : null"
        [class.text-danger]="(elem.selectable && !elem.isActive) || elem.isActive === false"
@@ -18,8 +19,8 @@
        [queryParams]="getQueryParams(elem)"
        [routerLink]="getLinkTarget(elem)"
        [title]="elem.textName | translate"
-       class="footerElement px-2 px-sm-1 py-sm-2 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
-    <p [class]="elem.iconColorClass + ' footerElemIcon align-self-center'">
+       class="footerElement px-2 px-sm-1 pt-sm-2 pb-sm-1 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
+    <i [class]="(elem.iconColorClass ? elem.iconColorClass : '') + ' footerElemIcon align-self-center h-100'">
       <fa-layers *ngIf="elem.iconLayer">
         <fa-icon *ngFor="let icon of elem.iconLayer"
                  [icon]="icon.classes"
@@ -29,7 +30,7 @@
       <fa-icon *ngIf="!elem.iconLayer"
                [icon]="getIconClass(elem)"
                [spin]="elem.isLoading"></fa-icon>
-    </p>
+    </i>
     <p class="footerElemText flex-column text-truncate text-left ml-2 flex-sm-grow-1">
       <span [class]="elem.textClass"
             [innerHTML]="elem.textName | translate"></span>
@@ -46,5 +47,5 @@
       <span *ngIf="notificationService.footerBadges[elem.id]"
             class="badge badge-danger ml-1 d-sm-block d-sm-inline-block align-self-md-start">{{notificationService.footerBadges[elem.id]}}</span>
     </p>
-  </div>
+  </a>
 </nav>

@@ -71,9 +71,20 @@ code[class*="language-"], pre[class*="language-"] {
 }
 
 .navbar-footer {
-  background-color: $bg-footer;
-  color: $footer-color;
   @include transitionEffect();
+  background-color: $bg-footer;
+
+  .footerElement {
+    color: $footer-color;
+
+    &:active,
+    &:focus,
+    &:hover {
+      color: $footer-color;
+      text-decoration: none;
+      border-bottom: 1px solid $footer-color;
+    }
+  }
 }
 
 #logo-image,
