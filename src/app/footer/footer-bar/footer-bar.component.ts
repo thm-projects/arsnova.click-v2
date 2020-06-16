@@ -17,8 +17,6 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class FooterBarComponent implements OnInit {
   public static readonly TYPE = 'FooterBarComponent';
 
-  public collapsedNavbar: boolean;
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     public footerBarService: FooterBarService,
@@ -87,7 +85,8 @@ export class FooterBarComponent implements OnInit {
 
   private detectCurrentRoute(): void {
     const currentComponent = this.fetchChildComponent(this.activatedRoute);
-    this.collapsedNavbar = [
+    this.footerBarService.collapsedNavbar = [
+      'LoginComponent',
       'QuizLobbyComponent',
       'QuizResultsComponent',
       'VotingComponent',

@@ -223,6 +223,10 @@ export class RootComponent implements OnInit, AfterViewInit {
 
   public getClasses(): string {
     if (this.footerBarService.footerElements.length) {
+      if (this.footerBarService.collapsedNavbar) {
+        return 'col-sm-11 offset-sm-1';
+      }
+
       return 'col-sm-11 offset-sm-1 col-md-10 offset-md-0 col-xl-9';
     }
 

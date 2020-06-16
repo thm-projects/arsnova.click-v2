@@ -12,7 +12,6 @@
 @mixin navbarFooterSMView() {
   position: fixed;
   top: 70px;
-  max-width: 20vw;
 
   .footerElement {
     .footerElemText {
@@ -30,7 +29,6 @@
 
     .footerElemText {
       flex-shrink: 0;
-      max-width: calc(20vw - 36px);
     }
   }
 }
@@ -55,7 +53,7 @@
   @include media-breakpoint-up(md) {
     @include border-right-radius($border-radius);
     opacity: 0.95;
-    max-width: 100%;
+    max-width: calc(20vw - 36px);
   }
 
   .footerElement {

@@ -86,6 +86,7 @@ export class FooterBarService {
   private _connectionState: RxStompState;
 
   public TYPE_REFERENCE: string;
+  public collapsedNavbar: boolean;
   public footerElemQuizpool: IFooterBarElement = new FooterbarElement({
     id: 'quizpool',
     iconLayer: [

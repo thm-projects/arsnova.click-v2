@@ -76,6 +76,7 @@ code[class*="language-"], pre[class*="language-"] {
 
   .footerElement {
     color: $footer-color;
+    border-bottom: 1px solid transparent;
 
     &:active,
     &:focus,

@@ -1,5 +1,5 @@
 <nav *ngIf="footerBarService.footerElements.length"
-     [class.collapsed]="collapsedNavbar"
+     [class.collapsed]="footerBarService.collapsedNavbar"
      class="nav navbar-footer d-md-inline-block flex-nowrap flex-sm-column justify-content-sm-start p-1 mb-2 mb-sm-0"
      role="navigation">
   <input (change)="fileChange($event)"
@@ -19,8 +19,8 @@
        [queryParams]="getQueryParams(elem)"
        [routerLink]="getLinkTarget(elem)"
        [title]="elem.textName | translate"
-       class="footerElement px-2 px-sm-1 pt-sm-2 pb-sm-1 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
-    <i [class]="(elem.iconColorClass ? elem.iconColorClass : '') + ' footerElemIcon align-self-center h-100'">
+       class="footerElement px-2 px-sm-1 pt-sm-2 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
+    <i [class]="(elem.iconColorClass ? elem.iconColorClass : '') + ' footerElemIcon'">
       <fa-layers *ngIf="elem.iconLayer">
         <fa-icon *ngFor="let icon of elem.iconLayer"
                  [icon]="icon.classes"
