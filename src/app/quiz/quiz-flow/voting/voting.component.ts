@@ -41,7 +41,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   private _selectedAnswers: Array<string> | string | number = [];
   private _currentQuestion: AbstractQuestionEntity;
   private _serverUnavailableModal: NgbModalRef;
-  private _hasTriggeredNavigation: boolean;
   private readonly _destroy = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
 
@@ -49,15 +48,7 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   public countdown: number;
 
   public musicConfig: IAudioPlayerConfig;
-
-  get hasTriggeredNavigation(): boolean {
-    return this._hasTriggeredNavigation;
-  }
-
-  set hasTriggeredNavigation(value: boolean) {
-    this._hasTriggeredNavigation = value;
-    console.trace('hasTriggeredNavigation');
-  }
+  public hasTriggeredNavigation: boolean;
 
   get answers(): Array<string> {
     return this._answers;

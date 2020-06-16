@@ -38,7 +38,7 @@ export class AttendeeMockService {
     return false;
   }
 
-  public hasReponse(): boolean {
+  public hasResponse(): boolean {
     return false;
   }
 
