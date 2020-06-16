@@ -46,7 +46,7 @@
         "/rabbitmq/**",
         "/rabbitmq-mgmt/**",
         "https://polyfill.io/**",
-        "https://sentry.io/**"
+        "https://sentry.arsnova.click/**"
       ],
       "cacheConfig": {
         "strategy": "freshness",
