@@ -41,14 +41,23 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   private _selectedAnswers: Array<string> | string | number = [];
   private _currentQuestion: AbstractQuestionEntity;
   private _serverUnavailableModal: NgbModalRef;
+  private _hasTriggeredNavigation: boolean;
   private readonly _destroy = new Subject();
   private readonly _messageSubscriptions: Array<string> = [];
 
   public isSendingResponse: boolean;
-  public hasTriggeredNavigation: boolean;
   public countdown: number;
 
   public musicConfig: IAudioPlayerConfig;
+
+  get hasTriggeredNavigation(): boolean {
+    return this._hasTriggeredNavigation;
+  }
+
+  set hasTriggeredNavigation(value: boolean) {
+    this._hasTriggeredNavigation = value;
+    console.trace('hasTriggeredNavigation');
+  }
 
   get answers(): Array<string> {
     return this._answers;
@@ -144,7 +153,6 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
 
   public sendResponses(route?: string): void {
     this.isSendingResponse = true;
-
     this.hasTriggeredNavigation = true;
 
     let result: Array<number> | number | string;
@@ -181,6 +189,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
   public ngOnInit(): void {
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
+        return;
+      }
+
+      if (this.hasTriggeredNavigation) {
         return;
       }
 
@@ -279,6 +291,10 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.countdown = payload.value;
         if (!this.countdown) {
           this.hasTriggeredNavigation = true;
@@ -286,20 +302,36 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
         }
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
         if (existingNickname === payload.name) {
           this.hasTriggeredNavigation = true;
           this.router.navigate(['/']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.sendResponses('results');
       }),

@@ -86,6 +86,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
         return;
       }
 
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       if (this.quizService.quiz.state === QuizState.Inactive) {
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
@@ -186,6 +190,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
 
     this.route.paramMap.pipe(map(params => parseInt(params.get('questionIndex'), 10)), distinctUntilChanged(), takeUntil(this._destroy))
       .subscribe(questionIndex => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this._questionIndex = questionIndex;
         this._isGlobalRanking = isNaN(this._questionIndex);
         if (this._isGlobalRanking) {
@@ -220,6 +228,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
         sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
@@ -251,6 +263,10 @@ export class LeaderboardComponent implements OnInit, OnDestroy, IHasTriggeredNav
     ];
 
     this.footerBarService.footerElemBack.onClickCallback = () => {
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       this.hasTriggeredNavigation = true;
       this.router.navigate(['/quiz', 'flow', 'results']);
     };

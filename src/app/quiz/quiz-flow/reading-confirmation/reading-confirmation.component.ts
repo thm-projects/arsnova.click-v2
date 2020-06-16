@@ -84,6 +84,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
       this._serverUnavailableModal.result.finally(() => this._serverUnavailableModal = null);
     });
 
+    if (this.hasTriggeredNavigation) {
+      return;
+    }
+
     if (this.attendeeService.hasReadingConfirmation()) {
       this.hasTriggeredNavigation = true;
       this.router.navigate(['/quiz', 'flow', 'results']);
@@ -100,6 +104,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
 
     this.quizService.quizUpdateEmitter.pipe(takeUntil(this._destroy)).subscribe(quiz => {
       if (!quiz) {
+        return;
+      }
+
+      if (this.hasTriggeredNavigation) {
         return;
       }
 
@@ -133,6 +141,10 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
         this.quizService.quiz.currentQuestionIndex = payload.nextQuestionIndex;
         sessionStorage.removeItem(StorageKey.CurrentQuestionIndex);
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedResponse, payload => {
@@ -141,11 +153,19 @@ export class ReadingConfirmationComponent implements OnInit, OnDestroy, IHasTrig
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }), this.messageQueue.subscribe(MessageProtocol.Added, payload => {

@@ -89,6 +89,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
         return;
       }
 
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       if (this.quizService.quiz.state === QuizState.Inactive) {
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
@@ -252,6 +256,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
 
     this.footerBarService.replaceFooterElements(footerBarElements);
     this.footerBarService.footerElemBack.onClickCallback = async () => {
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       this.memberApiService.deleteMember(this.quizService.quiz.name, this.attendeeService.ownNick).subscribe();
       this.attendeeService.cleanUp().subscribe();
       this.connectionService.cleanUp().subscribe();
@@ -284,6 +292,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
 
   private addFooterElemClickCallbacksAsOwner(): void {
     this.footerBarService.footerElemStartQuiz.onClickCallback = (self: FooterbarElement) => {
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       if (!this.canStartQuiz()) {
         return;
       }
@@ -304,6 +316,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       });
     };
     this.footerBarService.footerElemEditQuiz.onClickCallback = () => {
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       const promise = this.attendeeService.attendees.length ? //
                       this.ngbModal.open(EditModeConfirmComponent).result : //
                       new Promise<any>(resolve => resolve());
@@ -336,6 +352,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
@@ -370,11 +390,19 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
   private handleMessagesForAttendee(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
@@ -382,6 +410,10 @@ export class QuizLobbyComponent implements OnInit, OnDestroy, IHasTriggeredNavig
           this.router.navigate(['/quiz', 'flow', 'voting']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
         if (existingNickname === payload.name) {
           this.hasTriggeredNavigation = true;

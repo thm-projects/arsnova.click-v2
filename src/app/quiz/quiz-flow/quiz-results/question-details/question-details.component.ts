@@ -85,6 +85,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
     ]);
 
     this.footerBarService.footerElemBack.onClickCallback = () => {
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       this.hasTriggeredNavigation = true;
       history.back();
     };
@@ -130,6 +134,10 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
 
     this.quizService.quizUpdateEmitter.pipe(switchMapTo(questionIndex$), takeUntil(this._destroy)).subscribe(questionIndex => {
       if (!this.quizService.quiz || isNaN(questionIndex)) {
+        return;
+      }
+
+      if (this.hasTriggeredNavigation) {
         return;
       }
 
@@ -218,11 +226,19 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
       }), this.messageQueue.subscribe(MessageProtocol.Start, payload => {
         this.quizService.quiz.currentStartTimestamp = payload.currentStartTimestamp;
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
@@ -236,11 +252,19 @@ export class QuestionDetailsComponent implements OnInit, OnDestroy, IHasTriggere
   private handleMessagesForAttendee(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);

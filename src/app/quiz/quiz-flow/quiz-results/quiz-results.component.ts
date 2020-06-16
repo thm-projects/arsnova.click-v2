@@ -273,6 +273,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
     });
 
     this.quizService.quizUpdateEmitter.pipe(filter(quiz => Boolean(quiz)), takeUntil(this._destroy)).subscribe(async quiz => {
+      if (this.hasTriggeredNavigation) {
+        return;
+      }
+
       if (this.quizService.quiz.state === QuizState.Inactive) {
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
@@ -552,12 +556,20 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.hideProgressbarStyle = false;
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.Reset, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.attendeeService.clearResponses();
         this.quizService.quiz.currentQuestionIndex = -1;
         this.hasTriggeredNavigation = true;
         this.ngbModal.dismissAll();
         this.router.navigate(['/quiz', 'flow', 'lobby']);
       }), this.messageQueue.subscribe(MessageProtocol.Closed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/']);
       }),
@@ -634,12 +646,20 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   private handleMessagesForAttendee(): void {
     this._messageSubscriptions.push(...[
       this.messageQueue.subscribe(MessageProtocol.Start, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'voting']);
       }), this.messageQueue.subscribe(MessageProtocol.UpdatedSettings, payload => {
         this.quizService.quiz.sessionConfig = payload.sessionConfig;
         this.cd.markForCheck();
       }), this.messageQueue.subscribe(MessageProtocol.ReadingConfirmationRequested, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         this.hasTriggeredNavigation = true;
         if (environment.readingConfirmationEnabled) {
           this.router.navigate(['/quiz', 'flow', 'reading-confirmation']);
@@ -647,12 +667,20 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           this.router.navigate(['/quiz', 'flow', 'voting']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Removed, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         const existingNickname = sessionStorage.getItem(StorageKey.CurrentNickName);
         if (existingNickname === payload.name) {
           this.hasTriggeredNavigation = true;
           this.router.navigate(['/']);
         }
       }), this.messageQueue.subscribe(MessageProtocol.Stop, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         if (!this.attendeeService.hasResponse() ||
             [QuestionType.ABCDSurveyQuestion, QuestionType.SurveyQuestion].includes(this.quizService.currentQuestion().TYPE)
         ) {
@@ -662,6 +690,10 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
         this.hasTriggeredNavigation = true;
         this.router.navigate(['/quiz', 'flow', 'answer-result']);
       }), this.messageQueue.subscribe(MessageProtocol.Countdown, payload => {
+        if (this.hasTriggeredNavigation) {
+          return;
+        }
+
         if (payload.value ||
             !this.attendeeService.hasResponse() ||
             [QuestionType.ABCDSurveyQuestion, QuestionType.SurveyQuestion].includes(this.quizService.currentQuestion().TYPE)
