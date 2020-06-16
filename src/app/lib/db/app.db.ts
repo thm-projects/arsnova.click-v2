@@ -2,6 +2,7 @@ import Dexie from 'dexie';
 import { ReplaySubject } from 'rxjs';
 import { QuizEntity } from '../entities/QuizEntity';
 import { DbName, DbTable, StorageKey } from '../enums/enums';
+import { QuestionType } from '../enums/QuestionType';
 
 export class AppDb extends Dexie {
   public readonly initialized: ReplaySubject<void> = new ReplaySubject<void>(1);
@@ -47,6 +48,24 @@ export class AppDb extends Dexie {
           ;
           return this[DbTable.Quiz].put(value);
         }
+      }));
+    });
+
+    this.version(1.2).stores({
+      [DbTable.Config]: 'type',
+      [DbTable.Quiz]: 'name',
+    }).upgrade(async trans => {
+      const quizData = await trans.db.table<QuizEntity>(DbTable.Quiz).toArray();
+      return Promise.all(quizData.map(quiz => {
+        quiz.questionList = quiz.questionList.map(question => {
+          if ((question.TYPE as string) === 'ABCDSingleChoiceQuestion') {
+            question.TYPE = QuestionType.ABCDSurveyQuestion;
+          }
+
+          return question;
+        });
+
+        return this[DbTable.Quiz].put(quiz);
       }));
     });
 
