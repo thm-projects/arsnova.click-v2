@@ -1,7 +1,7 @@
 <nav class="navbar navbar-header flex-nowrap align-items-center p-0"
      id="header">
   <div class="arsnova-logo d-flex align-items-center cursor-pointer">
-    <a [routerLink]="interactiveLogo ? ['/'] : null">
+    <a [routerLink]="interactiveLogo ? ['/'] : null" class="text-decoration-none">
       <svg-icon [class.d-md-none]="logoSize !== 'xs'"
                 src="/assets/images/logo.svg"></svg-icon>
       <svg-icon *ngIf="logoSize !== 'xs'"
