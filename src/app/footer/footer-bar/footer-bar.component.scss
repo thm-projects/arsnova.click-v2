@@ -54,6 +54,10 @@
     @include border-right-radius($border-radius);
     opacity: 0.95;
     max-width: calc(20vw - 36px);
+
+    .footerElemText {
+      max-width: calc(100% - 26px);
+    }
   }
 
   .footerElement {
