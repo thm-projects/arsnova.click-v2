@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.hasUsernamePasswordLogin = environment.loginMechanism.includes(LoginMechanism.UsernamePassword) && !this.hasTokenLogin;
 
       if (this.hasTokenLogin) {
-        this.headerLabelService.headerLabel = 'component.login.login-to-quiz';
+        this.headerLabelService.headerLabel = '';
       } else {
         this.headerLabelService.headerLabel = 'component.login.login';
       }
