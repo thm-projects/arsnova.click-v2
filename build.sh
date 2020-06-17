@@ -50,7 +50,7 @@ csstype="text/css"
 curl -sI "$2/$stylefile" | awk -F ': ' '$1 == "content-type" { print $2 }' | grep $csstype > /dev/null
 styletype=$?
 
-curl -sI "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
+curl -s "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json > /dev/null
 hashdiff=$?
 
 if [[ "$styletype" -eq "0" ]] && [[ "$hashdiff" -eq "0" ]]
@@ -92,7 +92,7 @@ then
 else
    echo "Styles are not equal - regenerating theme assets"
    echo "Hashdiff is"
-   curl -sI "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json
+   curl -s "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json
 
    cd /usr/src/app
    echo "Starting the ssr server"
