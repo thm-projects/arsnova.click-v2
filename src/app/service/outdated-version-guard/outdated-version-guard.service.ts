@@ -27,8 +27,13 @@ export class OutdatedVersionGuardService implements CanActivate {
       return of(true);
     }
 
-    if (sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) &&
-        sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) !== 'false' &&
+    if (!sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep)) {
+      // We cannot determine the last version so we set it to the current one
+      sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, environment.version);
+      return of(true);
+    }
+
+    if (sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) !== 'false' &&
         isNaN(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) as any)) {
       return of(true);
     }
