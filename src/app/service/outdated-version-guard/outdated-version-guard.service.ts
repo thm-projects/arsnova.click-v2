@@ -29,7 +29,7 @@ export class OutdatedVersionGuardService implements CanActivate {
 
     if (sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) &&
         sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) !== 'false' &&
-        isNaN(parseInt(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep), 10))) {
+        isNaN(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) as any)) {
       return of(true);
     }
 
@@ -62,7 +62,7 @@ export class OutdatedVersionGuardService implements CanActivate {
             subscriber.complete();
             return;
 
-          } else if (isNaN(parseInt(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep), 10))) {
+          } else if (isNaN(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) as any)) {
             sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, 'false');
           }
 

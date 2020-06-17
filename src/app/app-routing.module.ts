@@ -16,37 +16,37 @@ const routes: Routes = [
   }, {
     path: 'info',
     loadChildren: () => import('./root/info/info.module').then(m => m.InfoModule),
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: 'i18n-manager',
     loadChildren: () => import('./i18n-manager/i18n-manager.module').then(m => m.I18nManagerModule),
-    canActivate: [InitDbGuard, StaticLoginService],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard, StaticLoginService],
   }, {
     path: 'quiz/manager',
     loadChildren: () => import('./quiz/quiz-manager/quiz-manager.module').then(m => m.QuizManagerModule),
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: 'quiz/flow',
     loadChildren: () => import('./quiz/quiz-flow/quiz-flow.module').then(m => m.QuizFlowModule),
     data: {
       preload: false,
     },
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: 'quiz',
     loadChildren: () => import('./quiz/quiz.module').then(m => m.QuizModule),
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: 'nicks',
     loadChildren: () => import('./root/nickname-chooser/nickname-chooser.module').then(m => m.NicknameChooserModule),
     data: {
       preload: false,
     },
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: 'themes',
     component: ThemeSwitcherComponent,
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: 'preview/:themeId/:languageId',
     component: HomeComponent,
@@ -55,11 +55,11 @@ const routes: Routes = [
   }, {
     path: 'languages',
     component: LanguageSwitcherComponent,
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: 'login',
     component: LoginComponent,
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: '',
     component: HomeComponent,
@@ -67,7 +67,7 @@ const routes: Routes = [
   }, {
     path: '**',
     redirectTo: '/',
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   },
 ];
 
