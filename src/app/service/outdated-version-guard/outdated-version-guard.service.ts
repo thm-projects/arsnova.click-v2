@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { isNotNullOrUndefined } from 'codelyzer/util/isNotNullOrUndefined';
 import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -40,7 +39,7 @@ export class OutdatedVersionGuardService implements CanActivate {
         return;
       }
 
-      if (isNotNullOrUndefined(this._versionMismatch)) {
+      if (this._versionMismatch ?? false) {
         if (!this._versionMismatch) {
           subscriber.next(true);
           subscriber.complete();
@@ -54,7 +53,7 @@ export class OutdatedVersionGuardService implements CanActivate {
 
       this.http.get('/assets/version.txt', { responseType: 'text' }).pipe(
         tap(version => {
-          this._versionMismatch = version !== environment.version;
+          this._versionMismatch = version.trim() !== environment.version;
 
           if (!this._versionMismatch) {
             sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, environment.version);

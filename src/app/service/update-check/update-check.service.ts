@@ -67,7 +67,7 @@ export class UpdateCheckService {
     });
 
     const httpReq = this.http.get('/assets/version.txt', { responseType: 'text' })
-      .pipe(tap(val => sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, val)));
+      .pipe(tap(val => sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, val.trim())));
 
     this.swUpdateToast.onTap.pipe(switchMapTo(httpReq)).subscribe(() => {
       this.clearCache().finally(() => {
