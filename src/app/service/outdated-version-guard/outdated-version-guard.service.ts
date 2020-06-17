@@ -33,11 +33,6 @@ export class OutdatedVersionGuardService implements CanActivate {
       return of(true);
     }
 
-    if (sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) !== 'false' &&
-        isNaN(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) as any)) {
-      return of(true);
-    }
-
     return new Observable<boolean>(subscriber => {
       if (sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) === 'false') {
         subscriber.next(true);

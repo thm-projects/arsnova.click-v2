@@ -1,9 +1,12 @@
 import { DOCUMENT } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { SwUpdate, UpdateAvailableEvent } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { interval } from 'rxjs';
+import { switchMapTo, tap } from 'rxjs/operators';
+import { StorageKey } from '../../lib/enums/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +19,8 @@ export class UpdateCheckService {
     @Inject(DOCUMENT) private document: Document,
     private updates: SwUpdate,
     private translateService: TranslateService,
-    private toastService: ToastrService
+    private toastService: ToastrService,
+    private http: HttpClient,
   ) {
     if (updates.isEnabled) {
       interval(this.INTERVAL_PERIOD).subscribe(() => this.doCheck().then(() => console.log('checking for updates')));
@@ -62,7 +66,10 @@ export class UpdateCheckService {
       toastClass: 'toast show ngx-toastr',
     });
 
-    this.swUpdateToast.onTap.subscribe(() => {
+    const httpReq = this.http.get('/assets/version.txt', { responseType: 'text' })
+      .pipe(tap(val => sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, val)));
+
+    this.swUpdateToast.onTap.pipe(switchMapTo(httpReq)).subscribe(() => {
       this.clearCache().finally(() => {
         this.updates.activateUpdate().then(() => this.reloadPage());
       });
