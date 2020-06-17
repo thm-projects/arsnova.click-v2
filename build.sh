@@ -67,7 +67,7 @@ then
       curl -s $2/assets/meta/$theme/linkNodes.json > assets/meta/$theme/linkNodes.json
       echo "Download of manifest definition file for theme '$theme' completed"
 
-      for langKey in en de fr it es ;
+      for langKey in en de;
       do
          langKey=$(echo "$langKey" | tr -d '"')
          for previewSize in $(cat assets/imageDerivates.json | jq '.frontendPreview | .[]')
