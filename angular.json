@@ -32,6 +32,7 @@
               "src/assets/themeData.json",
               "src/assets/piwik/piwik.js",
               "src/assets/theme-hashes.json",
+              "src/assets/version.txt",
               {
                 "glob": "click-service-worker.js",
                 "input": "src",
@@ -352,6 +353,7 @@
               "src/assets/serverEndpoint.json",
               "src/assets/imageDerivates.json",
               "src/assets/themeData.json",
+              "src/assets/version.txt",
               {
                 "glob": "click-service-worker.js",
                 "input": "src",
