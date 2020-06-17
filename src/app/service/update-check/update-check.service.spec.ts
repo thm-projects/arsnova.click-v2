@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, TestBed } from '@angular/core/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { TOAST_CONFIG, ToastrService } from 'ngx-toastr';
@@ -10,7 +11,7 @@ describe('UpdateCheckService', () => {
   let service: UpdateCheckService;
 
   beforeEach(() => TestBed.configureTestingModule({
-    imports: [I18nTestingModule],
+    imports: [I18nTestingModule, HttpClientTestingModule],
     providers: [
       {
         provide: SwUpdate,
