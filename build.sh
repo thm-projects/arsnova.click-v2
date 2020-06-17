@@ -7,6 +7,11 @@ then
   exit 1
 fi
 
+echo "Building unique version hash for the build"
+HASH=$(date | md5sum | head -c32)
+echo $HASH > src/assets/version.txt
+sed -i s/__VERSION__/$HASH/ src/environments/environment*.ts
+
 echo "Building the app"
 npm run build:"$1"
 if [[ $? -ne "0" ]]
@@ -21,7 +26,7 @@ cd /usr/src/app
 echo "Purifying css"
 npm run purify
 
-echo "Regenerating hashes"
+echo "Regenerating ngsw hashes"
 npm run ngsw-config
 
 echo "Renaming css files to a hashed version and add a json file containing the theme and the corresponding hash"

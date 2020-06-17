@@ -5,7 +5,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 export const environment: IEnvironment = {
   production: true,
   title: Title.Westermann,
-  version: 'VERSION',
+  version: '__VERSION__',
   enableCasLogin: false,
   ssrEndpoint: 'https://test01.ars.sbzo.de',
   serverEndpoint: 'https://test01.ars.sbzo.de/backend/',

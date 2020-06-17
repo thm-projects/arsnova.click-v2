@@ -6,7 +6,7 @@ export const environment: IEnvironment = {
   production: true,
   title: Title.Westermann,
   enableCasLogin: false,
-  version: 'VERSION',
+  version: '__VERSION__',
   sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
   ssrEndpoint: 'https://beta.arsnova.click/backend',
   serverEndpoint: 'https://beta.arsnova.click/backend',
