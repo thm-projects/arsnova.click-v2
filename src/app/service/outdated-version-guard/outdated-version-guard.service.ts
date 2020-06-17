@@ -62,8 +62,6 @@ export class OutdatedVersionGuardService implements CanActivate {
             subscriber.complete();
             return;
 
-          } else if (isNaN(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) as any)) {
-            sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, 'false');
           }
 
           this.ngbModal.open(OutdatedVersionComponent, {beforeDismiss: () => false}).result.finally(() => {
