@@ -2,6 +2,7 @@ import { isPlatformBrowser, isPlatformServer, LOCATION_INITIALIZED, ɵgetDOM } f
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, Inject, Injector, NgModule, PLATFORM_ID, SecurityContext } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, TransferState } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -58,6 +59,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     HomeComponent, RootComponent, LanguageSwitcherComponent, ThemeSwitcherComponent, LoginComponent, TwitterCardsComponent, StatisticsComponent,
   ],
   imports: [
+    BrowserAnimationsModule, // required by toastr
     BrowserModule.withServerTransition({ appId: 'arsnova-click' }),
     PrebootModule.withConfig({ appRoot: 'app-root', replay: false }),
     AppRoutingModule,

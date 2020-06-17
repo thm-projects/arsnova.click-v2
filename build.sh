@@ -91,6 +91,8 @@ then
    done
 else
    echo "Styles are not equal - regenerating theme assets"
+   echo "Hashdiff is"
+   curl -sI "$2/assets/theme-hashes.json" | diff - assets/theme-hashes.json
 
    cd /usr/src/app
    echo "Starting the ssr server"

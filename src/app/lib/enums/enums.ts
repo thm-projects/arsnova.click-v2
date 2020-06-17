@@ -37,19 +37,20 @@ export enum Project {
 }
 
 export enum StorageKey {
-  PushSubscription       = 'PushSubscription', //
-  TwitterOptIn           = 'TwitterOptIn', //
-  CurrentQuestionIndex   = 'CurrentQuestionIndex', //
-  PrivateKey             = 'PrivateKey', //
-  LoginToken             = 'LoginToken', //
-  QuizToken              = 'QuizToken', //
-  CasToken               = 'CasToken', //
-  CurrentQuizName        = 'CurrentQuizName', //
-  CurrentNickName        = 'CurrentNickName', //
-  CurrentMemberGroupName = 'CurrentMemberGroupName', //
-  Language               = 'Language', //
-  QuizTheme              = 'QuizTheme', //
-  DefaultTheme           = 'DefaultTheme', //
+  OutdatedVersionFunnelStep = 'OutdatedVersionFunnelStep', //
+  PushSubscription          = 'PushSubscription', //
+  TwitterOptIn              = 'TwitterOptIn', //
+  CurrentQuestionIndex      = 'CurrentQuestionIndex', //
+  PrivateKey                = 'PrivateKey', //
+  LoginToken                = 'LoginToken', //
+  QuizToken                 = 'QuizToken', //
+  CasToken                  = 'CasToken', //
+  CurrentQuizName           = 'CurrentQuizName', //
+  CurrentNickName           = 'CurrentNickName', //
+  CurrentMemberGroupName    = 'CurrentMemberGroupName', //
+  Language                  = 'Language', //
+  QuizTheme                 = 'QuizTheme', //
+  DefaultTheme              = 'DefaultTheme', //
 }
 
 export enum DbState {

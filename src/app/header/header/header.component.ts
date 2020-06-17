@@ -6,6 +6,7 @@ import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
@@ -33,6 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() public interactiveLogo = true;
 
   public isCheckingForUpdates: boolean;
+  public readonly version = environment.version;
 
   get storage(): StorageEstimate {
     return this._storage;

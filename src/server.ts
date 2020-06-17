@@ -40,7 +40,7 @@ export function app(): Express {
   server.get('**/*.*', express.static(distFolder, {
     maxAge: '1y',
   }), (req, res, next) => {
-    if (process.env.NODE_ENV !== 'development' || req.url.endsWith('.css')) {
+    if (process.env.NODE_ENV !== 'development' || req.url.endsWith('.css') || req.url.endsWith('.txt')) {
       next();
       return;
     }
@@ -55,8 +55,9 @@ export function app(): Express {
     const theme = (reqUrlMatch ? reqUrlMatch[1] : req.cookies.theme) ?? environment.defaultTheme;
     const hash = themeHashMap.find(value => value.theme === theme)?.hash ?? themeHashMap.find(value => value.theme === environment.defaultTheme);
     const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
+    const logoHref = `theme/${theme}/logo_s32x32.png`;
     const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
-    const updatedIndexHtml = indexHtmlContent.replace(/theme-default.css/g, href);
+    const updatedIndexHtml = indexHtmlContent.replace(/theme-default.css/g, href).replace(/logo.svg/, logoHref);
 
     res.render(indexHtml, {
       req,

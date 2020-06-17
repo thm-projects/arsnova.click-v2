@@ -202,7 +202,11 @@
           "non_writable": "Not writable"
         },
         "check-for-updates": "Check for Updates",
-        "checking-for-updates": "Checking for Updates"
+        "checking-for-updates": "Checking for Updates",
+        "current-version": {
+          "label": "Current Version:",
+          "version": "{version}"
+        }
       }
     }
   },
@@ -804,6 +808,44 @@
       "average-participants": {
         "title": "Players per quiz",
         "content": "The number indicates the average number of people who took part in quizzes."
+      }
+    },
+    "outdated-version": {
+      "title": "Your version of arsnova.click is outdated",
+      "understood": "Understood!",
+      "funnel": {
+        "1": {
+          "header": "Please update your version of arsnova.click. This is important to ensure that you receive the latest features and bug fixes.",
+          "solution": {
+            "1": "Press the button to check for updates. The page will reload after a few seconds.",
+            "2": "If that does not happen click here to follow to the next step"
+          }
+        },
+        "2": {
+          "header": "Alright, that didn't work. Try a »Hard-Reload« now",
+          "solution": {
+            "windows": "Hold down the »Ctrl« key and press »F5«",
+            "linux": "Hold down the »Ctrl« key and press »F5«",
+            "mac": "Hold down both »⌘« and »⇧« and press then the key »R«"
+          }
+        },
+        "3": {
+          "header": "Please reset your browser cache now.",
+          "solution": {
+            "chrome": "Click in the top right on the symbol with the three dots. Look for »More Tools« and select the option »Clear browsing data«.<br/><br/><strong>Important!</strong> To prevent data loss make sure that you have <strong>only</strong> ticked the box with »Cached images and files«.<br/><br/>Click on »Clear Data« and reload the page.",
+            "firefox": "Click in the top right on the symbol with the hamburger bars and select »Library« and then »History«. Now click on »Clear Recent History…«.<br/><br/><strong>Important!</strong> To prevent data loss make sure that you have <strong>only</strong> ticked the boxes with »Cache« and »Offline Website Data«.<br/><br/>Click on »OK« and reload the page.",
+            "safari": "You'll find at the <a href=\"https://support.apple.com/en-en/guide/safari/sfri47acf5d6/mac\">Apple Support</a> a manual how to reset the cache",
+            "ios": "Please check individually for your browser vendor how to reset the cache. You'll find at the <a href=\"https://support.apple.com/en-us/HT201265\">Apple Support</a> a manual how to reset the cache",
+            "android": "Please check individually for your browser vendor how to reset the cache. You'll find at the <a href=\"https://support.google.com/accounts/answer/32050?co=GENIE.Platform%3DAndroid&hl=en\">Google Support</a> a manual how to reset the cache"
+          }
+        },
+        "4": {
+          "header": "Unfortunately nothing has worked.",
+          "solution": {
+            "1": "Please write an E-Mail to the support",
+            "2": "You can close this window but it is possible that the App does not work properly for you."
+          }
+        }
       }
     }
   },

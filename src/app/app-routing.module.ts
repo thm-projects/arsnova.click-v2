@@ -6,6 +6,7 @@ import { LoginComponent } from './root/login/login.component';
 import { ThemeSwitcherComponent } from './root/theme-switcher/theme-switcher.component';
 import { InitDbGuard } from './service/init-db-guard/init-db.guard';
 import { StaticLoginService } from './service/login/static-login.service';
+import { OutdatedVersionGuardService } from './service/outdated-version-guard/outdated-version-guard.service';
 
 const routes: Routes = [
   {
@@ -62,7 +63,7 @@ const routes: Routes = [
   }, {
     path: '',
     component: HomeComponent,
-    canActivate: [InitDbGuard],
+    canActivate: [OutdatedVersionGuardService, InitDbGuard],
   }, {
     path: '**',
     redirectTo: '/',

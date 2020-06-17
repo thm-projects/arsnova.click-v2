@@ -32,9 +32,12 @@ export class UpdateCheckService {
   }
 
   public async clearCache(): Promise<Array<boolean>> {
-    return Promise.all((
-      await window.caches.keys()
-    ).map(key => window.caches.delete(key)));
+    const caches = await window.caches.keys();
+    if (!caches?.length) {
+      return [];
+    }
+
+    return Promise.all(caches.map(key => window.caches.delete(key)));
   }
 
   public reloadPage(): void {
@@ -42,10 +45,10 @@ export class UpdateCheckService {
   }
 
   private promptUser(availableEvent: UpdateAvailableEvent): void {
-    console.log('RootComponent: service worker update available');
-    console.log('RootComponent: current version is', availableEvent.current);
-    console.log('RootComponent: available version is', availableEvent.available);
-    console.log('RootComponent: event type is', availableEvent.type);
+    console.log('UpdateCheckService: service worker update available');
+    console.log('UpdateCheckService: current version is', availableEvent.current);
+    console.log('UpdateCheckService: available version is', availableEvent.available);
+    console.log('UpdateCheckService: event type is', availableEvent.type);
 
     if (this.swUpdateToast) {
       this.toastService.remove(this.swUpdateToast.toastId);
@@ -68,9 +71,9 @@ export class UpdateCheckService {
     console.log('updating to new version');
 
     this.updates.activated.subscribe(activatedEvent => {
-      console.log('RootComponent: previous version was', activatedEvent.previous);
-      console.log('RootComponent: current version is', activatedEvent.current);
-      console.log('RootComponent: event type is', activatedEvent.type);
+      console.log('UpdateCheckService: previous version was', activatedEvent.previous);
+      console.log('UpdateCheckService: current version is', activatedEvent.current);
+      console.log('UpdateCheckService: event type is', activatedEvent.type);
     });
   }
 }

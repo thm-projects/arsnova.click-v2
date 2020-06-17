@@ -1,0 +1,46 @@
+<div class="available-quizzes-modal">
+  <div class="modal-header">
+    <h5 class="modal-title">{{'component.outdated-version.title' | translate}}</h5>
+  </div>
+
+  <div class="modal-body">
+    <ng-container [ngTemplateOutlet]="step === 4 ? funnel_4 : step === 3 ? funnel_3 : step === 2 ? funnel_2 : funnel_1"></ng-container>
+  </div>
+</div>
+
+<ng-template #funnel_1>
+  <p class="mb-3">{{'component.outdated-version.funnel.1.header' | translate}}</p>
+  <p>{{'component.outdated-version.funnel.1.solution.1' | translate}}</p>
+  <button (click)="checkForUpdates()"
+          [disabled]="isCheckingForUpdates"
+          class="btn btn-primary d-block my-3">
+    <span *ngIf="!isCheckingForUpdates">{{'region.header.connection_status.check-for-updates' | translate}}</span>
+    <span *ngIf="isCheckingForUpdates">
+      <span class="mr-2">{{'region.header.connection_status.checking-for-updates' | translate}}</span>
+      <fa-icon [icon]="'spinner'"
+               [spin]="true"></fa-icon>
+    </span>
+  </button>
+  <a href="#" (click)="reload()" class="text-underline text-reset">{{'component.outdated-version.funnel.1.solution.2' | translate}}</a>
+</ng-template>
+
+<ng-template #funnel_2>
+  <p>{{'component.outdated-version.funnel.2.header' | translate}}</p>
+  <p>{{getFunnel2OsI18nKey() | translate}}</p>
+</ng-template>
+
+<ng-template #funnel_3>
+  <p>{{'component.outdated-version.funnel.3.header' | translate}}</p>
+  <p [innerHTML]="getFunnel3BrowserI18nKeys() | translate"></p>
+</ng-template>
+
+<ng-template #funnel_4>
+  <p>{{'component.outdated-version.funnel.4.header' | translate}}</p>
+  <a href="mailto:klaus.quibeldey-cirkel@transmit.de" target="_blank" rel="noopener noreferrer" class="text-underline text-reset">{{'component.outdated-version.funnel.4.solution.1' | translate}}</a>
+  <p class="mt-2">{{'component.outdated-version.funnel.4.solution.2' | translate}}</p>
+  <button (click)="abort()"
+          class="btn btn-danger d-block mt-2 mx-auto"
+          data-dismiss="modal"
+          type="button">{{'component.outdated-version.understood' | translate}}
+  </button>
+</ng-template>

@@ -202,7 +202,11 @@
           "non_writable": "Nicht beschreibbar"
         },
         "check-for-updates": "Auf Aktualisierungen prüfen",
-        "checking-for-updates": "Prüfe auf Aktualisierungen"
+        "checking-for-updates": "Prüfe auf Aktualisierungen",
+        "current-version": {
+          "label": "Aktuelle Version:",
+          "version": "{version}"
+        }
       }
     }
   },
@@ -804,6 +808,44 @@
       "average-participants": {
         "title": "Player pro Quiz",
         "content": "Die Zahl gibt an, wie viele Personen durchschnittlich an Quizzen teilgenommen haben."
+      }
+    },
+    "outdated-version": {
+      "title": "Deine Version von arsnova.click ist veraltet",
+      "understood": "Verstanden!",
+      "funnel": {
+        "1": {
+          "header": "Bitte aktualisiere deine Version von arsnova.click. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",
+          "solution": {
+            "1": "Klicke auf den Button, um auf Aktualisierungen zu prüfen. Die Seite wird sich nach einigen Sekunden neu laden.",
+            "2": "Falls das nicht passiert, klicke bitte hier, um zum nächsten Schritt zu gelangen"
+          }
+        },
+        "2": {
+          "header": "Ok, das hat nicht funktioniert. Probiere jetzt einen »Hard-Reload«",
+          "solution": {
+            "windows": "Halte die Taste »Strg« gedrückt und drücke dann auf »F5«",
+            "linux": "Halte die Taste »Strg« gedrückt und drücke dann auf »F5«",
+            "mac": "Halte die Tasten »⌘« und »⇧« gedrückt und drücke dann die Taste »R«"
+          }
+        },
+        "3": {
+          "header": "Setze nun bitte deinen Browser-Cache zurück.",
+          "solution": {
+            "chrome": "Klicke oben rechts auf das Symbol mit den drei Punkten. Suche dann nach »Weitere Tools« und wähle im Untermenü die Option »Browserdaten« löschen« aus.<br/><br/><strong> Wichtig!</strong> Um Datenverlust zu verhindern, stelle bitte sicher, dass du <strong>nur</strong> das Kästchen »Bilder und Dateien im Cache« ausgewählt hast.<br/><br/>Klicke anschließend auf »Daten löschen« und lade die Seite neu.",
+            "firefox": "Klicke oben rechts auf das Hamburger Symbol und wähle »Bibliothek« und dann »Chronik«. Anschließend klickst du auf »Lösche den letzten Verlauf…«.<br/><br/><strong>Wichtig!</strong> Um Datenverlust zu verhindern, stelle bitte sicher, dass du <strong>nur</strong> die Kästchen »Cache« und »Offline-Website-Daten« ausgewählt hast.<br/><br/>Klicke anschließend auf »OK« und lade die Seite neu.",
+            "safari": "Du findest <a href=\"https://support.apple.com/de-de/guide/safari/sfri47acf5d6/mac\">beim Apple Support</a> eine Anleitung für das Zurücksetzen des Caches",
+            "ios": "Bitte prüfe für deinen jeweiligen Browser Hersteller, wie der Cache geleert werden kann. Für Safari findest du eine Anleitung <a href=\"https://support.apple.com/de-de/HT201265\">beim Apple Support</a>",
+            "android": "Bitte prüfe für deinen jeweiligen Browser Hersteller, wie der Cache geleert werden kann. Für Chrome findest du eine Anleitung <a href=\"https://support.google.com/accounts/answer/32050?co=GENIE.Platform%3DAndroid&hl=de\">beim Google Support</a>"
+          }
+        },
+        "4": {
+          "header": "Leider hat keine der Methoden geholfen.",
+          "solution": {
+            "1": "Bitte wende dich an den Support",
+            "2": "Du kannst dieses Fenster schließen, es ist aber möglich, dass die App nicht oder nur teilweise funktioniert."
+          }
+        }
       }
     }
   },

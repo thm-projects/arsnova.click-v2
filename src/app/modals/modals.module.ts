@@ -4,6 +4,7 @@ import { AddModeComponent } from './add-mode/add-mode.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { AvailableQuizzesComponent } from './available-quizzes/available-quizzes.component';
 import { HotkeyCheatsheetComponent } from './hotkey-cheatsheet/hotkey-cheatsheet.component';
+import { OutdatedVersionComponent } from './outdated-version/outdated-version.component';
 import { QuizSaveComponent } from './quiz-save/quiz-save.component';
 import { ServerUnavailableModalComponent } from './server-unavailable-modal/server-unavailable-modal.component';
 
@@ -12,12 +13,19 @@ import { ServerUnavailableModalComponent } from './server-unavailable-modal/serv
     SharedModule,
   ],
   declarations: [
-    AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent, HotkeyCheatsheetComponent,
+    AvailableQuizzesComponent,
+    AddModeComponent,
+    AddUserComponent,
+    QuizSaveComponent,
+    ServerUnavailableModalComponent,
+    HotkeyCheatsheetComponent,
+    OutdatedVersionComponent,
   ],
   exports: [
     AvailableQuizzesComponent, AddModeComponent, AddUserComponent, QuizSaveComponent, ServerUnavailableModalComponent,
-    HotkeyCheatsheetComponent,
+    HotkeyCheatsheetComponent, OutdatedVersionComponent
   ],
+  bootstrap: [OutdatedVersionComponent]
 })
 export class ModalsModule {
 }
