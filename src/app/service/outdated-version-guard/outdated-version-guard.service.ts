@@ -13,7 +13,7 @@ import { OutdatedVersionComponent } from '../../modals/outdated-version/outdated
   providedIn: 'root',
 })
 export class OutdatedVersionGuardService implements CanActivate {
-  private _versionMismatch;
+  private _versionMismatch: boolean;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -26,41 +26,25 @@ export class OutdatedVersionGuardService implements CanActivate {
       return of(true);
     }
 
-    if (!sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep)) {
-      // We cannot determine the last version so we set it to the current one
-      sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, environment.version);
-      return of(true);
-    }
-
     return new Observable<boolean>(subscriber => {
-      if (sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) === 'false') {
-        subscriber.next(true);
-        subscriber.complete();
-        return;
-      }
 
-      if (this._versionMismatch ?? false) {
-        if (!this._versionMismatch) {
-          subscriber.next(true);
-          subscriber.complete();
-        }
-
+      if (this._versionMismatch) {
         this.ngbModal.open(OutdatedVersionComponent, {beforeDismiss: () => false}).result.finally(() => {
           subscriber.next(true);
           subscriber.complete();
         });
+        return;
       }
 
       this.http.get('/assets/version.txt', { responseType: 'text' }).pipe(
         tap(version => {
           this._versionMismatch = version.trim() !== environment.version;
 
-          if (!this._versionMismatch) {
-            sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, environment.version);
+          if (!this._versionMismatch || !sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep)) {
+            sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, version.trim());
             subscriber.next(true);
             subscriber.complete();
             return;
-
           }
 
           this.ngbModal.open(OutdatedVersionComponent, {beforeDismiss: () => false}).result.finally(() => {

@@ -48,16 +48,20 @@
                type="text"/>
 
         <span (click)="resetSessionName()"
+              (keyup.enter)="resetSessionName()"
               *ngIf="enteredSessionName"
               [class.rounded-left]="showJoinableQuizzes && !isShowingQuiznameDatalist"
               class="position-absolute text-light px-2 cursor-pointer d-flex flex-column justify-content-center align-items-center"
+              tabindex="0"
               id="remove-quiz-name">
               <fa-icon [icon]="'times'"
                        class="d-flex"></fa-icon>
             </span>
         <span (click)="hideQuiznameDatalist()"
+              (keyup.enter)="hideQuiznameDatalist()"
               *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
               class="position-absolute text-light px-2 cursor-pointer d-flex justify-content-center align-items-center"
+              tabindex="0"
               id="collapse-quiz-name-datalist">
               <fa-icon [icon]="'caret-up'"
                        class="d-flex"></fa-icon>
@@ -66,20 +70,28 @@
         <ul *ngIf="showJoinableQuizzes && isShowingQuiznameDatalist"
             class="list-group list-group-flush quiz-list">
           <li (click)="autoJoinToSession(quizname)"
+              (keyup.enter)="autoJoinToSession(quizname)"
               *ngFor="let quizname of sharedService.activeQuizzes | searchFilter:enteredSessionName"
               [class.list-group-item-success]="canModifyQuiz"
+              tabindex="0"
               class="list-group-item list-group-item-action cursor-pointer">{{'component.home.join' | translate:{name: quizname} }}</li>
 
           <ng-container *ngIf="canUsePublicQuizzes">
             <li (click)="selectQuizByList(quizname)"
+                (keyup.enter)="selectQuizByList(quizname)"
                 *ngFor="let quizname of ownQuizzes | searchFilter:enteredSessionName"
+                tabindex="0"
                 class="list-group-item list-group-item-action cursor-pointer">{{'component.home.use' | translate:{name: quizname} }}</li>
           </ng-container>
 
           <ng-container *ngIf="canModifyQuiz">
             <li (click)="selectQuizByList('Demo Quiz')"
+                (keyup.enter)="selectQuizByList('Demo Quiz')"
+                tabindex="0"
                 class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-demo-quiz' | translate}}</li>
             <li (click)="selectQuizByList('ABCD')"
+                (keyup.enter)="selectQuizByList('ABCD')"
+                tabindex="0"
                 class="list-group-item list-group-item-action cursor-pointer">{{'component.home.new-abcd-quiz' | translate}}</li>
           </ng-container>
         </ul>

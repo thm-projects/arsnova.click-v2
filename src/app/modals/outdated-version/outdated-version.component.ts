@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { environment } from '../../../environments/environment';
 import { BrowserVendor } from '../../lib/enums/BrowserVendor';
 import { StorageKey } from '../../lib/enums/enums';
 import { OperationSystem } from '../../lib/enums/OperationSystem';
@@ -22,6 +22,7 @@ export class OutdatedVersionComponent implements OnInit {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private activeModal: NgbActiveModal,
+    private http: HttpClient,
     private updateCheckService: UpdateCheckService,
   ) { }
 
@@ -46,8 +47,10 @@ export class OutdatedVersionComponent implements OnInit {
   }
 
   public abort(): void {
-    sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, environment.version);
-    this.activeModal.close();
+    this.http.get('/assets/version.txt', { responseType: 'text' }).subscribe(version => {
+      sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, version.trim());
+      this.activeModal.close();
+    });
   }
 
   public checkForUpdates(): void {
