@@ -28,9 +28,10 @@ export class OutdatedVersionComponent implements OnInit {
 
   public ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.step = parseInt(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep), 10);
-      if (isNaN(this.step)) {
+      if (isNaN(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) as any)) {
         this.step = 1;
+      } else {
+        this.step = parseInt(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep), 10);
       }
 
       const app = navigator.appVersion;
