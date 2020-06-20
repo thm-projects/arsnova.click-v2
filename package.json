@@ -1,11 +1,15 @@
 {
   "name": "arsnova-click-v2-frontend",
-  "version": "1.0.0",
-  "license": "MIT",
+  "version": "2.0.0",
+  "license": "GPL",
   "repository": {
     "type": "git",
-    "url": "git@git.thm.de:arsnova/arsnova.click-v2.git"
+    "url": "https://git.thm.de/arsnova/arsnova-click-v2-frontend"
   },
+  "bugs": {
+    "url": "https://github.com/thm-projects/arsnova.click-v2"
+  },
+  "homepage": "arsnova.click",
   "description": "Version 2 of arsnova.click (Frontend WebApp)",
   "scripts": {
     "dependency-check": "npx --ignore-existing madge --circular --extensions ts src",
