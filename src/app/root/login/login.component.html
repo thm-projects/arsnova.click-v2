@@ -1,5 +1,6 @@
 <ng-container *ngIf="!isLoading">
   <h4 *ngIf="hasTokenLogin" class="text-center mb-3">{{'component.login.login-to-quiz' | translate}}</h4>
+  <h4 *ngIf="!hasTokenLogin" class="text-center mb-3">{{'component.login.login' | translate}}</h4>
   <h4 class="text-center mb-5 mt-sm-5">{{'component.login.title' | translate}}</h4>
 
   <div *ngIf="hasUsernamePasswordLogin"
