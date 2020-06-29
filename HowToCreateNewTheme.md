@@ -2,7 +2,7 @@
 
 1. Create a new .scss file in `src/styles/themes`, please use `theme-` as a prefix. Example:  
 
-        `theme-test.scss`
+        theme-test.scss
     - - - 
 
 2. Add your styles in your new file
