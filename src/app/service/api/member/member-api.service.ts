@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
+import { Observable, of } from 'rxjs';
 import { DefaultSettings } from '../../../lib/default.settings';
 import { MemberEntity } from '../../../lib/entities/member/MemberEntity';
 import { StorageKey } from '../../../lib/enums/enums';

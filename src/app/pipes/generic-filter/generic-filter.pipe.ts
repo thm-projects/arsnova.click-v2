@@ -15,7 +15,7 @@ export class GenericFilterPipe implements PipeTransform {
     }
 
     if (typeof args === 'string') {
-      return value.filter(val => val.includes(args));
+      return value.filter(val => (val as string).includes(args));
     }
 
     const translateKeys = args.$translateKeys;
