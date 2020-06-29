@@ -1,5 +1,5 @@
 import { isPlatformServer } from '@angular/common';
-import { HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Directive, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
@@ -17,6 +17,7 @@ import { NotificationService } from '../../../service/notification/notification.
 import { QuizService } from '../../../service/quiz/quiz.service';
 import { StorageService } from '../../../service/storage/storage.service';
 
+@Directive()
 export abstract class AbstractQuizManagerDetailsComponent implements OnInit, OnDestroy {
   private _queryParams: Params = {};
   protected _isQuizPool: boolean;
