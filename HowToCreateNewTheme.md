@@ -106,5 +106,5 @@
 <br>
 
     Disclaimer:  
-    The preview in the styles tab on localhost:4200 only works after deploying to the staging server.
+    You need not worry, the preview in the styles tab on localhost:4200 will work after deploying to the staging server.
  
