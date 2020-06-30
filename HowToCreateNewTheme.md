@@ -2,37 +2,37 @@
 
 1. Create a new .scss file in `src/styles/themes`, please use `theme-` as a prefix. Example:  
 
-        theme-test.scss
+        theme-<your-theme-name>.scss
     - - - 
 
-2. Add your styles in your new file
+2. Add your styles in `theme-<your-theme-name>.scss`
     - Optional: go to theme-Material.scss in the same folder and copy the code into your file, then adjust the colorcodes.
     - All of the variables are selfexplanatory.
     - Adjust the colorcodes of the variables to impact the themes colors.
     - Consider using complementary colors.
     - - - 
 
-3. Add your new theme in the `docker-compose.yml` in the `root` directory in line 13 and 29. Example:  
+3. Add your new theme in the `docker-compose.yml` in the `root` directory. Example (line 13 & line 29):  
 
-        \"test\"
+        \"<your-theme-name>\"
     - - - 
 
-4. Add your new theme under the "Westermann" Theme in the `QuizTheme`.ts file in `src/app/lib/enums`. Example:  
+4. Add your new theme in the `QuizTheme.ts` file in `src/app/lib/enums`. Example (line 12):  
 
-        test = 'test'
+        <your-theme-name> = '<your-theme-name>'
     - - - 
 
-5. Add your new theme under the "Westermann" Theme in the `theme-hashes.json` file in `src/assets`. Example:  
+5. Add your new theme in the `theme-hashes.json` file in `src/assets`. Example (line 21):  
 
         {
             "hash": "__CSS_FILE_HASH__",
-            "theme": "test"
+            "theme": "<your-theme-name>"
         }
     - - - 
 
-6. Optional: Add your new theme under the "Westermann" Theme in the `themeData.json` in `src/assets`. Example:  
+6. Add your new theme in the `themeData.json` in `src/assets`. Example (line 261):  
 
-        "test": {
+        "<your-theme-name>": {
             "quizNameRowStyle": {
             "fg": "#FFFFFF",
             "bg": "#408743"
@@ -60,44 +60,44 @@
         }
     - - - 
 
-7. Add your new theme under westermann-blue in the `de.json` in `src/assets/i18n`. Example:  
+7. Add your new theme in the "theme-switcher.themes" tag in the `de.json` in `src/assets/i18n`. Example (line 612):  
 
-        "test": {
-            "name": "test",
-            "description": "test"
+        "<your-theme-name>": {
+            "name": "<your-theme-name>",
+            "description": "<your-theme-name>"
         }
     - - - 
 
-8. Add your new theme under westermann-blue in the `en.json` in `src/assets/i18n`. Example:   
+8. Add your new theme in the "theme-switcher.themes" tag in the `en.json` in `src/assets/i18n`. Example (line 612):   
 
-        "test": {
-            "name": "test",
-            "description": "test"
+        "<your-theme-name>": {
+            "name": "<your-theme-name>",
+            "description": "<your-theme-name>"
         }
     - - - 
 
-9. Add your new theme under the "Westermann" Theme in the `available-themes.ts` in `src/app/lib`. Example:  
+9. Add your new theme in the `available-themes.ts` in `src/app/lib`. Example (line 21):  
 
         {
-            name: 'component.theme_switcher.themes.test.name',
-            preview: 'component.theme_switcher.themes.test.preview',
-            description: 'component.theme_switcher.themes.test.description',
-            id: QuizTheme.test,
+            name: 'component.theme_switcher.themes.<your-theme-name>.name',
+            preview: 'component.theme_switcher.themes.<your-theme-name>.preview',
+            description: 'component.theme_switcher.themes.<your-theme-name>.description',
+            id: QuizTheme.<your-theme-name>,
         }
     - - - 
 
-10. Add your new theme in the `angular.json` in the `root` directory under every `styles:` tag. Like so:  
+10. Add your new theme in the `angular.json` in the `root` directory under the following tags: `options > ... > styles, configurations > ... > styles, thmStaging > ... > styles, thmBeta > ... > styles`. Example (line 76, line 135, line 188 & line 241):  
 
         {
             "inject": false,
-            "input": "src/styles/themes/theme-test.scss",
-            "bundleName": "theme-test-__CSS_FILE_HASH__"
+            "input": "src/styles/themes/theme-<your-theme-name>.scss",
+            "bundleName": "theme-<your-theme-name>-__CSS_FILE_HASH__"
         },
     - - - 
 
-11. Add your new theme under westermann-blue in the `environment.ts` in  `src/environments`. Example:  
+11. Add your new theme in the `availableQuizThemes` tag in the `environment.ts` in  `src/environments`. Example (line 37):  
 
-        QuizTheme.test  
+        QuizTheme.<your-theme-name>  
 
 <br>
 
