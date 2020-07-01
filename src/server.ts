@@ -6,7 +6,6 @@ import * as cookieparser from 'cookie-parser';
 import * as express from 'express';
 import { Express } from 'express';
 import { existsSync, readFileSync } from 'fs';
-import * as proxy from 'http-proxy-middleware';
 import { join } from 'path';
 import 'zone.js/dist/zone-node';
 import { environment } from './environments/environment';
@@ -27,6 +26,7 @@ export function app(): Express {
   server.use(cookieparser());
   // proxy
   if (process.env.NODE_ENV === 'development') {
+    const proxy = require('http-proxy-middleware');
     const proxyFile = JSON.parse(readFileSync(join(process.cwd(), 'src/proxy.conf.json'), {encoding: 'UTF-8'}));
     Object.entries(proxyFile).forEach(([path, config]) => {
       const proxyConfig = proxy(path, config);
