@@ -31,7 +31,9 @@ Enter `npm test` in the root directory to run the unit tests.
 It is required to define the location of a local Google Chrome installation to use the headless mode
 
 ###### Run (DEV)
-Go to the root directory and enter `npm run start:DEV` or use `docker-compose up -d local` to build the app for the local environment
+Go to the root directory and enter `npm run dev:ssr` or use `docker-compose up -d local` to build the app for the local environment. For local development the ssr node process should be given the environment
+variable "NODE_ENV=development" since the underlying express server will proxy the requests to the backend using another port correctly then without the requirement
+of a proxy server like nginx. See `src/proxy.conf.json` for details about the proxy configuration.
 
 ###### Build (PROD)
 Go to the root directory and enter `npm run build:PROD` or use a custom Dockerfile to run your environment

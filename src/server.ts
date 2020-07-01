@@ -26,11 +26,13 @@ export function app(): Express {
   // cookies
   server.use(cookieparser());
   // proxy
-  const proxyFile = JSON.parse(readFileSync(join(process.cwd(), 'src/proxy.conf.json'), {encoding: 'UTF-8'}));
-  Object.entries(proxyFile).forEach(([path, config]) => {
-    const proxyConfig = proxy(path, config);
-    server.use(path, proxyConfig);
-  });
+  if (process.env.NODE_ENV === 'development') {
+    const proxyFile = JSON.parse(readFileSync(join(process.cwd(), 'src/proxy.conf.json'), {encoding: 'UTF-8'}));
+    Object.entries(proxyFile).forEach(([path, config]) => {
+      const proxyConfig = proxy(path, config);
+      server.use(path, proxyConfig);
+    });
+  }
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine('html', ngExpressEngine({
