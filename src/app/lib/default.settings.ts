@@ -1,11 +1,22 @@
 import { environment } from '../../environments/environment';
 
+function stompEndpointFactory(): string {
+  if (typeof location === 'undefined') {
+    return null;
+  }
+
+  if (environment.stompConfig.endpoint.startsWith('/')) {
+    return location.protocol.replace('http', 'ws') + location.host + environment.stompConfig.endpoint;
+  }
+
+  return environment.stompConfig.endpoint;
+}
+
 export const DefaultSettings = {
   siteId: 'arsnova.click-v2',
-  ssrEndpoint: environment.ssrEndpoint,
-  httpApiEndpoint: environment.httpApiEndpoint,
-  httpLibEndpoint: environment.httpLibEndpoint,
-  serverEndpoint: environment.serverEndpoint,
+  httpApiEndpoint: environment.serverEndpoint + '/api/v1',
+  httpLibEndpoint: environment.serverEndpoint + '/api/lib',
+  stompEndpoint: stompEndpointFactory(),
   defaultQuizSettings: {
     answers: {
       answerText: '',

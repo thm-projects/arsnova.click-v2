@@ -25,7 +25,7 @@ export class StatisticsApiService {
   }
 
   public getBaseAppStatistics(): Observable<any> {
-    return this.http.get(`${DefaultSettings.serverEndpoint}/statistics`);
+    return this.http.get(`${DefaultSettings.httpLibEndpoint}/statistics`);
   }
 
   public optionsBaseStatistics(): Observable<void> {

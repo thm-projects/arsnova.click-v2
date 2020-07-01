@@ -9,10 +9,7 @@ export interface IEnvironment {
   sentryDSN?: string;
   version: string;
   production: boolean;
-  ssrEndpoint: string;
   serverEndpoint: string;
-  httpApiEndpoint: string;
-  httpLibEndpoint: string;
   stompConfig: {
     endpoint: string, user: string, password: string, vhost: string,
   };
