@@ -2,14 +2,16 @@
 
 1. Create a new .scss file in `src/styles/themes`, please use `theme-` as a prefix. Example:  
 
-        theme-<your-theme-name>.scss
+        theme-<your-theme-name>.scss  
     - - - 
 
 2. Add your styles to your newly created `theme-<your-theme-name>.scss` file
     - Optional: go to theme-Material.scss in the same folder and copy the code into your file, then adjust the colorcodes.
     - All of the variables are selfexplanatory.
     - Adjust the colorcodes of the variables to impact the themes colors.
-    - Consider using complementary colors.
+    - Consider using complementary colors.  
+    <br>
+
     - - - 
 
 3. Add the code below to the following tags: `services.master.build.args.themes, services.staging.build.args.themes` in the `docker-compose.yml` file in the `root` directory. Example: 
@@ -99,18 +101,13 @@
 
         QuizTheme.<your-theme-name>  
 
-<br>
+    <br>
 
-- - - 
+    - - - 
 
-Generating Preview Image: 
+12. To generate a preview image, run both the backend and the frontend, then navigate to `src/assets/jobs` with your terminal and paste `node --experimental-modules --experimental-json-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true` into it. This might take a while.
 
 
 
-- - -
-    
-<br>
 
-    Disclaimer:  
-    You need not worry, the preview in the styles tab on localhost:4200 will work after deploying to the staging server.
  

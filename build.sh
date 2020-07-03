@@ -107,7 +107,7 @@ else
    node GenerateMetaNodes.js --command=generateManifest --baseUrl="$2"
 
    echo "Generating preview screenshots"
-   node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4000 --root=true
+   node --experimental-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true
 fi
 
 echo "Gzipping app files"
