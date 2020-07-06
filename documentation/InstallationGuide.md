@@ -3,7 +3,6 @@
 ## Dependencies 
 
 1. Ubuntu 14.04+ or Mac
-2. Docker & docker-compose
 3. Typescript version 3.7.5
 4. Node lts version 12.x
 
