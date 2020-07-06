@@ -29,7 +29,8 @@
 4. Now install all node dependencies by using 
 
         npm install
-    - - -
+
+- - -
 
 
 ## Execution 
