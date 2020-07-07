@@ -70,7 +70,6 @@ export const DefaultSettings = {
         maxMembersPerGroup: 10,
         autoJoinToGroup: false,
         blockIllegalNicks: true,
-        restrictToCasLogin: false,
         selectedNicks: [],
       },
       theme: environment.defaultTheme,

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { QRCodeModule } from 'angular2-qrcode';
 import { MarkdownModule } from 'ngx-markdown';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { ShowUnloadWarningGuard } from '../../service/show-unload-warning-guard/show-unload-warning.guard';
 import { SharedModule } from '../../shared/shared.module';
 import { AnswerResultComponent } from './answer-result/answer-result.component';
@@ -24,7 +23,6 @@ export const quizFlowRoutes: Routes = [
     redirectTo: 'lobby',
   }, {
     path: 'lobby',
-    canLoad: [CasLoginService],
     component: QuizLobbyComponent,
     data: {},
     canDeactivate: [ShowUnloadWarningGuard],

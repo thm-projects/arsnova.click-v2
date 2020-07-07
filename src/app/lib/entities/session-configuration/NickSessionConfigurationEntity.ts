@@ -7,7 +7,6 @@ export class NickSessionConfigurationEntity {
   public autoJoinToGroup: boolean = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.autoJoinToGroup;
   public selectedNicks: Array<string> = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.selectedNicks;
   public blockIllegalNicks: boolean = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.blockIllegalNicks;
-  public restrictToCasLogin: boolean = DefaultSettings.defaultQuizSettings.sessionConfig.nicks.restrictToCasLogin;
 
   constructor(props) {
     this.memberGroups = props.memberGroups;
@@ -15,7 +14,6 @@ export class NickSessionConfigurationEntity {
     this.autoJoinToGroup = props.autoJoinToGroup;
     this.selectedNicks = props.selectedNicks;
     this.blockIllegalNicks = props.blockIllegalNicks;
-    this.restrictToCasLogin = props.restrictToCasLogin;
   }
 
   public equals(value: NickSessionConfigurationEntity): boolean {
@@ -23,8 +21,7 @@ export class NickSessionConfigurationEntity {
            this.maxMembersPerGroup === value.maxMembersPerGroup && //
            this.autoJoinToGroup === value.autoJoinToGroup && //
            this.selectedNicks === value.selectedNicks && //
-           this.blockIllegalNicks === value.blockIllegalNicks && //
-           this.restrictToCasLogin === value.restrictToCasLogin;
+           this.blockIllegalNicks === value.blockIllegalNicks;
   }
 
   public hasSelectedNick(nickname: string): boolean {

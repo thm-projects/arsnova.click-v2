@@ -3,7 +3,6 @@ import { PLATFORM_ID } from '@angular/core';
 import { async, inject, TestBed } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
-import { CasLoginService } from '../login/cas-login.service';
 import { StorageService } from '../storage/storage.service';
 import { UserService } from '../user/user.service';
 
@@ -22,7 +21,7 @@ describe('LanguageLoaderService', () => {
         }), HttpClientTestingModule,
       ],
       providers: [
-        LanguageLoaderService, CasLoginService, {
+        LanguageLoaderService, {
           provide: UserService,
           useValue: {},
         }, StorageService,

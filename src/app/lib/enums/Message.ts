@@ -21,7 +21,6 @@ export enum MessageProtocol {
   Inactive                     = 'Inactive', //
   AllPlayers                   = 'AllPlayers', //
   UnknownGroup                 = 'UnknownGroup', //
-  CasLoginRequired             = 'CasLoginRequired', //
   Opened                       = 'Opened', //
   Authenticate                 = 'Authenticate', //
   AuthenticateStatic           = 'AuthenticateStatic', //

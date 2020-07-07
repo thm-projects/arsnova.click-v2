@@ -24,7 +24,6 @@ import { FileUploadService } from '../../service/file-upload/file-upload.service
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsMockService } from '../../service/settings/settings.mock.service';
@@ -90,7 +89,7 @@ describe('HomeComponent', () => {
         }, I18nService, {
           provide: AttendeeService,
           useClass: AttendeeMockService,
-        }, CasLoginService, UserService, {
+        }, UserService, {
           provide: TrackingService,
           useClass: TrackingMockService,
         }, {

@@ -353,17 +353,6 @@ export class FooterBarService {
     linkTarget: null,
   }, function (): void {
   });
-  public footerElemEnableCasLogin: IFooterBarElement = new FooterbarElement({
-    id: 'enableCasLogin',
-    iconClass: ['fas', 'sign-in-alt'],
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.enable_cas_login',
-    selectable: true,
-    showIntro: false,
-    introTranslate: 'region.footer.footer_bar.description.enableCasLogin',
-    linkTarget: null,
-  }, function (): void {
-  });
   public footerElemLeaderboard: IFooterBarElement = new FooterbarElement({
     id: 'leaderboard',
     iconClass: ['fas', 'trophy'],
@@ -601,12 +590,6 @@ export class FooterBarService {
         captureException(e);
       });
     };
-    this.footerElemEnableCasLogin.onClickCallback = () => {
-      const newState = !this.footerElemEnableCasLogin.isActive;
-      this.footerElemEnableCasLogin.isActive = newState;
-      this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin = newState;
-      this.quizService.persist();
-    };
     this.footerElemBlockRudeNicknames.onClickCallback = () => {
       const newState = !this.footerElemBlockRudeNicknames.isActive;
       this.footerElemBlockRudeNicknames.isActive = newState;
@@ -622,9 +605,6 @@ export class FooterBarService {
     this.footerElemConfidenceSlider.isActive = !!this.quizService.quiz.sessionConfig.confidenceSliderEnabled;
     this.footerElemStartQuiz.isActive = this.quizService.isValid() && this._connectionState === RxStompState.OPEN;
     this.footerElemNicknames.isActive = this._connectionState === RxStompState.OPEN;
-
-    this.footerElemEnableCasLogin.restoreClickCallback();
-    this.footerElemEnableCasLogin.isActive = this.quizService.quiz.sessionConfig.nicks.restrictToCasLogin;
 
     this.footerElemBlockRudeNicknames.restoreClickCallback();
     this.footerElemBlockRudeNicknames.isActive = this.quizService.quiz.sessionConfig.nicks.blockIllegalNicks;

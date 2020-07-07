@@ -13,7 +13,6 @@ import { ConnectionService } from '../../service/connection/connection.service';
 import { CustomMarkdownService } from '../../service/custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../../service/custom-markdown/CustomMarkdownServiceMock';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizMockService } from '../../service/quiz/quiz-mock.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
@@ -47,7 +46,7 @@ describe('QuizJoinComponent', () => {
         {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, CasLoginService, QuizApiService, {
+        }, QuizApiService, {
           provide: QuizService,
           useClass: QuizMockService,
         }, {

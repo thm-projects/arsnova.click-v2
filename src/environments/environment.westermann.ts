@@ -6,7 +6,6 @@ export const environment: IEnvironment = {
   production: true,
   title: Title.Westermann,
   version: '__VERSION__',
-  enableCasLogin: false,
   serverEndpoint: '/backend',
   stompConfig: {
     endpoint: '/rabbitmq/ws',

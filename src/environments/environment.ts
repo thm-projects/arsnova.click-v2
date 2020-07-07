@@ -6,7 +6,6 @@ export const environment: IEnvironment = {
   production: true,
   title: Title.Default,
   version: '__VERSION__',
-  enableCasLogin: false,
   sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
   serverEndpoint: '',
   stompConfig: {

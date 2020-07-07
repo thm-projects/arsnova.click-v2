@@ -12,7 +12,6 @@ import { IAudioPlayerConfig } from '../../lib/interfaces/IAudioConfig';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SharedService } from '../../service/shared/shared.service';
 import { StorageService } from '../../service/storage/storage.service';
@@ -69,7 +68,6 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private route: ActivatedRoute,
     private router: Router,
-    private casService: CasLoginService,
     private themesService: ThemesService,
     private quizApiService: QuizApiService,
     private sharedService: SharedService,
@@ -86,10 +84,6 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     if (isPlatformServer(this.platformId)) {
       return;
     }
-
-    this.route.queryParams.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(queryParams => {
-      this.casService.ticket = queryParams.ticket;
-    });
 
     this.route.paramMap.pipe(map(val => val.get('quizName')), distinctUntilChanged(), takeUntil(this._destroy)).subscribe(quizname => {
       if (!quizname) {
@@ -160,11 +154,6 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
 
     this.quizService.quiz = quizStatusData.payload.quiz;
     this.quizService.isOwner = false;
-
-    this.casService.casLoginRequired = quizStatusData.payload.status.authorizeViaCas;
-    if (this.casService.casLoginRequired) {
-      this.casService.quizName = this.quizService.quiz.name;
-    }
 
     this.themesService.updateCurrentlyUsedTheme();
 

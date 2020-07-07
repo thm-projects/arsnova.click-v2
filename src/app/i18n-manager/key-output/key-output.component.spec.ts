@@ -10,7 +10,6 @@ import { SearchFilterPipeMock } from '../../../_mocks/_pipes/SearchFilterPipeMoc
 import { SortPipeMock } from '../../../_mocks/_pipes/SortPipeMock';
 import { UnusedKeyFilterPipeMock } from '../../../_mocks/_pipes/UnusedKeyFilterPipeMock';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
 import { UserService } from '../../service/user/user.service';
@@ -36,7 +35,7 @@ describe('KeyOutputComponent', () => {
         {
           provide: StorageService,
           useClass: StorageServiceMock,
-        }, CasLoginService, {
+        }, {
           provide: UserService,
           useValue: {},
         },

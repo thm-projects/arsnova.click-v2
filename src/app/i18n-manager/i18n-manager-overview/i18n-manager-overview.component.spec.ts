@@ -12,7 +12,6 @@ import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { PipesModule } from '../../pipes/pipes.module';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { ModalOrganizerService } from '../../service/modal-organizer/modal-organizer.service';
 import { StorageService } from '../../service/storage/storage.service';
 import { StorageServiceMock } from '../../service/storage/storage.service.mock';
@@ -49,7 +48,7 @@ describe('I18nManagerOverviewComponent', () => {
         }, {
           provide: UserService,
           useValue: {},
-        }, CasLoginService, {
+        }, {
           provide: ThemesService,
           useClass: ThemesMockService
         }, FooterBarService, HeaderLabelService, ModalOrganizerService, {

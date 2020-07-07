@@ -25,7 +25,6 @@ import { ConnectionService } from '../../service/connection/connection.service';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nService } from '../../service/i18n/i18n.service';
-import { CasLoginService } from '../../service/login/cas-login.service';
 import { QuizService } from '../../service/quiz/quiz.service';
 import { SettingsService } from '../../service/settings/settings.service';
 import { SharedService } from '../../service/shared/shared.service';
@@ -114,7 +113,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     private i18nService: I18nService,
     private attendeeService: AttendeeService,
     private sanitizer: DomSanitizer,
-    private casService: CasLoginService,
     private settingsService: SettingsService,
     private trackingService: TrackingService,
     private quizApiService: QuizApiService,
@@ -564,10 +562,6 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.canJoinQuiz = this.connectionService.serverAvailable;
           this.passwordRequired = false;
           this.canStartQuiz = false;
-          this.casService.casLoginRequired = value.payload.authorizeViaCas;
-          if (this.casService.casLoginRequired) {
-            this.casService.quizName = quizName;
-          }
           this._hasSuccess = 'component.home.success.can-join';
         } else if (value.step === MessageProtocol.Unavailable) {
           this.canAddQuiz = true;
