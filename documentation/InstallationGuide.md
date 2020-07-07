@@ -22,8 +22,8 @@
 
 3. Open the `environment.ts` file in `src/environments` folder. Add the code below to the `stompConfig` tag. Example:  
 
-        user: 'myUser',
-        password: 'myPassword',
+        user: '<myUser>',
+        password: '<myPassword>',
     - - -
 
 4. Now install all node dependencies by using 
