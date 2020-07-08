@@ -148,8 +148,8 @@ export class QuizService {
       this.storageService.db.Quiz.get(this.quiz.name).then(quiz => {
         if (quiz) {
           quiz.state = QuizState.Inactive;
+          return this.storageService.db.Quiz.put(quiz);
         }
-        return this.storageService.db.Quiz.put(quiz);
       });
       return this.quizApiService.deleteActiveQuiz(this._quiz);
     }
