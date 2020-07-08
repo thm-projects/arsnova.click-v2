@@ -29,7 +29,7 @@ export function app(): Express {
     const proxy = require('http-proxy-middleware');
     const proxyFile = JSON.parse(readFileSync(join(process.cwd(), 'src/proxy.conf.json'), {encoding: 'UTF-8'}));
     Object.entries(proxyFile).forEach(([path, config]) => {
-      const proxyConfig = proxy(path, config);
+      const proxyConfig = proxy.createProxyMiddleware(path, config);
       server.use(path, proxyConfig);
     });
   }
