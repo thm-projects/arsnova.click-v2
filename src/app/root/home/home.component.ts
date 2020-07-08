@@ -589,7 +589,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     requests$.push(this.quizService.cleanUp());
     requests$.push(this.connectionService.cleanUp());
     requests$.push(new Observable(subscriber => {
-      this.storageService.db.Config.delete(StorageKey.QuizTheme).finally(() => subscriber.next());
+      this.storageService
+        .db.Config
+        .delete(StorageKey.QuizTheme)
+        .catch(() => subscriber.next())
+        .then(() => subscriber.next());
     }));
 
     sessionStorage.removeItem(StorageKey.CurrentQuizName);
