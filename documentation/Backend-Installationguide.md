@@ -2,9 +2,9 @@
 
 ## Dependencies 
 
-1. Ubuntu 14.04+ or Mac
+1. Ubuntu 14.04+, Windows 10 or Mac
 2. Docker & docker-compose
-3. Typescript version 3.7.5
+3. Typescript version that is specified in the [package.json](https://git.thm.de/arsnova/arsnova-click-v2-backend/-/blob/staging/package.json)
 4. Node lts version 12.x
 
 ## Installation 
