@@ -2,7 +2,7 @@
 
 ###### Installation 
 
-You can find an Installationguide [here](https://git.thm.de/arsnova/arsnova-click-v2/-/blob/master/documentation/Frontend-Installationguide.md)  
+You can find an Installationguide [here](https://github.com/thm-projects/arsnova.click-v2/blob/master/Frontend-Installationguide.md)  
 
 ###### Global Dependencies
 
