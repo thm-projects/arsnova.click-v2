@@ -4,6 +4,8 @@
 
 You can find an Installationguide [here](https://github.com/thm-projects/arsnova.click-v2/blob/master/documentation/Frontend-Installationguide.md)  
 
+You can find a guide to create a custom theme [here](https://github.com/thm-projects/arsnova.click-v2/blob/master/documentation/HowToCreateCustomTheme.md)
+
 ###### Global Dependencies
 
 - CentOS / RHEL
