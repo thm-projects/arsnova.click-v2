@@ -1,11 +1,15 @@
 ## How to create a new Theme 
 
-1. Create a new .scss file in `src/styles/themes`, please use `theme-` as a prefix. Example:  
+
+1. Navigate to the folder you installed the [frontend](https://git.thm.de/arsnova/arsnova-click-v2-frontend)   
+    - - - 
+
+2. Create a new .scss file in `src/styles/themes`, please use `theme-` as a prefix. Example:  
 
         theme-<your-theme-name>.scss  
     - - - 
 
-2. Add your styles to your newly created `theme-<your-theme-name>.scss` file
+3. Add your styles to your newly created `theme-<your-theme-name>.scss` file
     - Optional: go to theme-Material.scss in the same folder and copy the code into your file, then adjust the colorcodes.
     - All of the variables are selfexplanatory.
     - Adjust the colorcodes of the variables to impact the themes colors.
@@ -14,17 +18,17 @@
 
     - - - 
 
-3. Add the code below to the following tags: `services.master.build.args.themes, services.staging.build.args.themes` in the `docker-compose.yml` file in the `root` directory. Example: 
+4. Add the code below to the following tags: `services.master.build.args.themes, services.staging.build.args.themes` in the `docker-compose.yml` file in the `root` directory. Example: 
 
         \"<your-theme-name>\"
     - - - 
 
-4. Add the code below to the enum in the `QuizTheme.ts` file in `src/app/lib/enums`. Example:
+5. Add the code below to the enum in the `QuizTheme.ts` file in `src/app/lib/enums`. Example:
 
         <your-theme-name> = '<your-theme-name>'
     - - - 
 
-5. Add the code below to the array in the `theme-hashes.json` file in `src/assets`. Example: 
+6. Add the code below to the array in the `theme-hashes.json` file in `src/assets`. Example: 
 
         {
             "hash": "__CSS_FILE_HASH__",
@@ -32,7 +36,7 @@
         }
     - - - 
 
-6. Add the code below to the root of the json object in the `themeData.json` file in `src/assets`. Example:  
+7. Add the code below to the root of the json object in the `themeData.json` file in `src/assets`. Example:  
 
         "<your-theme-name>": {
             "quizNameRowStyle": {
@@ -62,7 +66,7 @@
         }
     - - - 
 
-7. Add the code below to the `theme-switcher.themes` tag in the `de.json` in `src/assets/i18n`. Example:  
+8. Add the code below to the `theme-switcher.themes` tag in the `de.json` in `src/assets/i18n`. Example:  
 
         "<your-theme-name>": {
             "name": "<your-theme-name>",
@@ -70,7 +74,7 @@
         }
     - - - 
 
-8. Add the code below to the `theme-switcher.themes` tag in the `en.json` in `src/assets/i18n`. Example:   
+9. Add the code below to the `theme-switcher.themes` tag in the `en.json` in `src/assets/i18n`. Example:   
 
         "<your-theme-name>": {
             "name": "<your-theme-name>",
@@ -78,7 +82,7 @@
         }
     - - - 
 
-9. Add the code below to the Array in the `available-themes.ts` in `src/app/lib`. Example:  
+10. Add the code below to the Array in the `available-themes.ts` in `src/app/lib`. Example:  
 
         {
             name: 'component.theme_switcher.themes.<your-theme-name>.name',
@@ -88,7 +92,7 @@
         }
     - - - 
 
-10. Add the code below to the following tags: `projects.frontend.architect.build.options.styles, projects.frontend.architect.build.configurations.production.styles, projects.frontend.architect.build.configurations.thmStaging.styles, projects.frontend.architect.build.configurations.thmBeta.styles` in the `angular.json` in the `root` directory. Example:  
+11. Add the code below to the following tags: `projects.frontend.architect.build.options.styles, projects.frontend.architect.build.configurations.production.styles, projects.frontend.architect.build.configurations.thmStaging.styles, projects.frontend.architect.build.configurations.thmBeta.styles` in the `angular.json` in the `root` directory. Example:  
 
         {
             "inject": false,
@@ -97,7 +101,7 @@
         },
     - - - 
 
-11. Add the code below to the `availableQuizThemes` tag in the `environment.ts` file in  `src/environments`. Example:  
+12. Add the code below to the `availableQuizThemes` tag in the `environment.ts` file in  `src/environments`. Example:  
 
         QuizTheme.<your-theme-name>  
 
@@ -105,4 +109,4 @@
 
     - - - 
 
-12. To generate a preview image, run both the backend and the frontend, then navigate to `src/assets/jobs` with your terminal and paste `node --experimental-modules --experimental-json-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true` into it. This might take a while.
+13. To generate a preview image, run both the backend and the frontend, then navigate to `src/assets/jobs` with your terminal and paste `node --experimental-modules --experimental-json-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true` into it. This might take a while.
