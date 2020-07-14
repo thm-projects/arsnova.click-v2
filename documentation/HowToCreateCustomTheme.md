@@ -109,4 +109,4 @@
 
     - - - 
 
-13. To generate a preview image [run the frontend](./Frontend-Installationguide.md) and navigate to `src/assets/jobs` with your terminal and paste `node --experimental-modules --experimental-json-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true` into it. This might take a while.
+13. To generate a preview image [run the frontend](https://github.com/thm-projects/arsnova.click-v2/blob/master/documentation/Frontend-Installationguide.md) and navigate to `src/assets/jobs` with your terminal and paste `node --experimental-modules --experimental-json-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true` into it. This might take a while.
