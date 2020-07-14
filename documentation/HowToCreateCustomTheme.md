@@ -92,7 +92,7 @@
         }
     - - - 
 
-11. Add the code below to the following tags: `projects.frontend.architect.build.options.styles, projects.frontend.architect.build.configurations.production.styles, projects.frontend.architect.build.configurations.thmStaging.styles, projects.frontend.architect.build.configurations.thmBeta.styles` in the `angular.json` in the `root` directory. Example:  
+11. Add the code below to the following tags: `projects.frontend.architect.build.options.styles, projects.frontend.architect.build.configurations.production.styles, projects.frontend.architect.build.configurations.thmStaging.styles` in the `angular.json` in the `root` directory. Example:  
 
         {
             "inject": false,
@@ -109,4 +109,4 @@
 
     - - - 
 
-13. To generate a preview image, run both the backend and the frontend, then navigate to `src/assets/jobs` with your terminal and paste `node --experimental-modules --experimental-json-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true` into it. This might take a while.
+13. To generate a preview image [run the frontend](./Frontend-Installationguide.md) and navigate to `src/assets/jobs` with your terminal and paste `node --experimental-modules --experimental-json-modules GenerateImages.mjs --command=all --host=http://localhost:4200 --root=true` into it. This might take a while.
