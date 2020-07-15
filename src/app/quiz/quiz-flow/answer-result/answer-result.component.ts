@@ -178,6 +178,9 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       }
       this.isLoading = false;
       this.cd.markForCheck();
+    }, () => {
+      this.hasTriggeredNavigation = true;
+      this.router.navigate(['/quiz', 'flow', 'results']);
     });
   }
 }
