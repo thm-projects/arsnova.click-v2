@@ -199,7 +199,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     dbInitialized$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(async params => {
       if (!Object.keys(params).length || !params.get('themeId') || !params.get('languageId')) {
-        const theme = this.storageService.db.Config.get(StorageKey.DefaultTheme);
+        let theme;
+        try {
+          theme = this.storageService.db.Config.get(StorageKey.DefaultTheme);
+        } catch {
+          theme = null;
+        }
         if (!theme) {
           await this.storageService.db.Config.put({
             value: this.themesService.defaultTheme,
