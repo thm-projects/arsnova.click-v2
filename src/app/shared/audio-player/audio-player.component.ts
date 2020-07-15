@@ -92,20 +92,25 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.audioElement.ended) {
       this.audioElement.currentTime = 0;
     }
-    this.audioElement.play().catch(() => {
+    this.audioElement.play().then(() => {
+      this._isPlaying = true;
+    }).catch(() => {
       // Autoplay was prevented - "NotAllowedError: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD"
       this._autostartRejected = true;
     });
-    this._isPlaying = true;
   }
 
   public pauseMusic(): void {
+    if (!this._isPlaying) {
+      return;
+    }
+
     this.audioElement.pause();
     this._isPlaying = false;
   }
 
   public stopMusic(): void {
-    if (isPlatformServer(this.platformId) || !this.audioElement) {
+    if (isPlatformServer(this.platformId) || !this.audioElement || !this._isPlaying) {
       return;
     }
 
