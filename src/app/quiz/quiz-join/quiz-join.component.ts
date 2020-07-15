@@ -2,10 +2,10 @@ import { isPlatformServer } from '@angular/common';
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMapTo, take, takeUntil } from 'rxjs/operators';
+import { filter, map, switchMapTo, take, takeUntil } from 'rxjs/operators';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { AudioPlayerConfigTarget } from '../../lib/enums/AudioPlayerConfigTarget';
-import { StorageKey } from '../../lib/enums/enums';
+import { DbState, StorageKey } from '../../lib/enums/enums';
 import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { IMessage } from '../../lib/interfaces/communication/IMessage';
 import { IAudioPlayerConfig } from '../../lib/interfaces/IAudioConfig';
@@ -85,39 +85,19 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.route.paramMap.pipe(map(val => val.get('quizName')), distinctUntilChanged(), takeUntil(this._destroy)).subscribe(quizname => {
+    const routerParamsInitialized$ = this.route.paramMap.pipe(map(val => val.get('quizName')), takeUntil(this._destroy));
+    const dbLoaded$ = this.storageService.stateNotifier.pipe(
+      filter(val => [DbState.Initialized, DbState.Revalidate].includes(val)),
+      takeUntil(this._destroy)
+    );
+
+    dbLoaded$.pipe(switchMapTo(routerParamsInitialized$)).subscribe(quizname => {
       if (!quizname) {
         this.router.navigate(['/']);
         return;
       }
 
-      this._quizName = quizname;
-
-      this.storageService.db.Quiz.get(quizname).then(quiz => {
-        if (quiz) {
-          const quizEntity = new QuizEntity(quiz);
-          if (!quizEntity.isValid()) {
-            sessionStorage.setItem(StorageKey.CurrentQuizName, quizname);
-            this.router.navigate(['/quiz', 'manager', 'overview']);
-            return;
-          }
-
-          this.quizApiService.setQuiz(quiz).subscribe(modifiedQuestionGroup => {
-            this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
-            this.quizService.isOwner = true;
-            this.router.navigate(['/quiz', 'flow']);
-          });
-          return;
-        }
-
-        this.handleMessages();
-
-        this.quizApiService.getFullQuizStatusData(quizname).subscribe(data => {
-          this.resolveQuizStatusData(data);
-        }, () => {
-          this.router.navigate(['/']);
-        });
-      });
+      this.handleQuizJoin(quizname);
     });
   }
 
@@ -182,5 +162,35 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
     this._isJoining = true;
     this.joinAudio.stopMusic();
     this.countdownEndAudio.playMusic();
+  }
+
+  private handleQuizJoin(quizname: string): void {
+    this._quizName = quizname;
+
+    this.storageService.db.Quiz.get(quizname).then(quiz => {
+      if (quiz) {
+        const quizEntity = new QuizEntity(quiz);
+        if (!quizEntity.isValid()) {
+          sessionStorage.setItem(StorageKey.CurrentQuizName, quizname);
+          this.router.navigate(['/quiz', 'manager', 'overview']);
+          return;
+        }
+
+        this.quizApiService.setQuiz(quiz).subscribe(modifiedQuestionGroup => {
+          this.quizService.quiz = new QuizEntity(modifiedQuestionGroup);
+          this.quizService.isOwner = true;
+          this.router.navigate(['/quiz', 'flow']);
+        });
+        return;
+      }
+
+      this.handleMessages();
+
+      this.quizApiService.getFullQuizStatusData(quizname).subscribe(data => {
+        this.resolveQuizStatusData(data);
+      }, () => {
+        this.router.navigate(['/']);
+      });
+    });
   }
 }
