@@ -3,4 +3,5 @@ export interface IFreetextAnswerConfiguration {
   configEnabledString: string;
   enabled: boolean;
   id: string;
+  disabled: Function;
 }

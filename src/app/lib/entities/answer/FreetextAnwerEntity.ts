@@ -33,20 +33,26 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
       result = refValue === ref;
     }
     if (this.configTrimWhitespaces) {
-      refValue = refValue.replace(/ /g, '');
-      ref = ref.replace(/ /g, '');
+      refValue = refValue.replace(/[ ]/g, '');
+      ref = ref.replace(/[ ]/g, '');
       result = refValue === ref;
     } else {
+      refValue = refValue.replace(/[-]/g, ' ');
+      ref = ref.replace(/[-]/g, ' ');
+
       if (!this.configUsePunctuation) {
         refValue = refValue.replace(/[,:\(\)\[\]\.\*\?]/g, '');
         ref = ref.replace(/[,:\(\)\[\]\.\*\?]/g, '');
       }
-      if (!this.configUseKeywords) {
-        result = refValue.split(' ').filter(elem => {
-          return ref.indexOf(elem) === -1;
-        }).length === 0;
+
+      const revValueSplitted = refValue.split(/[ ]/);
+      const revSplitted = ref.split(/[ ]/);
+      if (this.configUseKeywords) {
+        result = revSplitted.length === revValueSplitted.length &&
+                 revSplitted.every((elem, index) => revValueSplitted[index] === elem);
       } else {
-        result = refValue === ref;
+        result = revSplitted.length === revValueSplitted.length &&
+                 revSplitted.every((elem) => revValueSplitted.includes(elem));
       }
     }
     return result;
@@ -59,6 +65,8 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
         break;
       case 'config_trim_whitespaces_switch':
         this.configTrimWhitespaces = configValue;
+        this.configUseKeywords = false;
+        this.configUsePunctuation = false;
         break;
       case 'config_use_keywords_switch':
         this.configUseKeywords = configValue;
@@ -79,6 +87,7 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
           this.configCaseSensitive ? 'onText' : 'offText'
         ),
         enabled: this.configCaseSensitive,
+        disabled: () => false,
         id: 'config_case_sensitive_switch',
       }, {
         configTitle: 'component.answeroptions.free_text_question.config_trim_whitespaces',
@@ -86,6 +95,7 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
           this.configTrimWhitespaces ? 'onText' : 'offText'
         ),
         enabled: this.configTrimWhitespaces,
+        disabled: () => false,
         id: 'config_trim_whitespaces_switch',
       }, {
         configTitle: 'component.answeroptions.free_text_question.config_use_keywords',
@@ -93,6 +103,7 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
           this.configUseKeywords ? 'onText' : 'offText'
         ),
         enabled: this.configUseKeywords,
+        disabled: () => Boolean(this.configTrimWhitespaces),
         id: 'config_use_keywords_switch',
       }, {
         configTitle: 'component.answeroptions.free_text_question.config_use_punctuation',
@@ -100,6 +111,7 @@ export class FreeTextAnswerEntity extends AbstractAnswerEntity {
           this.configUsePunctuation ? 'onText' : 'offText'
         ),
         enabled: this.configUsePunctuation,
+        disabled: () => Boolean(this.configTrimWhitespaces),
         id: 'config_use_punctuation_switch',
       },
     ];

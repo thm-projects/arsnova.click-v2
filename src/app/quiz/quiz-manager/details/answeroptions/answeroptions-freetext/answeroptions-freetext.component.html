@@ -22,20 +22,17 @@
            style="line-height: 1.2">
           <span [innerHTML]="elem.configTitle | translate"></span>&#58;&nbsp;
         </p>
-        <label class="btn cursor-pointer mb-0 align-self-center"
-               [class.btn-success]="elem.enabled"
-               (click)="setConfig(elem.id, !elem.enabled)"
-               [class.btn-danger]="!elem.enabled">
-          <input [id]="elem.id"
-                 type="checkbox"
-                 class="d-none"
-                 [attr.aria-label]="elem.configTitle | translate"
-                 autocomplete="off"
-                 role="switch"
-                 [checked]="elem.enabled"/>
+        <button class="btn cursor-pointer mb-0 align-self-center"
+                role="switch"
+                [id]="elem.id"
+                [class.btn-success]="elem.enabled"
+                [class.btn-danger]="!elem.enabled"
+                (click)="setConfig(elem.id, !elem.enabled)"
+                [attr.aria-label]="elem.configTitle | translate"
+                [disabled]="elem.disabled()">
           <span *ngIf="elem.enabled">{{'component.answeroptions.free_text_question.onText' | translate}}</span>
           <span *ngIf="!elem.enabled">{{'component.answeroptions.free_text_question.offText' | translate}}</span>
-        </label>
+        </button>
       </div>
     </div>
     <div class="row"
