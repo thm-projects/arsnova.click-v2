@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faHourglass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faKey } from '@fortawesome/free-solid-svg-icons/faKey';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
@@ -80,6 +81,7 @@ describe('VotingComponent', () => {
     const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faHourglass);
     library.addIcons(faSpinner);
+    library.addIcons(faKey);
     fixture = TestBed.createComponent(VotingComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

@@ -8,6 +8,7 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { ToastrService } from 'ngx-toastr';
 import { TranslatePipeMock } from '../../../../_mocks/_pipes/TranslatePipeMock';
 import { jwtOptionsFactory } from '../../../lib/jwt.factory';
 import { AttendeeMockService } from '../../../service/attendee/attendee.mock.service';
@@ -43,6 +44,7 @@ describe('AnswerResultComponent', () => {
         {provide: AttendeeService, useClass: AttendeeMockService},
         {provide: CustomMarkdownService, useClass: CustomMarkdownServiceMock},
         {provide: HotkeysService, useValue: {}},
+        {provide: ToastrService, useValue: {}},
       ],
       declarations: [ AnswerResultComponent, TranslatePipeMock ]
     })
