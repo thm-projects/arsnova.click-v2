@@ -2,7 +2,7 @@ import { isPlatformServer } from '@angular/common';
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { filter, map, switchMapTo, take, takeUntil } from 'rxjs/operators';
+import { filter, map, switchMapTo, takeUntil } from 'rxjs/operators';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { AudioPlayerConfigTarget } from '../../lib/enums/AudioPlayerConfigTarget';
 import { DbState, StorageKey } from '../../lib/enums/enums';
@@ -137,7 +137,7 @@ export class QuizJoinComponent implements OnInit, OnDestroy {
 
     this.themesService.updateCurrentlyUsedTheme();
 
-    this.playbackFinished.pipe(take(1)).subscribe(() => {
+    this.playbackFinished.pipe(takeUntil(this._destroy)).subscribe(() => {
 
       this._isPending = false;
 
