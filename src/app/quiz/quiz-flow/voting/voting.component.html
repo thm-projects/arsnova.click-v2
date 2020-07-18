@@ -3,9 +3,16 @@
 </div>
 
 <div *ngIf="quizService?.currentQuestion()?.timer > 0"
-     class="overflow-hidden mb-3 d-flex"
-     id="countdown-header">
-  <div class="ml-auto">
+     class="overflow-hidden mb-3 d-flex">
+
+  <fa-icon *ngIf="quizService?.currentQuestion()?.requiredForToken"
+           [icon]="['fas', 'key']"
+           class="text-warning align-self-center"
+           id="token-icon-header"
+           [ngbTooltip]="'component.quiz_summary.required-for-token.label' | translate"></fa-icon>
+
+  <div class="ml-auto"
+       id="countdown-header">
     <span *ngIf="countdown">{{countdown}}</span>
     <fa-icon *ngIf="!countdown"
              [icon]="'spinner'"

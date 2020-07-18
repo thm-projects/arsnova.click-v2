@@ -1,4 +1,11 @@
-<h5 class="mb-3">{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</h5>
+<h5 class="mb-3">
+  <span>{{'component.liveResults.question_number' | translate}}&nbsp;{{questionIndex + 1}}</span>
+
+  <fa-icon *ngIf="quizService?.currentQuestion()?.requiredForToken"
+           [icon]="['fas', 'key']"
+           class="text-warning ml-sm-2"
+           [ngbTooltip]="'component.quiz_summary.required-for-token.label' | translate"></fa-icon>
+</h5>
 
 <app-voting-question *ngIf="questionText && quizService?.currentQuestion()?.questionText"
                      [questionText]="questionText"
