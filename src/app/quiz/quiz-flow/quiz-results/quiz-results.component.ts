@@ -694,6 +694,13 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
           return;
         }
 
+        console.log(
+          '[QuizResultsComponent]: Received event Countdown',
+          payload.value,
+          this.attendeeService.hasResponse(),
+          [QuestionType.ABCDSurveyQuestion, QuestionType.SurveyQuestion].includes(this.quizService.currentQuestion().TYPE)
+        );
+
         if (payload.value ||
             !this.attendeeService.hasResponse() ||
             [QuestionType.ABCDSurveyQuestion, QuestionType.SurveyQuestion].includes(this.quizService.currentQuestion().TYPE)

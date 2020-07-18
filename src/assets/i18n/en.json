@@ -778,6 +778,10 @@
       "swupdate": {
         "message": "There is a new version of arsnova.click available. Please click here to reload the page. This will install the update automatically.",
         "title": "New version available"
+      },
+      "can-use-token": {
+        "message": "You have achieved a bonus token. Click here to view the token",
+        "title": "Bonustoken available"
       }
     },
     "statistics": {

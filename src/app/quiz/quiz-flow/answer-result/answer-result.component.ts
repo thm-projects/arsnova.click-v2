@@ -1,9 +1,13 @@
 import { DOCUMENT, isPlatformServer } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateService } from '@ngx-translate/core';
+import { captureException } from '@sentry/browser';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, switchMapTo, take, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { AnswerState } from '../../../lib/enums/AnswerState';
 import { StorageKey } from '../../../lib/enums/enums';
@@ -15,6 +19,8 @@ import { AttendeeService } from '../../../service/attendee/attendee.service';
 import { FooterBarService } from '../../../service/footer-bar/footer-bar.service';
 import { HeaderLabelService } from '../../../service/header-label/header-label.service';
 import { QuizService } from '../../../service/quiz/quiz.service';
+import { BonusTokenService } from '../../../service/user/bonus-token/bonus-token.service';
+import { BonusTokenComponent } from '../quiz-results/modals/bonus-token/bonus-token.component';
 
 @Component({
   selector: 'app-answer-result',
@@ -31,6 +37,7 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
   private readonly _messageSubscriptions: Array<string> = [];
   private readonly _loadedConfetti = new ReplaySubject<void>(1);
   private readonly _abortRequest = new Subject();
+  private showTokenModalToast: ActiveToast<any>;
 
   public hasTriggeredNavigation: boolean;
   public isLoading = true;
@@ -46,11 +53,15 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
     private headerLabelService: HeaderLabelService,
     private quizService: QuizService,
     private quizApiService: QuizApiService,
+    private bonusTokenService: BonusTokenService,
     private messageQueue: SimpleMQ,
     private attendeeService: AttendeeService,
     private footerBarService: FooterBarService,
     private router: Router,
     private cd: ChangeDetectorRef,
+    private translateService: TranslateService,
+    private toastService: ToastrService,
+    private ngbModal: NgbModal,
   ) {
     headerLabelService.headerLabel = 'component.liveResults.title';
     this.footerBarService.replaceFooterElements([]);
@@ -72,9 +83,12 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       this.isLastQuestion = this.quizService.quiz.currentQuestionIndex === this.quizService.quiz.questionList.length - 1;
       this.cd.markForCheck();
       this.handleMessages();
-    }).catch(() => this.hasTriggeredNavigation = true);
 
-    this.loadData();
+      this.loadData();
+    }).catch(err => {
+      captureException(err);
+      this.hasTriggeredNavigation = true;
+    });
   }
 
   public ngOnDestroy(): void {
@@ -165,6 +179,10 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
 
   private loadData(): void {
     this._abortRequest.next();
+
+    const canUseBonusToken$ = this.quizApiService.getCanUseBonusToken().pipe(filter(canUseBonusToken => Boolean(canUseBonusToken)));
+    const bonusToken$ = this.bonusTokenService.getBonusToken();
+
     this.quizApiService.getAnswerResult().pipe(takeUntil(this._abortRequest)).subscribe(data => {
       this.data = data;
       this.onlyOneAvailableCorrectAnswer = data.amountAvailable === 1 && data.amountCorrect === data.amountAvailable;
@@ -175,10 +193,33 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       this.document.body.classList.add(this._statusCssClass);
       if (data.state === AnswerState.Correct) {
         this._loadedConfetti.pipe(take(1)).subscribe(() => (window as any).confetti.start());
+
+        if (this.isLastQuestion && !this.showTokenModalToast) {
+          canUseBonusToken$.pipe(switchMapTo(bonusToken$)).subscribe(token => {
+
+            const message = this.translateService.instant('component.toasts.can-use-token.message');
+            const title = this.translateService.instant('component.toasts.can-use-token.title');
+            const nickname = this.attendeeService.ownNick;
+            const quizname = this.quizService.quiz.name;
+
+            this.showTokenModalToast = this.toastService.success(message, title, {
+              disableTimeOut: true,
+              toastClass: 'toast show ngx-toastr',
+            });
+
+            this.showTokenModalToast.onTap.subscribe(() => {
+              const ref = this.ngbModal.open(BonusTokenComponent);
+              ref.componentInstance.bonusToken = token;
+              ref.componentInstance.nickname = nickname;
+              ref.componentInstance.quizname = quizname;
+            });
+          });
+        }
       }
       this.isLoading = false;
       this.cd.markForCheck();
-    }, () => {
+    }, err => {
+      captureException(err);
       this.hasTriggeredNavigation = true;
       this.router.navigate(['/quiz', 'flow', 'results']);
     });

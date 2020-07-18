@@ -35,8 +35,10 @@ export class BonusTokenComponent implements OnInit, OnDestroy {
     });
     this.bonusTokenService.getBonusToken().subscribe(bonusToken => {
       this.bonusToken = bonusToken;
-    });
-    this.nickname = this.attendeeService.ownNick;
+    }, () => {});
+    if (this.attendeeService.ownNick) {
+      this.nickname = this.attendeeService.ownNick;
+    }
   }
 
   public ngOnDestroy(): void {
@@ -63,9 +65,5 @@ export class BonusTokenComponent implements OnInit, OnDestroy {
 
   public close(): void {
     this.activeModal.close();
-  }
-
-  public abort(): void {
-    this.activeModal.dismiss();
   }
 }

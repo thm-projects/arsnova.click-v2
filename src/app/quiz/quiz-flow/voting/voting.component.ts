@@ -210,7 +210,11 @@ export class VotingComponent implements OnInit, OnDestroy, IHasTriggeredNavigati
       }
 
       if ( //
-        (this.quizService.quiz.currentQuestionIndex > -1 && this.quizService.quiz.currentStartTimestamp === -1) || //
+        (
+          this.quizService.quiz.currentQuestionIndex > -1 &&
+          this.quizService.quiz.currentStartTimestamp === -1 &&
+          !(environment.readingConfirmationEnabled && this.quizService.quiz.sessionConfig.readingConfirmationEnabled)
+        ) || //
         this.attendeeService.hasResponse() //
       ) {
         this.hasTriggeredNavigation = true;
