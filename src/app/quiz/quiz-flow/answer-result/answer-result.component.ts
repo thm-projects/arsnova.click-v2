@@ -193,29 +193,29 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       this.document.body.classList.add(this._statusCssClass);
       if (data.state === AnswerState.Correct) {
         this._loadedConfetti.pipe(take(1)).subscribe(() => (window as any).confetti.start());
-
-        if (this.isLastQuestion && !this.showTokenModalToast) {
-          canUseBonusToken$.pipe(switchMapTo(bonusToken$)).subscribe(token => {
-
-            const message = this.translateService.instant('component.toasts.can-use-token.message');
-            const title = this.translateService.instant('component.toasts.can-use-token.title');
-            const nickname = this.attendeeService.ownNick;
-            const quizname = this.quizService.quiz.name;
-
-            this.showTokenModalToast = this.toastService.success(message, title, {
-              disableTimeOut: true,
-              toastClass: 'toast show ngx-toastr',
-            });
-
-            this.showTokenModalToast.onTap.subscribe(() => {
-              const ref = this.ngbModal.open(BonusTokenComponent);
-              ref.componentInstance.bonusToken = token;
-              ref.componentInstance.nickname = nickname;
-              ref.componentInstance.quizname = quizname;
-            });
-          });
-        }
       }
+      if (data.state !== AnswerState.Wrong && this.isLastQuestion && !this.showTokenModalToast) {
+        canUseBonusToken$.pipe(switchMapTo(bonusToken$)).subscribe(token => {
+
+          const message = this.translateService.instant('component.toasts.can-use-token.message');
+          const title = this.translateService.instant('component.toasts.can-use-token.title');
+          const nickname = this.attendeeService.ownNick;
+          const quizname = this.quizService.quiz.name;
+
+          this.showTokenModalToast = this.toastService.success(message, title, {
+            disableTimeOut: true,
+            toastClass: 'toast show ngx-toastr',
+          });
+
+          this.showTokenModalToast.onTap.subscribe(() => {
+            const ref = this.ngbModal.open(BonusTokenComponent);
+            ref.componentInstance.bonusToken = token;
+            ref.componentInstance.nickname = nickname;
+            ref.componentInstance.quizname = quizname;
+          });
+        });
+      }
+
       this.isLoading = false;
       this.cd.markForCheck();
     }, err => {
