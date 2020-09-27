@@ -134,6 +134,7 @@ npm_test:
     - apt-get -y install --allow-unauthenticated google-chrome-stable
     - npm install
     - npm test
+  allow_failure: true
 
 deploy:
   stage: deploy
