@@ -1,5 +1,5 @@
-$primary: Teal;
-$secondary: white;
+$primary: moccasin;
+$secondary: #86c15d;
 $invers: rebeccapurple;
 $light: #B2DFDB;
 $dark: #212121;
@@ -8,7 +8,7 @@ $success: #86c15d;
 $warning: #f5bc62;
 $danger: #e93458;
 
-$primary_text_color: white;
+$primary_text_color: #757575;
 $secondary_text_color: #757575;
 
 $modal-content-bg: white;
@@ -30,12 +30,12 @@ $bg-answer-result-correct: #00a200;
 $fg-answer-result-correct: $primary_text_color;
 $bg-answer-result-partially-correct: $invers;
 $fg-answer-result-partially-correct: $primary_text_color;
-$bg-answer-result-wrong: #f44336;
+$bg-answer-result-wrong: #e74c3c;
 $fg-answer-result-wrong: $primary_text_color;
 
 $progress-bg: transparent;
 
-$link-color: #f5bc62;
+$link-color: orange;
 $link-decoration: none;
 $link-hover-color: $primary_text_color;
 $link-hover-decoration: underline;
@@ -85,7 +85,7 @@ $colorChangingOwnNick: (
 
 $colorChangingArs: (
   0: (fg: white, bg: transparent),
-  25: (fg: #f5bc62, bg: transparent),
+  25: (fg: #1661a4, bg: transparent),
   50: (fg: white, bg: transparent),
   75: (fg: white, bg: transparent),
   100: (fg: white, bg: transparent)
@@ -94,7 +94,7 @@ $colorChangingArs: (
 $colorChangingNova: (
   0: (fg: white, bg: transparent),
   25: (fg: white, bg: transparent),
-  50: (fg: #f5bc62, bg: transparent),
+  50: (fg: #1661a4, bg: transparent),
   75: (fg: white, bg: transparent),
   100: (fg: white, bg: transparent)
 );
@@ -103,20 +103,20 @@ $colorChangingDot: (
   0: (fg: white, bg: transparent),
   25: (fg: white, bg: transparent),
   50: (fg: white, bg: transparent),
-  75: (fg: #f5bc62, bg: transparent),
+  75: (fg: #1661a4, bg: transparent),
   100: (fg: white, bg: transparent)
 );
 
 $colorChangingClick: (
-  0: (fg: #f5bc62, bg: transparent),
+  0: (fg: #1661a4, bg: transparent),
   25: (fg: white, bg: transparent),
   50: (fg: white, bg: transparent),
   75: (fg: white, bg: transparent),
-  100: (fg: #f5bc62, bg: transparent)
+  100: (fg: #1661a4, bg: transparent)
 );
 
 $logo-bg: transparent;
-$logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova-logo-click": white);
+$logo-fg: (".arsnova-logo-ars": #1661a4, ".arsnova-logo-nova": #1661a4, ".arsnova-logo-click": #1661a4);
 
 $popover-body-color: initial;
 
