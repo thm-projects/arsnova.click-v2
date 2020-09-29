@@ -685,8 +685,8 @@
       "view-all-public": "… oder sieh dir deine eigenen veröffentlichten Quizze an!",
       "view-own-public": "Klick hier, um deine veröffentlichten Quizze anzusehen!",
       "errors": {
-        "already-taken": "Dieser Name wird bereits verwendet. Bitte nutze einen anderen Quiz-Namen.",
-        "min-length": "Bitte gib für deinen Quiz-Namen mindestens vier Zeichen ein."
+        "already-taken": "Dieser Name wird bereits verwendet. Gib einen anderen ein.",
+        "min-length": "Bitte gib mindestens vier Zeichen ein."
       },
       "success": {
         "can-join": "Diesem Quiz kannst du beitreten!",

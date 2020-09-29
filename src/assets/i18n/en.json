@@ -685,8 +685,8 @@
       "view-all-public": "… or view your own public quizzes!",
       "view-own-public": "Click here to view your own public quizzes!",
       "errors": {
-        "already-taken": "This name is already used. Please use another quiz name",
-        "min-length": "Please use at least four characters for your quiz name."
+        "already-taken": "This name is already used. Please enter another one",
+        "min-length": "Enter at least four characters."
       },
       "success": {
         "can-join": "You can join this quiz!",
