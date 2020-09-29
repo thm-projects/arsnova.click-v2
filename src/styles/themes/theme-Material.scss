@@ -5,7 +5,7 @@ $light: #B2DFDB;
 $dark: #212121;
 $info: #26b5d2;
 $success: #86c15d;
-$warning: #f5bc62;
+$warning: #f8c362;
 $danger: #e93458;
 
 $primary_text_color: #757575;
@@ -84,34 +84,34 @@ $colorChangingOwnNick: (
 );
 
 $colorChangingArs: (
-  0: (fg: white, bg: transparent),
+  0: (fg: orange, bg: transparent),
   25: (fg: #1661a4, bg: transparent),
-  50: (fg: white, bg: transparent),
-  75: (fg: white, bg: transparent),
-  100: (fg: white, bg: transparent)
+  50: (fg: orange, bg: transparent),
+  75: (fg: orange, bg: transparent),
+  100: (fg: orange, bg: transparent)
 );
 
 $colorChangingNova: (
-  0: (fg: white, bg: transparent),
-  25: (fg: white, bg: transparent),
+  0: (fg: orange, bg: transparent),
+  25: (fg: orange, bg: transparent),
   50: (fg: #1661a4, bg: transparent),
-  75: (fg: white, bg: transparent),
-  100: (fg: white, bg: transparent)
+  75: (fg: orange, bg: transparent),
+  100: (fg: orange, bg: transparent)
 );
 
 $colorChangingDot: (
-  0: (fg: white, bg: transparent),
-  25: (fg: white, bg: transparent),
-  50: (fg: white, bg: transparent),
+  0: (fg: orange, bg: transparent),
+  25: (fg: orange, bg: transparent),
+  50: (fg: orange, bg: transparent),
   75: (fg: #1661a4, bg: transparent),
-  100: (fg: white, bg: transparent)
+  100: (fg: orange, bg: transparent)
 );
 
 $colorChangingClick: (
   0: (fg: #1661a4, bg: transparent),
-  25: (fg: white, bg: transparent),
-  50: (fg: white, bg: transparent),
-  75: (fg: white, bg: transparent),
+  25: (fg: orange, bg: transparent),
+  50: (fg: orange, bg: transparent),
+  75: (fg: orange, bg: transparent),
   100: (fg: #1661a4, bg: transparent)
 );
 

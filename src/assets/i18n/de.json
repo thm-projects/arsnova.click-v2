@@ -341,7 +341,7 @@
       }
     },
     "name_management": {
-      "enter_quiz_name": "Gib hier den Quiz-Namen ein…",
+      "enter_quiz_name": "Gib den Quiz-Namen ein …",
       "join_session": "Mach mit!",
       "start_session": {
         "title": "Quiz starten",
@@ -709,7 +709,7 @@
       "demo_quiz": {
         "title": {
           "2": "Gib »ABC…« ein oder mehr vom Alphabet. Ruf die App mit dem angezeigten Quiz-Namen in einem zweiten Browser auf. Spiel das Quiz in verteilten Rollen.",
-          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Projektblog</a> und erfahre, wie du Bonus-Quizze zur Lernmotivation im Unterricht einsetzt."
+          "3": "Besuche unseren <a target='_blank' href='https://arsnova.eu/blog/arsnova-click/' rel='noopener noreferrer'>Blog</a> und erfahre, wie du Bonus-Quizze zur Lernmotivation einsetzt."
         }
       }
     },

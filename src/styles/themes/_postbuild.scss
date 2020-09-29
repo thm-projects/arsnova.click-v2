@@ -91,6 +91,7 @@ code[class*="language-"], pre[class*="language-"] {
 #logo-image,
 #logo-image-xl {
   background-color: $logo-bg;
+  font-weight: bold;
 
   @each $selector, $colorCode in $logo-fg {
     #{$selector} {
