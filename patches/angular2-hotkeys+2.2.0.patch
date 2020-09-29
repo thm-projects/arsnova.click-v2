@@ -1,0 +1,13 @@
+diff --git a/node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts b/node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts
+index 3ca3a4a..dcf1904 100644
+--- a/node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts
++++ b/node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts
+@@ -1,7 +1,7 @@
+ import { Hotkey } from './hotkey.model';
+ import { Subject } from 'rxjs';
+ import { IHotkeyOptions } from './hotkey.options';
+-import 'mousetrap';
++import { MousetrapInstance } from 'mousetrap';
+ export declare class HotkeysService {
+     private options;
+     hotkeys: Hotkey[];
