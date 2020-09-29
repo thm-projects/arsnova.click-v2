@@ -114,6 +114,9 @@
     "web-animations-js": "^2.3.2",
     "zone.js": "~0.10.2"
   },
+  "resolutions": {
+    "@types/mousetrap": "1.6.2"
+  },
   "devDependencies": {
     "@angular/cli": "^10.0.0",
     "@angular/compiler-cli": "^10.0.1",
@@ -124,7 +127,6 @@
     "@types/jasmine": "^3.5.10",
     "@types/jasminewd2": "^2.0.8",
     "@types/modernizr": "^3.5.3",
-    "@types/mousetrap": "1.6.3",
     "@types/node": "^13.9.8",
     "@types/webpack": "^4.41.10",
     "chrome-launcher": "^0.10.7",
