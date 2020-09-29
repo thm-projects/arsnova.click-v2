@@ -57,7 +57,8 @@
     "serve:ssr": "node dist/frontend/server/main.js",
     "build:ssr": "ng build --prod && ng run frontend:server:production",
     "prerender": "ng run frontend:prerender",
-    "ngsw-config": "node_modules/.bin/ngsw-config dist src/ngsw-config.json"
+    "ngsw-config": "node_modules/.bin/ngsw-config dist src/ngsw-config.json",
+    "postinstall": "patch-package"
   },
   "private": true,
   "dependencies": {
@@ -105,6 +106,8 @@
     "ngx-toastr": "^12.1.0",
     "ngx-translate-messageformat-compiler": "^4.7.0",
     "node-sass": "^4.14.1",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "preboot": "^7.0.0",
     "prism-themes": "^1.4.0",
     "rxjs": "~6.5.5",

@@ -44,4 +44,7 @@ missingKeysByFile.forEach(f => {
 
 if (missingKeysByFile.length) {
   process.exit(1);
+} else {
+  console.log('i18n-check: Everything fine. No missing keys found');
+  process.exit(0);
 }
