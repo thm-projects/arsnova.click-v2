@@ -28,15 +28,14 @@
     top: 0;
     height: 50px;
     width: 36px;
-    background: rgba(0, 0, 0, 0.5);
+    background: #f1ada0;
+    color: white !important;
 
     &:hover, &:focus {
-      background: rgba(0, 0, 0, 0.3);
+      background: white !important;
+      color: #f1ada0 !important;
     }
 
-    &:active {
-      background: rgba(0, 0, 0, 0.9);
-    }
   }
 
   #name-input-field,

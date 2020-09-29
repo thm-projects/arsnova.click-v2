@@ -619,7 +619,7 @@
       "description": "Hier kannst du den Countdown für die Quizfrage einstellen. Sobald er abläuft oder alle Player eine Antwort abgegeben haben, ertönt ein Gong oder Pfiff und die Quizrunde ist beendet."
     },
     "translation": {
-      "translations": "Deine Sprache"
+      "translations": "Sprachauswahl"
     },
     "voting": {
       "title": "Abstimmung",
