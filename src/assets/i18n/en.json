@@ -341,7 +341,7 @@
       }
     },
     "name_management": {
-      "enter_quiz_name": "Enter the quiz name here",
+      "enter_quiz_name": "Enter the quiz name …",
       "join_session": "Join in!",
       "start_session": {
         "title": "Start the quiz",
@@ -619,7 +619,7 @@
       "description": "Here you can set the countdown for the quiz question. As soon as it expires, or all participants have answered, the quiz round is ended."
     },
     "translation": {
-      "translations": "Select your language"
+      "translations": "Language choice"
     },
     "voting": {
       "title": "Voting",
@@ -735,8 +735,8 @@
       "view-all-public": "… or view your own public quizzes!",
       "view-own-public": "Click here to view your own public quizzes!",
       "errors": {
-        "already-taken": "This name is already used. Please use another quiz name",
-        "min-length": "Please use at least four characters for your quiz name."
+        "already-taken": "This name is already used. Please enter another one",
+        "min-length": "Enter at least four characters."
       },
       "success": {
         "can-join": "You can join this quiz!",
