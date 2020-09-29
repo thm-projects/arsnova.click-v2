@@ -7,6 +7,10 @@
 
 #landingPageContent {
 
+  img {
+    width: 100%;
+  }
+
   #collapse-quiz-name-datalist {
     right: 0;
     font-size: 2rem;
@@ -24,15 +28,14 @@
     top: 0;
     height: 50px;
     width: 36px;
-    background: rgba(0, 0, 0, 0.5);
+    background: #f1ada0;
+    color: white !important;
 
     &:hover, &:focus {
-      background: rgba(0, 0, 0, 0.3);
+      background: white !important;
+      color: #f1ada0 !important;
     }
 
-    &:active {
-      background: rgba(0, 0, 0, 0.9);
-    }
   }
 
   #name-input-field,
@@ -48,10 +51,20 @@
 
   .header-label {
     @include media-breakpoint-down(xs) {
-      font-size: 1.8rem;
+      font-size: 1.7rem;
     }
     @include media-breakpoint-up(sm) {
       font-size: 2.8rem;
     }
   }
+}
+
+.alert-warning {
+  color: white;
+  background-color: #f1ada0;
+  border-color: #f1ada0;
+}
+
+label {
+  color: white;
 }
