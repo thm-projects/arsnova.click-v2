@@ -289,7 +289,7 @@
       }
     },
     "name_management": {
-      "enter_quiz_name": "Enter the quiz name here",
+      "enter_quiz_name": "Enter the quiz name …",
       "join_session": "Join in!",
       "start_session": {
         "title": "Start the quiz",
