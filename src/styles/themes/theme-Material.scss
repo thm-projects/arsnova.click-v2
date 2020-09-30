@@ -20,8 +20,6 @@ $body-color: $primary_text_color;
 
 $text-muted: $secondary_text_color;
 
-$bg-pre: $secondary;
-
 $border-loader_wrapper-outer_spin: #26b5d2;
 $border-loader_wrapper-middle_spin: #e74c3c;
 $border-loader_wrapper-inner_spin: #f5bc62;
@@ -120,7 +118,8 @@ $logo-fg: (".arsnova-logo-ars": #1661a4, ".arsnova-logo-nova": #1661a4, ".arsnov
 
 $popover-body-color: initial;
 
-$code-color: $primary_text_color;
+$bg-pre: black;
+$code-color: white;
 
 @import "postbuild";
 
@@ -134,5 +133,5 @@ $code-color: $primary_text_color;
 }
 
 .bg-white {
-  background-color: #f1b0a1;
+  background-color: #f1b0a1 !important;
 }

@@ -132,14 +132,14 @@ class GenerateMetaNodes {
 
       Object.keys(themeData).forEach(theme => {
         const manifest = {
-          short_name: 'arsnova.click',
+          short_name: '.click',
           name: 'arsnova.click',
           description: descriptionMessage,
           background_color: themeData[theme].exportedAtRowStyle.bg,
           theme_color: themeData[theme].exportedAtRowStyle.bg,
           start_url: '/',
           display: 'standalone',
-          orientation: 'portrait',
+          orientation: 'any',
           icons: imageDerivates.logo.map(derivate => {
             return {
               src: `/assets/images/theme/${theme}/logo_s${derivate}.png`,
