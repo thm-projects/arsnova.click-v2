@@ -67,6 +67,7 @@
         "back": "Zurück",
         "cache_assets": "Assets cachen",
         "block_rude_nicknames": "Nicknamen filtern",
+        "enable_cas_login": "CAS-Login",
         "global_leaderboard": "Globale Rangliste",
         "dataprivacy": "Datenschutz",
         "member_group": "Teams",
