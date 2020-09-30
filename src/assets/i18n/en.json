@@ -37,19 +37,19 @@
   "region": {
     "footer": {
       "footer_bar": {
-        "about": "arsnova.click",
+        "about": "About",
         "home": "Homepage",
         "tos": "Terms of Use",
         "imprint": "Imprint",
-        "blog": "Project Blog",
+        "blog": "Blog",
         "languages": "Language",
-        "style": "Styles",
+        "style": "Style",
         "import": "Import",
         "info": "Info",
         "reading-confirmation": "Reading confirmation",
         "fullscreen": "Fullscreen",
         "sound": "Sound",
-        "qr_code": "QR",
+        "qr_code": "QR code",
         "nicknames": "Nicknames",
         "edit_quiz": "Edit",
         "show_product_tour": "Product tour",
@@ -62,7 +62,7 @@
           "nicknames": "You can preset selectable nicknames out of multiple categories here. Hint: Block a rude nickname by clicking on the attendee in the quiz lobby.",
           "confidence-slider": "Active that option, which if you want that the participants can see the certainty of answering in hundreds during the vote: 0 &#37; »guessed« - 100 &#37; »absolutely safe«. The average would be indicated in the results diagram."
         },
-        "api-docs": "API Docs",
+        "api-docs": "API",
         "show_confidence_slider": "Confidence Grade",
         "back": "Back",
         "cache_assets": "Cache Assets",
@@ -86,7 +86,7 @@
         "hotkeys": "Hotkeys"
       },
       "about": {
-        "title": "About arsnova.click",
+        "title": "Info",
         "declaration": "A little <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />a little <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />a lot <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
         "ars": "arsnova.click is an innovative <a href='https://en.wikipedia.org/wiki/Audience_response#Classroom_use' target='_blank'>Audience-Response-System (ARS)</a> for public educational institutions.",
         "developed_by": "Inspired by <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> and <a href='https://socrative.com/' target='_blank'>Socrative</a> developed by computer science students of <a href='https://www.thm.de/site/' target='_blank'>THM</a> the <a href='https://en.wikipedia.org/wiki/Gamification' target='_blank'>gamified</a> alternative to the flagship <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
@@ -282,9 +282,9 @@
     },
     "twitter": {
       "optin": {
-        "check": "Check if you want enable Twitter features",
+        "check": "Check if you want to enable Twitter features",
         "share": "Share on social media",
-        "warning": "I agree that content from Twitter will be displayed"
+        "warning": "I agree that content from Twitter will be displayed."
       },
       "tweet": {
         "content": {
@@ -596,7 +596,7 @@
       }
     },
     "theme_switcher": {
-      "set_theme": "Choose a theme",
+      "set_theme": "Style",
       "themes": {
         "black_beauty": {
           "name": "Black Beauty (beamer-suitable)",
@@ -619,7 +619,7 @@
       "description": "Here you can set the countdown for the quiz question. As soon as it expires, or all participants have answered, the quiz round is ended."
     },
     "translation": {
-      "translations": "Language choice"
+      "translations": "Language"
     },
     "voting": {
       "title": "Voting",

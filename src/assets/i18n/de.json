@@ -37,11 +37,11 @@
   "region": {
     "footer": {
       "footer_bar": {
-        "about": "arsnova.click",
+        "about": "Über",
         "home": "Startseite",
         "tos": "Nutzungsbedingungen",
         "imprint": "Impressum",
-        "blog": "Projektblog",
+        "blog": "Blog",
         "languages": "Sprache",
         "style": "Stil",
         "import": "Quiz-Import",
@@ -62,12 +62,11 @@
           "nicknames": "Du kannst bekannte Namen aus verschiedenen Kategorien oder auch Emojis vorgeben.",
           "confidence-slider": "Aktiviere diese Option, wenn die Player zurückmelden sollen, wie sicher sie sich in ihrer Antwort sind von 0 &#37; »Geraten« bis 100 &#37; »Fest überzeugt«."
         },
-        "api-docs": "API-Dokumentation",
+        "api-docs": "API",
         "show_confidence_slider": "Antwortsicherheit abfragen",
         "back": "Zurück",
         "cache_assets": "Assets cachen",
         "block_rude_nicknames": "Nicknamen filtern",
-        "enable_cas_login": "CAS-Login",
         "global_leaderboard": "Globale Rangliste",
         "dataprivacy": "Datenschutz",
         "member_group": "Teams",
@@ -86,7 +85,7 @@
         "hotkeys": "Hotkeys"
       },
       "about": {
-        "title": "arsnova.click",
+        "title": "Info",
         "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
         "ars": "arsnova.click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
         "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelten Informatik-Studenten der <a href='http://www.thm.de/site/' target='_blank'>THM</a> die <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierte</a> Alternative zum Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
@@ -190,7 +189,7 @@
         "estimated-storage-quota": {
           "label": "Geschätzter Speicherplatz",
           "not_available": "Nicht verfügbar - Aktualisierungen müssen manuell gesucht werden!",
-          "currently-used": "Aktuell werden {USAGE}MiB von {QUOTA}MiB verwendet"
+          "currently-used": "Aktuell werden {USAGE}MiB von {QUOTA}MiB verwendet."
         },
         "disconnected": "Du bist gerade nicht verbunden. Du kannst nur mit Internetverbindung einem Quiz beitreten oder ein neues Quiz erstellen!",
         "server_status": {
@@ -355,7 +354,7 @@
       "can_create_session": "Quiz erstellen",
       "create_demo_session": "Starte Demo Quiz",
       "quiz_management": "Quiz-Speicher",
-      "session_management": "Quizze",
+      "session_management": "Meine Quizze",
       "delete_session": {
         "title": "Quiz löschen",
         "label": "Löschen"
@@ -596,7 +595,7 @@
       }
     },
     "theme_switcher": {
-      "set_theme": "Dein Stil",
+      "set_theme": "Stil",
       "themes": {
         "black_beauty": {
           "name": "Black Beauty (beamertauglich)",
@@ -619,7 +618,7 @@
       "description": "Hier kannst du den Countdown für die Quizfrage einstellen. Sobald er abläuft oder alle Player eine Antwort abgegeben haben, ertönt ein Gong oder Pfiff und die Quizrunde ist beendet."
     },
     "translation": {
-      "translations": "Sprachauswahl"
+      "translations": "Sprache"
     },
     "voting": {
       "title": "Abstimmung",
