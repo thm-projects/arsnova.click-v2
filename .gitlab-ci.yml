@@ -113,6 +113,8 @@ ts_lint:
     - nodejs
   script:
     - npm install
+    - echo "------------" && echo && echo "Temporary fix Mousetrap Instance Issue" && echo && echo && echo "REMOVE AFTER PACKAGE MAINTAINER HAS MERGED THE FIX" && echo && echo "------------"
+    - sed -i "s|import 'mousetrap';|import { MousetrapInstance } from 'mousetrap';|g" "node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts"
     - node_modules/tslint/bin/tslint -c tslint.json -p tsconfig.json
 
 i18n_check:
@@ -133,6 +135,8 @@ npm_test:
     - apt-get -y update
     - apt-get -y install --allow-unauthenticated google-chrome-stable
     - npm install
+    - echo "------------" && echo && echo "Temporary fix Mousetrap Instance Issue" && echo && echo && echo "REMOVE AFTER PACKAGE MAINTAINER HAS MERGED THE FIX" && echo && echo "------------"
+    - sed -i "s|import 'mousetrap';|import { MousetrapInstance } from 'mousetrap';|g" "node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts"
     - npm test
 
 deploy:
