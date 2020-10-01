@@ -25,13 +25,13 @@ $border-loader_wrapper-middle_spin: #e74c3c;
 $border-loader_wrapper-inner_spin: #f5bc62;
 
 $bg-answer-result-correct: #00a200;
-$fg-answer-result-correct: $primary_text_color;
+$fg-answer-result-correct:white;
 $bg-answer-result-partially-correct: $invers;
-$fg-answer-result-partially-correct: $primary_text_color;
+$fg-answer-result-partially-correct: white;
 $bg-answer-result-wrong: #e74c3c;
-$fg-answer-result-wrong: $primary_text_color;
+$fg-answer-result-wrong: white;
 
-$progress-bg: transparent;
+$progress-bg: white;
 
 $link-color: orange;
 $link-decoration: none;
@@ -134,4 +134,8 @@ $code-color: $secondary_text_color;
 
 .bg-white {
   background-color: #f1b0a1 !important;
+}
+
+.card {
+  background-color: #26b5d2;
 }
