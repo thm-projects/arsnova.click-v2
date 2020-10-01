@@ -40,7 +40,7 @@
            class="color-twitter tweet-opener bg-secondary justify-content-center align-items-center cursor-pointer mt-md-2"></fa-icon>
 
   <div [class.d-none]="!(twitterService.showTwitter | async)"
-       class="twitter-button">
+       class="bg-secondary">
     <button (click)="toggleTweetsOpened()"
             aria-label="Close"
             class="close cursor-pointer d-md-none w-100"
