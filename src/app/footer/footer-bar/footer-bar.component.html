@@ -9,31 +9,57 @@
          aria-hidden="true"
          multiple="multiple"
          type="file"/>
-  <a href="#"
-     (click)="toggleSetting(elem)"
-       *ngFor="let elem of footerBarService.footerElements"
-       [attr.data-intro]="elem.showIntro ? (elem.introTranslate | translate) : null"
-       [class.text-danger]="(elem.selectable && !elem.isActive) || elem.isActive === false"
-       [class.text-success]="elem.selectable && elem.isActive"
-       [id]="elem.id"
-       [queryParams]="getQueryParams(elem)"
-       [routerLink]="getLinkTarget(elem)"
-       [title]="elem.textName | translate"
-       class="footerElement px-2 px-sm-1 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
-    <i [class]="(elem.iconColorClass ? elem.iconColorClass : '') + ' footerElemIcon'">
-      <fa-layers *ngIf="elem.iconLayer">
-        <fa-icon *ngFor="let icon of elem.iconLayer"
-                 [icon]="icon.classes"
-                 [mask]="icon.mask"
-                 [transform]="icon.transform"></fa-icon>
-      </fa-layers>
-      <fa-icon *ngIf="!elem.iconLayer"
-               [icon]="getIconClass(elem)"
-               [spin]="elem.isLoading"></fa-icon>
-    </i>
 
-    <div (mouseover)="hoverFlag=true" (mouseout)="hoverFlag=false">
-      <span *ngIf="hoverFlag" class="footerElemText flex-column text-truncate text-left ml-2 flex-sm-grow-1">
+  <div (mouseenter)="hoverFlag=true" (mouseleave)="hoverFlag=false">
+    <span *ngIf="!hoverFlag">
+      <a href="#"
+      (click)="toggleSetting(elem)"
+        *ngFor="let elem of footerBarService.footerElements"
+        [attr.data-intro]="elem.showIntro ? (elem.introTranslate | translate) : null"
+        [class.text-danger]="(elem.selectable && !elem.isActive) || elem.isActive === false"
+        [class.text-success]="elem.selectable && elem.isActive"
+        [id]="elem.id"
+        [queryParams]="getQueryParams(elem)"
+        [routerLink]="getLinkTarget(elem)"
+        [title]="elem.textName | translate"
+        class="footerElement px-2 px-sm-1 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
+          <i [class]="(elem.iconColorClass ? elem.iconColorClass : '') + ' footerElemIcon'">
+            <fa-layers *ngIf="elem.iconLayer">
+              <fa-icon *ngFor="let icon of elem.iconLayer"
+                      [icon]="icon.classes"
+                      [mask]="icon.mask"
+                      [transform]="icon.transform"></fa-icon>
+            </fa-layers>
+            <fa-icon *ngIf="!elem.iconLayer"
+                    [icon]="getIconClass(elem)"
+                    [spin]="elem.isLoading"></fa-icon>
+          </i>
+      </a>
+    </span>
+    <span *ngIf="hoverFlag">
+      <a href="#"
+        (click)="toggleSetting(elem)"
+          *ngFor="let elem of footerBarService.footerElements"
+          [attr.data-intro]="elem.showIntro ? (elem.introTranslate | translate) : null"
+          [class.text-danger]="(elem.selectable && !elem.isActive) || elem.isActive === false"
+          [class.text-success]="elem.selectable && elem.isActive"
+          [id]="elem.id"
+          [queryParams]="getQueryParams(elem)"
+          [routerLink]="getLinkTarget(elem)"
+          [title]="elem.textName | translate"
+          class="footerElement px-2 px-sm-1 cursor-pointer d-flex align-items-center justify-content-center justify-content-sm-start">
+        <i [class]="(elem.iconColorClass ? elem.iconColorClass : '') + ' footerElemIcon'">
+          <fa-layers *ngIf="elem.iconLayer">
+            <fa-icon *ngFor="let icon of elem.iconLayer"
+                    [icon]="icon.classes"
+                    [mask]="icon.mask"
+                    [transform]="icon.transform"></fa-icon>
+          </fa-layers>
+          <fa-icon *ngIf="!elem.iconLayer"
+                  [icon]="getIconClass(elem)"
+                  [spin]="elem.isLoading"></fa-icon>
+        </i>
+        <p class="footerElemText flex-column text-truncate text-left ml-2 flex-sm-grow-1">
           <span [class]="elem.textClass"
                 [innerHTML]="elem.textName | translate"></span>
           <span *ngIf="elem.isLoading && elem.loadingBarState"
@@ -48,13 +74,8 @@
           </span>
           <span *ngIf="notificationService.footerBadges[elem.id]"
                 class="badge badge-danger ml-1 d-sm-block d-sm-inline-block align-self-md-start">{{notificationService.footerBadges[elem.id]}}</span>
-      </span>
-      <span *ngIf="!hoverFlag">
-      </span>
-    </div>
-
-
-
-
-  </a>
+        </p>
+      </a>
+    </span>
+  </div>
 </nav>
