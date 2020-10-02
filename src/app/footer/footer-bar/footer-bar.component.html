@@ -31,9 +31,8 @@
                [icon]="getIconClass(elem)"
                [spin]="elem.isLoading"></fa-icon>
     </i>
-    <p class="footerElemText flex-column text-truncate text-left ml-2 flex-sm-grow-1" [class.btn-success]="mouseOvered" 
-      (mouseover)="mouseOvered=true"
-      (mouseout)="mouseOvered=false"> 
+    <p (mouseenter)="hoverFlag=true" (mouseleave)="hoverFlag=false" class="footerElemText flex-column text-truncate text-left ml-2 flex-sm-grow-1">
+      <div [hidden]="hoverFlag">
         <span [class]="elem.textClass"
         [innerHTML]="elem.textName | translate"></span>
         <span *ngIf="elem.isLoading && elem.loadingBarState"
@@ -48,6 +47,7 @@
         </span>
         <span *ngIf="notificationService.footerBadges[elem.id]"
         class="badge badge-danger ml-1 d-sm-block d-sm-inline-block align-self-md-start">{{notificationService.footerBadges[elem.id]}}</span> 
+      </div>
   </p>
   </a>
 </nav>

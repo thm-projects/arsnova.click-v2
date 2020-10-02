@@ -16,6 +16,7 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 })
 export class FooterBarComponent implements OnInit {
   public static readonly TYPE = 'FooterBarComponent';
+  public hoverFlag: boolean; 
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -27,6 +28,7 @@ export class FooterBarComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
+    this.hoverFlag = false;
   }
 
   public getLinkTarget(elem: IFooterBarElement): Array<string> {
@@ -102,4 +104,5 @@ export class FooterBarComponent implements OnInit {
       route.firstChild ? this.fetchChildComponent(route.firstChild) : route.component
     );
   }
+
 }
