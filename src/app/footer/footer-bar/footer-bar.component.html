@@ -31,5 +31,23 @@
                [icon]="getIconClass(elem)"
                [spin]="elem.isLoading"></fa-icon>
     </i>
+    <p class="footerElemText flex-column text-truncate text-left ml-2 flex-sm-grow-1" [class.btn-success]="mouseOvered" 
+      (mouseover)="mouseOvered=true"
+      (mouseout)="mouseOvered=false"> 
+        <span [class]="elem.textClass"
+        [innerHTML]="elem.textName | translate"></span>
+        <span *ngIf="elem.isLoading && elem.loadingBarState"
+        class="progress rounded flex-grow-1">
+        <span [attr.aria-valuenow]="elem.loadingBarState"
+        class="progress-bar progress-bar-warning overflow-visible text-left rounded"
+        [style.width.%]="elem.loadingBarState"
+        aria-valuemax="100"
+        aria-valuemin="0"
+        role="progressbar">
+        </span>
+        </span>
+        <span *ngIf="notificationService.footerBadges[elem.id]"
+        class="badge badge-danger ml-1 d-sm-block d-sm-inline-block align-self-md-start">{{notificationService.footerBadges[elem.id]}}</span> 
+  </p>
   </a>
 </nav>
