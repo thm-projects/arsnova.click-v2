@@ -83,7 +83,7 @@ $colorChangingOwnNick: (
 
 $colorChangingArs: (
         0: (fg: orange, bg: transparent),
-        25: (fg: #1661a4, bg: transparent),
+        25: (fg: #00796b, bg: transparent),
         50: (fg: orange, bg: transparent),
         75: (fg: orange, bg: transparent),
         100: (fg: orange, bg: transparent)
@@ -92,7 +92,7 @@ $colorChangingArs: (
 $colorChangingNova: (
         0: (fg: orange, bg: transparent),
         25: (fg: orange, bg: transparent),
-        50: (fg: #1661a4, bg: transparent),
+        50: (fg: #00796b, bg: transparent),
         75: (fg: orange, bg: transparent),
         100: (fg: orange, bg: transparent)
 );
@@ -101,20 +101,20 @@ $colorChangingDot: (
         0: (fg: orange, bg: transparent),
         25: (fg: orange, bg: transparent),
         50: (fg: orange, bg: transparent),
-        75: (fg: #1661a4, bg: transparent),
+        75: (fg: #00796b, bg: transparent),
         100: (fg: orange, bg: transparent)
 );
 
 $colorChangingClick: (
-        0: (fg: #1661a4, bg: transparent),
+        0: (fg: #00796b, bg: transparent),
         25: (fg: orange, bg: transparent),
         50: (fg: orange, bg: transparent),
         75: (fg: orange, bg: transparent),
-        100: (fg: #1661a4, bg: transparent)
+        100: (fg: #00796b, bg: transparent)
 );
 
 $logo-bg: transparent;
-$logo-fg: (".arsnova-logo-ars": #1661a4, ".arsnova-logo-nova": #1661a4, ".arsnova-logo-click": #1661a4);
+$logo-fg: (".arsnova-logo-ars": #00796b, ".arsnova-logo-nova": #00796b, ".arsnova-logo-click": #00796b);
 
 $popover-body-color: initial;
 

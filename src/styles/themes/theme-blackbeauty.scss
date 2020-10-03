@@ -130,8 +130,8 @@ $popover-body-color: black;
 
 $code-color: $primary_text_color;
 
+@import "postbuild";
+
 .bg-secondary {
   background-color: #212121 !important;
 }
-
-@import "postbuild";

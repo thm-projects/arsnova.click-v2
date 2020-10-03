@@ -10,7 +10,7 @@
     "close_window": "Fenster schließen",
     "cookie_consent": {
       "message": "arsnova.click verwendet Cookies.",
-      "dismiss": "Hinweis nicht mehr anzeigen",
+      "dismiss": "Ich bin einverstanden.",
       "learn_more": "Datenschutzerklärung"
     },
     "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du die Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
@@ -255,7 +255,7 @@
     "quiz-pool": {
       "select-tag": {
         "label": "Tag auswählen",
-        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll.",
+        "placeholder": "Gib hier einen Tag ein, mit dem ein Quiz zusammengestellt werden soll.",
         "validation-error": {
           "invalid-tag": "Der eingegebene Tag ist leider nicht verfügbar. Bitte klicke auf einen Tag in der Auswahlliste."
         }
@@ -264,7 +264,7 @@
         "label": "Anzahl der Quizfragen",
         "placeholder": "Anzahl der Quizfragen",
         "validation-error": {
-          "required": "Bitte gib die Anzahl der gewünschten Quizfragen ein.",
+          "required": "Gib die Anzahl der gewünschten Quizfragen ein.",
           "min": "Bitte verwende mindestens eine Quizfrage für diesen Tag.",
           "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen."
         }
@@ -736,7 +736,7 @@
       "view-own-public": "Klick hier, um deine veröffentlichten Quizze anzusehen!",
       "errors": {
         "already-taken": "Dieser Name wird bereits verwendet. Gib einen anderen ein.",
-        "min-length": "Bitte gib mindestens vier Zeichen ein."
+        "min-length": "Gib mindestens vier Zeichen ein."
       },
       "success": {
         "can-join": "Diesem Quiz kannst du beitreten!",
@@ -776,8 +776,8 @@
     },
     "toasts": {
       "swupdate": {
-        "message": "Es ist eine neue Version von arsnova.click verfügbar. Bitte klicke hier, um die Seite neu zu laden. Dies wird das Update automatisch installieren.",
-        "title": "Neue Version verfügbar"
+        "message": "Klicke hier, um das Update zu installieren.",
+        "title": "Update verfügbar"
       },
       "can-use-token": {
         "message": "Du kannst einen Bonustoken einsetzen. Klicke auf diese Meldung, um den Token anzuzeigen",

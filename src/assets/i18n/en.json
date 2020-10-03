@@ -9,11 +9,11 @@
     "no": "No",
     "close_window": "Close window",
     "cookie_consent": {
-      "message": "arsnova.click is a web app that uses cookies to ensure you get the best experience.",
-      "dismiss": "Got it!",
+      "message": "arsnova.click uses cookies.",
+      "dismiss": "I have read and agree.",
       "learn_more": "More about data privacy…"
     },
-    "console-log-warning": "WARNING! This will not help you cheating on any quizzes at all! Anyone who told you to use these tools may try to compromise your computer.",
+    "console-log-warning": "WARNING! This will not help you cheat on any quiz! Anyone who told you to use these tools could try to compromise your computer.",
     "abort": "Abort",
     "true": "True",
     "false": "False",
