@@ -135,3 +135,7 @@ $code-color: $secondary_text_color;
 .bg-white {
   background-color: #f1b0a1 !important;
 }
+
+.bg-secondary {
+  background-color: $primary !important;
+}
