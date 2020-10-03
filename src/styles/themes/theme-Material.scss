@@ -9,7 +9,7 @@ $warning: #f8c362;
 $danger: #e93458;
 
 $primary_text_color: #757575;
-$secondary_text_color: #757575;
+$secondary_text_color: gray;
 
 $modal-content-bg: #00796b;
 $modal-content-color: #212121;
@@ -18,9 +18,9 @@ $modal-header-border-color: transparent;
 $body-bg: $primary;
 $body-color: $primary_text_color;
 
-$text-muted: #a6be9b;
+$text-muted: gray;
 
-$border-loader_wrapper-outer_spin: #26b5d2;
+$border-loader_wrapper-outer_spin: #00796b;
 $border-loader_wrapper-middle_spin: #e74c3c;
 $border-loader_wrapper-inner_spin: #f5bc62;
 
@@ -31,7 +31,7 @@ $fg-answer-result-partially-correct: white;
 $bg-answer-result-wrong: #e74c3c;
 $fg-answer-result-wrong: white;
 
-$progress-bg: white;
+$progress-bg: transparent;
 
 $link-color: orange;
 $link-decoration: none;

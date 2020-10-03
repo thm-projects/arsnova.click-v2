@@ -132,8 +132,8 @@ class GenerateMetaNodes {
 
       Object.keys(themeData).forEach(theme => {
         const manifest = {
-          short_name: '.click',
-          name: '.click',
+          short_name: '★click',
+          name: '★click',
           description: descriptionMessage,
           background_color: themeData[theme].exportedAtRowStyle.bg,
           theme_color: themeData[theme].exportedAtRowStyle.bg,
