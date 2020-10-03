@@ -88,3 +88,13 @@
     }
   }
 }
+
+@media all and (min-width: 480px) {
+  .deskContent {display:block;}
+  .phoneContent {display:none;}
+}
+
+@media all and (max-width: 479px) {
+  .deskContent {display:none;}
+  .phoneContent {display:block;}
+}
