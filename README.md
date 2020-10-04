@@ -1,8 +1,8 @@
-#### arsnova.click v2 Frontend
+#### arsnova✦click v2 Frontend
 
 ###### Installation 
 
-You can find an Installationguide [here](https://github.com/thm-projects/arsnova.click-v2/blob/master/documentation/Frontend-Installationguide.md)  
+You can find an installation guide [here](https://github.com/thm-projects/arsnova.click-v2/blob/master/documentation/Frontend-Installationguide.md)  
 
 You can find a guide to create a custom theme [here](https://github.com/thm-projects/arsnova.click-v2/blob/master/documentation/HowToCreateCustomTheme.md)
 

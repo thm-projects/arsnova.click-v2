@@ -12,7 +12,7 @@ describe('Home: Basics', () => {
     page.clearSessionStorage();
   });
 
-  it('should display the arsnova.click slogan', () => {
+  it('should display the arsnova✦click slogan', () => {
     page.navigateToBaseUrl();
     expect(page.getArsnovaClickSlogan()).toEqual('a r s n o v a . c l i c k');
   });
