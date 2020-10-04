@@ -127,12 +127,12 @@
         },
         "warranty": {
           "title": "Warranty",
-          "text": "We are trying to maintain the online service of ARSnova.click reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service."
+          "text": "We are trying to maintain the online service of arsnova✦click reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service."
         }
       },
       "data_privacy": {
         "scope": "Scope",
-        "declaration": "This privacy statement explains to users of ARSnova.click the nature, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).",
+        "declaration": "This privacy statement explains to users of arsnova✦click the kind, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).",
         "app_data": {
           "title": "Application data",
           "text": "All quiz questions and their answer options are held by the local browser storage of the quiz owner."
@@ -143,7 +143,7 @@
         },
         "logfiles": {
           "title": "Webserver logfiles",
-          "text": "The provider collects log files about every access to the ARSnova.click system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications."
+          "text": "The provider collects log files about every access to the arsnova✦click system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications."
         },
         "3rdparty": {
           "title": "3rd party services",
@@ -151,7 +151,7 @@
         },
         "cookies": {
           "title": "Cookies",
-          "text": "Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer ARSnova.click uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely."
+          "text": "Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer arsnova✦click uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely."
         },
         "piwik": {
           "title": "Matomo",
@@ -162,7 +162,7 @@
         "provider": {
           "title": "Service provider",
           "text": {
-            "1": "The operation of the web app arsnova.click is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
+            "1": "The operation of the web app arsnova✦click is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
             "2": "c/o THM – Technische Hochschule Mittelhessen",
             "3": "Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik",
             "4": "Prof. Dr. Klaus Quibeldey-Cirkel",

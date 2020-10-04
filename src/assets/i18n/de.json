@@ -143,7 +143,7 @@
         },
         "logfiles": {
           "title": "Webserver-Logdateien",
-          "text": "Der Anbieter erhebt Protokolldaten über jeden Zugriff auf arsnova.click in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht."
+          "text": "Der Anbieter erhebt Protokolldaten über jeden Zugriff auf arsnova✦click in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht."
         },
         "3rdparty": {
           "title": "Dienste und Inhalte Dritter",
@@ -151,7 +151,7 @@
         },
         "cookies": {
           "title": "Cookies",
-          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova.click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
+          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova✦click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
         },
         "piwik": {
           "title": "Matomo",
@@ -162,7 +162,7 @@
         "provider": {
           "title": "Dienstanbieter",
           "text": {
-            "1": "Der Betrieb der Web-App arsnova.click ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
+            "1": "Der Betrieb der Web-App arsnova✦click ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
             "2": "c/o THM – Technische Hochschule Mittelhessen",
             "3": "Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik",
             "4": "Prof. Dr. Klaus Quibeldey-Cirkel",
