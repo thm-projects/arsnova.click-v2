@@ -127,11 +127,11 @@ describe('HomeComponent', () => {
     }
   ));
 
-  it('should render \'arsnova.click\' in the main view', () => {
+  it('should render \'arsnova✦click\' in the main view', () => {
     const compiled = fixture.debugElement.nativeElement;
     const mainText = compiled.querySelector('#arsnova-click-description').textContent.trim().replace(/\s*\n*/g, '');
 
-    expect(mainText).toContain('arsnova.click');
+    expect(mainText).toContain('arsnova✦click');
   });
 
   describe('#sanitizeHTML', () => {
