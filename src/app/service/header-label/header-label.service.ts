@@ -76,7 +76,7 @@ export class HeaderLabelService {
   private static getDefaultBrowserTitle(): string {
     switch (environment.title) {
       case Title.Default:
-        return 'arsnova✦click';
+        return '✦click';
       case Title.Westermann:
         return 'Westermann Quiz';
     }
