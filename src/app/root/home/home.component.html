@@ -237,8 +237,6 @@
 
   <ng-container *ngIf="!isShowingQuiznameDatalist">
     <div class="col-12 text-center my-4 my-sm-5">
-      <p *ngIf="selectedTitle === Title.Default"
-         [innerHTML]="'component.name_home.demo_quiz.title.3' | translate"></p>
       <p *ngIf="(canUsePublicQuizzes && publicQuizAmount > 0) || ownPublicQuizAmount > 0">
         <a *ngIf="canUsePublicQuizzes && publicQuizAmount > 0"
            [routerLink]="['/quiz', 'public']">{{'component.home.view-public' | translate:{amount: publicQuizAmount} }}
