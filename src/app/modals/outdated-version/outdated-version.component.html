@@ -21,6 +21,11 @@
                [spin]="true"></fa-icon>
     </span>
   </button>
+  <button (click)="abort()"
+          class="btn btn-danger d-block mt-2 mx-auto"
+          data-dismiss="modal"
+          type="button">{{'component.outdated-version.understood' | translate}}
+  </button>
   <a href="#" (click)="reload()" class="text-underline text-reset">{{'component.outdated-version.funnel.1.solution.2' | translate}}</a>
 </ng-template>
 
@@ -38,9 +43,5 @@
   <p>{{'component.outdated-version.funnel.4.header' | translate}}</p>
   <a href="mailto:klaus.quibeldey-cirkel@transmit.de" target="_blank" rel="noopener noreferrer" class="text-underline text-reset">{{'component.outdated-version.funnel.4.solution.1' | translate}}</a>
   <p class="mt-2">{{'component.outdated-version.funnel.4.solution.2' | translate}}</p>
-  <button (click)="abort()"
-          class="btn btn-danger d-block mt-2 mx-auto"
-          data-dismiss="modal"
-          type="button">{{'component.outdated-version.understood' | translate}}
-  </button>
+  
 </ng-template>
