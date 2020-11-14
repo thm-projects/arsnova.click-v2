@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const basePath = path.join(__dirname + '/assets/i18n');
+const excludedFileEndings = ['md'];
 const files = fs.readdirSync(basePath);
 
 const flatObject = (obj, keyPrefix = null) =>
@@ -23,7 +24,7 @@ const flatObject = (obj, keyPrefix = null) =>
   }, {});
 
 // Read contents and parse JSON
-const filesWithKeys = files.map(f => ({
+const filesWithKeys = files.filter(f => !excludedFileEndings.some(ending => f.endsWith(ending))).map(f => ({
   name: f,
   keys: Object.keys(flatObject(JSON.parse(fs.readFileSync(path.join(basePath, f), 'utf8'))))
 }));
