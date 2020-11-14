@@ -7,6 +7,16 @@ then
   exit 1
 fi
 
+echo "------------"
+echo
+echo "Temporary fix Mousetrap Instance Issue"
+echo
+echo
+echo "REMOVE AFTER PACKAGE MAINTAINER HAS MERGED THE FIX"
+echo
+echo "------------"
+sed -i "s|import 'mousetrap';|import { MousetrapInstance } from 'mousetrap';|g" "node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts"
+
 echo "Building unique version hash for the build"
 HASH=$(date | md5sum | head -c32)
 echo $HASH > src/assets/version.txt
