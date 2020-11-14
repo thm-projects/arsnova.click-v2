@@ -133,6 +133,7 @@ npm_test:
     - apt-get -y update
     - apt-get -y install --allow-unauthenticated google-chrome-stable
     - npm install --production=false
+    - npm install @types/mousetrap@1.6.3 mousetrap@1.6.3
     - npm test
 
 deploy:
