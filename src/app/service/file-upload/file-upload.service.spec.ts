@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConnectionMockService } from '../connection/connection.mock.service';
 import { ConnectionService } from '../connection/connection.service';
@@ -13,7 +13,7 @@ import { StorageServiceMock } from '../storage/storage.service.mock';
 import { FileUploadService } from './file-upload.service';
 
 describe('FileUploadService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule, RouterTestingModule,
@@ -33,7 +33,7 @@ describe('FileUploadService', () => {
     });
   }));
 
-  it('should be created', async(inject([FileUploadService], (service: FileUploadService) => {
+  it('should be created', waitForAsync(inject([FileUploadService], (service: FileUploadService) => {
     expect(service).toBeTruthy();
   })));
 });

@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { TransferState } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
@@ -32,7 +32,7 @@ describe('ThemesService', () => {
     ],
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, RouterTestingModule, HttpClientTestingModule,
@@ -65,7 +65,7 @@ describe('ThemesService', () => {
     })
   ));
 
-  it('#updateCurrentlyUsedTheme', async(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
+  it('#updateCurrentlyUsedTheme', waitForAsync(inject([ThemesService, ConnectionService], (service: ThemesService, connectionService: ConnectionService) => {
     spyOnProperty(service, 'currentTheme').and.returnValue('Material');
     spyOn(service, 'reloadLinkNodes').and.callFake(() => of(null));
     spyOn(connectionService.dataEmitter, 'subscribe').and.callFake(() => of({ status: StatusProtocol.Failed }).subscribe());
@@ -77,7 +77,7 @@ describe('ThemesService', () => {
     });
   })));
 
-  it('#reloadLinkNodes', async(inject([ThemesService], (service: ThemesService) => {
+  it('#reloadLinkNodes', waitForAsync(inject([ThemesService], (service: ThemesService) => {
 
     spyOnProperty(service, 'currentTheme').and.returnValue('Material');
     spyOn(service, 'reloadLinkNodes').and.callThrough();

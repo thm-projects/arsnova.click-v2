@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -38,7 +38,7 @@ describe('QuestionDetailsComponent', () => {
   let component: QuestionDetailsComponent;
   let fixture: ComponentFixture<QuestionDetailsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({
@@ -80,7 +80,7 @@ describe('QuestionDetailsComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(QuestionDetailsComponent);
     component = fixture.componentInstance;
     const quizService = TestBed.inject(QuizService);
@@ -88,7 +88,7 @@ describe('QuestionDetailsComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
   it('should contain a TYPE reference', () => {

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HotkeysService } from 'angular2-hotkeys';
 import { Subject } from 'rxjs';
@@ -9,7 +9,7 @@ describe('HotkeyCheatsheetComponent', () => {
   let component: HotkeyCheatsheetComponent;
   let fixture: ComponentFixture<HotkeyCheatsheetComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [

@@ -1,4 +1,4 @@
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '../../shared/shared.module';
 import { ConnectionMockService } from '../connection/connection.mock.service';
@@ -10,7 +10,7 @@ import { StorageServiceMock } from '../storage/storage.service.mock';
 import { SettingsService } from './settings.service';
 
 describe('SettingsService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         SharedModule, RouterTestingModule,
@@ -27,7 +27,7 @@ describe('SettingsService', () => {
     });
   }));
 
-  it('should be created', async(inject([SettingsService], (service: SettingsService) => {
+  it('should be created', waitForAsync(inject([SettingsService], (service: SettingsService) => {
     expect(service).toBeTruthy();
   })));
 });

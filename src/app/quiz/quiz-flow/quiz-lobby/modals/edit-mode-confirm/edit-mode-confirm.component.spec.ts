@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
 
@@ -8,7 +8,7 @@ describe('EditModeConfirmComponent', () => {
   let component: EditModeConfirmComponent;
   let fixture: ComponentFixture<EditModeConfirmComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [I18nTestingModule],
       providers: [

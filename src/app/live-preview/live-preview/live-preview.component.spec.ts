@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SwUpdate } from '@angular/service-worker';
@@ -33,7 +33,7 @@ describe('LivePreviewComponent', () => {
   let component: LivePreviewComponent;
   let fixture: ComponentFixture<LivePreviewComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, RouterTestingModule, HttpClientTestingModule, HeaderModule, NgbModule, AngularSvgIconModule.forRoot(),
@@ -66,7 +66,7 @@ describe('LivePreviewComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(LivePreviewComponent);
     component = fixture.componentInstance;
     component.targetEnvironment = LivePreviewEnvironment.QUESTION;
@@ -74,30 +74,30 @@ describe('LivePreviewComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should contain a TYPE definition', async(() => {
+  it('should contain a TYPE definition', waitForAsync(() => {
     expect(LivePreviewComponent.TYPE).toEqual('LivePreviewComponent');
   }));
 
-  it('#deviceClass', async(() => {
+  it('#deviceClass', waitForAsync(() => {
     component.targetDevice = DeviceType.XS;
     expect(component.deviceClass()).toEqual('device_xs');
   }));
 
-  it('#getComputedWidth', async(() => {
+  it('#getComputedWidth', waitForAsync(() => {
     component.targetDevice = DeviceType.XS;
     expect(component.getComputedWidth()).toEqual('calc(50% - 1rem)');
   }));
 
-  it('#normalizeAnswerOptionIndex', async(() => {
+  it('#normalizeAnswerOptionIndex', waitForAsync(() => {
     expect(component.normalizeAnswerOptionIndex(0)).toEqual('A');
     expect(component.normalizeAnswerOptionIndex(1)).toEqual('B');
   }));
 
-  it('#sanitizeHTML', async(inject([DomSanitizer], (sanitizer: DomSanitizer) => {
+  it('#sanitizeHTML', waitForAsync(inject([DomSanitizer], (sanitizer: DomSanitizer) => {
     const markup = '<div><span>Test</span></div>';
     spyOn(sanitizer, 'bypassSecurityTrustHtml').and.callThrough();
     component.sanitizeHTML(markup);

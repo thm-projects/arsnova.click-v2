@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
@@ -9,7 +9,7 @@ describe('QuizSaveComponent', () => {
   let component: QuizSaveComponent;
   let fixture: ComponentFixture<QuizSaveComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [FormsModule],
       providers: [NgbActiveModal],

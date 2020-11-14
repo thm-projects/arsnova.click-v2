@@ -3,7 +3,8 @@ import { DomSanitizer, SafeHtml, SafeStyle } from '@angular/platform-browser';
 
 export abstract class AbstractProgressBar {
   private _percent: number;
-  private _base: number;
+
+  protected _base: number;
 
   public absolute: number;
   public label: string;

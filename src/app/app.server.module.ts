@@ -53,7 +53,7 @@ export function svgLoaderFactory(http: HttpClient, transferState: TransferState)
       useClass: TrackingMockService,
     }, {
       provide: THEME_MAP,
-      useValue: JSON.parse(fs.readFileSync(path.join(__dirname, '/../browser/assets/theme-hashes.json'), { encoding: 'UTF-8' })),
+      useValue: JSON.parse(fs.readFileSync(path.join(__dirname, '/../browser/assets/theme-hashes.json'), { encoding: 'utf-8' })),
     }, NgbActiveModal, {
       provide: HotkeysService,
       useValue: {

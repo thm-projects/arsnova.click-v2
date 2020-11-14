@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { TranslateService } from '@ngx-translate/core';
@@ -53,7 +53,7 @@ import { ReadingConfirmationProgressComponent } from './reading-confirmation-pro
 describe('QuizResultsComponent', () => {
   let component: QuizResultsComponent;
   let fixture: ComponentFixture<QuizResultsComponent>;
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({
@@ -110,7 +110,7 @@ describe('QuizResultsComponent', () => {
       ],
     }).compileComponents();
   }));
-  beforeEach(async(inject([QuizService], (quizService: QuizService) => {
+  beforeEach(waitForAsync(inject([QuizService], (quizService: QuizService) => {
     fixture = TestBed.createComponent(QuizResultsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

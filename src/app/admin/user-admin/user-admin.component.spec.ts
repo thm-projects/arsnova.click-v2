@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -40,7 +40,7 @@ describe('UserAdminComponent', () => {
     name: 'new-user-name',
   };
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule, JwtModule.forRoot({
@@ -115,17 +115,17 @@ describe('UserAdminComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', async(() => {
+  it('should create', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should check if a user is currently deleted', async(() => {
+  it('should check if a user is currently deleted', waitForAsync(() => {
     expect(component.isDeletingElem(JSON.parse(JSON.stringify(UserMock)))).toBeFalsy();
     component['_deletingElements'].push(JSON.parse(JSON.stringify(UserMock)).name);
     expect(component.isDeletingElem(JSON.parse(JSON.stringify(UserMock)))).toBeTruthy();
   }));
 
-  it('should delete a given user by name', async(() => {
+  it('should delete a given user by name', waitForAsync(() => {
     component.deleteElem(JSON.parse(JSON.stringify(UserMock)));
     expect(component.data).not.toContain(JSON.parse(JSON.stringify(UserMock)));
   }));

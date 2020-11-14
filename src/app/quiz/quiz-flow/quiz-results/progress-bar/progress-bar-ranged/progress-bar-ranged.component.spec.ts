@@ -1,4 +1,4 @@
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -10,7 +10,7 @@ describe('ProgressBarRangedComponent', () => {
   let component: ProgressBarRangedComponent;
   let fixture: ComponentFixture<ProgressBarRangedComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, FontAwesomeModule,
@@ -20,7 +20,7 @@ describe('ProgressBarRangedComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faSpinner);
     fixture = TestBed.createComponent(ProgressBarRangedComponent);
@@ -28,7 +28,7 @@ describe('ProgressBarRangedComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
   it('should contain a TYPE reference', () => {

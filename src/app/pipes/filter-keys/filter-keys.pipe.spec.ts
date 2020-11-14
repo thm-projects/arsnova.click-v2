@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { Filter, Language } from '../../lib/enums/enums';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
@@ -30,7 +30,7 @@ describe('FilterKeysPipe', () => {
     },
   ];
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         JwtModule.forRoot({
@@ -61,7 +61,7 @@ describe('FilterKeysPipe', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     pipe = new FilterKeysPipe(TestBed.inject(LanguageLoaderService));
   }));
 

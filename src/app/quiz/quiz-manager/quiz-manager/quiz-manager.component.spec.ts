@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SwPush } from '@angular/service-worker';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -39,7 +39,7 @@ describe('QuizManagerComponent', () => {
   let component: QuizManagerComponent;
   let fixture: ComponentFixture<QuizManagerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, JwtModule.forRoot({
@@ -91,11 +91,11 @@ describe('QuizManagerComponent', () => {
     }
   ));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should contain a TYPE reference', async(() => {
+  it('should contain a TYPE reference', waitForAsync(() => {
     expect(QuizManagerComponent.TYPE).toEqual('QuizManagerComponent');
   }));
 

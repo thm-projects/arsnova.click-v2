@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateService } from '@ngx-translate/core';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -18,7 +18,7 @@ import { UserService } from '../user/user.service';
 import { FooterBarService } from './footer-bar.service';
 
 describe('FooterBarService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule, SharedModule, HttpClientTestingModule,
@@ -49,7 +49,7 @@ describe('FooterBarService', () => {
     });
   }));
 
-  it('should be created', async(inject([FooterBarService], (service: FooterBarService) => {
+  it('should be created', waitForAsync(inject([FooterBarService], (service: FooterBarService) => {
     expect(service).toBeTruthy();
   })));
 });

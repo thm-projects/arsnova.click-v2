@@ -1,9 +1,9 @@
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SharedService } from './shared.service';
 
 describe('SharedService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       providers: [
         SharedService,
@@ -11,7 +11,7 @@ describe('SharedService', () => {
     });
   }));
 
-  it('should be created', async(inject([SharedService], (service: SharedService) => {
+  it('should be created', waitForAsync(inject([SharedService], (service: SharedService) => {
     expect(service).toBeTruthy();
   })));
 });

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TagCloudModule } from 'angular-tag-cloud-module';
 
 import { WordCloudComponent } from './word-cloud.component';
@@ -7,7 +7,7 @@ describe('WordCloudComponent', () => {
   let component: WordCloudComponent;
   let fixture: ComponentFixture<WordCloudComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [TagCloudModule],
       declarations: [ WordCloudComponent ]

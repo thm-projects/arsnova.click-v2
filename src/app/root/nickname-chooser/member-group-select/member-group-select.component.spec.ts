@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -31,7 +31,7 @@ describe('MemberGroupSelectComponent', () => {
   let component: MemberGroupSelectComponent;
   let fixture: ComponentFixture<MemberGroupSelectComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, HttpClientTestingModule, RouterTestingModule,
@@ -70,23 +70,23 @@ describe('MemberGroupSelectComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(MemberGroupSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should create', async(() => {
+  it('should create', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should contain a TYPE reference', async(() => {
+  it('should contain a TYPE reference', waitForAsync(() => {
     expect(MemberGroupSelectComponent.TYPE).toEqual('MemberGroupSelectComponent');
   }));
 
   describe('#addToGroup', () => {
 
-    it('should add an attendee to a free member group', async(inject([Router, StorageService], (router: Router, storageService: StorageService) => {
+    it('should add an attendee to a free member group', waitForAsync(inject([Router, StorageService], (router: Router, storageService: StorageService) => {
       spyOn(component, 'addToGroup').and.callThrough();
       spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 

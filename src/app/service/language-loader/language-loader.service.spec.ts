@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { StorageService } from '../storage/storage.service';
@@ -9,7 +9,7 @@ import { UserService } from '../user/user.service';
 import { LanguageLoaderService } from './language-loader.service';
 
 describe('LanguageLoaderService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         JwtModule.forRoot({

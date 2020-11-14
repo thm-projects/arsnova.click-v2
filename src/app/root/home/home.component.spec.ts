@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Pipe, PipeTransform, PLATFORM_ID, SecurityContext } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -148,7 +148,7 @@ describe('HomeComponent', () => {
 
   describe('#autoJoinToSession', () => {
 
-    it('should join the session by click', async(inject([Router], (router: Router) => {
+    it('should join the session by click', waitForAsync(inject([Router], (router: Router) => {
       spyOn(component, 'selectQuizByList').and.callThrough();
       spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
 

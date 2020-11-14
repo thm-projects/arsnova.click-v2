@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CustomMarkdownService } from '../../../../service/custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../../../../service/custom-markdown/CustomMarkdownServiceMock';
@@ -14,7 +14,7 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
   let component: ReadingConfirmationProgressComponent;
   let fixture: ComponentFixture<ReadingConfirmationProgressComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule,
@@ -32,13 +32,13 @@ describe('Quiz-Results: ReadingConfirmationComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(ReadingConfirmationProgressComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
   it('should contain a TYPE reference', () => {

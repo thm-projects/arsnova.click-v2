@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { I18nTestingModule } from '../../../../../shared/testing/i18n-testing/i18n-testing.module';
@@ -9,7 +9,7 @@ describe('ProgressBarAnonymousComponent', () => {
   let component: ProgressBarAnonymousComponent;
   let fixture: ComponentFixture<ProgressBarAnonymousComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [I18nTestingModule, FontAwesomeModule],
       providers: [],

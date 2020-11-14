@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faPlay, faStop } from '@fortawesome/free-solid-svg-icons';
@@ -12,7 +12,7 @@ describe('AudioPlayerComponent', () => {
   let component: AudioPlayerComponent;
   let fixture: ComponentFixture<AudioPlayerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         FontAwesomeModule, HttpClientTestingModule, FormsModule,
@@ -27,7 +27,7 @@ describe('AudioPlayerComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faStop);
     library.addIcons(faPlay);
@@ -36,11 +36,11 @@ describe('AudioPlayerComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should contain a TYPE reference', async(() => {
+  it('should contain a TYPE reference', waitForAsync(() => {
     expect(AudioPlayerComponent.TYPE).toEqual('AudioPlayerComponent');
   }));
 });

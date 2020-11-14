@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { I18nTestingModule } from '../../../../shared/testing/i18n-testing/i18n-testing.module';
@@ -18,7 +18,7 @@ describe('QuizTypeSelectModalComponent', () => {
   let component: QuizTypeSelectModalComponent;
   let fixture: ComponentFixture<QuizTypeSelectModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [I18nTestingModule, FormsModule],
       providers: [

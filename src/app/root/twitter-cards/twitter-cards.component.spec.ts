@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Pipe, PipeTransform } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -29,7 +29,7 @@ describe('TwitterCardsComponent', () => {
   let component: TwitterCardsComponent;
   let fixture: ComponentFixture<TwitterCardsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [I18nTestingModule, FormsModule, RouterTestingModule, HttpClientTestingModule, FontAwesomeModule, NgbModule],
       declarations: [TwitterCardsComponent, SearchFilterPipeMock, LanguageFilterPipeMock],
@@ -55,7 +55,7 @@ describe('TwitterCardsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain a TYPE reference', async(() => {
+  it('should contain a TYPE reference', waitForAsync(() => {
     expect(TwitterCardsComponent.TYPE).toEqual('TwitterCardsComponent');
   }));
 

@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FileUploadMockService } from '../../service/file-upload/file-upload.mock.service';
 import { FileUploadService } from '../../service/file-upload/file-upload.service';
@@ -15,7 +15,7 @@ describe('AdditionalDataComponent', () => {
   let component: AdditionalDataComponent;
   let fixture: ComponentFixture<AdditionalDataComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, RouterTestingModule, HttpClientTestingModule,
@@ -46,7 +46,7 @@ describe('AdditionalDataComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain a TYPE definition', async(() => {
+  it('should contain a TYPE definition', waitForAsync(() => {
     expect(AdditionalDataComponent.TYPE).toEqual('AdditionalDataComponent');
   }));
 

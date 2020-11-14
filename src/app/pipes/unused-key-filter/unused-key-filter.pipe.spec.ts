@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { I18nManagerApiService } from '../../service/api/i18n-manager/i18n-manager-api.service';
@@ -26,7 +26,7 @@ describe('UnusedKeyFilterPipe', () => {
     },
   ];
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         JwtModule.forRoot({
@@ -57,7 +57,7 @@ describe('UnusedKeyFilterPipe', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     pipe = new UnusedKeyFilterPipe(TestBed.inject(LanguageLoaderService));
   }));
 
