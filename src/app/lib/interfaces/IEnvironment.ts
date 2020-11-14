@@ -5,6 +5,7 @@ export interface IEnvironment {
   enableBonusToken: boolean;
   vapidPublicKey: string;
   title: Title;
+  appName: string;
   sentryDSN?: string;
   version: string;
   production: boolean;

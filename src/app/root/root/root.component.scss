@@ -79,3 +79,11 @@
 .bottom-0 {
   bottom: 0;
 }
+
+:host ::ng-deep universal-cookie-consent {
+  color: var(--ucc-text-color);
+
+  a, a:visited, a:hover, a:active {
+    color: var(--ucc-link-color);
+  }
+}

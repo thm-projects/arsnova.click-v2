@@ -9,9 +9,21 @@
     "no": "No",
     "close_window": "Close window",
     "cookie_consent": {
-      "message": "arsnova.click is a web app that uses cookies to ensure you get the best experience.",
-      "dismiss": "Got it!",
-      "learn_more": "More about data privacy…"
+      "message": "{APP_NAME} is using cookies to gather statistic data of the usage of the website and to improve the offering. For certain offers we do need your acknowledgement. You can withdraw this in our <a href=\"/info/dataprivacy\" target=\"_blank\">Data Privacy Page</a> at any time.",
+      "back": "Back",
+      "accept": "Accept",
+      "customizeButton": "Customize",
+      "save": "Save",
+      "customize": "Cookie Settings",
+      "reset": "Reset cookie settings",
+      "base": {
+        "title": "Base Functions",
+        "description": "These cookies are required for the functionality of this website and can\\'t be disabled."
+      },
+      "analytics": {
+        "title": "Statistics",
+        "description": "We use these cookies to improve our website."
+      }
     },
     "console-log-warning": "WARNING! This will not help you cheating on any quizzes at all! Anyone who told you to use these tools may try to compromise your computer.",
     "abort": "Abort",

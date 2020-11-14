@@ -17,6 +17,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { MarkdownModule, MarkedOptions as NgxMarkedOptions } from 'ngx-markdown';
 import { ToastrModule } from 'ngx-toastr';
 import { PrebootModule } from 'preboot';
+import { UniversalCookieConsentModule } from 'universal-cookie-consent';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { FooterModule } from './footer/footer.module';
@@ -110,6 +111,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     HotkeyModule.forRoot({
       disableCheatSheet: true,
     }),
+    UniversalCookieConsentModule.forRoot({consentTypes: []})
   ],
   providers: [
     {

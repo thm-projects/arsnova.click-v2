@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { UniversalCookieConsentService } from 'universal-cookie-consent';
 import { environment } from '../../../environments/environment';
 import { DefaultSettings } from '../../lib/default.settings';
 import { FooterBarService } from '../../service/footer-bar/footer-bar.service';
@@ -32,6 +33,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
     private translateService: TranslateService,
+    private cookieConsentService: UniversalCookieConsentService,
   ) {
 
     headerLabelService.headerLabel = 'region.footer.about.title';
@@ -107,6 +109,10 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'backendApi':
         return environment.infoBackendApiEnabled;
     }
+  }
+
+  public resetCookieSettings(): void {
+    this.cookieConsentService.setGrantedConsents([]);
   }
 
   private buildMarkdownFileSources(lang: string): void {

@@ -13,6 +13,7 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { TOAST_CONFIG } from 'ngx-toastr';
 import { EventReplayer } from 'preboot';
 import { of } from 'rxjs';
+import { UniversalCookieConsentService } from 'universal-cookie-consent';
 import { SwUpdateMock } from '../../../_mocks/_services/SwUpdateMock';
 import { AdditionalDataComponent } from '../../footer/additional-data/additional-data.component';
 import { FooterBarComponent } from '../../footer/footer-bar/footer-bar.component';
@@ -100,6 +101,12 @@ describe('RootComponent', () => {
           }, {
             provide: HotkeysService,
             useValue: {}
+          }, {
+            provide: UniversalCookieConsentService,
+            useValue: {
+              getGrantedConsents: () => of([]),
+              show: () => {},
+            }
           },
         ],
         declarations: [
