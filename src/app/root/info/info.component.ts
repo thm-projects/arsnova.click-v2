@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -16,10 +17,13 @@ import { TrackingService } from '../../service/tracking/tracking.service';
 export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   public static readonly TYPE = 'InfoComponent';
 
+  private _markdownFilePostfix: string = environment.markdownFilePostfix;
   private readonly _destroy = new Subject();
   @ViewChild('buttonHeader', { static: true }) private buttonHeader: ElementRef;
 
   public currentData: string;
+  public imprintMarkdownSrc: string;
+  public dataPrivacyMarkdownSrc: string;
   public readonly infoButtons: Array<{ id: string, i18nRef: string }> = [];
 
   constructor(
@@ -27,6 +31,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
     private trackingService: TrackingService,
     private route: ActivatedRoute,
     private headerLabelService: HeaderLabelService,
+    private translateService: TranslateService,
   ) {
 
     headerLabelService.headerLabel = 'region.footer.about.title';
@@ -55,6 +60,12 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
         i18nRef: 'region.footer.footer_bar.dataprivacy',
       },
     ]);
+
+    this.translateService.onLangChange.pipe(takeUntil(this._destroy)).subscribe((langChanged: LangChangeEvent) => {
+      this.buildMarkdownFileSources(langChanged.lang);
+    });
+
+    this.buildMarkdownFileSources(this.translateService.currentLang);
   }
 
   public ngOnInit(): void {
@@ -96,5 +107,10 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
       case 'backendApi':
         return environment.infoBackendApiEnabled;
     }
+  }
+
+  private buildMarkdownFileSources(lang: string): void {
+    this.imprintMarkdownSrc = `/assets/i18n/${lang}.imprint.${this._markdownFilePostfix}.md`;
+    this.dataPrivacyMarkdownSrc = `/assets/i18n/${lang}.data_privacy.${this._markdownFilePostfix}.md`;
   }
 }

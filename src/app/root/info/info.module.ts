@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { MarkdownModule } from 'ngx-markdown';
 import { SharedModule } from '../../shared/shared.module';
 import { InfoComponent } from './info.component';
 
@@ -31,7 +32,7 @@ const infoRoutes: Routes = [
 
 @NgModule({
   imports: [
-    SharedModule, RouterModule.forChild(infoRoutes), TranslateModule,
+    SharedModule, RouterModule.forChild(infoRoutes), TranslateModule, MarkdownModule,
   ],
   declarations: [InfoComponent],
 })

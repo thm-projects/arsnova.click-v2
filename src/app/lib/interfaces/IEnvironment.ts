@@ -31,4 +31,6 @@ export interface IEnvironment {
   enableTwitter: boolean;
   enableQuizPool: boolean;
   showInfoButtonsInFooter: boolean;
+  markdownFilePostfix: string;
+  loginButtonLabelConfiguration: string;
 }

@@ -70,59 +70,10 @@
   </div>
   <div *ngIf="currentData === 'imprint'"
        id="imprintElement">
-    <h3 [innerHTML]="'region.footer.imprint.provider.title' | translate"
-        class="mb-2"></h3>
-    <p [innerHTML]="'region.footer.imprint.provider.text.1' | translate"></p>
-    <ul class="list list-unstyled">
-      <li [innerHTML]="'region.footer.imprint.provider.text.2' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.3' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.4' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.5' | translate"></li>
-    </ul>
-    <ul class="list list-unstyled">
-      <li [innerHTML]="'region.footer.imprint.provider.text.6' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.7' | translate"></li>
-    </ul>
-    <ul class="list list-unstyled">
-      <li [innerHTML]="'region.footer.imprint.provider.text.8' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.9' | translate"></li>
-    </ul>
-    <ul class="list list-unstyled">
-      <li [innerHTML]="'region.footer.imprint.provider.text.10' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.11' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.12' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.13' | translate"></li>
-      <li [innerHTML]="'region.footer.imprint.provider.text.14' | translate"></li>
-    </ul>
+    <markdown [src]="imprintMarkdownSrc"></markdown>
   </div>
   <div *ngIf="currentData === 'dataprivacy'"
        id="dataprivacyElement">
-    <h3 [innerHTML]="'region.footer.data_privacy.scope' | translate"
-        class="mb-2"></h3>
-    <p [innerHTML]="'region.footer.data_privacy.declaration' | translate"></p>
-
-    <h3 [innerHTML]="'region.footer.data_privacy.app_data.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.data_privacy.app_data.text' | translate"></p>
-
-    <h3 [innerHTML]="'region.footer.data_privacy.access_data.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.data_privacy.access_data.text' | translate"></p>
-
-    <h3 [innerHTML]="'region.footer.data_privacy.logfiles.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.data_privacy.logfiles.text' | translate"></p>
-
-    <h3 [innerHTML]="'region.footer.data_privacy.3rdparty.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.data_privacy.3rdparty.text' | translate"></p>
-
-    <h3 [innerHTML]="'region.footer.data_privacy.cookies.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.data_privacy.cookies.text' | translate"></p>
-
-    <h3 [innerHTML]="'region.footer.data_privacy.piwik.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.data_privacy.piwik.text' | translate"></p>
+    <markdown [src]="dataPrivacyMarkdownSrc"></markdown>
   </div>
 </div>

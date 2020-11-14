@@ -17,6 +17,7 @@ import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
 import { UserRole } from '../../lib/enums/UserRole';
+import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { ITrackClickEvent } from '../../lib/interfaces/tracking/ITrackClickEvent';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
@@ -404,7 +405,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private updateFooterElements(isLoggedIn: boolean): void {
-    const footerElements = [
+    const footerElements: Array<IFooterBarElement> = [
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,

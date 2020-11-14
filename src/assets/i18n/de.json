@@ -72,7 +72,8 @@
         "dataprivacy": "Datenschutz",
         "member_group": "Teams",
         "edit-i18n": "i18n editieren",
-        "login": "Anmelden",
+        "login_login": "Login",
+        "login_administration": "Administration",
         "logout": "Ausloggen",
         "save_quiz": "Quiz speichern",
         "admin": "Administration",
@@ -128,55 +129,6 @@
         "warranty": {
           "title": "Gewährleistung",
           "text": "Wir sind bemüht, den Online-Dienst arsnova.click zuverlässig und störungsfrei zu betreiben, können dies aber nicht garantieren. Alle Quiz-Daten liegen ausschließlich im Browser-Speicher des Quizmasters. Wir übernehmen keine Haftung für den Verlust der Daten, zum Beispiel durch Löschen des Browser-Speichers, ohne zuvor die Quizze exportiert zu haben, oder bei rechtswidriger Nutzung des Dienstes."
-        }
-      },
-      "data_privacy": {
-        "scope": "Geltungsbereich",
-        "declaration": "Diese Datenschutzerklärung klärt Nutzer/innen von arsnova.click über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
-        "app_data": {
-          "title": "Anwendungsdaten",
-          "text": "Alle Quizfragen und deren Antwortoptionen werden ausschließlich im Browser-Speicher (Web Storage) des Quizmasters gehalten."
-        },
-        "access_data": {
-          "title": "Zugriffsdaten",
-          "text": "Außer Webserver-Logdateien werden keine personenbezogenen Zugriffsdaten gespeichert."
-        },
-        "logfiles": {
-          "title": "Webserver-Logdateien",
-          "text": "Der Anbieter erhebt Protokolldaten über jeden Zugriff auf arsnova.click in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht."
-        },
-        "3rdparty": {
-          "title": "Dienste und Inhalte Dritter",
-          "text": "In Quizfragen können Inhalte Dritter, wie zum Beispiel Videos von YouTube oder Grafiken von anderen Webseiten, eingebunden werden. Dies setzt voraus, dass die Anbieter der Inhalte die IP-Adresse der Nutzer/innen wahrnehmen. Ohne die IP-Adresse können die Inhalte nicht an den Browser gesendet werden."
-        },
-        "cookies": {
-          "title": "Cookies",
-          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova.click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
-        },
-        "piwik": {
-          "title": "Matomo",
-          "text": "Dieses Angebot benutzt Matomo, eine Open-Source-Software zur statistischen Auswertung der Zugriffe, siehe <a href='http://matomo.org/' target='_blank'>matomo.org</a>. Matomo verwendet Cookies, die auf dem Computer der Nutzer/innen gespeichert werden und die eine Analyse der Benutzung der Webseite ermöglichen. Die durch den Cookie erzeugten Informationen über die Benutzung dieses Angebotes werden auf dem Server des Anbieters in Deutschland gespeichert. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Nutzer/innen können die Installation der Cookies durch eine entsprechende Einstellung ihrer Browser-Software verhindern."
-        }
-      },
-      "imprint": {
-        "provider": {
-          "title": "Dienstanbieter",
-          "text": {
-            "1": "Der Betrieb der Web-App arsnova.click ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
-            "2": "c/o THM – Technische Hochschule Mittelhessen",
-            "3": "Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik",
-            "4": "Prof. Dr. Klaus Quibeldey-Cirkel",
-            "5": "Lehrstuhl für Softwaretechnik",
-            "6": "Wiesenstraße 14",
-            "7": "D-35390 Gießen",
-            "8": "Telefon: +49 641 309 – 24 50",
-            "9": "E-Mail: <a href='mailto:klaus.quibeldey-cirkel@transmit.de'>klaus.quibeldey-cirkel@transmit.de</a>",
-            "10": "Sitz der Gesellschaft: Gießen",
-            "11": "Website: <a href='https://www.transmit.de'>https://www.transmit.de</a>",
-            "12": "Rechtsform: GmbH",
-            "13": "Amtsgericht: Gießen HRB 3036",
-            "14": "USt-IdNr.: DE 188 685 037"
-          }
         }
       }
     },

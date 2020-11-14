@@ -379,7 +379,7 @@ export class FooterBarService {
     id: 'login',
     iconClass: ['fas', 'sign-in-alt'],
     textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.login',
+    textName: `region.footer.footer_bar.login_${environment.loginButtonLabelConfiguration}`,
     selectable: false,
     showIntro: false,
     introTranslate: 'region.footer.footer_bar.description.login',
