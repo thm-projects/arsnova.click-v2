@@ -18,8 +18,8 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   private _isPlaying = false;
   private _autostartRejected: boolean;
   private _revalidate: Subscription;
+  private _audioElement: HTMLAudioElement;
   private readonly _destroy = new Subject();
-  private readonly audioElement: HTMLAudioElement;
 
   get autostartRejected(): boolean {
     return this._autostartRejected;
@@ -36,7 +36,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     this._revalidate = value.pipe(takeUntil(this._destroy)).subscribe(() => {
       this._config.autostart = this.isPlaying;
       this._volume = this._config.original_volume;
-      this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
+      this._audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
     });
   }
 
@@ -63,7 +63,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
   set volume(value: string) {
     this._volume = value;
     this.volumeChange.emit(this.volume);
-    this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
+    this._audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
   }
 
   get isPlaying(): boolean {
@@ -72,8 +72,8 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private filesApiService: FilesApiService) {
     if (isPlatformBrowser(this.platformId)) {
-      this.audioElement = new Audio();
-      this.audioElement.addEventListener('ended', () => {
+      this._audioElement = new Audio();
+      this._audioElement.addEventListener('ended', () => {
         this.playbackFinished.next();
         this.stopMusic();
       });
@@ -89,10 +89,10 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public playMusic(): void {
     this._autostartRejected = false;
-    if (this.audioElement.ended) {
-      this.audioElement.currentTime = 0;
+    if (this._audioElement.ended) {
+      this._audioElement.currentTime = 0;
     }
-    this.audioElement.play().then(() => {
+    this._audioElement.play().then(() => {
       this._isPlaying = true;
     }).catch(() => {
       // Autoplay was prevented - "NotAllowedError: play() failed because the user didn't interact with the document first. https://goo.gl/xX8pDD"
@@ -105,17 +105,17 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.audioElement.pause();
+    this._audioElement.pause();
     this._isPlaying = false;
   }
 
   public stopMusic(): void {
-    if (isPlatformServer(this.platformId) || !this.audioElement || !this._isPlaying) {
+    if (isPlatformServer(this.platformId) || !this._audioElement || !this._isPlaying) {
       return;
     }
 
-    this.audioElement.pause();
-    this.audioElement.currentTime = 0;
+    this._audioElement.pause();
+    this._audioElement.currentTime = 0;
     this._isPlaying = false;
   }
 
@@ -124,7 +124,7 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    return (!this.audioElement.currentTime && this.audioElement.paused) || this.audioElement.ended;
+    return (!this._audioElement.currentTime && this._audioElement.paused) || this._audioElement.ended;
   }
 
   public ngAfterViewInit(): void {
@@ -132,12 +132,15 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
+    this._audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
   }
 
   public ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.stopMusic();
+      this._audioElement.removeAttribute('src');
+      this._audioElement.load();
+      this._audioElement = null;
     }
 
     this._destroy.next();
@@ -149,10 +152,10 @@ export class AudioPlayerComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.audioElement.autoplay = this._config.autostart;
-    this.audioElement.src = this.getUrl();
-    this.audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
-    this.audioElement.loop = this.config.loop;
+    this._audioElement.autoplay = this._config.autostart;
+    this._audioElement.src = this.getUrl();
+    this._audioElement.volume = (parseInt(this._volume, 10) || 0) / 100;
+    this._audioElement.loop = this.config.loop;
 
     if (this._config.autostart && !this.isPlaying) {
       this.playMusic();
