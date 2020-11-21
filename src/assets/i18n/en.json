@@ -781,6 +781,8 @@
     "outdated-version": {
       "title": "Your version of arsnova.click is outdated",
       "understood": "Understood!",
+      "current-version": "Currently Installed: {version}",
+      "target-version": "New Version: {version}",
       "funnel": {
         "1": {
           "header": "Please update your version of arsnova.click. This is important to ensure that you receive the latest features and bug fixes.",

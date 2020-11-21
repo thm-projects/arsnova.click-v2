@@ -781,6 +781,8 @@
     "outdated-version": {
       "title": "Deine Version von arsnova.click ist veraltet",
       "understood": "Verstanden!",
+      "current-version": "Aktuell installiert: {version}",
+      "target-version": "Neue Version: {version}",
       "funnel": {
         "1": {
           "header": "Bitte aktualisiere deine Version von arsnova.click. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",

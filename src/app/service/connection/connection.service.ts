@@ -31,6 +31,7 @@ export class ConnectionService {
 
   set serverAvailable(value: boolean) {
     this._serverAvailable = value;
+    this._serverStatusEmitter.next(value);
   }
 
   get websocketAvailable(): boolean {
@@ -127,13 +128,9 @@ export class ConnectionService {
       switch (value) {
         case RxStompState.OPEN:
           this._websocketAvailable = true;
-          this._serverAvailable = true;
-          this._serverStatusEmitter.next(true);
           break;
         case RxStompState.CLOSED:
           this._websocketAvailable = false;
-          this._serverAvailable = false;
-          this._serverStatusEmitter.next(false);
           break;
       }
     });
