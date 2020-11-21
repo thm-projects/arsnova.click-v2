@@ -17,6 +17,7 @@ export class ConnectionService {
   private _serverAvailable: boolean;
   private _websocketAvailable = false;
   private _serverStatusEmitter = new ReplaySubject<boolean>(1);
+  private _websocketStatusEmitter = new ReplaySubject<boolean>(1);
   private _rtt = 0;
   private _lowSpeed = false;
   private _mediumSpeed = false;
@@ -34,12 +35,21 @@ export class ConnectionService {
     this._serverStatusEmitter.next(value);
   }
 
+  set websocketAvailable(value: boolean) {
+    this._websocketAvailable = value;
+    this._websocketStatusEmitter.next(value);
+  }
+
   get websocketAvailable(): boolean {
     return this._websocketAvailable;
   }
 
   get serverStatusEmitter(): ReplaySubject<boolean> {
     return this._serverStatusEmitter;
+  }
+
+  get websocketStatusEmitter(): ReplaySubject<boolean> {
+    return this._websocketStatusEmitter;
   }
 
   get rtt(): number {
@@ -127,10 +137,10 @@ export class ConnectionService {
     this.rxStompService.connectionState$.subscribe(value => {
       switch (value) {
         case RxStompState.OPEN:
-          this._websocketAvailable = true;
+          this.websocketAvailable = true;
           break;
         case RxStompState.CLOSED:
-          this._websocketAvailable = false;
+          this.websocketAvailable = false;
           break;
       }
     });

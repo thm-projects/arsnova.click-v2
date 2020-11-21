@@ -222,7 +222,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.connectionService.serverStatusEmitter.pipe(
+    this.connectionService.websocketStatusEmitter.pipe(
       filter(v => !!v),
       switchMapTo(this.connectionService.connectToGlobalChannel()),
       takeUntil(this._destroy),
