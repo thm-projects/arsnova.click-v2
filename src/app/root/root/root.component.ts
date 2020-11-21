@@ -94,18 +94,18 @@ export class RootComponent implements OnInit, AfterViewInit {
         }),
         switchMap(this.loadStyleHashMap.bind(this)),
         tap(data => this.themeService.themeHashes = data),
-        map(data =>  data.find(value => value.theme === theme).hash),
+        map(data => data.find(value => value.theme === theme).hash),
         switchMap(hash => this.loadExternalStyles(`/theme-${theme}${hash ? '-' : ''}${hash}.css`)),
         switchMapTo(this.cookieConsentService.getGrantedConsents()),
         filter(consents => !consents?.includes('base')),
-        takeUntil(this._destroy)
+        takeUntil(this._destroy),
       ).subscribe(() => {
         this.initializeCookieConsent();
       });
 
       this.cookieConsentService.getGrantedConsents().pipe(
         filter(consents => !consents?.includes('base')),
-        takeUntil(this._destroy)
+        takeUntil(this._destroy),
       ).subscribe(() => {
         this.initializeCookieConsent();
       });
@@ -113,7 +113,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       this.cookieConsentService.getGrantedConsents().pipe(
         filter(consents => consents?.includes('analytics')),
         take(1),
-        takeUntil(this._destroy)
+        takeUntil(this._destroy),
       ).subscribe(() => {
         const matomoConfig = this.document.createElement('script');
         matomoConfig.innerText = 'window[\'_paq\'] = window[\'_paq\'] || [];';
@@ -157,7 +157,7 @@ export class RootComponent implements OnInit, AfterViewInit {
       filter(consents => !consents?.includes('base')),
       switchMapTo(this.translateService.onLangChange),
       filter(() => isPlatformBrowser(this.platformId)),
-      takeUntil(this._destroy)
+      takeUntil(this._destroy),
     ).subscribe(() => {
       this.initializeCookieConsent();
     });
@@ -313,24 +313,24 @@ export class RootComponent implements OnInit, AfterViewInit {
           id: 'base',
           title: this.translateService.instant('global.cookie_consent.base.title'),
           description: this.translateService.instant('global.cookie_consent.base.description'),
-          mandatory: true
+          mandatory: true,
         },
         {
           id: 'analytics',
           title: this.translateService.instant('global.cookie_consent.analytics.title'),
-          description: this.translateService.instant('global.cookie_consent.analytics.description', {APP_NAME: environment.appName}),
-          color: 'orange'
-        }
+          description: this.translateService.instant('global.cookie_consent.analytics.description', { APP_NAME: environment.appName }),
+          color: 'orange',
+        },
       ],
       disableBodyScroll: true,
-      introText: this.translateService.instant('global.cookie_consent.message', {APP_NAME: environment.appName}),
+      introText: this.translateService.instant('global.cookie_consent.message', { APP_NAME: environment.appName }),
       acceptText: this.translateService.instant('global.cookie_consent.accept'),
       backText: this.translateService.instant('global.cookie_consent.back'),
       customizeText: this.translateService.instant('global.cookie_consent.customizeButton'),
       customizeHeadingText: this.translateService.instant('global.cookie_consent.customize'),
       saveText: this.translateService.instant('global.cookie_consent.save'),
       cookieSettings: {
-        expires: 365
+        expires: 365,
       },
     });
   }
