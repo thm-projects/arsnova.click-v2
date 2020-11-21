@@ -4,8 +4,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { merge, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { merge, of, Subject } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -74,10 +74,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isThemePreview = isPlatformBrowser(this.platformId) && location.pathname.startsWith('/preview');
     this.generateConnectionQualityColor();
 
-    merge(...[
+    merge(
       this.connectionService.serverStatusEmitter,
-      this.connectionService.websocketStatusEmitter
-    ]).pipe(takeUntil(this._destroy)).subscribe(() => {
+      this.connectionService.websocketStatusEmitter,
+    ).pipe(
+      catchError(err => of(err)),
+      takeUntil(this._destroy)
+    ).subscribe(() => {
       if (!this.showHeader || this.isThemePreview) {
         return;
       }

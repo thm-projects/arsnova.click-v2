@@ -8,6 +8,7 @@ export class ConnectionMockService {
   };
 
   public serverStatusEmitter = of(null);
+  public websocketStatusEmitter = of(null);
   public readonly dataEmitter: ReplaySubject<IMessage> = new ReplaySubject<IMessage>();
 
   constructor() {

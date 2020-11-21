@@ -3,8 +3,8 @@ import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core
 import { IconParams, IconProp } from '@fortawesome/fontawesome-svg-core';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subject, zip } from 'rxjs';
-import { filter, switchMapTo, takeUntil } from 'rxjs/operators';
+import { of, Subject, zip } from 'rxjs';
+import { catchError, filter, switchMapTo, takeUntil } from 'rxjs/operators';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { UserRole } from '../../lib/enums/UserRole';
 import { IServerStatistics } from '../../lib/interfaces/IServerStatistics';
@@ -71,13 +71,14 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    zip(...[
+    zip(
       this.connectionService.serverStatusEmitter,
       this.connectionService.websocketStatusEmitter,
       this.i18nService.initialized,
-    ]).pipe( //
+    ).pipe( //
       filter(value => value.every(v => v === true)), //
       switchMapTo(this.statisticsApiService.getBaseAppStatistics()), //
+      catchError(err => of(err)),
       takeUntil(this._destroy$), //
     ).subscribe(data => {
       this.statistics = data;
