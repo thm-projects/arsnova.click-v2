@@ -176,3 +176,13 @@ iframe {
   }
 
 }
+
+.ucc-modal {
+  overflow: auto;
+
+  @include media-breakpoint-down(sm) {
+    .ucc-consent-type {
+      flex-wrap: wrap;
+    }
+  }
+}
