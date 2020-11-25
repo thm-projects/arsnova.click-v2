@@ -1,4 +1,4 @@
-<div class="available-quizzes-modal">
+<div>
   <div class="modal-header">
     <h5 class="modal-title">{{'component.outdated-version.title' | translate}}</h5>
   </div>
@@ -11,6 +11,12 @@
 <ng-template #funnel_1>
   <p class="mb-3">{{'component.outdated-version.funnel.1.header' | translate}}</p>
   <p>{{'component.outdated-version.funnel.1.solution.1' | translate}}</p>
+
+  <div class="mt-3 text-break">
+    <p>{{'component.outdated-version.current-version' | translate:{version: currentVersion} }}</p>
+    <p>{{'component.outdated-version.target-version' | translate:{version: targetVersion} }}</p>
+  </div>
+
   <button (click)="checkForUpdates()"
           [disabled]="isCheckingForUpdates"
           class="btn btn-primary d-block my-3">
@@ -26,16 +32,34 @@
 
 <ng-template #funnel_2>
   <p>{{'component.outdated-version.funnel.2.header' | translate}}</p>
+
+  <div class="my-3 text-break">
+    <p>{{'component.outdated-version.current-version' | translate:{version: currentVersion} }}</p>
+    <p>{{'component.outdated-version.target-version' | translate:{version: targetVersion} }}</p>
+  </div>
+
   <p>{{getFunnel2OsI18nKey() | translate}}</p>
 </ng-template>
 
 <ng-template #funnel_3>
   <p>{{'component.outdated-version.funnel.3.header' | translate}}</p>
+
+  <div class="my-3 text-break">
+    <p>{{'component.outdated-version.current-version' | translate:{version: currentVersion} }}</p>
+    <p>{{'component.outdated-version.target-version' | translate:{version: targetVersion} }}</p>
+  </div>
+
   <p [innerHTML]="getFunnel3BrowserI18nKeys() | translate"></p>
 </ng-template>
 
 <ng-template #funnel_4>
   <p>{{'component.outdated-version.funnel.4.header' | translate}}</p>
+
+  <div class="my-3 text-break">
+    <p>{{'component.outdated-version.current-version' | translate:{version: currentVersion} }}</p>
+    <p>{{'component.outdated-version.target-version' | translate:{version: targetVersion} }}</p>
+  </div>
+
   <a href="mailto:klaus.quibeldey-cirkel@transmit.de" target="_blank" rel="noopener noreferrer" class="text-underline text-reset">{{'component.outdated-version.funnel.4.solution.1' | translate}}</a>
   <p class="mt-2">{{'component.outdated-version.funnel.4.solution.2' | translate}}</p>
   <button (click)="abort()"

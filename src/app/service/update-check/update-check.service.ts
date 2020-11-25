@@ -45,7 +45,7 @@ export class UpdateCheckService {
   }
 
   public reloadPage(): void {
-    document.location.reload(true);
+    this.document.location.reload(true);
   }
 
   private promptUser(availableEvent: UpdateAvailableEvent): void {

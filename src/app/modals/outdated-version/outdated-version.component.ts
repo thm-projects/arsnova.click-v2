@@ -18,6 +18,8 @@ export class OutdatedVersionComponent implements OnInit {
 
   public step: number;
   public isCheckingForUpdates: boolean;
+  public currentVersion: string;
+  public targetVersion: string;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -28,7 +30,8 @@ export class OutdatedVersionComponent implements OnInit {
 
   public ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      if (isNaN(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep) as any)) {
+      const storedVersion = sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep);
+      if (storedVersion === null || isNaN(storedVersion as any)) {
         this.step = 1;
       } else {
         this.step = parseInt(sessionStorage.getItem(StorageKey.OutdatedVersionFunnelStep), 10);
@@ -48,10 +51,8 @@ export class OutdatedVersionComponent implements OnInit {
   }
 
   public abort(): void {
-    this.http.get('/assets/version.txt', { responseType: 'text' }).subscribe(version => {
-      sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, version.trim());
-      this.activeModal.close();
-    });
+    sessionStorage.setItem(StorageKey.OutdatedVersionFunnelStep, this.targetVersion);
+    this.activeModal.close();
   }
 
   public checkForUpdates(): void {

@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
+import { UniversalCookieConsentService } from 'universal-cookie-consent';
 import { jwtOptionsFactory } from '../../lib/jwt.factory';
 import { ConnectionMockService } from '../../service/connection/connection.mock.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -56,6 +57,9 @@ describe('InfoComponent', () => {
           useClass: TwitterServiceMock,
         }, {
           provide: HotkeysService,
+          useValue: {}
+        }, {
+          provide: UniversalCookieConsentService,
           useValue: {}
         },
       ],

@@ -5,6 +5,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 export const environment: IEnvironment = {
   production: true,
   title: Title.Westermann,
+  appName: 'Westermann Quiz',
   version: '__VERSION__',
   serverEndpoint: '/backend',
   stompConfig: {

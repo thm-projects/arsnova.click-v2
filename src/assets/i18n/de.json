@@ -9,9 +9,21 @@
     "no": "Nein",
     "close_window": "Fenster schließen",
     "cookie_consent": {
-      "message": "arsnova.click verwendet Cookies.",
-      "dismiss": "Hinweis nicht mehr anzeigen",
-      "learn_more": "Datenschutzerklärung"
+      "message": "{APP_NAME} verwendet Cookies, um statistische Daten zur Nutzung der Webseite zu erfassen und so das Angebot zu verbessern. Für bestimmte Angebote benötigen wir aber Ihre Erlaubnis. Sie können diese hinterher jederzeit in unserer <a href=\"/info/dataprivacy\" target=\"_blank\">Datenschutzerklärung</a> widerrufen.",
+      "back": "Zurück",
+      "accept": "Akzeptieren",
+      "customizeButton": "Anpassen",
+      "save": "Speichern",
+      "customize": "Cookie Einstellung",
+      "reset": "Cookie-Einstellungen zurücksetzen",
+      "base": {
+        "title": "Basisfunktionen",
+        "description": "Diese Cookies sind erforderlich für die Grundfunktionen dieser Webseite und können nicht deaktiviert werden."
+      },
+      "analytics": {
+        "title": "Statistik",
+        "description": "Wir nutzen diese Cookies um Statistiken zu genutzten Seiten & Funktionen von {APP_NAME} zu erfassen."
+      }
     },
     "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du die Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
     "abort": "Abbrechen",
@@ -769,6 +781,8 @@
     "outdated-version": {
       "title": "Deine Version von arsnova.click ist veraltet",
       "understood": "Verstanden!",
+      "current-version": "Aktuell installiert: {version}",
+      "target-version": "Neue Version: {version}",
       "funnel": {
         "1": {
           "header": "Bitte aktualisiere deine Version von arsnova.click. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",

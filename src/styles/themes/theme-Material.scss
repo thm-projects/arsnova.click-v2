@@ -131,3 +131,16 @@ $code-color: $primary_text_color;
 .card {
   color: $secondary_text_color
 }
+
+universal-cookie-consent {
+  --ucc-color-primary: rebeccapurple;
+  --ucc-color-primary-contrast: white;
+  --ucc-color-secondary: #00796B;
+  --ucc-color-secondary-contrast: white;
+  --ucc-text-color: black;
+  --ucc-link-color: #026533;
+  --ucc-backdrop-color: rgba(0, 0, 0, 0.6);
+  --ucc-modal-background: white;
+  --ucc-switch-background: #BBBBBB;
+  --ucc-consent-type-description-color: rgba(0,0,0,0.8);
+}

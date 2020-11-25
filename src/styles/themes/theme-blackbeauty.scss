@@ -131,3 +131,16 @@ $popover-body-color: black;
 $code-color: $primary_text_color;
 
 @import "postbuild";
+
+universal-cookie-consent {
+  --ucc-color-primary: rebeccapurple;
+  --ucc-color-primary-contrast: white;
+  --ucc-color-secondary: #00796B;
+  --ucc-color-secondary-contrast: white;
+  --ucc-text-color: #cacaca;
+  --ucc-link-color: #6bdca3;
+  --ucc-backdrop-color: rgba(0, 0, 0, 0.6);
+  --ucc-modal-background: #a75b00;
+  --ucc-switch-background: #BBBBBB;
+  --ucc-consent-type-description-color: #c1c1c1;
+}

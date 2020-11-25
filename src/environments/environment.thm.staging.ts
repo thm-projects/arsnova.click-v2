@@ -5,6 +5,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 export const environment: IEnvironment = {
   production: true,
   title: Title.Default,
+  appName: 'arsnova.click',
   version: '__VERSION__',
   sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
   serverEndpoint: '/backend',

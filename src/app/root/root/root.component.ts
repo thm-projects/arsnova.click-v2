@@ -8,8 +8,8 @@ import { SimpleMQ } from 'ng2-simple-mq';
 import { CookieService } from 'ngx-cookie-service';
 import { EventReplayer } from 'preboot';
 import { forkJoin, Observable, of, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import themeData from '../../../assets/themeData.json';
+import { distinctUntilChanged, filter, map, switchMap, switchMapTo, take, takeUntil, tap } from 'rxjs/operators';
+import { UniversalCookieConsentService } from 'universal-cookie-consent';
 import { environment } from '../../../environments/environment';
 import { QuizEntity } from '../../lib/entities/QuizEntity';
 import { DbState, DeprecatedDb, DeprecatedKeys } from '../../lib/enums/enums';
@@ -17,7 +17,6 @@ import { StatusProtocol } from '../../lib/enums/Message';
 import { QuizTheme } from '../../lib/enums/QuizTheme';
 import { INamedType } from '../../lib/interfaces/interfaces';
 import { IThemeHashMap } from '../../lib/interfaces/ITheme';
-import { IWindow } from '../../lib/interfaces/IWindow';
 import { QuizManagerComponent } from '../../quiz/quiz-manager/quiz-manager/quiz-manager.component';
 import { ThemesApiService } from '../../service/api/themes/themes-api.service';
 import { ConnectionService } from '../../service/connection/connection.service';
@@ -75,6 +74,7 @@ export class RootComponent implements OnInit, AfterViewInit {
     private appRef: ApplicationRef,
     private replayer: EventReplayer,
     private cookieService: CookieService,
+    private cookieConsentService: UniversalCookieConsentService,
   ) {
 
     this._rendererInstance = this.rendererFactory.createRenderer(this.document, null);
@@ -94,11 +94,36 @@ export class RootComponent implements OnInit, AfterViewInit {
         }),
         switchMap(this.loadStyleHashMap.bind(this)),
         tap(data => this.themeService.themeHashes = data),
-        map(data =>  data.find(value => value.theme === theme).hash),
+        map(data => data.find(value => value.theme === theme).hash),
         switchMap(hash => this.loadExternalStyles(`/theme-${theme}${hash ? '-' : ''}${hash}.css`)),
-        takeUntil(this._destroy)
+        switchMapTo(this.cookieConsentService.getGrantedConsents()),
+        filter(consents => !consents?.includes('base')),
+        takeUntil(this._destroy),
       ).subscribe(() => {
-        this.initializeCookieConsent(theme);
+        this.initializeCookieConsent();
+      });
+
+      this.cookieConsentService.getGrantedConsents().pipe(
+        filter(consents => !consents?.includes('base')),
+        takeUntil(this._destroy),
+      ).subscribe(() => {
+        this.initializeCookieConsent();
+      });
+
+      this.cookieConsentService.getGrantedConsents().pipe(
+        filter(consents => consents?.includes('analytics')),
+        take(1),
+        takeUntil(this._destroy),
+      ).subscribe(() => {
+        const matomoConfig = this.document.createElement('script');
+        matomoConfig.innerText = 'window[\'_paq\'] = window[\'_paq\'] || [];';
+        matomoConfig.type = 'text/javascript';
+        this.document.body.appendChild(matomoConfig);
+
+        const matomoScript = this.document.createElement('script');
+        matomoScript.src = '/assets/piwik/piwik.js';
+        matomoConfig.type = 'text/javascript';
+        this.document.body.appendChild(matomoScript);
       });
     }
 
@@ -128,8 +153,13 @@ export class RootComponent implements OnInit, AfterViewInit {
       });
     });
 
-    this.translateService.onLangChange.pipe(filter(() => isPlatformBrowser(this.platformId)), takeUntil(this._destroy)).subscribe(() => {
-      this.initializeCookieConsent(this.themeService.currentTheme);
+    this.cookieConsentService.getGrantedConsents().pipe(
+      filter(consents => !consents?.includes('base')),
+      switchMapTo(this.translateService.onLangChange),
+      filter(() => isPlatformBrowser(this.platformId)),
+      takeUntil(this._destroy),
+    ).subscribe(() => {
+      this.initializeCookieConsent();
     });
 
     this.router.events.pipe(takeUntil(this._destroy)).subscribe((event: any) => {
@@ -275,40 +305,32 @@ export class RootComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private initializeCookieConsent(theme: QuizTheme): void {
-    if (!(
-      <IWindow>window
-    ).cookieconsent || !theme || this.cookieService.check('cookieconsent_status')) {
-      return;
-    }
+  private initializeCookieConsent(): void {
 
-    const elements = document.getElementsByClassName('cc-window');
-    for (let i = 0; i < elements.length; i++) {
-      elements.item(i).remove();
-    }
-
-    console.log('initializing cookie consent with theme', theme);
-
-    (
-      <IWindow>window
-    ).cookieconsent.initialise({
-      palette: {
-        popup: {
-          background: themeData[theme].quizNameRowStyle.bg,
+    this.cookieConsentService.show({
+      consentTypes: [
+        {
+          id: 'base',
+          title: this.translateService.instant('global.cookie_consent.base.title'),
+          description: this.translateService.instant('global.cookie_consent.base.description'),
+          mandatory: true,
         },
-        button: {
-          background: 'transparent',
-          text: themeData[theme].exportedAtRowStyle.fg,
-          border: themeData[theme].exportedAtRowStyle.fg,
+        {
+          id: 'analytics',
+          title: this.translateService.instant('global.cookie_consent.analytics.title'),
+          description: this.translateService.instant('global.cookie_consent.analytics.description', { APP_NAME: environment.appName }),
+          color: 'orange',
         },
-      },
-      theme: 'classic',
-      position: 'bottom-right',
-      content: {
-        message: this.translateService.instant('global.cookie_consent.message'),
-        dismiss: this.translateService.instant('global.cookie_consent.dismiss'),
-        link: this.translateService.instant('global.cookie_consent.learn_more'),
-        href: 'info/dataprivacy',
+      ],
+      disableBodyScroll: true,
+      introText: this.translateService.instant('global.cookie_consent.message', { APP_NAME: environment.appName }),
+      acceptText: this.translateService.instant('global.cookie_consent.accept'),
+      backText: this.translateService.instant('global.cookie_consent.back'),
+      customizeText: this.translateService.instant('global.cookie_consent.customizeButton'),
+      customizeHeadingText: this.translateService.instant('global.cookie_consent.customize'),
+      saveText: this.translateService.instant('global.cookie_consent.save'),
+      cookieSettings: {
+        expires: 365,
       },
     });
   }
