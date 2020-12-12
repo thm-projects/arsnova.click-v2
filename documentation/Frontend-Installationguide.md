@@ -5,6 +5,7 @@
 1. Ubuntu 14.04+, Windows 10 or Mac
 2. Typescript version that is specified in the [package.json](https://git.thm.de/arsnova/arsnova-click-v2-frontend/-/blob/staging/package.json)
 3. Node lts version 12.x
+4. Docker & docker-compose
 
 - - -
 
@@ -30,7 +31,16 @@
 
         npm install
 
-- - -
+    - - -
+
+5. Quick fix for current [Issue](https://git.thm.de/arsnova/arsnova-click-v2/-/issues/198): 
+    Navigate into `node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts` and change line 4 to 
+
+        import { MousetrapInstance } from 'mousetrap';
+
+    Redo this after every `npm install` until the [Issue](https://git.thm.de/arsnova/arsnova-click-v2/-/issues/198) is resolved.
+
+    - - - 
 
 
 ## Execution 

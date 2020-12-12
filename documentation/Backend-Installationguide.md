@@ -21,7 +21,7 @@
 
 3. Create 7 files using
 
-        touch arsnova-click.env mongo.env init-mongo.js rabbitmq.env arsnova-click-staging.env arsnova-click-beta.env arsnova-click-export.env
+        touch arsnova-click.env mongo.env init-mongo.js rabbitmq.env arsnova-click-staging.env arsnova-click-beta.env export-arsnova-click.env
     - - - 
 
 4. Install node depencencies type
@@ -51,7 +51,7 @@
         export AMQP_USER=<myUser>
         export AMQP_PASSWORD=<myPassword>
 
-    into the `arsnova-click-export.env` file. 
+    into the export-arsnova-click.env` file. 
     - - - 
 
 7. Copy: 
@@ -179,5 +179,6 @@
     - - - 
 
 5. Run the project 
+
         cd dist && node main.js
     - - - 
