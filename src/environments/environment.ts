@@ -8,7 +8,7 @@ export const environment: IEnvironment = {
   appName: 'Westermann Quiz',
   version: '__VERSION__',
   sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
-  serverEndpoint: '',
+  serverEndpoint: 'http://localhost:3010',
   stompConfig: {
     endpoint: 'ws://localhost:15674/ws',
     user: 'arsnova-click',
