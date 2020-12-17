@@ -4,7 +4,7 @@
     "description": "Ein bisschen wie Kahoot!, ein bisschen wie Socrative, aber ganz viel ARSnova!"
   },
   "global": {
-    "arsnova_slogan": "Quiz-App für den MINT-Unterricht",
+    "arsnova_slogan": "Quiz-App für den Unterricht",
     "yes": "Ja",
     "no": "Nein",
     "close_window": "Fenster schließen",
@@ -126,21 +126,6 @@
             "2": "Tipp einfach den Namen des Quiz ein. Die Buttons werden aktiviert, sobald du entweder den Namen eines freigeschalteten Quiz eingibst: »Mach mit!« oder ein Quiz mit dem eingegebenen Namen erstellen kannst: »Neues Quiz«.",
             "3": "Folge einfach deiner Intuition: schauen, klicken, quizzen."
           }
-        }
-      },
-      "tos": {
-        "declaration": "Alle (nicht nur Lehrende) dürfen die Quiz-App arsnova.click für ihre Zwecke verwenden, solange dabei nicht gegen deutsches oder EU-Recht verstoßen wird.",
-        "license": {
-          "title": "Lizenz",
-          "text": "arsnova.click ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> und steht unter der <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
-        },
-        "musicLicense": {
-          "title": "Musik-Lizenz",
-          "text": "Der Sound <a href='http://soundbible.com/2148-Chinese-Gong.html' target='_blank'>Chinese Gong</a> von Daniel Simon steht unter der <a href='https://creativecommons.org/licenses/by/3.0/de' target='_blank'>CC BY 3.0</a> Lizenz."
-        },
-        "warranty": {
-          "title": "Gewährleistung",
-          "text": "Wir sind bemüht, den Online-Dienst arsnova.click zuverlässig und störungsfrei zu betreiben, können dies aber nicht garantieren. Alle Quiz-Daten liegen ausschließlich im Browser-Speicher des Quizmasters. Wir übernehmen keine Haftung für den Verlust der Daten, zum Beispiel durch Löschen des Browser-Speichers, ohne zuvor die Quizze exportiert zu haben, oder bei rechtswidriger Nutzung des Dienstes."
         }
       }
     },

@@ -25,6 +25,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   public currentData: string;
   public imprintMarkdownSrc: string;
   public dataPrivacyMarkdownSrc: string;
+  public tosMarkdownSrc: string;
   public readonly infoButtons: Array<{ id: string, i18nRef: string }> = [];
 
   constructor(
@@ -118,5 +119,6 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
   private buildMarkdownFileSources(lang: string): void {
     this.imprintMarkdownSrc = `/assets/i18n/${lang}.imprint.${this._markdownFilePostfix}.md`;
     this.dataPrivacyMarkdownSrc = `/assets/i18n/${lang}.data_privacy.${this._markdownFilePostfix}.md`;
+    this.tosMarkdownSrc = `/assets/i18n/${lang}.tos.${this._markdownFilePostfix}.md`;
   }
 }
