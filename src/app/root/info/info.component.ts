@@ -37,7 +37,7 @@ export class InfoComponent implements OnInit, OnDestroy, AfterViewInit {
     private cookieConsentService: UniversalCookieConsentService,
   ) {
 
-    headerLabelService.headerLabel = 'region.footer.about.title';
+    headerLabelService.headerLabel = environment.appName;
     this.footerBarService.TYPE_REFERENCE = InfoComponent.TYPE;
 
     footerBarService.replaceFooterElements([
