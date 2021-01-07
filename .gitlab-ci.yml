@@ -131,7 +131,6 @@ npm_test:
     - nodejs
     - angular
   artifacts:
-    untracked: true
     paths:
       - .lcov_output
   script:
