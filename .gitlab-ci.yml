@@ -4,6 +4,7 @@ variables:
 stages:
   - install
   - test
+  - analyze
   - build
   - deploy
 
@@ -129,6 +130,10 @@ npm_test:
   tags:
     - nodejs
     - angular
+  artifacts:
+    untracked: true
+    paths:
+      - .lcov_output
   script:
     - curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
     - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
@@ -138,6 +143,18 @@ npm_test:
     - echo "------------" && echo && echo "Temporary fix Mousetrap Instance Issue" && echo && echo && echo "REMOVE AFTER PACKAGE MAINTAINER HAS MERGED THE FIX" && echo && echo "------------"
     - sed -i "s|import 'mousetrap';|import { MousetrapInstance } from 'mousetrap';|g" "node_modules/angular2-hotkeys/lib/hotkeys.service.d.ts"
     - npm test
+
+sonarqube:
+  stage: analyze
+  tags:
+    - sonar-cli
+  dependencies:
+    - npm_test
+  # only:
+  #   - staging
+  script:
+    - ls -al
+    - sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=https://scm.thm.de/sonar/
 
 deploy:
   stage: deploy
