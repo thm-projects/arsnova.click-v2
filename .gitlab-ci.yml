@@ -149,10 +149,9 @@ sonarqube:
     - sonar-cli
   dependencies:
     - npm_test
-  # only:
-  #   - staging
+  only:
+    - staging
   script:
-    - ls -al
     - npm i
     - sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=https://scm.thm.de/sonar/
 
