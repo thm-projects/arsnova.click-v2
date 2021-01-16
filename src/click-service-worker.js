@@ -1,6 +1,6 @@
 try {
   importScripts('./ngsw-worker.js');
-} catch {
+} catch (e) {
 }
 
 const scope = self;

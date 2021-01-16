@@ -55,18 +55,7 @@
   </div>
   <div *ngIf="currentData === 'tos'"
        id="tosElement">
-    <h3 [innerHTML]="'global.arsnova_slogan' | translate"
-        class="mb-2"></h3>
-    <p [innerHTML]="'region.footer.tos.declaration' | translate"></p>
-    <h3 [innerHTML]="'region.footer.tos.license.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.tos.license.text' | translate"></p>
-    <h3 [innerHTML]="'region.footer.tos.musicLicense.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.tos.musicLicense.text' | translate"></p>
-    <h3 [innerHTML]="'region.footer.tos.warranty.title' | translate"
-        class="mb-2 mt-3"></h3>
-    <p [innerHTML]="'region.footer.tos.warranty.text' | translate"></p>
+    <markdown [src]="tosMarkdownSrc"></markdown>
   </div>
   <div *ngIf="currentData === 'imprint'"
        id="imprintElement">

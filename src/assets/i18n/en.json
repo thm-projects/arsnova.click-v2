@@ -4,7 +4,7 @@
     "description": "A bit like Kahoot!, a bit like Socrative, but lots of ARSnova!"
   },
   "global": {
-    "arsnova_slogan": "Quiz app for MINT lessons",
+    "arsnova_slogan": "Quiz app for lessons",
     "yes": "Yes",
     "no": "No",
     "close_window": "Close window",
@@ -99,7 +99,6 @@
         "hotkeys": "Hotkeys"
       },
       "about": {
-        "title": "About arsnova.click",
         "declaration": "A little <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />a little <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />a lot <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
         "ars": "arsnova.click is an innovative <a href='https://en.wikipedia.org/wiki/Audience_response#Classroom_use' target='_blank'>Audience-Response-System (ARS)</a> for public educational institutions.",
         "developed_by": "Inspired by <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> and <a href='https://socrative.com/' target='_blank'>Socrative</a> developed by computer science students of <a href='https://www.thm.de/site/' target='_blank'>THM</a> the <a href='https://en.wikipedia.org/wiki/Gamification' target='_blank'>gamified</a> alternative to the flagship <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
@@ -126,21 +125,6 @@
             "2": "Just type in the name of the quiz. The buttons will be activated as soon as you either enter the name of an unlocked quiz: »Join in!« or create a quiz with the entered name: »New Quiz«.",
             "3": "Now it is as simple as: Clicking. Looking. Quizzing."
           }
-        }
-      },
-      "tos": {
-        "declaration": "Everyone ( not only teachers ) is allowed to use the quiz app arsnova.click for their own purposes as long as this does not violate German or EU law.",
-        "license": {
-          "title": "License",
-          "text": "arsnova.click is a free web service (Software as a Service). The software is <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> and is licensed under the <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
-        },
-        "musicLicense": {
-          "title": "Music license",
-          "text": "The sound <a href='http://soundbible.com/2148-Chinese-Gong.html' target='_blank'>Chinese Gong</a> by Daniel Simon is licensed under <a href='https://creativecommons.org/licenses/by/3.0/' target='_blank'>CC BY 3.0</a>."
-        },
-        "warranty": {
-          "title": "Warranty",
-          "text": "We are trying to maintain the online service of ARSnova.click reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service."
         }
       }
     },
