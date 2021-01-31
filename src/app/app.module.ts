@@ -148,7 +148,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
             locationInitialized.then(() => {
               const lang = navigator.language.match(/([A-Z]{2})/i);
               let langToSet: string;
-              if (!Array.isArray(lang) || !lang[0]) {
+              if (!Array.isArray(lang) || !lang[0] || !Language[lang[0].toUpperCase()]) {
                 langToSet = Language.EN;
               } else {
                 langToSet = lang[0].toLowerCase();
