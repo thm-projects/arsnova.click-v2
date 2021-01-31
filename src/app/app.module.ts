@@ -22,6 +22,7 @@ import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { FooterModule } from './footer/footer.module';
 import { HeaderModule } from './header/header.module';
+import { AppInitializerFactory } from './lib/app-initializer.factory';
 import { Language } from './lib/enums/enums';
 import { jwtOptionsFactory } from './lib/jwt.factory';
 import { RoutePreloader } from './lib/route-preloader';
@@ -127,43 +128,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     }, SimpleMQ, RoutePreloader, NgbActiveModal,
     {
       provide: APP_INITIALIZER,
-      useFactory: (platformId: object, translate: TranslateService, injector: Injector) => () => {
-        if (isPlatformBrowser(platformId)) {
-          return new Promise(resolve => {
-            const dom = ɵgetDOM();
-            const styles = Array.prototype.slice.apply(
-              dom.getDefaultDocument().querySelectorAll('style[ng-transition]'),
-            );
-            styles.forEach(el => {
-              // Remove ng-transition attribute to prevent Angular appInitializerFactory
-              // to remove server styles before preboot complete
-              el.removeAttribute('ng-transition');
-            });
-            dom.getDefaultDocument().addEventListener('PrebootComplete', () => {
-              // After preboot complete, remove the server scripts
-              styles.forEach(el => dom.remove(el));
-            });
-
-            const locationInitialized = injector.get(LOCATION_INITIALIZED, Promise.resolve(null));
-            locationInitialized.then(() => {
-              const lang = navigator.language.match(/([A-Z]{2})/i);
-              let langToSet: string;
-              if (!Array.isArray(lang) || !lang[0] || !Language[lang[0].toUpperCase()]) {
-                langToSet = Language.EN;
-              } else {
-                langToSet = lang[0].toLowerCase();
-              }
-              translate.setDefaultLang(langToSet);
-              translate.use(langToSet).subscribe(() => {
-              }, err => {
-                console.error(`Problem with '${langToSet}' language initialization.'`, err);
-              }, () => {
-                resolve(null);
-              });
-            });
-          });
-        }
-      },
+      useFactory: AppInitializerFactory,
       deps: [PLATFORM_ID, TranslateService, Injector],
       multi: true,
     },
