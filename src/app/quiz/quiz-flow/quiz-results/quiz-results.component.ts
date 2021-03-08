@@ -63,6 +63,7 @@ export class QuizResultsComponent implements OnInit, OnDestroy, IHasTriggeredNav
   public isLoadingQuestionData: boolean;
   public countdownRunningMusicConfig: IAudioPlayerConfig;
   public countdownEndMusicConfig: IAudioPlayerConfig;
+  public readonly environment = environment;
 
   set footerElems(value: Array<any>) {
     this._footerElems = value;
