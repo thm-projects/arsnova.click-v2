@@ -136,8 +136,9 @@ export class QuizManagerDetailsOverviewComponent extends AbstractQuizManagerDeta
     question.requiredForToken = !question.requiredForToken;
   }
 
-  public canSelectRequiredState(question: AbstractQuestionEntity): boolean {
-    return !this.quizService.isAddingPoolQuestion &&
+  public canSelectRequiredForTokenState(question: AbstractQuestionEntity): boolean {
+    return environment.enableBonusToken &&
+           !this.quizService.isAddingPoolQuestion &&
            ![QuestionType.ABCDSurveyQuestion, QuestionType.SurveyQuestion].includes(question?.TYPE);
   }
 

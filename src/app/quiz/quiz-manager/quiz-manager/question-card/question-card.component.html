@@ -11,7 +11,7 @@
              [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
              class="text-danger ml-sm-2"></fa-icon>
 
-    <fa-icon *ngIf="elem?.requiredForToken"
+    <fa-icon *ngIf="environment.enableBonusToken && elem?.requiredForToken"
              [icon]="'key'"
              [class.ml-1]="!elem?.isValid()"
              class="text-warning ml-sm-2"
