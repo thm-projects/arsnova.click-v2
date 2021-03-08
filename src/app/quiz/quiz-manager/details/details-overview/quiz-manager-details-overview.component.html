@@ -73,7 +73,7 @@
         <span *ngIf="!question?.TYPE">{{'component.quiz_summary.validation_errors.reasons.empty_question_type' | translate}}</span>
         <span *ngIf="question?.TYPE">{{question?.translationReferrer() | translate}}</span>
       </p>
-      <p>
+      <p *ngIf="environment.enableQuizPool">
         <span>{{'component.quiz_summary.tags' | translate}}:&nbsp;</span>
         <span *ngIf="!question?.tags?.length">{{'component.quiz_manager.no-added-tags' | translate}}</span>
         <span *ngFor="let tag of question?.tags; let lastElem = last">{{tag}}<span *ngIf="!lastElem">, </span></span>
