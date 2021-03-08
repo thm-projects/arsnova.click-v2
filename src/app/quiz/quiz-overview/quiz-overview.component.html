@@ -12,7 +12,14 @@
 </div>
 
 <div class="form-row">
-  <div *ngFor="let elem of sessions; let i = index"
+  <div class="col-12 my-2">
+    <input class="form-control"
+           type="text"
+           [(ngModel)]="searchText"
+           [placeholder]="'component.name_management.search-for-quiz-name' | translate"/>
+  </div>
+
+  <div *ngFor="let elem of sessions | quizFilter:searchText; let i = index"
        class="col-12 col-lg-6 mb-2">
     <div class="card h-100">
 

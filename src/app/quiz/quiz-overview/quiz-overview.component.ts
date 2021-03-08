@@ -30,6 +30,7 @@ export class QuizOverviewComponent implements OnInit {
   public publicQuizAmount: number;
   public isStartingQuiz: QuizEntity;
   public isDeletingQuiz: QuizEntity;
+  public searchText: string;
 
   get sessions(): Array<QuizEntity> {
     return this._sessions;

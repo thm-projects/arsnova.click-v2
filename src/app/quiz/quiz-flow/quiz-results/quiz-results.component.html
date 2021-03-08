@@ -104,7 +104,7 @@
                          [answers]="quizService?.currentQuestion()?.displayAnswerText === false ? answers : null"
                          [tags]="quizService?.currentQuestion()?.tags"></app-voting-question>
 
-    <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
+    <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
          class="d-flex">
       <button (click)="hasTriggeredNavigation = true"
               *ngIf="showLeaderBoardButton(selectedQuestionIndex)"
