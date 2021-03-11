@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { QuizFilterPipeMock } from '../../../_mocks/_pipes/QuizFilterPipeMock';
 import { DefaultSettings } from '../../lib/default.settings';
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
 import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
@@ -118,7 +119,7 @@ describe('QuizOverviewComponent', () => {
           useValue: {}
         },
       ],
-      declarations: [QuizOverviewComponent],
+      declarations: [QuizOverviewComponent, QuizFilterPipeMock],
     }).compileComponents();
   }));
 
