@@ -3,7 +3,7 @@
      [infiniteScrollThrottle]="throttle"
      infinite-scroll>
 
-  <ng-container *ngIf="(languageLoaderService.parsedLangData | unusedKeyFilter:unusedKeyFilter | filterKeys:filter | searchFilter:searchFilter | sort) as results">
+  <ng-container *ngIf="(languageLoaderService.parsedLangData | unusedKeyFilter:unusedKeyFilter | filterKeys:filter | searchFilter:searchFilter | sort) as results">
     <div *ngFor="let elem of results | justafew:visibleData"
          (click)="selectKey(elem)"
          class="p-2 cursor-pointer d-flex"

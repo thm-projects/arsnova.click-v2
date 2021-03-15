@@ -5,6 +5,7 @@ import { RxStompService } from '@stomp/ng2-stompjs';
 import { SimpleMQ } from 'ng2-simple-mq';
 import { of, Subject, zip } from 'rxjs';
 import { catchError, filter, switchMapTo, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { UserRole } from '../../lib/enums/UserRole';
 import { IServerStatistics } from '../../lib/interfaces/IServerStatistics';
@@ -131,33 +132,38 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         amount: this.statistics.quiz.active,
         title: 'component.statistics.active-quizzes.title',
         content: 'component.statistics.active-quizzes.content',
-      }, {
-        iconColor: 'var(--pink)',
-        iconLayer: [
-          {
-            classes: ['fas', 'question'],
-            transform: 'shrink-3 left-5' as any,
-          },
-          {
-            classes: ['fas', 'question'],
-            transform: 'shrink-6 right-2 rotate-50' as any,
-          },
-          {
-            classes: ['fas', 'question'],
-            transform: 'shrink-5 bottom-5 left-12 rotate--30' as any,
-          },
-        ],
-        amount: this.statistics.quiz.pool.questions,
-        title: 'component.statistics.total-pool-questions.title',
-        content: 'component.statistics.total-pool-questions.content',
-      }, {
-        iconColor: 'var(--orange)',
-        icon: 'tags',
-        amount: this.statistics.quiz.pool.tags,
-        title: 'component.statistics.total-pool-tags.title',
-        content: 'component.statistics.total-pool-tags.content',
       },
     );
+
+    if (environment.enableQuizPool) {
+      this.data.push({
+          iconColor: 'var(--pink)',
+          iconLayer: [
+            {
+              classes: ['fas', 'question'],
+              transform: 'shrink-3 left-5' as any,
+            },
+            {
+              classes: ['fas', 'question'],
+              transform: 'shrink-6 right-2 rotate-50' as any,
+            },
+            {
+              classes: ['fas', 'question'],
+              transform: 'shrink-5 bottom-5 left-12 rotate--30' as any,
+            },
+          ],
+          amount: this.statistics.quiz.pool.questions,
+          title: 'component.statistics.total-pool-questions.title',
+          content: 'component.statistics.total-pool-questions.content',
+        }, {
+          iconColor: 'var(--orange)',
+          icon: 'tags',
+          amount: this.statistics.quiz.pool.tags,
+          title: 'component.statistics.total-pool-tags.title',
+          content: 'component.statistics.total-pool-tags.content',
+        },
+      );
+    }
 
     if (this.statistics.quiz.active) {
       this.data.push({

@@ -17,6 +17,7 @@ import { SwPush } from '@angular/service-worker';
 import { TranslateService } from '@ngx-translate/core';
 import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { AbstractChoiceQuestionEntity } from '../../../../lib/entities/question/AbstractChoiceQuestionEntity';
 import { AbstractQuestionEntity } from '../../../../lib/entities/question/AbstractQuestionEntity';
 import { StorageKey } from '../../../../lib/enums/enums';
@@ -54,6 +55,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   @Output() public readonly moveAllDown = new EventEmitter<void>();
   @Output() public readonly edit = new EventEmitter<void>();
   @Output() public readonly delete = new EventEmitter<void>();
+  public readonly environment = environment;
 
   public renderedQuestionText: SafeHtml;
 

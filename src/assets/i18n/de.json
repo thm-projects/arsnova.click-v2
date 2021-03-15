@@ -320,7 +320,8 @@
         "title": "Quiz speichern",
         "label": "Speichern"
       },
-      "used-pool-tags": "Verwendete Tags"
+      "used-pool-tags": "Verwendete Tags",
+      "search-for-quiz-name": "Suche nach Quiznamen"
     },
     "leaderboard": {
       "header": "Rangliste",

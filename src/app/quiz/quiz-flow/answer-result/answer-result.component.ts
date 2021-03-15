@@ -194,7 +194,7 @@ export class AnswerResultComponent implements OnInit, OnDestroy, IHasTriggeredNa
       if (data.state === AnswerState.Correct) {
         this._loadedConfetti.pipe(take(1)).subscribe(() => (window as any).confetti.start());
       }
-      if (data.state !== AnswerState.Wrong && this.isLastQuestion && !this.showTokenModalToast) {
+      if (environment.enableBonusToken && data.state !== AnswerState.Wrong && this.isLastQuestion && !this.showTokenModalToast) {
         canUseBonusToken$.pipe(switchMapTo(bonusToken$)).subscribe(token => {
 
           const message = this.translateService.instant('component.toasts.can-use-token.message');

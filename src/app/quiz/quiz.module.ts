@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { PipesModule } from '../pipes/pipes.module';
 import { UserRoleGuardService } from '../service/user-role-guard/user-role-guard.service';
 import { SharedModule } from '../shared/shared.module';
 import { QuizDuplicateComponent } from './quiz-duplicate/quiz-duplicate.component';
@@ -38,7 +39,7 @@ const quizRoutes: Routes = [
 
 @NgModule({
   imports: [
-    SharedModule, RouterModule.forChild(quizRoutes), ReactiveFormsModule,
+    SharedModule, RouterModule.forChild(quizRoutes), ReactiveFormsModule, PipesModule,
   ],
   providers: [],
   declarations: [

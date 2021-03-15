@@ -320,7 +320,8 @@
         "title": "Save Quiz",
         "label": "Save"
       },
-      "used-pool-tags": "Used Tags"
+      "used-pool-tags": "Used Tags",
+      "search-for-quiz-name": "Search for Quiz Name"
     },
     "leaderboard": {
       "header": "Leaderboard",

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTypeahead } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
@@ -31,6 +31,7 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
   public readonly self = this;
 
   @ViewChild('instance', { static: true }) public instance: NgbTypeahead;
+  @ViewChild('inputElement', { static: true }) public inputElement: ElementRef<HTMLInputElement>;
 
   get tags(): Array<CloudData> {
     return this._tags;
@@ -97,6 +98,8 @@ export class TagsComponent extends AbstractQuizManagerDetailsComponent implement
       ).trim(),
     } as CloudData);
     this.tagName = null;
+
+    this.inputElement.nativeElement.focus();
   }
 
   public hasTagSelected(): boolean {
