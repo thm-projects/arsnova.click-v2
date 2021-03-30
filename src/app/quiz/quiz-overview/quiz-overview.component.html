@@ -21,7 +21,7 @@
 
   <ng-container *ngIf="sessions | quizFilter:searchText as result">
 
-    <div *ngFor="let elem of result; let i = index" class="col-12 col-lg-6 mb-2">
+    <div *ngFor="let elem of result" class="col-12 col-lg-6 mb-2">
       <div class="card h-100">
 
         <div class="card-header">
@@ -75,13 +75,13 @@
           <div class="d-flex">
             <ng-container *ngIf="elem.isValid() && connectionService.serverAvailable">
 
-              <button (click)="saveQuiz(i)"
+              <button (click)="saveQuiz(elem)"
                       *ngIf="isAuthorizedToSaveQuiz() && isAuthorizedToModifyQuiz()"
                       [ngbTooltip]="'component.name_management.save_session.title' | translate"
                       class="btn btn-outline-invers btn-block mt-0 mr-2 d-flex justify-content-center">
-                <fa-icon *ngIf="isSaved(i)"
+                <fa-icon *ngIf="isSaved(elem)"
                          [icon]="'check'"></fa-icon>
-                <fa-icon *ngIf="!isSaved(i)"
+                <fa-icon *ngIf="!isSaved(elem)"
                          [icon]="'save'"></fa-icon>
               </button>
 
@@ -94,14 +94,14 @@
 
             </ng-container>
 
-            <button (click)="editQuiz(i)"
+            <button (click)="editQuiz(elem)"
                     *ngIf="isAuthorizedToModifyQuiz()"
                     [ngbTooltip]="'component.name_management.edit_session.title' | translate"
                     class="btn btn-outline-warning btn-block mt-0 mr-2 d-flex justify-content-center">
               <fa-icon [icon]="'edit'"></fa-icon>
             </button>
 
-            <button (click)="exportQuiz(i)"
+            <button (click)="exportQuiz(elem)"
                     *ngIf="isAuthorizedToModifyQuiz()"
                     [ngbTooltip]="'component.name_management.export.title' | translate"
                     class="btn btn-outline-primary btn-block mt-0 mr-2 d-flex justify-content-center">
