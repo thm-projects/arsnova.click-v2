@@ -157,7 +157,7 @@ describe('QuizOverviewComponent', () => {
       spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
       component.sessions.splice(0, -1, validQuiz);
 
-      component.editQuiz(0);
+      component.editQuiz(validQuiz);
 
       expect(quizService.quiz).toEqual(jasmine.objectContaining(validQuiz));
       expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager', 'overview']));
@@ -171,7 +171,7 @@ describe('QuizOverviewComponent', () => {
       component.sessions.push(validQuiz);
       const exportData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(validQuiz));
 
-      await component.exportQuiz(0, (self, event) => {
+      await component.exportQuiz(validQuiz, (self, event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         expect(self.href).toEqual(exportData);

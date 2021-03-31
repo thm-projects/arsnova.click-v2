@@ -313,6 +313,7 @@
         "label": "Exportieren"
       },
       "no_sessions": "Es sind keine Quizze in diesem Browser gespeichert.",
+      "no_sessions_matched": "Für den eingegebenen Suchbegriff wurden keine Quizze gefunden",
       "create_abcd_session": "Starte ABC…-Quiz",
       "enter_server_password": "Server-Passwort eingeben",
       "public-quizzes": "Suchst du mehr? Klicke hier, um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes} } zu wählen!",

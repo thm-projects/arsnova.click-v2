@@ -11,7 +11,7 @@
   </h5>
 </div>
 
-<div class="form-row">
+<div class="form-row" *ngIf="sessions.length">
   <div class="col-12 my-2">
     <input class="form-control"
            type="text"
@@ -19,104 +19,111 @@
            [placeholder]="'component.name_management.search-for-quiz-name' | translate"/>
   </div>
 
-  <div *ngFor="let elem of sessions | quizFilter:searchText; let i = index"
-       class="col-12 col-lg-6 mb-2">
-    <div class="card h-100">
+  <ng-container *ngIf="sessions | quizFilter:searchText as result">
 
-      <div class="card-header">
-        <h6 class="mb-0">{{elem.name}}</h6>
+    <div *ngFor="let elem of result" class="col-12 col-lg-6 mb-2">
+      <div class="card h-100">
 
-        <small class="mb-0 text-muted">{{'component.quiz_manager.added_questions_title' | translate:{amount: elem.questionList.length} }}</small>
-      </div>
+        <div class="card-header">
+          <h6 class="mb-0">{{elem.name}}</h6>
 
-      <div class="card-body text-break">
-        <p class="card-text">
+          <small class="mb-0 text-muted">{{'component.quiz_manager.added_questions_title' | translate:{amount: elem.questionList.length} }}</small>
+        </div>
+
+        <div class="card-body text-break">
+          <p class="card-text">
           <span *ngIf="elem.isValid()"
                 class="text-success">
             {{'component.quiz_summary.question_group_successful' | translate}}
           </span>
-          <span *ngIf="!elem.isValid()"
-                class="text-danger">
+            <span *ngIf="!elem.isValid()"
+                  class="text-danger">
             {{'component.quiz_summary.question_group_failed' | translate}}
           </span>
-        </p>
+          </p>
 
-        <div class="input-group input-group-sm">
-          <input [attr.aria-label]="'component.quiz_summary.description.session_url' | translate"
-                 [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
-                 type="text"
-                 class="form-control"
-                 readonly
-                 #quizLinkInput
-                 [value]="getQuizLink(elem.name)"/>
-          <div class="input-group-append">
-            <button (click)="copyQuizLink(quizLinkInput)"
-                    [title]="'global.copy-to-clipboard' | translate"
-                    class="btn btn-primary">
-              <fa-icon [icon]="'copy'"
-                       class="cursor-pointer text-reset"></fa-icon>
+          <div class="input-group input-group-sm">
+            <input [attr.aria-label]="'component.quiz_summary.description.session_url' | translate"
+                   [attr.data-intro]="'component.quiz_summary.description.session_url' | translate"
+                   type="text"
+                   class="form-control"
+                   readonly
+                   #quizLinkInput
+                   [value]="getQuizLink(elem.name)"/>
+            <div class="input-group-append">
+              <button (click)="copyQuizLink(quizLinkInput)"
+                      [title]="'global.copy-to-clipboard' | translate"
+                      class="btn btn-primary">
+                <fa-icon [icon]="'copy'"
+                         class="cursor-pointer text-reset"></fa-icon>
+              </button>
+            </div>
+          </div>
+
+          <ng-container *ngIf="getUniqueTags(elem).length">
+            <p class="card-text">
+              <small>{{'component.name_management.used-pool-tags' | translate}}:</small>
+            </p>
+            <small class="font-italic d-block">
+              {{getUniqueTags(elem).join(', ')}}
+            </small>
+          </ng-container>
+        </div>
+
+        <div class="card-footer">
+
+          <div class="d-flex">
+            <ng-container *ngIf="elem.isValid() && connectionService.serverAvailable">
+
+              <button (click)="saveQuiz(elem)"
+                      *ngIf="isAuthorizedToSaveQuiz() && isAuthorizedToModifyQuiz()"
+                      [ngbTooltip]="'component.name_management.save_session.title' | translate"
+                      class="btn btn-outline-invers btn-block mt-0 mr-2 d-flex justify-content-center">
+                <fa-icon *ngIf="isSaved(elem)"
+                         [icon]="'check'"></fa-icon>
+                <fa-icon *ngIf="!isSaved(elem)"
+                         [icon]="'save'"></fa-icon>
+              </button>
+
+              <button (click)="startQuiz(elem)"
+                      [ngbTooltip]="'component.name_management.start_session.title' | translate"
+                      class="btn btn-outline-success btn-block mt-0 mr-2 d-flex justify-content-center">
+                <fa-icon [icon]="isStartingQuiz === elem ? 'spinner' : 'paper-plane'"
+                         [spin]="isStartingQuiz === elem"></fa-icon>
+              </button>
+
+            </ng-container>
+
+            <button (click)="editQuiz(elem)"
+                    *ngIf="isAuthorizedToModifyQuiz()"
+                    [ngbTooltip]="'component.name_management.edit_session.title' | translate"
+                    class="btn btn-outline-warning btn-block mt-0 mr-2 d-flex justify-content-center">
+              <fa-icon [icon]="'edit'"></fa-icon>
+            </button>
+
+            <button (click)="exportQuiz(elem)"
+                    *ngIf="isAuthorizedToModifyQuiz()"
+                    [ngbTooltip]="'component.name_management.export.title' | translate"
+                    class="btn btn-outline-primary btn-block mt-0 mr-2 d-flex justify-content-center">
+              <fa-icon [icon]="'download'"></fa-icon>
+            </button>
+
+            <button (click)="deleteQuiz(elem)"
+                    [disabled]="!connectionService.serverAvailable"
+                    [ngbTooltip]="'component.name_management.delete_session.title' | translate"
+                    class="btn btn-outline-danger btn-block mt-0 d-flex justify-content-center">
+              <fa-icon [icon]="isDeletingQuiz === elem ? 'spinner' : 'trash'"
+                       [spin]="isDeletingQuiz === elem"></fa-icon>
             </button>
           </div>
+
         </div>
-
-        <ng-container *ngIf="getUniqueTags(elem).length">
-          <p class="card-text">
-            <small>{{'component.name_management.used-pool-tags' | translate}}:</small>
-          </p>
-          <small class="font-italic d-block">
-            {{getUniqueTags(elem).join(', ')}}
-          </small>
-        </ng-container>
-      </div>
-
-      <div class="card-footer">
-
-        <div class="d-flex">
-          <ng-container *ngIf="elem.isValid() && connectionService.serverAvailable">
-
-            <button (click)="saveQuiz(i)"
-                    *ngIf="isAuthorizedToSaveQuiz() && isAuthorizedToModifyQuiz()"
-                    [ngbTooltip]="'component.name_management.save_session.title' | translate"
-                    class="btn btn-outline-invers btn-block mt-0 mr-2 d-flex justify-content-center">
-              <fa-icon *ngIf="isSaved(i)"
-                       [icon]="'check'"></fa-icon>
-              <fa-icon *ngIf="!isSaved(i)"
-                       [icon]="'save'"></fa-icon>
-            </button>
-
-            <button (click)="startQuiz(elem)"
-                    [ngbTooltip]="'component.name_management.start_session.title' | translate"
-                    class="btn btn-outline-success btn-block mt-0 mr-2 d-flex justify-content-center">
-              <fa-icon [icon]="isStartingQuiz === elem ? 'spinner' : 'paper-plane'"
-                       [spin]="isStartingQuiz === elem"></fa-icon>
-            </button>
-
-          </ng-container>
-
-          <button (click)="editQuiz(i)"
-                  *ngIf="isAuthorizedToModifyQuiz()"
-                  [ngbTooltip]="'component.name_management.edit_session.title' | translate"
-                  class="btn btn-outline-warning btn-block mt-0 mr-2 d-flex justify-content-center">
-            <fa-icon [icon]="'edit'"></fa-icon>
-          </button>
-
-          <button (click)="exportQuiz(i)"
-                  *ngIf="isAuthorizedToModifyQuiz()"
-                  [ngbTooltip]="'component.name_management.export.title' | translate"
-                  class="btn btn-outline-primary btn-block mt-0 mr-2 d-flex justify-content-center">
-            <fa-icon [icon]="'download'"></fa-icon>
-          </button>
-
-          <button (click)="deleteQuiz(elem)"
-                  [disabled]="!connectionService.serverAvailable"
-                  [ngbTooltip]="'component.name_management.delete_session.title' | translate"
-                  class="btn btn-outline-danger btn-block mt-0 d-flex justify-content-center">
-            <fa-icon [icon]="isDeletingQuiz === elem ? 'spinner' : 'trash'"
-                     [spin]="isDeletingQuiz === elem"></fa-icon>
-          </button>
-        </div>
-
       </div>
     </div>
-  </div>
+
+    <div *ngIf="!result.length"
+         class="col-12 mt-5">
+      <h4 class="text-center">{{'component.name_management.no_sessions_matched' | translate}}</h4>
+    </div>
+  </ng-container>
 </div>
