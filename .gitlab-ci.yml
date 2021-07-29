@@ -1,6 +1,3 @@
-variables:
-  MIRROR_REPO: git@github.com:thm-projects/arsnova.click-v2-frontend.git
-
 stages:
   - install
   - test
@@ -81,33 +78,6 @@ build_staging:
     - *staging_server_env
     - *docker_push
 
-build_beta:
-  <<: *build_template
-  only:
-    - beta
-  environment:
-    name: Beta
-  variables:
-    VERSION: 2.0.0-beta
-    SERVICE_NAME: beta
-    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-beta
-  script:
-    - *staging_server_env
-    - *docker_push
-
-build-westermann:
-  <<: *build_template
-  only:
-    - westermann
-  environment:
-    name: Westermann
-  variables:
-    VERSION: 2.0.0-westermann
-    SERVICE_NAME: westermann
-    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-westermann
-  script:
-    - *docker_push
-
 ts_lint:
   stage: test
   tags:
@@ -155,11 +125,13 @@ sonarqube:
     - npm i
     - sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=https://scm.thm.de/sonar/
 
-deploy:
+deploy_staging:
   stage: deploy
   only:
     - staging
-    - beta
+  needs:
+    - job: build_staging
+      optional: true
   tags:
     - ssh
   script:
@@ -170,26 +142,9 @@ deploy_master:
   stage: deploy
   only:
     - master
+  needs: ["build_master"]
   tags:
     - ssh
   script:
     - *server_deploy
     - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /root/docker-compose.yml up --no-deps -d frontend && docker image prune -af"
-
-sync_mirror:
-  stage: deploy
-  tags:
-    - git
-  when: always
-  allow_failure: true
-  dependencies: []
-  only:
-    - master
-    - staging
-  script:
-    - eval $(ssh-agent -s)
-    - mkdir ~/.ssh && echo "$SYNC_SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - ssh-add <(echo "$SYNC_SSH_PRIVATE_KEY")
-    - git clone --bare "$CI_REPOSITORY_URL" mirror.git
-    - cd mirror.git
-    - git push --mirror "$MIRROR_REPO"
