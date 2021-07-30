@@ -1,82 +1,8 @@
 stages:
-  - install
   - test
   - analyze
   - build
   - deploy
-
-.build_template: &build_template
-  stage: build
-  services:
-    - name: docker:19.03.1-dind
-      alias: docker
-  variables:
-    DOCKER_TLS_CERTDIR: ""
-  tags:
-    - docker-compose
-  dependencies: []
-  cache: {}
-  artifacts:
-    expire_in: 2 mins
-    paths:
-      - variables
-      - private_key
-
-.docker_push_template: &docker_push |
-  docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  docker-compose build $CI_COMMIT_REF_NAME
-  docker push "$CI_IMAGE_NAME:$VERSION"
-
-.staging_server_env_template: &staging_server_env |
-  echo "export CI_CONTAINER_INSTANCE_NAME=$CI_CONTAINER_INSTANCE_NAME" >> variables
-  echo "export SSH_URL=$STAGING_FRONTEND_URL" >> variables
-  echo "export SSH_CMD=$STAGING_SSH" >> variables
-  echo "export VERSION=$VERSION" >> variables
-  echo "export SERVICE_NAME=$SERVICE_NAME" >> variables
-  echo "$STAGING_SSH_PRIVATE_KEY" >> private_key
-
-.production_server_env_template: &production_server_env |
-  echo "export CI_CONTAINER_INSTANCE_NAME=$CI_CONTAINER_INSTANCE_NAME" >> variables
-  echo "export SSH_URL=$PRODUCTION_FRONTEND_URL" >> variables
-  echo "export SSH_CMD=$PRODUCTION_SSH" >> variables
-  echo "export VERSION=$VERSION" >> variables
-  echo "export SERVICE_NAME=$SERVICE_NAME" >> variables
-  echo "$PRODUCTION_SSH_PRIVATE_KEY" >> private_key
-
-.server_deploy_template: &server_deploy |
-  source variables
-  eval $(ssh-agent -s)
-  mkdir ~/.ssh
-  ssh-keyscan "$SSH_URL" >> ~/.ssh/known_hosts
-  ssh-add <(cat private_key)
-
-build_master:
-  <<: *build_template
-  only:
-    - master
-  environment:
-    name: Master
-  variables:
-    VERSION: 2.0.0
-    SERVICE_NAME: master
-    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-master
-  script:
-    - *production_server_env
-    - *docker_push
-
-build_staging:
-  <<: *build_template
-  only:
-    - staging
-  environment:
-    name: Staging
-  variables:
-    VERSION: 2.0.0-staging
-    SERVICE_NAME: staging
-    CI_CONTAINER_INSTANCE_NAME: arsnova-click-frontend-staging
-  script:
-    - *staging_server_env
-    - *docker_push
 
 ts_lint:
   stage: test
@@ -125,26 +51,39 @@ sonarqube:
     - npm i
     - sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.host.url=https://scm.thm.de/sonar/
 
-deploy_staging:
-  stage: deploy
+build_image:
+  stage: build
   only:
     - staging
-  needs:
-    - job: build_staging
-      optional: true
+    - master
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   tags:
-    - ssh
+    - kaniko
   script:
-    - *server_deploy
-    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /home/arsnova/arsnova-click-docker/docker-compose-frontend.yml -p arsnova-click-frontend up --no-deps -d $SERVICE_NAME && docker image prune -af"
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context     "$CI_PROJECT_DIR"
+      --dockerfile  "$CI_PROJECT_DIR/Dockerfile"
+      --build-arg   buildCmd="PROD"
+      --build-arg   targetUrl="https://antworte.jetzt"
+      --build-arg   themes="[\"Material\",\"blackbeauty\"]"
+      --build-arg   PUPPETEER_SKIP_CHROMIUM_DOWNLOAD="true"
+      --build-arg   CHROMIUM_PATH="/usr/bin/chromium-browser"
+      --build-arg   CHROME_BIN="CHROME_BIN"
+      --destination "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
 
-deploy_master:
+deploy:
   stage: deploy
   only:
     - master
-  needs: ["build_master"]
   tags:
     - ssh
   script:
-    - *server_deploy
-    - ssh $SSH_CMD "docker pull $CI_IMAGE_NAME:$VERSION && docker rm -f $CI_CONTAINER_INSTANCE_NAME ; docker-compose -f /root/docker-compose.yml up --no-deps -d frontend && docker image prune -af"
+    - eval $(ssh-agent -s)
+    - mkdir ~/.ssh
+    - ssh-keyscan "$SERVER_URL" >> ~/.ssh/known_hosts
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - ssh $SSH_CMD "touch ~/deploy"
