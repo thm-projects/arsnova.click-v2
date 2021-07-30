@@ -46,7 +46,6 @@ sonarqube:
   dependencies:
     - npm_test
   only:
-    - deployment-adjustments-for-fragjetzt-server
     - staging
   script:
     - npm i
@@ -55,7 +54,6 @@ sonarqube:
 build_image:
   stage: build
   only:
-    - deployment-adjustments-for-fragjetzt-server
     - staging
     - master
   image:
@@ -80,7 +78,6 @@ build_image:
 deploy:
   stage: deploy
   only:
-    - deployment-adjustments-for-fragjetzt-server
     - master
   tags:
     - ssh
