@@ -78,7 +78,7 @@ build_image:
 deploy:
   stage: deploy
   only:
-    - master
+    - staging
   tags:
     - ssh
   script:
