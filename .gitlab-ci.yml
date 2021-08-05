@@ -79,6 +79,7 @@ deploy:
   stage: deploy
   only:
     - staging
+    - master
   tags:
     - ssh
   script:
@@ -86,4 +87,4 @@ deploy:
     - mkdir ~/.ssh
     - ssh-keyscan "$SERVER_URL" >> ~/.ssh/known_hosts
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
-    - ssh $SSH_CMD "touch ~/deploy"
+    - ssh $SSH_CMD "touch ~/deploy_$CI_COMMIT_REF_SLUG"
