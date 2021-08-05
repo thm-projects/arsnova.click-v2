@@ -1,43 +1,43 @@
-$primary: #00796B;
-$secondary: white;
+$primary: moccasin;
+$secondary: #86c15d;
 $invers: rebeccapurple;
-$light: #B2DFDB;
-$dark: black;
-$info: #00CCB9;
-$success: #006000;
-$warning: #FF9800;
-$danger: #b3190e;
+$light: #f1ada0;
+$dark: white;
+$info: #26b5d2;
+$success: #86c15d;
+$warning: #f8c362;
+$danger: #e93458;
 
-$primary_text_color: white;
+$primary_text_color: #757575;
 $secondary_text_color: #757575;
 
 $modal-content-bg: white;
-$modal-content-color: #000c19;
+$modal-content-color: #212121;
 $modal-header-border-color: transparent;
 
-$body-bg: #009688;
+$body-bg: $primary;
 $body-color: $primary_text_color;
 
 $text-muted: $secondary_text_color;
 
 $bg-pre: $secondary;
 
-$border-loader_wrapper-outer_spin: #3498db;
+$border-loader_wrapper-outer_spin: #26b5d2;
 $border-loader_wrapper-middle_spin: #e74c3c;
-$border-loader_wrapper-inner_spin: #f9c922;
+$border-loader_wrapper-inner_spin: #f5bc62;
 
 $bg-answer-result-correct: #00a200;
 $fg-answer-result-correct: $primary_text_color;
 $bg-answer-result-partially-correct: $invers;
 $fg-answer-result-partially-correct: $primary_text_color;
-$bg-answer-result-wrong: #f44336;
+$bg-answer-result-wrong: #e74c3c;
 $fg-answer-result-wrong: $primary_text_color;
 
 $progress-bg: transparent;
 
-$link-color: #efefaa;
+$link-color: orange;
 $link-decoration: none;
-$link-hover-color: #eaeac9;
+$link-hover-color: $primary_text_color;
 $link-hover-decoration: underline;
 
 $corner-radius: 10px;
@@ -57,66 +57,66 @@ $input-focus-border-color: none;
 $modal-footer-border-color: $border-color;
 
 $theme-colors: map-merge(
-    $theme-colors,
-    (
-      invers:$invers,
-    )
+                $theme-colors,
+                (
+                        invers:$invers,
+                )
 );
 
 $colors: map-merge(
-    $colors,
-      (
-      )
+                $colors,
+                        (
+                        )
 );
 
 $bg-footer: $light;
 $footer-color: $dark;
 
 $colorChangingBg: (
-  0: (fg: white, bg: black),
-  50: (fg: white, bg: black),
-  100: (fg: white, bg: black)
+        0: (fg: white, bg: black),
+        50: (fg: white, bg: black),
+        100: (fg: white, bg: black)
 );
 
 $colorChangingOwnNick: (
-  0: (fg: white, bg: #a50101),
-  100: (fg: white, bg: $danger)
+        0: (fg: white, bg: #a50101),
+        100: (fg: white, bg: $danger)
 );
 
 $colorChangingArs: (
-  0: (fg: white, bg: transparent),
-  25: (fg: #FF9800, bg: transparent),
-  50: (fg: white, bg: transparent),
-  75: (fg: white, bg: transparent),
-  100: (fg: white, bg: transparent)
+        0: (fg: orange, bg: transparent),
+        25: (fg: #1661a4, bg: transparent),
+        50: (fg: orange, bg: transparent),
+        75: (fg: orange, bg: transparent),
+        100: (fg: orange, bg: transparent)
 );
 
 $colorChangingNova: (
-  0: (fg: white, bg: transparent),
-  25: (fg: white, bg: transparent),
-  50: (fg: #FF9800, bg: transparent),
-  75: (fg: white, bg: transparent),
-  100: (fg: white, bg: transparent)
+        0: (fg: orange, bg: transparent),
+        25: (fg: orange, bg: transparent),
+        50: (fg: #1661a4, bg: transparent),
+        75: (fg: orange, bg: transparent),
+        100: (fg: orange, bg: transparent)
 );
 
 $colorChangingDot: (
-  0: (fg: white, bg: transparent),
-  25: (fg: white, bg: transparent),
-  50: (fg: white, bg: transparent),
-  75: (fg: #FF9800, bg: transparent),
-  100: (fg: white, bg: transparent)
+        0: (fg: orange, bg: transparent),
+        25: (fg: orange, bg: transparent),
+        50: (fg: orange, bg: transparent),
+        75: (fg: #1661a4, bg: transparent),
+        100: (fg: orange, bg: transparent)
 );
 
 $colorChangingClick: (
-  0: (fg: #FF9800, bg: transparent),
-  25: (fg: white, bg: transparent),
-  50: (fg: white, bg: transparent),
-  75: (fg: white, bg: transparent),
-  100: (fg: #FF9800, bg: transparent)
+        0: (fg: #1661a4, bg: transparent),
+        25: (fg: orange, bg: transparent),
+        50: (fg: orange, bg: transparent),
+        75: (fg: orange, bg: transparent),
+        100: (fg: #1661a4, bg: transparent)
 );
 
 $logo-bg: transparent;
-$logo-fg: (".arsnova-logo-ars": white, ".arsnova-logo-nova": $warning, ".arsnova-logo-click": white);
+$logo-fg: (".arsnova-logo-ars": #1661a4, ".arsnova-logo-nova": #1661a4, ".arsnova-logo-click": #1661a4);
 
 $popover-body-color: initial;
 
@@ -126,6 +126,7 @@ $code-color: $primary_text_color;
 
 .btn-secondary {
   border-color: #d3d3d3;
+  color: white;
 }
 
 .card {
