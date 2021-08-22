@@ -176,3 +176,29 @@ iframe {
   }
 
 }
+
+.ucc-modal {
+  overflow: auto;
+
+  @include media-breakpoint-down(sm) {
+    .ucc-buttons {
+      flex-wrap: wrap;
+
+      .ucc-button:nth-child(1) {
+        margin-bottom: var(--ucc-button-spacing);
+      }
+
+      .ucc-button {
+        flex-basis: 100% !important;
+      }
+    }
+
+    .ucc-consent-type {
+      flex-wrap: wrap;
+
+      .ucc-consent-type__content {
+        flex-basis: 100%;
+      }
+    }
+  }
+}

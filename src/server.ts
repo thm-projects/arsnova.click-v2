@@ -18,7 +18,7 @@ export function app(): Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/frontend/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index.html';
-  const themeHashMap = JSON.parse(readFileSync(join(distFolder, 'assets/theme-hashes.json'), {encoding: 'UTF-8'}));
+  const themeHashMap = JSON.parse(readFileSync(join(distFolder, 'assets/theme-hashes.json'), {encoding: 'utf-8'}));
 
   // gzip
   server.use(compression());
@@ -27,7 +27,7 @@ export function app(): Express {
   // proxy
   if (process.env.NODE_ENV === 'development') {
     const proxy = require('http-proxy-middleware');
-    const proxyFile = JSON.parse(readFileSync(join(process.cwd(), 'src/proxy.conf.json'), {encoding: 'UTF-8'}));
+    const proxyFile = JSON.parse(readFileSync(join(process.cwd(), 'src/proxy.conf.json'), {encoding: 'utf-8'}));
     Object.entries(proxyFile).forEach(([path, config]) => {
       const proxyConfig = proxy.createProxyMiddleware(path, config);
       server.use(path, proxyConfig);
@@ -65,7 +65,7 @@ export function app(): Express {
     const hash = themeHashMap.find(value => value.theme === theme)?.hash ?? themeHashMap.find(value => value.theme === environment.defaultTheme);
     const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
     const logoHref = `theme/${theme}/logo_s32x32.png`;
-    const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'UTF-8'});
+    const indexHtmlContent = readFileSync(join(distFolder, indexHtml), {encoding: 'utf-8'});
     const updatedIndexHtml = indexHtmlContent.replace(/theme-default.css/g, href).replace(/logo.svg/, logoHref);
 
     res.render(indexHtml, {

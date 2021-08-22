@@ -2,10 +2,10 @@ import { isPlatformServer } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { IconParams, IconProp } from '@fortawesome/fontawesome-svg-core';
 import { RxStompService } from '@stomp/ng2-stompjs';
-import { RxStompState } from '@stomp/rx-stomp';
 import { SimpleMQ } from 'ng2-simple-mq';
-import { Subject } from 'rxjs';
-import { filter, switchMapTo, takeUntil } from 'rxjs/operators';
+import { of, Subject, zip } from 'rxjs';
+import { catchError, filter, switchMapTo, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { MessageProtocol } from '../../lib/enums/Message';
 import { UserRole } from '../../lib/enums/UserRole';
 import { IServerStatistics } from '../../lib/interfaces/IServerStatistics';
@@ -72,12 +72,14 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.connectionService.serverStatusEmitter.pipe( //
-      filter(value => Boolean(value)), //
-      switchMapTo(this.rxStompService.connectionState$), //
-      filter(value => value === RxStompState.OPEN), //
-      switchMapTo(this.i18nService.initialized), //
+    zip(
+      this.connectionService.serverStatusEmitter,
+      this.connectionService.websocketStatusEmitter,
+      this.i18nService.initialized,
+    ).pipe( //
+      filter(value => value.every(v => v === true)), //
       switchMapTo(this.statisticsApiService.getBaseAppStatistics()), //
+      catchError(err => of(err)),
       takeUntil(this._destroy$), //
     ).subscribe(data => {
       this.statistics = data;
@@ -130,33 +132,38 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         amount: this.statistics.quiz.active,
         title: 'component.statistics.active-quizzes.title',
         content: 'component.statistics.active-quizzes.content',
-      }, {
-        iconColor: 'var(--pink)',
-        iconLayer: [
-          {
-            classes: ['fas', 'question'],
-            transform: 'shrink-3 left-5' as any,
-          },
-          {
-            classes: ['fas', 'question'],
-            transform: 'shrink-6 right-2 rotate-50' as any,
-          },
-          {
-            classes: ['fas', 'question'],
-            transform: 'shrink-5 bottom-5 left-12 rotate--30' as any,
-          },
-        ],
-        amount: this.statistics.quiz.pool.questions,
-        title: 'component.statistics.total-pool-questions.title',
-        content: 'component.statistics.total-pool-questions.content',
-      }, {
-        iconColor: 'var(--orange)',
-        icon: 'tags',
-        amount: this.statistics.quiz.pool.tags,
-        title: 'component.statistics.total-pool-tags.title',
-        content: 'component.statistics.total-pool-tags.content',
       },
     );
+
+    if (environment.enableQuizPool) {
+      this.data.push({
+          iconColor: 'var(--pink)',
+          iconLayer: [
+            {
+              classes: ['fas', 'question'],
+              transform: 'shrink-3 left-5' as any,
+            },
+            {
+              classes: ['fas', 'question'],
+              transform: 'shrink-6 right-2 rotate-50' as any,
+            },
+            {
+              classes: ['fas', 'question'],
+              transform: 'shrink-5 bottom-5 left-12 rotate--30' as any,
+            },
+          ],
+          amount: this.statistics.quiz.pool.questions,
+          title: 'component.statistics.total-pool-questions.title',
+          content: 'component.statistics.total-pool-questions.content',
+        }, {
+          iconColor: 'var(--orange)',
+          icon: 'tags',
+          amount: this.statistics.quiz.pool.tags,
+          title: 'component.statistics.total-pool-tags.title',
+          content: 'component.statistics.total-pool-tags.content',
+        },
+      );
+    }
 
     if (this.statistics.quiz.active) {
       this.data.push({

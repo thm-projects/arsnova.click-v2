@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -35,7 +35,7 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
   let component: ReadingConfirmationComponent;
   let fixture: ComponentFixture<ReadingConfirmationComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({
@@ -74,16 +74,16 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(ReadingConfirmationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should create', async(() => {
+  it('should create', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
-  it('should contain a TYPE reference', async(() => {
+  it('should contain a TYPE reference', waitForAsync(() => {
     expect(ReadingConfirmationComponent.TYPE).toEqual('ReadingConfirmationComponent');
   }));
 
@@ -95,7 +95,7 @@ describe('QuizFlow: ReadingConfirmationComponent', () => {
     expect(sanitizer.bypassSecurityTrustHtml).toHaveBeenCalled();
   }));
 
-  it('#confirmReading', async(inject([Router], (router: Router) => {
+  it('#confirmReading', waitForAsync(inject([Router], (router: Router) => {
     spyOn(component, 'confirmReading').and.callFake(() => {});
 
     component.confirmReading();

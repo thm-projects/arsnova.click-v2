@@ -12,6 +12,7 @@
   <input #inputElement
          #instance="ngbTypeahead"
          (click)="click$.next(inputElement.value)"
+         (keydown.enter)="saveTag()"
          (focus)="focus$.next(inputElement.value)"
          [(ngModel)]="tagName"
          [editable]='true'

@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Angulartics2Module } from 'angulartics2';
 import { ArsnovaClickAngulartics2Piwik } from '../../shared/tracking/ArsnovaClickAngulartics2Piwik';
@@ -7,7 +7,7 @@ import { ArsnovaClickAngulartics2Piwik } from '../../shared/tracking/ArsnovaClic
 import { TrackingService } from './tracking.service';
 
 describe('TrackingService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule, HttpClientTestingModule, Angulartics2Module.forRoot(),
@@ -18,7 +18,7 @@ describe('TrackingService', () => {
     });
   }));
 
-  it('should be created', async(inject([TrackingService], (service: TrackingService) => {
+  it('should be created', waitForAsync(inject([TrackingService], (service: TrackingService) => {
     expect(service).toBeTruthy();
   })));
 });

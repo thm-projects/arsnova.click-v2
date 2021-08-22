@@ -5,6 +5,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 export const environment: IEnvironment = {
   production: true,
   title: Title.Default,
+  appName: 'arsnova.click',
   version: '__VERSION__',
   sentryDSN: 'https://14415a5e358f4c04b6a878072d352c4e@sentry.arsnova.click/2',
   serverEndpoint: '/backend',
@@ -24,7 +25,7 @@ export const environment: IEnvironment = {
   enableBonusToken: true,
   forceQuizTheme: false,
   loginMechanism: [LoginMechanism.UsernamePassword],
-  showLoginButton: false,
+  showLoginButton: true,
   showJoinableQuizzes: true,
   showPublicQuizzes: true,
   persistQuizzes: true,
@@ -38,4 +39,6 @@ export const environment: IEnvironment = {
   enableQuizPool: true,
   showInfoButtonsInFooter: false,
   vapidPublicKey: 'BFy8kQxiV2p43Z8Xqs6isn7QRVDEvkqreDH3wH0QlDLDn8cZkbM41iOWwxUBsw_R0Y4Bv8AkI9sKj82P18q41z0',
+  markdownFilePostfix: 'thm',
+  loginButtonLabelConfiguration: 'administration',
 };

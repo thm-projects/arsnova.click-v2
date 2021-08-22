@@ -93,7 +93,7 @@
                [icon]="'spinner'"
                [spin]="true"></fa-icon>
 
-      <fa-icon *ngIf="quizService?.currentQuestion()?.requiredForToken"
+      <fa-icon *ngIf="environment.enableBonusToken && quizService?.currentQuestion()?.requiredForToken"
                [icon]="['fas', 'key']"
                class="text-warning ml-sm-2"
                [ngbTooltip]="'component.quiz_summary.required-for-token.label' | translate"></fa-icon>
@@ -104,7 +104,7 @@
                          [answers]="quizService?.currentQuestion()?.displayAnswerText === false ? answers : null"
                          [tags]="quizService?.currentQuestion()?.tags"></app-voting-question>
 
-    <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
+    <div *ngIf="showLeaderBoardButton(selectedQuestionIndex) || showQuestionButton(selectedQuestionIndex)"
          class="d-flex">
       <button (click)="hasTriggeredNavigation = true"
               *ngIf="showLeaderBoardButton(selectedQuestionIndex)"

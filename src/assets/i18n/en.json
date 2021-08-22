@@ -4,14 +4,28 @@
     "description": "A bit like Kahoot!, a bit like Socrative, but lots of ARSnova!"
   },
   "global": {
-    "arsnova_slogan": "Quiz app for MINT lessons",
+    "arsnova_slogan": "Quiz app for lessons",
     "yes": "Yes",
     "no": "No",
     "close_window": "Close window",
     "cookie_consent": {
       "message": "arsnova✦click uses cookies.",
       "dismiss": "I have read and agree.",
-      "learn_more": "More about data privacy…"
+      "learn_more": "More about data privacy…",
+      "back": "Back",
+      "accept": "Accept",
+      "customizeButton": "Customize",
+      "save": "Save",
+      "customize": "Cookie Settings",
+      "reset": "Reset cookie settings",
+      "base": {
+        "title": "Base Functions",
+        "description": "These cookies are required for the functionality of this website and can\\'t be disabled."
+      },
+      "analytics": {
+        "title": "Statistics",
+        "description": "We use these cookies to improve our website."
+      }
     },
     "console-log-warning": "WARNING! This will not help you cheat on any quiz! Anyone who told you to use these tools could try to compromise your computer.",
     "abort": "Abort",
@@ -72,7 +86,8 @@
         "dataprivacy": "Data Privacy",
         "member_group": "Teams",
         "edit-i18n": "Edit i18n",
-        "login": "Login",
+        "login_login": "Login",
+        "login_administration": "Administration",
         "logout": "Logout",
         "save_quiz": "Save Quiz",
         "admin": "Administrate",
@@ -365,6 +380,7 @@
         "label": "Export"
       },
       "no_sessions": "There are no quizzes stored in your browser.",
+      "no_sessions_matched": "No quizzes could be found for the entered search term",
       "create_abcd_session": "Start ABCD quiz",
       "enter_server_password": "Enter the server password here",
       "public-quizzes": "Looking for more? Click here to choose from a list of {amount} public {amount, plural, =0{quizzes} one{quiz} other{quizzes}}!",
@@ -372,7 +388,8 @@
         "title": "Save Quiz",
         "label": "Save"
       },
-      "used-pool-tags": "Used Tags"
+      "used-pool-tags": "Used Tags",
+      "search-for-quiz-name": "Search for Quiz Name"
     },
     "leaderboard": {
       "header": "Leaderboard",
@@ -817,6 +834,8 @@
     "outdated-version": {
       "title": "Your version of arsnova✦click is outdated",
       "understood": "Understood!",
+      "current-version": "Currently Installed: {version}",
+      "target-version": "New Version: {version}",
       "funnel": {
         "1": {
           "header": "Please update your version of arsnova✦click. This is important to ensure that you receive the latest features and bug fixes.",

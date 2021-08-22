@@ -1,11 +1,11 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
 import { HeaderLabelService } from './header-label.service';
 
 describe('HeaderLabelService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, RouterTestingModule, HttpClientTestingModule,
@@ -14,7 +14,7 @@ describe('HeaderLabelService', () => {
     });
   }));
 
-  it('should be created', async(inject([HeaderLabelService], (service: HeaderLabelService) => {
+  it('should be created', waitForAsync(inject([HeaderLabelService], (service: HeaderLabelService) => {
     expect(service).toBeTruthy();
   })));
 });

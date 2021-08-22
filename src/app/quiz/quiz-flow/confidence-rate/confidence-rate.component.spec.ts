@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -34,7 +34,7 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
   let component: ConfidenceRateComponent;
   let fixture: ComponentFixture<ConfidenceRateComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({
@@ -73,25 +73,25 @@ describe('QuizFlow: ConfidenceRateComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(ConfidenceRateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should create', async(() => {
+  it('should create', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should have a TYPE reference', async(() => {
+  it('should have a TYPE reference', waitForAsync(() => {
     expect(ConfidenceRateComponent.TYPE).toEqual('ConfidenceRateComponent');
   }));
 
-  it('#getConfidenceLevel', async(() => {
+  it('#getConfidenceLevel', waitForAsync(() => {
     expect(component.getConfidenceLevelTranslation()).toEqual('component.voting.confidence_level.very_sure');
   }));
 
-  it('#sendConfidence', async(() => {
+  it('#sendConfidence', waitForAsync(() => {
     spyOn(component, 'sendConfidence').and.callFake(() => new Promise<Subscription>(resolve => resolve()));
 
     component.sendConfidence();

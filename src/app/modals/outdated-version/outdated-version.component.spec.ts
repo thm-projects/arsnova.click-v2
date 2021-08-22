@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -12,7 +12,7 @@ describe('OutdatedVersionComponent', () => {
   let component: OutdatedVersionComponent;
   let fixture: ComponentFixture<OutdatedVersionComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [I18nTestingModule, HttpClientTestingModule],
       providers: [

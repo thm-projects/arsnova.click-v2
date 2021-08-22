@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -27,7 +27,7 @@ describe('AvailableQuizzesComponent', () => {
   let component: AvailableQuizzesComponent;
   let fixture: ComponentFixture<AvailableQuizzesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule, NgbModule,
@@ -54,21 +54,21 @@ describe('AvailableQuizzesComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(AvailableQuizzesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should have a TYPE reference', async(() => {
+  it('should have a TYPE reference', waitForAsync(() => {
     expect(AvailableQuizzesComponent.TYPE).toEqual('AvailableQuizzesComponent');
   }));
 
-  it('#dismiss', async(inject([NgbActiveModal], (activeModal: NgbActiveModal) => {
+  it('#dismiss', waitForAsync(inject([NgbActiveModal], (activeModal: NgbActiveModal) => {
     spyOn(component, 'dismiss').and.callThrough();
     spyOn(activeModal, 'dismiss').and.callThrough();
 
@@ -78,7 +78,7 @@ describe('AvailableQuizzesComponent', () => {
     expect(activeModal.dismiss).toHaveBeenCalled();
   })));
 
-  it('#abort', async(inject([NgbActiveModal], (activeModal: NgbActiveModal) => {
+  it('#abort', waitForAsync(inject([NgbActiveModal], (activeModal: NgbActiveModal) => {
     spyOn(component, 'abort').and.callThrough();
     spyOn(activeModal, 'close').and.callThrough();
 
@@ -88,7 +88,7 @@ describe('AvailableQuizzesComponent', () => {
     expect(activeModal.close).toHaveBeenCalled();
   })));
 
-  it('#next', async(inject([NgbActiveModal], (activeModal: NgbActiveModal) => {
+  it('#next', waitForAsync(inject([NgbActiveModal], (activeModal: NgbActiveModal) => {
     spyOn(component, 'next').and.callThrough();
     spyOn(activeModal, 'close').and.callThrough();
 

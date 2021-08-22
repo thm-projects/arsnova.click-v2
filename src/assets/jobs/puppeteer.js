@@ -33,8 +33,8 @@ async function asyncForEach(array, callback) {
           'arsnova.click' : '';
 
   await page.setCookie({
-    'name': 'cookieconsent_status',
-    'value': 'dismiss',
+    'name': 'ucc_consents',
+    'value': '[%22base%22]',
     'domain': host,
     'path': '/',
     'expires': (new Date()).getTime() + (1000 * 60 * 60)

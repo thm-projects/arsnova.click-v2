@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
@@ -8,6 +8,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { RxStompService } from '@stomp/ng2-stompjs';
 import { HotkeysService } from 'angular2-hotkeys';
 import { SimpleMQ } from 'ng2-simple-mq';
+import { QuizFilterPipeMock } from '../../../_mocks/_pipes/QuizFilterPipeMock';
 import { DefaultSettings } from '../../lib/default.settings';
 import { DefaultAnswerEntity } from '../../lib/entities/answer/DefaultAnswerEntity';
 import { SingleChoiceQuestionEntity } from '../../lib/entities/question/SingleChoiceQuestionEntity';
@@ -78,7 +79,7 @@ describe('QuizOverviewComponent', () => {
     ],
   });
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, JwtModule.forRoot({
@@ -118,20 +119,20 @@ describe('QuizOverviewComponent', () => {
           useValue: {}
         },
       ],
-      declarations: [QuizOverviewComponent],
+      declarations: [QuizOverviewComponent, QuizFilterPipeMock],
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(QuizOverviewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
-  it('should contain a TYPE reference', async(() => {
+  it('should contain a TYPE reference', waitForAsync(() => {
     expect(QuizOverviewComponent.TYPE).toEqual('QuizOverviewComponent');
   }));
 
@@ -156,7 +157,7 @@ describe('QuizOverviewComponent', () => {
       spyOn(router, 'navigate').and.callFake(() => new Promise<boolean>(resolve => {resolve(); }));
       component.sessions.splice(0, -1, validQuiz);
 
-      component.editQuiz(0);
+      component.editQuiz(validQuiz);
 
       expect(quizService.quiz).toEqual(jasmine.objectContaining(validQuiz));
       expect(router.navigate).toHaveBeenCalledWith(jasmine.arrayWithExactContents(['/quiz', 'manager', 'overview']));
@@ -170,7 +171,7 @@ describe('QuizOverviewComponent', () => {
       component.sessions.push(validQuiz);
       const exportData = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(validQuiz));
 
-      await component.exportQuiz(0, (self, event) => {
+      await component.exportQuiz(validQuiz, (self, event) => {
         event.preventDefault();
         event.stopImmediatePropagation();
         expect(self.href).toEqual(exportData);

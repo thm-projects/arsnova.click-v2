@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -27,7 +27,7 @@ describe('QuizPublicComponent', () => {
   let component: QuizPublicComponent;
   let fixture: ComponentFixture<QuizPublicComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, FontAwesomeModule, HttpClientTestingModule, JwtModule.forRoot({

@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { RxStompService } from '@stomp/ng2-stompjs';
@@ -24,7 +24,7 @@ import { QuizService } from './quiz.service';
 describe('QuizService', () => {
   let quizMock: QuizEntity;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, HttpClientTestingModule, RouterTestingModule, JwtModule.forRoot({

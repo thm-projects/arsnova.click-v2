@@ -14,7 +14,6 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "extractCss": true,
             "outputPath": "dist/frontend/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -99,7 +98,6 @@
                 "styles": false,
                 "scripts": true
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -152,7 +150,6 @@
                 "styles": false,
                 "scripts": true
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -205,7 +202,6 @@
                 "styles": false,
                 "scripts": true
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -258,7 +254,6 @@
                 "styles": false,
                 "scripts": true
               },
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,

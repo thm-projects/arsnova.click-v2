@@ -28,9 +28,9 @@ export const DefaultSettings = {
     },
     question: {
       dispayAnswerText: true,
-      showOneAnswerPerRow: false,
+      showOneAnswerPerRow: true,
       questionText: '',
-      timer: 60,
+      timer: 30,
       multipleSelectionEnabled: true,
       rangeMin: 0,
       rangeMax: 60,

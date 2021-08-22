@@ -132,3 +132,16 @@ $popover-body-color: initial;
 .card {
   color: $secondary_text_color
 }
+
+universal-cookie-consent {
+  --ucc-color-primary: #ff9800;
+  --ucc-color-primary-contrast: #000000;
+  --ucc-color-secondary: #3a8dc5;
+  --ucc-color-secondary-contrast: #ffffff;
+  --ucc-text-color: #000000;
+  --ucc-link-color: #000000cc;
+  --ucc-backdrop-color: rgba(0, 0, 0, 0.6);
+  --ucc-modal-background: #A6C4E6;
+  --ucc-switch-background: #1f1f1f;
+  --ucc-consent-type-description-color: #000000;
+}

@@ -473,3 +473,31 @@ $font-text: 'Lato', Arial, sans-serif !important;
 
 $color-markdown-blockquote: $primary_text_color !default;
 $border-left-color-markdown-blockquote: $secondary-text_color !default;
+
+universal-cookie-consent {
+  --ucc-text-size: 1rem;
+  --ucc-font-family: inherit;
+
+  --ucc-modal-width: 24rem;
+  --ucc-modal-padding: 4rem;
+  --ucc-modal-border-radius: 0;
+
+  --ucc-heading-size: 2rem;
+  --ucc-heading-weight: 500;
+
+  --ucc-button-radius: 0;
+  --ucc-button-padding-x: 1rem;
+  --ucc-button-padding-y: 0.5rem;
+  --ucc-button-spacing: 0.5rem;
+  --ucc-button-font-size: 1rem;
+  --ucc-button-weight: 500;
+
+  --ucc-switch-height: 2rem;
+  --ucc-switch-width: 4rem;
+  --ucc-switch-radius: 1rem;
+  --ucc-switch-toggle-size: 1.5rem;
+  --ucc-switch-toggle-radius: 100%;
+  --ucc-consent-type-title-size: 1.125rem;
+  --ucc-consent-type-title-weight: 500;
+  --ucc-consent-type-description-size: 0.875rem;
+}

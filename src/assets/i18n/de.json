@@ -4,14 +4,28 @@
     "description": "Ein bisschen wie Kahoot!, ein bisschen wie Socrative, aber ganz viel ARSnova!"
   },
   "global": {
-    "arsnova_slogan": "Quiz-App für den MINT-Unterricht",
+    "arsnova_slogan": "Quiz-App für den Unterricht",
     "yes": "Ja",
     "no": "Nein",
     "close_window": "Fenster schließen",
     "cookie_consent": {
       "message": "arsnova✦click verwendet Cookies.",
       "dismiss": "Ich bin einverstanden.",
-      "learn_more": "Datenschutzerklärung"
+      "learn_more": "Datenschutzerklärung",
+      "back": "Zurück",
+      "accept": "Akzeptieren",
+      "customizeButton": "Anpassen",
+      "save": "Speichern",
+      "customize": "Cookie Einstellung",
+      "reset": "Cookie-Einstellungen zurücksetzen",
+      "base": {
+        "title": "Basisfunktionen",
+        "description": "Diese Cookies sind erforderlich für die Grundfunktionen dieser Webseite und können nicht deaktiviert werden."
+      },
+      "analytics": {
+        "title": "Statistik",
+        "description": "Wir nutzen diese Cookies um Statistiken zu genutzten Seiten & Funktionen von {APP_NAME} zu erfassen."
+      }
     },
     "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du die Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
     "abort": "Abbrechen",
@@ -72,7 +86,8 @@
         "dataprivacy": "Datenschutz",
         "member_group": "Teams",
         "edit-i18n": "i18n editieren",
-        "login": "Anmelden",
+        "login_login": "Login",
+        "login_administration": "Administration",
         "logout": "Ausloggen",
         "save_quiz": "Quiz speichern",
         "admin": "Administration",
@@ -365,6 +380,7 @@
         "label": "Exportieren"
       },
       "no_sessions": "Es sind keine Quizze in diesem Browser gespeichert.",
+      "no_sessions_matched": "Für den eingegebenen Suchbegriff wurden keine Quizze gefunden",
       "create_abcd_session": "Starte ABC…-Quiz",
       "enter_server_password": "Server-Passwort eingeben",
       "public-quizzes": "Suchst du mehr? Klicke hier, um aus einer Liste von {amount, plural, =0{keinem veröffentlichten Quiz} one{einem veröffentlichten Quiz} other{# veröffentlichten Quizzes} } zu wählen!",
@@ -372,7 +388,8 @@
         "title": "Quiz speichern",
         "label": "Speichern"
       },
-      "used-pool-tags": "Verwendete Tags"
+      "used-pool-tags": "Verwendete Tags",
+      "search-for-quiz-name": "Suche nach Quiznamen"
     },
     "leaderboard": {
       "header": "Rangliste",
@@ -817,6 +834,8 @@
     "outdated-version": {
       "title": "Deine Version von arsnova✦click ist veraltet",
       "understood": "Verstanden!",
+      "current-version": "Aktuell installiert: {version}",
+      "target-version": "Neue Version: {version}",
       "funnel": {
         "1": {
           "header": "Bitte aktualisiere deine Version von arsnova✦click. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",

@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
@@ -28,7 +28,7 @@ describe('MarkdownBarComponent', () => {
   let component: MarkdownBarComponent;
   let fixture: ComponentFixture<MarkdownBarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule,
@@ -43,7 +43,7 @@ describe('MarkdownBarComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faBold);
     library.addIcons(faHeading);
@@ -63,15 +63,15 @@ describe('MarkdownBarComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should have a TYPE reference', async(() => {
+  it('should have a TYPE reference', waitForAsync(() => {
     expect(MarkdownBarComponent.TYPE).toEqual('MarkdownBarComponent');
   }));
 
-  it('#connector', async(inject([TrackingService], (trackingService: TrackingService) => {
+  it('#connector', waitForAsync(inject([TrackingService], (trackingService: TrackingService) => {
     const element = component.markdownBarElements.find(el => el.feature === MarkdownFeature.Bold);
 
     spyOn(component.connectorEmitter, 'emit').and.callFake(() => {});

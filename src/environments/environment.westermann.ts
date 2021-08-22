@@ -5,6 +5,7 @@ import { IEnvironment } from '../app/lib/interfaces/IEnvironment';
 export const environment: IEnvironment = {
   production: true,
   title: Title.Westermann,
+  appName: 'Westermann Quiz',
   version: '__VERSION__',
   serverEndpoint: '/backend',
   stompConfig: {
@@ -34,4 +35,6 @@ export const environment: IEnvironment = {
   enableQuizPool: false,
   showInfoButtonsInFooter: true,
   vapidPublicKey: 'BFy8kQxiV2p43Z8Xqs6isn7QRVDEvkqreDH3wH0QlDLDn8cZkbM41iOWwxUBsw_R0Y4Bv8AkI9sKj82P18q41z0',
+  markdownFilePostfix: 'westermann',
+  loginButtonLabelConfiguration: 'login',
 };

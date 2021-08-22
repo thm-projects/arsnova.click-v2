@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Attendee } from '../../../../lib/attendee/attendee';
@@ -39,7 +39,7 @@ describe('ProgressBarComponent', () => {
   let component: ProgressBarComponent;
   let fixture: ComponentFixture<ProgressBarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, SharedModule, RouterTestingModule, HttpClientTestingModule,
@@ -77,7 +77,7 @@ describe('ProgressBarComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(ProgressBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -95,7 +95,7 @@ describe('ProgressBarComponent', () => {
     }
   ));
 
-  it('#attendeeDataForAnswer', async(() => {
+  it('#attendeeDataForAnswer', waitForAsync(() => {
     const quizService: QuizService = TestBed.inject(QuizService);
     const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
     const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
@@ -123,7 +123,7 @@ describe('ProgressBarComponent', () => {
     });
   }));
 
-  it('#attendeeDataForAnswer anonymous', async(() => {
+  it('#attendeeDataForAnswer anonymous', waitForAsync(() => {
     const quizService: QuizService = TestBed.inject(QuizService);
     const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
     const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
@@ -150,7 +150,7 @@ describe('ProgressBarComponent', () => {
     });
   }));
 
-  it('#attendeeDataForAnswer - RangedQuestion', async(() => {
+  it('#attendeeDataForAnswer - RangedQuestion', waitForAsync(() => {
     const quizService: QuizService = TestBed.inject(QuizService);
     const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
     const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
@@ -178,7 +178,7 @@ describe('ProgressBarComponent', () => {
     });
   }));
 
-  it('#attendeeDataForAnswer - RangedQuestion anonymous', async(() => {
+  it('#attendeeDataForAnswer - RangedQuestion anonymous', waitForAsync(() => {
     const quizService: QuizService = TestBed.inject(QuizService);
     const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
     const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
@@ -205,7 +205,7 @@ describe('ProgressBarComponent', () => {
     });
   }));
 
-  it('#attendeeDataForAnswer - FreeTextQuestion', async(() => {
+  it('#attendeeDataForAnswer - FreeTextQuestion', waitForAsync(() => {
     const quizService: QuizService = TestBed.inject(QuizService);
     const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
     const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);
@@ -233,7 +233,7 @@ describe('ProgressBarComponent', () => {
     });
   }));
 
-  it('#attendeeDataForAnswer - FreeTextQuestion anonymous', async(() => {
+  it('#attendeeDataForAnswer - FreeTextQuestion anonymous', waitForAsync(() => {
     const quizService: QuizService = TestBed.inject(QuizService);
     const attendeeService: AttendeeService = TestBed.inject(AttendeeService);
     const questionTextService: QuestionTextService = TestBed.inject(QuestionTextService);

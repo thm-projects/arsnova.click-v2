@@ -25,11 +25,12 @@ export class QuizOverviewComponent implements OnInit {
   public static readonly TYPE = 'QuizOverviewComponent';
 
   private _sessions: Array<QuizEntity> = [];
-  private _isSaving: Array<number> = [];
+  private _isSaving: Array<string> = [];
 
   public publicQuizAmount: number;
   public isStartingQuiz: QuizEntity;
   public isDeletingQuiz: QuizEntity;
+  public searchText: string;
 
   get sessions(): Array<QuizEntity> {
     return this._sessions;
@@ -101,7 +102,7 @@ export class QuizOverviewComponent implements OnInit {
     });
   }
 
-  public editQuiz(index: number): void {
+  public editQuiz(quiz: QuizEntity): void {
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -111,12 +112,12 @@ export class QuizOverviewComponent implements OnInit {
       label: `edit-quiz`,
     });
 
-    this.quizService.quiz = this.sessions[index];
+    this.quizService.quiz = quiz;
     this.quizService.isOwner = true;
     this.router.navigate(['/quiz', 'manager', 'overview']);
   }
 
-  public async exportQuiz(index: number, onClick?: (self: HTMLAnchorElement, event: MouseEvent) => void): Promise<void> {
+  public async exportQuiz(quiz: QuizEntity, onClick?: (self: HTMLAnchorElement, event: MouseEvent) => void): Promise<void> {
     if (isPlatformServer(this.platformId)) {
       return;
     }
@@ -124,8 +125,8 @@ export class QuizOverviewComponent implements OnInit {
     const a = document.createElement('a');
     const time = new Date();
     const type = 'text/json';
-    const sessionName = this.sessions[index].name;
-    const exportData = `${type};charset=utf-8,${encodeURIComponent(JSON.stringify(this.sessions[index]))}`;
+    const sessionName = quiz.name;
+    const exportData = `${type};charset=utf-8,${encodeURIComponent(JSON.stringify(quiz))}`;
     const timestring = time.getDate() + '_' + (time.getMonth() + 1) + '_' + time.getFullYear();
     const fileName = `${sessionName}-${timestring}.json`;
 
@@ -179,12 +180,12 @@ export class QuizOverviewComponent implements OnInit {
     this.loadData();
   }
 
-  public isSaved(index: number): boolean {
-    return this._isSaving.includes(index);
+  public isSaved(quiz: QuizEntity): boolean {
+    return this._isSaving.includes(quiz.name);
   }
 
-  public saveQuiz(index: number): void {
-    if (this.isSaved(index)) {
+  public saveQuiz(quiz: QuizEntity): void {
+    if (this.isSaved(quiz)) {
       return;
     }
 
@@ -200,16 +201,18 @@ export class QuizOverviewComponent implements OnInit {
         return;
       }
 
+      const index = this.sessions.findIndex(v => v.name === quiz.name);
+
       this.sessions[index].expiry = val.expiry ? new Date(val.expiry) : null;
       this.sessions[index].visibility = val.visibility;
       this.sessions[index].description = val.description;
-      this._isSaving.push(index);
+      this._isSaving.push(quiz.name);
 
       this.storageService.db.Quiz.put(this.sessions[index]);
       this.quizApiService.putSavedQuiz(this.sessions[index]).subscribe(() => {
-        this._isSaving.splice(this._isSaving.indexOf(index), 1);
+        this._isSaving.splice(this._isSaving.indexOf(quiz.name), 1);
       }, () => {
-        this._isSaving.splice(this._isSaving.indexOf(index), 1);
+        this._isSaving.splice(this._isSaving.indexOf(quiz.name), 1);
       });
     });
   }

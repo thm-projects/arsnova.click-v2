@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { JWT_OPTIONS, JwtModule } from '@auth0/angular-jwt';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -19,7 +19,7 @@ describe('KeyOutputComponent', () => {
   let component: KeyOutputComponent;
   let fixture: ComponentFixture<KeyOutputComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         JwtModule.forRoot({
@@ -44,7 +44,7 @@ describe('KeyOutputComponent', () => {
     .compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(KeyOutputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

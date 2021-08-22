@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, TestBed } from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
 import { SwUpdate } from '@angular/service-worker';
 import { TOAST_CONFIG, ToastrService } from 'ngx-toastr';
 import { of, Subject } from 'rxjs';
@@ -50,7 +50,7 @@ describe('UpdateCheckService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should prompt a user when a new version is available', async(() => {
+  it('should prompt a user when a new version is available', waitForAsync(() => {
     const toastService: ToastrService = TestBed.inject(ToastrService);
     spyOn(toastService, 'remove').and.callFake(() => service['swUpdateToast'] = null);
     spyOn(toastService, 'info').and.callFake(() => (

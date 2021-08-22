@@ -1,12 +1,12 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, inject, TestBed } from '@angular/core/testing';
+import { inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { CustomMarkdownService } from '../custom-markdown/custom-markdown.service';
 import { CustomMarkdownServiceMock } from '../custom-markdown/CustomMarkdownServiceMock';
 import { QuestionTextService } from './question-text.service';
 
 describe('QuestionTextService', () => {
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule, HttpClientTestingModule,
@@ -20,7 +20,7 @@ describe('QuestionTextService', () => {
     });
   }));
 
-  it('should be created', async(inject([QuestionTextService], (service: QuestionTextService) => {
+  it('should be created', waitForAsync(inject([QuestionTextService], (service: QuestionTextService) => {
     expect(service).toBeTruthy();
   })));
 });

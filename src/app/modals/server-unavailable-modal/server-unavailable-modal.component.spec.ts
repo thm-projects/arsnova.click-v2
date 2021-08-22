@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslatePipeMock } from '../../../_mocks/_pipes/TranslatePipeMock';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
 import { I18nTestingModule } from '../../shared/testing/i18n-testing/i18n-testing.module';
@@ -9,7 +9,7 @@ describe('ServerUnavailableModalComponent', () => {
   let component: ServerUnavailableModalComponent;
   let fixture: ComponentFixture<ServerUnavailableModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [I18nTestingModule],
       providers: [HeaderLabelService],

@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { JWT_OPTIONS, JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,7 +36,7 @@ describe('When BonusToken Icon is going to be clicked', () => {
   let component: BonusTokenComponent;
   let fixture: ComponentFixture<BonusTokenComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
         imports: [
           HttpClientTestingModule, I18nTestingModule, SharedModule, RouterTestingModule, JwtModule.forRoot({

@@ -5,6 +5,7 @@ export interface IEnvironment {
   enableBonusToken: boolean;
   vapidPublicKey: string;
   title: Title;
+  appName: string;
   sentryDSN?: string;
   version: string;
   production: boolean;
@@ -31,4 +32,6 @@ export interface IEnvironment {
   enableTwitter: boolean;
   enableQuizPool: boolean;
   showInfoButtonsInFooter: boolean;
+  markdownFilePostfix: string;
+  loginButtonLabelConfiguration: string;
 }

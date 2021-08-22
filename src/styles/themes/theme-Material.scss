@@ -21,6 +21,8 @@ $body-color: $primary_text_color;
 $text-muted: gray;
 
 $border-loader_wrapper-outer_spin: #00796b;
+$bg-pre: $secondary;
+
 $border-loader_wrapper-middle_spin: #e74c3c;
 $border-loader_wrapper-inner_spin: #f5bc62;
 
@@ -142,4 +144,17 @@ $code-color: $secondary_text_color;
 
 .bg-warning {
   background-color: orange !important;
+}
+
+universal-cookie-consent {
+  --ucc-color-primary: rebeccapurple;
+  --ucc-color-primary-contrast: white;
+  --ucc-color-secondary: #00796B;
+  --ucc-color-secondary-contrast: white;
+  --ucc-text-color: black;
+  --ucc-link-color: #026533;
+  --ucc-backdrop-color: rgba(0, 0, 0, 0.6);
+  --ucc-modal-background: white;
+  --ucc-switch-background: #BBBBBB;
+  --ucc-consent-type-description-color: rgba(0,0,0,0.8);
 }

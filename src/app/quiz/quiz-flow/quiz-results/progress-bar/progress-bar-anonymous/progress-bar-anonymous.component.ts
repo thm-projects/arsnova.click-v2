@@ -23,7 +23,6 @@ export class ProgressBarAnonymousComponent extends AbstractProgressBar {
     absolute: 0,
     percent: '',
   };
-  public base = 0;
 
   @Input() public type: QuestionType;
 
@@ -34,7 +33,7 @@ export class ProgressBarAnonymousComponent extends AbstractProgressBar {
 
     this.correct = value.correct;
     this.wrong = value.wrong;
-    this.base = value.base;
+    this._base = value._base;
     this.neutral = value.neutral;
   }
 

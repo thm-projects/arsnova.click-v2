@@ -4,8 +4,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { NgbModal, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { merge, of, Subject } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ConnectionService } from '../../service/connection/connection.service';
 import { HeaderLabelService } from '../../service/header-label/header-label.service';
@@ -65,6 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
                      this.connectionService.lowSpeed ? 'fill-danger' : //
                      'fill-success';
 
+    console.log('switching to ', cssClass);
     this.connectionIndicator.nativeElement.classList.remove(...['fill-danger', 'fill-warning', 'fill-grey', 'fill-success']);
     this.connectionIndicator.nativeElement.classList.add(cssClass);
   }
@@ -73,7 +74,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isThemePreview = isPlatformBrowser(this.platformId) && location.pathname.startsWith('/preview');
     this.generateConnectionQualityColor();
 
-    this.connectionService.serverStatusEmitter.pipe(distinctUntilChanged(), takeUntil(this._destroy)).subscribe(() => {
+    merge(
+      this.connectionService.serverStatusEmitter,
+      this.connectionService.websocketStatusEmitter,
+    ).pipe(
+      catchError(err => of(err)),
+      takeUntil(this._destroy)
+    ).subscribe(() => {
       if (!this.showHeader || this.isThemePreview) {
         return;
       }

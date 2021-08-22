@@ -1,5 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AbstractQuestionEntity } from '../../lib/entities/question/AbstractQuestionEntity';
 import { SurveyQuestionEntity } from '../../lib/entities/question/SurveyQuestionEntity';
@@ -11,7 +11,7 @@ describe('QuizDetailsAdminComponent', () => {
   let component: QuizDetailsAdminComponent;
   let fixture: ComponentFixture<QuizDetailsAdminComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule],
       providers: [

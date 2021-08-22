@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -48,7 +48,7 @@ describe('AnsweroptionsComponent', () => {
   let component: AnsweroptionsComponent;
   let fixture: ComponentFixture<AnsweroptionsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule,
@@ -127,17 +127,17 @@ describe('AnsweroptionsComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(AnsweroptionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
 
-  it('should be created', async(() => {
+  it('should be created', waitForAsync(() => {
     expect(component).toBeTruthy();
   }));
 
-  it('should contain a TYPE reference', async(() => {
+  it('should contain a TYPE reference', waitForAsync(() => {
     expect(AnsweroptionsComponent.TYPE).toEqual('AnsweroptionsComponent');
   }));
 });

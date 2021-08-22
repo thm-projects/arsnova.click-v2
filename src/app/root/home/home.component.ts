@@ -17,6 +17,7 @@ import { MessageProtocol, StatusProtocol } from '../../lib/enums/Message';
 import { QuestionType } from '../../lib/enums/QuestionType';
 import { QuizState } from '../../lib/enums/QuizState';
 import { UserRole } from '../../lib/enums/UserRole';
+import { IFooterBarElement } from '../../lib/footerbar-element/interfaces';
 import { ITrackClickEvent } from '../../lib/interfaces/tracking/ITrackClickEvent';
 import { MemberApiService } from '../../service/api/member/member-api.service';
 import { QuizApiService } from '../../service/api/quiz/quiz-api.service';
@@ -173,7 +174,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const dbInitialized$ = this.storageService.stateNotifier.pipe(filter(val => val === DbState.Initialized), take(amount), takeUntil(this._destroy));
     const dbLoaded$ = this.storageService.stateNotifier.pipe(
       filter(val => [DbState.Initialized, DbState.Revalidate].includes(val)),
-      takeUntil(this._destroy)
+      takeUntil(this._destroy),
     );
 
     this.cleanUpSessionStorage().pipe(switchMapTo(this.quizApiService.getActiveQuizzes())).subscribe(value => {
@@ -221,7 +222,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.connectionService.serverStatusEmitter.pipe(
+    this.connectionService.websocketStatusEmitter.pipe(
       filter(v => !!v),
       switchMapTo(this.connectionService.connectToGlobalChannel()),
       takeUntil(this._destroy),
@@ -404,7 +405,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   private updateFooterElements(isLoggedIn: boolean): void {
-    const footerElements = [
+    const footerElements: Array<IFooterBarElement> = [
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
@@ -519,12 +520,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     const currentQuiz = new QuizEntity(await this.storageService.db.Quiz.get(quizname));
     this.canAddQuiz = false;
     this.canEditQuiz = true;
-    this.canStartQuiz = this.connectionService.serverAvailable && //
-                        (
-                        this.settingsService.serverSettings && !this.settingsService.serverSettings.createQuizPasswordRequired
-                        ) && //
-                        currentQuiz.isValid();
-    this.passwordRequired = this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired;
+    this.canStartQuiz = Boolean(this.connectionService.serverAvailable && //
+                                (
+                                this.settingsService.serverSettings && !this.settingsService.serverSettings.createQuizPasswordRequired
+                                ) && //
+                                currentQuiz.isValid());
+    this.passwordRequired = Boolean(this.canStartQuiz && this.settingsService.serverSettings.createQuizPasswordRequired);
     this.isQueryingQuizState = false;
     this.enteredSessionName = currentQuiz.name;
   }

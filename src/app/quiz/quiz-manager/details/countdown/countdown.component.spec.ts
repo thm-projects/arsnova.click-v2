@@ -1,6 +1,6 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { PLATFORM_ID } from '@angular/core';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -32,7 +32,7 @@ describe('CountdownComponent', () => {
   let component: CountdownComponent;
   let fixture: ComponentFixture<CountdownComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
         I18nTestingModule, HttpClientTestingModule, RouterTestingModule, FormsModule, FontAwesomeModule, JwtModule.forRoot({
@@ -81,7 +81,7 @@ describe('CountdownComponent', () => {
     }).compileComponents();
   }));
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     const library: FaIconLibrary = TestBed.inject(FaIconLibrary);
     library.addIcons(faHourglass);
     fixture = TestBed.createComponent(CountdownComponent);

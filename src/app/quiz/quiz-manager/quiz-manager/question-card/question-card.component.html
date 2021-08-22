@@ -11,7 +11,7 @@
              [ngbTooltip]="'component.quiz_summary.question_failed' | translate"
              class="text-danger ml-sm-2"></fa-icon>
 
-    <fa-icon *ngIf="elem?.requiredForToken"
+    <fa-icon *ngIf="environment.enableBonusToken && elem?.requiredForToken"
              [icon]="'key'"
              [class.ml-1]="!elem?.isValid()"
              class="text-warning ml-sm-2"
@@ -80,8 +80,9 @@
                role="button"></fa-icon>
     </button>
 
-    <div [ngbTooltip]="getTooltipForUpload() | translate"
-         class="ml-auto flex-shrink-0">
+    <div *ngIf="environment.enableQuizPool"
+         [ngbTooltip]="getTooltipForUpload() | translate"
+         class="flex-shrink-0">
       <button (click)="updloadToQuizPool()"
               [disabled]="!elem?.isValid() || !elem?.tags?.length"
               class="btn btn-light btn-sm mr-2">
@@ -96,6 +97,7 @@
     <button (click)="edit.next()"
             [ngbTooltip]="'component.quiz_manager.question-card.edit' | translate"
             [routerLink]="['/quiz', 'manager', index,  'overview']"
+            [class.ml-auto]="!environment.enableQuizPool"
             class="btn btn-light btn-sm mr-2 flex-shrink-0">
       <span class="d-none d-lg-inline mr-2">{{'component.quiz_manager.question-card.edit' | translate}}</span>
       <fa-icon [icon]="'edit'"

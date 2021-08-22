@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NgbActiveModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '../../shared/shared.module';
 
@@ -8,7 +8,7 @@ describe('AddUserComponent', () => {
   let component: AddUserComponent;
   let fixture: ComponentFixture<AddUserComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [SharedModule, NgbModalModule],
       providers: [NgbActiveModal],
