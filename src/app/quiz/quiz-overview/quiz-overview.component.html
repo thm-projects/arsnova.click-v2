@@ -116,28 +116,6 @@
                        [spin]="isDeletingQuiz === elem"></fa-icon>
             </button>
           </div>
-
-          <button (click)="editQuiz(i)"
-                  *ngIf="isAuthorizedToModifyQuiz()"
-                  [ngbTooltip]="'component.name_management.edit_session.title' | translate"
-                  class="btn btn-outline-warning btn-block mt-0 mr-2 d-flex justify-content-center">
-            <fa-icon [icon]="'edit'"></fa-icon>
-          </button>
-
-          <button (click)="exportQuiz(i)"
-                  *ngIf="isAuthorizedToModifyQuiz()"
-                  [ngbTooltip]="'component.name_management.export.title' | translate"
-                  class="btn btn-outline-info btn-block mt-0 mr-2 d-flex justify-content-center">
-            <fa-icon [icon]="'download'"></fa-icon>
-          </button>
-
-          <button (click)="deleteQuiz(elem)"
-                  [disabled]="!connectionService.serverAvailable"
-                  [ngbTooltip]="'component.name_management.delete_session.title' | translate"
-                  class="btn btn-outline-danger btn-block mt-0 d-flex justify-content-center">
-            <fa-icon [icon]="isDeletingQuiz === elem ? 'spinner' : 'trash'"
-                     [spin]="isDeletingQuiz === elem"></fa-icon>
-          </button>
         </div>
       </div>
     </div>
