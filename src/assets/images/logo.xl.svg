@@ -13,8 +13,8 @@
          y="20">nova
    </text>
    <text class="arsnova-logo-click"
-         style="font-size: 1.5rem;"
+         style="font-size: 1.2rem;"
          x="0"
-         y="45">.click
+         y="45">✦click
    </text>
 </svg>

@@ -9,7 +9,9 @@
     "no": "Nein",
     "close_window": "Fenster schließen",
     "cookie_consent": {
-      "message": "{APP_NAME} verwendet Cookies, um statistische Daten zur Nutzung der Webseite zu erfassen und so das Angebot zu verbessern. Für bestimmte Angebote benötigen wir aber Ihre Erlaubnis. Sie können diese hinterher jederzeit in unserer <a href=\"/info/dataprivacy\" target=\"_blank\">Datenschutzerklärung</a> widerrufen.",
+      "message": "arsnova✦click verwendet Cookies.",
+      "dismiss": "Ich bin einverstanden.",
+      "learn_more": "Datenschutzerklärung",
       "back": "Zurück",
       "accept": "Akzeptieren",
       "customizeButton": "Anpassen",
@@ -49,11 +51,11 @@
   "region": {
     "footer": {
       "footer_bar": {
-        "about": "arsnova.click",
+        "about": "Über",
         "home": "Startseite",
         "tos": "Nutzungsbedingungen",
         "imprint": "Impressum",
-        "blog": "Projektblog",
+        "blog": "Blog",
         "languages": "Sprache",
         "style": "Stil",
         "import": "Quiz-Import",
@@ -74,7 +76,7 @@
           "nicknames": "Du kannst bekannte Namen aus verschiedenen Kategorien oder auch Emojis vorgeben.",
           "confidence-slider": "Aktiviere diese Option, wenn die Player zurückmelden sollen, wie sicher sie sich in ihrer Antwort sind von 0 &#37; »Geraten« bis 100 &#37; »Fest überzeugt«."
         },
-        "api-docs": "API-Dokumentation",
+        "api-docs": "API",
         "show_confidence_slider": "Antwortsicherheit abfragen",
         "back": "Zurück",
         "cache_assets": "Assets cachen",
@@ -99,8 +101,9 @@
         "hotkeys": "Hotkeys"
       },
       "about": {
+        "title": "Info",
         "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
-        "ars": "arsnova.click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
+        "ars": "arsnova✦click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
         "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelten Informatik-Studenten der <a href='http://www.thm.de/site/' target='_blank'>THM</a> die <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierte</a> Alternative zum Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
         "met_requirements": "<strong>Features:</strong>",
         "requirements": {
@@ -126,6 +129,70 @@
             "3": "Folge einfach deiner Intuition: schauen, klicken, quizzen."
           }
         }
+      },
+      "tos": {
+        "declaration": "Alle (nicht nur Lehrende) dürfen die Quiz-App arsnova✦click für ihre Zwecke verwenden, solange dabei nicht gegen deutsches oder EU-Recht verstoßen wird.",
+        "license": {
+          "title": "Lizenz",
+          "text": "arsnova✦click ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> und steht unter der <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
+        },
+        "musicLicense": {
+          "title": "Musik-Lizenz",
+          "text": "Der Sound <a href='http://soundbible.com/2148-Chinese-Gong.html' target='_blank'>Chinese Gong</a> von Daniel Simon steht unter der <a href='https://creativecommons.org/licenses/by/3.0/de' target='_blank'>CC BY 3.0</a> Lizenz."
+        },
+        "warranty": {
+          "title": "Gewährleistung",
+          "text": "Wir sind bemüht, den Online-Dienst arsnova✦click zuverlässig und störungsfrei zu betreiben, können dies aber nicht garantieren. Alle Quiz-Daten liegen ausschließlich im Browser-Speicher des Quizmasters. Wir übernehmen keine Haftung für den Verlust der Daten, zum Beispiel durch Löschen des Browser-Speichers, ohne zuvor die Quizze exportiert zu haben, oder bei rechtswidriger Nutzung des Dienstes."
+        }
+      },
+      "data_privacy": {
+        "scope": "Geltungsbereich",
+        "declaration": "Diese Datenschutzerklärung klärt Nutzer/innen von arsnova✦click über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
+        "app_data": {
+          "title": "Anwendungsdaten",
+          "text": "Alle Quizfragen und deren Antwortoptionen werden ausschließlich im Browser-Speicher (Web Storage) des Quizmasters gehalten."
+        },
+        "access_data": {
+          "title": "Zugriffsdaten",
+          "text": "Außer Webserver-Logdateien werden keine personenbezogenen Zugriffsdaten gespeichert."
+        },
+        "logfiles": {
+          "title": "Webserver-Logdateien",
+          "text": "Der Anbieter erhebt Protokolldaten über jeden Zugriff auf arsnova✦click in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht."
+        },
+        "3rdparty": {
+          "title": "Dienste und Inhalte Dritter",
+          "text": "In Quizfragen können Inhalte Dritter, wie zum Beispiel Videos von YouTube oder Grafiken von anderen Webseiten, eingebunden werden. Dies setzt voraus, dass die Anbieter der Inhalte die IP-Adresse der Nutzer/innen wahrnehmen. Ohne die IP-Adresse können die Inhalte nicht an den Browser gesendet werden."
+        },
+        "cookies": {
+          "title": "Cookies",
+          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova✦click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
+        },
+        "piwik": {
+          "title": "Matomo",
+          "text": "Dieses Angebot benutzt Matomo, eine Open-Source-Software zur statistischen Auswertung der Zugriffe, siehe <a href='http://matomo.org/' target='_blank'>matomo.org</a>. Matomo verwendet Cookies, die auf dem Computer der Nutzer/innen gespeichert werden und die eine Analyse der Benutzung der Webseite ermöglichen. Die durch den Cookie erzeugten Informationen über die Benutzung dieses Angebotes werden auf dem Server des Anbieters in Deutschland gespeichert. Die IP-Adresse wird sofort nach der Verarbeitung und vor deren Speicherung anonymisiert. Nutzer/innen können die Installation der Cookies durch eine entsprechende Einstellung ihrer Browser-Software verhindern."
+        }
+      },
+      "imprint": {
+        "provider": {
+          "title": "Dienstanbieter",
+          "text": {
+            "1": "Der Betrieb der Web-App arsnova✦click ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
+            "2": "c/o THM – Technische Hochschule Mittelhessen",
+            "3": "Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik",
+            "4": "Prof. Dr. Klaus Quibeldey-Cirkel",
+            "5": "Lehrstuhl für Softwaretechnik",
+            "6": "Wiesenstraße 14",
+            "7": "D-35390 Gießen",
+            "8": "Telefon: +49 641 309 – 24 50",
+            "9": "E-Mail: <a href='mailto:klaus.quibeldey-cirkel@transmit.de'>klaus.quibeldey-cirkel@transmit.de</a>",
+            "10": "Sitz der Gesellschaft: Gießen",
+            "11": "Website: <a href='https://www.transmit.de'>https://www.transmit.de</a>",
+            "12": "Rechtsform: GmbH",
+            "13": "Amtsgericht: Gießen HRB 3036",
+            "14": "USt-IdNr.: DE 188 685 037"
+          }
+        }
       }
     },
     "header": {
@@ -138,9 +205,9 @@
         "estimated-storage-quota": {
           "label": "Geschätzter Speicherplatz",
           "not_available": "Nicht verfügbar - Aktualisierungen müssen manuell gesucht werden!",
-          "currently-used": "Aktuell werden {USAGE}MiB von {QUOTA}MiB verwendet"
+          "currently-used": "Aktuell werden {USAGE}MiB von {QUOTA}MiB verwendet."
         },
-        "disconnected": "Du bist gerade nicht verbunden. Du kannst nur mit Internetverbindung einem Quiz beitreten oder ein neues Quiz erstellen!",
+        "disconnected": "Du bist gerade offline. Du kannst nur mit einer Internetverbindung an einem Quiz teilnehmen oder ein neues Quiz erstellen.",
         "server_status": {
           "not_available": "Nicht verfügbar",
           "available": "Verfügbar"
@@ -203,7 +270,7 @@
     "quiz-pool": {
       "select-tag": {
         "label": "Tag auswählen",
-        "placeholder": "Bitte gib hier einen Tag ein, aus dem ein Quiz zusammengestellt werden soll.",
+        "placeholder": "Gib hier einen Tag ein, mit dem ein Quiz zusammengestellt werden soll.",
         "validation-error": {
           "invalid-tag": "Der eingegebene Tag ist leider nicht verfügbar. Bitte klicke auf einen Tag in der Auswahlliste."
         }
@@ -212,7 +279,7 @@
         "label": "Anzahl der Quizfragen",
         "placeholder": "Anzahl der Quizfragen",
         "validation-error": {
-          "required": "Bitte gib die Anzahl der gewünschten Quizfragen ein.",
+          "required": "Gib die Anzahl der gewünschten Quizfragen ein.",
           "min": "Bitte verwende mindestens eine Quizfrage für diesen Tag.",
           "max": "Du kannst nur maximal {max, plural, =0{0 Fragen} one{eine Frage} other{{max} Fragen}} mit deinem gewählten Tag hinzufügen."
         }
@@ -232,11 +299,11 @@
       "optin": {
         "check": "Für Social Media Features anklicken",
         "share": "Auf Social Media teilen",
-        "warning": "Ich bin einverstanden, dass Tweets über arsnova.click angezeigt werden."
+        "warning": "Ich bin einverstanden, dass Tweets über arsnova✦click angezeigt werden."
       },
       "tweet": {
         "content": {
-          "0": "Gerade das Quiz »{NAME}« auf arsnova.click gespielt ❤️\n"
+          "0": "Gerade das Quiz »{NAME}« auf arsnova✦click gespielt ❤️\n"
         }
       }
     },
@@ -303,7 +370,7 @@
       "can_create_session": "Quiz erstellen",
       "create_demo_session": "Starte Demo Quiz",
       "quiz_management": "Quiz-Speicher",
-      "session_management": "Quizze",
+      "session_management": "Meine Quizze",
       "delete_session": {
         "title": "Quiz löschen",
         "label": "Löschen"
@@ -546,7 +613,7 @@
       }
     },
     "theme_switcher": {
-      "set_theme": "Dein Stil",
+      "set_theme": "Stil",
       "themes": {
         "black_beauty": {
           "name": "Black Beauty (beamertauglich)",
@@ -569,7 +636,7 @@
       "description": "Hier kannst du den Countdown für die Quizfrage einstellen. Sobald er abläuft oder alle Player eine Antwort abgegeben haben, ertönt ein Gong oder Pfiff und die Quizrunde ist beendet."
     },
     "translation": {
-      "translations": "Sprachauswahl"
+      "translations": "Sprache"
     },
     "voting": {
       "title": "Abstimmung",
@@ -686,7 +753,7 @@
       "view-own-public": "Klick hier, um deine veröffentlichten Quizze anzusehen!",
       "errors": {
         "already-taken": "Dieser Name wird bereits verwendet. Gib einen anderen ein.",
-        "min-length": "Bitte gib mindestens vier Zeichen ein."
+        "min-length": "Gib mindestens vier Zeichen ein."
       },
       "success": {
         "can-join": "Diesem Quiz kannst du beitreten!",
@@ -726,8 +793,8 @@
     },
     "toasts": {
       "swupdate": {
-        "message": "Es ist eine neue Version von arsnova.click verfügbar. Bitte klicke hier, um die Seite neu zu laden. Dies wird das Update automatisch installieren.",
-        "title": "Neue Version verfügbar"
+        "message": "Klicke hier, um das Update zu installieren.",
+        "title": "Update verfügbar"
       },
       "can-use-token": {
         "message": "Du kannst einen Bonustoken einsetzen. Klicke auf diese Meldung, um den Token anzuzeigen",
@@ -737,7 +804,7 @@
     "statistics": {
       "users": {
         "title": "User online",
-        "content": "Hier werden die Verbindungen zu arsnova.click gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist die Zahl ein guter Hinweis, wie stark arsnova.click aktuell beansprucht wird."
+        "content": "Hier werden die Verbindungen zu arsnova✦click gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist die Zahl ein guter Hinweis, wie stark arsnova✦click aktuell beansprucht wird."
       },
       "total-quizzes": {
         "title": "Quizze",
@@ -757,7 +824,7 @@
       },
       "active-participants": {
         "title": "Player",
-        "content": "Hier siehst du die aktuelle Zahl aller Player in den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, einzelne Personen zu identifizieren oder ihre Aktionen nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova.click gerade beansprucht wird."
+        "content": "Hier siehst du die aktuelle Zahl aller Player in den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, einzelne Personen zu identifizieren oder ihre Aktionen nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova✦click gerade beansprucht wird."
       },
       "average-participants": {
         "title": "Player pro Quiz",
@@ -765,13 +832,13 @@
       }
     },
     "outdated-version": {
-      "title": "Deine Version von arsnova.click ist veraltet",
+      "title": "Deine Version von arsnova✦click ist veraltet",
       "understood": "Verstanden!",
       "current-version": "Aktuell installiert: {version}",
       "target-version": "Neue Version: {version}",
       "funnel": {
         "1": {
-          "header": "Bitte aktualisiere deine Version von arsnova.click. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",
+          "header": "Bitte aktualisiere deine Version von arsnova✦click. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",
           "solution": {
             "1": "Klicke auf den Button, um auf Aktualisierungen zu prüfen. Die Seite wird sich nach einigen Sekunden neu laden.",
             "2": "Falls das nicht passiert, klicke bitte hier, um zum nächsten Schritt zu gelangen"

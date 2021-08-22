@@ -12,15 +12,16 @@
   }
 
   #collapse-quiz-name-datalist {
-    right: 0;
+    left: 0;
     font-size: 2rem;
-    border-top-right-radius: $border-radius !important;
+    border-radius: $border-radius !important;
+
   }
 
   #remove-quiz-name {
-    left: 0;
+    right: 0;
     font-size: 1.3rem;
-    border-top-left-radius: $border-radius !important;
+    border-radius: $border-radius !important;
   }
 
   #remove-quiz-name,
@@ -63,4 +64,8 @@
   color: white;
   background-color: #f1ada0;
   border-color: #f1ada0;
+}
+
+label {
+  color: white;
 }
