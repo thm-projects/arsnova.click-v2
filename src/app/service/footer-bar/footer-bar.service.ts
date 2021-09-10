@@ -336,6 +336,20 @@ export class FooterBarService {
     linkTarget: ['/', 'quiz', 'manager', 'memberGroup'],
   }, function (): void {
   });
+  public footerElemLogout: IFooterBarElement = new FooterbarElement({
+    id: 'logout',
+    iconClass: ['fas', 'sign-out-alt'],
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.logout',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.logout',
+    linkTarget: ['/', 'login'],
+    queryParams: {
+      logout: true,
+    },
+  }, () => {
+  });
   public footerElemEditI18n: IFooterBarElement = new FooterbarElement({
     id: 'edit-i18n',
     iconClass: ['fas', 'language'],
