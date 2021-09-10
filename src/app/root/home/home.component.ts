@@ -416,6 +416,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)
     )) {
       footerElements.push(this.footerBarService.footerElemHashtagManagement);
+      footerElements.push(this.footerBarService.footerElemImport);
     }
 
     if (isLoggedIn) {
@@ -425,7 +426,9 @@ export class HomeComponent implements OnInit, OnDestroy {
         if (this.userService.isAuthorizedFor(UserRole.CreateQuiz)) {
           footerElements.push(this.footerBarService.footerElemHashtagManagement);
         }
-
+        if (this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
+          footerElements.push(this.footerBarService.footerElemImport);
+        }
       }
 
       if (this.userService.isAuthorizedFor(UserRole.EditI18n)) {

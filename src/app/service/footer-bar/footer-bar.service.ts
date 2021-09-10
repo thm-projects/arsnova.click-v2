@@ -156,7 +156,18 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.description.home',
     linkTarget: ['/'],
   }, function (): void {
-
+  });
+  public footerElemImport: IFooterBarElement = new FooterbarElement({
+    id: 'import',
+    iconClass: ['fas', 'upload'],
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.import',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.import',
+    linkTarget: null,
+  }, () =>  {
+    this.document.getElementById('upload-session').click();
   });
   public footerElemAbout: IFooterBarElement = new FooterbarElement({
     id: 'about',
