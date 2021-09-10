@@ -35,7 +35,7 @@ export const environment: IEnvironment = {
   ],
   defaultTheme: QuizTheme.Material,
   darkModeCheckEnabled: true,
-  enableTwitter: true,
+  enableTwitter: false,
   enableQuizPool: true,
   showInfoButtonsInFooter: false,
   vapidPublicKey: 'BFy8kQxiV2p43Z8Xqs6isn7QRVDEvkqreDH3wH0QlDLDn8cZkbM41iOWwxUBsw_R0Y4Bv8AkI9sKj82P18q41z0',
