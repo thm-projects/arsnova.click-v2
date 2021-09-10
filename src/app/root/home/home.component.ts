@@ -434,10 +434,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       if (this.userService.isAuthorizedFor(UserRole.EditI18n)) {
         footerElements.push(this.footerBarService.footerElemEditI18n);
       }
-
-      footerElements.push(this.footerBarService.footerElemLogout);
-    } else if (environment.showLoginButton) {
-      footerElements.push(this.footerBarService.footerElemLogin);
     }
 
     this.footerBarService.replaceFooterElements(footerElements);
