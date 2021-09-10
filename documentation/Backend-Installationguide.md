@@ -27,6 +27,8 @@
 4. Install node depencencies type
 
         npm install 
+   OR
+        npm install --legacy-peer-deps
     - - - 
 
 5. Create 2 folders with
