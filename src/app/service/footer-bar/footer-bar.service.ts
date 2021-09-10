@@ -87,30 +87,6 @@ export class FooterBarService {
 
   public TYPE_REFERENCE: string;
   public collapsedNavbar: boolean;
-  public footerElemQuizpool: IFooterBarElement = new FooterbarElement({
-    id: 'quizpool',
-    iconLayer: [
-      {
-        classes: ['fas', 'question'],
-        transform: 'shrink-3' as any,
-      },
-      {
-        classes: ['fas', 'question'],
-        transform: 'shrink-6 right-7 rotate-50' as any,
-      },
-      {
-        classes: ['fas', 'question'],
-        transform: 'shrink-5 bottom-5 left-7 rotate--30' as any,
-      },
-    ],
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.questionpool',
-    selectable: false,
-    showIntro: false,
-    introTranslate: 'region.footer.footer_bar.description.questionpool',
-    linkTarget: ['/', 'quiz', 'pool'],
-  }, function (): void {
-  });
   public footerElemTranslation: IFooterBarElement = new FooterbarElement({
     id: 'translation',
     iconClass: ['fas', 'globe'],
@@ -158,18 +134,6 @@ export class FooterBarService {
   }, function (): void {
 
   });
-  public footerElemImport: IFooterBarElement = new FooterbarElement({
-    id: 'import',
-    iconClass: ['fas', 'upload'],
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.import',
-    selectable: false,
-    showIntro: false,
-    introTranslate: 'region.footer.footer_bar.description.import',
-    linkTarget: null,
-  }, () =>  {
-    this.document.getElementById('upload-session').click();
-  });
   public footerElemHashtagManagement: IFooterBarElement = new FooterbarElement({
     id: 'sessionManagement',
     iconClass: ['fas', 'wrench'],
@@ -181,20 +145,6 @@ export class FooterBarService {
     linkTarget: ['/', 'quiz', 'overview'],
   }, function (): void {
 
-  });
-  public footerElemFullscreen: IFooterBarElement = new FooterbarElement({
-    id: 'fullscreen',
-    iconClass: ['fas', 'arrows-alt'],
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.fullscreen',
-    selectable: true,
-    showIntro: false,
-    introTranslate: 'region.footer.footer_bar.description.fullscreen',
-    linkTarget: null,
-    isActive: isPlatformBrowser(this.platformId) ? window.outerWidth === screen.width && window.outerHeight === screen.height : false,
-  }, self => {
-    self.isActive = !self.isActive;
-    setFullScreen(self.isActive);
   });
   public footerElemHome: IFooterBarElement = new FooterbarElement({
     id: 'home',
@@ -411,17 +361,6 @@ export class FooterBarService {
     linkTarget: ['/', 'i18n-manager'],
   }, function (): void {
   });
-  public footerElemAdmin: IFooterBarElement = new FooterbarElement({
-    id: 'admin',
-    iconClass: ['fas', 'unlock'],
-    textClass: 'footerElementText',
-    textName: 'region.footer.footer_bar.admin',
-    selectable: false,
-    showIntro: false,
-    introTranslate: 'region.footer.footer_bar.description.admin',
-    linkTarget: ['/', 'admin'],
-  }, function (): void {
-  });
   public footerElemShowToken: IFooterBarElement = new FooterbarElement({
     id: 'showToken',
     iconClass: ['fas', 'key'],
@@ -547,11 +486,6 @@ export class FooterBarService {
   }
 
   private removeUnsupportedElements(elements: Array<IFooterBarElement>): void {
-    const fullscreenIndex = elements.findIndex(elem => elem.id === this.footerElemFullscreen.id);
-    if (fullscreenIndex > -1 && isPlatformBrowser(this.platformId) && !Modernizr.fullscreen) {
-      elements.splice(fullscreenIndex, 1);
-    }
-
     const backIndex = elements.findIndex(elem => elem.id === this.footerElemBack.id);
     if (backIndex > -1 && isPlatformBrowser(this.platformId) && history.length < 2) {
       elements.splice(backIndex, 1);

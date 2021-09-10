@@ -408,19 +408,14 @@ export class HomeComponent implements OnInit, OnDestroy {
     const footerElements: Array<IFooterBarElement> = [
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
-      this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemTheme
     ];
 
-    if (environment.enableQuizPool) {
-      footerElements.push(this.footerBarService.footerElemQuizpool);
-    }
 
     if (!environment.requireLoginToCreateQuiz && (
       environment.showPublicQuizzes || this.userService.isAuthorizedFor(UserRole.QuizAdmin)
     )) {
       footerElements.push(this.footerBarService.footerElemHashtagManagement);
-      footerElements.push(this.footerBarService.footerElemImport);
     }
 
     if (isLoggedIn) {
@@ -431,17 +426,10 @@ export class HomeComponent implements OnInit, OnDestroy {
           footerElements.push(this.footerBarService.footerElemHashtagManagement);
         }
 
-        if (this.userService.isAuthorizedFor(UserRole.QuizAdmin)) {
-          footerElements.push(this.footerBarService.footerElemImport);
-        }
       }
 
       if (this.userService.isAuthorizedFor(UserRole.EditI18n)) {
         footerElements.push(this.footerBarService.footerElemEditI18n);
-      }
-
-      if (this.userService.isAuthorizedFor([UserRole.SuperAdmin])) {
-        footerElements.push(this.footerBarService.footerElemAdmin);
       }
 
       footerElements.push(this.footerBarService.footerElemLogout);
