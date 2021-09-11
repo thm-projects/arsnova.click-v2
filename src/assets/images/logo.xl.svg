@@ -6,15 +6,15 @@
      xmlns="http://www.w3.org/2000/svg">
    <text class="arsnova-logo-ant"
          x="2"
-         y="20">ars
+         y="20">ant
    </text>
    <text class="arsnova-logo-worte"
          x="25"
-         y="20">nova
+         y="20">worte
    </text>
    <text class="arsnova-logo-jetzt"
          style="font-size: 1.2rem;"
          x="0"
-         y="45">✦click
+         y="45">✦jetzt
    </text>
 </svg>
