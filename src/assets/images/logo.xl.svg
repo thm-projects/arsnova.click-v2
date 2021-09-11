@@ -4,15 +4,15 @@
      width="60px"
      font-size="0.9rem"
      xmlns="http://www.w3.org/2000/svg">
-   <text class="arsnova-logo-ars"
+   <text class="arsnova-logo-ant"
          x="2"
          y="20">ars
    </text>
-   <text class="arsnova-logo-nova"
+   <text class="arsnova-logo-worte"
          x="25"
          y="20">nova
    </text>
-   <text class="arsnova-logo-click"
+   <text class="arsnova-logo-jetzt"
          style="font-size: 1.2rem;"
          x="0"
          y="45">✦click
