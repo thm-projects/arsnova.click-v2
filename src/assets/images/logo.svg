@@ -1,15 +1,15 @@
 <svg id="logo-image"
-     viewBox="0 0 60 60"
-     height="60px"
-     width="60px"
+     viewBox="0 0 70 70"
+     height="70px"
+     width="70px"
      font-size="0.9rem"
      xmlns="http://www.w3.org/2000/svg">
   <text class="antworte-logo-jetzt"
-        x="0"
+        x="2"
         y="20">ant
   </text>
   <text class="antworte-logo-jetzt"
-        x="20"
+        x="25"
         y="20">worte
   </text>
   <text class="antworte-logo-jetzt"
