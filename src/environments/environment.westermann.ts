@@ -24,7 +24,7 @@ export const environment: IEnvironment = {
   requireLoginToCreateQuiz: true,
   forceQuizTheme: true,
   loginMechanism: [LoginMechanism.UsernamePassword, LoginMechanism.Token],
-  showLoginButton: true,
+  showLoginButton: false,
   showJoinableQuizzes: false,
   showPublicQuizzes: false,
   persistQuizzes: false,

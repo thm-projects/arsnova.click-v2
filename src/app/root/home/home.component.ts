@@ -410,6 +410,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
       this.footerBarService.footerElemFullscreen,
+      this.footerBarService.footerElemLogin
     ];
 
     if (environment.enableQuizPool) {
@@ -452,7 +453,10 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
 
       footerElements.push(this.footerBarService.footerElemLogout);
+    } else if (environment.showLoginButton) {
+      footerElements.push(this.footerBarService.footerElemLogin);
     }
+
 
     this.footerBarService.replaceFooterElements(footerElements);
   }

@@ -376,6 +376,17 @@ export class FooterBarService {
     linkTarget: ['/', 'quiz', 'manager', 'memberGroup'],
   }, function (): void {
   });
+  public footerElemLogin: IFooterBarElement = new FooterbarElement({
+    id: 'login',
+    iconClass: ['fas', 'sign-in-alt'],
+    textClass: 'footerElementText',
+    textName: `region.footer.footer_bar.login_${environment.loginButtonLabelConfiguration}`,
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.description.login',
+    linkTarget: ['/', 'login'],
+  }, function (): void {
+  });
   public footerElemLogout: IFooterBarElement = new FooterbarElement({
     id: 'logout',
     iconClass: ['fas', 'sign-out-alt'],
@@ -423,6 +434,19 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.showToken',
     linkTarget: null,
   }, function (): void {
+  });
+  public footerElemTwitterTweet: IFooterBarElement = new FooterbarElement({
+    id: 'twitter-tweet',
+    iconClass: ['fab', 'twitter'],
+    iconColorClass: 'color-twitter',
+    textClass: 'footerElementText',
+    textName: 'region.footer.footer_bar.twitter.tweet',
+    selectable: false,
+    showIntro: false,
+    introTranslate: 'region.footer.footer_bar.twitter.tweet',
+    linkTarget: null,
+  }, () => {
+    this.twitterService.tweet();
   });
   public footerElemHotkeys: IFooterBarElement = new FooterbarElement({
     id: 'hotkey',
