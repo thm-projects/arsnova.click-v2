@@ -1,20 +1,20 @@
 <svg id="logo-image"
      viewBox="0 0 60 60"
      height="60px"
-     width="60px"
+     width="70px"
      font-size="0.9rem"
      xmlns="http://www.w3.org/2000/svg">
   <text class="antworte-logo-jetzt"
         x="2"
-        y="20">ars
+        y="20">ant
   </text>
   <text class="antworte-logo-jetzt"
-        x="25"
-        y="20">nova
+        x="30"
+        y="20">worte
   </text>
   <text class="antworte-logo-jetzt"
         style="font-size: 1.5rem;"
         x="0"
-        y="45">.click
+        y="45">.jetzt
   </text>
 </svg>
