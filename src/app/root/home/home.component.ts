@@ -408,9 +408,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     const footerElements: Array<IFooterBarElement> = [
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
-      this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemFullscreen,
-      this.footerBarService.footerElemLogin
+      this.footerBarService.footerElemTheme
     ];
 
     if (environment.enableQuizPool) {
