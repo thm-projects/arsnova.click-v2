@@ -409,11 +409,18 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.footerBarService.footerElemAbout,
       this.footerBarService.footerElemTranslation,
       this.footerBarService.footerElemTheme,
-      this.footerBarService.footerElemFullscreen,
     ];
 
     if (environment.enableQuizPool) {
       footerElements.push(this.footerBarService.footerElemQuizpool);
+    }
+
+    if (environment.enableFullscreen) {
+      footerElements.push(this.footerBarService.footerElemFullscreen);
+    }
+
+    if (environment.enableAdmin) {
+      footerElements.push(this.footerBarService.footerElemAdmin);
     }
 
     if (!environment.requireLoginToCreateQuiz && (
