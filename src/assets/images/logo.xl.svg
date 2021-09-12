@@ -1,21 +1,20 @@
 <svg id="logo-image-xl"
-     viewBox="0 0 70 70"
-     height="70px"
-     width="70px"
-     width="100%"
+     viewBox="0 0 60 60"
+     height="60px"
+     width="60px"
      font-size="0.9rem"
      xmlns="http://www.w3.org/2000/svg">
-   <text class="arsnova-logo-ant"
+   <text class="arsnova-logo-ars"
          x="2"
-         y="20">ant
+         y="20">ars
    </text>
-   <text class="arsnova-logo-worte"
+   <text class="arsnova-logo-nova"
          x="25"
-         y="20">worte
+         y="20">nova
    </text>
-   <text class="arsnova-logo-jetzt"
+   <text class="arsnova-logo-click"
          style="font-size: 1.2rem;"
          x="0"
-         y="45">✦jetzt
+         y="45">✦click
    </text>
 </svg>

@@ -18,6 +18,7 @@ body {
 * {
   backface-visibility: hidden;
   outline: none !important;
+  touch-action: manipulation;
 }
 
 .qrCodeContent {

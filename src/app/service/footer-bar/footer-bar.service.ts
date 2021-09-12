@@ -230,7 +230,6 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.description.qr-code',
     linkTarget: null,
   }, function (): void {
-
   });
   public footerElemNicknames: IFooterBarElement = new FooterbarElement({
     id: 'nicknames',
@@ -422,7 +421,6 @@ export class FooterBarService {
     introTranslate: 'region.footer.footer_bar.description.admin',
     linkTarget: ['/', 'admin'],
   }, function (): void {
-
   });
   public footerElemShowToken: IFooterBarElement = new FooterbarElement({
     id: 'showToken',

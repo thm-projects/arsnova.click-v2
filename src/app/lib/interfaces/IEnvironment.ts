@@ -31,8 +31,6 @@ export interface IEnvironment {
   darkModeCheckEnabled: boolean;
   enableTwitter: boolean;
   enableQuizPool: boolean;
-  enableFullscreen: boolean;
-  enableAdmin: boolean;
   showInfoButtonsInFooter: boolean;
   markdownFilePostfix: string;
   loginButtonLabelConfiguration: string;
