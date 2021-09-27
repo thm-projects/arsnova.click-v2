@@ -35,7 +35,7 @@ export const environment: IEnvironment = {
   ],
   defaultTheme: QuizTheme.Material,
   darkModeCheckEnabled: true,
-  enableTwitter: true,
+  enableTwitter: false,
   enableQuizPool: false,
   enableFullscreen: false,
   enableAdmin: false,
