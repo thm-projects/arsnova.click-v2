@@ -112,7 +112,11 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     HotkeyModule.forRoot({
       disableCheatSheet: true,
     }),
-    UniversalCookieConsentModule.forRoot({consentTypes: []})
+    UniversalCookieConsentModule.forRoot({
+      autoShow: false,
+      consentTypes: [],
+      disableBodyScroll: false
+    })
   ],
   providers: [
     {
