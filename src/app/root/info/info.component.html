@@ -49,13 +49,4 @@
        id="imprintElement">
     <markdown [src]="imprintMarkdownSrc"></markdown>
   </div>
-  <div *ngIf="currentData === 'dataprivacy'"
-       id="dataprivacyElement">
-
-    <div class="d-flex">
-      <button class="btn btn-sm btn-secondary mb-3 ml-auto" (click)="resetCookieSettings()">{{'global.cookie_consent.reset' | translate}}</button>
-    </div>
-
-    <markdown [src]="dataPrivacyMarkdownSrc"></markdown>
-  </div>
 </div>
