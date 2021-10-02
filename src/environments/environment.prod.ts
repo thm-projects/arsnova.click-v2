@@ -33,7 +33,7 @@ export const environment: IEnvironment = {
     QuizTheme.Material,
     QuizTheme.Blackbeauty,
   ],
-  defaultTheme: QuizTheme.Blackbeauty,
+  defaultTheme: QuizTheme.Material,
   darkModeCheckEnabled: true,
   enableTwitter: false,
   enableQuizPool: false,
