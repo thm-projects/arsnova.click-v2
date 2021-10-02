@@ -4,9 +4,9 @@ Everyone (not only teachers) is allowed to use the quiz app Westermann Quiz for 
 <br/>
 
 #### License
-Westermann Quiz is based upon the Quiz-App [arsnova.click](https://arsnova.click).
+Westermann Quiz is based upon the Quiz-App [antworte✦jetzt](https://antworte.jetzt).
 
-arsnova.click is a free web service (Software as a Service). The software is [Open Source](https://github.com/thm-projects/arsnova.click-v2) and is licensed under the [GNU Lesser General Public License v3.0](https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE).
+antworte✦jetzt is a free web service (Software as a Service). The software is [Open Source](https://github.com/thm-projects/arsnova.click-v2) and is licensed under the [GNU Lesser General Public License v3.0](https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE).
 
 <br/>
 

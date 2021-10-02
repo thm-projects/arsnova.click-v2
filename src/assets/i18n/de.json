@@ -109,7 +109,7 @@
         "requirements": {
           "1": "Absoluter Datenschutz: keine personenbezogenen Daten auf dem Server, alle Quiz-Daten verbleiben im Browser (<a href='https://de.wikipedia.org/wiki/Web_Storage' target='_blank'>Web Storage</a>)",
           "2": "Keine Registrierung, keine Anmeldung, keine Installation (<a href='https://de.wikipedia.org/wiki/Bring_your_own_device' target='_blank'>BYOD</a>), keine Werbung, keine Kosten",
-          "3": "Dieselbe Startseite arsnova.click für beide Rollen: Quizmaster und Player",
+          "3": "Dieselbe Startseite antworte✦jetzt für beide Rollen: Quizmaster und Player",
           "4": "Jeder darf Quizze erstellen, sofort und beliebig viele.",
           "5": "Barrierefreie und für den Beamer optimierte Bedienoberfläche",
           "6": "Fragetypen: ABC…, Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
@@ -450,7 +450,7 @@
       "neutral_answer": "Antworten",
       "bonus-token": {
         "title": "Bonustoken",
-        "mail": "mailto:?subject=arsnova.click%3A%20Mein%20Token%20%C2%BB{quizname}%C2%AB&body=Hallo%2C%0D%0A%0D%0AIch%20habe%20am%20Quiz%20%C2%BB{quizname}%C2%AB%20am%20{date}%20teilgenommen%20und%20habe%20folgenden%20Token%20erhalten%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMein%20Nickname%20im%20Quiz%20lautete%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0AIch%20freue%20mich%20schon%20auf%20unser%20nächstes%20Quiz%20mit%20arsnova.click%21",
+        "mail": "mailto:?subject=antworte✦jetzt%3A%20Mein%20Token%20%C2%BB{quizname}%C2%AB&body=Hallo%2C%0D%0A%0D%0AIch%20habe%20am%20Quiz%20%C2%BB{quizname}%C2%AB%20am%20{date}%20teilgenommen%20und%20habe%20folgenden%20Token%20erhalten%3A%0D%0A%0D%0A{token}%0D%0A%0D%0AMein%20Nickname%20im%20Quiz%20lautete%3A%0D%0A%0D%0A{nickname}%0D%0A%0D%0AIch%20freue%20mich%20schon%20auf%20unser%20nächstes%20Quiz%20mit%20antworte✦jetzt%21",
         "your-bonus-token": "Dein Token:",
         "please-wait": "Bitte warte – dein Token wird geladen",
         "send-to-teacher": "Sende diesen Token an die Lehrperson und tausche ihn gegen Bonuspunkte ein."

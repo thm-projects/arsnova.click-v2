@@ -1,5 +1,5 @@
 ### Scope
-This privacy statement explains to users of ARSnova.click the nature, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).
+This privacy statement explains to users of antworte✦jetzt the nature, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).
 
 <br/>
 
@@ -14,7 +14,7 @@ Besides web server log files, no personal access data is stored.
 <br/>
 
 ### Webserver logfiles
-The provider collects log files about every access to the ARSnova.click system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications.
+The provider collects log files about every access to the antworte✦jetzt system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications.
 
 <br/>
 
@@ -24,7 +24,7 @@ In quizzes third party services or content, such as videos from YouTube and Vime
 <br/>
 
 ### Cookies
-Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer ARSnova.click uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely.
+Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer antworte✦jetzt uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely.
 
 <br/>
 

@@ -1,5 +1,5 @@
 ### Geltungsbereich
-Diese Datenschutzerklärung klärt Nutzer/innen von arsnova.click über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
+Diese Datenschutzerklärung klärt Nutzer/innen von antworte✦jetzt über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
 
 <br/>
 
@@ -14,7 +14,7 @@ Außer Webserver-Logdateien werden keine personenbezogenen Zugriffsdaten gespeic
 <br/>
 
 ### Webserver-Logdateien
-Der Anbieter erhebt Protokolldaten über jeden Zugriff auf arsnova.click in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht.
+Der Anbieter erhebt Protokolldaten über jeden Zugriff auf antworte✦jetzt in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht.
 
 <br/>
 
@@ -24,7 +24,7 @@ In Quizfragen können Inhalte Dritter, wie zum Beispiel Videos von YouTube oder 
 <br/>
 
 ### Cookies
-Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova.click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird.
+Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot antworte✦jetzt nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird.
 
 <br/>
 

@@ -1,5 +1,5 @@
 ### Service provider
-The operation of the web app arsnova.click is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH Projektbereich für mobile Anwendungen
+The operation of the web app antworte✦jetzt is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH Projektbereich für mobile Anwendungen
 c/o THM – Technische Hochschule Mittelhessen
 Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik
 Prof. Dr. Klaus Quibeldey-Cirkel

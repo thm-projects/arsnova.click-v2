@@ -1,10 +1,10 @@
 ### Terms of Service
-Everyone (not only teachers) is allowed to use the quiz app arsnova.click for their own purposes as long as this does not violate German or EU law.
+Everyone (not only teachers) is allowed to use the quiz app antworte✦jetzt for their own purposes as long as this does not violate German or EU law.
 
 <br/>
 
 #### License
-arsnova.click is a free web service (Software as a Service). The software is [Open Source](https://github.com/thm-projects/arsnova.click-v2) and is licensed under the [GNU Lesser General Public License v3.0](https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE).
+antworte✦jetzt is a free web service (Software as a Service). The software is [Open Source](https://github.com/thm-projects/arsnova.click-v2) and is licensed under the [GNU Lesser General Public License v3.0](https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE).
 
 <br/>
 
@@ -14,4 +14,4 @@ The sound [Chinese Gong](http://soundbible.com/2148-Chinese-Gong.html) by Daniel
 <br/>
 
 #### Warranty
-We are trying to maintain the online service of arsnova.click reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service.
+We are trying to maintain the online service of antworte✦jetzt reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service.

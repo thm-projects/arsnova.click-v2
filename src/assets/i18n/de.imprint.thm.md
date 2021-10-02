@@ -1,5 +1,5 @@
 ### Dienstanbieter
-Der Betrieb der Web-App arsnova.click ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH Projektbereich für mobile Anwendungen
+Der Betrieb der Web-App antworte✦jetzt ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH Projektbereich für mobile Anwendungen
 c/o THM – Technische Hochschule Mittelhessen
 Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik
 Prof. Dr. Klaus Quibeldey-Cirkel
