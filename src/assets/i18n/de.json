@@ -9,7 +9,7 @@
     "no": "Nein",
     "close_window": "Fenster schließen",
     "cookie_consent": {
-      "message": "arsnova✦click verwendet Cookies.",
+      "message": "antworte✦jetzt verwendet Cookies.",
       "dismiss": "Ich bin einverstanden.",
       "learn_more": "Datenschutzerklärung",
       "back": "Zurück",
@@ -103,7 +103,7 @@
       "about": {
         "title": "Info",
         "declaration": "Ein bisschen <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />ein bisschen <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />ganz viel <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
-        "ars": "arsnova✦click ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
+        "ars": "antworte✦jetzt ist ein innovatives <a href='https://de.wikipedia.org/wiki/Audience_Response_System' target='_blank'>Audience-Response-System (ARS)</a> für öffentliche Bildungseinrichtungen.",
         "developed_by": "Inspiriert durch <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> und <a href='https://socrative.com/' target='_blank'>Socrative</a> entwickelten Informatik-Studenten der <a href='http://www.thm.de/site/' target='_blank'>THM</a> die <a href='https://de.wikipedia.org/wiki/Gamification' target='_blank'>gamifizierte</a> Alternative zum Flaggschiff <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
         "met_requirements": "<strong>Features:</strong>",
         "requirements": {
@@ -131,10 +131,10 @@
         }
       },
       "tos": {
-        "declaration": "Alle (nicht nur Lehrende) dürfen die Quiz-App arsnova✦click für ihre Zwecke verwenden, solange dabei nicht gegen deutsches oder EU-Recht verstoßen wird.",
+        "declaration": "Alle (nicht nur Lehrende) dürfen die Quiz-App antworte✦jetzt für ihre Zwecke verwenden, solange dabei nicht gegen deutsches oder EU-Recht verstoßen wird.",
         "license": {
           "title": "Lizenz",
-          "text": "arsnova✦click ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> und steht unter der <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
+          "text": "antworte✦jetzt ist ein kostenloser Webservice (Software as a Service). Die Software ist <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> und steht unter der <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
         },
         "musicLicense": {
           "title": "Musik-Lizenz",
@@ -142,12 +142,12 @@
         },
         "warranty": {
           "title": "Gewährleistung",
-          "text": "Wir sind bemüht, den Online-Dienst arsnova✦click zuverlässig und störungsfrei zu betreiben, können dies aber nicht garantieren. Alle Quiz-Daten liegen ausschließlich im Browser-Speicher des Quizmasters. Wir übernehmen keine Haftung für den Verlust der Daten, zum Beispiel durch Löschen des Browser-Speichers, ohne zuvor die Quizze exportiert zu haben, oder bei rechtswidriger Nutzung des Dienstes."
+          "text": "Wir sind bemüht, den Online-Dienst antworte✦jetzt zuverlässig und störungsfrei zu betreiben, können dies aber nicht garantieren. Alle Quiz-Daten liegen ausschließlich im Browser-Speicher des Quizmasters. Wir übernehmen keine Haftung für den Verlust der Daten, zum Beispiel durch Löschen des Browser-Speichers, ohne zuvor die Quizze exportiert zu haben, oder bei rechtswidriger Nutzung des Dienstes."
         }
       },
       "data_privacy": {
         "scope": "Geltungsbereich",
-        "declaration": "Diese Datenschutzerklärung klärt Nutzer/innen von arsnova✦click über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
+        "declaration": "Diese Datenschutzerklärung klärt Nutzer/innen von antworte✦jetzt über die Art, den Umfang und den Zweck der Verwendung personenbezogener Daten durch den verantwortlichen Anbieter auf. Die rechtlichen Grundlagen des Datenschutzes finden sich im Bundesdatenschutzgesetz (BDSG) und dem Telemediengesetz (TMG).",
         "app_data": {
           "title": "Anwendungsdaten",
           "text": "Alle Quizfragen und deren Antwortoptionen werden ausschließlich im Browser-Speicher (Web Storage) des Quizmasters gehalten."
@@ -158,7 +158,7 @@
         },
         "logfiles": {
           "title": "Webserver-Logdateien",
-          "text": "Der Anbieter erhebt Protokolldaten über jeden Zugriff auf arsnova✦click in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht."
+          "text": "Der Anbieter erhebt Protokolldaten über jeden Zugriff auf antworte✦jetzt in sogenannten Logdateien. Der Anbieter verwendet die Protokolldaten ausschließlich für statistische Auswertungen zum Zwecke des Betriebs, der Sicherheit und der Optimierung des Angebotes. Der Anbieter behält sich vor, die Protokolldaten nachträglich zu überprüfen, wenn aufgrund konkreter Anhaltspunkte der berechtigte Verdacht einer rechtswidrigen Nutzung besteht."
         },
         "3rdparty": {
           "title": "Dienste und Inhalte Dritter",
@@ -166,7 +166,7 @@
         },
         "cookies": {
           "title": "Cookies",
-          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot arsnova✦click nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
+          "text": "Cookies sind kleine Dateien, die es ermöglichen, auf dem Zugriffsgerät der Nutzer/innen spezifische, auf das Gerät bezogene Informationen zu speichern. Das Angebot antworte✦jetzt nutzt Cookies, um die statistischen Daten der Webseitennutzung mit Matomo (siehe unten) zu erfassen und sie zwecks Verbesserung des Angebotes analysieren zu können. Die Nutzer/innen können auf den Einsatz der Cookies Einfluss nehmen. Die meisten Browser verfügen über eine Option, mit der das Speichern von Cookies eingeschränkt oder komplett verhindert wird."
         },
         "piwik": {
           "title": "Matomo",
@@ -177,7 +177,7 @@
         "provider": {
           "title": "Dienstanbieter",
           "text": {
-            "1": "Der Betrieb der Web-App arsnova✦click ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
+            "1": "Der Betrieb der Web-App antworte✦jetzt ist eine kostenlose Dienstleistung der TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
             "2": "c/o THM – Technische Hochschule Mittelhessen",
             "3": "Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik",
             "4": "Prof. Dr. Klaus Quibeldey-Cirkel",
@@ -299,11 +299,11 @@
       "optin": {
         "check": "Für Social Media Features anklicken",
         "share": "Auf Social Media teilen",
-        "warning": "Ich bin einverstanden, dass Tweets über arsnova✦click angezeigt werden."
+        "warning": "Ich bin einverstanden, dass Tweets über antworte✦jetzt angezeigt werden."
       },
       "tweet": {
         "content": {
-          "0": "Gerade das Quiz »{NAME}« auf arsnova✦click gespielt ❤️\n"
+          "0": "Gerade das Quiz »{NAME}« auf antworte✦jetzt gespielt ❤️\n"
         }
       }
     },
@@ -804,7 +804,7 @@
     "statistics": {
       "users": {
         "title": "User online",
-        "content": "Hier werden die Verbindungen zu arsnova✦click gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist die Zahl ein guter Hinweis, wie stark arsnova✦click aktuell beansprucht wird."
+        "content": "Hier werden die Verbindungen zu antworte✦jetzt gezählt. Natürlich sind die Daten anonymisiert. Es ist nicht möglich, Rückschlüsse auf einzelne Personen zu ziehen. Für dich ist die Zahl ein guter Hinweis, wie stark antworte✦jetzt aktuell beansprucht wird."
       },
       "total-quizzes": {
         "title": "Quizze",
@@ -824,7 +824,7 @@
       },
       "active-participants": {
         "title": "Player",
-        "content": "Hier siehst du die aktuelle Zahl aller Player in den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, einzelne Personen zu identifizieren oder ihre Aktionen nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark arsnova✦click gerade beansprucht wird."
+        "content": "Hier siehst du die aktuelle Zahl aller Player in den aktiven Quizzen. Natürlich schreiben wir Datenschutz groß: Es ist nicht möglich, einzelne Personen zu identifizieren oder ihre Aktionen nachzuverfolgen. Keine Sorge, hier geht es nur um einen groben Anhaltspunkt, wie stark antworte✦jetzt gerade beansprucht wird."
       },
       "average-participants": {
         "title": "Player pro Quiz",
@@ -832,13 +832,13 @@
       }
     },
     "outdated-version": {
-      "title": "Deine Version von arsnova✦click ist veraltet",
+      "title": "Deine Version von antworte✦jetzt ist veraltet",
       "understood": "Verstanden!",
       "current-version": "Aktuell installiert: {version}",
       "target-version": "Neue Version: {version}",
       "funnel": {
         "1": {
-          "header": "Bitte aktualisiere deine Version von arsnova✦click. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",
+          "header": "Bitte aktualisiere deine Version von antworte✦jetzt. Das ist wichtig, weil ansonsten Fehler beim Spielen von Quizzen auftreten können.",
           "solution": {
             "1": "Klicke auf den Button, um auf Aktualisierungen zu prüfen. Die Seite wird sich nach einigen Sekunden neu laden.",
             "2": "Falls das nicht passiert, klicke bitte hier, um zum nächsten Schritt zu gelangen"

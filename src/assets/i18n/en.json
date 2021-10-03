@@ -9,7 +9,7 @@
     "no": "No",
     "close_window": "Close window",
     "cookie_consent": {
-      "message": "arsnova✦click uses cookies.",
+      "message": "antworte✦jetzt uses cookies.",
       "dismiss": "I have read and agree.",
       "learn_more": "More about data privacy…",
       "back": "Back",
@@ -103,7 +103,7 @@
       "about": {
         "title": "Info",
         "declaration": "A little <a href='https://getkahoot.com' target='_blank'>Kahoot!</a>, <br />a little <a href='https://socrative.com/' target='_blank'>Socrative</a>,<br />a lot <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>!",
-        "ars": "arsnova✦click is an innovative <a href='https://en.wikipedia.org/wiki/Audience_response#Classroom_use' target='_blank'>Audience-Response-System (ARS)</a> for public educational institutions.",
+        "ars": "antworte✦jetzt is an innovative <a href='https://en.wikipedia.org/wiki/Audience_response#Classroom_use' target='_blank'>Audience-Response-System (ARS)</a> for public educational institutions.",
         "developed_by": "Inspired by <a href='https://getkahoot.com' target='_blank'>Kahoot!</a> and <a href='https://socrative.com/' target='_blank'>Socrative</a> developed by computer science students of <a href='https://www.thm.de/site/' target='_blank'>THM</a> the <a href='https://en.wikipedia.org/wiki/Gamification' target='_blank'>gamified</a> alternative to the flagship <a href='https://arsnova.eu/' target='_blank'>ARSnova</a>.",
         "met_requirements": "<strong>Features:</strong>",
         "requirements": {
@@ -131,10 +131,10 @@
         }
       },
       "tos": {
-        "declaration": "Everyone ( not only teachers ) is allowed to use the quiz app arsnova✦click for their own purposes as long as this does not violate German or EU law.",
+        "declaration": "Everyone ( not only teachers ) is allowed to use the quiz app antworte✦jetzt for their own purposes as long as this does not violate German or EU law.",
         "license": {
           "title": "License",
-          "text": "arsnova✦click is a free web service (Software as a Service). The software is <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> and is licensed under the <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
+          "text": "antworte✦jetzt is a free web service (Software as a Service). The software is <a href='https://github.com/thm-projects/arsnova.click-v2' target='_blank'>Open Source</a> and is licensed under the <a href='https://github.com/thm-projects/arsnova.click-v2/blob/master/LICENSE' target='_blank'>GNU Lesser General Public License v3.0</a>."
         },
         "musicLicense": {
           "title": "Music license",
@@ -142,12 +142,12 @@
         },
         "warranty": {
           "title": "Warranty",
-          "text": "We are trying to maintain the online service of arsnova✦click reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service."
+          "text": "We are trying to maintain the online service of antworte✦jetzt reliable but we cannot guarantee that. The quiz files are located exclusively in the local browser storage of the quiz owner. We do not give any legal responsibility for any data loss for example via deleting the local browser storage or by illegal usage of the service."
         }
       },
       "data_privacy": {
         "scope": "Scope",
-        "declaration": "This privacy statement explains to users of arsnova✦click the kind, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).",
+        "declaration": "This privacy statement explains to users of antworte✦jetzt the kind, scope and purpose of the usage of personal data by the responsible provider. The legal basis of this privacy policy can be found in the German Bundesdatenschutzgesetz (BDSG) and the German Telemediengesetz (TMG).",
         "app_data": {
           "title": "Application data",
           "text": "All quiz questions and their answer options are held by the local browser storage of the quiz owner."
@@ -158,7 +158,7 @@
         },
         "logfiles": {
           "title": "Webserver logfiles",
-          "text": "The provider collects log files about every access to the arsnova✦click system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications."
+          "text": "The provider collects log files about every access to the antworte✦jetzt system in so-called log files. The provider uses the data exclusively for statistical purposes, for the purpose of operation, security and the optimization of the service. The provider reserves the right to check the log data if there is a reasonable suspicion of unlawful use due to concrete indications."
         },
         "3rdparty": {
           "title": "3rd party services",
@@ -166,7 +166,7 @@
         },
         "cookies": {
           "title": "Cookies",
-          "text": "Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer arsnova✦click uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely."
+          "text": "Cookies are small files that make it possible to save specific (related to the device) information of the user inside the access device. The offer antworte✦jetzt uses cookies to observe statistical data of website's usage by Matomo (see below) to be able to detect and analyze them in order to improve the offer. The user can influence the use of cookies. Most browsers have an option to limit the storage and usage of cookies or prevent the usage of cookies completely."
         },
         "piwik": {
           "title": "Matomo",
@@ -177,7 +177,7 @@
         "provider": {
           "title": "Service provider",
           "text": {
-            "1": "The operation of the web app arsnova✦click is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
+            "1": "The operation of the web app antworte✦jetzt is a free service of the TransMIT-Gesellschaft für Technologietransfer mbH, Projektbereich für mobile Anwendungen.",
             "2": "c/o THM – Technische Hochschule Mittelhessen",
             "3": "Fachbereich MNI – Mathematik, Naturwissenschaften und Informatik",
             "4": "Prof. Dr. Klaus Quibeldey-Cirkel",
@@ -303,7 +303,7 @@
       },
       "tweet": {
         "content": {
-          "0": "Just played the quiz »{NAME}« at arsnova✦click ❤️\n"
+          "0": "Just played the quiz »{NAME}« at antworte✦jetzt ❤️\n"
         }
       }
     },
@@ -793,7 +793,7 @@
     },
     "toasts": {
       "swupdate": {
-        "message": "There is a new version of arsnova✦click available. Please click here to reload the page. This will install the update automatically.",
+        "message": "There is a new version of antworte✦jetzt available. Please click here to reload the page. This will install the update automatically.",
         "title": "New version available"
       },
       "can-use-token": {
@@ -804,7 +804,7 @@
     "statistics": {
       "users": {
         "title": "Users online",
-        "content": "All connections to arsnova✦click are counted here. Of course the data is anonymized. It is not possible to draw conclusions about individual persons. For you the number is a good indication of how much arsnova✦click is currently used."
+        "content": "All connections to antworte✦jetzt are counted here. Of course the data is anonymized. It is not possible to draw conclusions about individual persons. For you the number is a good indication of how much antworte✦jetzt is currently used."
       },
       "total-quizzes": {
         "title": "Quizzes",
@@ -824,7 +824,7 @@
       },
       "active-participants": {
         "title": "Active players",
-        "content": "Here you can see the current number of all players in active quizzes. Of course, we attach great importance to data protection: it is not possible to identify individual persons or to track their actions. Don't worry, this is only a rough indication of how much arsnova✦click is currently used."
+        "content": "Here you can see the current number of all players in active quizzes. Of course, we attach great importance to data protection: it is not possible to identify individual persons or to track their actions. Don't worry, this is only a rough indication of how much antworte✦jetzt is currently used."
       },
       "average-participants": {
         "title": "Players per quiz",
@@ -832,13 +832,13 @@
       }
     },
     "outdated-version": {
-      "title": "Your version of arsnova✦click is outdated",
+      "title": "Your version of antworte✦jetzt is outdated",
       "understood": "Understood!",
       "current-version": "Currently Installed: {version}",
       "target-version": "New Version: {version}",
       "funnel": {
         "1": {
-          "header": "Please update your version of arsnova✦click. This is important to ensure that you receive the latest features and bug fixes.",
+          "header": "Please update your version of antworte✦jetzt. This is important to ensure that you receive the latest features and bug fixes.",
           "solution": {
             "1": "Press the button to check for updates. The page will reload after a few seconds.",
             "2": "If that does not happen click here to follow to the next step"
