@@ -9,14 +9,14 @@
     "no": "Nein",
     "close_window": "Fenster schließen",
     "cookie_consent": {
-      "message": "antworte✦jetzt verwendet Cookies.",
-      "dismiss": "Ich bin einverstanden.",
+      "message": "antworte✦jetzt ist eine freie spielbasierte Quiz-App aus dem ARSnova-Team der Technischen Hochschule Mittelhessen. Die WebApp kann auch über https://antworte.jetzt direkt aufgerufen werden.\n\nantworte✦jetzt verwendet zusätzliche Cookies.",
+      "dismiss": "Ich bin damit einverstanden.",
       "learn_more": "Datenschutzerklärung",
       "back": "Zurück",
       "accept": "Akzeptieren",
       "customizeButton": "Anpassen",
       "save": "Speichern",
-      "customize": "Cookie Einstellung",
+      "customize": "Cookie-Einstellungen",
       "reset": "Cookie-Einstellungen zurücksetzen",
       "base": {
         "title": "Basisfunktionen",
