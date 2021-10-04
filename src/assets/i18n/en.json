@@ -9,7 +9,7 @@
     "no": "No",
     "close_window": "Close window",
     "cookie_consent": {
-      "message": "answer✦jetzt is a free game-based quiz app from the ARSnova team at Mittelhessen University of Technology. The WebApp can also be accessed directly via https://antworte.jetzt.\n\nantworte✦jetzt uses additional cookies.",
+      "message": "answer✦jetzt is a free game-based quiz app from the ARSnova team at Mittelhessen University of Technology.<br><br>The WebApp can also be accessed directly via <a href='https://antworte.jetzt' target='_blank'>https://antworte.jetzt</a>.<br><br>antworte✦jetzt uses cookies.",
       "dismiss": "I agree with this.",
       "learn_more": "More about data privacy…",
       "back": "Back",
