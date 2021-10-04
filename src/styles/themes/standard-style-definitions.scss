@@ -478,14 +478,14 @@ universal-cookie-consent {
   --ucc-text-size: 1rem;
   --ucc-font-family: inherit;
 
-  --ucc-modal-width: 24rem;
-  --ucc-modal-padding: 4rem;
-  --ucc-modal-border-radius: 0;
+  --ucc-modal-width: 20rem;
+  --ucc-modal-padding: 2rem;
+  --ucc-modal-border-radius: 10px;
 
   --ucc-heading-size: 2rem;
   --ucc-heading-weight: 500;
 
-  --ucc-button-radius: 0;
+  --ucc-button-radius: 10px;
   --ucc-button-padding-x: 1rem;
   --ucc-button-padding-y: 0.5rem;
   --ucc-button-spacing: 0.5rem;
