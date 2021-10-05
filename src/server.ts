@@ -2,7 +2,6 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import * as compression from 'compression';
-import * as cookieparser from 'cookie-parser';
 import * as express from 'express';
 import { Express } from 'express';
 import { existsSync, readFileSync } from 'fs';
@@ -22,8 +21,6 @@ export function app(): Express {
 
   // gzip
   server.use(compression());
-  // cookies
-  server.use(cookieparser());
   // proxy
   if (process.env.NODE_ENV === 'development') {
     const proxy = require('http-proxy-middleware');
@@ -61,7 +58,8 @@ export function app(): Express {
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
     const reqUrlMatch = req.url.match(/\/preview\/([a-z\-A-Z]*)\/.*/);
-    const theme = (reqUrlMatch ? reqUrlMatch[1] : req.cookies.theme) ?? environment.defaultTheme;
+    const theme = environment.defaultTheme;
+    //const theme = (reqUrlMatch ? reqUrlMatch[1] : req.cookies.theme) ?? environment.defaultTheme; //TODO: Make it up to frag.jetzt local storage which theme will be used.
     const hash = themeHashMap.find(value => value.theme === theme)?.hash ?? themeHashMap.find(value => value.theme === environment.defaultTheme);
     const href = `theme-${theme}${hash ? '-' : ''}${hash}.css`;
     const logoHref = `theme/${theme}/logo_s32x32.png`;
