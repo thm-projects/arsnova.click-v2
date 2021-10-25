@@ -9,15 +9,13 @@ export class LocalStorageReceiveService {
     //Pings parent window and asks for response with key and value of "Language"
     window.parent.postMessage({
       action: 'get',
-      targetOrigin: 'https://frag.jetzt',
       key: 'Language'
-    });
+    }, 'https://frag.jetzt');
 
     window.parent.postMessage({
       action: 'get',
-      targetOrigin: 'https://frag.jetzt',
       key: 'Theme'
-    });
+    }, 'https://frag.jetzt');
 
     window.addEventListener('message', this.messageHandler, false);
   }
