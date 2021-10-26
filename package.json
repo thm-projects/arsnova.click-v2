@@ -78,8 +78,6 @@
     "@fortawesome/fontawesome-svg-core": "1.2.32",
     "@fortawesome/free-brands-svg-icons": "5.15.1",
     "@fortawesome/free-solid-svg-icons": "5.15.1",
-    "@angular/material": "11.2.11",
-    "@angular/cdk": "11.2.11",
     "@ng-bootstrap/ng-bootstrap": "8.0.0",
     "@ng-bootstrap/schematics": "2.0.0-alpha.1",
     "@nguniversal/express-engine": "11.0.0",

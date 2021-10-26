@@ -15,13 +15,11 @@ import { FooterBarService } from '../footer-bar/footer-bar.service';
 import { StorageService } from '../storage/storage.service';
 import { ThemesService } from '../themes/themes.service';
 import { UserService } from '../user/user.service';
-import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NotificationService {
-  public snackRef: any;
   private _badgeAmount = 0;
   private readonly _vapidPublicKey = environment.vapidPublicKey;
 
@@ -42,23 +40,12 @@ export class NotificationService {
     private footerBarService: FooterBarService,
     private notificationApiService: NotificationApiService,
     private messageQueue: SimpleMQ,
-    public snackBar: MatSnackBar
   ) {
     if (isPlatformBrowser(this.platformId)) {
       this.registerHandlers();
 
       this.userService.loginNotifier.pipe(filter(val => !val)).subscribe(() => this.clearFooterElemBadges());
     }
-  }
-
-  public show(message: string, action?: string, config?: MatSnackBarConfig) {
-    const defaultConfig: MatSnackBarConfig = {
-      duration: (action ? 25000 : 7000),
-      panelClass: ['snackbar']
-    };
-
-    // Delegate the message and merge the (optionally) passed config with the default config
-    this.snackRef = this.snackBar.open(message, action, Object.assign({}, defaultConfig, config));
   }
 
   public async subscribeToNotifications(): Promise<void> {
