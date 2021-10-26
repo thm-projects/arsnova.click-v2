@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { ThemeSwitcherComponent } from 'src/app/root/theme-switcher/theme-switcher.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageReceiveService {
 
-  constructor() {
+  constructor(private themeSwitcher: ThemeSwitcherComponent) {
     //Pings parent window and asks for response with key and value of "Language"
     window.parent.postMessage({
       action: 'get',
@@ -29,6 +30,8 @@ export class LocalStorageReceiveService {
   }
 
   useData(key, value) {
+    console.log(key); //TODO: erase
     window.localStorage.setItem(key, value);
+    this.themeSwitcher.trigger();
   }
 }
