@@ -106,4 +106,8 @@ export class ThemeSwitcherComponent implements OnInit, OnDestroy {
       label: id,
     });
   }
+
+  public trigger(): void {
+    this.change(window.localStorage.getItem('Theme'));
+  }
 }

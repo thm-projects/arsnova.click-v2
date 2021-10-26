@@ -40,6 +40,7 @@ import { TwitterCardsComponent } from './root/twitter-cards/twitter-cards.compon
 import rxStompConfig from './rx-stomp.config';
 import { SentryErrorHandler } from './shared/sentry-error-handler';
 import { SharedModule } from './shared/shared.module';
+import { LocalStorageReceiveService } from './service/local-storage/local-storage-receive.service'
 
 function markedOptionsFactory(): MarkedOptions {
   return {
@@ -129,7 +130,7 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
     {
       provide: APP_INITIALIZER,
       useFactory: AppInitializerFactory,
-      deps: [PLATFORM_ID, TranslateService, Injector],
+      deps: [PLATFORM_ID, TranslateService, Injector, LocalStorageReceiveService],
       multi: true,
     },
     CookieService,
