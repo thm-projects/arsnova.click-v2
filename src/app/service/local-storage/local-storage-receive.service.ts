@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { NotifierService } from './../../service/notification/notifier.service'
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalStorageReceiveService {
 
-  constructor() {
+  constructor(private notifier: NotifierService) {
     //Pings parent window and asks for response with key and value of "Language"
     window.parent.postMessage({
       action: 'get',
@@ -29,7 +30,7 @@ export class LocalStorageReceiveService {
   }
 
   useData(key, value) {
-    console.log(key); //TODO: erase
+    this.notifier.show(key);
     window.localStorage.setItem(key, value);
   }
 
