@@ -32,6 +32,7 @@ export class LocalStorageReceiveService {
   useData(key, value) {
     console.log(key); //TODO: erase
     window.localStorage.setItem(key, value);
-    this.themeSwitcher.trigger();
   }
+
+  //TODO: Listener on localStorage language and localstorage Theme which react when theyre being changed
 }
