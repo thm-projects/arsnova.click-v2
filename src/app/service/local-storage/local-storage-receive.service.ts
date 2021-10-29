@@ -8,15 +8,15 @@ export class LocalStorageReceiveService {
   constructor() {
     //Ping parent until response, then ask for data
     //Pings parent window and asks for response with key and value of "Language"
-    window.parent.postMessage({
+    window.parent.postMessage(JSON.stringify({
       action: 'get',
       key: 'Language'
-    }, 'staging.frag.jetzt');
+    }), '*');
 
-    window.parent.postMessage({
+    window.parent.postMessage(JSON.stringify({
       action: 'get',
       key: 'Theme'
-    }, 'staging.frag.jetzt');
+    }), '*');
 
     window.addEventListener('message', this.messageHandler, false);
   }
