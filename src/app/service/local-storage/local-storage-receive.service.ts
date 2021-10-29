@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 export class LocalStorageReceiveService {
 
   constructor() {
+    //Pings parent window and asks for response with key and value of "Language"
     window.parent.postMessage({
       action: 'get',
       key: 'Language'
@@ -28,6 +29,7 @@ export class LocalStorageReceiveService {
   }
 
   useData(key, value) {
+    console.log(key); //TODO: erase
     window.localStorage.setItem(key, value);
   }
 

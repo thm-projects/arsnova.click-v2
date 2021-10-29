@@ -63,8 +63,6 @@
   "dependencies": {
     "@angular-devkit/build-angular": "~0.1100.1",
     "@angular/animations": "^11.0.0",
-    "@angular/cdk": "11.2.11",
-    "@angular/material": "11.2.11",
     "@angular/common": "^11.0.0",
     "@angular/compiler": "^11.0.0",
     "@angular/core": "^11.0.0",
