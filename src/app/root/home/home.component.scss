@@ -52,7 +52,7 @@
 
   .header-label {
     @include media-breakpoint-down(xs) {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
     }
     @include media-breakpoint-up(sm) {
       font-size: 2.8rem;
