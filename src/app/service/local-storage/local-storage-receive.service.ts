@@ -10,12 +10,12 @@ export class LocalStorageReceiveService {
     window.parent.postMessage({
       action: 'get',
       key: 'Language'
-    }, 'https://staging.frag.jetzt');
+    }, 'http://staging.frag.jetzt');
 
     window.parent.postMessage({
       action: 'get',
       key: 'Theme'
-    }, 'https://staging.frag.jetzt');
+    }, 'http://staging.frag.jetzt');
 
     window.addEventListener('message', this.messageHandler, false);
   }
