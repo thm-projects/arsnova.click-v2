@@ -9,7 +9,7 @@
     "no": "Nein",
     "close_window": "Fenster schließen",
     "cookie_consent": {
-      "message": "antworte✦jetzt ist eine freie spielbasierte Quiz-App aus dem ARSnova-Team der Technischen Hochschule Mittelhessen.<br><br>Die WebApp kann auch über <a href='https://antworte.jetzt' target='_blank'>https://antworte.jetzt</a> direkt aufgerufen werden.<br><br>antworte✦jetzt verwendet Cookies.",
+      "message": "antworte✦jetzt ist eine freie spielbasierte Quiz-App aus dem ARSnova-Team der Technischen Hochschule Mittelhessen.<br><br>Die WebApp kann auch direkt über <a href='https://antworte.jetzt' target='_blank'>https://antworte.jetzt</a> aufgerufen werden.<br><br>antworte✦jetzt verwendet Cookies.",
       "dismiss": "Ich bin damit einverstanden.",
       "learn_more": "Datenschutzerklärung",
       "back": "Zurück",
@@ -20,11 +20,11 @@
       "reset": "Cookie-Einstellungen zurücksetzen",
       "base": {
         "title": "Basisfunktionen",
-        "description": "Diese Cookies sind erforderlich für die Grundfunktionen dieser Webseite und können nicht deaktiviert werden."
+        "description": "Diese Cookies sind erforderlich für die Grundfunktionen der Webseite und können nicht deaktiviert werden."
       },
       "analytics": {
-        "title": "Statistik",
-        "description": "Wir nutzen diese Cookies um Statistiken zu genutzten Seiten & Funktionen von {APP_NAME} zu erfassen."
+        "title": "Statistiken",
+        "description": "Wir setzen Tracking-Cookies ein, um anonymisiert Statistiken zu genutzten Seiten & Funktionen von {APP_NAME} zu erfassen."
       }
     },
     "console-log-warning": "WARNUNG! Dies wird dir nicht beim Schummeln helfen! Jeder, der dir gesagt hat, dass du die Entwicklertools verwenden sollst, versucht möglicherweise, deinen Computer zu kompromittieren.",
@@ -113,7 +113,7 @@
           "4": "Jeder darf Quizze erstellen, sofort und beliebig viele.",
           "5": "Barrierefreie und für den Beamer optimierte Bedienoberfläche",
           "6": "Fragetypen: ABC…, Multiple/Single Choice, Schätzfrage, Kurzantwort, Umfrage; MC/SC-Fragen mit beliebig vielen Antwortoptionen",
-          "7": "ABC…-Quizze können durch Eingabe von ABC… als Quiz-Name mit einem Klick erstellt werden. Die Anzahl der fortlaufende Buchstaben bestimmt die Antwortoptionen.",
+          "7": "ABC…-Quizze können durch Eingabe von ABC… als Quiz-Name mit einem Klick erstellt werden. Die Anzahl der fortlaufenden Buchstaben bestimmt die Antwortoptionen.",
           "8": "<a href='https://de.wikipedia.org/wiki/TeX' target='_blank'>TeX</a>-Formelsatz, Textformatierung mit <a href='https://de.wikipedia.org/wiki/Markdown' target='_blank'>Markdown</a>, <a href='http://www.webpagefx.com/tools/emoji-cheat-sheet/' target='_blank'>Emojis</a>, Bilder und Videos im Fragetext und in den Antwortoptionen",
           "9": "Edutainment: Lernmotivation durch Live-Wettbewerb – einzeln oder in Teams – mit Sound im Countdown gegen die Mitspielenden",
           "10": "Bonusoption: Die Top Player erhalten »Tokens«, die sie per Mail an die Lehrperson in Bonuspunkte einlösen können.",
