@@ -29,7 +29,6 @@ export class LocalStorageReceiveService {
   }
 
   useData(key, value) {
-    console.log(key); //TODO: erase
     window.localStorage.setItem(key, value);
   }
 
