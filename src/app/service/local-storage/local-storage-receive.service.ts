@@ -23,7 +23,7 @@ export class LocalStorageReceiveService {
 
 
   messageHandler(event) {
-    const { action, key, value } = event.data;
+    const { action, key, value } = JSON.parse(event.data);
     if ( action == 'returnData') {
       this.useData(key, value)
     }
