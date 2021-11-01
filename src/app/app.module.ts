@@ -117,10 +117,6 @@ function svgLoaderFactory(http: HttpClient, transferState: TransferState): SvgBr
   ],
   providers: [
     {
-      provide: Window,
-      useValue: window
-    },
-    {
       provide: ErrorHandler,
       useClass: SentryErrorHandler,
     }, {

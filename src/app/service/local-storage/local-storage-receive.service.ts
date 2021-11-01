@@ -5,15 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class LocalStorageReceiveService {
 
-  constructor(private window: Window) {
+  constructor() {
     //Ping parent until response, then ask for data
     //Pings parent window and asks for response with key and value of "Language"
-
-    if (window === undefined) {
-      console.log('Could not use window object!');
-      return;
-    }
-
     window.parent.postMessage(JSON.stringify({
       action: 'get',
       key: 'Language'
