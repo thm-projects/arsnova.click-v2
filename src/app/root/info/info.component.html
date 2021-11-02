@@ -49,4 +49,8 @@
        id="imprintElement">
     <markdown [src]="imprintMarkdownSrc"></markdown>
   </div>
+  <div *ngIf="currentData === 'dataPrivacy'"
+       id="dataPrivacyElement">
+    <markdown [src]="dataPrivacyMarkdownSrc"></markdown>
+  </div>
 </div>
