@@ -27,6 +27,10 @@
 4. Install node depencencies type
 
         npm install 
+
+        OR 
+
+        npm install --legacy-peer-deps
     - - - 
 
 5. Create 2 folders with
@@ -51,7 +55,7 @@
         export AMQP_USER=<myUser>
         export AMQP_PASSWORD=<myPassword>
 
-    into the export-arsnova-click.env` file. 
+    into the `export-arsnova-click.env` file. 
     - - - 
 
 7. Copy: 
