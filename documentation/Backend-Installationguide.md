@@ -28,31 +28,6 @@
         chmod 777 rabbitmq
     - - -
 
-5. If you dont want to use the default user, change
-
-        export AMQP_USER=<myUser>
-        export AMQP_PASSWORD=<myPassword>
-
-        ===> 
-
-        export AMQP_USER=user
-        export AMQP_PASSWORD=bitnami
-        
-    in the `export-arsnova-click.env` file. 
-
-6. If you dont want to use the default user, change
-
-        export AMQP_USER=<myUser>
-        export AMQP_PASSWORD=<myPassword>
-
-        ===> 
-
-        export AMQP_USER=user
-        export AMQP_PASSWORD=bitnami
-
-    in the `arsnova-click.env` file. 
-    - - - 
-
 ## Execution
 
 ### First time execution 
@@ -76,7 +51,7 @@
         docker-compose up -d rabbitmq mongodb
     - - - 
 
-4. If you dont want to use the default user, open
+4. Open
         
         http://localhost:15672/
 
