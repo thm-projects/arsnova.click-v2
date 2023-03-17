@@ -19,21 +19,7 @@
         cd arsnova-click-v2-backend
     - - - 
 
-3. Create 7 files using
-
-        touch arsnova-click.env mongo.env init-mongo.js rabbitmq.env arsnova-click-staging.env arsnova-click-beta.env export-arsnova-click.env
-    - - - 
-
-4. Install node depencencies type
-
-        npm install 
-
-        OR 
-
-        npm install --legacy-peer-deps
-    - - - 
-
-5. Create 2 folders with
+4. Create 2 folders with
 
         mkdir rabbitmq mongodb
 
@@ -42,63 +28,29 @@
         chmod 777 rabbitmq
     - - -
 
-6. Copy: 
+5. If you dont want to use the default user, change
 
-        export MONGODB_SERVICE_NAME=localhost
-        export MONGODB_DATABASE=arsnova-click-v2
-        export MONGODB_USER=root
-        export MONGODB_PASSWORD=pass123
-        export MONGODB_AUTH_SOURCE=arsnova-click-v2
-        export LOG_LEVEL=debug
-        export NODE_ENV=development
-        export AMQP_HOSTNAME=localhost
         export AMQP_USER=<myUser>
         export AMQP_PASSWORD=<myPassword>
 
-    into the `export-arsnova-click.env` file. 
-    - - - 
+        ===> 
 
-7. Copy: 
+        export AMQP_USER=user
+        export AMQP_PASSWORD=bitnami
+        
+    in the `export-arsnova-click.env` file. 
 
-        MONGO_INITDB_DATABASE=arsnova-click-v2
-        MONGO_INITDB_ROOT_USERNAME=user
-        MONGO_INITDB_ROOT_PASSWORD=pass123
+6. If you dont want to use the default user, change
 
-    into the `mongo.env` file. 
-    - - - 
+        export AMQP_USER=<myUser>
+        export AMQP_PASSWORD=<myPassword>
 
-8. Copy: 
+        ===> 
 
-        db.createUser(
-            {
-                user: "root",
-                pwd: "pass123",
-                roles: [
-                    {
-                        role: "readWrite",
-                        db: "arsnova-click-v2"
-                    }
-                ]
-            }
-        );
+        export AMQP_USER=user
+        export AMQP_PASSWORD=bitnami
 
-    into the `init-mongo.js` file. 
-    - - - 
-
-9. Copy: 
-
-        MONGODB_SERVICE_NAME=localhost
-        MONGODB_DATABASE=arsnova-click-v2
-        MONGODB_USER=root
-        MONGODB_PASSWORD=pass123
-        MONGODB_AUTH_SOURCE=arsnova-click-v2
-        LOG_LEVEL=debug
-        NODE_ENV=development
-        AMQP_HOSTNAME=localhost
-        AMQP_USER=<myUser>
-        AMQP_PASSWORD=<myPassword>
-    
-    into the `arsnova-click.env` file. 
+    in the `arsnova-click.env` file. 
     - - - 
 
 ## Execution
@@ -124,7 +76,7 @@
         docker-compose up -d rabbitmq mongodb
     - - - 
 
-4. Open 
+4. If you dont want to use the default user, open
         
         http://localhost:15672/
 
@@ -177,12 +129,21 @@
         docker-compose up -d rabbitmq mongodb
     - - - 
 
-4. Build the project 
+4. Install node depencencies type (Make sure you are using the correct npm version!!)
+
+        npm install 
+
+        OR 
+
+        npm install --legacy-peer-deps
+    - - - 
+
+5. Build the project 
 
         npm run build:DEV
     - - - 
 
-5. Run the project 
+6. Run the project 
 
         cd dist && node main.js
     - - - 
