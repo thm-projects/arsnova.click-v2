@@ -168,6 +168,11 @@
         source export-arsnova-click.env
     - - - 
 
+3. Install the node modules with `legacy-peer-deps` support
+
+        npm install --legacy-peer-deps
+    - - -
+
 3. Start the docker containers using 
 
         docker-compose up -d rabbitmq mongodb
